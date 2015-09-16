@@ -1,0 +1,74 @@
+itemGroup.iceandfire=Ice And Fire
+
+tile.iceandfire.goldpile.name=Pile of Gold
+tile.iceandfire.silverOre.name=Silver Ore
+tile.iceandfire.sapphireOre.name=Sapphire Ore
+tile.iceandfire.silverBlock.name=Silver Block
+tile.iceandfire.sapphireBlock.name=Sapphire Block
+tile.iceandfire.charedDirt.name=Charred Dirt
+tile.iceandfire.charedGrass.name=Charred Grass
+
+item.iceandfire.sapphireGem.name=Sapphire
+item.iceandfire.silverIngot.name=Silver Ingot
+item.iceandfire.silverNugget.name=Silver Nugget
+item.iceandfire.silver_helmet.name=Silver Helmet
+item.iceandfire.silver_chestplate.name=Silver Chestplate
+item.iceandfire.silver_leggings.name=Silver Leggings
+item.iceandfire.silver_boots.name=Silver Boots
+item.iceandfire.silver_pickaxe.name=Silver Pickaxe
+item.iceandfire.silver_sword.name=Silver Sword
+item.iceandfire.silver_axe.name=Silver Axe
+item.iceandfire.silver_shovel.name=Silver Shovel
+item.iceandfire.silver_hoe.name=Silver Hoe
+item.iceandfire.dragonegg.name=Dragon Egg
+item.iceandfire.dragonscales.name=Dragon Scales
+item.iceandfire.dragonHelmet.name=Dragon Scale Helmet
+item.iceandfire.dragonChestplate.name=Dragon Scale Chestplate
+item.iceandfire.dragonLeggings.name=Dragon Scale Leggings
+item.iceandfire.dragonBoots.name=Dragon Scale Boots
+item.iceandfire.dragonbone.name=Dragon Bone
+item.iceandfire.witherbone.name=Witherbone
+item.iceandfire.wither_shard.name=Witherbone Shard
+item.iceandfire.dragonbone_sword.name=Dragon Bone Sword
+item.iceandfire.dragonbone_shovel.name=Dragon Bone Shovel
+item.iceandfire.dragonbone_pickaxe.name=Dragon Bone Pickaxe
+item.iceandfire.dragonbone_axe.name=Dragon Bone Axe
+item.iceandfire.dragonbone_hoe.name=Dragon Bone Hoe
+item.iceandfire.dragonbone_arrow.name=Dragon Bone Arrow
+item.iceandfire.dragonbone_bow.name=Dragon Bone Bow
+item.iceandfire.dragon_skull.name=Dragon Skull
+
+entity.iceandfire.firedragon.name=Fire Dragon
+entity.iceandfire.dragonegg.name=Dragon Egg
+entity.iceandfire.dragonarrow.name=Dragon Bone Arrow
+entity.iceandfire.dragonskull.name=Dragon Skull
+
+dragon.red=Red
+dragon.green=Green
+dragon.bronze=Bronze
+dragon.gray=Gray
+dragon.blue=Blue
+dragon.white=White
+dragon.sapphire=Sapphire
+dragon.silver=Silver
+dragon.stage=Stage 
+dragon.fire=Fire
+dragon.ice=Ice
+
+message.iceandfire.dragonWander=This dragon is now Wandering.
+message.iceandfire.dragonFollow=This dragon is now Following.
+message.iceandfire.dragonSit=This dragon is now Staying.
+message.iceandfire.dragonSleep=This dragon is now Sleeping.
+message.iceandfire.knownAs=The dragon know as 
+message.iceandfire.dragonWanderName= is now Wandering.
+message.iceandfire.dragonFollowName= is now Following.
+message.iceandfire.dragonSitName= is now Staying.
+message.iceandfire.dragonSleepName= is now Sleeping.
+message.iceandfire.dragonGrown=This dragon has grown to Stage 
+message.iceandfire.dragonGrownEnd=!
+message.iceandfire.dragonGrownName= has grown to Stage 
+
+key.dragon_up=Fly Dragon Up
+key.dragon_down=Fly Dragon Down
+key.dragon_strike=Dragon Strike
+key.dragon_fireAttack=Dragon Breath
