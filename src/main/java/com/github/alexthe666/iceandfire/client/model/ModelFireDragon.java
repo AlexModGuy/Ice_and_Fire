@@ -2,7 +2,8 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
-import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
+import net.ilexiconn.llibrary.common.animation.Animator;
+import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.entity.Entity;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -88,6 +89,7 @@ public class ModelFireDragon extends MowzieModelBase {
 	public MowzieModelRenderer Lmembrane3;
 	public MowzieModelRenderer ClawL2;
 	public MowzieModelRenderer ClawL3;
+	private Animator animator;
 
 	public ModelFireDragon() {
 		this.textureWidth = 256;
@@ -494,11 +496,11 @@ public class ModelFireDragon extends MowzieModelBase {
 		this.ArmL2.addChild(this.FingerL1);
 		this.ArmL2.addChild(this.ClawLPivot);
 		this.ClawLPivot.addChild(this.ClawL);
-
+		animator = new Animator(this);
 		ModelUtils.doMowzieStuff(boxList, false);
 	}
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		animate((IAnimated)entity, f, f1, f2, f3, f4, f5);
 		ModelUtils.renderAll(boxList);
 	}
 
@@ -521,6 +523,7 @@ public class ModelFireDragon extends MowzieModelBase {
 
 		MowzieModelRenderer[] rightLegParts = {this.ThighR, this.LegR};
 		MowzieModelRenderer[] leftLegParts = {this.ThighL, this.LegL};
+		float walkspeed = ((EntityDragonBase)entity).getDragonSize() * 0.06F;
 
 		if(!dragon.onGround){
 			this.setRotateAngle(Lmembrane1, 0.0F, 3.141592653589793F, 0.0F);
@@ -591,9 +594,9 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(Tail1, -0.06340587811240811F, -0.0F, 0.0F);
 			this.setRotateAngle(FingerR3, 0.0F, 0.9094539343445369F, 0.0F);
 			this.setRotateAngle(Rmembrane2, 0.0F, 0.0F, 0.0F);
-					float speed = 0.3F;
-	        this.faceTarget(Neck2, 2, f3, f4);
-	        this.faceTarget(Head, 1, f3, f4);
+			float speed = 0.3F;
+			this.faceTarget(Neck2, 2, f3, f4);
+			this.faceTarget(Head, 1, f3, f4);
 			this.bob(BodyLower, speed, 3, false, entity.ticksExisted, 1);
 			this.chainFlap(rightWingParts, speed, 0.3F, -2, entity.ticksExisted, 1);
 			this.chainFlap(leftWingParts, -speed, -0.3F, -2, entity.ticksExisted, 1);
@@ -606,7 +609,7 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.swing(ArmL2, speed, 0.3F, false, 0, 0, entity.ticksExisted, 1);
 			this.swing(FingerL1, speed, -0.2F, true, -1F, -0.2F, entity.ticksExisted, 1);
 			this.chainWave(tailParts, speed, 0.1F, -3, entity.ticksExisted, 1);
-			this.chainWave(neckParts, speed, 0.2F, 4, entity.ticksExisted, 1);
+			this.chainWave(neckHeadParts, speed, 0.2F, 4, entity.ticksExisted, 1);
 			this.chainWave(rightLegParts, speed, 0.1F, -2, entity.ticksExisted, 1);
 			this.chainWave(leftLegParts, speed, 0.1F, 2, entity.ticksExisted, 1);
 
@@ -679,38 +682,41 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(HornR2, -0.07504915783575616F, 0.0F, 0.0F);
 			this.setRotateAngle(ToeR3, 0.5235987755982988F, 0.0F, 0.0F);
 
-			this.faceTarget(Neck2, 2, f3, f4);
-			this.faceTarget(Head, 1, f3, f4);
+			//this.faceTarget(Neck2, 2, f3, f4);
+			//this.faceTarget(Head, 1, f3, f4);
 			float speed = 0.1F;
 			this.bob(BodyLower, speed, 0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighR, speed, -0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighL, speed, -0.7F, false, entity.ticksExisted, 1);
 			this.bob(ArmR1, speed, -0.7F, false, entity.ticksExisted, 1);
 			this.bob(ArmL1, speed, -0.7F, false, entity.ticksExisted, 1);
-			this.walk(ThighL, speed, 0.8F, false, 0F, 0.4F, f, f1);
-			this.walk(LegL, speed, 0.2F, false, 0F, -0.6F, f, f1);
-			this.walk(ToeL1, speed, -0.9F, false, 0F, 0.4F, f, f1);
-			this.walk(ToeL2, speed, -0.9F, false, 0F, 0.4F, f, f1);
-			this.walk(ToeL3, speed, -0.9F, false, 0F, 0.4F, f, f1);
-			this.walk(ThighR, speed, 0.8F, true, 0F, 0.4F, f, f1);
-			this.walk(LegR, speed, 0.2F, true, 0F, -0.6F, f, f1);
-			this.walk(ToeR1, speed, -0.9F, true, 0F, 0.4F, f, f1);
-			this.walk(ToeR2, speed, -0.9F, true, 0F, 0.4F, f, f1);
-			this.walk(ToeR3, speed, -0.9F, true, 0F, 0.4F, f, f1);
-			this.swing(ArmL1, speed, 0.4F, false, 0F, -0.2F, f, f1);
-			this.swing(ArmR1, speed, 0.4F, false, 0F, 0.2F, f, f1);
-			this.swing(ArmL2, speed, 0.2F, false, 0F, -0.2F, f, f1);
-			this.swing(ArmR2, speed, 0.2F, false, 0F, 0.2F, f, f1);
-			this.flap(ClawL, speed, 0.6F, true, 0F, 0.4F, f, f1);
-			this.flap(ClawR, speed, 0.6F, false, 0F, 0.4F, f, f1);
+			this.walk(ThighL, walkspeed, 0.8F, false, 0F, 0.4F, f, f1);
+			this.walk(LegL, walkspeed, 0.2F, false, 0F, -0.6F, f, f1);
+			this.walk(ToeL1, walkspeed, -0.9F, false, 0F, 0.4F, f, f1);
+			this.walk(ToeL2, walkspeed, -0.9F, false, 0F, 0.4F, f, f1);
+			this.walk(ToeL3, walkspeed, -0.9F, false, 0F, 0.4F, f, f1);
+			this.walk(ThighR, walkspeed, 0.8F, true, 0F, 0.4F, f, f1);
+			this.walk(LegR, walkspeed, 0.2F, true, 0F, -0.6F, f, f1);
+			this.walk(ToeR1, walkspeed, -0.9F, true, 0F, 0.4F, f, f1);
+			this.walk(ToeR2, walkspeed, -0.9F, true, 0F, 0.4F, f, f1);
+			this.walk(ToeR3, walkspeed, -0.9F, true, 0F, 0.4F, f, f1);
+			this.swing(ArmL1, walkspeed, 0.4F, false, 0F, -0.2F, f, f1);
+			this.swing(ArmR1, walkspeed, 0.4F, false, 0F, 0.2F, f, f1);
+			this.swing(ArmL2, walkspeed, 0.2F, false, 0F, -0.2F, f, f1);
+			this.swing(ArmR2, walkspeed, 0.2F, false, 0F, 0.2F, f, f1);
+			this.flap(ClawL, walkspeed, 0.6F, true, 0F, 0.4F, f, f1);
+			this.flap(ClawR, walkspeed, 0.6F, false, 0F, 0.4F, f, f1);
 			//this.walk(LeftLeg, 0.5F * scaleFactor, 0.5F, true, 1F, 0F, f, f1);
-		//	this.walk(LeftAnkle, 0.5F * scaleFactor, 0.5F, false, 0F, 0F, f, f1);
+			//	this.walk(LeftAnkle, 0.5F * scaleFactor, 0.5F, false, 0F, 0F, f, f1);
 			//this.walk(LeftFoot, 0.5F * scaleFactor, 1.5F, true, 0.5F, 1F, f, f1);
 			this.chainWave(tailParts, speed, 0.05F, -3, entity.ticksExisted, 1);
 			this.chainWave(neckHeadParts, speed, 0.04F, 4, entity.ticksExisted, 1);
 			this.chainSwing(tailParts, speed, 0.05F, 0, entity.ticksExisted, 1);
 
 		}else{
+			BodyLower.setRotationPoint(BodyLower.rotationPointX, 14.09F, BodyLower.rotationPointZ);
+			this.setRotateAngle(BodyLower, -0.2275909344600606F, 0.0F, 0.0F);
+			this.setRotateAngle(BodyUpper, 0.3642502148912167F, 0.0F, 0.0F);
 			this.setRotateAngle(Lmembrane1, 0, 0, 0);
 			this.setRotateAngle(FingerR4, 3.141592653589793F, 0.5009094953223726F, 3.141592653589793F);
 			this.setRotateAngle(Spike10, 0.8178612874845427F, -0.0F, 0.0F);
@@ -728,7 +734,9 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(ThighR, -0.5410520681182421F, -0.0F, 0.0F);
 			this.setRotateAngle(HeadFront, -0.03237238967054832F, -0.0F, 0.0F);
 			this.setRotateAngle(Tail4, 0.136659280431156F, 0.136659280431156F, 0.0F);
-			this.setRotateAngle(Head, -0.18203784098300857F, -0.0F, 0.0F);
+			this.setRotateAngle(Head, (float)Math.toRadians(-22.05), (float)Math.toRadians(-2.61), 0.0F);
+			this.setRotateAngle(Lmembrane1, 0, (float)Math.toRadians(164.35), 0);
+			this.setRotateAngle(Neck3, 0, (float)Math.toRadians(10.43D), 0.0F);
 			this.setRotateAngle(Rmembrane3, 3.141592653589793F, 3.141592653589793F, 3.141592653589793F);
 			this.setRotateAngle(Spike14, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(Spike20, 0.3731102663676185F, -0.0F, 0.0F);
@@ -742,7 +750,6 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(ArmL2, -0.08726646259971647F, 0.8552113334772213F, 0.0F);
 			this.setRotateAngle(HornL, 0.3141592653589793F, 0.33161255787892263F, 0.19198621771937624F);
 			this.setRotateAngle(HornR2, -0.07504915783575616F, 0.0F, 0.0F);
-			this.setRotateAngle(Neck3, 0.0F, 0.18203784098300857F, 0.0F);
 			this.setRotateAngle(Spike6, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(Spike9, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(ThighL, -0.5410520681182421F, -0.0F, 0.0F);
@@ -754,7 +761,7 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(FingerR3, 0.0F, 1.9577358219620393F, 0.0F);
 			this.setRotateAngle(ToeR2, 1.3962634015954636F, 0.0F, 0.0F);
 			this.setRotateAngle(ArmR2, 0.08726646259971647F, -0.8552113334772213F, 0.0F);
-			this.setRotateAngle(Club, -0.045553093477052F, -0.0F, 0.0F);
+			this.setRotateAngle(Club, (float)Math.toRadians(5), -0.0F, 0.0F);
 			this.setRotateAngle(Rmembrane4, -0.0F, 0.003490658503988659F, 0.0F);
 			this.setRotateAngle(ArmR1, 0.06981317007977318F, 0.06981317007977318F, -0.3490658503988659F);
 			this.setRotateAngle(Spike7, 0.8178612874845427F, -0.0F, 0.0F);
@@ -764,7 +771,6 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(FingerR2, -0.0F, 0.3590142271352336F, 0.0F);
 			this.setRotateAngle(HornR, 0.3141592653589793F, -0.33161255787892263F, -0.19198621771937624F);
 			this.setRotateAngle(Spike2, 0.8178612874845427F, -0.0F, 0.0F);
-			this.setRotateAngle(BodyLower, -0.36425021489121656F, -0.0F, 0.0F);
 			this.setRotateAngle(Tail3, 0.091106186954104F, 0.36425021489121656F, 0.0F);
 			this.setRotateAngle(FingerL1, 0.0F, -1.48352986419518F, 0.015707963267948967F);
 			this.setRotateAngle(Neck1, 0.31869712141416456F, 0.22759093446006054F, -0.136659280431156F);
@@ -773,15 +779,72 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(Neck2, -0.06667157742618339F, 0.22759093446006054F, 0.0F);
 			this.setRotateAngle(ArmL1, -0.27314402793711257F, -2.5953045977155678F, 0.3490658503988659F);
 			this.setRotateAngle(Spike19, 0.668842409753383F, -0.0F, 0.0F);
-			this.setRotateAngle(BodyUpper, 0.136659280431156F, -0.0F, 0.0F);
 			this.setRotateAngle(Spike5, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(HornR3, -0.05235987755982988F, -0.3141592653589793F, 0.0F);
 			this.setRotateAngle(Spike15, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(Spike17, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(Spike1, 0.8178612874845427F, -0.0F, 0.0F);
 			this.setRotateAngle(ToeR3, 1.3089969389957472F, 0.0F, 0.0F);
-		}
+			float speed = 0.1F;
 
+			this.chainSwing(tailParts, speed, 0.1F, 0, entity.ticksExisted, 1);
+
+		}
+		((EntityDragonBase)entity).tailbuffer.applyChainSwingBuffer(tailParts);
+	}
+	//TODO
+	public void animate(IAnimated entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		animator.update(entity);
+		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+		/*animator.setAnimationId(1);
+		animator.startPhase(5);
+		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
+		ModelUtils.rotate(animator, Neck2, 5.22F, 0, 0);
+		animator.endPhase();
+		animator.startPhase(5);
+		ModelUtils.rotate(animator, Neck3, -13.04F, 0, 0);
+		animator.endPhase();
+		animator.startPhase(5);
+		ModelUtils.rotate(animator, Head, 41.74F, 0, 0);
+		ModelUtils.rotate(animator, Jaw, 20.87F, 0, 0);
+		animator.endPhase();
+		animator.setStationaryPhase(2);
+		animator.resetPhase(10);*/
+		animator.setAnimationId(1);
+		//35
+		animator.startPhase(15);
+		ModelUtils.rotate(animator, Neck1, -15.65F, 0, 0);
+		animator.endPhase();
+		animator.startPhase(15);
+		ModelUtils.rotate(animator, Neck3, -10.43F, 0, 0);
+		animator.move(Neck3, 0, 0, 0.2F);
+		ModelUtils.rotate(animator, Head, -5.22F, 0, 0);
+		ModelUtils.rotate(animator, Jaw, 20.87F, 0, 0);
+		animator.endPhase();
+		animator.resetPhase(10);
+		animator.setAnimationId(2);
+		animator.startPhase(15);
+		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
+		ModelUtils.rotate(animator, Neck2, -20.87F, 0, 0);
+		ModelUtils.rotate(animator, Head, 54.78F, 0, 0);
+		animator.endPhase();
+		animator.startPhase(10);
+		ModelUtils.rotate(animator, Head, 41.74F, 0, 0);
+		ModelUtils.rotate(animator, Jaw, 44.35F, 0, 0);
+		animator.endPhase();
+		animator.startPhase(10);
+		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
+		animator.endPhase();
+		animator.resetPhase(10);
+		/*animator.startPhase(10);
+		animator.rotate(Head, 1F, 0F, 0F);
+		animator.endPhase();
+		animator.resetPhase(10);
+		animator.setAnimationId(2);
+		animator.startPhase(10);
+		animator.rotate(Head, 1F, 0F, 0F);
+		animator.endPhase();
+		animator.resetPhase(10);*/
 	}
 
 }

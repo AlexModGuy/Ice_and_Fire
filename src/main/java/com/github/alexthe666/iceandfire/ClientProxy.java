@@ -13,10 +13,12 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonSkull;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderNothing;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
@@ -32,6 +34,7 @@ public class ClientProxy extends CommonProxy{
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonEgg.class, new RenderDragonEgg(Minecraft.getMinecraft().getRenderManager(), new ModelDragonEgg()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonArrow.class, new RenderDragonArrow(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonSkull.class, new RenderDragonSkull(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFire.class, new RenderNothing(Minecraft.getMinecraft().getRenderManager()));
 
 	}
 	public void renderItems(){

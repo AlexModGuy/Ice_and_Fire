@@ -3,9 +3,15 @@ package com.github.alexthe666.iceandfire;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ilexiconn.llibrary.LLibrary;
+import net.ilexiconn.llibrary.common.animation.Animation;
+import net.ilexiconn.llibrary.common.animation.IAnimated;
+import net.ilexiconn.llibrary.common.animation.MessageLLibraryAnimation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -27,7 +33,9 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.message.MessageDragonMotion;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
+import com.github.alexthe666.iceandfire.messagee.MessageCorrectAnimation;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
@@ -35,7 +43,7 @@ public class IceAndFire
 {
 
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.1.4";
 
 	public static final List treasure_dragondungeon = new ArrayList<WeightedRandomChestContent>();
 	@Instance(value = MODID)
@@ -45,11 +53,17 @@ public class IceAndFire
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
 
+    public static DamageSource dragon = (new DamageSource("dragon")).setFireDamage();
+    public static DamageSource dragonFire = (new DamageSource("dragonFire")).setFireDamage();
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
+		channel.registerMessage(MessageDragonMotion.class, MessageDragonMotion.class, 1, Side.CLIENT);
+		channel.registerMessage(MessageCorrectAnimation.class, MessageCorrectAnimation.class, 2, Side.CLIENT);
+
 		 MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	@EventHandler

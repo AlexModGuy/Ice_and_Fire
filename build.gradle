@@ -42,7 +42,7 @@ url = "http://maven.ilexiconn.net/"
 }
 
 dependencies {
-compile 'net.ilexiconn.llibrary:LLibrary:0.3.5-1.8:dev'
+compile 'net.ilexiconn.llibrary:LLibrary:0.4.0-1.8:dev'
 }
 processResources
 {

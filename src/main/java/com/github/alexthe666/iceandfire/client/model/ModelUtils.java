@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
+import net.ilexiconn.llibrary.common.animation.Animator;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 
 public class ModelUtils {
 	public static void renderAll(List boxList){
@@ -31,5 +34,8 @@ public class ModelUtils {
 				}
 			}
 		}
+	}
+	public static void rotate(Animator animator, ModelRenderer box, float x, float y, float z){
+		animator.rotate(box, (float)Math.toRadians(x), (float)Math.toRadians(y), (float)Math.toRadians(z));
 	}
 }

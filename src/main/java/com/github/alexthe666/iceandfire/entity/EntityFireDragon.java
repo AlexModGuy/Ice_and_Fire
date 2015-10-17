@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -17,8 +18,10 @@ public class EntityFireDragon extends EntityDragonBase{
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
 		this.setSize(2.78F, 0.9F);
+        this.tasks.addTask(1, new EntityAISwimming(this));
 		minSize = 0.3F;
 		maxSize = 8.58F;
+		this.isImmuneToFire = true;
 		this.setScale(this.getDragonSize());
 	}
 	@Override
@@ -29,12 +32,6 @@ public class EntityFireDragon extends EntityDragonBase{
 			return "iceandfire:textures/models/firedragon/" + this.getColorName() + this.getStage() + ".png";
 		}
 	}
-	
-	public boolean canBeCollidedWith()
-	{
-		return false;
-	}
-
 
 	private String getColorName() {
 		switch(this.getColor()){
@@ -50,7 +47,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	}
 	@Override
 	public void onSpawn() {
-		this.setDragonAge(120);
+		this.setDragonAge(1);
 		this.updateSize();
 		this.jump();
 		this.setColor(this.getRNG().nextInt(5));
@@ -81,7 +78,9 @@ public class EntityFireDragon extends EntityDragonBase{
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(baseSpeed);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(baseHealth);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(baseDamage);
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32D);
 	}
+
 	@Override
 	public void updateSize()
 	{

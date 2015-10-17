@@ -19,6 +19,7 @@ public class RenderDragonBase extends RenderLiving {
 	}
 
 	protected void preRenderCallback(EntityLivingBase entity, float f) {
+		
 		if(entity instanceof EntityDragonBase){
 			GL11.glScalef(((EntityDragonBase)entity).getDragonSize(), ((EntityDragonBase)entity).getDragonSize(), ((EntityDragonBase)entity).getDragonSize());
 		}

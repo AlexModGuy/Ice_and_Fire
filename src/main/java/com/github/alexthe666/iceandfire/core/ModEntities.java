@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 
@@ -32,6 +33,7 @@ public class ModEntities {
 		registerUnspawnable(EntityDragonEgg.class, "iceandfire.dragonegg");	
 		registerUnspawnable(EntityDragonArrow.class, "iceandfire.dragonarrow");	
 		registerUnspawnable(EntityDragonSkull.class, "iceandfire.dragonskull");	
+		registerUnspawnable(EntityDragonFire.class, "iceandfire.dragonfire");	
 
 	}
 }
