@@ -523,7 +523,7 @@ public class ModelFireDragon extends MowzieModelBase {
 
 		MowzieModelRenderer[] rightLegParts = {this.ThighR, this.LegR};
 		MowzieModelRenderer[] leftLegParts = {this.ThighL, this.LegL};
-		float walkspeed = ((EntityDragonBase)entity).getDragonSize() * 0.06F;
+		float walkspeed = entity.width * 0.01F;
 
 		if(!dragon.onGround){
 			this.setRotateAngle(Lmembrane1, 0.0F, 3.141592653589793F, 0.0F);

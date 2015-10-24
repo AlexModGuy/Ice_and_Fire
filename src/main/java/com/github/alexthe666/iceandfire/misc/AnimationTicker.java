@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.messagee.MessageCorrectAnimation;
+import com.github.alexthe666.iceandfire.message.MessageCorrectAnimation;
 
 public class AnimationTicker
 {

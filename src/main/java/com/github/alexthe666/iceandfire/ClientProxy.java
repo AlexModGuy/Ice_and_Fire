@@ -5,10 +5,12 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
+import com.github.alexthe666.iceandfire.client.particle.EntityFXSnowflake;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
@@ -39,6 +41,14 @@ public class ClientProxy extends CommonProxy{
 	}
 	public void renderItems(){
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.podium), new String[] {"iceandfire:podium_oak", "iceandfire:podium_spruce",
+			"iceandfire:podium_birch", "iceandfire:podium_jungle", "iceandfire:podium_acacia", "iceandfire:podium_dark_oak"});
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 0, new ModelResourceLocation("iceandfire:podium_oak", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 1, new ModelResourceLocation("iceandfire:podium_spruce", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 2, new ModelResourceLocation("iceandfire:podium_birch", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 3, new ModelResourceLocation("iceandfire:podium_jungle", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 4, new ModelResourceLocation("iceandfire:podium_acacia", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 5, new ModelResourceLocation("iceandfire:podium_dark_oak", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.goldPile), 0, new ModelResourceLocation("iceandfire:goldpile", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.silverOre), 0, new ModelResourceLocation("iceandfire:silver_ore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.sapphireOre), 0, new ModelResourceLocation("iceandfire:sapphire_ore", "inventory"));
@@ -46,6 +56,7 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.sapphireBlock), 0, new ModelResourceLocation("iceandfire:sapphire_block", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedDirt), 0, new ModelResourceLocation("iceandfire:chared_dirt", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedGrass), 0, new ModelResourceLocation("iceandfire:chared_grass", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.bestiary, 0, new ModelResourceLocation("iceandfire:bestiary", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.sapphireGem, 0, new ModelResourceLocation("iceandfire:sapphire_gem", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.silverIngot, 0, new ModelResourceLocation("iceandfire:silver_ingot", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.silverNugget, 0, new ModelResourceLocation("iceandfire:silver_nugget", "inventory"));
@@ -91,6 +102,11 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 2, new ModelResourceLocation("iceandfire:dragonbone_bow_pulling_1", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 0, new ModelResourceLocation("iceandfire:dragon_skull_fire", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 1, new ModelResourceLocation("iceandfire:dragon_skull_ice", "inventory"));
+		ModelBakery.addVariantName(ModItems.dragon_armor_iron, new String[] {"iceandfire:dragonarmor_iron_head", "iceandfire:dragonarmor_iron_neck", "iceandfire:dragonarmor_iron_body", "iceandfire:dragonarmor_iron_tail"});
+		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 0, new ModelResourceLocation("iceandfire:dragonarmor_iron_head", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 1, new ModelResourceLocation("iceandfire:dragonarmor_iron_neck", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 2, new ModelResourceLocation("iceandfire:dragonarmor_iron_body", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 3, new ModelResourceLocation("iceandfire:dragonarmor_iron_tail", "inventory"));
 
 	}
 	public void renderArmors(EnumDragonArmor armor){
@@ -100,5 +116,12 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(armor.leggings, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_leggings", "inventory"));
 		renderItem.getItemModelMesher().register(armor.boots, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_boots", "inventory"));
 	}
+	
+	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ){
+		if(name == "snowflake"){
+			Minecraft.getMinecraft().effectRenderer.addEffect(new EntityFXSnowflake(world, x, y, z, motX, motY, motZ));
+		}
+	}
+
 }
 

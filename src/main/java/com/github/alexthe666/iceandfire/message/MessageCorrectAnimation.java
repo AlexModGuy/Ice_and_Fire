@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.messagee;
+package com.github.alexthe666.iceandfire.message;
 
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.common.animation.IAnimated;

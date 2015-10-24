@@ -1,0 +1,14 @@
+{
+    "parent": "iceandfire:block/podium_jungle",
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.7, -2.75 ],
+            "scale": [ 0.275, 0.275, 0.275 ]
+        },
+ "gui": {
+            "translation": [ 0, -0.95, 0 ],
+            "scale": [ 0.775, 0.775, 0.775 ]
+        }
+    }
+}

@@ -1,5 +1,12 @@
 itemGroup.iceandfire=Ice And Fire
 
+tile.iceandfire.podium.name=Podium
+tile.iceandfire.podium_oak.name=Oak Podium
+tile.iceandfire.podium_spruce.name=Spruce Podium
+tile.iceandfire.podium_birch.name=Birch Podium
+tile.iceandfire.podium_jungle.name=Jungle Podium
+tile.iceandfire.podium_acacia.name=Acacia Podium
+tile.iceandfire.podium_dark_oak.name=Dark Oak Podium
 tile.iceandfire.goldpile.name=Pile of Gold
 tile.iceandfire.silverOre.name=Silver Ore
 tile.iceandfire.sapphireOre.name=Sapphire Ore
@@ -8,6 +15,7 @@ tile.iceandfire.sapphireBlock.name=Sapphire Block
 tile.iceandfire.charedDirt.name=Charred Dirt
 tile.iceandfire.charedGrass.name=Charred Grass
 
+item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.sapphireGem.name=Sapphire
 item.iceandfire.silverIngot.name=Silver Ingot
 item.iceandfire.silverNugget.name=Silver Nugget
@@ -37,6 +45,7 @@ item.iceandfire.dragonbone_hoe.name=Dragon Bone Hoe
 item.iceandfire.dragonbone_arrow.name=Dragon Bone Arrow
 item.iceandfire.dragonbone_bow.name=Dragon Bone Bow
 item.iceandfire.dragon_skull.name=Dragon Skull
+item.iceandfire.dragonarmor_iron.name=Iron Dragon Armor
 
 entity.iceandfire.firedragon.name=Fire Dragon
 entity.iceandfire.dragonegg.name=Dragon Egg
@@ -55,6 +64,19 @@ dragon.silver=Silver
 dragon.stage=Stage 
 dragon.fire=Fire
 dragon.ice=Ice
+dragon.armor_head=Head
+dragon.armor_neck=Neck
+dragon.armor_body=Body
+dragon.armor_tail=Tail
+dragon.hatchtime=Hatches in: 
+bestiary.contains=Contains: 
+bestiary.intro=Introduction
+bestiary.firedragons=Fire Dragons
+bestiary.fireeggs=Fire Dragon Eggs
+bestiary.icedragons=Ice Dragons
+bestiary.iceeggs=Ice Dragon Eggs
+bestiary.dragonscales=Dragon Scales
+bestiary.dragonbones=Dragon Bones
 
 message.iceandfire.dragonWander=This dragon is now Wandering.
 message.iceandfire.dragonFollow=This dragon is now Following.

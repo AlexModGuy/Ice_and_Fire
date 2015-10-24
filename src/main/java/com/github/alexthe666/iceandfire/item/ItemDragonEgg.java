@@ -3,10 +3,12 @@ package com.github.alexthe666.iceandfire.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
@@ -30,6 +32,10 @@ public class ItemDragonEgg extends Item {
 		this.setUnlocalizedName("iceandfire.dragonegg");
 		this.maxStackSize = 1;
 		GameRegistry.registerItem(this, name);
+	}
+
+	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+		itemStack.setTagCompound(new NBTTagCompound());
 	}
 
 	@SideOnly(Side.CLIENT)

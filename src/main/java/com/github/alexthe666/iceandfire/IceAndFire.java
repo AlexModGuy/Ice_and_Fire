@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -33,9 +34,9 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.message.MessageCorrectAnimation;
 import com.github.alexthe666.iceandfire.message.MessageDragonMotion;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
-import com.github.alexthe666.iceandfire.messagee.MessageCorrectAnimation;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
@@ -78,6 +79,7 @@ public class IceAndFire
 		initilizeTreasure();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 	}
 	public void initilizeTreasure(){

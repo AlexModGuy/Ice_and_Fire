@@ -14,8 +14,8 @@ public enum EnumDragonEgg {
 	GRAY(3, EnumChatFormatting.GRAY, true),
 	BLUE(4, EnumChatFormatting.AQUA, false),
 	WHITE(5, EnumChatFormatting.WHITE, false),
-	SAPPHIRE(5, EnumChatFormatting.BLUE, false),
-	SILVER(5, EnumChatFormatting.DARK_GRAY, false);
+	SAPPHIRE(6, EnumChatFormatting.BLUE, false),
+	SILVER(7, EnumChatFormatting.DARK_GRAY, false);
 
 	
     private static final Map META_LOOKUP = Maps.newHashMap();

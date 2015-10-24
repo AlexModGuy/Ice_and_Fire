@@ -33,6 +33,10 @@ public class EntityDragonSkull extends EntityLiving{
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
 	}
 
+	public boolean isEntityInvulnerable(DamageSource i)
+	{
+		return i.getEntity() != null;
+	}
 
 	private boolean isAIDisabled()
 	{
@@ -89,7 +93,7 @@ public class EntityDragonSkull extends EntityLiving{
 	{
 		this.dataWatcher.updateObject(23, var1);
 	}
-	
+
 	public String getHurtSound(){
 		return "none";	
 	}
@@ -118,7 +122,7 @@ public class EntityDragonSkull extends EntityLiving{
 		if (player.isSneaking())
 		{
 			this.rotationYaw = player.rotationYaw;
-			}else{
+		}else{
 			if(this.getMouthState() == 0){
 				this.setMouthState(1);
 			}

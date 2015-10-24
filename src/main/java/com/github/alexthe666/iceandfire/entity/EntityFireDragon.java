@@ -2,7 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.world.World;
@@ -14,7 +16,6 @@ public class EntityFireDragon extends EntityDragonBase{
 	public static final double maxHealth = 1000;
 	public static final double maxDamage = 12;
 	public static final double maxSpeed = 0.35D;
-
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
 		this.setSize(2.78F, 0.9F);
@@ -22,6 +23,7 @@ public class EntityFireDragon extends EntityDragonBase{
 		minSize = 0.3F;
 		maxSize = 8.58F;
 		this.isImmuneToFire = true;
+		this.ignoreFrustumCheck = true;
 		this.setScale(this.getDragonSize());
 	}
 	@Override
@@ -69,6 +71,7 @@ public class EntityFireDragon extends EntityDragonBase{
 				}
 			}
 		}
+		System.out.println(this.getDragonSize());
 		super.interact(player);
 		return false;
 	}
@@ -112,5 +115,11 @@ public class EntityFireDragon extends EntityDragonBase{
 			}
 		}
 	}
+	@Override
+	public void onInventoryChanged(InventoryBasic p_76316_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

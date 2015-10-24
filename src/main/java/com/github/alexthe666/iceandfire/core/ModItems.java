@@ -8,6 +8,8 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.item.ItemDragonBone;
 import com.github.alexthe666.iceandfire.item.ItemDragonBow;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
@@ -23,6 +25,7 @@ import com.github.alexthe666.iceandfire.item.ItemSilverArmor;
 
 public class ModItems {
 
+	public static Item bestiary;
 	public static Item sapphireGem;
 	public static Item silverIngot;
 	public static Item silverNugget;
@@ -62,6 +65,7 @@ public class ModItems {
 	public static Item dragonbone_arrow;
 	public static Item dragonbone_bow;
 	public static Item dragon_skull;
+	public static Item dragon_armor_iron;
 
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[]{2, 7, 6, 2}, 20);
 	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[]{2, 7, 6, 2}, 15);
@@ -72,6 +76,7 @@ public class ModItems {
     public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 
 	public static void init(){
+		bestiary = new ItemBestiary();
 		sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
 		silverIngot = new ItemGeneric("silver_ingot", "iceandfire.silverIngot");
 		silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
@@ -112,5 +117,6 @@ public class ModItems {
 		dragonbone_arrow = new ItemGeneric("dragonbone_arrow", "iceandfire.dragonbone_arrow");
 		dragonbone_bow = new ItemDragonBow();
 		dragon_skull = new ItemDragonSkull();
+		dragon_armor_iron = new ItemDragonArmor(0, "dragonarmor_iron");
 	}
 }
