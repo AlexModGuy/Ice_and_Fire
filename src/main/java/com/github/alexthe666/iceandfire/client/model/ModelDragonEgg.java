@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
@@ -39,6 +41,12 @@ public class ModelDragonEgg extends MowzieModelBase {
         ModelUtils.renderAll(boxList);
     }
 
+    public void renderPodium() {
+        Egg1.rotateAngleX = (float)Math.toRadians(-180);
+        ModelUtils.renderAll(boxList);
+
+    }
+    
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);

@@ -14,7 +14,7 @@ public class CreativeTab extends CreativeTabs{
 
 	@Override
 	public Item getTabIconItem() {
-		return ModItems.dragonegg_red;
+		return ModItems.dragon_skull;
 	}
 
 }

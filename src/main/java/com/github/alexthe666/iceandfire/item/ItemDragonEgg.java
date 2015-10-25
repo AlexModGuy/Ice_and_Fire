@@ -23,7 +23,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class ItemDragonEgg extends Item {
-	EnumDragonEgg type;
+	public EnumDragonEgg type;
 	public ItemDragonEgg(String name, EnumDragonEgg type)
 	{
 		this.setHasSubtypes(true);

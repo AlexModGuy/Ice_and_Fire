@@ -64,7 +64,6 @@ public class IceAndFire
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
 		channel.registerMessage(MessageDragonMotion.class, MessageDragonMotion.class, 1, Side.CLIENT);
 		channel.registerMessage(MessageCorrectAnimation.class, MessageCorrectAnimation.class, 2, Side.CLIENT);
-
 		 MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	@EventHandler
