@@ -1,5 +1,6 @@
 itemGroup.iceandfire=Ice And Fire
 
+tile.iceandfire.lectern.name=Lectern
 tile.iceandfire.podium.name=Podium
 tile.iceandfire.podium_oak.name=Oak Podium
 tile.iceandfire.podium_spruce.name=Spruce Podium
@@ -16,6 +17,7 @@ tile.iceandfire.charedDirt.name=Charred Dirt
 tile.iceandfire.charedGrass.name=Charred Grass
 
 item.iceandfire.bestiary.name=Bestiary
+item.iceandfire.manuscript.name=Manuscript
 item.iceandfire.sapphireGem.name=Sapphire
 item.iceandfire.silverIngot.name=Silver Ingot
 item.iceandfire.silverNugget.name=Silver Nugget

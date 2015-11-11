@@ -13,9 +13,9 @@ public class EntityFireDragon extends EntityDragonBase{
 	public static final double baseHealth = 10;
 	public static final double baseDamage = 1;
 	public static final double baseSpeed = 0.25D;
-	public static final double maxHealth = 1000;
+	public static final double maxHealth = 700;
 	public static final double maxDamage = 12;
-	public static final double maxSpeed = 0.35D;
+	public static final double maxSpeed = 0.55D;
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
 		this.setSize(2.78F, 0.9F);
@@ -56,6 +56,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	}
 	@Override
 	public boolean interact(EntityPlayer player){
+		System.out.println(this.getMaxHealth());
 
 		if(player.inventory.getCurrentItem() != null){
 			if(player.inventory.getCurrentItem().getItem() != null){
@@ -63,15 +64,16 @@ public class EntityFireDragon extends EntityDragonBase{
 				if(player.inventory.getCurrentItem().getItem() instanceof ItemFood){
 					ItemFood food = (ItemFood)item;
 					if(food.isWolfsFavoriteMeat()){
-						increaseDragonAge();
+						this.setDragonAgeTick(0);
+						this.increaseDragonAge();
 						this.updateSize();
 						this.destroyItem(player, getHeldItem());
+						this.heal(4);
 						return true;
 					}
 				}
 			}
 		}
-		System.out.println(this.getDragonSize());
 		super.interact(player);
 		return false;
 	}
@@ -82,6 +84,7 @@ public class EntityFireDragon extends EntityDragonBase{
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(baseHealth);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(baseDamage);
 		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32D);
+		updateSize();
 	}
 
 	@Override
@@ -90,16 +93,15 @@ public class EntityFireDragon extends EntityDragonBase{
 		double healthStep;
 		double attackStep;
 		double speedStep;
-		healthStep = (this.maxHealth - this.baseHealth) / (125 + 1);
-		attackStep = (this.maxDamage - this.baseDamage) / (125 + 1);
-		speedStep = (this.maxSpeed - this.baseSpeed) / (125 + 1);
+		healthStep = (this.maxHealth - this.baseHealth) / (126);
+		attackStep = (this.maxDamage - this.baseDamage) / (126);
+		speedStep = (this.maxSpeed - this.baseSpeed) / (126);
 
-
-		if (this.getDragonSize() <= 125)
+		if (this.getDragonAge() <= 125)
 		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(Math.round(this.baseHealth + (healthStep * this.getDragonSize())));
-			this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(Math.round(this.baseDamage + (attackStep * this.getDragonSize())));
-			this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.baseSpeed + (speedStep * this.getDragonSize()));
+			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(Math.round(this.baseHealth + (healthStep * this.getDragonAge())));
+			this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(Math.round(this.baseDamage + (attackStep * this.getDragonAge())));
+			this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.baseSpeed + (speedStep * this.getDragonAge()));
 
 			if (this.isTeen())
 			{

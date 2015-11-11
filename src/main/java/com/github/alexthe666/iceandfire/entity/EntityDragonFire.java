@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.structures.BlockMeta;
-import com.github.alexthe666.iceandfire.structures.StructureUtils;
+import com.github.alexthe666.iceandfire.structures.WorldUtils;
 
 public class EntityDragonFire extends Entity
 {
@@ -59,13 +59,13 @@ public class EntityDragonFire extends Entity
 		d1 *= 64.0D;
 		return distance < d1 * d1;
 	}
-	public EntityDragonFire(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
+	public EntityDragonFire(World worldIn, Entity mouth, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
 	{
 		super(worldIn);
 		this.shootingEntity = shooter;
 		this.setSize(0.1F, 0.1F);
-		this.setLocationAndAngles(shooter.posX, shooter.posY, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-		this.setPosition(this.posX, this.posY, this.posZ);
+		this.setLocationAndAngles(mouth.posX, mouth.posY, mouth.posZ, shooter.rotationYaw, shooter.rotationPitch);
+		this.setPosition(mouth.posX, mouth.posY, mouth.posZ);
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 		accelX += this.rand.nextGaussian() * 0.4D;
 		accelY += this.rand.nextGaussian() * 0.4D;
@@ -81,8 +81,8 @@ public class EntityDragonFire extends Entity
 	 */
 	public void onUpdate()
 	{
-
-		this.setSize(width + 0.0000005F * ticksExisted, height + 0.0000005F * ticksExisted);
+		if(this.width < 2.5)
+		this.setSize(width + 0.00005F * ticksExisted, height + 0.00005F * ticksExisted);
 		for (int i = 0; i < 2; ++i)
 		{
 			this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + (this.rand.nextDouble() - 0.5D) * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D, new int[0]);
@@ -268,10 +268,10 @@ public class EntityDragonFire extends Entity
 
 					if (this.worldObj.isAirBlock(blockpos))
 					{
-						StructureUtils.setBlock(worldObj, blockpos.getX(), blockpos.getY(), blockpos.getZ(), this.getImpactBlock(worldObj.getBlockState(blockpos).getBlock()).getBlock(),
+						WorldUtils.setBlock(worldObj, blockpos.getX(), blockpos.getY(), blockpos.getZ(), this.getImpactBlock(worldObj.getBlockState(blockpos).getBlock()).getBlock(),
 								this.getImpactBlock(worldObj.getBlockState(blockpos).getBlock()).getMeta(), 3);
 					}
-					spawnCrater(worldObj, blockpos, this.getImpactBlock(worldObj.getBlockState(blockpos).getBlock()));
+					spawnCrater(worldObj, blockpos.down(3), this.getImpactBlock(worldObj.getBlockState(blockpos).getBlock()));
 				}
 			}
 
@@ -350,7 +350,7 @@ public class EntityDragonFire extends Entity
 	public void generateSphere(World world, int radius, BlockPos blockpos, BlockMeta block){
 		for(float i = 0; i < radius; i += 0.5) {
 			for(float j = 0; j < 2 * Math.PI * i; j += 0.5)
-				StructureUtils.setBlock(world, (int)Math.floor(blockpos.getX() + Math.sin(j) * i), blockpos.getY() + radius, (int)Math.floor(blockpos.getZ() + Math.cos(j) * i), block.getBlock(), block.getMeta(), 3);
+				WorldUtils.setBlock(world, (int)Math.floor(blockpos.getX() + Math.sin(j) * i), blockpos.getY() + radius, (int)Math.floor(blockpos.getZ() + Math.cos(j) * i), block.getBlock(), block.getMeta(), 3);
 		}
 	}
 

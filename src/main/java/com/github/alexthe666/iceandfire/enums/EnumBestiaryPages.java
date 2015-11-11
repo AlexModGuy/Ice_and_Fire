@@ -1,26 +1,25 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
-import com.google.common.primitives.Ints;
 
 public enum EnumBestiaryPages {
 	INTRO, FIREDRAGONS, FIREEGGS, ICEDRAGONS, ICEEGGS, DRAGONSCALES, DRAGONBONES; 
 
 	public static List<Integer> getList(int[] containedpages){
-	    List<Integer> intList = new ArrayList<Integer>();
-	    for (int index = 0; index < containedpages.length; index++)
-	    {
-	        intList.add(containedpages[index]);
-	    }
-	    return intList;
+		List<Integer> intList = new ArrayList<Integer>();
+		for (int index = 0; index < containedpages.length; index++)
+		{
+			intList.add(containedpages[index]);
+		}
+		return intList;
 	}
 
 	public static int[] fromList(List<Integer> containedpages){
@@ -47,12 +46,17 @@ public enum EnumBestiaryPages {
 		}
 		return list;
 	}
+	public static EnumBestiaryPages getRand(){
+		return EnumBestiaryPages.values()[new Random().nextInt(EnumBestiaryPages.values().length)];
 
+	}
 	public static void addPage(EnumBestiaryPages page, ItemStack book){
 		if(book.getItem() instanceof ItemBestiary){
 			NBTTagCompound tag = book.getTagCompound();
 			List<EnumBestiaryPages> enumlist = containedPages(getList(tag.getIntArray("Pages")));
-			enumlist.add(page);
+			if(!enumlist.contains(page)){
+				enumlist.add(page);
+			}
 			tag.setIntArray("Pages", fromList(enumToInt(enumlist)));
 		}
 	}

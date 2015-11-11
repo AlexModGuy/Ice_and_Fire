@@ -121,6 +121,7 @@ public class TileEntityPodium extends TileEntity implements IUpdatePlayerListBox
 				nbttaglist.appendTag(nbttagcompound1);
 			}
 		}
+		compound.setTag("Items", nbttaglist);
 	}
 
 	public void openInventory(EntityPlayer player) {}

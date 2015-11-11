@@ -10,23 +10,24 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import com.github.alexthe666.iceandfire.structures.StructureUtils;
+
+import com.github.alexthe666.iceandfire.structures.WorldUtils;
 
 public class StructureGenerator implements IWorldGenerator{
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(new BlockPos(chunkX, 10, chunkZ));
-		if (BiomeDictionary.isBiomeOfType(biome, Type.PLAINS))
-		{
-			int k = chunkX + random.nextInt(16) + 8;
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(new BlockPos(chunkX, 0, chunkZ));
+			int e = chunkX + random.nextInt(16) + 8;
 			int l = chunkZ+ random.nextInt(16) + 8;
-			BlockPos blockpos1 = world.getHorizon(new BlockPos(k, 0, l));
-			for(int i = 0; i <= 16; i++){
-				if(world.getBlockState(blockpos1).getBlock() != Blocks.ice && world.getBlockState(blockpos1).getBlock() != Blocks.packed_ice){
-				//StructureUtils.setBlock(world, blockpos1.getX(), blockpos1.getY() + i, blockpos1.getZ(), StructureUtils.iceOrPackedIce(), 0, 3);
-				}
-			}
+			BlockPos blockpos2 = new BlockPos(e, 0, l);
+			BlockPos blockpos = world.getHorizon(blockpos2);
+
+			for(float i = 0; i < 20; i += 0.5) {
+				for(float j = 0; j < 2 * 9; j += 0.5)
+					for(int k = 0; k < 70 + random.nextInt(20); k ++)
+						WorldUtils.setBlock(world, (int)Math.floor(blockpos.getX() + Math.sin(j) * i), blockpos.getY() + k, (int)Math.floor(blockpos.getZ() + Math.cos(j) * i), Blocks.ice, 0, 3);
+
 		}
 	}
 

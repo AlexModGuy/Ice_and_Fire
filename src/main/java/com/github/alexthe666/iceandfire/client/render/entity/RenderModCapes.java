@@ -32,7 +32,6 @@ public class RenderModCapes {
 			/*Raptorfarian*/UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),
 	};
 
-	//field_178862_f
 	@SubscribeEvent
 	public void playerRender(RenderPlayerEvent.Pre event){
 		if(event.entityPlayer instanceof AbstractClientPlayer){
@@ -106,6 +105,7 @@ public class RenderModCapes {
 		}
 		return false;
 	}
+	
 	private boolean hasBlueCape(UUID uniqueID) {
 		for (UUID uuid1 : bluecapes)
 		{

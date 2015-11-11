@@ -8,10 +8,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import com.github.alexthe666.iceandfire.client.gui.GuiDragon;
+import com.github.alexthe666.iceandfire.client.gui.GuiLectern;
 import com.github.alexthe666.iceandfire.client.gui.GuiPodium;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
+import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 
 public class GuiHandler implements IGuiHandler {
@@ -40,6 +43,15 @@ public class GuiHandler implements IGuiHandler {
 				}
 			}
 			break;
+			
+		case 2:
+			if(tile != null) {
+
+				if (tile instanceof TileEntityLectern) {
+					return new ContainerLectern(player.inventory, (TileEntityLectern)tile);
+				}
+			}
+			break;
 		}
 		return entity;
 
@@ -65,6 +77,15 @@ public class GuiHandler implements IGuiHandler {
 
 				if (tile instanceof TileEntityPodium) {
 					return new GuiPodium(player.inventory, (TileEntityPodium)tile);
+				}
+			}
+			break;
+			
+		case 2:
+			if(tile != null) {
+
+				if (tile instanceof TileEntityLectern) {
+					return new GuiLectern(player.inventory, (TileEntityLectern)tile);
 				}
 			}
 			break;

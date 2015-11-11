@@ -23,7 +23,7 @@ public class EntityAIDragonAge extends EntityAIBase
 		if (this.dragon.getDragonAge() < 999)
 		{
 			this.dragon.increaseDragonAgeTick();
-			return this.dragon.getDragonAgeTick() >= 12000;
+			return this.dragon.getDragonAgeTick() >= 2000;
 		}
 
 		return false;

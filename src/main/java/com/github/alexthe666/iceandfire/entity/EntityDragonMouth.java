@@ -28,19 +28,17 @@ public class EntityDragonMouth extends Entity
 		EntityLivingBase entitylivingbase = this.entityDragonObj.getAttackTarget();
 		double d0 = 64.0D;
 		if(entitylivingbase != null){
-			if (entitylivingbase.getDistanceSqToEntity(this.entityDragonObj) < d0 * d0 && this.entityDragonObj.canEntityBeSeen(entitylivingbase))
+			if (entitylivingbase.getDistanceSqToEntity(entityDragonObj) < d0 * d0 && this.entityDragonObj.canEntityBeSeen(entitylivingbase))
 			{
 				World world = this.entityDragonObj.worldObj;
                 double d1 = 0D;
-                Vec3 vec3 = this.entityDragonObj.getLook(1.0F);
+                Vec3 vec3 = this.getLook(1.0F);
                 double d2 = entitylivingbase.posX - (this.posX + vec3.xCoord * d1);
                 double d3 = entitylivingbase.getEntityBoundingBox().minY + (double)(entitylivingbase.height / 2.0F) - (0.5D + this.posY + (double)(this.height / 2.0F));
                 double d4 = entitylivingbase.posZ - (this.posZ + vec3.zCoord * d1);
                 world.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
-                EntityDragonFire entitylargefireball = new EntityDragonFire(world, this.entityDragonObj, d2, d3, d4);
-                entitylargefireball.posX = this.posX + vec3.xCoord * d1;
-                entitylargefireball.posY = this.posY + (double)(this.height / 2.0F) + 0.5D;
-                entitylargefireball.posZ = this.posZ + vec3.zCoord * d1;
+                EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, this.entityDragonObj, d2, d3, d4);
+                entitylargefireball.setPosition(entityDragonObj.mouth.posX, entityDragonObj.mouth.posY, entityDragonObj.mouth.posZ);
                 world.spawnEntityInWorld(entitylargefireball);
 			}
 		}

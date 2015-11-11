@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.structures.StructureUtils;
+import com.github.alexthe666.iceandfire.structures.WorldUtils;
 
 public class BlockGoldPile extends Block
 {
@@ -54,7 +54,7 @@ public class BlockGoldPile extends Block
 				if(item.getItem() == Items.gold_nugget|| item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)){
 					if(item != null){
 						if(this.getMetaFromState(state) < 7){
-							StructureUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.goldPile, this.getMetaFromState(state) + 1, 3);
+							WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.goldPile, this.getMetaFromState(state) + 1, 3);
 							if (!playerIn.capabilities.isCreativeMode)
 							{
 								--item.stackSize;

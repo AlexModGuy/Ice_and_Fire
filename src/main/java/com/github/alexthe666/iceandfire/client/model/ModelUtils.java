@@ -38,4 +38,11 @@ public class ModelUtils {
 	public static void rotate(Animator animator, ModelRenderer box, float x, float y, float z){
 		animator.rotate(box, (float)Math.toRadians(x), (float)Math.toRadians(y), (float)Math.toRadians(z));
 	}
+	
+	public static void rotateFrom(Animator animator, ModelRenderer box, float x, float y, float z){
+		animator.rotate(box, (float)Math.toRadians(x) - box.rotateAngleX, (float)Math.toRadians(y) - box.rotateAngleY,(float)Math.toRadians(z) - box.rotateAngleZ);
+	}
+	public static void rotateFromRadians(Animator animator, ModelRenderer box, float x, float y, float z){
+		animator.rotate(box, x - box.rotateAngleX, y - box.rotateAngleY, z - box.rotateAngleZ);
+	}
 }

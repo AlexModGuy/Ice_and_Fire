@@ -31,6 +31,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
@@ -64,7 +65,7 @@ public class IceAndFire
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
 		channel.registerMessage(MessageDragonMotion.class, MessageDragonMotion.class, 1, Side.CLIENT);
 		channel.registerMessage(MessageCorrectAnimation.class, MessageCorrectAnimation.class, 2, Side.CLIENT);
-		 MinecraftForge.EVENT_BUS.register(new EventLiving());
+		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	@EventHandler
 	public void init(FMLInitializationEvent event)
@@ -72,6 +73,7 @@ public class IceAndFire
 		tab = new CreativeTab(MODID);
 		ModBlocks.init();
 		ModItems.init();
+		ModRecipes.init();
 		ModEntities.init();
 		ModKeys.init();
 		FMLCommonHandler.instance().bus().register(new EventKeys());

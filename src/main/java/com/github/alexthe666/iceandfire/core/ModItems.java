@@ -26,6 +26,7 @@ import com.github.alexthe666.iceandfire.item.ItemSilverArmor;
 public class ModItems {
 
 	public static Item bestiary;
+	public static Item manuscript;
 	public static Item sapphireGem;
 	public static Item silverIngot;
 	public static Item silverNugget;
@@ -77,6 +78,7 @@ public class ModItems {
 
 	public static void init(){
 		bestiary = new ItemBestiary();
+		manuscript = new ItemGeneric("manuscript", "iceandfire.manuscript");
 		sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
 		silverIngot = new ItemGeneric("silver_ingot", "iceandfire.silverIngot");
 		silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");

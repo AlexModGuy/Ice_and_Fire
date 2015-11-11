@@ -9,10 +9,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonOre;
 import com.github.alexthe666.iceandfire.block.BlockGeneric;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
+import com.github.alexthe666.iceandfire.block.BlockLectern;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
 
 public class ModBlocks {
 
+	public static Block lectern;
 	public static Block podium;
 	public static Block goldPile;
 	public static Block silverOre;
@@ -23,6 +25,7 @@ public class ModBlocks {
 	public static Block charedGrass;
 
 	public static void init(){
+		lectern = new BlockLectern();
 		podium = new BlockPodium();
 		goldPile = new BlockGoldPile();
 		silverOre = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
