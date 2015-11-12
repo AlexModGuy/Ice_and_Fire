@@ -485,7 +485,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if(d <= 1.78F * this.getDragonSize()){
 				float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
-			}else{
+			}else if(this.getRNG().nextInt(20) == 0){
 				this.shootFire(getAttackTarget());
 			}
 		}
@@ -503,8 +503,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private void shootFire(EntityLivingBase attackTarget) {
-		float headPosX = (float) (1F * getDragonSize() * Math.sin(rotationYaw * Math.PI/180));
-		float headPosZ = (float) (1F * getDragonSize() * Math.sin(rotationYaw * Math.PI/180));
+		float headPosX = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
+		float headPosZ = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
 		 double d1 = 0D;
          Vec3 vec3 = this.getLook(1.0F);
          double d2 = attackTarget.posX - (this.posX + vec3.xCoord * d1);
