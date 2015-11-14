@@ -41,7 +41,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
@@ -50,8 +49,6 @@ import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
-import com.github.alexthe666.iceandfire.message.MessageDragonMotion;
-import com.github.alexthe666.iceandfire.misc.AnimationTicker;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -83,6 +80,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@SideOnly(Side.CLIENT)
 	public float motionSpeedZ;
 	public List<Class> blacklist = new ArrayList<Class>();
+	public Entity entityInMouth;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -186,6 +184,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 	 */
+
 	public float getDragonSize()
 	{
 		float step;
@@ -201,7 +200,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean increaseDragonAge()
 	{
-		if (this.getDragonAge() < 124)
+		if (this.getDragonAge() < 125)
 		{
 			this.setDragonAge(this.getDragonAge() + 1);
 			this.tellAge();
@@ -212,19 +211,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 	public void breakBlock(float hardness)
 	{
-		if(this.getEntityBoundingBox() != null){
-			for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++)
-			{
-				for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 3) && (b <= 127); b++)
+		if(!worldObj.isRemote){
+			if(this.getEntityBoundingBox() != null){
+				for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++)
 				{
-					for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++)
+					for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 3) && (b <= 127); b++)
 					{
-						BlockPos pos = new  BlockPos(a, b, c);
-						if (!(worldObj.getBlockState(pos).getBlock() instanceof BlockBush) && !(worldObj.getBlockState(pos).getBlock() instanceof BlockLiquid) && worldObj.getBlockState(pos).getBlock() != Blocks.bedrock)
+						for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++)
 						{
-							this.motionX *= 0.6D;
-							this.motionZ *= 0.6D;
-							worldObj.destroyBlock(pos, true);
+							BlockPos pos = new  BlockPos(a, b, c);
+							if (!(worldObj.getBlockState(pos).getBlock() instanceof BlockBush) && !(worldObj.getBlockState(pos).getBlock() instanceof BlockLiquid) && worldObj.getBlockState(pos).getBlock() != Blocks.bedrock)
+							{
+								this.motionX *= 0.6D;
+								this.motionZ *= 0.6D;
+								worldObj.destroyBlock(pos, true);
+							}
 						}
 					}
 				}
@@ -479,19 +480,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void onUpdate(){
 		super.onUpdate();
+		
+		
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
-		if(this.getAttackTarget() != null){
+		if(this.getAttackTarget() != null && entityInMouth == null){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
 				float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+				getAttackTarget().setDead();
 			}else{
-				this.shootFire(getAttackTarget());
+				//if(this.getRNG().nextInt(30) == 0)
+				//this.shootFire(getAttackTarget());
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
-		IceAndFire.channel.sendToAll(new MessageDragonMotion(this.getEntityId(), (float)motionX, (float)motionY, (float)motionZ));
-		AnimationTicker.tickAnimations(this);
+		Animation.tickAnimations(this);
 		if(this.isFlying){
 			setRelitiveEntityPosition(mouth, 1.6F, 0.95F);
 		}else{
@@ -503,8 +507,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private void shootFire(EntityLivingBase attackTarget) {
-		float headPosX = (float) (1F * getDragonSize() * Math.sin(rotationYaw * Math.PI/180));
-		float headPosZ = (float) (1F * getDragonSize() * Math.sin(rotationYaw * Math.PI/180));
+		float headPosX = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
+		float headPosZ = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
 		 double d1 = 0D;
          Vec3 vec3 = this.getLook(1.0F);
          double d2 = attackTarget.posX - (this.posX + vec3.xCoord * d1);
@@ -800,7 +804,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			entity.motionZ = -0.1 * Math.sin(angle);
 		}
 	}
-	
+
 	public List<EntityLivingBase> getEntityLivingBaseNearby(double distanceX, double distanceY, double distanceZ, double radius)
 	{
 		List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(distanceX, distanceY, distanceZ));
@@ -812,12 +816,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		return listEntityLivingBase;
 	}
-	
+
 	public double getAngleBetweenEntities(Entity first, Entity second)
-    {
-        return Math.atan2(second.posZ - first.posZ, second.posX - first.posX) * (180 / Math.PI) + 90;
-    }
-	
+	{
+		return Math.atan2(second.posZ - first.posZ, second.posX - first.posX) * (180 / Math.PI) + 90;
+	}
+
 	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData data)
 	{
 		this.onSpawn();

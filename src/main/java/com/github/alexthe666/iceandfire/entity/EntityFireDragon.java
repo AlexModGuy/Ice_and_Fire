@@ -56,7 +56,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	}
 	@Override
 	public boolean interact(EntityPlayer player){
-		System.out.println(this.getMaxHealth());
+		
 
 		if(player.inventory.getCurrentItem() != null){
 			if(player.inventory.getCurrentItem().getItem() != null){
@@ -64,11 +64,14 @@ public class EntityFireDragon extends EntityDragonBase{
 				if(player.inventory.getCurrentItem().getItem() instanceof ItemFood){
 					ItemFood food = (ItemFood)item;
 					if(food.isWolfsFavoriteMeat()){
-						this.setDragonAgeTick(0);
-						this.increaseDragonAge();
+						//this.setDragonAgeTick(0);
+						//this.increaseDragonAge();
+						this.setDragonAgeTick(this.getDragonAgeTick() + 2000);
 						this.updateSize();
 						this.destroyItem(player, getHeldItem());
 						this.heal(4);
+						System.out.println(this.getDragonAge());
+						System.out.println(this.getMaxHealth());
 						return true;
 					}
 				}

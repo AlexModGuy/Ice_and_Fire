@@ -4,6 +4,7 @@ import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
 import net.ilexiconn.llibrary.common.animation.Animator;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -601,21 +602,21 @@ public class ModelFireDragon extends MowzieModelBase {
 			this.setRotateAngle(Rmembrane2, 0.0F, 0.0F, 0.0F);
 			this.faceTarget(Neck2, 2, f3, f4);
 			this.faceTarget(Head, 1, f3, f4);
-			this.bob(BodyLower, speed, 3, false, entity.ticksExisted, 1);
-			this.chainFlap(rightWingParts, speed, 0.3F, -2, entity.ticksExisted, 1);
-			this.chainFlap(leftWingParts, -speed, -0.3F, -2, entity.ticksExisted, 1);
-			this.flap(FingerR1, speed, -0.1F, false, -0.3F, -0.1F, entity.ticksExisted, 1);
-			this.flap(FingerL1, speed, -0.1F, false, -0.3F, -0.1F, entity.ticksExisted, 1);
-			this.swing(ArmR1, speed, 0.3F, false, 0, 0, entity.ticksExisted, 1);
-			this.swing(ArmR2, speed, 0.3F, true, 0, 0, entity.ticksExisted, 1);
-			this.swing(FingerR1, speed, -0.2F, false, -1F, 0.2F, entity.ticksExisted, 1);
-			this.swing(ArmL1, speed, 0.3F, true, 0, 0, entity.ticksExisted, 1);
-			this.swing(ArmL2, speed, 0.3F, false, 0, 0, entity.ticksExisted, 1);
-			this.swing(FingerL1, speed, -0.2F, true, -1F, -0.2F, entity.ticksExisted, 1);
-			this.chainWave(tailParts, speed, 0.1F, -3, entity.ticksExisted, 1);
-			this.chainWave(neckHeadParts, speed, 0.2F, 4, entity.ticksExisted, 1);
-			this.chainWave(rightLegParts, speed, 0.1F, -2, entity.ticksExisted, 1);
-			this.chainWave(leftLegParts, speed, 0.1F, 2, entity.ticksExisted, 1);
+			this.bob(BodyLower, 0.3F, 3, false, entity.ticksExisted, 1);
+			this.chainFlap(rightWingParts, 0.3F, 0.3F, -2, entity.ticksExisted, 1);
+			this.chainFlap(leftWingParts, -0.3F, -0.3F, -2, entity.ticksExisted, 1);
+			this.flap(FingerR1, 0.3F, -0.1F, false, -0.3F, -0.1F, entity.ticksExisted, 1);
+			this.flap(FingerL1, 0.3F, -0.1F, false, -0.3F, -0.1F, entity.ticksExisted, 1);
+			this.swing(ArmR1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+			this.swing(ArmR2, 0.3F, 0.3F, true, 0, 0, entity.ticksExisted, 1);
+			this.swing(FingerR1, 0.3F, -0.2F, false, -1F, 0.2F, entity.ticksExisted, 1);
+			this.swing(ArmL1, 0.3F, 0.3F, true, 0, 0, entity.ticksExisted, 1);
+			this.swing(ArmL2, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+			this.swing(FingerL1, 0.3F, -0.2F, true, -1F, -0.2F, entity.ticksExisted, 1);
+			this.chainWave(tailParts, 0.3F, 0.1F, -3, entity.ticksExisted, 1);
+			this.chainWave(neckHeadParts, 0.3F, 0.2F, 4, entity.ticksExisted, 1);
+			this.chainWave(rightLegParts, 0.3F, 0.1F, -2, entity.ticksExisted, 1);
+			this.chainWave(leftLegParts, 0.3F, 0.1F, 2, entity.ticksExisted, 1);
 
 		}else if(dragon.getSleeping() == 0){
 			this.setRotateAngle(BodyLower, -0.091106186954104F, -0.0F, 0.0F);
@@ -809,7 +810,7 @@ public class ModelFireDragon extends MowzieModelBase {
 		ModelUtils.rotate(animator, Jaw, 20.87F, 0, 0);
 		animator.endPhase();
 		animator.resetPhase(10);
-		
+
 		animator.setAnimationId(2);
 		animator.startPhase(15);
 		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
@@ -824,7 +825,7 @@ public class ModelFireDragon extends MowzieModelBase {
 		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
 		animator.endPhase();
 		animator.resetPhase(10);
-		
+
 		animator.setAnimationId(3);
 		animator.startPhase(30);
 		animator.move(BodyLower, 0, 3.1F, 0);
@@ -861,7 +862,7 @@ public class ModelFireDragon extends MowzieModelBase {
 		ModelUtils.rotate(animator, Rmembrane3, 0, 0, 0);
 		ModelUtils.rotate(animator, Lmembrane4, 0, 0, 0);
 		ModelUtils.rotate(animator, Rmembrane4, 0, 0, 0);*/
-/*
+		/*
         animator.rotate(ArmR2, 0.17453292519943295F, -0.13962634015954636F, -0.08726646259971647F);
         animator.rotate(Lmembrane2, 0.0F, 3.141592653589793F, 0.13962634015954636F);
         animator.rotate(ArmL2, -0.17453292519943295F, 0.13962634015954636F, -0.08726646259971647F);
@@ -882,7 +883,7 @@ public class ModelFireDragon extends MowzieModelBase {
         animator.rotate(FingerR1, -0.0F, 0.15707963267948966F, 0.0F);
         animator.rotate(Rmembrane2, 0.0F, 0.0F, 0.13962634015954636F);
         animator.rotate(FingerR2, -0.0F, 0.3590142271352336F, 0.0F);
-*/
+		 */
 		ModelUtils.rotate(animator, ArmL1, 0F, 0, 0F);
 
 		ModelUtils.rotate(animator, ThighR, 30F, 0, 0F);
@@ -901,7 +902,7 @@ public class ModelFireDragon extends MowzieModelBase {
 		EntityDragonBase dragon = (EntityDragonBase)entity;
 		if(!dragon.isAirBorne && dragon.getAnimation() == EntityDragonBase.animation_takeoff && dragon.getAnimationTick() > 30 ){
 			float speed = 0.3F;
-			
+
 			MowzieModelRenderer[] rightWingParts = {this.ArmR1, this.ArmR2};
 			MowzieModelRenderer[] leftWingParts = {this.ArmL1, this.ArmL2};
 			/*this.chainFlap(rightWingParts, speed, 0.3F, -2, dragon.ticksExisted, 1);

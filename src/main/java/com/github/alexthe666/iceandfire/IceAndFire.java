@@ -3,12 +3,7 @@ package com.github.alexthe666.iceandfire;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ilexiconn.llibrary.LLibrary;
-import net.ilexiconn.llibrary.common.animation.Animation;
-import net.ilexiconn.llibrary.common.animation.IAnimated;
-import net.ilexiconn.llibrary.common.animation.MessageLLibraryAnimation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -35,8 +30,6 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.message.MessageCorrectAnimation;
-import com.github.alexthe666.iceandfire.message.MessageDragonMotion;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
@@ -63,8 +56,6 @@ public class IceAndFire
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
-		channel.registerMessage(MessageDragonMotion.class, MessageDragonMotion.class, 1, Side.CLIENT);
-		channel.registerMessage(MessageCorrectAnimation.class, MessageCorrectAnimation.class, 2, Side.CLIENT);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	@EventHandler

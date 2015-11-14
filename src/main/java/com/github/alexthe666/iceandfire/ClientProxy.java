@@ -31,6 +31,7 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.event.EventNewMenu;
 
 public class ClientProxy extends CommonProxy{
 
@@ -47,6 +48,8 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
+		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
+
 	}
 	public void renderItems(){
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

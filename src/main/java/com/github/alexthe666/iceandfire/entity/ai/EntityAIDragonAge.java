@@ -24,9 +24,10 @@ public class EntityAIDragonAge extends EntityAIBase
 		{
 			this.dragon.increaseDragonAgeTick();
 			return this.dragon.getDragonAgeTick() >= 2000;
+		}else{
+			return false;
 		}
 
-		return false;
 	}
 
 	/**

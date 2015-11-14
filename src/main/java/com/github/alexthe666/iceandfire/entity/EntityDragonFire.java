@@ -129,7 +129,7 @@ public class EntityDragonFire extends Entity
 			vec3 = new Vec3(this.posX, this.posY, this.posZ);
 			vec31 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
-			if (movingobjectposition != null)
+			if (movingobjectposition != null && movingobjectposition.entityHit != this.shootingEntity)
 			{
 				vec31 = new Vec3(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
 			}
