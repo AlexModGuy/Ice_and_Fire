@@ -488,10 +488,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if(d <= 1.78F * this.getDragonSize()){
 				float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+<<<<<<< HEAD
 				getAttackTarget().setDead();
 			}else{
 				//if(this.getRNG().nextInt(30) == 0)
 				//this.shootFire(getAttackTarget());
+=======
+			}else if(this.getRNG().nextInt(20) == 0){
+				this.shootFire(getAttackTarget());
+>>>>>>> origin/master
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
