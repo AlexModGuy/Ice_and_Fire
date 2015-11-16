@@ -1,22 +1,15 @@
 package com.github.alexthe666.iceandfire.entity;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -27,27 +20,15 @@ import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInvBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -492,6 +473,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void onUpdate(){
 		super.onUpdate();
+		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 		if(this.getAttackTarget() != null && entityInMouth == null && this.getAnimation().animationId == 0){
 			float d = this.getDistanceToEntity(getAttackTarget());
