@@ -66,7 +66,7 @@ public class EntityFireDragon extends EntityDragonBase{
 					if(food.isWolfsFavoriteMeat()){
 						//this.setDragonAgeTick(0);
 						//this.increaseDragonAge();
-						this.increaseDragonAge();
+						this.setDragonAgeTick(this.getDragonAgeTick() + 2000);
 						this.updateSize();
 						this.destroyItem(player, getHeldItem());
 						this.heal(4);
