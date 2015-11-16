@@ -49,8 +49,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int attackTick;
 	public int flameTick;
 	private AnimalChest inv;
-	public static Animation animation_roar1 = new Animation(1, 50);
-	public static Animation animation_flame1 = new Animation(2, 45);
+	public static Animation animation_flame1 = new Animation(1, 50);
+	public static Animation animation_bite1 = new Animation(2, 45);
 	public static Animation animation_takeoff = new Animation(3, 90);
 
 	@SideOnly(Side.CLIENT)
@@ -478,15 +478,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if(this.getAttackTarget() != null && entityInMouth == null && this.getAnimation().animationId == 0){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
-				if(this.getAnimation() != animation_flame1){
-					this.setAnimation(animation_flame1);
+				if(this.getAnimation() != animation_bite1){
+					this.setAnimation(animation_bite1);
 				}
 				this.attackTick = 1;
 
 			}else{
 				if(this.getRNG().nextInt(30) == 0)
-					if(this.getAnimation() != animation_roar1){
-						this.setAnimation(animation_roar1);
+					if(this.getAnimation() != animation_flame1){
+						this.setAnimation(animation_flame1);
 					}
 				this.flameTick = 1;
 			}
@@ -958,7 +958,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public final Animation[] animations() {
-		return new Animation[]{this.animation_none, this.animation_roar1, this.animation_flame1, this.animation_takeoff};
+		return new Animation[]{this.animation_none, this.animation_flame1, this.animation_bite1, this.animation_takeoff};
 	}
 
 	public boolean canAttackMob(EntityLivingBase targetEntity) {
