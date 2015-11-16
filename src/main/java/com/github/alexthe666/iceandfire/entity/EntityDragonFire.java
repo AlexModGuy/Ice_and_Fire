@@ -43,7 +43,7 @@ public class EntityDragonFire extends Entity
 	public EntityDragonFire(World worldIn)
 	{
 		super(worldIn);
-		this.setSize(0.1F, 0.1F);
+		this.setSize(0.6F, 0.6F);
 	}
 
 	protected void entityInit() {}

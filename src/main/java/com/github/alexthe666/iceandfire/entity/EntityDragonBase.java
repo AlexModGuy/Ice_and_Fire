@@ -11,14 +11,12 @@ import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -42,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
@@ -66,8 +65,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private int animTick;
 	public ChainBuffer tailbuffer = new ChainBuffer(5);
 
-	private int attackTick;
-	private int flameTick;
+	public int attackTick;
+	public int flameTick;
 	private AnimalChest inv;
 	public static Animation animation_roar1 = new Animation(1, 50);
 	public static Animation animation_flame1 = new Animation(2, 45);
@@ -95,7 +94,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.tasks.addTask(0, new EntityAIDragonStarve(this));
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit);
-		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
+		this.tasks.addTask(3, new EntityAIDragonAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
 		this.tasks.addTask(3, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
 		this.tasks.addTask(4, new EntityAIDragonWander(this));
 		this.tasks.addTask(5, new EntityAIDragonFollow(this, 10, 2));
@@ -267,11 +266,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void onLivingUpdate(){
 		super.onLivingUpdate();
 		//breakBlock(5);
-		if(attackTick != 0 && attackTick > 40){
+		if(attackTick != 0 && attackTick < 25){
 			attackTick++;
 		}
-		if(flameTick != 0 && flameTick > 40){
+		if(flameTick != 0 && flameTick < 30){
 			flameTick++;
+			if(getAttackTarget() != null)
+				this.getLookHelper().setLookPosition(getAttackTarget().posX, getAttackTarget().posY + (double)getAttackTarget().getEyeHeight(), getAttackTarget().posZ, 10.0F, (float)getVerticalFaceSpeed());	
+		}
+		if(attackTick == 25){
+			attackTick = 0;
+			float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+			if(getAttackTarget() != null)
+				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+		}
+		if(flameTick == 30){
+			flameTick = 0;
+			if(getAttackTarget() != null)
+				this.shootFire(getAttackTarget());
 		}
 		if(this.getRNG().nextInt(50) == 0){
 			if(this.getAnimation() != null && this.getAnimation().animationId == 0 && !worldObj.isRemote){
@@ -480,17 +492,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void onUpdate(){
 		super.onUpdate();
-		
-		
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
-		if(this.getAttackTarget() != null && entityInMouth == null){
+		if(this.getAttackTarget() != null && entityInMouth == null && this.getAnimation().animationId == 0){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
-				float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+				if(this.getAnimation() != animation_flame1){
+					this.setAnimation(animation_flame1);
+				}
+				this.attackTick = 1;
+
 			}else{
 				if(this.getRNG().nextInt(30) == 0)
-				this.shootFire(getAttackTarget());
+					if(this.getAnimation() != animation_roar1){
+						this.setAnimation(animation_roar1);
+					}
+				this.flameTick = 1;
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
@@ -506,17 +522,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private void shootFire(EntityLivingBase attackTarget) {
-		float headPosX = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
-		float headPosZ = (float) (2.3F * getDragonSize() * Math.sin((rotationYaw * -90) * Math.PI/180));
-		 double d1 = 0D;
-         Vec3 vec3 = this.getLook(1.0F);
-         double d2 = attackTarget.posX - (this.posX + vec3.xCoord * d1);
-         double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + posY + 3 + (double)(this.height / 2.0F));
-         double d4 = attackTarget.posZ - (this.posZ + vec3.zCoord * d1);
-         worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
-         EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, this.getAttackTarget(), d2, d3, d4);
-         entitylargefireball.setPosition(headPosX + posX, posY + 3, headPosZ + posZ);
-         worldObj.spawnEntityInWorld(entitylargefireball);
+		float headPosX = (float) (posX + 1.8F * getDragonSize() * Math.cos((rotationYaw + 90) * Math.PI/180));
+		float headPosZ = (float) (posZ + 1.8F * getDragonSize() * Math.sin((rotationYaw + 90) * Math.PI/180));
+		float headPosY = (float) (posY + 0.7 * getDragonSize());
+		double d1 = 0D;
+		Vec3 vec3 = this.getLook(1.0F);
+		double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
+		double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + headPosY + (double)(this.height / 2.0F));
+		double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
+		worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
+		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, this.getAttackTarget(), d2, d3, d4);
+		entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+		worldObj.spawnEntityInWorld(entitylargefireball);
 	}
 
 	public void spawnLandingParticles(){
@@ -918,49 +935,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		float bob = -(float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
 		entity.posY += bob;
 	}
-
-	public boolean attackEntityAsMob(Entity entity)
-	{
-		/*if(this.getAnimation().animationId == 0){
-			this.setAnimation(animation_flame1);
-		}*/
-		if(this.getAnimation() != animation_flame1){
-			this.setAnimation(animation_flame1);
-		}
-
-		float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-		int i = 0;
-
-		if (entity instanceof EntityLivingBase)
-		{
-			f += EnchantmentHelper.func_152377_a(this.getHeldItem(), ((EntityLivingBase)entity).getCreatureAttribute());
-			i += EnchantmentHelper.getKnockbackModifier(this);
-		}
-
-		boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), f);
-		System.out.println(f);
-		if (flag)
-		{
-			if (i > 0)
-			{
-				entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F));
-				this.motionX *= 0.6D;
-				this.motionZ *= 0.6D;
-			}
-
-			int j = EnchantmentHelper.getFireAspectModifier(this);
-
-			if (j > 0)
-			{
-				entity.setFire(j * 4);
-			}
-
-			this.func_174815_a(this, entity);
-		}
-
-		return flag;
-	}
-
 
 	public void setNextAttack(){
 		if(this.getCurrentAttack() == 0){
