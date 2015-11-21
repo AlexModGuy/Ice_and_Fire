@@ -1,65 +1,80 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
-apply plugin: 'forge'
+ext.configFile = file "build.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
 
-version = "0.1"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+version = getVersionFromJava()
+group = config.mod_group
+archivesBaseName = config.mod_name
 
 minecraft {
-    version = "1.8-11.14.3.1502"
-    runDir = "eclipse"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
+    version = config.minecraft_version + "-" + config.forge_version
+    runDir = "minecraft"
     mappings = "snapshot_20141130"
+    replace '${version}', project.version
 }
 
 repositories {
-mavenCentral()
-maven {
-name = "ilexiconn"
-url = "http://maven.ilexiconn.net/"
+    mavenCentral()
+    maven {
+        name = "ilexiconn"
+        url = "http://maven.ilexiconn.net/"
+    }
 }
+
+configurations {
+    include
 }
 
 dependencies {
-compile 'net.ilexiconn:llibrary:0.5.2-1.8:dev'
+    compile "net.ilexiconn:llibrary:${config.llibrary_version}-${config.minecraft_version}:dev"
+    include "net.ilexiconn:llibrary-wrapper:${config.minecraft_version}"
 }
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
+
+jar {
+    from configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest {
+        attributes "FMLCorePlugin": "net.ilexiconn.llibrary.LLibraryWrapper"
+    }
+}
+
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
-    // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+String getVersionFromJava() {
+    String major = "0";
+    String revision = "0";
+    String patch = "0";
+    String prefix = "public static final String VERSION = \"";
+    File file = file("src/main/java/com/github/alexthe666/iceandfire/IceAndFire.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length(), s.length() - 2);
+            String[] pts = s.split("\\.");
+
+            major = pts[0];
+            revision = pts[1];
+            patch = pts[2];
+        }
+    }
+
+    return "$major.$revision.$patch";
 }
