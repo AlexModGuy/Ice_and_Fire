@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.structures.BlockMeta;
+import com.github.alexthe666.iceandfire.structures.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -10,21 +11,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.structures.BlockMeta;
-import com.github.alexthe666.iceandfire.structures.WorldUtils;
+import java.util.List;
 
 public class EntityDragonFire extends Entity
 {
@@ -91,7 +83,7 @@ public class EntityDragonFire extends Entity
 
 		if (!this.worldObj.isRemote && (this.shootingEntity != null && this.shootingEntity.isDead || !this.worldObj.isBlockLoaded(new BlockPos(this))))
 		{
-			this.setDead();
+//			this.setDead();
 		}
 		else
 		{
@@ -105,7 +97,7 @@ public class EntityDragonFire extends Entity
 
 					if (this.ticksAlive == 600)
 					{
-						this.setDead();
+//						this.setDead();
 					}
 
 					return;
@@ -221,6 +213,7 @@ public class EntityDragonFire extends Entity
 			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		}
+		if (ticksExisted > 15) setDead();
 	}
 
 	/**
@@ -275,7 +268,7 @@ public class EntityDragonFire extends Entity
 				}
 			}
 
-			this.setDead();
+//			this.setDead();
 		}
 	}
 
@@ -397,7 +390,7 @@ public class EntityDragonFire extends Entity
 		}
 		else
 		{
-			this.setDead();
+//			this.setDead();
 		}
 	}
 

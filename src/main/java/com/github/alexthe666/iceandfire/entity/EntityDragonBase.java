@@ -261,10 +261,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if(getAttackTarget() != null)
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
 		}
-		if(flameTick == 30){
-			flameTick = 0;
+		if(flameTick <= 30 && flameTick >= 20){
+			if (flameTick == 30) flameTick = 0;
 			if(getAttackTarget() != null)
-				this.shootFire(getAttackTarget());
+				shootFire(getAttackTarget());
 		}
 		if(this.getRNG().nextInt(50) == 0){
 			if(this.getAnimation() != null && this.getAnimation().animationId == 0 && !worldObj.isRemote){

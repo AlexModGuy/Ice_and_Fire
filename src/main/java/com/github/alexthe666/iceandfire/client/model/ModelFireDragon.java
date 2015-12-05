@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
 import net.ilexiconn.llibrary.common.animation.Animator;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
 
 public class ModelFireDragon extends MowzieModelBase {
@@ -714,7 +712,7 @@ public class ModelFireDragon extends MowzieModelBase {
 			//	this.walk(LeftAnkle, 0.5F * scaleFactor, 0.5F, false, 0F, 0F, f, f1);
 			//this.walk(LeftFoot, 0.5F * scaleFactor, 1.5F, true, 0.5F, 1F, f, f1);
 			this.chainWave(tailParts, speed, 0.05F, -3, entity.ticksExisted, 1);
-			this.chainWave(neckHeadParts, speed, 0.04F, 4, entity.ticksExisted, 1);
+			this.chainWave(neckHeadParts, speed, -0.04F, -4, entity.ticksExisted, 1);
 			this.chainSwing(tailParts, speed, 0.05F, 0, entity.ticksExisted, 1);
 
 		}else{
