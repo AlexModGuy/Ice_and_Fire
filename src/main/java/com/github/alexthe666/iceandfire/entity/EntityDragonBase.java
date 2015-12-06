@@ -49,7 +49,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int attackTick;
 	public int flameTick;
 	private AnimalChest inv;
-	public static Animation animation_flame1 = new Animation(1, 50);
+	public static Animation animation_flame1 = new Animation(1, 70);
 	public static Animation animation_bite1 = new Animation(2, 45);
 	public static Animation animation_takeoff = new Animation(3, 90);
 
@@ -261,7 +261,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if(getAttackTarget() != null)
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
 		}
-		if(flameTick <= 30 && flameTick >= 20){
+		if(flameTick <= 50 && flameTick >= 20){
 			if (flameTick == 30) flameTick = 0;
 			if(getAttackTarget() != null)
 				shootFire(getAttackTarget());
@@ -513,7 +513,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + headPosY + (double)(this.height / 2.0F));
 		double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
 		worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
-		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, this.getAttackTarget(), d2, d3, d4);
+		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 		entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 		worldObj.spawnEntityInWorld(entitylargefireball);
 	}

@@ -808,7 +808,7 @@ public class ModelFireDragon extends MowzieModelBase {
 		ModelUtils.rotate(animator, Jaw, 20.87F, 0, 0);
 		animator.endPhase();
 		animator.resetPhase(10);
-
+		animator.setStationaryPhase(20);
 		animator.setAnimationId(2);
 		animator.startPhase(15);
 		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
