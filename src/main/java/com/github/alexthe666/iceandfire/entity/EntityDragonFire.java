@@ -31,12 +31,12 @@ public class EntityDragonFire extends EntityFireball
 	{
 		super(worldIn);
 	}
-	
+
 	public EntityDragonFire(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ)
 	{
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
 	}
-	
+
 	public EntityDragonFire(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
 	{
 		super(worldIn, shooter, accelX, accelY, accelZ);
@@ -44,9 +44,8 @@ public class EntityDragonFire extends EntityFireball
 
 	public void onUpdate()
 	{
-        this.setFire(0);
 		super.onUpdate();
-        this.setFire(0);
+		this.extinguish();
 
 		if(this.width < 2.5)
 			this.setSize(width + 0.00005F * ticksExisted, height + 0.00005F * ticksExisted);
@@ -62,7 +61,6 @@ public class EntityDragonFire extends EntityFireball
 		if (!this.worldObj.isRemote)
 		{
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)){
-				System.out.println("ouch");
 				movingObject.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, movingObject.entityHit), 6.0F);
 				this.func_174815_a(this.shootingEntity, movingObject.entityHit);
 			}
@@ -74,5 +72,11 @@ public class EntityDragonFire extends EntityFireball
 			}
 		}
 	}
+
+	public boolean attackEntityFrom(DamageSource source, float amount)
+	{
+		return false;
+	}
+
 
 }

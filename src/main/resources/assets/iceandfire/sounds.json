@@ -1,1 +1,15 @@
-{}
+{
+    "firedragon.child.idle": {"category": "neutral","sounds": ["firedragon_child_idle_0"]},
+    "firedragon.child.hurt": {"category": "neutral","sounds": ["firedragon_child_idle_0"]},
+    "firedragon.child.death": {"category": "neutral","sounds": ["firedragon_child_idle_0"]},
+    "firedragon.child.roar": {"category": "neutral","sounds": ["firedragon_child_idle_0"]},
+    "firedragon.teen.idle": {"category": "neutral","sounds": ["firedragon_teen_idle_0", "firedragon_teen_idle_1", "firedragon_teen_idle_2", "firedragon_teen_idle_3", "firedragon_teen_idle_4", "firedragon_teen_idle_5"]},
+    "firedragon.teen.hurt": {"category": "neutral","sounds": ["firedragon_teen_hurt_0", "firedragon_teen_hurt_1"]},
+    "firedragon.teen.death": {"category": "neutral","sounds": ["firedragon_teen_die_0"]},
+    "firedragon.teen.roar": {"category": "neutral","sounds": ["firedragon_teen_roar_0", "firedragon_teen_roar_1"]},
+    "firedragon.adult.idle": {"category": "neutral","sounds": ["firedragon_adult_idle_0", "firedragon_adult_idle_1", "firedragon_adult_idle_2", "firedragon_adult_idle_3"]},
+    "firedragon.adult.hurt": {"category": "neutral","sounds": ["firedragon_adult_hurt_0", "firedragon_adult_hurt_1", "firedragon_adult_hurt_2"]},
+    "firedragon.adult.death": {"category": "neutral","sounds": ["firedragon_adult_hurt_0", "firedragon_adult_hurt_1", "firedragon_adult_hurt_2"]},
+    "firedragon.adult.roar": {"category": "neutral","sounds": ["firedragon_adult_roar_0", "firedragon_adult_roar_1"]},
+    "dragonegg.hatch": {"category": "neutral","sounds": ["egg_hatch"]}
+}

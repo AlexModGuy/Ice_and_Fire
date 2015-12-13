@@ -37,7 +37,7 @@ public class EntityDragonMouth extends Entity
                 double d3 = entitylivingbase.getEntityBoundingBox().minY + (double)(entitylivingbase.height / 2.0F) - (0.5D + this.posY + (double)(this.height / 2.0F));
                 double d4 = entitylivingbase.posZ - (this.posZ + vec3.zCoord * d1);
                 world.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
-                EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, this.entityDragonObj, d2, d3, d4);
+                EntityDragonFire entitylargefireball = new EntityDragonFire(world, this.entityDragonObj, d2, d3, d4);
                 entitylargefireball.setPosition(entityDragonObj.mouth.posX, entityDragonObj.mouth.posY, entityDragonObj.mouth.posZ);
                 world.spawnEntityInWorld(entitylargefireball);
 			}

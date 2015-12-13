@@ -1,12 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelBase;
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 
 public class ModelDragonEgg extends MowzieModelBase {
 	
@@ -47,13 +46,20 @@ public class ModelDragonEgg extends MowzieModelBase {
 
     }
     
+    public void renderFrozen(TileEntityEggInIce tile) {
+        Egg1.rotateAngleX = (float)Math.toRadians(-180);
+        ModelUtils.renderAll(boxList);
+		this.walk(Egg1, 0.3F, 0.1F, true, 1, 0, tile.ticksExisted, 1);
+		this.flap(Egg1, 0.3F, 0.1F, false, 0, 0, tile.ticksExisted, 1);
+    }
+    
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		ModelUtils.doMowzieStuff(boxList, true);
 		EntityDragonEgg dragon = (EntityDragonEgg)entity;
-		this.walk(Egg1, 0.3F, 0.1F, true, 1, 0, entity.ticksExisted, 1);
-		this.flap(Egg1, 0.3F, 0.1F, false, 0, 0, entity.ticksExisted, 1);
+		//this.walk(Egg1, 0.3F, 0.1F, true, 1, 0, entity.ticksExisted, 1);
+		//this.flap(Egg1, 0.3F, 0.1F, false, 0, 0, entity.ticksExisted, 1);
 
 	}
 }

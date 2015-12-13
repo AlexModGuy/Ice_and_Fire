@@ -1,20 +1,22 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
-
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.github.alexthe666.iceandfire.block.BlockEggInIce;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class EntityDragonEgg extends EntityLiving{
 
@@ -78,7 +80,19 @@ public class EntityDragonEgg extends EntityLiving{
 
 	public void onUpdate(){
 		super.onUpdate();
-		if(this.getType().isFire){
+		int i = MathHelper.floor_double(this.posX);
+		int j = MathHelper.floor_double(this.posY);
+		int k = MathHelper.floor_double(this.posZ);
+		BlockPos pos = new BlockPos(i, j, k);
+		if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.water && !getType().isFire && this.getRNG().nextInt(500) == 0){
+			worldObj.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
+			worldObj.playSoundEffect(i, j, k, "dig.glass", 1, 1);
+			if(worldObj.getBlockState(pos).getBlock() instanceof BlockEggInIce){
+				((TileEntityEggInIce)worldObj.getTileEntity(pos)).type = this.getType();
+				this.setDead();
+			}
+		}
+		/*if(this.getType().isFire){
 			for (int i = 0; i < 2; ++i)
 			{
 				this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D, new int[0]);
@@ -91,7 +105,7 @@ public class EntityDragonEgg extends EntityLiving{
 					this.worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height + 0.8D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D, new int[0]);
 				}
 			}
-		}
+		}*/
 	}
 
 	public String getTexture(){
@@ -112,7 +126,7 @@ public class EntityDragonEgg extends EntityLiving{
 	@Override
 	public boolean attackEntityFrom(DamageSource var1, float var2)
 	{
-		if(!worldObj.isRemote){
+		if(!worldObj.isRemote && !var1.canHarmInCreative()){
 			this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, this.posX, this.posY, this.posZ, this.getItem()));
 		}
 		this.setDead();

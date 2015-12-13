@@ -1,16 +1,22 @@
 package com.github.alexthe666.iceandfire.entity;
 
 
-import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
@@ -20,15 +26,29 @@ import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInvBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonHunt;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -49,9 +69,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int attackTick;
 	public int flameTick;
 	private AnimalChest inv;
-	public static Animation animation_flame1 = new Animation(1, 70);
-	public static Animation animation_bite1 = new Animation(2, 45);
-	public static Animation animation_takeoff = new Animation(3, 90);
+	public static AnimationBlend animation_flame1 = new AnimationBlend(1, 70, true);
+	public static AnimationBlend animation_bite1 = new AnimationBlend(2, 45, true);
+	public static AnimationBlend animation_takeoff = new AnimationBlend(3, 90, false);
 
 	@SideOnly(Side.CLIENT)
 	public float motionSpeedX;
@@ -60,7 +80,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@SideOnly(Side.CLIENT)
 	public float motionSpeedZ;
 	public List<Class> blacklist = new ArrayList<Class>();
-	public Entity entityInMouth;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -81,7 +100,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.tasks.addTask(5, new EntityAIDragonFollow(this, 10, 2));
 		this.tasks.addTask(6, new EntityAIDragonDefend(this));
 		this.tasks.addTask(7, new EntityAIDragonEatItem(this));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, true, true));
+		this.targetTasks.addTask(1, new EntityAIDragonHunt(this, EntityLivingBase.class, true, true));
 		this.setHunger(50);
 		this.setHealth(10F);
 	}
@@ -268,7 +287,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if(this.getRNG().nextInt(50) == 0){
 			if(this.getAnimation() != null && this.getAnimation().animationId == 0 && !worldObj.isRemote){
-				//this.setAnimation(animation_takeoff);
+				this.setAnimation(animation_takeoff);
 			}
 		}
 		int sleepCounter = 0;
@@ -475,7 +494,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		super.onUpdate();
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
-		if(this.getAttackTarget() != null && entityInMouth == null && this.getAnimation().animationId == 0){
+		if(this.getAttackTarget() != null && this.getAnimation().animationId == 0){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
 				if(this.getAnimation() != animation_bite1){
@@ -839,11 +858,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean isTeen()
 	{
-		return  this.getDragonAge() > 50 && this.getDragonAge() < 100;
+		return  this.getDragonAge() > 20 && this.getDragonAge() < 75;
 	}
 	public boolean isChild()
 	{
-		return this.getDragonAge() <= 50;
+		return this.getDragonAge() <= 20;
 	}
 
 	public abstract String getTexture();

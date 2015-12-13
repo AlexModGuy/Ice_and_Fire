@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonOre;
+import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.BlockGeneric;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.BlockLectern;
@@ -23,6 +24,7 @@ public class ModBlocks {
 	public static Block sapphireBlock;
 	public static Block charedDirt;
 	public static Block charedGrass;
+	public static Block eggInIce;
 
 	public static void init(){
 		lectern = new BlockLectern();
@@ -34,6 +36,7 @@ public class ModBlocks {
 		sapphireBlock = new BlockGeneric(Material.iron, "sapphire_block", "iceandfire.sapphireBlock", "pickaxe", 2, 3.0F, 10.0F, Block.soundTypeMetal);
 		charedDirt = new BlockGeneric(Material.ground, "chared_dirt", "iceandfire.charedDirt", "shovel", 0, 0.5F, 0.0F, Block.soundTypeGravel);
 		charedGrass = new BlockGeneric(Material.grass, "chared_grass", "iceandfire.charedGrass", "shovel", 0, 0.6F, 0.0F, Block.soundTypeGrass);
+		eggInIce = new BlockEggInIce();
 	}	
 	
 }

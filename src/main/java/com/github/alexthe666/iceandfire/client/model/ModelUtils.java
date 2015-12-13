@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
 import net.ilexiconn.llibrary.common.animation.Animator;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelUtils {
@@ -35,6 +34,29 @@ public class ModelUtils {
 			}
 		}
 	}
+	
+	public static void animateOrRotate(Animator animator, boolean animate, MowzieModelRenderer box, float x, float y, float z){
+		if(animate){
+			animator.rotate(box, x == box.rotateAngleX ? 0 : x, y == box.rotateAngleY ? 0 : y, z == box.rotateAngleZ ? 0 : z);
+		}else{
+			ModelUtils.setRotateAngle(box, x, y, z);
+		}
+	}
+	
+	public static void animateOrRotateIgnore(Animator animator, boolean animate, MowzieModelRenderer box, float x, float y, float z, boolean ignoreX, boolean ignoreY, boolean ignoreZ){
+		if(animate){
+			animator.rotate(box, ignoreX ? 0 : x, ignoreY ? y : 0, ignoreZ ? z : 0);
+		}else{
+			ModelUtils.setRotateAngle(box, x, y, z);
+		}
+	}
+	
+	private static void setRotateAngle(MowzieModelRenderer model, float x, float y, float z) {
+		model.rotateAngleX = x;
+		model.rotateAngleY = y;
+		model.rotateAngleZ = z;
+	}
+	
 	public static void rotate(Animator animator, ModelRenderer box, float x, float y, float z){
 		animator.rotate(box, (float)Math.toRadians(x), (float)Math.toRadians(y), (float)Math.toRadians(z));
 	}

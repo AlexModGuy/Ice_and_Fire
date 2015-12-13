@@ -126,5 +126,19 @@ public class EntityFireDragon extends EntityDragonBase{
 		
 	}
 
+    protected String getLivingSound()
+    {
+        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".idle";
+    }
+
+    protected String getHurtSound()
+    {
+        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".hurt";
+    }
+
+    protected String getDeathSound()
+    {
+        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".death";
+    }
 
 }

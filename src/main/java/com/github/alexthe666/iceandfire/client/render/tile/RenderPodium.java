@@ -41,7 +41,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
 		
 	}
 	
-	public String getTexture(EnumDragonEgg type){
+	public static String getTexture(EnumDragonEgg type){
 		String i = type.isFire ? "firedragon/" : "icedragon/";
 		return "iceandfire:textures/models/" + i + "egg_" + type.name().toLowerCase() + ".png";
 
