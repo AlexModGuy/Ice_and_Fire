@@ -112,7 +112,6 @@ public class TileEntityLectern extends TileEntity implements IUpdatePlayerListBo
 		{
 			this.markDirty();
 		}
-		//System.out.println(this.furnaceBurnTime);
 		float f1 = this.pageHelp1;
 		do
 		{
@@ -206,6 +205,12 @@ public class TileEntityLectern extends TileEntity implements IUpdatePlayerListBo
 		{
 			stack.stackSize = this.getInventoryStackLimit();
 		}
+		if (index == 0 && !flag)
+        {
+            this.totalCookTime = 900;
+            this.cookTime = 0;
+            this.markDirty();
+        }
 	}
 
 	public void readFromNBT(NBTTagCompound compound)
@@ -313,7 +318,7 @@ public class TileEntityLectern extends TileEntity implements IUpdatePlayerListBo
 		{
 			ItemStack itemstack = this.stacks[0].copy();
 			if(this.stacks[0].getItem() == ModItems.bestiary){
-				EnumBestiaryPages.addPage(EnumBestiaryPages.getRand(), this.stacks[0]);
+				EnumBestiaryPages.addRandomPage(itemstack);
 			}
 
 			if (this.stacks[2] == null)

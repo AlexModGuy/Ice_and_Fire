@@ -22,6 +22,7 @@ public class EntityDragonEgg extends EntityLiving{
 
 	public EntityDragonEgg(World worldIn) {
 		super(worldIn);
+		this.isImmuneToFire = true;
 		this.setSize(0.45F, 0.55F);
 	}
 	@Override
@@ -84,6 +85,9 @@ public class EntityDragonEgg extends EntityLiving{
 		int j = MathHelper.floor_double(this.posY);
 		int k = MathHelper.floor_double(this.posZ);
 		BlockPos pos = new BlockPos(i, j, k);
+		if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.fire && getType().isFire){
+			this.setDragonAge(this.getDragonAge() + 1);
+		}
 		if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.water && !getType().isFire && this.getRNG().nextInt(500) == 0){
 			worldObj.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
 			worldObj.playSoundEffect(i, j, k, "dig.glass", 1, 1);
@@ -91,6 +95,19 @@ public class EntityDragonEgg extends EntityLiving{
 				((TileEntityEggInIce)worldObj.getTileEntity(pos)).type = this.getType();
 				this.setDead();
 			}
+		}
+		if(this.getDragonAge() == 60){
+			if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.fire && getType().isFire){
+				worldObj.destroyBlock(pos, false);
+				EntityFireDragon dragon = new EntityFireDragon(worldObj);
+				dragon.setColor(getType().meta);
+				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+				if(!worldObj.isRemote){
+					worldObj.spawnEntityInWorld(dragon);
+				}
+			}
+			this.playSound("iceandfire:dragonegg.hatch", 1, 1);
+			this.setDead();
 		}
 		/*if(this.getType().isFire){
 			for (int i = 0; i < 2; ++i)

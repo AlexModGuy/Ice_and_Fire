@@ -38,21 +38,16 @@ public class GuiLectern extends GuiContainer
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
         int i1;
-
-       /* if (TileEntityLectern.isBurning(this.tileFurnace))
-        {
-            i1 = this.func_175382_i(13);
-            this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-        }*/
-
         i1 = this.func_175381_h(24);
-        this.drawTexturedModalRect(k + 76, l + 35, 176, 0, i1 + 1, 16);
+        this.drawTexturedModalRect(k + 76, l + 36, 176, 0, i1 + 1, 16);
     }
 
-    private int func_175381_h(int i)
+
+    private int func_175381_h(int p_175381_1_)
     {
         int j = this.tileFurnace.getField(2);
         int k = this.tileFurnace.getField(3);
-        return k != 0 && j != 0 ? j * i / k : 0;
+        return k != 0 && j != 0 ? j * p_175381_1_ / k : 0;
     }
+
 }

@@ -500,9 +500,6 @@ public class ModelFireDragon extends ModelDragonBase {
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
 		animate((IAnimated)entity, f, f1, f2, f3, f4, f5);
 		ModelUtils.renderAll(boxList);
-		if(this.isChild){
-			this.Head.setScale(50F, 50F, 2.3F);
-		}
 	}
 
 	private void setRotateAngle(MowzieModelRenderer model, float x, float y, float z) {
@@ -530,8 +527,8 @@ public class ModelFireDragon extends ModelDragonBase {
 		float speed = 0.1F;
 
 		if(!dragon.onGround){
-			this.faceTarget(Neck2, 2, f3, f4);
-			this.faceTarget(Head, 1, f3, f4);
+			this.faceTarget(Neck3, 2, f3, f4);
+			this.faceTarget(Head, 2, f3, f4);
 			this.bob(BodyLower, 0.3F, 3, false, entity.ticksExisted, 1);
 			this.chainFlap(rightWingParts, 0.3F, 0.3F, -1, entity.ticksExisted, 1);
 			this.chainFlap(leftWingParts, -0.3F, -0.3F, -2, entity.ticksExisted, 1);
@@ -549,8 +546,8 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.chainWave(leftLegParts, 0.3F, 0.1F, 2, entity.ticksExisted, 1);
 
 		}else{
-			this.faceTarget(Neck2, 2, f3, f4);
-			this.faceTarget(Head, 1, f3, f4);
+			this.faceTarget(Neck3, 2, f3, f4);
+			this.faceTarget(Head, 2, f3, f4);
 			this.bob(BodyLower, speed, 0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighR, speed, -0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighL, speed, -0.7F, false, entity.ticksExisted, 1);

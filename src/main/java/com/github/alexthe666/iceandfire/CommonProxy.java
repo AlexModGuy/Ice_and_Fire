@@ -6,4 +6,5 @@ public class CommonProxy {
 	public void render(){}
 	public void renderArmors(EnumDragonArmor armor){}
 	public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ){}
+	public void openBestiaryGui(){}
 }

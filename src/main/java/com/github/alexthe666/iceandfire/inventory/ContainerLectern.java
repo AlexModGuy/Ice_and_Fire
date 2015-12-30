@@ -6,14 +6,11 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceFuel;
-import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
+import com.github.alexthe666.iceandfire.core.ModItems;
 
 public class ContainerLectern extends Container
 {
@@ -28,7 +25,7 @@ public class ContainerLectern extends Container
         this.tileFurnace = furnaceInventory;
 		this.addSlotToContainer(new Slot(furnaceInventory, 0, 44, 35));
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 80, 58));
-        this.addSlotToContainer(new SlotFurnaceOutput(playerInv.player, furnaceInventory, 2, 116, 35));
+        this.addSlotToContainer(new SlotLectern(playerInv.player, furnaceInventory, 2, 116, 35));
         int i;
 
         for (i = 0; i < 3; ++i)
@@ -103,78 +100,75 @@ public class ContainerLectern extends Container
         return this.tileFurnace.isUseableByPlayer(playerIn);
     }
 
-    /**
-     * Take a stack from the specified inventory slot.
-     */
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
-    {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+	 public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+	    {
+	        ItemStack itemstack = null;
+	        Slot slot = (Slot)this.inventorySlots.get(index);
 
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+	        if (slot != null && slot.getHasStack())
+	        {
+	            ItemStack itemstack1 = slot.getStack();
+	            itemstack = itemstack1.copy();
 
-            if (index == 2)
-            {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true))
-                {
-                    return null;
-                }
+	            if (index == 2)
+	            {
+	                if (!this.mergeItemStack(itemstack1, 3, 39, true))
+	                {
+	                    return null;
+	                }
 
-                slot.onSlotChange(itemstack1, itemstack);
-            }
-            else if (index != 1 && index != 0)
-            {
-                if (FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null)
-                {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false))
-                    {
-                        return null;
-                    }
-                }
-              /*  else if (TileEntityLectern.isItemFuel(itemstack1))
-                {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
-                    {
-                        return null;
-                    }
-                }*/
-                else if (index >= 3 && index < 30)
-                {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
-            {
-                return null;
-            }
+	                slot.onSlotChange(itemstack1, itemstack);
+	            }
+	            else if (index != 1 && index != 0)
+	            {
+	                if (itemstack1 != null && itemstack1.getItem() == ModItems.bestiary)
+	                {
+	                    if (!this.mergeItemStack(itemstack1, 0, 1, false))
+	                    {
+	                        return null;
+	                    }
+	                }
+	                else if (itemstack1 != null && itemstack1.getItem() == ModItems.manuscript)
+	                {
+	                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
+	                    {
+	                        return null;
+	                    }
+	                }
+	                else if (index >= 3 && index < 30)
+	                {
+	                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
+	                    {
+	                        return null;
+	                    }
+	                }
+	                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+	                {
+	                    return null;
+	                }
+	            }
+	            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
+	            {
+	                return null;
+	            }
 
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
+	            if (itemstack1.stackSize == 0)
+	            {
+	                slot.putStack((ItemStack)null);
+	            }
+	            else
+	            {
+	                slot.onSlotChanged();
+	            }
 
-            if (itemstack1.stackSize == itemstack.stackSize)
-            {
-                return null;
-            }
+	            if (itemstack1.stackSize == itemstack.stackSize)
+	            {
+	                return null;
+	            }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
-        }
+	            slot.onPickupFromSlot(playerIn, itemstack1);
+	        }
 
-        return itemstack;
-    }
+	        return itemstack;
+	    }
 }

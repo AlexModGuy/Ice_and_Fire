@@ -30,7 +30,7 @@ public class GuiHandler implements IGuiHandler {
 			if(entity != null) {
 
 				if (entity instanceof EntityDragonBase) {
-					return new ContainerDragon(player.inventory, (EntityDragonBase)entity);
+					return new ContainerDragon((EntityDragonBase)entity, player);
 				}
 			}
 			break;

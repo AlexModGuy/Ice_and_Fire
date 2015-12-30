@@ -10,6 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
 import com.github.alexthe666.iceandfire.client.particle.EntityFXSnowflake;
@@ -140,6 +141,10 @@ public class ClientProxy extends CommonProxy{
 		if(name == "snowflake"){
 			Minecraft.getMinecraft().effectRenderer.addEffect(new EntityFXSnowflake(world, x, y, z, motX, motY, motZ));
 		}
+	}
+
+	public void openBestiaryGui(){
+		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary());
 	}
 
 }
