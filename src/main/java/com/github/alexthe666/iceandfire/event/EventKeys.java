@@ -13,16 +13,16 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleKeyInputEvent(InputEvent.KeyInputEvent event){
-		if(ModKeys.dragon_up.isKeyDown()){
+		if(ModKeys.dragon_up.isPressed()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(1));
 		}
-		if(ModKeys.dragon_down.isKeyDown()){
+		if(ModKeys.dragon_down.isPressed()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(2));
 		}
-		if(ModKeys.dragon_fireAttack.isKeyDown()){
+		if(ModKeys.dragon_fireAttack.isPressed()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(3));
 		}
-		if(ModKeys.dragon_strike.isKeyDown()){
+		if(ModKeys.dragon_strike.isPressed()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(4));
 		}
 		

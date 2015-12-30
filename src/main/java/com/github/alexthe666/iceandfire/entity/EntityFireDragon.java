@@ -54,6 +54,32 @@ public class EntityFireDragon extends EntityDragonBase{
 		this.jump();
 		this.setColor(this.getRNG().nextInt(5));
 	}
+	@Override
+	public boolean interact(EntityPlayer player){
+		
+
+		if(player.inventory.getCurrentItem() != null){
+			if(player.inventory.getCurrentItem().getItem() != null){
+				Item item = player.inventory.getCurrentItem().getItem();
+				if(player.inventory.getCurrentItem().getItem() instanceof ItemFood){
+					ItemFood food = (ItemFood)item;
+					if(food.isWolfsFavoriteMeat()){
+						//this.setDragonAgeTick(0);
+						//this.increaseDragonAge();
+						this.increaseDragonAge();
+						this.updateSize();
+						this.destroyItem(player, getHeldItem());
+						this.heal(4);
+						System.out.println(this.getDragonAge());
+						System.out.println(this.getMaxHealth());
+						return true;
+					}
+				}
+			}
+		}
+		super.interact(player);
+		return false;
+	}
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
