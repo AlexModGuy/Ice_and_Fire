@@ -17,7 +17,7 @@ public class ContainerDragon extends Container
     private EntityDragonBase dragon;
     private static final String __OBFID = "CL_00001751";
 
-    public ContainerDragon(EntityDragonBase dragon, EntityPlayer player)
+    public ContainerDragon(final EntityDragonBase dragon, EntityPlayer player)
     {
     	
         this.dragonInv = dragon.inv;
@@ -31,12 +31,24 @@ public class ContainerDragon extends Container
             {
                 return super.isItemValid(stack)&& EntityDragonBase.isAllowedInSlot(1, stack);
             }
+            
+            public void onSlotChange(ItemStack stack, ItemStack stack2)
+            {
+            	dragon.playSound("mob.horse.armor", 1, 1);
+            	super.onSlotChange(stack, stack2);
+            }
         });
         this.addSlotToContainer(new Slot(dragon.inv, 2, 8, 36)
         {
             public boolean isItemValid(ItemStack stack)
             {
                 return super.isItemValid(stack)&& EntityDragonBase.isAllowedInSlot(2, stack);
+            }
+            
+            public void onSlotChange(ItemStack stack, ItemStack stack2)
+            {
+            	dragon.playSound("mob.horse.armor", 1, 1);
+            	super.onSlotChange(stack, stack2);
             }
         });
         this.addSlotToContainer(new Slot(dragon.inv, 3, 153, 18)
@@ -45,12 +57,24 @@ public class ContainerDragon extends Container
             {
                 return super.isItemValid(stack)&& EntityDragonBase.isAllowedInSlot(3, stack);
             }
+            
+            public void onSlotChange(ItemStack stack, ItemStack stack2)
+            {
+            	dragon.playSound("mob.horse.armor", 1, 1);
+            	super.onSlotChange(stack, stack2);
+            }
         });
         this.addSlotToContainer(new Slot(dragon.inv, 4, 153, 36)
         {
             public boolean isItemValid(ItemStack stack)
             {
                 return super.isItemValid(stack)&& EntityDragonBase.isAllowedInSlot(4, stack);
+            }
+            
+            public void onSlotChange(ItemStack stack, ItemStack stack2)
+            {
+            	dragon.playSound("mob.horse.armor", 1, 1);
+            	super.onSlotChange(stack, stack2);
             }
         });
         int j;
