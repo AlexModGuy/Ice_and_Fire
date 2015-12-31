@@ -17,14 +17,17 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIControlledByPlayer;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInvBasic;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -36,11 +39,10 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.client.RollBuffer;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
@@ -68,6 +70,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private Animation currentAnimation;
 	private int animTick;
 	public ChainBuffer tailbuffer = new ChainBuffer(5);
+	public RollBuffer rollbuffer = new RollBuffer(1);
 	public int attackTick;
 	public int flameTick;
 	public AnimalChest inv;
@@ -82,19 +85,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		blacklist.add(EntityDragonEgg.class);
 		blacklist.add(EntityDragonSkull.class);
 		this.currentOrder = EnumOrder.WANDER;
-		//((PathNavigateGround)this.getNavigator()).func_179690_a(true);
 		this.mouth = new EntityDragonMouth(this, "head");
-		//initInv();
 		this.tasks.addTask(0, new EntityAIDragonAge(this));
 		this.tasks.addTask(0, new EntityAIDragonStarve(this));
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit);
-		this.tasks.addTask(3, new EntityAIDragonAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
-		this.tasks.addTask(3, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
-		this.tasks.addTask(4, new EntityAIDragonWander(this));
-		this.tasks.addTask(5, new EntityAIDragonFollow(this, 10, 2));
-		this.tasks.addTask(6, new EntityAIDragonDefend(this));
-		this.tasks.addTask(7, new EntityAIDragonEatItem(this));
+		this.tasks.addTask(3, new EntityAIControlledByPlayer(this, 0.3F));
+		this.tasks.addTask(4, new EntityAIDragonAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
+		this.tasks.addTask(5, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
+		this.tasks.addTask(6, new EntityAIDragonWander(this));
+		this.tasks.addTask(7, new EntityAIDragonFollow(this, 10, 2));
+		this.tasks.addTask(8, new EntityAIDragonDefend(this));
+		this.tasks.addTask(9, new EntityAIDragonEatItem(this));
 		this.targetTasks.addTask(1, new EntityAIDragonHunt(this, EntityLivingBase.class, true, true));
 		this.setHunger(50);
 		this.setHealth(10F);
@@ -340,21 +342,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void updateRiderPosition()
 	{
 		super.updateRiderPosition();
-		/*
+
 		if (this.riddenByEntity != null)
 		{
 			rotationYaw = renderYawOffset;
-			float radius = 0.4F * this.getCreatureLength() - 3;
+			float radius = 0.4F *  (0.7F * getDragonSize()) * - 3;
 			float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
-			((EntityLivingBase)this.riddenByEntity).rotationYaw = (float) (angle * (180 / Math.PI) - 150.0F);
 			double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 			double extraZ = (double) (radius * MathHelper.cos(angle));
-			this.riddenByEntity.setPosition(this.posX + extraX, this.posY + 2, this.posZ + extraZ);
-			this.bobPrey(riddenByEntity, 0.3F, 0.3F, this.ticksExisted, 1);
+			double extraY = 0.4F *  (1.9F * getDragonSize());
+			this.riddenByEntity.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+			this.bobPrey(riddenByEntity, 0.1F, 0.3F, this.ticksExisted, 1);
 
 
 		}
-		 */
+
 	}
 
 	public boolean isSitting()
@@ -500,8 +502,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void onUpdate(){
 		super.onUpdate();
+		if(this.riddenByEntity != null){
+			if(this.riddenByEntity instanceof EntityPlayer && this.currentOrder != EnumOrder.WANDER){
+				this.currentOrder = EnumOrder.WANDER;
+			}
+		}
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
+
+		if(this.getAttackTarget() != null){
+			repelEntity(this.getAttackTarget(), this.posX, this.posY, this.posZ, 2.5F * this.getDragonSize());
+		}
+
 		if(this.getAttackTarget() != null && this.getAnimation().animationId == 0){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
@@ -519,12 +531,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
+		if(this.isOffGround())
+			rollbuffer.calculateChainRollBuffer(50F, 5, 4, this);
+
 		Animation.tickAnimations(this);
-		if(this.isFlying){
-			setRelitiveEntityPosition(mouth, 1.6F, 0.95F);
-		}else{
-			setRelitiveEntityPosition(mouth, 1.6F, 2.0F);			
-		}
 		//tester
 		//this.worldObj.spawnParticle(EnumParticleTypes.NOTE, mouth.posX, mouth.posY, mouth.posZ, 0, 0, 0, new int[]{0});
 
@@ -570,60 +580,81 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean interact(EntityPlayer player)
 	{
-		player.addChatComponentMessage(new ChatComponentText("" + this.getAttackDistance()));
+		ItemStack itemstack = player.getHeldItem();
+		if(itemstack == null){
+			if(player.isSneaking()){
+				this.currentOrder = this.currentOrder.next();
+				if (this.currentOrder == EnumOrder.SIT || this.currentOrder == EnumOrder.SLEEP)
+				{
+					this.getNavigator().clearPathEntity();
+					this.setSitting(true);
+				}
+				else
+				{
+					this.setSitting(false);
+				}
+				if(worldObj.isRemote){
+					if(this.currentOrder == EnumOrder.WANDER){
+						if(this.hasCustomName()){
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonWanderName")));
+						}else{
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonWander")));
+						}
+					}
+					if(this.currentOrder == EnumOrder.FOLLOW){
+						if(this.hasCustomName()){
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonFollowName")));
+						}else{
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonFollow")));
+						}
+					}
+					if(this.currentOrder == EnumOrder.SIT){
+						if(this.hasCustomName()){
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonSitName")));
+						}else{
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonSit")));
+						}
+					}
+					if(this.currentOrder == EnumOrder.SLEEP){
+						if(this.hasCustomName()){
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonSleepName")));
+						}else{
+							player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonSleep")));
+						}
+					}
+				}
+				return true;
+			}else{
+				player.openGui(IceAndFire.instance, 0, this.worldObj, getEntityId(), 0, 0);
+			}
+		}else if(itemstack != null && itemstack.getItem() != null){
+			Item item = itemstack.getItem();
+			if(item == Items.stick && this.getStage() > 2){
+				this.mountDragon(player);
+				return true;
+			}
+			if(item instanceof ItemFood){
+				boolean isWolfFood = ((ItemFood)item).isWolfsFavoriteMeat();
+				if(isWolfFood){
+					this.increaseDragonAge();
+					this.updateSize();
+					this.destroyItem(player, getHeldItem());
+					this.heal(4);
+					float radius = 0.4F *  (0.7F * getDragonSize()) * - 3;
+					float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
+					double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+					double extraZ = (double) (radius * MathHelper.cos(angle));
+					double extraY = 0.4F *  (1.9F * getDragonSize());
+					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, extraX + (this.rand.nextDouble() - 0.5D), extraY + (this.rand.nextDouble() - 0.5D), extraZ + (this.rand.nextDouble() - 0.5D), 0, 0.05D, 0, new int[] {Item.getIdFromItem(itemstack.getItem()), itemstack.getMetadata()});
+					return true;
 
-		ItemStack item = player.inventory.getCurrentItem();
-		if(player.isSneaking()){
-			this.currentOrder = this.currentOrder.next();
-			if (this.currentOrder == EnumOrder.SIT || this.currentOrder == EnumOrder.SLEEP)
-			{
-				this.getNavigator().clearPathEntity();
-				this.setSitting(true);
-			}
-			else
-			{
-				this.setSitting(false);
-			}
-			if(worldObj.isRemote){
-				if(this.currentOrder == EnumOrder.WANDER){
-					if(this.hasCustomName()){
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonWanderName")));
-					}else{
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonWander")));
-					}
-				}
-				if(this.currentOrder == EnumOrder.FOLLOW){
-					if(this.hasCustomName()){
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonFollowName")));
-					}else{
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonFollow")));
-					}
-				}
-				if(this.currentOrder == EnumOrder.SIT){
-					if(this.hasCustomName()){
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonSitName")));
-					}else{
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonSit")));
-					}
-				}
-				if(this.currentOrder == EnumOrder.SLEEP){
-					if(this.hasCustomName()){
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.knownAs") + this.getCustomNameTag() + StatCollector.translateToLocal("message.iceandfire.dragonSleepName")));
-					}else{
-						player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonSleep")));
-					}
 				}
 			}
-
-		}else if(!this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == player)){
-			player.mountEntity(this);
 
 		}
-		if(item == null){
-			player.openGui(IceAndFire.instance, 0, this.worldObj, getEntityId(), 0, 0);
-		}
-		return true;
+		return false;
 	}
+
 	public void tellOtherPlayersAge(){
 		int acctualStage = getStage();
 		if(this.worldObj.getClosestPlayerToEntity(this, 16) != null && worldObj.isRemote){
@@ -633,36 +664,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				worldObj.getClosestPlayerToEntity(this, 16).addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.iceandfire.dragonGrown") + acctualStage + StatCollector.translateToLocal("message.iceandfire.dragonGrownEnd")));
 			}	
 		}
-	}
-
-	public void setRelitiveEntityPosition(Entity entity, float entityX, float entityY){
-		if (this.ringBufferIndex < 0)
-		{
-			for (int i = 0; i < this.ringBuffer.length; ++i)
-			{
-				this.ringBuffer[i][0] = (double)this.rotationYaw;
-				this.ringBuffer[i][1] = this.posY;
-			}
-		}
-
-		if (++this.ringBufferIndex == this.ringBuffer.length)
-		{
-			this.ringBufferIndex = 0;
-		}
-
-		this.ringBuffer[this.ringBufferIndex][0] = (double)this.rotationYaw;
-		this.ringBuffer[this.ringBufferIndex][1] = this.posY;
-		this.mouth.onUpdate();
-
-		double[] adouble1 = this.getMovementOffsets(5, 1.0F);
-		double[] adouble = this.getMovementOffsets(0, 1.0F);
-		float f1 = (float)(this.getMovementOffsets(5, 1.0F)[1] - this.getMovementOffsets(10, 1.0F)[1]) * 10.0F / 180.0F * (float)Math.PI;
-		float f2 = MathHelper.cos(f1);
-		float f10 = -MathHelper.sin(f1);
-		float f12 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F - this.randomYawVelocity * 0.01F);
-		float f13 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F - this.randomYawVelocity * 0.01F);
-		entity.setLocationAndAngles(this.posX + (double)(f12 *  -width/entityX * f2), this.posY + height/entityY, this.posZ - (double)(f13 * -width/entityX * f2), 0.0F, 0.0F);
-
 	}
 
 	public double[] getMovementOffsets(int x, float y)
@@ -819,6 +820,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return false;
 	}
 
+	private void mountDragon(EntityPlayer player) {
+		player.rotationYaw = this.rotationYaw;
+		player.rotationPitch = this.rotationPitch;
+
+		if (!this.worldObj.isRemote) {
+			player.mountEntity(this);
+		}
+	}
+
+	protected void repelEntity(Entity entity, double posX, double posY, double posZ, float radius)
+	{
+		double angle = (getAngleBetweenEntities(this, entity) + 90) * Math.PI / 180;
+		entity.motionX = -0.1 * Math.cos(angle);
+		entity.motionZ = -0.1 * Math.sin(angle);
+	}
+
 	protected void repelEntities(double posX, double posY, double posZ, float radius)
 	{
 		List<EntityLivingBase> nearestEntities = getEntityLivingBaseNearby(posX, posY, posZ, radius);
@@ -929,12 +946,58 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void moveEntityWithHeading(float x, float z)
 	{
 		if(this.currentOrder == EnumOrder.SIT || this.currentOrder == EnumOrder.SLEEP){
-			this.motionX *= 0D;
-			this.motionZ *= 0D;
+
 		}else{
-			super.moveEntityWithHeading(x, z);
+			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase)
+			{
+				this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
+				this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
+				this.setRotation(this.rotationYaw, this.rotationPitch);
+				this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
+				moveForward = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
+				z = ((EntityLivingBase)this.riddenByEntity).moveForward;
+
+				if (z <= 0.0F)
+				{
+					z *= 0.25F;
+				}
+
+				this.stepHeight = 1.0F;
+				this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
+
+				if (!this.worldObj.isRemote)
+				{
+					this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
+					super.moveEntityWithHeading(moveForward, z);
+				}
+
+				if (this.onGround)
+				{
+
+				}
+
+				this.prevLimbSwingAmount = this.limbSwingAmount;
+				double d1 = this.posX - this.prevPosX;
+				double d0 = this.posZ - this.prevPosZ;
+				float f4 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
+
+				if (f4 > 1.0F)
+				{
+					f4 = 1.0F;
+				}
+
+				this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
+				this.limbSwing += this.limbSwingAmount;
+			}
+			else
+			{
+				this.stepHeight = 0.5F;
+				this.jumpMovementFactor = 0.02F;
+				super.moveEntityWithHeading(x, z);
+			}
 		}
 	}
+
 	public EntityLivingBase closestEntity(){
 		return (EntityLivingBase)this.worldObj.findNearestEntityWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand((double)16, 3.0D, 16), this);
 	}
@@ -1021,4 +1084,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 
+	public boolean canBeSteered()
+	{
+		return true;
+	}
+	
+	public boolean isOffGround(){
+		BlockPos pos = this.getPosition();
+		return  worldObj.isAirBlock(pos) && worldObj.isAirBlock(pos.down());
+	}
 }
