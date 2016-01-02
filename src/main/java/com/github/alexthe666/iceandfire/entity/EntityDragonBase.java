@@ -39,7 +39,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.animation.AnimationBlend;
 import com.github.alexthe666.iceandfire.client.RollBuffer;
@@ -90,7 +89,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.tasks.addTask(0, new EntityAIDragonStarve(this));
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit);
-		this.tasks.addTask(3, new EntityAIControlledByPlayer(this, 0.3F));
 		this.tasks.addTask(4, new EntityAIDragonAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
 		this.tasks.addTask(5, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
 		this.tasks.addTask(6, new EntityAIDragonWander(this));
@@ -249,7 +247,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if(this.getRNG().nextInt(50) == 0){
 			if(this.getAnimation() != null && this.getAnimation().animationId == 0 && !worldObj.isRemote){
-				//this.setAnimation(animation_takeoff);
+				this.setAnimation(animation_takeoff);
 			}
 		}
 		int sleepCounter = 0;
@@ -531,8 +529,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
-		if(this.isOffGround())
+		if(this.isOffGround()){
 			rollbuffer.calculateChainRollBuffer(50F, 5, 4, this);
+		}else{
+			rollbuffer.resetRotations();
+		}
 
 		Animation.tickAnimations(this);
 		//tester
@@ -639,7 +640,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 					this.increaseDragonAge();
 					this.updateSize();
 					this.destroyItem(player, getHeldItem());
-					this.heal(4);
+					this.heal(6);
 					float radius = 0.4F *  (0.7F * getDragonSize()) * - 3;
 					float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
 					double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));

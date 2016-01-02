@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.core;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -51,6 +53,15 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 1), new Object[] {"XXX", " XX", Character.valueOf('X'), "blockIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 2), new Object[] {"XXX", "XXX", "X X", Character.valueOf('X'), "blockIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 3), new Object[] {"  X", "XX ", Character.valueOf('X'), "blockIron"}));
-		
+		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
+		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+
+	}
+
+	public static TileEntityBanner.EnumBannerPattern addBanner(String name, ItemStack craftingStack)
+	{
+		Class<?>[] classes = {String.class, String.class, ItemStack.class};
+		Object[] names = {"iceandfire_" + name, "iceandfire." + name, craftingStack};
+		return (TileEntityBanner.EnumBannerPattern)EnumHelper.addEnum(TileEntityBanner.EnumBannerPattern.class, name.toUpperCase(), classes, names);
 	}
 }
