@@ -1,23 +1,19 @@
 package com.github.alexthe666.iceandfire.entity;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.client.RollBuffer;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIControlledByPlayer;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
@@ -30,29 +26,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.animation.AnimationBlend;
-import com.github.alexthe666.iceandfire.client.RollBuffer;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonHunt;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -842,6 +822,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		List<EntityLivingBase> nearestEntities = getEntityLivingBaseNearby(posX, posY, posZ, radius);
 		for (Entity entity : nearestEntities)
 		{
+			if (entity == riddenByEntity) continue;
 			double angle = (getAngleBetweenEntities(this, entity) + 90) * Math.PI / 180;
 			entity.motionX = -0.1 * Math.cos(angle);
 			entity.motionZ = -0.1 * Math.sin(angle);
@@ -955,7 +936,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
 				this.setRotation(this.rotationYaw, this.rotationPitch);
 				this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-				moveForward = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
+				x = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
 				z = ((EntityLivingBase)this.riddenByEntity).moveForward;
 
 				if (z <= 0.0F)
@@ -969,7 +950,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				if (!this.worldObj.isRemote)
 				{
 					this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
-					super.moveEntityWithHeading(moveForward, z);
+					super.moveEntityWithHeading(x, z);
 				}
 
 				if (this.onGround)
