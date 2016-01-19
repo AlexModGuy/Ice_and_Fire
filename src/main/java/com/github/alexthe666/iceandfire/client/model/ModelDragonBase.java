@@ -15,64 +15,34 @@ public abstract class ModelDragonBase extends MowzieModelBase{
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		EntityDragonBase dragon = (EntityDragonBase)entity;
-		
-		if(dragon.getAnimation() == null || dragon.getAnimation().animationId == 0){
-				if(!dragon.onGround){
-					flightPose(false);
-				}else{
-					if(dragon.getSleeping() == 1){
-						sleepPose(false);
-					}else{
-						normalPose(false);
-					}
-				}
-		}
-		if(dragon.getAnimation() instanceof AnimationBlend){
-			if(((AnimationBlend)dragon.getAnimation()).blend){
-				if(!dragon.onGround){
-					flightPose(false);
-				}else{
-					if(dragon.getSleeping() == 1){
-						sleepPose(false);
-					}else{
-						normalPose(false);
-					}
-				}
-			}else{
-				normalPose(false);	
-			}
-		}
+		float hover = dragon.hoverProgress;
+		hoverPose(hover);
 	}
-	public void caryOutPoses(){
-		
-	}
-	public abstract void normalPose(boolean animate);
+	
+	public void progressAnimationRotation(MowzieModelRenderer modelRenderer, float sitProgress, float rotX, float rotY, float rotZ)
+    {
+        modelRenderer.rotateAngleX += sitProgress * rotX / 25.0F;
+        modelRenderer.rotateAngleY += sitProgress * rotY / 25.0F;
+        modelRenderer.rotateAngleZ += sitProgress * rotZ / 25.0F;
+    }
 
-	public abstract void flightPose(boolean animate);
+	public void progressAnimationPos(MowzieModelRenderer modelRenderer, float sitProgress, float x, float y, float z)
+    {
+        modelRenderer.rotationPointX += sitProgress * x / 20.0F;
+        modelRenderer.rotationPointY += sitProgress * y / 20.0F;
+        modelRenderer.rotationPointZ += sitProgress * z / 20.0F;
+    }
+	
+	public abstract void flightPose(float progress);
 
-	public abstract void sitPose(boolean animate);
+	public abstract void sitPose(float progress);
 
-	public abstract void sleepPose(boolean animate);
+	public abstract void sleepPose(float progress);
 
-	public abstract void hoverPose(boolean animate);
+	public abstract void hoverPose(float progress);
 
-	public abstract void deadPose(boolean animate);
+	public abstract void deadPose(float progress);
 
-	public void renderAndSetAngles(ModelDragonBase otherModel){
-		ModelUtils.renderAll(boxList);
-		Iterator itr = otherModel.boxList.iterator();
-		Iterator itr2 = boxList.iterator();
+	public void normalPose() {}
 
-		while(itr.hasNext() && itr2.hasNext()) {
-			Object element = itr.next();
-			Object element2 = itr2.next();
-			if(element instanceof MowzieModelRenderer && element2 instanceof MowzieModelRenderer){
-				MowzieModelRenderer box = (MowzieModelRenderer)element;
-				MowzieModelRenderer box2 = (MowzieModelRenderer)element2;
-				box2.rotateAngleX = box.rotateAngleX;
-				box2.rotateAngleY = box.rotateAngleY;
-				box2.rotateAngleZ = box.rotateAngleZ;
-			}
-		}
-	}
 }

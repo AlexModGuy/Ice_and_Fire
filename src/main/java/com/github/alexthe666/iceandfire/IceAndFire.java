@@ -30,6 +30,7 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
@@ -39,15 +40,13 @@ public class IceAndFire
 
 	public static final String MODID = "iceandfire";
 	public static final String VERSION = "0.1.4";
-
-	public static final List treasure_dragondungeon = new ArrayList<WeightedRandomChestContent>();
 	@Instance(value = MODID)
 	public static IceAndFire instance;
 	public static SimpleNetworkWrapper channel;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
-
+	public static final List treasure_dragondungeon = new ArrayList<WeightedRandomChestContent>();
     public static DamageSource dragon = (new DamageSource("dragon")).setFireDamage();
     public static DamageSource dragonFire = (new DamageSource("dragonFire")).setFireDamage();
 
@@ -56,6 +55,7 @@ public class IceAndFire
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
+		channel.registerMessage(MessageDragonUpdate.class, MessageDragonUpdate.class, 1, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	@EventHandler
@@ -74,6 +74,7 @@ public class IceAndFire
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 	}
+	
 	public void initilizeTreasure(){
 		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.gold_nugget), 1, 3, 75));
 		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.diamond), 1, 2, 15));

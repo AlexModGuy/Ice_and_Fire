@@ -182,7 +182,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.Jaw = new MowzieModelRenderer(this, 34, 56);
 		this.Jaw.setRotationPoint(0.0F, 0.4F, -3.3F);
 		this.Jaw.addBox(-1.5F, -0.4F, -5.5F, 3, 1, 5, 0.0F);
-		this.setRotateAngle(Jaw, 0.5689773361501514F, -0.0F, 0.0F);
+		this.setRotateAngle(Jaw, -(float)Math.toRadians(2.61D), -0.0F, 0.0F);
 		this.Spike5 = new MowzieModelRenderer(this, 34, 34);
 		this.Spike5.setRotationPoint(0.0F, -1.5F, -6.1F);
 		this.Spike5.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 2, 0.0F);
@@ -497,7 +497,7 @@ public class ModelFireDragon extends ModelDragonBase {
 	}
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
 		animate((IAnimated)entity, f, f1, f2, f3, f4, f5);
-		
+
 		ModelUtils.renderAll(boxList);
 	}
 
@@ -525,7 +525,13 @@ public class ModelFireDragon extends ModelDragonBase {
 		MowzieModelRenderer[] leftLegParts = {this.ThighL, this.LegL};
 		float walkspeed = 0.35F - 0.0018656F * dragon.getDragonAge();
 		float speed = 0.1F;
-		if(!dragon.onGround){	
+		if(dragon.isFlying() || dragon.isHovering()){
+
+			if(dragon.isHovering())
+				hoverPose(dragon.hoverProgress);
+			else if(!dragon.isHovering() && dragon.isFlying())
+				flightPose(dragon.flightProgress);
+
 			this.bob(BodyLower, 0.3F, 3, false, entity.ticksExisted, 1);
 			this.chainFlap(rightWingParts, 0.3F, 0.3F, -1, entity.ticksExisted, 1);
 			this.chainFlap(leftWingParts, -0.3F, -0.3F, -2, entity.ticksExisted, 1);
@@ -543,6 +549,7 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.chainWave(leftLegParts, 0.3F, 0.1F, 2, entity.ticksExisted, 1);
 
 		}else{
+			normalPose();
 			this.bob(BodyLower, speed, 0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighR, speed, -0.7F, false, entity.ticksExisted, 1);
 			this.bob(ThighL, speed, -0.7F, false, entity.ticksExisted, 1);
@@ -573,14 +580,12 @@ public class ModelFireDragon extends ModelDragonBase {
 
 		}
 		((EntityDragonBase)entity).tailbuffer.applyChainSwingBuffer(tailParts);
-		((EntityDragonBase)entity).rollbuffer.applyChainRollBuffer(new MowzieModelRenderer[]{this.BodyLower});
+		//((EntityDragonBase)entity).rollbuffer.applyChainRollBuffer(new MowzieModelRenderer[]{this.BodyLower});
 
 	}
-	//TODO
 	public void animate(IAnimated entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		animator.update(entity);
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
-		this.hoverPose(false);
 		animator.setAnimationId(1);
 		animator.startPhase(15);
 		ModelUtils.rotate(animator, Neck1, -15.65F, 0, 0);
@@ -608,376 +613,176 @@ public class ModelFireDragon extends ModelDragonBase {
 		animator.endPhase();
 		animator.resetPhase(10);
 
-		animator.setAnimationId(3);
-		animator.startPhase(0);
-		this.flightPose(true);
-		animator.endPhase();
-		animator.startPhase(70);
-		this.hoverPose(true);
-		animator.endPhase();
+	}
+	@Override
+	public void flightPose(float sitProgress) {
 
-	}
-	@Override
-	public void normalPose(boolean animate) {
-		ModelUtils.animateOrRotate(animator, animate, Spike2, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerR2, 0, (float)Math.toRadians(20.57D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike1, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Jaw, -((float)Math.toRadians(2.6099999999999994D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Club, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL3, (float)Math.toRadians(30.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR1, (float)Math.toRadians(30.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike5, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike20, (float)Math.toRadians(21.377643555866484D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail2, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR1, 0, (float)Math.toRadians(85.0D), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR2, (float)Math.toRadians(37.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL3, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawRPivot, -((float)Math.toRadians(177.0D)), (float)Math.toRadians(41.0D), -((float)Math.toRadians(146.09D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike10, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HeadFront, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighR, -((float)Math.toRadians(11.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike12, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike9, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL1, (float)Math.toRadians(30.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike11, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike13, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighL, -((float)Math.toRadians(11.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL2, -((float)Math.toRadians(5.0D)), (float)Math.toRadians(49.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR3, (float)Math.toRadians(30.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike3, (float)Math.toRadians(51.750006438508166D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyUpper, (float)Math.toRadians(5.22D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR2, (float)Math.toRadians(5.0D), -((float)Math.toRadians(49.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane2, 0, (float)Math.toRadians(145.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL2, (float)Math.toRadians(37.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, LegR, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR3, 0, (float)Math.toRadians(110.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike6, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawLPivot, (float)Math.toRadians(177.0D), -((float)Math.toRadians(41.0D)), -((float)Math.toRadians(146.0D)));
-        ModelUtils.animateOrRotate(animator, animate, HornR3, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Head, (float)Math.toRadians(20.870000000000005D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck1, (float)Math.toRadians(5.219999999999999D), 0, (float)Math.toRadians(2.61D));
-        ModelUtils.animateOrRotate(animator, animate, Spike19, (float)Math.toRadians(38.3218472382285D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck2, -((float)Math.toRadians(3.82D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL3, 0, -((float)Math.toRadians(110.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike4, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike17, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike7, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane2, 0, (float)Math.toRadians(35.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike15, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike8, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike18, (float)Math.toRadians(36.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane3, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL1, 0, -((float)Math.toRadians(85.0D)), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, Spike16, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR1, (float)Math.toRadians(28.0D), (float)Math.toRadians(4.0D), -((float)Math.toRadians(20.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane3, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike14, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL2, 0, -((float)Math.toRadians(20.57D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail1, -((float)Math.toRadians(7.83D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR4, (float)Math.toRadians(180.0D), (float)Math.toRadians(26.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, LegL, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL4, (float)Math.toRadians(180.0D), -((float)Math.toRadians(26.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Tail3, (float)Math.toRadians(5.22D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane4, 0, (float)Math.toRadians(0.2D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane1, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL1, -((float)Math.toRadians(28.0D)), (float)Math.toRadians(176.0D), (float)Math.toRadians(20.0D));
-	}
-	@Override
-	public void flightPose(boolean animate) {
-		ModelUtils.animateOrRotate(animator, animate, Spike9, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike3, (float)Math.toRadians(51.750006438508166D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail1, -((float)Math.toRadians(3.6328892121619076D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail4, (float)Math.toRadians(0.21D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR2, (float)Math.toRadians(100.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike12, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL3, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyUpper, (float)Math.toRadians(5.22D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL2, 0, -((float)Math.toRadians(20.57D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail3, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike13, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Head, (float)Math.toRadians(5.22D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR3, 0, (float)Math.toRadians(52.107872099509834D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail2, -((float)Math.toRadians(0.2600000000000019D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawLPivot, (float)Math.toRadians(180.0D), -((float)Math.toRadians(60.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL3, 0, -((float)Math.toRadians(52.11D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR1, (float)Math.toRadians(90.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck3, (float)Math.toRadians(2.13D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike14, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane1, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighR, (float)Math.toRadians(60.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL1, (float)Math.toRadians(90.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR2, 0, (float)Math.toRadians(20.57D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike7, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR1, 0, (float)Math.toRadians(9.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Club, -((float)Math.toRadians(7.83D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike4, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR1, 0, (float)Math.toRadians(4.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, HeadFront, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike2, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike19, (float)Math.toRadians(38.3218472382285D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighL, (float)Math.toRadians(60.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike16, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike20, (float)Math.toRadians(21.377643555866484D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane3, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, BodyLower, -((float)Math.toRadians(5.22D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike11, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck1, -((float)Math.toRadians(5.22D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike1, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR3, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane2, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike6, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL3, (float)Math.toRadians(90.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL4, (float)Math.toRadians(180.0D), -((float)Math.toRadians(82.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane3, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL1, 0, (float)Math.toRadians(176.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike8, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike18, (float)Math.toRadians(36.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, LegL, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawRPivot, (float)Math.toRadians(180.0D), (float)Math.toRadians(60.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR3, (float)Math.toRadians(90.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR2, 0, -((float)Math.toRadians(8.0D)), -((float)Math.toRadians(5.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike17, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike10, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL1, 0, -((float)Math.toRadians(9.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike15, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane4, 0, (float)Math.toRadians(0.2D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Jaw, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL2, 0, (float)Math.toRadians(8.0D), -((float)Math.toRadians(5.0D)));
-        ModelUtils.animateOrRotate(animator, animate, ToeL2, (float)Math.toRadians(100.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, LegR, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
-        ModelUtils.animateOrRotate(animator, animate, FingerR4, (float)Math.toRadians(180.0D), (float)Math.toRadians(82.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Spike5, (float)Math.toRadians(46.86D), 0, 0);
-	}
-
-	@Override
-	public void sitPose(boolean animate) {
+		progressAnimationRotation(ArmR1, sitProgress, 0, (float)Math.toRadians(4.0D), 0);
+		progressAnimationRotation(ToeL3, sitProgress, (float)Math.toRadians(90.0D), 0, 0);
+		progressAnimationRotation(ToeR1, sitProgress, (float)Math.toRadians(90.0D), 0, 0);
+		progressAnimationRotation(Lmembrane3, sitProgress, 0, (float)Math.toRadians(0.0D), 0);
+		progressAnimationRotation(Head, sitProgress, (float)Math.toRadians(5.22D), 0, 0);
+		progressAnimationRotation(FingerL3, sitProgress, 0, ((float)Math.toRadians(0D)), 0);
+		progressAnimationRotation(Club, sitProgress, -((float)Math.toRadians(7.83D)), 0, 0);
+		progressAnimationRotation(ClawLPivot, sitProgress, (float)Math.toRadians(0.0D), ((float)Math.toRadians(0.0D)), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(Neck3, sitProgress, (float)Math.toRadians(2.13D), 0, 0);
+		progressAnimationRotation(ArmR2, sitProgress, 0, -((float)Math.toRadians(1.0D)), -((float)Math.toRadians(5.0D)));
+		progressAnimationRotation(BodyLower, sitProgress, -((float)Math.toRadians(5.22D)), 0, 0);
+		progressAnimationRotation(Rmembrane4, sitProgress, 0, (float)Math.toRadians(0.2D), 0);
+		progressAnimationRotation(HeadFront, sitProgress, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
+		progressAnimationRotation(BodyUpper, sitProgress, (float)Math.toRadians(5.22D), 0, 0);
+		progressAnimationRotation(ThighL, sitProgress, (float)Math.toRadians(110.0D), 0, 0);
+		progressAnimationRotation(Tail3, sitProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressAnimationRotation(FingerL2, sitProgress, 0, -((float)Math.toRadians(0D)), 0);
+		progressAnimationRotation(LegL, sitProgress, -((float)Math.toRadians(19.0D)), 0, 0);
+		progressAnimationRotation(ThighR, sitProgress, (float)Math.toRadians(110.0D), 0, 0);
+		progressAnimationRotation(FingerR3, sitProgress, 0, 0, 0);
+		progressAnimationRotation(ToeR3, sitProgress, (float)Math.toRadians(90.0D), 0, 0);
+		progressAnimationRotation(FingerR2, sitProgress, 0, (float)Math.toRadians(0D), 0);
+		progressAnimationRotation(Lmembrane1, sitProgress, 0, (float)Math.toRadians(0.0D), 0);
+		progressAnimationRotation(Rmembrane3, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(Tail4, sitProgress, (float)Math.toRadians(0.21D), 0, 0);
+		progressAnimationRotation(ToeL2, sitProgress, (float)Math.toRadians(80.0D), 0, 0);
+		progressAnimationRotation(ArmL2, sitProgress, 0, (float)Math.toRadians(1.0D), -((float)Math.toRadians(5.0D)));
+		progressAnimationRotation(Lmembrane2, sitProgress, 0, (float)Math.toRadians(0.0D), 0);
+		progressAnimationRotation(ToeR2, sitProgress, (float)Math.toRadians(80.0D), 0, 0);
+		progressAnimationRotation(FingerR4, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(Neck1, sitProgress, -((float)Math.toRadians(5.22D)), 0, 0);
+		progressAnimationRotation(ToeL1, sitProgress, (float)Math.toRadians(90.0D), 0, 0);
+		progressAnimationRotation(Jaw, sitProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressAnimationRotation(Tail2, sitProgress, -((float)Math.toRadians(0.2600000000000019D)), 0, 0);
+		progressAnimationRotation(FingerL1, sitProgress, 0, -((float)Math.toRadians(9.0D)), 0);
+		progressAnimationRotation(Tail1, sitProgress, -((float)Math.toRadians(3.6328892121619076D)), 0, 0);
+		progressAnimationRotation(FingerR1, sitProgress, 0, (float)Math.toRadians(9.0D), 0);
+		progressAnimationRotation(ArmL1, sitProgress, 0, -(float)Math.toRadians(4.0D), 0);
+		progressAnimationRotation(ClawRPivot, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(FingerL4, sitProgress, (float)Math.toRadians(0.0D), -((float)Math.toRadians(0.0D)), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(LegR, sitProgress, -((float)Math.toRadians(19.0D)), 0, 0);
 
 	}
 
 	@Override
-	public void sleepPose(boolean animate) {
-		ModelUtils.animateOrRotate(animator, animate, Neck1, (float)Math.toRadians(18.26D), (float)Math.toRadians(13.04D), -((float)Math.toRadians(7.83D)));
-        ModelUtils.animateOrRotate(animator, animate, Tail2, (float)Math.toRadians(7.83D), (float)Math.toRadians(10.43D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike8, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL3, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike5, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane1, 0, (float)Math.toRadians(164.35D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane2, 0, (float)Math.toRadians(140.87D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane3, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL4, (float)Math.toRadians(180.0D), -((float)Math.toRadians(18.26D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Club, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HeadFront, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL3, 0, -((float)Math.toRadians(112.17D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike17, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, LegL, -((float)Math.toRadians(35.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike14, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail4, (float)Math.toRadians(7.83D), (float)Math.toRadians(7.83D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Jaw, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike12, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR4, (float)Math.toRadians(180.0D), (float)Math.toRadians(28.7D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, ThighR, -((float)Math.toRadians(31.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike18, (float)Math.toRadians(36.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike10, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL2, 0, -((float)Math.toRadians(20.57D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail1, -((float)Math.toRadians(10.43D)), (float)Math.toRadians(5.22D), (float)Math.toRadians(10.43D));
-        ModelUtils.animateOrRotate(animator, animate, ToeL2, (float)Math.toRadians(80.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane4, 0, (float)Math.toRadians(0.2D), 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighL, -((float)Math.toRadians(31.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawLPivot, (float)Math.toRadians(180.0D), -((float)Math.toRadians(60.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, ArmL1, -((float)Math.toRadians(15.65D)), -((float)Math.toRadians(148.7D)), (float)Math.toRadians(20.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerR1, 0, (float)Math.toRadians(85.0D), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, HornR3, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike19, (float)Math.toRadians(38.3218472382285D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck2, -((float)Math.toRadians(3.82D)), (float)Math.toRadians(13.04D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane3, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerR3, 0, (float)Math.toRadians(112.17D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike9, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL2, -((float)Math.toRadians(5.0D)), (float)Math.toRadians(49.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyLower, -((float)Math.toRadians(13.040000000000001D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike6, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR1, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR2, 0, (float)Math.toRadians(20.57D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail3, (float)Math.toRadians(5.22D), (float)Math.toRadians(20.87D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike13, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR3, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR1, (float)Math.toRadians(4.0D), (float)Math.toRadians(4.0D), -((float)Math.toRadians(20.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike2, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike1, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike3, (float)Math.toRadians(51.750006438508166D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Head, -((float)Math.toRadians(18.26D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR2, (float)Math.toRadians(5.0D), -((float)Math.toRadians(49.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL1, 0, -((float)Math.toRadians(85.0D)), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, Spike4, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL1, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
-        ModelUtils.animateOrRotate(animator, animate, HornL, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
-        ModelUtils.animateOrRotate(animator, animate, Neck3, 0, (float)Math.toRadians(10.43D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane2, 0, (float)Math.toRadians(35.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyUpper, (float)Math.toRadians(20.870000000000005D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike15, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawRPivot, (float)Math.toRadians(180.0D), (float)Math.toRadians(60.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR2, (float)Math.toRadians(80.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike7, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike16, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL3, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, LegR, -((float)Math.toRadians(35.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike11, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike20, (float)Math.toRadians(21.377643555866484D), 0, 0);
+	public void sitPose(float sitProgress) {}
+
+	@Override
+	public void sleepPose(float sitProgress) {}
+
+	@Override
+	public void hoverPose(float sitProgress) {
+		progressAnimationRotation(BodyUpper, sitProgress, (float)Math.toRadians(13.040000000000001D), 0, 0);
+		progressAnimationRotation(LegR, sitProgress, -((float)Math.toRadians(19.0D)), 0, 0);
+		progressAnimationRotation(Neck3, sitProgress, (float)Math.toRadians(10.43D), 0, 0);
+		progressAnimationRotation(Lmembrane1, sitProgress, 0, (float)Math.toRadians(0.0D), 0);
+		progressAnimationRotation(Jaw, sitProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressAnimationRotation(FingerL2, sitProgress, 0, -((float)Math.toRadians(0D)), 0);
+		progressAnimationRotation(ToeR1, sitProgress, (float)Math.toRadians(60.0D), 0, -((float)Math.toRadians(3.0D)));
+		progressAnimationRotation(Rmembrane2, sitProgress, 0, (float)Math.toRadians(8.0D), (float)Math.toRadians(8.0D));
+		progressAnimationRotation(HeadFront, sitProgress, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
+		progressAnimationRotation(Lmembrane3, sitProgress, 0, 0, 0);
+		progressAnimationRotation(LegL, sitProgress, -((float)Math.toRadians(19.0D)), 0, 0);
+		progressAnimationRotation(Head, sitProgress, (float)Math.toRadians(29.78D), 0, 0);
+		progressAnimationRotation(FingerL1, sitProgress, 0, -((float)Math.toRadians(9.0D)), 0);
+		progressAnimationRotation(FingerR3, sitProgress, 0, (float)Math.toRadians(0D), 0);
+		progressAnimationRotation(ThighL, sitProgress, (float)Math.toRadians(60.0D), 0, 0);
+		progressAnimationRotation(Tail3, sitProgress, (float)Math.toRadians(7.83D), 0, 0);
+		progressAnimationRotation(Tail4, sitProgress, (float)Math.toRadians(2.61D), 0, 0);
+		progressAnimationRotation(FingerR2, sitProgress, 0, 0, 0);
+		progressAnimationRotation(ThighR, sitProgress, (float)Math.toRadians(60.0D), 0, 0);
+		progressAnimationRotation(ToeL3, sitProgress, (float)Math.toRadians(60.0D), 0, (float)Math.toRadians(3.0D));
+		progressAnimationRotation(FingerL3, sitProgress, 0, ((float)Math.toRadians(0D)), 0);
+		progressAnimationRotation(ArmL2, sitProgress, -((float)Math.toRadians(10.0D)), (float)Math.toRadians(8.0D), -((float)Math.toRadians(5.0D)));
+		progressAnimationRotation(ToeR2, sitProgress, (float)Math.toRadians(50.0D), 0, 0);
+		progressAnimationRotation(Neck2, sitProgress, (float)Math.toRadians(2.61D), 0, 0);
+		progressAnimationRotation(ToeL2, sitProgress, (float)Math.toRadians(50.0D), 0, 0);
+		progressAnimationRotation(ToeL1, sitProgress, (float)Math.toRadians(60.0D), 0, -((float)Math.toRadians(3.0D)));
+		progressAnimationRotation(FingerL4, sitProgress, (float)Math.toRadians(0.0D), ((float)Math.toRadians(0.0D)), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(ArmL1, sitProgress, -((float)Math.toRadians(8.0D)), -(float)Math.toRadians(0.0D), -((float)Math.toRadians(18.0D)));
+		progressAnimationRotation(Rmembrane4, sitProgress, 0, (float)Math.toRadians(0.2D), 0);
+		progressAnimationRotation(ToeR3, sitProgress, (float)Math.toRadians(60.0D), 0, (float)Math.toRadians(3.0D));
+		progressAnimationRotation(Neck1, sitProgress, (float)Math.toRadians(2.61D), 0, 0);
+		progressAnimationRotation(FingerR4, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(FingerR1, sitProgress, 0, (float)Math.toRadians(9.0D), 0);
+		progressAnimationRotation(Club, sitProgress, (float)Math.toRadians(13.04D), 0, 0);
+		progressAnimationRotation(Lmembrane2, sitProgress, 0, -(float)Math.toRadians(8.0D), (float)Math.toRadians(8.0D));
+		progressAnimationRotation(ClawRPivot, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(ArmR2, sitProgress, (float)Math.toRadians(10.0D), -((float)Math.toRadians(8.0D)), -((float)Math.toRadians(5.0D)));
+		progressAnimationRotation(Tail2, sitProgress, (float)Math.toRadians(2.61D), 0, 0);
+		progressAnimationRotation(BodyLower, sitProgress, -((float)Math.toRadians(28.7D)), 0, 0);
+		progressAnimationRotation(Rmembrane3, sitProgress, (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(ClawLPivot, sitProgress, (float)Math.toRadians(0.0D), -((float)Math.toRadians(0.0D)), (float)Math.toRadians(0.0D));
+		progressAnimationRotation(ArmR1, sitProgress, (float)Math.toRadians(8.0D), 0, (float)Math.toRadians(18.0D));
 	}
 
 	@Override
-	public void deadPose(boolean animate) {
-		ModelUtils.animateOrRotate(animator, animate, ToeL2, (float)Math.toRadians(80.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail2, (float)Math.toRadians(7.83D), (float)Math.toRadians(10.43D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Jaw, (float)Math.toRadians(28.7D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR1, 0, (float)Math.toRadians(85.0D), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, HornR, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane3, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL4, (float)Math.toRadians(180.0D), -((float)Math.toRadians(18.26D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL3, 0, -((float)Math.toRadians(112.17D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane2, 0, (float)Math.toRadians(140.87D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawLPivot, (float)Math.toRadians(180.0D), -((float)Math.toRadians(60.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Spike9, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike5, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
-        ModelUtils.animateOrRotate(animator, animate, HeadFront, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Club, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyLower, 0, 0, (float)Math.toRadians(5.22D));
-        ModelUtils.animateOrRotate(animator, animate, HornR2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL1, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR3, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL3, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR3, 0, (float)Math.toRadians(112.17D), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR2, 0, (float)Math.toRadians(20.57D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike13, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike11, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike15, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike20, (float)Math.toRadians(21.377643555866484D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck3, 0, (float)Math.toRadians(10.43D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike6, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane1, 0, (float)Math.toRadians(164.35D), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL2, 0, -((float)Math.toRadians(20.57D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike18, (float)Math.toRadians(36.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR1, (float)Math.toRadians(75.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail4, -((float)Math.toRadians(2.61D)), (float)Math.toRadians(10.43D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane4, 0, (float)Math.toRadians(0.2D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail3, (float)Math.toRadians(5.22D), -((float)Math.toRadians(10.43D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike12, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike19, (float)Math.toRadians(38.3218472382285D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighL, (float)Math.toRadians(28.7D), (float)Math.toRadians(20.87D), -((float)Math.toRadians(60.0D)));
-        ModelUtils.animateOrRotate(animator, animate, FingerR4, (float)Math.toRadians(180.0D), (float)Math.toRadians(28.7D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane3, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike14, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Head, -((float)Math.toRadians(5.22D)), -((float)Math.toRadians(13.04D)), -((float)Math.toRadians(20.87D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike7, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck1, (float)Math.toRadians(10.43D), (float)Math.toRadians(5.22D), -((float)Math.toRadians(31.3D)));
-        ModelUtils.animateOrRotate(animator, animate, BodyUpper, -((float)Math.toRadians(2.61D)), -((float)Math.toRadians(7.83D)), -((float)Math.toRadians(13.04D)));
-        ModelUtils.animateOrRotate(animator, animate, ArmL1, -((float)Math.toRadians(15.65D)), -((float)Math.toRadians(151.3D)), (float)Math.toRadians(39.13D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR2, (float)Math.toRadians(80.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawRPivot, (float)Math.toRadians(180.0D), (float)Math.toRadians(60.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane2, 0, (float)Math.toRadians(35.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, LegR, -((float)Math.toRadians(35.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike4, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike10, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike2, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR3, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike8, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighR, (float)Math.toRadians(31.3D), -((float)Math.toRadians(2.61D)), (float)Math.toRadians(83.48D));
-        ModelUtils.animateOrRotate(animator, animate, Spike3, (float)Math.toRadians(51.750006438508166D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL1, 0, -((float)Math.toRadians(85.0D)), (float)Math.toRadians(0.9D));
-        ModelUtils.animateOrRotate(animator, animate, Tail1, -((float)Math.toRadians(10.43D)), (float)Math.toRadians(5.22D), (float)Math.toRadians(10.43D));
-        ModelUtils.animateOrRotate(animator, animate, LegL, -((float)Math.toRadians(35.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike17, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL3, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL2, -((float)Math.toRadians(5.0D)), (float)Math.toRadians(44.35D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR1, (float)Math.toRadians(4.0D), (float)Math.toRadians(10.43D), -((float)Math.toRadians(2.61D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike1, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR2, (float)Math.toRadians(5.0D), -((float)Math.toRadians(49.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike16, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck2, -((float)Math.toRadians(3.82D)), (float)Math.toRadians(13.04D), 0);
-	}
-	
-	@Override
-	public void hoverPose(boolean animate) {
-		ModelUtils.animateOrRotate(animator, animate, ToeL3, (float)Math.toRadians(90.0D), 0, (float)Math.toRadians(3.0D));
-        ModelUtils.animateOrRotate(animator, animate, ToeR2, (float)Math.toRadians(100.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR3, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike4, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike2, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR2, (float)Math.toRadians(10.0D), -((float)Math.toRadians(8.0D)), -((float)Math.toRadians(5.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Tail3, (float)Math.toRadians(7.83D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Tail4, (float)Math.toRadians(2.61D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyLower, -((float)Math.toRadians(28.7D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike12, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane4, 0, (float)Math.toRadians(0.2D), 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane1, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, LegL, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike3, (float)Math.toRadians(51.750006438508166D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ThighL, (float)Math.toRadians(60.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane2, 0, 0, (float)Math.toRadians(8.0D));
-        ModelUtils.animateOrRotate(animator, animate, Tail2, (float)Math.toRadians(2.61D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike14, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike13, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike20, (float)Math.toRadians(21.377643555866484D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR1, 0, (float)Math.toRadians(9.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR3, 0, (float)Math.toRadians(52.107872099509834D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike5, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL1, -((float)Math.toRadians(8.0D)), (float)Math.toRadians(180.0D), -((float)Math.toRadians(18.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Jaw, -((float)Math.toRadians(2.61D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR4, (float)Math.toRadians(180.0D), (float)Math.toRadians(82.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, ToeL2, (float)Math.toRadians(100.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike9, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike8, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, LegR, -((float)Math.toRadians(19.0D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR1, (float)Math.toRadians(90.0D), 0, -((float)Math.toRadians(3.0D)));
-        ModelUtils.animateOrRotate(animator, animate, ThighR, (float)Math.toRadians(60.0D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike15, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Club, (float)Math.toRadians(13.04D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawLPivot, (float)Math.toRadians(180.0D), -((float)Math.toRadians(60.0D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, HeadFront, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike17, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck2, (float)Math.toRadians(2.61D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ClawRPivot, (float)Math.toRadians(180.0D), (float)Math.toRadians(60.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Spike7, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck1, (float)Math.toRadians(2.61D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmR1, (float)Math.toRadians(8.0D), 0, (float)Math.toRadians(18.0D));
-        ModelUtils.animateOrRotate(animator, animate, Spike1, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornR2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerR2, 0, (float)Math.toRadians(20.57D), 0);
-        ModelUtils.animateOrRotate(animator, animate, Rmembrane3, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, Spike16, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ArmL2, -((float)Math.toRadians(10.0D)), (float)Math.toRadians(8.0D), -((float)Math.toRadians(5.0D)));
-        ModelUtils.animateOrRotate(animator, animate, Spike18, (float)Math.toRadians(36.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike6, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, BodyUpper, (float)Math.toRadians(13.040000000000001D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike11, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL4, (float)Math.toRadians(180.0D), -((float)Math.toRadians(83.48D)), (float)Math.toRadians(180.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL3, 0, -((float)Math.toRadians(52.11D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
-        ModelUtils.animateOrRotate(animator, animate, FingerL2, 0, -((float)Math.toRadians(20.57D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike10, (float)Math.toRadians(46.86D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Spike19, (float)Math.toRadians(38.3218472382285D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Neck3, (float)Math.toRadians(10.43D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane3, 0, (float)Math.toRadians(180.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, FingerL1, 0, -((float)Math.toRadians(9.0D)), 0);
-        ModelUtils.animateOrRotate(animator, animate, Head, (float)Math.toRadians(29.78D), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, HornL3, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeL1, (float)Math.toRadians(90.0D), 0, -((float)Math.toRadians(3.0D)));
-        ModelUtils.animateOrRotate(animator, animate, HornL2, -((float)Math.toRadians(4.3D)), 0, 0);
-        ModelUtils.animateOrRotate(animator, animate, ToeR3, (float)Math.toRadians(90.0D), 0, (float)Math.toRadians(3.0D));
-        ModelUtils.animateOrRotate(animator, animate, Lmembrane2, 0, (float)Math.toRadians(180.0D), (float)Math.toRadians(8.0D));
-	}
+	public void deadPose(float sitProgress) {}
 
+	@Override
+	public void normalPose() {
+		this.setRotateAngle(Lmembrane2, 0.0F, 2.530727415391778F, 0.0F);
+		this.setRotateAngle(Spike12, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike17, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(ToeR2, 0.6457718232379019F, 0.0F, 0.0F);
+		this.setRotateAngle(ToeL2, 0.6457718232379019F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike6, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(HornL2, -0.07504915783575616F, 0.0F, 0.0F);
+		this.setRotateAngle(ClawLPivot, 3.089232776029963F, -0.7155849933176751F, -2.548180707911721F);
+		this.setRotateAngle(Spike11, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(HornL3, -0.05235987755982988F, 0.3141592653589793F, 0.0F);
+		this.setRotateAngle(FingerL4, 3.141592653589793F, -0.45378560551852565F, 3.141592653589793F);
+		this.setRotateAngle(Rmembrane3, 3.141592653589793F, 3.141592653589793F, 3.141592653589793F);
+		this.setRotateAngle(Club, -0.045553093477052F, -0.0F, 0.0F);
+		this.setRotateAngle(Neck2, -0.06667157742618339F, 0.0F, 0.0F);
+		this.setRotateAngle(ToeR3, 0.5235987755982988F, 0.0F, 0.0F);
+		this.setRotateAngle(HornR3, -0.05235987755982988F, -0.3141592653589793F, 0.0F);
+		this.setRotateAngle(LegL, -0.33161255787892263F, 0.0F, 0.0F);
+		this.setRotateAngle(HeadFront, -0.03237238967054832F, -0.0F, 0.0F);
+		this.setRotateAngle(ArmR1, 0.4886921905584123F, 0.06981317007977318F, -0.3490658503988659F);
+		this.setRotateAngle(Spike2, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike4, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike20, 0.3731102663676185F, -0.0F, 0.0F);
+		this.setRotateAngle(ThighR, -0.19198621771937624F, 0.0F, 0.0F);
+		this.setRotateAngle(Rmembrane2, 0.0F, 0.6108652381980153F, 0.0F);
+		this.setRotateAngle(Lmembrane1, 0.0F, 3.141592653589793F, 0.0F);
+		this.setRotateAngle(ClawRPivot, -3.089232776029963F, 0.7155849933176751F, -2.5497515042385164F);
+		this.setRotateAngle(ArmL2, -0.08726646259971647F, 0.8552113334772213F, 0.0F);
+		this.setRotateAngle(FingerL1, 0.0F, -1.48352986419518F, 0.015707963267948967F);
+		this.setRotateAngle(LegR, -0.33161255787892263F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike16, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(HornR2, -0.07504915783575616F, 0.0F, 0.0F);
+		this.setRotateAngle(Tail3, 0.091106186954104F, -0.0F, 0.0F);
+		this.setRotateAngle(Head, 0.3642502148912167F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike10, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(ToeL1, 0.5235987755982988F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike5, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike14, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Lmembrane3, 0.0F, 3.141592653589793F, 0.0F);
+		this.setRotateAngle(HornR, 0.3141592653589793F, -0.33161255787892263F, -0.19198621771937624F);
+		this.setRotateAngle(HornL, 0.3141592653589793F, 0.33161255787892263F, 0.19198621771937624F);
+		this.setRotateAngle(Tail2, -0.045553093477052F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike15, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(BodyUpper, 0.091106186954104F, 0.0F, 0.0F);
+		this.setRotateAngle(ArmR2, 0.08726646259971647F, -0.8552113334772213F, 0.0F);
+		this.setRotateAngle(Neck1, 0.09110618695410398F, 0.0F, 0.045553093477052F);
+		this.setRotateAngle(ThighL, -0.19198621771937624F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike3, 0.9032080002802318F, -0.0F, 0.0F);
+		this.setRotateAngle(FingerL3, 0.0F, -1.9198621771937625F, 0.0F);
+		this.setRotateAngle(Spike1, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike18, 0.6433283622851098F, -0.0F, 0.0F);
+		this.setRotateAngle(FingerL2, -0.0F, -0.3590142271352336F, 0.0F);
+		this.setRotateAngle(Spike19, 0.668842409753383F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike9, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(ArmL1, -0.4886921905584123F, 3.07177948351002F, 0.3490658503988659F);
+		this.setRotateAngle(Tail1, -0.136659280431156F, -0.0F, 0.0F);
+		this.setRotateAngle(Spike13, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(Jaw, -0.04555309347705199F, 0.0F, 0.0F);
+		this.setRotateAngle(Spike8, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(FingerR4, 3.141592653589793F, 0.45378560551852565F, 3.141592653589793F);
+		this.setRotateAngle(Rmembrane4, -0.0F, 0.003490658503988659F, 0.0F);
+		this.setRotateAngle(FingerR1, -0.0F, 1.48352986419518F, 0.015707963267948967F);
+		this.setRotateAngle(Spike7, 0.8178612874845427F, -0.0F, 0.0F);
+		this.setRotateAngle(FingerR2, -0.0F, 0.3590142271352336F, 0.0F);
+		this.setRotateAngle(ToeR1, 0.5235987755982988F, 0.0F, 0.0F);
+		this.setRotateAngle(FingerR3, 0.0F, 1.9198621771937625F, 0.0F);
+		this.setRotateAngle(ToeL3, 0.5235987755982988F, 0.0F, 0.0F);
+	}
 }
