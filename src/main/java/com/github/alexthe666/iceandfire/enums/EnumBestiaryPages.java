@@ -13,7 +13,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 
 public enum EnumBestiaryPages {
-	
+
 	INTRO(new ItemStack(ModItems.bestiary), 0),
 	FIREDRAGONS(new ItemStack(ModItems.dragon_skull), 0),
 	FIREEGGS(new ItemStack(ModItems.dragonegg_red), 0),
@@ -28,7 +28,7 @@ public enum EnumBestiaryPages {
 		stack = displayItem;
 		indexPage = onPage;
 	}
-	
+
 	public static List<Integer> getList(int[] containedpages){
 		List<Integer> intList = new ArrayList<Integer>();
 		for (int index = 0; index < containedpages.length; index++)
@@ -54,6 +54,23 @@ public enum EnumBestiaryPages {
 		return list;
 	}
 
+	public static boolean hasAllPages(ItemStack book){
+		List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
+		for(int i = 0; i < EnumBestiaryPages.values().length; i++){
+			allPages.add(EnumBestiaryPages.values()[i]);
+		}
+		List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.getList(book.getTagCompound().getIntArray("Pages")));
+		Iterator itr = allPages.iterator();
+		while(itr.hasNext()){
+			EnumBestiaryPages page = (EnumBestiaryPages) itr.next();
+			if(!pages.contains(page)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
 	public static List<Integer> enumToInt(List<EnumBestiaryPages> pages){
 		Iterator itr = pages.iterator();
 		List<Integer> list = new ArrayList<Integer>();
@@ -67,17 +84,17 @@ public enum EnumBestiaryPages {
 
 	}
 	public static void addRandomPage(ItemStack book){
-		EnumBestiaryPages page = getRand();
+
 		if(book.getItem() instanceof ItemBestiary){
+
+			Random rand = new Random();
 			NBTTagCompound tag = book.getTagCompound();
 			List<EnumBestiaryPages> enumlist = containedPages(getList(tag.getIntArray("Pages")));
-			if(!enumlist.contains(page)){
-				enumlist.add(page);
-			}else{
-				addRandomPage(book);
-				return;
-
+			int random = rand.nextInt(EnumBestiaryPages.values().length + 1);
+			while(enumlist.contains(random)) {
+				random = rand.nextInt(EnumBestiaryPages.values().length + 1);
 			}
+			addPage(EnumBestiaryPages.values()[random], book);
 		}
 	}
 	public static void addPage(EnumBestiaryPages page, ItemStack book){
