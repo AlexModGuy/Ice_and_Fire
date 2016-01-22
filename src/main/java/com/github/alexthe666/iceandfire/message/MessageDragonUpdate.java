@@ -35,33 +35,35 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 	public void handleServerMessage(MessageDragonUpdate message, EntityPlayer player)
 	{
 		EntityDragonBase entity = (EntityDragonBase) player.worldObj.getEntityByID(message.dragonId);
-		switch(message.dataType){
-		default://set Hover
-			entity.hoverProgress = message.data;
-			break;
-		case 1://start Hover
-			entity.hoverProgress = message.data;
-			if(!entity.isHovering())
-				entity.setHovering(true);
-			break;
-		case 2://end Hover
-			entity.hoverProgress = message.data;
-			if(entity.isHovering())
-				entity.setHovering(false);
-			break;
-		case 3://setFlight
-			entity.flightProgress = message.data;
-			break;
-		case 4://start Flight
-			entity.flightProgress = message.data;
-			if(!entity.isFlying())
-				entity.setFlying(true);
-			break;
-		case 5://end Flight
-			entity.flightProgress = message.data;
-			if(entity.isFlying())
-				entity.setFlying(false);
-			break;
+		if(entity != null && !entity.isDead){
+			switch(message.dataType){
+			default://set Hover
+				entity.hoverProgress = message.data;
+				break;
+			case 1://start Hover
+				entity.hoverProgress = message.data;
+				if(!entity.isHovering())
+					entity.setHovering(true);
+				break;
+			case 2://end Hover
+				entity.hoverProgress = message.data;
+				if(entity.isHovering())
+					entity.setHovering(false);
+				break;
+			case 3://setFlight
+				entity.flightProgress = message.data;
+				break;
+			case 4://start Flight
+				entity.flightProgress = message.data;
+				if(!entity.isFlying())
+					entity.setFlying(true);
+				break;
+			case 5://end Flight
+				entity.flightProgress = message.data;
+				if(entity.isFlying())
+					entity.setFlying(false);
+				break;
+			}
 		}
 	}
 

@@ -1,13 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.animation.AnimationBlend;
-import com.github.alexthe666.iceandfire.client.RollBuffer;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
-import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
@@ -15,7 +11,12 @@ import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
@@ -28,13 +29,32 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.client.RollBuffer;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonHunt;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
+import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -43,7 +63,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public EnumOrder currentOrder;
 	public double[][] ringBuffer = new double[64][3];
 	public int ringBufferIndex = -1;
-	public BlockPos currentTarget;
 	//For fire breathing
 	public EntityDragonMouth mouth;
 	private Animation currentAnimation;
@@ -58,6 +77,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public List<Class> blacklist = new ArrayList<Class>();
 	public float hoverProgress;
 	public float flightProgress;
+	public boolean enableFlight = true;
+	public BlockPos airTarget;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -83,6 +104,23 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		initInv();
 	}
 
+	protected void entityInit()
+	{
+		super.entityInit();
+		this.dataWatcher.addObject(18, 0);
+		this.dataWatcher.addObject(19, 0);
+		this.dataWatcher.addObject(20, 0);
+		this.dataWatcher.addObject(21, 0);
+		this.dataWatcher.addObject(22, 0);
+		this.dataWatcher.addObject(23, 0);
+		this.dataWatcher.addObject(24, 30);
+		this.dataWatcher.addObject(25, 300);
+		this.dataWatcher.addObject(26, 0);
+		this.dataWatcher.addObject(27, 0);
+		this.dataWatcher.addObject(28, 0);
+
+	}
+	
 	public void initInv(){
 		AnimalChest animalchest = this.inv;
 		this.inv = new AnimalChest("dragonInv", 5);
@@ -207,10 +245,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void onLivingUpdate(){
 		super.onLivingUpdate();
+		
 		breakBlock(5);
-		//this.setHovering(false);
-		//this.setFlying(false);
-		if(worldObj.isRemote && getRNG().nextInt(150) == 0 && !this.isHovering() && !this.isFlying()){
+		
+		if(enableFlight && worldObj.isRemote && getRNG().nextInt(150) == 0 && !this.isHovering() && !this.isFlying() && this.currentOrder == EnumOrder.WANDER){
 			this.setHovering(true);
 			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)1, hoverProgress));
 		}
@@ -234,7 +272,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			flightProgress -= 0.5F;
 		}
 
-		if (worldObj.isRemote && isHovering() && this.isOffGround(6, true) &&  hoverProgress == 20)
+		if (worldObj.isRemote && isHovering() && this.isOffGround(9, true) &&  hoverProgress == 20)
 		{
 			this.setHovering(false);
 			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)2, hoverProgress));
@@ -242,19 +280,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)4, flightProgress));
 		}
 
-		if (!worldObj.isRemote && (isHovering() || isFlying()))
+		if (!worldObj.isRemote && isHovering())
 		{
 			this.moveEntity(0, 0.17F, 0);
-			if(isFlying()){
-				this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
-				this.posY += 0.10000000149011612D;
-				this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);	
-			}
+
 		}
 
 		if(this.onGround && this.isFlying()){
 			this.setFlying(false);
+			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)5, flightProgress));
 		}
+		
+		if(this.isFlying() && this.airTarget == null){
+			this.flyAround();
+		}
+		
+		if(this.airTarget != null){
+			this.flyTowardsTarget();
+		}
+		
 		if(worldObj.isRemote && hoverProgress != 0){
 			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress));
 		}
@@ -262,22 +306,26 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if(attackTick != 0 && attackTick < 25){
 			attackTick++;
 		}
+		
 		if(flameTick != 0 && flameTick < 30){
 			flameTick++;
 			if(getAttackTarget() != null)
 				this.getLookHelper().setLookPosition(getAttackTarget().posX, getAttackTarget().posY + (double)getAttackTarget().getEyeHeight(), getAttackTarget().posZ, 10.0F, (float)getVerticalFaceSpeed());	
 		}
+		
 		if(attackTick == 25){
 			attackTick = 0;
 			float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 			if(getAttackTarget() != null)
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
-		}
+		} 
+		
 		if(flameTick <= 50 && flameTick >= 20){
 			if (flameTick == 30) flameTick = 0;
 			if(getAttackTarget() != null)
 				shootFire(getAttackTarget());
 		}
+		
 		int sleepCounter = 0;
 		int wakeCounter = 0;
 
@@ -315,10 +363,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.setAttackTarget((EntityLivingBase)null);
 			}
 		}
-		//land();
 		if (motionY < 0.0D)
 		{
-			//TODO
 			motionY *= 0.6D;
 		}
 		if (!this.isSitting())
@@ -331,15 +377,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 					}
 				}
 			}
-		}
-
-		if(this.getAITarget() != null && this.getCurrentAttack() == 2){
-			currentTarget = new BlockPos((int) getAttackTarget().posX, ((int) getAttackTarget().posY + getAttackTarget().getEyeHeight() + this.getFallAttackHeight()), (int) getAttackTarget().posZ);
-			flyTowardsTarget();
-			if(this.getDistance(currentTarget.getX(), this.posY, currentTarget.getZ()) < 5F){
-				this.land();
-			}
-
 		}
 
 	}
@@ -370,40 +407,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public boolean isSitting()
 	{
 		return currentOrder == EnumOrder.SIT || currentOrder == EnumOrder.SLEEP;
-	}
-
-	public void flyTowardsTarget()
-	{
-		if (currentTarget != null)
-		{
-			double targetX = currentTarget.getX() + 0.5D - posX;
-			double targetY = currentTarget.getY() + 1D - posY;
-			double targetZ = currentTarget.getZ() + 0.5D - posZ;
-			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.10000000149011612D;
-			motionY += (Math.signum(targetY) * 0.699999988079071D - motionY) * 0.10000000149011612D;
-			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.10000000149011612D;
-			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-			float rotation = MathHelper.wrapAngleTo180_float(angle
-					- rotationYaw);
-			moveForward = 0.5F;
-			rotationYaw += rotation;
-		}
-
-	}
-
-	public void flyAround()
-	{
-		if (currentTarget != null){
-			if (!worldObj.isAirBlock(currentTarget) || currentTarget.getY() < 1){
-				currentTarget = null;
-			}
-		}
-		if (currentTarget == null || rand.nextInt(30) == 0 || this.getDistance(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ()) < 10F){
-			currentTarget = new BlockPos((int) posX + rand.nextInt(90)
-					- rand.nextInt(60), (int) posY + rand.nextInt(60),
-					(int) posZ + rand.nextInt(90) - rand.nextInt(60));
-		}
-		flyTowardsTarget();
 	}
 
 	protected void destroyItem(EntityPlayer player, ItemStack stack)
@@ -854,22 +857,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 
-	protected void entityInit()
-	{
-		super.entityInit();
-		this.dataWatcher.addObject(18, 0);
-		this.dataWatcher.addObject(19, 0);
-		this.dataWatcher.addObject(20, 0);
-		this.dataWatcher.addObject(21, 0);
-		this.dataWatcher.addObject(22, 0);
-		this.dataWatcher.addObject(23, 0);
-		this.dataWatcher.addObject(24, 30);
-		this.dataWatcher.addObject(25, 300);
-		this.dataWatcher.addObject(26, 0);
-		this.dataWatcher.addObject(27, 0);
-		this.dataWatcher.addObject(28, 0);
-
-	}
 	@Override
 	protected boolean canDespawn()
 	{
@@ -1153,5 +1140,43 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			b = worldObj.isAirBlock(pos.down(i));
 		}
 		return  b && !onGround;
+	}
+
+	public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2)
+	{
+		MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec1, new Vec3(vec2.xCoord, vec2.yCoord + (double)this.height * 0.5D, vec2.zCoord), false, true, false);
+		return movingobjectposition == null || movingobjectposition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK;
+	}
+
+	public void flyAround()
+	{
+		if (airTarget != null && !worldObj.isAirBlock(airTarget))
+				airTarget = null;
+
+		if (airTarget == null || rand.nextInt(150) == 0 || this.getDistanceSq((int) posX, (int) posY,(int) posZ) < 10F)
+			airTarget = new BlockPos((int) posX + rand.nextInt(90) - rand.nextInt(60), (int) posY + rand.nextInt(60) - 2, (int) posZ + rand.nextInt(90) - rand.nextInt(60));
+
+		flyTowardsTarget();
+	}
+	public void flyTowardsTarget()
+	{
+		if (airTarget != null && isDirectPathBetweenPoints(this.getPositionVector(), new Vec3(airTarget.getX(), airTarget.getY(), airTarget.getZ())) && this.isOffGround(1, false))
+		{
+
+			double targetX = airTarget.getX() + 0.5D - posX;
+			double targetY = airTarget.getY() + 1D - posY;
+			double targetZ = airTarget.getZ() + 0.5D - posZ;
+			motionX += (Math.signum(targetX) * 0.5D - motionX) * flightSpeed();
+			motionY += (Math.signum(targetY) * 0.5D - motionY) * flightSpeed();
+			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * flightSpeed();
+			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+			float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
+			moveForward = 0.5F;
+			rotationYaw += rotation;
+		}
+	}
+
+	private double flightSpeed() {
+		return 0.10000000149011612D;
 	}
 }
