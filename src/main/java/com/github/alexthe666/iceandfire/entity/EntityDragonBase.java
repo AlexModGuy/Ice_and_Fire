@@ -346,9 +346,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.setAttackTarget((EntityLivingBase)null);
 			}
 		}
-		if (motionY < 0.0D)
+		if (motionY < 0.0D && (isFlying() || isHovering()))
 		{
-			motionY *= 0.6D;
+			motionY *= -1.0D;
 		}
 		if (!this.isSitting())
 		{
