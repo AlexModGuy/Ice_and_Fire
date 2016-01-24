@@ -1148,14 +1148,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			double targetY = airTarget.getY() + 1D - posY;
 			double targetZ = airTarget.getZ() + 0.5D - posZ;
 			moveEntity(motionX + (Math.signum(targetX) * 0.5D - motionX) * flightSpeed(), motionY + (Math.signum(targetY) * 0.5D - motionY) * flightSpeed(), motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * flightSpeed());
-			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-			float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
-			moveForward = 0.5F;
-			rotationYaw += rotation;
+			float angle = (float) (Math.atan(motionX/motionZ) * 180.0D / Math.PI) - 90.0F;
+//			float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
+//			moveForward = 0.5F;
+//			rotationYaw += rotation;
+			setRotation(angle, 0);
+			rotationYawHead = angle;
 		}
 	}
 
 	private double flightSpeed() {
-		return 0.10000000149011612D;
+		return 0.50000000149011612D;
 	}
 }
