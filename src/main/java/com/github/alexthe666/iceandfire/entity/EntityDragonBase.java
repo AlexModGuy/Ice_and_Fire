@@ -1,22 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.client.RollBuffer;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
+import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
@@ -29,32 +27,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.animation.AnimationBlend;
-import com.github.alexthe666.iceandfire.client.RollBuffer;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonHunt;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
-import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -79,6 +58,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public float flightProgress;
 	public boolean enableFlight = true;
 	public BlockPos airTarget;
+
+	private float angle;
+	private float changeAngle;
+	private float changeChangeAngle;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -379,6 +362,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}
 		}
 
+		System.out.println(motionX);
 	}
 
 	private int getFallAttackHeight() {
@@ -566,7 +550,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
 		double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + headPosY + (double)(this.height / 2.0F));
 		double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
-		worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
+		worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
 		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 		entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 		worldObj.spawnEntityInWorld(entitylargefireball);
@@ -1160,15 +1144,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 	public void flyTowardsTarget()
 	{
-		if (airTarget != null && isDirectPathBetweenPoints(this.getPositionVector(), new Vec3(airTarget.getX(), airTarget.getY(), airTarget.getZ())) && this.isOffGround(1, false))
+		if (airTarget != null && isDirectPathBetweenPoints(this.getPositionVector(), new Vec3(airTarget.getX(), airTarget.getY(), airTarget.getZ())) && this.isOffGround(1, false) && isFlying())
 		{
-
 			double targetX = airTarget.getX() + 0.5D - posX;
 			double targetY = airTarget.getY() + 1D - posY;
 			double targetZ = airTarget.getZ() + 0.5D - posZ;
-			motionX += (Math.signum(targetX) * 0.5D - motionX) * flightSpeed();
-			motionY += (Math.signum(targetY) * 0.5D - motionY) * flightSpeed();
-			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * flightSpeed();
+			moveEntity(motionX + (Math.signum(targetX) * 0.5D - motionX) * flightSpeed(), motionY + (Math.signum(targetY) * 0.5D - motionY) * flightSpeed(), motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * flightSpeed());
 			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
 			float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
 			moveForward = 0.5F;
