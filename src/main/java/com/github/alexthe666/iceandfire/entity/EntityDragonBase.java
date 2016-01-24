@@ -361,8 +361,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				}
 			}
 		}
-
-		System.out.println(motionX);
 	}
 
 	private int getFallAttackHeight() {
