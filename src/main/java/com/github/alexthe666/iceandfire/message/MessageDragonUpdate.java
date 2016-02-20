@@ -34,7 +34,7 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 
 	public void handleServerMessage(MessageDragonUpdate message, EntityPlayer player)
 	{
-		EntityDragonBase entity = (EntityDragonBase) player.worldObj.getEntityByID(message.dragonId);
+		EntityDragonBase entity = (EntityDragonBase)player.worldObj.getEntityByID(message.dragonId);
 		if(entity != null && !entity.isDead){
 			switch(message.dataType){
 			default://set Hover
@@ -50,7 +50,7 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 				if(entity.isHovering())
 					entity.setHovering(false);
 				break;
-			case 3://setFlight
+			case 3://set Flight
 				entity.flightProgress = message.data;
 				break;
 			case 4://start Flight
@@ -62,6 +62,9 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 				entity.flightProgress = message.data;
 				if(entity.isFlying())
 					entity.setFlying(false);
+				break;
+			case 6://set Flame
+				//entity.flameProgress = message.data;
 				break;
 			}
 		}

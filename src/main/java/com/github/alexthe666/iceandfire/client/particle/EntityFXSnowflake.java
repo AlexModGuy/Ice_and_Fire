@@ -40,7 +40,7 @@ public class EntityFXSnowflake extends EntityFX
         float f6 = ((float)this.particleAge + x) / (float)this.particleMaxAge * 32.0F;
         f6 = MathHelper.clamp_float(f6, 0.0F, 1.0F);
         this.particleScale = this.particleScaleOverTime * f6;
-        super.func_180434_a(worldRender, entity, x, y, z, f, f1, f2);
+       // super.func_180434_a(worldRender, entity, x, y, z, f, f1, f2);
     }
 
     /**

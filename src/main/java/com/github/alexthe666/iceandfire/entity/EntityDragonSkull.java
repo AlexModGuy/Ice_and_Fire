@@ -38,7 +38,7 @@ public class EntityDragonSkull extends EntityLiving{
 		return i.getEntity() != null;
 	}
 
-	private boolean isAIDisabled()
+	public boolean isAIDisabled()
 	{
 		return true;
 	}

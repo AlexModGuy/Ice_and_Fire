@@ -47,7 +47,7 @@ public class EntityAIDragonDefend extends EntityAITarget
             {
                 this.theOwnerAttacker = entitylivingbase.getAITarget();
                 int i =  entitylivingbase.getRevengeTimer();
-                return i != this.field_142051_e && this.isSuitableTarget(this.theOwnerAttacker, false) && this.dragon.func_142018_a(this.theOwnerAttacker, entitylivingbase);
+                return i != this.field_142051_e && this.isSuitableTarget(this.theOwnerAttacker, false) && this.dragon.shouldAttackEntity(this.theOwnerAttacker, entitylivingbase);
             }
         }
     }

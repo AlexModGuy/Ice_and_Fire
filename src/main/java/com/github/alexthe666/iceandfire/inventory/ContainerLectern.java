@@ -42,18 +42,12 @@ public class ContainerLectern extends Container
         }
     }
 
-    /**
-     * Add the given Listener to the list of Listeners. Method name is for legacy.
-     */
-    public void addCraftingToCrafters(ICrafting listener)
+    public void onCraftGuiOpened(ICrafting listener)
     {
-        super.addCraftingToCrafters(listener);
-        listener.func_175173_a(this, this.tileFurnace);
+        super.onCraftGuiOpened(listener);
+        listener.sendAllWindowProperties(this, this.tileFurnace);
     }
-
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
+  
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();

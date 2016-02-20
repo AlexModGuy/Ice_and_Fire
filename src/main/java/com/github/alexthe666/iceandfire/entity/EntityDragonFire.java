@@ -62,10 +62,10 @@ public class EntityDragonFire extends EntityFireball
 		{
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)){
 				movingObject.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, movingObject.entityHit), 6.0F);
-				this.func_174815_a(this.shootingEntity, movingObject.entityHit);
+				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 			}
 			if (movingObject.typeOfHit != movingObject.typeOfHit.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)){
-				boolean flag = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
+				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
 				//this.worldObj.newExplosion((Entity)null, this.posX, this.posY, this.posZ, (float)1, flag, flag);
 				WorldUtils.setBlock(worldObj, (int)posX, (int)posY, (int)posZ, Blocks.fire, 0, 3);
 				this.setDead();

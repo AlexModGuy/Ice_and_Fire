@@ -4,14 +4,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
-public class TileEntityEggInIce extends TileEntity implements IUpdatePlayerListBox{
+public class TileEntityEggInIce extends TileEntity implements ITickable{
 	public EnumDragonEgg type;
 	public int age;
 	public int ticksExisted;

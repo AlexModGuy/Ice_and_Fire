@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -13,6 +12,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemFood;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EntitySelectors;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
@@ -49,7 +49,7 @@ public class EntityAIDragonEatItem extends EntityAIBase{
 	}
 
 	protected boolean isSuitableTarget(Entity entity) {
-		if (!this.dragon.func_180485_d(new BlockPos(entity)))
+		if (!this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entity)))
 		{
 			return false;
 		}
@@ -131,7 +131,7 @@ public class EntityAIDragonEatItem extends EntityAIBase{
 	}
 	private EntityItem getNearestItem(int range)
 	{
-		List nearbyItems = dragon.worldObj.getEntitiesWithinAABB(EntityItem.class, dragon.getEntityBoundingBox().expand(range, range, range), Predicates.and(this.targetEntitySelector, IEntitySelector.NOT_SPECTATING));
+		List nearbyItems = dragon.worldObj.getEntitiesWithinAABB(EntityItem.class, dragon.getEntityBoundingBox().expand(range, range, range), Predicates.and(this.targetEntitySelector, EntitySelectors.NOT_SPECTATING));
 		if(!nearbyItems.isEmpty()){
 			Iterator iterateNearbyItems = nearbyItems.iterator();
 			EntityItem entityItem = null;

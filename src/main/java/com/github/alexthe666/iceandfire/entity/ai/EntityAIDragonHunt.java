@@ -3,9 +3,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.util.EntitySelectors;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -26,7 +26,6 @@ public class EntityAIDragonHunt extends EntityAINearestAttackableTarget
 
 	public boolean shouldExecute()
 	{
-
 		if (this.taskOwner.getRNG().nextInt(10) != 0)
 		{
 			return false;
@@ -34,7 +33,7 @@ public class EntityAIDragonHunt extends EntityAINearestAttackableTarget
 		else
 		{
 			double d0 = this.getTargetDistance();
-			List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand(d0, 4.0D, d0), Predicates.and(this.targetEntitySelector, IEntitySelector.NOT_SPECTATING));
+			List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand(d0, 4.0D, d0), Predicates.and(this.targetEntitySelector, EntitySelectors.NOT_SPECTATING));
 			Collections.sort(list, this.theNearestAttackableTargetSorter);
 
 			if (list.isEmpty())
@@ -45,8 +44,11 @@ public class EntityAIDragonHunt extends EntityAINearestAttackableTarget
 			{
 				this.targetEntity = (EntityLivingBase)list.get(0);
 
-				if(!(targetEntity instanceof EntityFireDragon) && dragon.canAttackMob(targetEntity)){
+				if(dragon.isTamed() && targetEntity == dragon.getOwner()){
+					return false;
+				}
 				
+				if(!(targetEntity instanceof EntityFireDragon) && dragon.canAttackMob(targetEntity)){
 					return true;
 				}else{
 					return false;

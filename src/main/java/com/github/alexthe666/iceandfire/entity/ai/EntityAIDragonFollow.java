@@ -117,7 +117,7 @@ public class EntityAIDragonFollow extends EntityAIBase
                         {
                             int i = MathHelper.floor_double(this.theOwner.posX) - 2;
                             int j = MathHelper.floor_double(this.theOwner.posZ) - 2;
-                            int k = MathHelper.floor_double(this.theOwner.getBoundingBox().minY);
+                            int k = MathHelper.floor_double(this.theOwner.getEntityBoundingBox().minY);
 
                             for (int l = 0; l <= 4; ++l)
                             {

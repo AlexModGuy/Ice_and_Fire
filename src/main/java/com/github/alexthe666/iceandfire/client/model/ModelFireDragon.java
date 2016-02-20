@@ -126,7 +126,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.setRotateAngle(Spike13, 0.8178612874845427F, -0.0F, 0.0F);
 		this.FingerR4 = new MowzieModelRenderer(this, 128, 38);
 		this.FingerR4.setRotationPoint(-7.5F, 0.0F, 1.3F);
-		this.FingerR4.addBox(-14.0F, -0.5F, -1.0F, 14, 1, 2, 0.0F);
+		this.FingerR4.addBox(-14.0F, -0.4F, -1.0F, 14, 1, 2, 0.0F);
 		this.setRotateAngle(FingerR4, 3.141592653589793F, 1.4311699866353502F, 3.141592653589793F);
 		this.ToeL3 = new MowzieModelRenderer(this, 1, 63);
 		this.ToeL3.setRotationPoint(-1.0F, 6.1F, 0.7F);
@@ -263,7 +263,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.setRotateAngle(Rmembrane3, 3.141592653589793F, 3.141592653589793F, 3.141592653589793F);
 		this.FingerL4 = new MowzieModelRenderer(this, 128, 38);
 		this.FingerL4.setRotationPoint(-7.5F, 0.0F, -1.3F);
-		this.FingerL4.addBox(-14.0F, -0.5F, -1.0F, 14, 1, 2, 0.0F);
+		this.FingerL4.addBox(-14.0F, -0.4F, -1.0F, 14, 1, 2, 0.0F);
 		this.setRotateAngle(FingerL4, 3.141592653589793F, -1.4311699866353502F, 3.141592653589793F);
 		this.Spike9 = new MowzieModelRenderer(this, 34, 34);
 		this.Spike9.setRotationPoint(0.0F, -0.9F, 6.5F);
@@ -575,7 +575,6 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.chainWave(neckHeadParts, speed, -0.04F, -4, entity.ticksExisted, 1);
 			this.chainSwing(tailParts, speed, 0.05F, 0, entity.ticksExisted, 1);
 
-
 			//this.chainSwing(tailParts, speed, 0.1F, 0, entity.ticksExisted, 1);
 
 		}
@@ -612,7 +611,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
 		animator.endPhase();
 		animator.resetPhase(10);
-
 	}
 	@Override
 	public void flightPose(float sitProgress) {
@@ -715,6 +713,16 @@ public class ModelFireDragon extends ModelDragonBase {
 
 	@Override
 	public void deadPose(float sitProgress) {}
+
+	
+	public void breathPose(float sitProgress) {
+		progressAnimationPos(Neck2, sitProgress, 0, 0, 0.2F);
+		progressAnimationPos(Neck3, sitProgress, 0, 0, 0.1F);
+		progressAnimationRotation(Neck2, sitProgress, -(float)Math.toRadians(7.0D), 0, 0);
+		progressAnimationRotation(Neck3, sitProgress, -(float)Math.toRadians(8.0D), 0, 0);
+		progressAnimationRotation(Head, sitProgress, -(float)Math.toRadians(5.0D), 0, 0);
+		progressAnimationRotation(Jaw, sitProgress, (float)Math.toRadians(36.0D), 0, 0);
+	}
 
 	@Override
 	public void normalPose() {

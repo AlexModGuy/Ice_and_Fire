@@ -67,7 +67,7 @@ public class IceAndFire
 		ModRecipes.init();
 		ModEntities.init();
 		ModKeys.init();
-		FMLCommonHandler.instance().bus().register(new EventKeys());
+		//FMLCommonHandler.instance().bus().register(new EventKeys());
 		initilizeTreasure();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);

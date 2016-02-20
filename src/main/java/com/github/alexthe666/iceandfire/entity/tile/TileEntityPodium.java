@@ -5,16 +5,16 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.StatCollector;
 
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 
-public class TileEntityPodium extends TileEntity implements IUpdatePlayerListBox, ISidedInventory{
+public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory{
 	private static final int[] slotsTop = new int[] {0};
 	private ItemStack[] stacks = new ItemStack[1];
 
@@ -192,6 +192,12 @@ public class TileEntityPodium extends TileEntity implements IUpdatePlayerListBox
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		return false;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

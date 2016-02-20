@@ -131,7 +131,7 @@ public class EntityDragonEgg extends EntityLiving{
 
 	}
 
-	private boolean isAIDisabled()
+	public boolean isAIDisabled()
 	{
 		return true;
 	}
