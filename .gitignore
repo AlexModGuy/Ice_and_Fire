@@ -1,9 +1,22 @@
-minecraft/
-.gradle/
-build/
-out/
-*.iml
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
 *.ipr
 *.iws
-Thumbs.db
-.DS_Store
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
