@@ -497,7 +497,6 @@ public class ModelFireDragon extends ModelDragonBase {
 	}
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
 		animate((IAnimated)entity, f, f1, f2, f3, f4, f5);
-
 		ModelUtils.renderAll(boxList);
 	}
 
@@ -526,11 +525,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		float walkspeed = 0.35F - 0.0018656F * dragon.getDragonAge();
 		float speed = 0.1F;
 		if(dragon.isFlying() || dragon.isHovering()){
-
-			if(dragon.isHovering())
-				hoverPose(dragon.hoverProgress);
-			else if(!dragon.isHovering() && dragon.isFlying())
-				flightPose(dragon.flightProgress);
 
 			this.bob(BodyLower, 0.3F, 3, false, entity.ticksExisted, 1);
 			this.chainFlap(rightWingParts, 0.3F, 0.3F, -1, entity.ticksExisted, 1);
@@ -584,6 +578,7 @@ public class ModelFireDragon extends ModelDragonBase {
 	}
 	public void animate(IAnimated entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		animator.update(entity);
+		EntityDragonBase dragon = (EntityDragonBase)entity;
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
 		animator.setAnimationId(1);
 		animator.startPhase(15);
@@ -611,6 +606,13 @@ public class ModelFireDragon extends ModelDragonBase {
 		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
 		animator.endPhase();
 		animator.resetPhase(10);
+		breathPose(dragon.fireBreathProgress);	
+		if(dragon.isFlying() || dragon.isHovering()){
+			if(dragon.isHovering())
+				hoverPose(dragon.hoverProgress);
+			else if(!dragon.isHovering() && dragon.isFlying())
+				flightPose(dragon.flightProgress);
+		}
 	}
 	@Override
 	public void flightPose(float sitProgress) {
@@ -667,6 +669,7 @@ public class ModelFireDragon extends ModelDragonBase {
 
 	@Override
 	public void hoverPose(float sitProgress) {
+
 		progressAnimationRotation(BodyUpper, sitProgress, (float)Math.toRadians(13.040000000000001D), 0, 0);
 		progressAnimationRotation(LegR, sitProgress, -((float)Math.toRadians(19.0D)), 0, 0);
 		progressAnimationRotation(Neck3, sitProgress, (float)Math.toRadians(10.43D), 0, 0);
@@ -714,14 +717,14 @@ public class ModelFireDragon extends ModelDragonBase {
 	@Override
 	public void deadPose(float sitProgress) {}
 
-	
+
 	public void breathPose(float sitProgress) {
-		progressAnimationPos(Neck2, sitProgress, 0, 0, 0.2F);
-		progressAnimationPos(Neck3, sitProgress, 0, 0, 0.1F);
-		progressAnimationRotation(Neck2, sitProgress, -(float)Math.toRadians(7.0D), 0, 0);
-		progressAnimationRotation(Neck3, sitProgress, -(float)Math.toRadians(8.0D), 0, 0);
-		progressAnimationRotation(Head, sitProgress, -(float)Math.toRadians(5.0D), 0, 0);
-		progressAnimationRotation(Jaw, sitProgress, (float)Math.toRadians(36.0D), 0, 0);
+		progressAnimationPos(10, Neck2, sitProgress, 0, 0, 0.2F);
+		progressAnimationPos(10, Neck3, sitProgress, 0, 0, 0.1F);
+		progressAnimationRotation(15, Neck2, sitProgress, -(float)Math.toRadians(7.0D), 0, 0);
+		progressAnimationRotation(15, Neck3, sitProgress, -(float)Math.toRadians(8.0D), 0, 0);
+		progressAnimationRotation(15, Head, sitProgress, -(float)Math.toRadians(5.0D), 0, 0);
+		progressAnimationRotation(15, Jaw, sitProgress, (float)Math.toRadians(36.0D), 0, 0);
 	}
 
 	@Override

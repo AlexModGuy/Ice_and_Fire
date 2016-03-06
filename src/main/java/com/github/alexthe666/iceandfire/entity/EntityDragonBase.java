@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
 import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
+
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
 import net.ilexiconn.llibrary.common.animation.IAnimated;
@@ -53,12 +54,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public List<Class> blacklist = new ArrayList<Class>();
 	public float hoverProgress;
 	public float flightProgress;
+	public float fireBreathProgress;
 	public boolean enableFlight = false;
 	public BlockPos airTarget;
-
 	private float angle;
-	private float changeAngle;
-	private float changeChangeAngle;
+	public boolean isBreathingFire;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -226,10 +226,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		super.onLivingUpdate();
 
 		breakBlock(5);
+		float prevHoverProgress = hoverProgress;
+		float prevFlightProgress = flightProgress;
+		float prevFireBreathProgress = fireBreathProgress;
 
 		if(enableFlight && !worldObj.isRemote && getRNG().nextInt(150) == 0 && !this.isHovering() && !this.isFlying() && this.currentOrder == EnumOrder.WANDER){
 			this.setHovering(true);
-			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, hoverProgress));
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress, prevHoverProgress));
 		}
 
 		if (!worldObj.isRemote && isHovering() && hoverProgress < 20.0F)
@@ -241,6 +244,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			hoverProgress -= 0.5F;
 		}
 
+		if(hoverProgress != prevHoverProgress && !worldObj.isRemote){
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress, prevHoverProgress));
+		}
 
 		if (!worldObj.isRemote && isFlying() && flightProgress < 20.0F)
 		{
@@ -251,23 +257,41 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			flightProgress -= 0.5F;
 		}
 
+		if(flightProgress != prevFlightProgress && !worldObj.isRemote){
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
+		}
+
+		if (!worldObj.isRemote && isBreathingFire && fireBreathProgress < 10.0F)
+		{
+			fireBreathProgress += 0.5F;
+		}
+		else if (!worldObj.isRemote && !isBreathingFire && fireBreathProgress > 0.0F)
+		{
+			fireBreathProgress -= 0.5F;
+		}
+
+		if(fireBreathProgress != prevFireBreathProgress && !worldObj.isRemote){
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)2, fireBreathProgress, prevFireBreathProgress));
+		}
+
 		if (!worldObj.isRemote && isHovering() && this.isOffGround(9, true) &&  hoverProgress == 20)
 		{
 			this.setHovering(false);
-			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)2, hoverProgress));
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress, prevHoverProgress));
 			this.setFlying(true);
-			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)4, flightProgress));
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
 		}
+
+
 
 		if (!worldObj.isRemote && isHovering())
 		{
 			//this.moveEntity(0, 0.17F, 0);
-
 		}
 
-		if(this.onGround && this.isFlying()){
+		if(this.onGround && this.isFlying() && !worldObj.isRemote){
 			this.setFlying(false);
-			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)5, flightProgress));
+			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
 		}
 
 		if(this.isFlying() && this.airTarget == null){
@@ -276,10 +300,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 		if(this.airTarget != null){
 			this.flyTowardsTarget();
-		}
-
-		if(!worldObj.isRemote && hoverProgress != 0){
-			IceAndFire.channel.sendToServer(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress));
 		}
 
 		if(attackTick != 0 && attackTick < 25){
@@ -299,12 +319,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
 		} 
 
-		if(flameTick <= 50 && flameTick >= 20){
-			if (flameTick == 30) flameTick = 0;
+		if(flameTick >= 20){
 			if(getAttackTarget() != null)
 				shootFire(getAttackTarget());
 		}
-
+		if(isBreathingFire && getAttackTarget() == null){
+			isBreathingFire = false;
+		}
 		if(this.isTamed() && this.getAttackTarget() != null && isHungry()){
 			if(this.getAttackTarget() == this.getOwner()){
 				this.setAttackTarget((EntityLivingBase)null);
@@ -474,24 +495,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 
-		if(this.getAttackTarget() != null){
-		}
-
-		if(this.getAttackTarget() != null && this.getAnimation() != this.animation_none){
+		if(this.getAttackTarget() != null && this.getAnimation() == this.animation_none){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
 				if(this.getAnimation() != animation_bite1){
 					this.setAnimation(animation_bite1);
 				}
-				System.out.println("i");
 				this.attackTick = 1;
 
 			}else{
-				if(this.getRNG().nextInt(30) == 0)
-					if(this.getAnimation() != animation_flame1){
-						this.setAnimation(animation_flame1);
-					}
-				this.flameTick = 1;
+				if(this.getRNG().nextInt(30) == 0){
+					this.flameTick = 1;
+					isBreathingFire = true;
+				}
 			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
@@ -507,7 +523,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private void shootFire(EntityLivingBase attackTarget) {
 		float headPosX = (float) (posX + 1.8F * getDragonSize() * Math.cos((rotationYaw + 90) * Math.PI/180));
 		float headPosZ = (float) (posZ + 1.8F * getDragonSize() * Math.sin((rotationYaw + 90) * Math.PI/180));
-		float headPosY = (float) (posY + 0.7 * getDragonSize());
+		float headPosY = (float) (posY + 0.5 * getDragonSize());
 		double d1 = 0D;
 		Vec3 vec3 = this.getLook(1.0F);
 		double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
@@ -516,6 +532,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
 		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 		entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+		entitylargefireball.setSizes(this.getDragonSize() * 0.25F, this.getDragonSize() * 0.25F);
 		worldObj.spawnEntityInWorld(entitylargefireball);
 	}
 

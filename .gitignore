@@ -16,6 +16,7 @@ out/
 minecraft/
 eclipse/
 build/
+run/
 .classpath
 .project
 Ice_and_Fire_Client.launch

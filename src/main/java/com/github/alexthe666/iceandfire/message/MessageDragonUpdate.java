@@ -15,12 +15,14 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 	public int dragonId;
 	public byte dataType;
 	public float data;
+	public float prevData;
 
-	public MessageDragonUpdate(int dragonId, byte type, float data)
+	public MessageDragonUpdate(int dragonId, byte type, float data, float prevData)
 	{
 		this.dragonId = dragonId;
 		this.dataType = type;
 		this.data = data;
+		this.prevData = prevData;
 	}
 	public MessageDragonUpdate()
 	{
@@ -29,45 +31,43 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 
 	public void handleClientMessage(MessageDragonUpdate message, EntityPlayer player)
 	{
-
+		EntityDragonBase entity = (EntityDragonBase)player.worldObj.getEntityByID(message.dragonId);
+		if(entity != null && !entity.isDead){
+			switch(message.dataType){
+			default:
+				entity.hoverProgress = message.data;
+				if(message.data > message.prevData){
+					entity.setHovering(true);
+				}
+				else if(message.data == 0){
+					entity.setHovering(false);
+				}
+				break;
+			case 1:
+				entity.flightProgress = message.data;
+				if(message.data > message.prevData){
+					entity.setFlying(true);
+				}
+				else if(message.data == 0){
+					entity.setFlying(false);
+				}
+				break;
+			case 2:
+				entity.fireBreathProgress = message.data;
+				if(message.data > message.prevData){
+					entity.isBreathingFire = true;
+				}
+				else if(message.data == 0){
+					entity.isBreathingFire = false;
+				}
+				
+			}
+		}
 	}
 
 	public void handleServerMessage(MessageDragonUpdate message, EntityPlayer player)
 	{
-		EntityDragonBase entity = (EntityDragonBase)player.worldObj.getEntityByID(message.dragonId);
-		if(entity != null && !entity.isDead){
-			switch(message.dataType){
-			default://set Hover
-				entity.hoverProgress = message.data;
-				break;
-			case 1://start Hover
-				entity.hoverProgress = message.data;
-				if(!entity.isHovering())
-					entity.setHovering(true);
-				break;
-			case 2://end Hover
-				entity.hoverProgress = message.data;
-				if(entity.isHovering())
-					entity.setHovering(false);
-				break;
-			case 3://set Flight
-				entity.flightProgress = message.data;
-				break;
-			case 4://start Flight
-				entity.flightProgress = message.data;
-				if(!entity.isFlying())
-					entity.setFlying(true);
-				break;
-			case 5://end Flight
-				entity.flightProgress = message.data;
-				if(entity.isFlying())
-					entity.setFlying(false);
-				break;
-			case 6://set Flame
-				//entity.flameProgress = message.data;
-				break;
-			}
-		}
+	
 	}
 
 	public void fromBytes(ByteBuf buf)
@@ -75,6 +75,7 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 		dragonId = buf.readInt();
 		dataType = buf.readByte();
 		data = buf.readFloat();
+		prevData = buf.readFloat();
 	}
 
 	public void toBytes(ByteBuf buf)
@@ -82,5 +83,6 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 		buf.writeInt(dragonId);
 		buf.writeByte(dataType);
 		buf.writeFloat(data);
+		buf.writeFloat(prevData);
 	}
 }

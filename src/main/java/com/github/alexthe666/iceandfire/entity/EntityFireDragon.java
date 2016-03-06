@@ -95,7 +95,7 @@ public class EntityFireDragon extends EntityDragonBase{
 		}
 	}
 	@Override
-	public void onInventoryChanged(InventoryBasic p_76316_1_) {
+	public void onInventoryChanged(InventoryBasic inventory) {
 		// TODO Auto-generated method stub
 		
 	}

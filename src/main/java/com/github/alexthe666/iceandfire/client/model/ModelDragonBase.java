@@ -33,6 +33,21 @@ public abstract class ModelDragonBase extends MowzieModelBase{
         modelRenderer.rotationPointZ += sitProgress * z / 20.0F;
     }
 	
+	public void progressAnimationRotation(int progressMod, MowzieModelRenderer modelRenderer, float sitProgress, float rotX, float rotY, float rotZ)
+    {
+        modelRenderer.rotateAngleX += sitProgress * rotX / progressMod;
+        modelRenderer.rotateAngleY += sitProgress * rotY / progressMod;
+        modelRenderer.rotateAngleZ += sitProgress * rotZ / progressMod;
+    }
+
+	public void progressAnimationPos(int progressMod, MowzieModelRenderer modelRenderer, float sitProgress, float x, float y, float z)
+    {
+        modelRenderer.rotationPointX += sitProgress * x / progressMod;
+        modelRenderer.rotationPointY += sitProgress * y / progressMod;
+        modelRenderer.rotationPointZ += sitProgress * z / progressMod;
+    }
+	
+	
 	public abstract void flightPose(float progress);
 
 	public abstract void sitPose(float progress);

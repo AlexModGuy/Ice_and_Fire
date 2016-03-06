@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -27,7 +26,6 @@ import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
@@ -55,9 +53,10 @@ public class IceAndFire
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
-		channel.registerMessage(MessageDragonUpdate.class, MessageDragonUpdate.class, 1, Side.SERVER);
+		channel.registerMessage(MessageDragonUpdate.class, MessageDragonUpdate.class, 1, Side.CLIENT);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
+	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
@@ -67,7 +66,6 @@ public class IceAndFire
 		ModRecipes.init();
 		ModEntities.init();
 		ModKeys.init();
-		//FMLCommonHandler.instance().bus().register(new EventKeys());
 		initilizeTreasure();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
