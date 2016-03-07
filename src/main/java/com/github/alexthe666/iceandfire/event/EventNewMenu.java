@@ -32,11 +32,11 @@ public class EventNewMenu
 	@SubscribeEvent
 	public void onPlayerRenderPre(RenderPlayerEvent.Pre event)
 	{
-		if(event.entityPlayer == Minecraft.getMinecraft().thePlayer && event.entityPlayer.ridingEntity != null){
-			if(event.entityPlayer.ridingEntity instanceof EntityDragonBase){
+		boolean b = event.entityPlayer.ridingEntity != null && event.entityPlayer.ridingEntity instanceof EntityDragonBase;
+		if(event.entityPlayer == Minecraft.getMinecraft().thePlayer){
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 				Field thirdPersonDistanceField = ReflectionHelper.findField(EntityRenderer.class, ObfuscationReflectionHelper.remapFieldNames(EntityRenderer.class.getName(), thirdPersonDistanceNames));
-				float thirdPersonDistance = 14 + ((EntityDragonBase)event.entityPlayer.riddenByEntity).getDragonSize();
+				float thirdPersonDistance = 4 + (b ? ((EntityDragonBase)event.entityPlayer.ridingEntity).getDragonSize() : 0);
 				try
 				{
 					Field modifier = Field.class.getDeclaredField("modifiers");
@@ -50,7 +50,6 @@ public class EventNewMenu
 				}
 			}
 		}
-	}
 	@SubscribeEvent
 	public void openMainMenu(GuiOpenEvent event)
 	{

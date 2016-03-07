@@ -41,27 +41,27 @@ public class MessageModKeys extends AbstractMessage<MessageModKeys>
 					System.out.println("Down");
 				}
 				if(message.keyId == 3){
-					System.out.println("FireAttack");
-					float headPosX = (float) (dragon.posX + 1.8F * dragon.getDragonSize() * Math.cos((dragon.rotationYaw + 90) * Math.PI/180));
-					float headPosZ = (float) (dragon.posZ + 1.8F * dragon.getDragonSize() * Math.sin((dragon.rotationYaw + 90) * Math.PI/180));
-					float headPosY = (float) (dragon.posY + 0.7 * dragon.getDragonSize());
-					double d1 = 0D;
-					Vec3 vec3 = dragon.getLook(1.0F);
-					double d2 = player.getLook(1.0F).xCoord;
-					double d3 = player.getLook(1.0F).yCoord;
-					double d4 = player.getLook(1.0F).zCoord;
-					dragon.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(dragon), 0);
-					EntityDragonFire entitylargefireball = new EntityDragonFire(dragon.worldObj, dragon, d2, d3, d4);
-					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					dragon.worldObj.spawnEntityInWorld(entitylargefireball);
-					
+					if(!dragon.isBreathingFire)
+						dragon.isBreathingFire = true;
+					dragon.ticksTillStopFire = 20;
+					if(dragon.flameTick == 0){
+						dragon.flameTick = 1;
+						System.out.println(dragon.flameTick);
+					}
+
 				}
 				if(message.keyId == 4){
-					System.out.println("Strike");
+					if(dragon.attackTick == 0){
+						dragon.attackTick = 1;
+					}
+					if(dragon.getAnimation() != dragon.animation_bite1){
+						dragon.setAnimation(dragon.animation_bite1);
+					}
+					
 				}
 			}	
 		}
-		
+
 	}
 
 	public void fromBytes(ByteBuf buf)

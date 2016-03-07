@@ -1,12 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.animation.AnimationBlend;
-import com.github.alexthe666.iceandfire.client.RollBuffer;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumOrder;
-import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
 import net.ilexiconn.llibrary.common.animation.Animation;
@@ -14,7 +10,12 @@ import net.ilexiconn.llibrary.common.animation.IAnimated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityTameable;
@@ -27,13 +28,32 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.animation.AnimationBlend;
+import com.github.alexthe666.iceandfire.client.RollBuffer;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonBreathFire;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonDefend;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonEatItem;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonHunt;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
+import com.github.alexthe666.iceandfire.enums.EnumOrder;
+import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
 
@@ -59,6 +79,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public BlockPos airTarget;
 	private float angle;
 	public boolean isBreathingFire;
+	public int ticksTillStopFire;
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
@@ -282,7 +303,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
 		}
 
-
+		if(ticksTillStopFire > 0 && !worldObj.isRemote){
+			ticksTillStopFire--;
+		}else if(ticksTillStopFire == 0 && isBreathingFire && !worldObj.isRemote){
+			isBreathingFire = false;
+		}
 
 		if (!worldObj.isRemote && isHovering())
 		{
@@ -317,13 +342,37 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 			if(getAttackTarget() != null)
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+			else{
+				List<EntityLivingBase> list = this.getEntityLivingBaseNearby(posX, posY, posZ, getDragonSize() * 1.8F);
+				for (Entity prey1 : list)
+				{
+					prey1.attackEntityFrom(DamageSource.causeMobDamage(this), f);
+					this.faceEntity(prey1, 360, 0);
+
+				}
+			}
 		} 
 
 		if(flameTick >= 20){
-			if(getAttackTarget() != null)
+			if(getAttackTarget() != null && riddenByEntity == null)
 				shootFire(getAttackTarget());
+			else if(riddenByEntity != null && ticksTillStopFire > 0){
+				float headPosX = (float) (this.posX + 1.8F * this.getDragonSize() * Math.cos((this.rotationYaw + 90) * Math.PI/180));
+				float headPosZ = (float) (this.posZ + 1.8F * this.getDragonSize() * Math.sin((this.rotationYaw + 90) * Math.PI/180));
+				float headPosY = (float) (this.posY + 0.5 * this.getDragonSize());
+				double d1 = 0D;
+				Vec3 vec3 = riddenByEntity.func_181014_aG();
+				double d2 = riddenByEntity.getLook(1.0F).xCoord;
+				double d3 = riddenByEntity.getLook(1.0F).yCoord;
+				double d4 = riddenByEntity.getLook(1.0F).zCoord;
+				this.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1008, new BlockPos(this), 0);
+				EntityDragonFire entitylargefireball = new EntityDragonFire(riddenByEntity.worldObj, this, d2, d3, d4);
+				entitylargefireball.setLocationAndAngles(headPosX, headPosY, headPosZ, riddenByEntity.rotationYaw, riddenByEntity.rotationPitch);
+				entitylargefireball.setSizes(this.getDragonSize() * 0.25F, this.getDragonSize() * 0.25F);
+				this.worldObj.spawnEntityInWorld(entitylargefireball);
+			}
 		}
-		if(isBreathingFire && getAttackTarget() == null){
+		if(isBreathingFire && riddenByEntity == null && getAttackTarget() == null){
 			isBreathingFire = false;
 		}
 		if(this.isTamed() && this.getAttackTarget() != null && isHungry()){
@@ -495,7 +544,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 
-		if(this.getAttackTarget() != null && this.getAnimation() == this.animation_none){
+		if(this.getAttackTarget() != null && this.getAnimation() == this.animation_none && (this.riddenByEntity == null || this.riddenByEntity != null && !(this.riddenByEntity instanceof EntityPlayer))){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
 				if(this.getAnimation() != animation_bite1){

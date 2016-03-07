@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -32,15 +33,21 @@ public class EntityDragonFire extends EntityFireball
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
 	}
 
+
 	public EntityDragonFire(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
 	{
 		super(worldIn, shooter, accelX, accelY, accelZ);
 	}
-	
+
 	public void setSizes(float width, float height){
 		this.setSize(width, height);
 	}
-	
+
+    public boolean canBeCollidedWith()
+    {
+        return false;
+    }
+    
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -58,13 +65,13 @@ public class EntityDragonFire extends EntityFireball
 		if (!this.worldObj.isRemote)
 		{
 
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) || movingObject.entityHit == null){
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null){
 				FireExplosion explosion = new FireExplosion(worldObj, (Entity)null, this.posX, this.posY, this.posZ, 3F, true);
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 			}
 
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)){
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity){
 				movingObject.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, movingObject.entityHit), 6.0F);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 			}else{
@@ -74,8 +81,6 @@ public class EntityDragonFire extends EntityFireball
 
 			if (movingObject.typeOfHit != movingObject.typeOfHit.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)){
 				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
-				//this.worldObj.newExplosion((Entity)null, this.posX, this.posY, this.posZ, (float)1, flag, flag);
-
 				this.setDead();
 			}
 		}
@@ -98,6 +103,5 @@ public class EntityDragonFire extends EntityFireball
 	{
 		return false;
 	}
-
 
 }

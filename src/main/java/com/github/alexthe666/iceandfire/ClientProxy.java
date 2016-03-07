@@ -34,6 +34,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 
 public class ClientProxy extends CommonProxy{
@@ -54,6 +55,7 @@ public class ClientProxy extends CommonProxy{
 
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
 		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
+		MinecraftForge.EVENT_BUS.register(new EventKeys());
 
 	}
 	public void renderItems(){

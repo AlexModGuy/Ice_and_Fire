@@ -17,9 +17,11 @@ public class EventKeys {
 		if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())){
 			IceAndFire.channel.sendToServer(new MessageModKeys(1));
 		}
-		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode())){
-			System.out.println("i");
+		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode()) && Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0){
 			IceAndFire.channel.sendToServer(new MessageModKeys(3));
+		}
+		if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode()) && Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0){
+			IceAndFire.channel.sendToServer(new MessageModKeys(4));
 		}
 	}
 /*	@SubscribeEvent
