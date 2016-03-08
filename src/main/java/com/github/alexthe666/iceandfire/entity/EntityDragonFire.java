@@ -20,8 +20,6 @@ import com.github.alexthe666.iceandfire.structures.WorldUtils;
 public class EntityDragonFire extends EntityFireball
 {
 
-	public float width;
-
 	public EntityDragonFire(World worldIn)
 	{
 		super(worldIn);
@@ -66,7 +64,7 @@ public class EntityDragonFire extends EntityFireball
 		{
 
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null){
-				FireExplosion explosion = new FireExplosion(worldObj, (Entity)null, this.posX, this.posY, this.posZ, 3F, true);
+				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, this.width, true);
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 			}

@@ -8,6 +8,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockGravel;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -170,8 +171,6 @@ public class FireExplosion extends Explosion
 	  */
 	 public void doExplosionB(boolean spawnParticles)
 	 {
-		 this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
-
 		 if (this.isSmoking)
 		 {
 			 for (BlockPos blockpos : this.affectedBlockPositions)
@@ -210,8 +209,18 @@ public class FireExplosion extends Explosion
 						 worldObj.setBlockState(blockpos, ModBlocks.charedDirt.getDefaultState());
 					 }
 					 
-					 if(block instanceof BlockLeaves){
+					 if(block instanceof BlockLeaves || block.getMaterial() == Material.water){
 						 worldObj.setBlockState(blockpos, Blocks.air.getDefaultState());
+					 }
+					 
+					 if(block instanceof BlockGravel){
+						 worldObj.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
+					 }
+					 
+					 if(block.getMaterial() == Material.rock && (block != ModBlocks.charedCobblestone && block != Blocks.cobblestone && block != Blocks.mossy_cobblestone && block != Blocks.cobblestone_wall)){
+						 worldObj.setBlockState(blockpos, ModBlocks.charedStone.getDefaultState());
+					 }else if(block.getMaterial() == Material.rock){
+						 worldObj.setBlockState(blockpos, ModBlocks.charedCobblestone.getDefaultState());
 					 }
 				 }
 			 }

@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-
-import net.minecraft.block.Block;
+import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockGeneric extends Block{
+import com.github.alexthe666.iceandfire.IceAndFire;
+
+public class BlockFallingGeneric extends BlockFalling{
 	
-	public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
+	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
 		this.setHarvestLevel(toolUsed, toolStrength);
@@ -20,7 +21,7 @@ public class BlockGeneric extends Block{
 		
 	}
 
-	public BlockGeneric(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound) {
+	public BlockFallingGeneric(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
 		this.setHardness(hardness);

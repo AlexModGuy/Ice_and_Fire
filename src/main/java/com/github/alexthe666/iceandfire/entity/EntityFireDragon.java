@@ -15,7 +15,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	public static final double baseSpeed = 0.25D;
 	public static final double maxHealth = 700;
 	public static final double maxDamage = 12;
-	public static final double maxSpeed = 0.55D;
+	public static final double maxSpeed = 0.6D;
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
 		this.setSize(2.78F, 0.9F);

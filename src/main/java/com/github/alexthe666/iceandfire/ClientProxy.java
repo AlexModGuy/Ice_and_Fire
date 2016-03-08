@@ -76,6 +76,9 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.sapphireBlock), 0, new ModelResourceLocation("iceandfire:sapphire_block", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedDirt), 0, new ModelResourceLocation("iceandfire:chared_dirt", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedGrass), 0, new ModelResourceLocation("iceandfire:chared_grass", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedStone), 0, new ModelResourceLocation("iceandfire:chared_stone", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedCobblestone), 0, new ModelResourceLocation("iceandfire:chared_cobblestone", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedGravel), 0, new ModelResourceLocation("iceandfire:chared_gravel", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.eggInIce), 0, new ModelResourceLocation("iceandfire:egginice", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.bestiary, 0, new ModelResourceLocation("iceandfire:bestiary", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.manuscript, 0, new ModelResourceLocation("iceandfire:manuscript", "inventory"));
