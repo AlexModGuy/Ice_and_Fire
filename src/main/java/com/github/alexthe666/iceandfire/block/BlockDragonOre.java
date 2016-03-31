@@ -2,20 +2,19 @@ package com.github.alexthe666.iceandfire.block;
 
 import java.util.Random;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModItems;
 
 public class BlockDragonOre extends Block {
 
@@ -35,7 +34,7 @@ public class BlockDragonOre extends Block {
 		return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
 	}
 	@Override
-	public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune)
+	public int getExpDrop(IBlockState blockstate, IBlockAccess world, BlockPos pos, int fortune)
 	{
 		if (this == Blocks.emerald_ore)
 		{

@@ -10,10 +10,10 @@ public class IceAndFireHooks {
 	 */
 	public static void dismount(EntityPlayer player){
 		System.out.println("i");
-		if(player.ridingEntity != null && player.ridingEntity instanceof EntityDragonBase){
-			
+		/*	if(player.ridingEntity != null && player.ridingEntity instanceof EntityDragonBase){
+
 		}else{
-			player.mountEntity(null);
-		}
+			player.dismountEntity(null);
+		}*/
 	}
 }

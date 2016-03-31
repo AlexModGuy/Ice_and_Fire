@@ -28,20 +28,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.animation.AnimationBlend;
 import com.github.alexthe666.iceandfire.client.RollBuffer;
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
@@ -302,11 +299,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.setFlying(true);
 			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
 		}
-
-		if(ticksTillStopFire > 0 && !worldObj.isRemote){
-			ticksTillStopFire--;
-		}else if(ticksTillStopFire == 0 && isBreathingFire && !worldObj.isRemote){
-			isBreathingFire = false;
+		if(this.riddenByEntity != null){
+			if(ticksTillStopFire > 0 && !worldObj.isRemote){
+				ticksTillStopFire--;
+			}else if(ticksTillStopFire == 0 && isBreathingFire && !worldObj.isRemote){
+				isBreathingFire = false;
+			}
 		}
 
 		if (!worldObj.isRemote && isHovering())

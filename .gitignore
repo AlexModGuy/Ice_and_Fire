@@ -1,23 +1,22 @@
+# eclipse
+bin
+*.launch
+.settings
 .metadata
-.gradle
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*.properties
-.settings/
-.loadpath
-.idea/
-*.ipr
-*.iml
-*.iws
-out/
-minecraft/
-eclipse/
-build/
-run/
 .classpath
 .project
-Ice_and_Fire_Client.launch
-Ice_and_Fire_Server.launch
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run

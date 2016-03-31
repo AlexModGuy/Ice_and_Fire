@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
-@MCVersion("1.8.9")
+@MCVersion("1.9")
 @TransformerExclusions({"com.github.alexthe666.iceandfire.access."})
 public class IceAndFireForgeLoading implements IFMLLoadingPlugin{
 

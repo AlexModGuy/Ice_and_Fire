@@ -44,7 +44,6 @@ public class IceAndFire
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
-	public static final List treasure_dragondungeon = new ArrayList<WeightedRandomChestContent>();
     public static DamageSource dragon = (new DamageSource("dragon")).setFireDamage();
     public static DamageSource dragonFire = (new DamageSource("dragonFire")).setFireDamage();
 
@@ -66,23 +65,9 @@ public class IceAndFire
 		ModRecipes.init();
 		ModEntities.init();
 		ModKeys.init();
-		initilizeTreasure();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
-	}
-	
-	public void initilizeTreasure(){
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.gold_nugget), 1, 3, 75));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.diamond), 1, 2, 15));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.emerald), 1, 2, 15));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.quartz), 1, 4, 35));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.clock), 1, 1, 15));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.experience_bottle), 1, 2, 15));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.skull), 1, 1, 10));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.minecart), 1, 1, 5));
-		treasure_dragondungeon.add(new WeightedRandomChestContent(new ItemStack(Items.glowstone_dust), 1, 5, 25));
 
 	}
 }

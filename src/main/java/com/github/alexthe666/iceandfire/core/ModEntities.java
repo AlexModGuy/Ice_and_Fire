@@ -20,7 +20,7 @@ public class ModEntities {
 		Random random = new Random(x);
 		EntityRegistry.registerGlobalEntityID(entityClass, name, entityId);
 		EntityRegistry.registerModEntity(entityClass, name, entityId, IceAndFire.instance, range, 1, true);
-		EntityList.entityEggs.put(Integer.valueOf(entityId), new EntityList.EntityEggInfo(entityId, mainColor, subColor));
+		EntityList.entityEggs.put(name, new EntityList.EntityEggInfo(name, mainColor, subColor));
 	}
 	public static void registerUnspawnable(Class entityClass, String name){
 		int entityId = EntityRegistry.findGlobalUniqueEntityId();

@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,8 +61,8 @@ public class ClientProxy extends CommonProxy{
 	public void renderItems(){
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.lectern), 0, new ModelResourceLocation("iceandfire:lectern", "inventory"));
-		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.podium), new String[] {"iceandfire:podium_oak", "iceandfire:podium_spruce",
-			"iceandfire:podium_birch", "iceandfire:podium_jungle", "iceandfire:podium_acacia", "iceandfire:podium_dark_oak"});
+		//ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.podium), new String[] {"iceandfire:podium_oak", "iceandfire:podium_spruce",
+		//	"iceandfire:podium_birch", "iceandfire:podium_jungle", "iceandfire:podium_acacia", "iceandfire:podium_dark_oak"});
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 0, new ModelResourceLocation("iceandfire:podium_oak", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 1, new ModelResourceLocation("iceandfire:podium_spruce", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 2, new ModelResourceLocation("iceandfire:podium_birch", "inventory"));
@@ -119,15 +119,15 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_axe, 0, new ModelResourceLocation("iceandfire:dragonbone_axe", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_hoe, 0, new ModelResourceLocation("iceandfire:dragonbone_hoe", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_arrow, 0, new ModelResourceLocation("iceandfire:dragonbone_arrow", "inventory"));
-		ModelBakery.addVariantName(ModItems.dragonbone_bow, new String[] {"iceandfire:dragonbone_bow", "iceandfire:dragonbone_bow_pulling_0",
-				"iceandfire:dragonbone_bow_pulling_1", "iceandfire:dragonbone_bow_pulling_2"});
+		//ModelBakery.addVariantName(ModItems.dragonbone_bow, new String[] {"iceandfire:dragonbone_bow", "iceandfire:dragonbone_bow_pulling_0",
+		//		"iceandfire:dragonbone_bow_pulling_1", "iceandfire:dragonbone_bow_pulling_2"});
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 0, new ModelResourceLocation("iceandfire:dragonbone_bow", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 1, new ModelResourceLocation("iceandfire:dragonbone_bow_pulling_0", "inventory"));
-		ModelBakery.addVariantName(ModItems.dragon_skull, new String[] {"iceandfire:dragon_skull_fire", "iceandfire:dragon_skull_ice"});
+		//ModelBakery.addVariantName(ModItems.dragon_skull, new String[] {"iceandfire:dragon_skull_fire", "iceandfire:dragon_skull_ice"});
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 2, new ModelResourceLocation("iceandfire:dragonbone_bow_pulling_1", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 0, new ModelResourceLocation("iceandfire:dragon_skull_fire", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 1, new ModelResourceLocation("iceandfire:dragon_skull_ice", "inventory"));
-		ModelBakery.addVariantName(ModItems.dragon_armor_iron, new String[] {"iceandfire:dragonarmor_iron_head", "iceandfire:dragonarmor_iron_neck", "iceandfire:dragonarmor_iron_body", "iceandfire:dragonarmor_iron_tail"});
+		//ModelBakery.addVariantName(ModItems.dragon_armor_iron, new String[] {"iceandfire:dragonarmor_iron_head", "iceandfire:dragonarmor_iron_neck", "iceandfire:dragonarmor_iron_body", "iceandfire:dragonarmor_iron_tail"});
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 0, new ModelResourceLocation("iceandfire:dragonarmor_iron_head", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 1, new ModelResourceLocation("iceandfire:dragonarmor_iron_neck", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 2, new ModelResourceLocation("iceandfire:dragonarmor_iron_body", "inventory"));

@@ -25,7 +25,7 @@ group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-
 archivesBaseName = "modid"
 
 minecraft {
-    version = "1.8.9-11.15.1.1764"
+    version = "1.9-12.16.0.1811-1.9"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -33,20 +33,19 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_20"
+    mappings = "snapshot_20160312"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
-    mavenCentral()
     maven {
         name = "ilexiconn"
-        url = "http://maven.ilexiconn.net/"
+        url = "http://maven.ilexiconn.net"
     }
 }
 
 dependencies {
-    compile "net.ilexiconn:llibrary:0.9.2-1.8.9:dev"
+    compile "net.ilexiconn:llibrary:0.10.0-beta-1-1.9:dev"
 }
 
 processResources

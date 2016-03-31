@@ -6,15 +6,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -28,24 +30,55 @@ import com.github.alexthe666.iceandfire.structures.WorldUtils;
 public class BlockGoldPile extends Block
 {
 	public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 8);
+	protected static final AxisAlignedBB[] SNOW_AABB = new AxisAlignedBB[] {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
 
 	public BlockGoldPile()
 	{
 		super(Material.ground);
 		GameRegistry.registerBlock(this, "goldpile");
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, Integer.valueOf(1)));
 		this.setTickRandomly(true);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.goldpile");
-		this.setBlockBoundsForItemRender();
 		this.setHardness(0.3F);
+	}
+
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return SNOW_AABB[((Integer)state.getValue(LAYERS)).intValue()];
 	}
 
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
 	{
-		return false;
+		return ((Integer)worldIn.getBlockState(pos).getValue(LAYERS)).intValue() < 5;
 	}
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+
+	/**
+	 * Checks if an IBlockState represents a block that is opaque and a full cube.
+	 *  
+	 * @param state The block state to check.
+	 */
+	public boolean isFullyOpaque(IBlockState state)
+	{
+		return ((Integer)state.getValue(LAYERS)).intValue() == 7;
+	}
+
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+	{
+		int i = ((Integer)blockState.getValue(LAYERS)).intValue() - 1;
+		float f = 0.125F;
+		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(worldIn, pos);
+		return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, (double)((float)i * f), axisalignedbb.maxZ);
+	}
+
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+	{
+		IBlockState iblockstate = worldIn.getBlockState(pos.down());
+		Block block = iblockstate.getBlock();
+		return block != Blocks.ice && block != Blocks.packed_ice ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : (block == this && ((Integer)iblockstate.getValue(LAYERS)).intValue() >= 7 ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement())) : false;
+	}
+
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		ItemStack item = playerIn.inventory.getCurrentItem();
 
@@ -70,13 +103,7 @@ public class BlockGoldPile extends Block
 				}
 			}
 		}
-		return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
-	}
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
-	{
-		int i = ((Integer)state.getValue(LAYERS)).intValue();
-		float f = 0.125F;
-		return new AxisAlignedBB((double)pos.getX() + this.minX, (double)pos.getY() + this.minY, (double)pos.getZ() + this.minZ, (double)pos.getX() + this.maxX, (double)((float)pos.getY() + (float)i * f), (double)pos.getZ() + this.maxZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, item, side, hitX, hitY, hitZ);
 	}
 
 	public boolean isOpaqueCube()
@@ -89,34 +116,6 @@ public class BlockGoldPile extends Block
 		return false;
 	}
 
-	/**
-	 * Sets the block's bounds for rendering it as an item
-	 */
-	public void setBlockBoundsForItemRender()
-	{
-		this.getBoundsForLayers(0);
-	}
-
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
-	{
-		IBlockState iblockstate = worldIn.getBlockState(pos);
-		this.getBoundsForLayers(((Integer)iblockstate.getValue(LAYERS)).intValue());
-	}
-
-	protected void getBoundsForLayers(int p_150154_1_)
-	{
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, (float)p_150154_1_ / 8.0F, 1.0F);
-	}
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
-	{
-		IBlockState iblockstate = worldIn.getBlockState(pos.down());
-		Block block = iblockstate.getBlock();
-		return (block == this && !(((Integer)iblockstate.getValue(LAYERS)).intValue() == 7) ? true : block.isOpaqueCube());
-	}
-
-	/**
-	 * Called when a neighboring block changes.
-	 */
 	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
 	{
 		this.checkAndDropBlock(worldIn, pos, state);
@@ -135,42 +134,36 @@ public class BlockGoldPile extends Block
 		}
 	}
 
-	/**
-	 * Get the Item that this Block should drop when harvested.
-	 *  
-	 * @param fortune the level of the Fortune enchantment on the player's tool
-	 */
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
 		return Items.gold_nugget;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(worldIn, pos, side);
+		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
-	/**
-	 * Convert the given metadata into a BlockState for this Block
-	 */
 	public IBlockState getStateFromMeta(int meta)
-	{
-		return this.getDefaultState().withProperty(LAYERS, Integer.valueOf((meta & 7) + 1));
-	}
+    {
+        return this.getDefaultState().withProperty(LAYERS, Integer.valueOf((meta & 7) + 1));
+    }
 
-	/**
-	 * Convert the BlockState into the correct metadata value
-	 */
-	public int getMetaFromState(IBlockState state)
-	{
-		return ((Integer)state.getValue(LAYERS)).intValue() - 1;
-	}
+    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos)
+    {
+        return ((Integer)worldIn.getBlockState(pos).getValue(LAYERS)).intValue() == 1;
+    }
 
-	protected BlockState createBlockState()
-	{
-		return new BlockState(this, new IProperty[] {LAYERS});
-	}
+    public int getMetaFromState(IBlockState state)
+    {
+        return ((Integer)state.getValue(LAYERS)).intValue() - 1;
+    }
 
-	@Override public int quantityDropped(IBlockState state, int fortune, Random random){ return ((Integer)state.getValue(LAYERS)) + 1; }
+    @Override public int quantityDropped(IBlockState state, int fortune, Random random){ return ((Integer)state.getValue(LAYERS)) + 1; }
+
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, new IProperty[] {LAYERS});
+    }
 }

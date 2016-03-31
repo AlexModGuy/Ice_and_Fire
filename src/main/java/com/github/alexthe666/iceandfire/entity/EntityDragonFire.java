@@ -53,7 +53,7 @@ public class EntityDragonFire extends EntityFireball
 
 		for (int i = 0; i < 2; ++i)
 		{
-			this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * 1) * (double)this.width, this.posY + ((this.rand.nextDouble() - 0.5D) * 1) * (double)this.height, this.posZ + ((this.rand.nextDouble() - 0.5D) * 1) * (double)this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D, new int[0]);
 		}
 		if (ticksExisted > 30) setDead();
 	}

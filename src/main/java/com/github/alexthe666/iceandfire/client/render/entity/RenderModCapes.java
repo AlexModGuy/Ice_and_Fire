@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.UUID;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
@@ -34,9 +33,9 @@ public class RenderModCapes {
 
 	@SubscribeEvent
 	public void playerRender(RenderPlayerEvent.Pre event){
-		if(event.entityPlayer instanceof AbstractClientPlayer){
-			if (hasRedCape(event.entityPlayer.getUniqueID())){
-				AbstractClientPlayer player = (AbstractClientPlayer)event.entityPlayer;
+		if(event.getEntityPlayer() instanceof AbstractClientPlayer){
+			if (hasRedCape(event.getEntityPlayer().getUniqueID())){
+				AbstractClientPlayer player = (AbstractClientPlayer)event.getEntityPlayer();
 				Field field = ReflectionHelper.findField(AbstractClientPlayer.class, ObfuscationReflectionHelper.remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
 				try
 				{
@@ -63,8 +62,8 @@ public class RenderModCapes {
 				}
 
 			}
-			else if (hasBlueCape(event.entityPlayer.getUniqueID())){
-				AbstractClientPlayer player = (AbstractClientPlayer)event.entityPlayer;
+			else if (hasBlueCape(event.getEntityPlayer().getUniqueID())){
+				AbstractClientPlayer player = (AbstractClientPlayer)event.getEntityPlayer();
 				Field field = ReflectionHelper.findField(AbstractClientPlayer.class, ObfuscationReflectionHelper.remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
 				try
 				{
