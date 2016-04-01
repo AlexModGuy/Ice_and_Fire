@@ -1,16 +1,11 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.MathHelper;
 
 public class SlotLectern extends Slot
 {
@@ -59,7 +54,7 @@ public class SlotLectern extends Slot
      */
     protected void onCrafting(ItemStack stack)
     {
-        thePlayer.addStat(StatList.objectCraftStats[Item.getIdFromItem(stack.getItem())], stack.stackSize);
+       // thePlayer.addStat(StatList.objectCraftStats[Item.getIdFromItem(stack.getItem())], stack.stackSize);
         this.field_75228_b = 0;
        
     }

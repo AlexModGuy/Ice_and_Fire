@@ -2,17 +2,17 @@ package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.StatCollector;
 
 public class ItemDragonArmor extends Item {
 
@@ -69,7 +69,7 @@ public class ItemDragonArmor extends Item {
     	tooltip.add(StatCollector.translateToLocal(words));
 	}
 	
-	@Override
+	/*@Override
 	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining)
 	{
 		switch(stack.getMetadata()){
@@ -82,5 +82,5 @@ public class ItemDragonArmor extends Item {
 		case 3:
 			return new ModelResourceLocation("iceandfire:dragonarmor_iron_tail", "inventory");	
 		}
-	}
+	}*/
 }

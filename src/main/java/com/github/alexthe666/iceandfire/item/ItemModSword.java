@@ -8,11 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 
 public class ItemModSword extends ItemSword {
@@ -36,6 +36,6 @@ public class ItemModSword extends ItemSword {
 
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
 		if(this == ModItems.silver_sword)
-		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+		list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
 	}
 }

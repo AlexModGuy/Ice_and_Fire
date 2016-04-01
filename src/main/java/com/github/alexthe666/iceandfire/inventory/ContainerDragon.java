@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -34,7 +35,7 @@ public class ContainerDragon extends Container
             
             public void onSlotChange(ItemStack stack, ItemStack stack2)
             {
-            	dragon.playSound("mob.horse.armor", 1, 1);
+                dragon.worldObj.playSound((EntityPlayer)null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
             	super.onSlotChange(stack, stack2);
             }
         });
@@ -47,7 +48,7 @@ public class ContainerDragon extends Container
             
             public void onSlotChange(ItemStack stack, ItemStack stack2)
             {
-            	dragon.playSound("mob.horse.armor", 1, 1);
+                dragon.worldObj.playSound((EntityPlayer)null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
             	super.onSlotChange(stack, stack2);
             }
         });
@@ -60,7 +61,7 @@ public class ContainerDragon extends Container
             
             public void onSlotChange(ItemStack stack, ItemStack stack2)
             {
-            	dragon.playSound("mob.horse.armor", 1, 1);
+                dragon.worldObj.playSound((EntityPlayer)null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
             	super.onSlotChange(stack, stack2);
             }
         });
@@ -73,7 +74,7 @@ public class ContainerDragon extends Container
             
             public void onSlotChange(ItemStack stack, ItemStack stack2)
             {
-            	dragon.playSound("mob.horse.armor", 1, 1);
+                dragon.worldObj.playSound((EntityPlayer)null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
             	super.onSlotChange(stack, stack2);
             }
         });

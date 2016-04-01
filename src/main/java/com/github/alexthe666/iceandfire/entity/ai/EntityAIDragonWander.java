@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
@@ -40,7 +40,7 @@ public class EntityAIDragonWander extends EntityAIBase
         }
         else
         {
-            Vec3 vec3 = RandomPositionGenerator.findRandomTarget(this.dragon, 10, 7);
+        	Vec3d vec3 = RandomPositionGenerator.findRandomTarget(this.dragon, 10, 7);
 
             if (vec3 == null)
             {

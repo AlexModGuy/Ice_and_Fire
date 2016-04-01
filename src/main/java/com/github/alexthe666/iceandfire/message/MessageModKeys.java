@@ -2,13 +2,9 @@ package com.github.alexthe666.iceandfire.message;
 
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.common.message.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
 
 public class MessageModKeys extends AbstractMessage<MessageModKeys>
 {
@@ -31,9 +27,9 @@ public class MessageModKeys extends AbstractMessage<MessageModKeys>
 
 	public void handleServerMessage(MessageModKeys message, EntityPlayer player)
 	{
-		if(player.ridingEntity != null){
-			if(player.ridingEntity instanceof EntityDragonBase){
-				EntityDragonBase dragon = (EntityDragonBase)player.ridingEntity;
+		if(player.getRidingEntity() != null){
+			if(player.getRidingEntity() instanceof EntityDragonBase){
+				EntityDragonBase dragon = (EntityDragonBase)player.getRidingEntity();
 				if(message.keyId == 1){
 					System.out.println("Up");
 					//dragon.motionY += 0.1D;

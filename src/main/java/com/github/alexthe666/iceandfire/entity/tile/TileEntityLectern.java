@@ -12,15 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
@@ -300,10 +299,6 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 		return "tile.iceandfire.lectern.name";
 	}
 
-	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(StatCollector.translateToLocal("tile.iceandfire.lectern.name"));
-	}
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
@@ -424,6 +419,11 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
+		return null;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
 		return null;
 	}
 }

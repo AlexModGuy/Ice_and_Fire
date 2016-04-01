@@ -1,23 +1,32 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 
-public class EntityDragonSkull extends EntityLiving{
+public class EntityDragonSkull extends EntityAnimal{
 
 	public final float minSize = 0.3F;
 	public final float maxSize = 8.58F;
 	private float field_98056_d = -1.0F;
 	private float field_98057_e;
+    private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> DRAGON_STAGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
+
 	public EntityDragonSkull(World worldIn) {
 		super(worldIn);
 		this.setSize(1.45F, 0.65F);
@@ -29,8 +38,8 @@ public class EntityDragonSkull extends EntityLiving{
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(1);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
 	}
 
 	public boolean isEntityInvulnerable(DamageSource i)
@@ -47,55 +56,45 @@ public class EntityDragonSkull extends EntityLiving{
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataWatcher.addObject(20, 0);
-		this.dataWatcher.addObject(21, 0);
-		this.dataWatcher.addObject(22, 0);
-		this.dataWatcher.addObject(23, 0);
+		this.dataWatcher.register(DRAGON_TYPE, 0);
+		this.dataWatcher.register(DRAGON_AGE, 0);
+		this.dataWatcher.register(DRAGON_STAGE, 0);
 
 	}
 
 	public int getType()
 	{
-		return this.dataWatcher.getWatchableObjectInt(20);
+        return ((Integer)this.getDataManager().get(DRAGON_TYPE)).intValue();
 	}
 
 	public void setType(int var1)
 	{
-		this.dataWatcher.updateObject(20, var1);
+        this.getDataManager().set(DRAGON_TYPE, Integer.valueOf(var1));
 	}
 
 	public int getStage()
 	{
-		return this.dataWatcher.getWatchableObjectInt(21);
+        return ((Integer)this.getDataManager().get(DRAGON_STAGE)).intValue();
 	}
 
 	public void setStage(int var1)
 	{
-		this.dataWatcher.updateObject(21, var1);
+        this.getDataManager().set(DRAGON_STAGE, Integer.valueOf(var1));
 	}
 
 	public int getDragonAge()
 	{
-		return this.dataWatcher.getWatchableObjectInt(22);
+        return ((Integer)this.getDataManager().get(DRAGON_AGE)).intValue();
 	}
 
 	public void setDragonAge(int var1)
 	{
-		this.dataWatcher.updateObject(22, var1);
+        this.getDataManager().set(DRAGON_AGE, Integer.valueOf(var1));
 	}
 
-	public int getMouthState()
-	{
-		return this.dataWatcher.getWatchableObjectInt(23);
-	}
 
-	public void setMouthState(int var1)
-	{
-		this.dataWatcher.updateObject(23, var1);
-	}
-
-	public String getHurtSound(){
-		return "none";	
+	public SoundEvent getHurtSound(){
+		return null;	
 	}
 
 	@Override
@@ -117,28 +116,19 @@ public class EntityDragonSkull extends EntityLiving{
 
 	}
 
-	public boolean interact(EntityPlayer player)
+    public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack)
 	{
 		if (player.isSneaking())
 		{
 			this.rotationYaw = player.rotationYaw;
-		}else{
-			if(this.getMouthState() == 0){
-				this.setMouthState(1);
-			}
-			if(this.getMouthState() == 1){
-				this.setMouthState(0);
-			}
 		}
-		return super.interact(player);
+		return super.processInteract(player, hand, stack);
 	}
 	public void readEntityFromNBT(NBTTagCompound compound)
 	{
 		this.setType(compound.getInteger("Type"));
 		this.setStage(compound.getInteger("Stage"));
 		this.setDragonAge(compound.getInteger("DragonAge"));
-		this.setMouthState(compound.getInteger("MouthState"));
-
 		super.readEntityFromNBT(compound);
 	}
 	public void writeEntityToNBT(NBTTagCompound compound)
@@ -146,8 +136,6 @@ public class EntityDragonSkull extends EntityLiving{
 		compound.setInteger("Type", this.getType());
 		compound.setInteger("Stage", this.getStage());
 		compound.setInteger("DragonAge", this.getDragonAge());
-		compound.setInteger("MouthState", this.getMouthState());
-
 		super.writeEntityToNBT(compound);
 	}
 
@@ -177,5 +165,10 @@ public class EntityDragonSkull extends EntityLiving{
 	}
 
 	protected void collideWithEntity(Entity entity) {}
+
+	@Override
+	public EntityAgeable createChild(EntityAgeable ageable) {
+		return null;
+	}
 
 }

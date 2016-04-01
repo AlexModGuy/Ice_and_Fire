@@ -3,8 +3,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -123,7 +123,7 @@ public class EntityAIDragonFollow extends EntityAIBase
                             {
                                 for (int i1 = 0; i1 <= 4; ++i1)
                                 {
-                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.doesBlockHaveSolidTopSurface(this.theWorld, new BlockPos(i + l, k - 1, j + i1)) && !this.theWorld.getBlockState(new BlockPos(i + l, k, j + i1)).getBlock().isNormalCube())
+                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && theWorld.getTopSolidOrLiquidBlock(new BlockPos(i + l, k - 1, j + i1)) != null && !this.theWorld.getBlockState(new BlockPos(i + l, k, j + i1)).isNormalCube())
                                     {
                                         this.dragon.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.dragon.rotationYaw, this.dragon.rotationPitch);
                                         this.petPathfinder.clearPathEntity();

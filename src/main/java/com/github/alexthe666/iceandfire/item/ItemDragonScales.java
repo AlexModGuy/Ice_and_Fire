@@ -2,16 +2,16 @@ package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.StatCollector;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class ItemDragonScales extends Item {
 	EnumDragonEgg type;

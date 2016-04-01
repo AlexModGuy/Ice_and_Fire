@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.item.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -27,7 +25,7 @@ public class ItemBlockPodium extends ItemBlock {
 		return meta;
 	}
 	
-	@Override
+	/*@Override
 	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining)
 	{
 		switch(stack.getMetadata()){
@@ -44,5 +42,5 @@ public class ItemBlockPodium extends ItemBlock {
 		case 5:
 			return new ModelResourceLocation("iceandfire:podium_dark_oak", "inventory");	
 		}
-	}
+	}*/
 }

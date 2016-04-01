@@ -6,12 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
 
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory{
@@ -169,11 +168,6 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return "tile.iceandfire.podium.name";
 	}
 
-	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(StatCollector.translateToLocal("tile.iceandfire.podium.name"));
-	}
-
 	public int[] getSlotsForFace(EnumFacing side)
 	{
 		return slotsTop;
@@ -196,6 +190,12 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

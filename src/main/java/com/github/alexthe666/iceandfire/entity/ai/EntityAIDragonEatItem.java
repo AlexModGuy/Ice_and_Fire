@@ -11,8 +11,8 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemFood;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.math.BlockPos;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
@@ -180,7 +180,7 @@ public class EntityAIDragonEatItem extends EntityAIBase{
 	}
 	protected double getTargetDistance()
 	{
-		IAttributeInstance iattributeinstance = this.dragon.getEntityAttribute(SharedMonsterAttributes.followRange);
+		IAttributeInstance iattributeinstance = this.dragon.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
 		return iattributeinstance == null ? 16.0D : iattributeinstance.getAttributeValue();
 	}
 }

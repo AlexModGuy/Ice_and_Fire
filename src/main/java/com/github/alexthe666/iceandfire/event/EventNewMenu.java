@@ -32,11 +32,11 @@ public class EventNewMenu
 	@SubscribeEvent
 	public void onPlayerRenderPre(RenderPlayerEvent.Pre event)
 	{
-		boolean b = event.entityPlayer.ridingEntity != null && event.entityPlayer.ridingEntity instanceof EntityDragonBase;
-		if(event.entityPlayer == Minecraft.getMinecraft().thePlayer){
+		boolean b = event.getEntityPlayer().getRidingEntity() != null && event.getEntityPlayer().getRidingEntity() instanceof EntityDragonBase;
+		if(event.getEntityPlayer() == Minecraft.getMinecraft().thePlayer){
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 				Field thirdPersonDistanceField = ReflectionHelper.findField(EntityRenderer.class, ObfuscationReflectionHelper.remapFieldNames(EntityRenderer.class.getName(), thirdPersonDistanceNames));
-				float thirdPersonDistance = 4 + (b ? ((EntityDragonBase)event.entityPlayer.ridingEntity).getDragonSize() : 0);
+				float thirdPersonDistance = 4 + (b ? ((EntityDragonBase)event.getEntityPlayer().getRidingEntity()).getDragonSize() : 0);
 				try
 				{
 					Field modifier = Field.class.getDeclaredField("modifiers");
@@ -54,9 +54,9 @@ public class EventNewMenu
 	public void openMainMenu(GuiOpenEvent event)
 	{
 
-		if (event.gui instanceof GuiMainMenu)
+		if (event.getGui() instanceof GuiMainMenu)
 		{
-			GuiMainMenu mainMenu = (GuiMainMenu) event.gui;
+			GuiMainMenu mainMenu = (GuiMainMenu) event.getGui();
 			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), titlePanoramaPaths));
 			try
 			{

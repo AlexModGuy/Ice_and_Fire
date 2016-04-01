@@ -2,23 +2,21 @@ package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
@@ -43,11 +41,11 @@ public class ItemDragonEgg extends Item {
 		tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
 	}
 
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (side != EnumFacing.UP)
 		{
-			return false;
+			return EnumActionResult.PASS;
 		}else{
 			EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			egg.setType(type);
@@ -64,7 +62,7 @@ public class ItemDragonEgg extends Item {
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack)null);
 				}
 			}
-			return true;
+			return EnumActionResult.SUCCESS;
 
 		}
 	}

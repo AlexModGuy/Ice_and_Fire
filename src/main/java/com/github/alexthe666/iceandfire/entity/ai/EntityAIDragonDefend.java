@@ -25,8 +25,8 @@ public class EntityAIDragonDefend extends EntityAITarget
      */
     public boolean shouldExecute()
     {
-        if(dragon.riddenByEntity != null){
-        	 if(dragon.riddenByEntity == dragon.getOwner()){
+        if(!dragon.getPassengers().isEmpty()){
+        	 if(dragon.getPassengers().contains(dragon.getOwner())){
              	return false;
              }	
         }

@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
-public class EntityAIDragonAttackOnCollide extends EntityAIAttackOnCollide
+public class EntityAIDragonAttackOnCollide extends EntityAIAttackMelee
 {
 
-	public EntityAIDragonAttackOnCollide(EntityCreature entity, Class clazz, double d, boolean d1) {
-		super(entity, clazz, d, d1);
+	public EntityAIDragonAttackOnCollide(EntityCreature entity, double d, boolean d1) {
+		super(entity, d, d1);
 	}
 
 	public boolean shouldExecute()
