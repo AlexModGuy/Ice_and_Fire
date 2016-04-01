@@ -13,27 +13,19 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 
 public class ModEntities {
+
+	public static void registerSpawnable(Class entityClass, String name, int id, int mainColor, int subColor){
+		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.instance, 64, 1, true, mainColor, subColor);
+	}
+	public static void registerUnspawnable(Class entityClass, String name, int id){
+		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.instance, 64, 1, true);
+	}
 	
-	public static void registerSpawnable(Class entityClass, String name, int mainColor, int subColor, int range){
-		int entityId = EntityRegistry.findGlobalUniqueEntityId();
-		long x = name.hashCode();
-		Random random = new Random(x);
-		EntityRegistry.registerGlobalEntityID(entityClass, name, entityId);
-		EntityRegistry.registerModEntity(entityClass, name, entityId, IceAndFire.instance, range, 1, true);
-		EntityList.entityEggs.put(name, new EntityList.EntityEggInfo(name, mainColor, subColor));
-	}
-	public static void registerUnspawnable(Class entityClass, String name){
-		int entityId = EntityRegistry.findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(entityClass, name, entityId);
-		EntityRegistry.registerModEntity(entityClass, name, entityId, IceAndFire.instance, 64, 1, true);
-
-	}
 	public static void init() {
-		registerSpawnable(EntityFireDragon.class, "iceandfire.firedragon", 0X340000, 0XA52929, 64);	
-		registerUnspawnable(EntityDragonEgg.class, "iceandfire.dragonegg");	
-		registerUnspawnable(EntityDragonArrow.class, "iceandfire.dragonarrow");	
-		registerUnspawnable(EntityDragonSkull.class, "iceandfire.dragonskull");	
-		registerUnspawnable(EntityDragonFire.class, "iceandfire.dragonfire");	
-
+		registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);	
+		registerUnspawnable(EntityDragonArrow.class, "dragonarrow", 2);	
+		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);	
+		registerUnspawnable(EntityDragonFire.class, "dragonfire", 4);	
+		registerSpawnable(EntityFireDragon.class, "firedragon", 5, 0X340000, 0XA52929);	
 	}
 }

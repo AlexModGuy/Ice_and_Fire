@@ -33,7 +33,7 @@ public class RenderModCapes {
 
 	@SubscribeEvent
 	public void playerRender(RenderPlayerEvent.Pre event){
-		if(event.getEntityPlayer() instanceof AbstractClientPlayer){
+		/*if(event.getEntityPlayer() instanceof AbstractClientPlayer){
 			if (hasRedCape(event.getEntityPlayer().getUniqueID())){
 				AbstractClientPlayer player = (AbstractClientPlayer)event.getEntityPlayer();
 				Field field = ReflectionHelper.findField(AbstractClientPlayer.class, ObfuscationReflectionHelper.remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
@@ -90,7 +90,7 @@ public class RenderModCapes {
 				}
 
 			}
-		}
+		}*/
 	}
 
 

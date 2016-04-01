@@ -14,14 +14,23 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event){
-		if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())){
+		if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode()) && checkIfPlayer()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(1));
 		}
-		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode()) && Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0){
+		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode()) && checkIfPlayer()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(3));
 		}
-		if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode()) && Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0){
+		if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode()) && checkIfPlayer()){
 			IceAndFire.channel.sendToServer(new MessageModKeys(4));
+		}
+	}
+	
+	public boolean checkIfPlayer(){
+		if( Minecraft.getMinecraft().thePlayer != null){
+			return Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0;
+		}
+		else{
+			return false;
 		}
 	}
 /*	@SubscribeEvent
