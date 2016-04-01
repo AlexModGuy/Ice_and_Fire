@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client;
 
 import net.ilexiconn.llibrary.LLibrary;
-import net.ilexiconn.llibrary.client.model.modelbase.MowzieModelRenderer;
+import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 
@@ -52,13 +52,13 @@ public class RollBuffer {
         }
     }
 
-    public void applyChainRollBuffer(MowzieModelRenderer[] boxes) {
+    public void applyChainRollBuffer(AdvancedModelRenderer[] boxes) {
         if (boxes.length == yawArray.length) {
             for (int i = 0; i < boxes.length; i++) {
                 boxes[i].rotateAngleZ += yawArray[i];
             }
         } else {
-            LLibrary.logger.error("Wrong array length being used in the buffer! (Y axis)");
+            LLibrary.LOGGER.error("Wrong array length being used in the buffer! (Y axis)");
         }
     }
 

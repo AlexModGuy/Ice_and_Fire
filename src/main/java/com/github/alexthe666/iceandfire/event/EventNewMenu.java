@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.event;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import net.ilexiconn.llibrary.common.entity.EntityHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.EntityRenderer;

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 

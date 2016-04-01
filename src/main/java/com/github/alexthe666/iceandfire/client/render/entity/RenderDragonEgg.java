@@ -6,12 +6,13 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
+import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 
 public class RenderDragonEgg extends RenderLiving {
 
-	public RenderDragonEgg(RenderManager renderManager, ModelBase model) {
-		super(renderManager, model, 0.3F);
+	public RenderDragonEgg(RenderManager renderManager, ModelBase modelDragonEgg) {
+		super(renderManager, modelDragonEgg, 0.3F);
 	}
 
 	@Override

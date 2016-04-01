@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.message;
 
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.common.message.AbstractMessage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
-public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
+public class MessageDragonUpdate extends net.ilexiconn.llibrary.server.network.AbstractMessage<MessageDragonUpdate>
 {
 
 	public int dragonId;
@@ -25,9 +27,23 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 	{
 	}
 
-
-	public void handleClientMessage(MessageDragonUpdate message, EntityPlayer player)
+	public void fromBytes(ByteBuf buf)
 	{
+		dragonId = buf.readInt();
+		dataType = buf.readByte();
+		data = buf.readFloat();
+		prevData = buf.readFloat();
+	}
+
+	public void toBytes(ByteBuf buf)
+	{
+		buf.writeInt(dragonId);
+		buf.writeByte(dataType);
+		buf.writeFloat(data);
+		buf.writeFloat(prevData);
+	}
+	@Override
+	public void onClientReceived(Minecraft client, MessageDragonUpdate message, EntityPlayer player, MessageContext messageContext) {
 		EntityDragonBase entity = (EntityDragonBase)player.worldObj.getEntityByID(message.dragonId);
 		if(entity != null && !entity.isDead){
 			switch(message.dataType){
@@ -61,25 +77,9 @@ public class MessageDragonUpdate extends AbstractMessage<MessageDragonUpdate>
 			}
 		}
 	}
-
-	public void handleServerMessage(MessageDragonUpdate message, EntityPlayer player)
-	{
 	
-	}
-
-	public void fromBytes(ByteBuf buf)
-	{
-		dragonId = buf.readInt();
-		dataType = buf.readByte();
-		data = buf.readFloat();
-		prevData = buf.readFloat();
-	}
-
-	public void toBytes(ByteBuf buf)
-	{
-		buf.writeInt(dragonId);
-		buf.writeByte(dataType);
-		buf.writeFloat(data);
-		buf.writeFloat(prevData);
+	@Override
+	public void onServerReceived(MinecraftServer server, MessageDragonUpdate message, EntityPlayer player, MessageContext messageContext) {
+		
 	}
 }

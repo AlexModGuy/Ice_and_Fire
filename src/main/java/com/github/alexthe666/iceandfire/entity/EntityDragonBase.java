@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.ilexiconn.llibrary.client.model.modelbase.ChainBuffer;
-import net.ilexiconn.llibrary.common.animation.Animation;
-import net.ilexiconn.llibrary.common.animation.IAnimated;
+import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
+import net.ilexiconn.llibrary.server.animation.Animation;
+import net.ilexiconn.llibrary.server.animation.AnimationHandler;
+import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
@@ -44,7 +45,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.animation.AnimationBlend;
 import com.github.alexthe666.iceandfire.client.RollBuffer;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -60,7 +60,7 @@ import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
 import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimated, IRangedAttackMob, IInvBasic{
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IRangedAttackMob, IInvBasic{
 
 	private static final DataParameter<Integer> DRAGON_COLOR = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_GENDER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -85,13 +85,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int ringBufferIndex = -1;
 	private Animation currentAnimation;
 	private int animTick;
-	public ChainBuffer tailbuffer = new ChainBuffer(5);
+	public ChainBuffer tailbuffer = new ChainBuffer();
 	public RollBuffer rollbuffer = new RollBuffer(1);
 	public int attackTick;
 	public int flameTick;
 	public AnimalChest inv;
-	public static AnimationBlend animation_flame1 = new AnimationBlend(1, 70, true);
-	public static AnimationBlend animation_bite1 = new AnimationBlend(2, 45, true);
+	public static Animation animation_flame1 = Animation.create(1, 70);
+	public static Animation animation_bite1 = Animation.create(2, 45);
 	public List<Class> blacklist = new ArrayList<Class>();
 	public float hoverProgress;
 	public float flightProgress;
@@ -104,7 +104,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public EntityDragonBase(World worldIn) {
 		super(worldIn);
-		currentAnimation = animation_none;
+		currentAnimation = NO_ANIMATION;
 		blacklist.add(EntityArmorStand.class);
 		blacklist.add(EntityDragonEgg.class);
 		blacklist.add(EntityDragonSkull.class);
@@ -600,7 +600,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 
-		if(this.getAttackTarget() != null && this.getAnimation() == this.animation_none && (this.getControllingRider() == null || this.getControllingRider() != null && !(this.getControllingRider() instanceof EntityPlayer))){
+		if(this.getAttackTarget() != null && this.getAnimation() == this.NO_ANIMATION && (this.getControllingRider() == null || this.getControllingRider() != null && !(this.getControllingRider() instanceof EntityPlayer))){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
 				if(this.getAnimation() != animation_bite1){
@@ -622,7 +622,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			rollbuffer.resetRotations();
 		}
 
-		Animation.tickAnimations(this);
+		AnimationHandler.INSTANCE.updateAnimations(this);
 	}
 
 	private void shootFire(EntityLivingBase attackTarget) {
@@ -1163,8 +1163,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return currentAnimation;
 	}
 
-	public final Animation[] animations() {
-		return new Animation[]{this.animation_none, this.animation_flame1, this.animation_bite1};
+	public final Animation[] getAnimations() {
+		return new Animation[]{this.NO_ANIMATION, this.animation_flame1, this.animation_bite1};
 	}
 
 	public boolean canAttackMob(EntityLivingBase targetEntity) {
@@ -1173,7 +1173,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 
 	public void attackEntityWithRangedAttack(EntityLivingBase entity, float f){
-		if(this.getAnimation().animationId == 0){
+		if(this.getAnimation() == NO_ANIMATION){
 			setNextAttack();
 		}
 	}
