@@ -80,7 +80,6 @@ public class ModelFireSkull extends ModelBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-    	this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.Head.render(f5);
     }
 
@@ -91,14 +90,6 @@ public class ModelFireSkull extends ModelBase {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
-    }
-    
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity){
-    	 if(entity instanceof EntityDragonSkull && ((EntityDragonSkull)entity).getMouthState() == 1){
-             this.Head.setRotationPoint(0.0F, 22.9F, 2.5F);
-             this.setRotateAngle(Head, -0.136659280431156F, 0.0F, 0.0F);
-             this.setRotateAngle(Jaw, 0.22759093446006054F, -0.0F, 0.0F);
-         }
     }
 
 }

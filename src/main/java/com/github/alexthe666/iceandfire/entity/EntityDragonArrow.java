@@ -58,7 +58,7 @@ public class EntityDragonArrow extends EntityArrow
 
 	@Override
 	protected ItemStack getArrowStack() {
-		return ModItems.dragonbone_arrow;
+		return new ItemStack(ModItems.dragonbone_arrow);
 	}
 
 }

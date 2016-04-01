@@ -5,33 +5,44 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class EntityDragonEgg extends EntityLiving{
+
+	private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
 
 	public EntityDragonEgg(World worldIn) {
 		super(worldIn);
 		this.isImmuneToFire = true;
 		this.setSize(0.45F, 0.55F);
 	}
+	
 	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0D);
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 	}
+	
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
 		super.writeEntityToNBT(tag);
@@ -51,19 +62,18 @@ public class EntityDragonEgg extends EntityLiving{
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataWatcher.addObject(18, 0);
-		this.dataWatcher.addObject(19, 0);
-
+		this.dataWatcher.register(DRAGON_TYPE, 0);
+		this.dataWatcher.register(DRAGON_AGE, 0);
 	}
 
 	public EnumDragonEgg getType()
 	{
-		return EnumDragonEgg.byMetadata(this.dataWatcher.getWatchableObjectInt(18));
+		return EnumDragonEgg.byMetadata(((Integer)this.getDataManager().get(DRAGON_TYPE)).intValue());
 	}
 
 	public void setType(EnumDragonEgg newtype)
 	{
-		this.dataWatcher.updateObject(18, newtype.meta);
+		this.getDataManager().set(DRAGON_TYPE, newtype.meta);
 	}
 	public boolean isEntityInvulnerable(DamageSource i)
 	{
@@ -71,12 +81,12 @@ public class EntityDragonEgg extends EntityLiving{
 	}
 	public int getDragonAge()
 	{
-		return this.dataWatcher.getWatchableObjectInt(19);
+		return ((Integer)this.getDataManager().get(DRAGON_AGE)).intValue();
 	}
 
 	public void setDragonAge(int i)
 	{
-		this.dataWatcher.updateObject(19, i);
+		this.getDataManager().set(DRAGON_TYPE, i);
 	}
 
 	public void onUpdate(){
@@ -85,19 +95,19 @@ public class EntityDragonEgg extends EntityLiving{
 		int j = MathHelper.floor_double(this.posY);
 		int k = MathHelper.floor_double(this.posZ);
 		BlockPos pos = new BlockPos(i, j, k);
-		if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.fire && getType().isFire){
+		if(worldObj.getBlockState(pos).getMaterial() == Material.fire && getType().isFire){
 			this.setDragonAge(this.getDragonAge() + 1);
 		}
-		if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.water && !getType().isFire && this.getRNG().nextInt(500) == 0){
+		if(worldObj.getBlockState(pos).getMaterial() == Material.water && !getType().isFire && this.getRNG().nextInt(500) == 0){
 			worldObj.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
-			worldObj.playSoundEffect(i, j, k, "dig.glass", 1, 1);
+            this.worldObj.playSound(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, SoundEvents.block_glass_break, this.getSoundCategory(), 2.5F, 1.0F, false);
 			if(worldObj.getBlockState(pos).getBlock() instanceof BlockEggInIce){
 				((TileEntityEggInIce)worldObj.getTileEntity(pos)).type = this.getType();
 				this.setDead();
 			}
 		}
 		if(this.getDragonAge() == 60){
-			if(worldObj.getBlockState(pos).getBlock().getMaterial() == Material.fire && getType().isFire){
+			if(worldObj.getBlockState(pos).getMaterial() == Material.fire && getType().isFire){
 				worldObj.destroyBlock(pos, false);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
 				dragon.setColor(getType().meta);
@@ -106,7 +116,7 @@ public class EntityDragonEgg extends EntityLiving{
 					worldObj.spawnEntityInWorld(dragon);
 				}
 			}
-			this.playSound("iceandfire:dragonegg.hatch", 1, 1);
+            this.worldObj.playSound(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, ModSounds.dragon_hatch, this.getSoundCategory(), 2.5F, 1.0F, false);
 			this.setDead();
 		}
 		/*if(this.getType().isFire){
@@ -136,8 +146,8 @@ public class EntityDragonEgg extends EntityLiving{
 		return true;
 	}
 
-	public String getHurtSound(){
-		return "none";	
+	public SoundEvent getHurtSound(){
+		return null;	
 	}
 
 	@Override

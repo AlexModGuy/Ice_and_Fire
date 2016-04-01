@@ -18,9 +18,9 @@ public class ItemScaleArmor extends ItemArmor{
 
 	public EnumDragonArmor type;
 	public EnumDragonEgg eggType;
-	public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor type, ArmorMaterial material, int renderIndex, EntityEquipmentSlot armorType) {
-		super(material, renderIndex, armorType);
-		this.type = type;
+	public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
+		super(material, renderIndex, slot);
+		this.type = armorType;
 		this.eggType = eggType;
 		this.setCreativeTab(IceAndFire.tab);
 	}

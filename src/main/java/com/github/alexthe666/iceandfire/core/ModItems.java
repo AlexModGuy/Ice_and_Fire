@@ -83,10 +83,10 @@ public class ModItems {
 		sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
 		silverIngot = new ItemGeneric("silver_ingot", "iceandfire.silverIngot");
 		silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
-		silver_helmet = new ItemSilverArmor(silverMetal, 11, EntityEquipmentSlot.HEAD, "armor_silverMetal_helmet", "iceandfire.silver_helmet");
-		silver_chestplate = new ItemSilverArmor(silverMetal, 11, EntityEquipmentSlot.CHEST, "armor_silverMetal_chestplate", "iceandfire.silver_chestplate");
-		silver_leggings = new ItemSilverArmor(silverMetal, 11, EntityEquipmentSlot.LEGS, "armor_silverMetal_leggings", "iceandfire.silver_leggings");
-		silver_boots = new ItemSilverArmor(silverMetal, 11, EntityEquipmentSlot.FEET, "armor_silverMetal_boots", "iceandfire.silver_boots");
+		silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silverMetal_helmet", "iceandfire.silver_helmet");
+		silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silverMetal_chestplate", "iceandfire.silver_chestplate");
+		silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silverMetal_leggings", "iceandfire.silver_leggings");
+		silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silverMetal_boots", "iceandfire.silver_boots");
 		silver_sword = new ItemModSword(silverTools, "silver_sword", "iceandfire.silver_sword");
 		silver_shovel = new ItemModShovel(silverTools, "silver_shovel", "iceandfire.silver_shovel");
 		silver_pickaxe = new ItemModPickaxe(silverTools, "silver_pickaxe", "iceandfire.silver_pickaxe");

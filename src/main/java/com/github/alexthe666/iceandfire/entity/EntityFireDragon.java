@@ -1,12 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModSounds;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityFireDragon extends EntityDragonBase{
@@ -57,10 +56,10 @@ public class EntityFireDragon extends EntityDragonBase{
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(baseSpeed);
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(baseHealth);
-		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(baseDamage);
-		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(baseSpeed);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(baseHealth);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(baseDamage);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
 		updateSize();
 	}
 
@@ -76,43 +75,43 @@ public class EntityFireDragon extends EntityDragonBase{
 
 		if (this.getDragonAge() <= 125)
 		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(Math.round(this.baseHealth + (healthStep * this.getDragonAge())));
-			this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(Math.round(this.baseDamage + (attackStep * this.getDragonAge())));
-			this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.baseSpeed + (speedStep * this.getDragonAge()));
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(this.baseHealth + (healthStep * this.getDragonAge())));
+			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(this.baseDamage + (attackStep * this.getDragonAge())));
+			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.baseSpeed + (speedStep * this.getDragonAge()));
 
 			if (this.isTeen())
 			{
-				this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.5D);
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
 			}
 			else if (this.isAdult())
 			{
-				this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(2.0D);
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
 			}
 			else
 			{
-				this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.0D);
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.0D);
 			}
 		}
 	}
+	
 	@Override
 	public void onInventoryChanged(InventoryBasic inventory) {
-		// TODO Auto-generated method stub
 		
 	}
 
-    protected String getLivingSound()
+    protected SoundEvent getLivingSound()
     {
-        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".idle";
+        return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
     }
 
-    protected String getHurtSound()
+    protected SoundEvent getHurtSound()
     {
-        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".hurt";
+        return this.isTeen() ? ModSounds.firedragon_teen_hurt : this.isAdult() ? ModSounds.firedragon_adult_hurt : ModSounds.firedragon_child_hurt;
     }
 
-    protected String getDeathSound()
+    protected SoundEvent getDeathSound()
     {
-        return "iceandfire:firedragon." + (this.isTeen() ? "teen" : this.isAdult() ? "adult" : "child") + ".death";
+        return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
     }
 
 }

@@ -3,15 +3,13 @@ package com.github.alexthe666.iceandfire.entity;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -58,7 +56,7 @@ public class EntityDragonFire extends EntityFireball
 		if (ticksExisted > 30) setDead();
 	}
 
-	protected void onImpact(MovingObjectPosition movingObject){
+	protected void onImpact(RayTraceResult movingObject){
 
 		if (!this.worldObj.isRemote)
 		{
