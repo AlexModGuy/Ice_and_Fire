@@ -112,7 +112,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.tasks.addTask(0, new EntityAIDragonAge(this));
 		this.tasks.addTask(0, new EntityAIDragonStarve(this));
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, this.aiSit);
+		//this.tasks.addTask(2, this.aiSit);
 		this.tasks.addTask(4, new EntityAIDragonAttackOnCollide(this, 1.0D, false));
 		this.tasks.addTask(5, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
 		this.tasks.addTask(6, new EntityAIDragonWander(this));
