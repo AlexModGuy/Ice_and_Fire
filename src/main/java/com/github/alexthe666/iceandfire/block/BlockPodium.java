@@ -105,12 +105,12 @@ public class BlockPodium extends BlockContainer
 		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState blockstate)
 	{
 		return false;
 	}
 
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState blockstate)
 	{
 		return false;
 	}

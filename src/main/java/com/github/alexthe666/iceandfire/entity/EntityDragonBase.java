@@ -323,7 +323,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 
 		if(flightProgress != prevFlightProgress && !worldObj.isRemote){
-			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
+			//IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)1, flightProgress, prevFlightProgress));
 		}
 
 		if (!worldObj.isRemote && isBreathingFire && fireBreathProgress < 10.0F)
@@ -336,7 +336,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 
 		if(fireBreathProgress != prevFireBreathProgress && !worldObj.isRemote){
-			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)2, fireBreathProgress, prevFireBreathProgress));
+//			IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)2, fireBreathProgress, prevFireBreathProgress));
 		}
 
 		if (!worldObj.isRemote && isHovering() && this.isOffGround(9, true) &&  hoverProgress == 20)

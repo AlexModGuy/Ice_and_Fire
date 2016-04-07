@@ -48,12 +48,12 @@ public class BlockLectern extends BlockContainer
 		return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
 	}
 
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState blockstate)
 	{
 		return false;
 	}
 
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState blockstate)
 	{
 		return false;
 	}

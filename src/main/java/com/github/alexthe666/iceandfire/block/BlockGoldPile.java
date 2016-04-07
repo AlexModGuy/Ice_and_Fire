@@ -106,12 +106,12 @@ public class BlockGoldPile extends Block
 		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, item, side, hitX, hitY, hitZ);
 	}
 
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState blockstate)
 	{
 		return false;
 	}
 
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState blockstate)
 	{
 		return false;
 	}

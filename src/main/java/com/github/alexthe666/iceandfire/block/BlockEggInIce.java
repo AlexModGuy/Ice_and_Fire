@@ -131,12 +131,12 @@ public class BlockEggInIce extends BlockContainer {
 		return 0;
 	}
 
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState blockstate)
 	{
 		return false;
 	}
 
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState blockstate)
 	{
 		return false;
 	}
