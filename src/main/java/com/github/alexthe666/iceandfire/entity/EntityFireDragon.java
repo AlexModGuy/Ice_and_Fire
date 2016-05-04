@@ -18,13 +18,12 @@ public class EntityFireDragon extends EntityDragonBase{
 	public static final double maxSpeed = 0.6D;
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
-		this.setSize(2.78F, 0.9F);
+		this.setSize(2.78F, 1.4F);
         this.tasks.addTask(1, new EntityAISwimming(this));
 		minSize = 0.3F;
 		maxSize = 8.58F;
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
-		this.setScale(this.getDragonSize());
 	}
 	@Override
 	public String getTexture() {

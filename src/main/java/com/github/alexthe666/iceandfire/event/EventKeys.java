@@ -15,13 +15,13 @@ public class EventKeys {
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event){
 		if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode()) && checkIfPlayer()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(1));
+			//IceAndFire.channel.sendToServer(new MessageModKeys(1));
 		}
 		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode()) && checkIfPlayer()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(3));
+			//IceAndFire.channel.sendToServer(new MessageModKeys(3));
 		}
 		if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode()) && checkIfPlayer()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(4));
+			//IceAndFire.channel.sendToServer(new MessageModKeys(4));
 		}
 	}
 	
