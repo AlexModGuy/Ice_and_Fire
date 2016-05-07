@@ -17,7 +17,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +42,7 @@ public class BlockPodium extends BlockContainer
 		super(Material.wood);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
 		this.setHardness(2.0F);
-		this.setResistance(5.0F);
-		this.setStepSound(SoundType.WOOD);
+  		this.setStepSound(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.podium");
 		GameRegistry.registerBlock(this, ItemBlockPodium.class, "podium");
@@ -67,12 +68,12 @@ public class BlockPodium extends BlockContainer
 	{
 		return ((BlockPodium.EnumType)state.getValue(VARIANT)).getMetadata();
 	}
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(player.isSneaking()){
+		if(playerIn.isSneaking()){
 			return false;
 		}else{
-			player.openGui(IceAndFire.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			playerIn.openGui(IceAndFire.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 	}
@@ -216,8 +217,9 @@ public class BlockPodium extends BlockContainer
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	public int getRenderType(){
-		return 3;
+	public EnumBlockRenderType getRenderType(IBlockState state)
+	{
+		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override

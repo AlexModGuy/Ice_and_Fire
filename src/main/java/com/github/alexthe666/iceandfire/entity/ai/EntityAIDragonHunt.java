@@ -47,7 +47,6 @@ public class EntityAIDragonHunt extends EntityAINearestAttackableTarget
 				if(dragon.isTamed() && targetEntity == dragon.getOwner()){
 					return false;
 				}
-				
 				if(!(targetEntity instanceof EntityFireDragon) && dragon.canAttackMob(targetEntity)){
 					return true;
 				}else{

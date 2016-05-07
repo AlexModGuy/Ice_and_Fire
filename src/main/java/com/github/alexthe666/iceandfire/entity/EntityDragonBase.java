@@ -1184,7 +1184,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public boolean shouldSetFire(EntityLivingBase entitylivingbase) {
-		return this.getCurrentAttack() == 1;
+		return this.rand.nextInt(2) == 0;
 	}
 
 	public int pickUpFood(ItemStack stack) {

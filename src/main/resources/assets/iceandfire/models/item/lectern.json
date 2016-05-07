@@ -1,11 +1,34 @@
-{
-    "parent": "iceandfire:block/lectern",
-     "display": {
-        "thirdperson": {
-            "rotation": [ 10, -45, 170 ],
-            "translation": [ 0, 1.5, -2.75 ],
-            "scale": [ 0.375, 0.375, 0.375 ]
+{"parent": "iceandfire:block/lectern",
+    "display": {
+        "gui": {
+            "rotation": [ 30, 225, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.7,  0.7,  0.7]
+        },
+        "fixed": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 4, 0],
+            "scale":[ 1, 1, 1 ]
+        },
+
+        "firstperson_righthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 1.13, 3.2, 1.13 ],
+            "scale": [ 0.48, 0.48, 0.48 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 1.13, 3.2, 1.13 ],
+            "scale": [ 0.48, 0.48, 0.48 ]
         }
-    }
-}
+,  "thirdperson_righthand": {
+            "rotation": [ 0, 0, 0],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.45, 0.45, 0.45 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 0, 0],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.45, 0.45, 0.45 ]
+        }    }
 }

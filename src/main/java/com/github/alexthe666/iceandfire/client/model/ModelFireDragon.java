@@ -116,7 +116,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.FingerR2.addBox(-10.0F, -0.5F, -1.0F, 10, 1, 2, 0.0F);
 		this.setRotateAngle(FingerR2, -0.0F, 0.3590142271352336F, 0.0F);
 		this.Tail3 = new AdvancedModelRenderer(this, 72, 21);
-		this.Tail3.setRotationPoint(0.0F, -0.1F, 7.7F);
+		this.Tail3.setRotationPoint(0.0F, 0F, 7.7F);
 		this.Tail3.addBox(-1.5F, -1.3F, 0.9F, 3, 3, 9, 0.0F);
 		this.setRotateAngle(Tail3, 0.009925436895032277F, -0.0F, 0.0F);
 		this.Spike13 = new AdvancedModelRenderer(this, 34, 34);
@@ -491,6 +491,8 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.ArmL2.addChild(this.FingerL1);
 		this.ArmL2.addChild(this.ClawLPivot);
 		this.ClawLPivot.addChild(this.ClawL);
+		this.Neck2.setScale(1.01F, 1.01F, 1.01F);
+		this.Tail2.setScale(1.01F, 1.01F, 1.01F);
 		animator = ModelAnimator.create();
 		this.updateDefaultPose();
 	}
@@ -517,7 +519,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		AdvancedModelRenderer[] neckHeadParts = {this.Neck1, this.Neck2, this.Neck3, this.Head};
 		AdvancedModelRenderer[] neckChestParts = {this.BodyUpper, this.Neck1, this.Neck2, this.Neck3};
 		this.faceTarget(f3, f4, 4, neckChestParts);
-
 		AdvancedModelRenderer[] rightLegParts = {this.ThighR, this.LegR};
 		AdvancedModelRenderer[] leftLegParts = {this.ThighL, this.LegL};
 		float walkspeed = 0.35F - 0.0018656F * dragon.getDragonAge();
@@ -594,6 +595,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		animator.startKeyframe(15);
 		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
 		ModelUtils.rotate(animator, Neck2, -20.87F, 0, 0);
+		animator.move(Neck2, 0, 0, 1);
 		ModelUtils.rotate(animator, Head, 54.78F, 0, 0);
 		animator.endKeyframe();
 		animator.startKeyframe(10);

@@ -1,6 +1,8 @@
 {
-    "parent": "item/generated",
+    "parent": "item/dragonbone_bow",
     "textures": {
         "layer0": "iceandfire:items/dragonbone_bow_pulling_2"
     }
+}
+}
 }

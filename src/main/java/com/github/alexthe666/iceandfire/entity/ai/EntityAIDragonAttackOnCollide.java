@@ -14,13 +14,12 @@ public class EntityAIDragonAttackOnCollide extends EntityAIAttackMelee
 
 	public boolean shouldExecute()
 	{
-		super.shouldExecute();
 		EntityDragonBase dragon = ((EntityDragonBase)attacker);
-			if(dragon.getAttackTarget() != null){
-				float d = dragon.getDistanceToEntity(dragon.getAttackTarget());
-				 if(dragon.attackTick != 0 && d <= 1.78F * dragon.getDragonSize()){
-					return true;
-				}
+		if(dragon.getAttackTarget() != null){
+			float d = dragon.getDistanceToEntity(dragon.getAttackTarget());
+			if(d <= 1.78F * dragon.getDragonSize()){
+				return super.shouldExecute();
+			}
 		}
 		return false;
 	}

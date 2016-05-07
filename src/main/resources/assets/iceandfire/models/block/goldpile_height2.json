@@ -1,4 +1,4 @@
-{
+{   "parent": "block/thin_block",
     "textures": {
         "particle": "iceandfire:blocks/goldpile",
         "texture": "iceandfire:blocks/goldpile"
