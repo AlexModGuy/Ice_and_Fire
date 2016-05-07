@@ -21,7 +21,9 @@ public class EntityDragonFire extends EntityFireball
 	public EntityDragonFire(World worldIn)
 	{
 		super(worldIn);
-		this.setSize(1.7F, 1.7F);
+		if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase){
+			this.setSize(((EntityDragonBase)shootingEntity).getDragonSize() * 0.15F, ((EntityDragonBase)shootingEntity).getDragonSize() * 0.15F);
+		}
 	}
 
 	public EntityDragonFire(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ)
@@ -30,7 +32,7 @@ public class EntityDragonFire extends EntityFireball
 	}
 
 
-	public EntityDragonFire(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
+	public EntityDragonFire(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ)
 	{
 		super(worldIn, shooter, accelX, accelY, accelZ);
 	}
@@ -46,6 +48,7 @@ public class EntityDragonFire extends EntityFireball
     
 	public void onUpdate()
 	{
+		
 		super.onUpdate();
 		this.extinguish();
 

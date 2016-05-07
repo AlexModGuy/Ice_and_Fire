@@ -581,16 +581,18 @@ public class ModelFireDragon extends ModelDragonBase {
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
 		animator.setAnimation(dragon.animation_flame1);
 		animator.startKeyframe(15);
-		ModelUtils.rotate(animator, Neck1, -15.65F, 0, 0);
+		ModelUtils.rotate(animator, Neck1, -15F, 0, 0);
+		ModelUtils.rotate(animator, Neck2, -15F, 0, 0);
+		ModelUtils.rotate(animator, Neck3, 25F, 0, 0);
+		ModelUtils.rotate(animator, Head, -25F, 0, 0);
+		ModelUtils.rotate(animator, Jaw, 25F, 0, 0);
+		animator.move(Neck2, 0, 0, 1);
 		animator.endKeyframe();
-		animator.startKeyframe(15);
-		ModelUtils.rotate(animator, Neck3, -10.43F, 0, 0);
-		animator.move(Neck3, 0, 0, 0.6F);
-		ModelUtils.rotate(animator, Head, -5.22F, 0, 0);
-		ModelUtils.rotate(animator, Jaw, 20.87F, 0, 0);
+		animator.startKeyframe(dragon.getFireBurnTick());
+		ModelUtils.rotate(animator, Head, -25F, 0, 0);
+		ModelUtils.rotate(animator, Jaw, 25F, 0, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
-		animator.setStaticKeyframe(20);
 		animator.setAnimation(dragon.animation_bite1);
 		animator.startKeyframe(15);
 		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
@@ -606,13 +608,13 @@ public class ModelFireDragon extends ModelDragonBase {
 		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
-		breathPose(dragon.fireBreathProgress);	
+	/*	breathPose(dragon.fireBreathProgress);	
 		if(dragon.isFlying() || dragon.isHovering()){
 			if(dragon.isHovering())
 				hoverPose(dragon.hoverProgress);
 			else if(!dragon.isHovering() && dragon.isFlying())
 				flightPose(dragon.flightProgress);
-		}
+		}*/
 	}
 	@Override
 	public void flightPose(float sitProgress) {

@@ -48,7 +48,7 @@ public class MessageDragonUpdate extends net.ilexiconn.llibrary.server.network.A
 		if(entity != null && !entity.isDead){
 			switch(message.dataType){
 			default:
-				entity.hoverProgress = message.data;
+			//	entity.hoverProgress = message.data;
 				if(message.data > message.prevData){
 					entity.setHovering(true);
 				}
@@ -57,7 +57,7 @@ public class MessageDragonUpdate extends net.ilexiconn.llibrary.server.network.A
 				}
 				break;
 			case 1:
-				entity.flightProgress = message.data;
+			//	entity.flightProgress = message.data;
 				if(message.data > message.prevData){
 					entity.setFlying(true);
 				}
@@ -66,7 +66,7 @@ public class MessageDragonUpdate extends net.ilexiconn.llibrary.server.network.A
 				}
 				break;
 			case 2:
-				entity.fireBreathProgress = message.data;
+			//	entity.fireBreathProgress = message.data;
 				if(message.data > message.prevData){
 					entity.isBreathingFire = true;
 				}
