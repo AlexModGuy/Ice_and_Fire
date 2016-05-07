@@ -43,6 +43,9 @@ import com.github.alexthe666.iceandfire.event.EventNewMenu;
 public class ClientProxy extends CommonProxy{
 
 	public void render(){
+		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
+		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
+		MinecraftForge.EVENT_BUS.register(new EventKeys());
 		renderItems();
 		renderEntities();
 	}
@@ -55,11 +58,6 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
-
-		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
-		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
-		MinecraftForge.EVENT_BUS.register(new EventKeys());
-
 	}
 	public void renderItems(){
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

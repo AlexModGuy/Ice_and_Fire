@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
+import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,7 +47,6 @@ public class IceAndFire
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
-		channel.registerMessage(MessageDragonUpdate.class, MessageDragonUpdate.class, 1, Side.CLIENT);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	

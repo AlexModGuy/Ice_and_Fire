@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.lwjgl.input.Keyboard;
 
@@ -14,40 +16,30 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event){
-		/*if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode()) && checkIfPlayer()){
-			//IceAndFire.channel.sendToServer(new MessageModKeys(1));
+		System.out.println(FMLCommonHandler.instance().getSide());
+		if(FMLCommonHandler.instance().getSide().isClient() && checkIfPlayer()){
+			if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())){
+				IceAndFire.channel.sendToServer(new MessageModKeys(1));
+			}
+			if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode())){
+				IceAndFire.channel.sendToServer(new MessageModKeys(2));
+			}
+			if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode())){
+				IceAndFire.channel.sendToServer(new MessageModKeys(3));
+			}
+			if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode())){
+				IceAndFire.channel.sendToServer(new MessageModKeys(4));
+			}
 		}
-		if(Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode()) && checkIfPlayer()){
-			//IceAndFire.channel.sendToServer(new MessageModKeys(3));
-		}
-		if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode()) && checkIfPlayer()){
-			//IceAndFire.channel.sendToServer(new MessageModKeys(4));
-		}*/
 	}
-	
+
 	public boolean checkIfPlayer(){
-		if( Minecraft.getMinecraft().thePlayer != null){
-			return Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0;
+		if(Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().thePlayer != null){
+			return Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote;
 		}
 		else{
 			return false;
 		}
 	}
-/*	@SubscribeEvent
-	public void handleKeyInputEvent(InputEvent.KeyInputEvent event){
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-			System.out.println(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode());
-		}
-		if(ModKeys.dragon_down.isKeyDown()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(2));
-		}
-		if(ModKeys.dragon_fireAttack.isKeyDown()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(3));
-		}
-		if(ModKeys.dragon_strike.isKeyDown()){
-			IceAndFire.channel.sendToServer(new MessageModKeys(4));
-		}
-		
-	}*/
 }
 

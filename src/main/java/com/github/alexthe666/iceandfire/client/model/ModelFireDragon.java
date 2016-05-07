@@ -562,7 +562,7 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.swing(ArmR1, walkspeed, 0.4F, false, 0F, 0.2F, f, f1);
 			this.swing(ArmL2, walkspeed, 0.2F, false, 0F, -0.2F, f, f1);
 			this.swing(ArmR2, walkspeed, 0.2F, false, 0F, 0.2F, f, f1);
-			this.flap(ClawL, walkspeed, 0.6F, true, 0F, 0.4F, f, f1);
+			this.flap(ClawL, walkspeed, 0.6F, true, 0F, -0.4F, f, f1);
 			this.flap(ClawR, walkspeed, 0.6F, false, 0F, 0.4F, f, f1);
 			this.chainWave(tailParts, speed, 0.05F, -3, entity.ticksExisted, 1);
 			this.chainWave(neckHeadParts, speed, -0.04F, -4, entity.ticksExisted, 1);

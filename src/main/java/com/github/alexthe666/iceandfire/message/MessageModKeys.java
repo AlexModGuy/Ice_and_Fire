@@ -4,7 +4,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
@@ -29,14 +32,11 @@ public class MessageModKeys extends net.ilexiconn.llibrary.server.network.Abstra
 	public void toBytes(ByteBuf buf)
 	{
 		buf.writeInt(keyId);
-
 	}
+	
 	@Override
-	public void onClientReceived(Minecraft client, MessageModKeys message,
-			EntityPlayer player, MessageContext messageContext) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onClientReceived(Minecraft client, MessageModKeys message, EntityPlayer player, MessageContext messageContext) {}
+	
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageModKeys message, EntityPlayer player, MessageContext messageContext) {
 		if(player.getRidingEntity() != null){
