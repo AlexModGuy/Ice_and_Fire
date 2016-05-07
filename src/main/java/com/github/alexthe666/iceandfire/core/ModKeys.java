@@ -10,8 +10,8 @@ public class ModKeys {
 	public static KeyBinding dragon_strike;
 
 	public static void init() {
-		dragon_fireAttack = new KeyBinding("key.dragon_fireAttack", Keyboard.KEY_F, "key.categories.gameplay");
-		dragon_strike = new KeyBinding("key.dragon_strike", Keyboard.KEY_R, "key.categories.gameplay");
+		dragon_fireAttack = new KeyBinding("key.dragon_fireAttack", Keyboard.KEY_R, "key.categories.gameplay");
+		dragon_strike = new KeyBinding("key.dragon_strike", Keyboard.KEY_T, "key.categories.gameplay");
 		ClientRegistry.registerKeyBinding(dragon_fireAttack);
 		ClientRegistry.registerKeyBinding(dragon_strike);
 

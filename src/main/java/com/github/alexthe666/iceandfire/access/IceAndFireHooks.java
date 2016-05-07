@@ -9,11 +9,9 @@ public class IceAndFireHooks {
 	 * Called when a player is sneaking. 
 	 */
 	public static void dismount(EntityPlayer player){
-		System.out.println("i");
-		/*	if(player.ridingEntity != null && player.ridingEntity instanceof EntityDragonBase){
-
-		}else{
-			player.dismountEntity(null);
-		}*/
+		System.out.println("wat");
+		if(player.getRidingEntity() != null && !(player.getRidingEntity() instanceof EntityDragonBase)){
+			player.dismountRidingEntity();
+		}
 	}
 }

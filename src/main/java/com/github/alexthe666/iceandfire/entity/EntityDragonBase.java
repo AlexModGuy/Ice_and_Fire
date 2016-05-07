@@ -89,7 +89,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int attackTick;
 	public int flameTick;
 	public AnimalChest inv;
-	public static Animation animation_flame1 = Animation.create(1, 70);
+	public static Animation animation_flame1 = Animation.create(1, 20);
 	public static Animation animation_bite1 = Animation.create(2, 45);
 	public List<Class> blacklist = new ArrayList<Class>();
 	public boolean enableFlight = false;
@@ -111,7 +111,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		//this.tasks.addTask(2, this.aiSit);
 		this.tasks.addTask(4, new EntityAIDragonAttackOnCollide(this, 1.0D, false));
-		this.tasks.addTask(5, new EntityAIDragonBreathFire(this, 1.0D, 20, 1, 15.0F));
 		this.tasks.addTask(6, new EntityAIDragonWander(this));
 		this.tasks.addTask(7, new EntityAIDragonFollow(this, 10, 2));
 		this.tasks.addTask(8, new EntityAIDragonDefend(this));
@@ -350,14 +349,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} 
 
 		if(this.getAnimation() == animation_flame1){
-			if(this.getAnimationTick() >= 20){
-				if(getAttackTarget() != null)
+			if(this.getAnimationTick() >= 15){
+				if(getAttackTarget() != null && this.getControllingRider() == null)
 					shootFire(getAttackTarget());
 				else if(!this.getPassengers().isEmpty() && ticksTillStopFire > 0){
 					double d1 = 0D;
 					float headPosX = (float) (this.posX + 1.8F * this.getDragonSize() * Math.cos((this.rotationYaw + 90) * Math.PI/180));
 					float headPosZ = (float) (this.posZ + 1.8F * this.getDragonSize() * Math.sin((this.rotationYaw + 90) * Math.PI/180));
-					float headPosY = (float) (this.posY + 0.5 * this.getDragonSize());
+					float headPosY = (float) (this.posY + 0.75 * this.getDragonSize());
 					//Vec3d vec3 = this.getControllingRider().func_181014_aG();
 					double d2 = this.getControllingRider().getLook(1.0F).xCoord;
 					double d3 = this.getControllingRider().getLook(1.0F).yCoord;
@@ -426,9 +425,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
 			double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 			double extraZ = (double) (radius * MathHelper.cos(angle));
-			double extraY = 0.4F *  (1.9F * getDragonSize());
+			double extraY = 0.4F *  (1.7F * getDragonSize());
 			this.getControllingRider().setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
-			this.bobPrey(this.getControllingRider(), 0.1F, 0.3F, this.ticksExisted, 1);
+			this.bobPrey(this.getControllingRider(), 0.1F, 0.2F, this.ticksExisted, 1);
 
 
 		}
@@ -559,14 +558,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.currentOrder = EnumOrder.WANDER;
 			}
 		}
+		if(animation_flame1.getDuration() != 25 + getFireBurnTick()){
+			animation_flame1 = Animation.create(25 + getFireBurnTick());
+		}
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 
 		if(this.getAttackTarget() != null && this.getAnimation() == this.NO_ANIMATION && (this.getControllingRider() == null || this.getControllingRider() != null && !(this.getControllingRider() instanceof EntityPlayer))){
 			float d = this.getDistanceToEntity(getAttackTarget());
+			if(d <= 1.78F * this.getDragonSize()){
+				if(this.getAnimation() != animation_bite1){
+					this.setAnimation(animation_bite1);
+				}
+				this.attackTick = 1;
+
+			}else{
 				if(this.getAnimation() != animation_flame1){
 					this.setAnimation(animation_flame1);
 				}
+			}
 		}
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
 		if(this.isOffGround(5, true)){
@@ -579,19 +589,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private void shootFire(EntityLivingBase attackTarget) {
-		float headPosX = (float) (posX + 1.8F * getDragonSize() * Math.cos((rotationYaw + 90) * Math.PI/180));
-		float headPosZ = (float) (posZ + 1.8F * getDragonSize() * Math.sin((rotationYaw + 90) * Math.PI/180));
-		float headPosY = (float) (posY + 0.5 * getDragonSize());
-		double d1 = 0D;
-		Vec3d vec3 = this.getLook(1.0F);
-		double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
-		double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + headPosY + (double)(this.height / 2.0F));
-		double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
-		worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
-		EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
-		entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-		worldObj.spawnEntityInWorld(entitylargefireball);
-
+		if(this.rand.nextInt(5) == 0){
+			float headPosX = (float) (posX + 1.8F * getDragonSize() * Math.cos((rotationYaw + 90) * Math.PI/180));
+			float headPosZ = (float) (posZ + 1.8F * getDragonSize() * Math.sin((rotationYaw + 90) * Math.PI/180));
+			float headPosY = (float) (posY + 0.5 * getDragonSize());
+			double d1 = 0D;
+			Vec3d vec3 = this.getLook(1.0F);
+			double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
+			double d3 = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 2.0F) - (0.5D + headPosY + (double)(this.height / 2.0F));
+			double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
+			worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
+			EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
+			entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+			worldObj.spawnEntityInWorld(entitylargefireball);
+		}
 	}
 
 	public void spawnLandingParticles(){
@@ -661,7 +672,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}else{
 				player.openGui(IceAndFire.instance, 0, this.worldObj, getEntityId(), 0, 0);
 			}
-		}else if(itemstack != null && itemstack.getItem() != null){
+		}
+		if(itemstack != null && itemstack.getItem() != null){
 			Item item = itemstack.getItem();
 			if(item == Items.stick && this.getStage() > 2){
 				this.mountDragon(player);
@@ -684,7 +696,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 				}
 			}
-
 		}
 		return false;
 	}
@@ -897,7 +908,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		player.rotationPitch = this.rotationPitch;
 
 		if (!this.worldObj.isRemote) {
-			player.startRiding(this);
+			player.startRiding(this, true);
 		}
 	}
 

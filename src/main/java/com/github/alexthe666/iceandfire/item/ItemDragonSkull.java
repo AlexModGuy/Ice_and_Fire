@@ -78,7 +78,6 @@ public class ItemDragonSkull extends Item {
 				EntityDragonSkull skull = new EntityDragonSkull(worldIn);
 				skull.setType(stack.getMetadata());
 				skull.setStage(stack.getTagCompound().getInteger("Stage"));
-				System.out.println(stack.getTagCompound().getInteger("DragonAge"));
 				skull.setDragonAge(stack.getTagCompound().getInteger("DragonAge"));
 				float f3 = (float)MathHelper.floor_float((MathHelper.wrapAngleTo180_float(player.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 				skull.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0);
