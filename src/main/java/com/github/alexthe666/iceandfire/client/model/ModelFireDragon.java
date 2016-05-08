@@ -496,6 +496,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		animator = ModelAnimator.create();
 		this.updateDefaultPose();
 	}
+	
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.resetToDefaultPose();
 		animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
@@ -571,6 +572,12 @@ public class ModelFireDragon extends ModelDragonBase {
 			//this.chainSwing(tailParts, speed, 0.1F, 0, entity.ticksExisted, 1);
 
 		}
+		if(dragon.getAnimation() == dragon.animation_shakehead){
+			float scaledProg2 = dragon.getAnimationTick() > 30 ?  (50 - dragon.getAnimationTick()) * 0.015F : dragon.getAnimationTick() < 10 ?  dragon.getAnimationTick() * 0.03F : 0.3F;
+			this.chainSwing(neckHeadParts, 0.3F, scaledProg2 * 0.5F, 3, entity.ticksExisted, 1);
+			this.chainFlap(neckHeadParts, 0.3F, scaledProg2 * 1.5F, 3, entity.ticksExisted, 1);
+
+		}
 		((EntityDragonBase)entity).tailbuffer.applyChainSwingBuffer(tailParts);
 		//((EntityDragonBase)entity).rollbuffer.applyChainRollBuffer(new AdvancedModelRenderer[]{this.BodyLower});
 
@@ -579,7 +586,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		animator.update(entity);
 		EntityDragonBase dragon = (EntityDragonBase)entity;
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
-		animator.setAnimation(dragon.animation_flame1);
+		animator.setAnimation(dragon.animation_flame);
 		animator.startKeyframe(15);
 		ModelUtils.rotate(animator, Neck1, -15F, 0, 0);
 		ModelUtils.rotate(animator, Neck2, -15F, 0, 0);
@@ -593,7 +600,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		ModelUtils.rotate(animator, Jaw, 25F, 0, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
-		animator.setAnimation(dragon.animation_bite1);
+		animator.setAnimation(dragon.animation_bite);
 		animator.startKeyframe(15);
 		ModelUtils.rotate(animator, Neck1, -10.43F, 0, 0);
 		ModelUtils.rotate(animator, Neck2, -20.87F, 0, 0);
@@ -608,6 +615,80 @@ public class ModelFireDragon extends ModelDragonBase {
 		ModelUtils.rotate(animator, Neck3, 10.43F, 0, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
+		animator.setAnimation(dragon.animation_stretch);
+		animator.startKeyframe(15);
+		ModelUtils.rotate(animator, BodyUpper, 0, 0, 12F);
+		ModelUtils.rotate(animator, ArmL1, 0, 0, -12F);
+		ModelUtils.rotate(animator, ArmR1, 0, 0, -12F);
+		ModelUtils.rotate(animator, Neck1, 0, 10, 13F);
+		ModelUtils.rotate(animator, Neck2, 0, 7, 7);
+		ModelUtils.rotate(animator, Neck3, 0, 18, 5F);
+		ModelUtils.rotate(animator, Head, 0, 10, 20F);
+		ModelUtils.rotate(animator, Jaw, 15, 0, 0);
+		animator.move(Neck3, 0.5F, 0, 1F);
+		animator.endKeyframe();
+		animator.startKeyframe(15);
+		ModelUtils.rotate(animator, BodyUpper, 0, 0, -12F);
+		ModelUtils.rotate(animator, ArmL1, 0, 0, 12F);
+		ModelUtils.rotate(animator, ArmR1, 0, 0, 12F);
+		ModelUtils.rotate(animator, Neck1, 0, -10, -13F);
+		ModelUtils.rotate(animator, Neck2, 0, -7, -7);
+		ModelUtils.rotate(animator, Neck3, 0, -18, -5F);
+		ModelUtils.rotate(animator, Head, 0, -10, -20F);
+		ModelUtils.rotate(animator, Jaw, 15, 0, 0);
+		animator.move(Neck3, -0.5F, 0, 1F);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
+		animator.setAnimation(dragon.animation_tailslap);
+		animator.startKeyframe(15);
+		ModelUtils.rotate(animator, BodyLower, 0, -20F, 0);
+		ModelUtils.rotate(animator, Neck1, 0, 13F, 0);
+		ModelUtils.rotate(animator, Neck2, 0, 20F, 0);
+		ModelUtils.rotate(animator, Neck3, 0, 18F, 0);
+		ModelUtils.rotate(animator, Head, 0, 15F, 0);
+		ModelUtils.rotate(animator, Tail1, 0, -10F, 0);
+		ModelUtils.rotate(animator, Tail2, 0, -16F, 0);
+		ModelUtils.rotate(animator, Tail3, 0, -14F, 0);
+		ModelUtils.rotate(animator, Tail4, 0, -8F, 0);
+		ModelUtils.rotate(animator, Club, 0, 0, -30F);
+		ModelUtils.rotate(animator, Jaw, 15, 0, 0);
+		animator.endKeyframe();
+		animator.setStaticKeyframe(5);
+		animator.startKeyframe(5);
+		ModelUtils.rotate(animator, BodyLower, 0, 150F, 0);
+		ModelUtils.rotate(animator, BodyUpper, 0, 10F, 0);
+		ModelUtils.rotate(animator, Neck1, 0, -13F, 0);
+		ModelUtils.rotate(animator, Neck2, 0, -20F, 0);
+		ModelUtils.rotate(animator, Neck3, 0, -18F, 0);
+		ModelUtils.rotate(animator, Head, 0, -15F, 0);
+		ModelUtils.rotate(animator, Tail1, 0, 10F, 0);
+		ModelUtils.rotate(animator, Tail2, 0, 16F, 0);
+		ModelUtils.rotate(animator, Tail3, 0, 14F, 0);
+		ModelUtils.rotate(animator, Tail4, 0, 8F, 0);
+		ModelUtils.rotate(animator, Club, 0, 0, 40F);
+		ModelUtils.rotate(animator, Jaw, 15, 0, 0);
+		animator.endKeyframe();
+		animator.setStaticKeyframe(5);
+		animator.resetKeyframe(15);
+		animator.setAnimation(dragon.animation_roar);
+		animator.startKeyframe(20);
+		ModelUtils.rotate(animator, BodyUpper, 0, 12F, 0);
+		ModelUtils.rotate(animator, Neck1, -15F, 20F, 0);
+		ModelUtils.rotate(animator, Neck2, -5F, 10F, 0);
+		ModelUtils.rotate(animator, Neck3, -5F, 10F, 0);
+		ModelUtils.rotate(animator, Head, -7F, 10F, 0);
+		ModelUtils.rotate(animator, Jaw, 31F, 0, 0);
+		animator.endKeyframe();
+		animator.startKeyframe(20);
+		ModelUtils.rotate(animator, BodyUpper, 0, -12F, 0);
+		ModelUtils.rotate(animator, Neck1, -15F, -20F, 0);
+		ModelUtils.rotate(animator, Neck2, -5F, -10F, 0);
+		ModelUtils.rotate(animator, Neck3, -5F, -10F, 0);
+		ModelUtils.rotate(animator, Head, -7F, -10F, 0);
+		ModelUtils.rotate(animator, Jaw, 31F, 0, 0);
+		animator.endKeyframe();
+		animator.resetKeyframe(15);
+
 	/*	breathPose(dragon.fireBreathProgress);	
 		if(dragon.isFlying() || dragon.isHovering()){
 			if(dragon.isHovering())

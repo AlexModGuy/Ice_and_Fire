@@ -2,7 +2,10 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.UUID;
+
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -16,12 +19,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderModCapes {
-	public static final String[] playerInfo = new String[]{"playerInfo", "field_175157_a"};
-	public static final String[] cape = new String[]{"locationCape", "field_178862_f"};
-
-
 	public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
+	public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
 	public ResourceLocation blueTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_ice.png");
+	public ResourceLocation blueElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_ice.png");
 
 	public UUID[] redcapes = new UUID[]{
 			/*Alexthe666*/UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c"),
@@ -33,6 +34,37 @@ public class RenderModCapes {
 
 	@SubscribeEvent
 	public void playerRender(RenderPlayerEvent.Pre event){
+		if(event.getEntityPlayer() instanceof AbstractClientPlayer){
+			NetworkPlayerInfo info = null;
+			try {
+				info = (NetworkPlayerInfo) ReflectionHelper.findField(AbstractClientPlayer.class, new String[]{"playerInfo", "field_175157_a"}).get(event.getEntityPlayer());
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			if(info != null){
+				Map<Type, ResourceLocation> textureMap = null;
+				try {
+					textureMap = (Map<Type, ResourceLocation>) ReflectionHelper.findField(NetworkPlayerInfo.class, new String[]{"playerTextures", "field_187107_a"}).get(info);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				if(textureMap != null){
+					if (hasRedCape(event.getEntityPlayer().getUniqueID())){
+						textureMap.put(Type.CAPE, redTex);
+						textureMap.put(Type.ELYTRA, redElytraTex);
+
+					}else if (hasBlueCape(event.getEntityPlayer().getUniqueID())){
+						textureMap.put(Type.CAPE, blueTex);
+						textureMap.put(Type.ELYTRA, blueElytraTex);
+
+					}
+				}
+			}
+		}
 		/*if(event.getEntityPlayer() instanceof AbstractClientPlayer){
 			if (hasRedCape(event.getEntityPlayer().getUniqueID())){
 				AbstractClientPlayer player = (AbstractClientPlayer)event.getEntityPlayer();
@@ -104,7 +136,7 @@ public class RenderModCapes {
 		}
 		return false;
 	}
-	
+
 	private boolean hasBlueCape(UUID uniqueID) {
 		for (UUID uuid1 : bluecapes)
 		{

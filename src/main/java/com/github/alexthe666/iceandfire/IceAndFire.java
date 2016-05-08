@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +22,6 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.message.MessageDragonUpdate;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
@@ -46,7 +44,7 @@ public class IceAndFire
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-		channel.registerMessage(MessageModKeys.class, MessageModKeys.class, 0, Side.SERVER);
+		channel.registerMessage(MessageModKeys.Handler.class, MessageModKeys.class, 0, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 	

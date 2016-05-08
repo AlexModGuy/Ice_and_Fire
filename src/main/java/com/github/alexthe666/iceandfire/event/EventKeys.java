@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import org.lwjgl.input.Keyboard;
 
@@ -16,7 +15,6 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event){
-		System.out.println(FMLCommonHandler.instance().getSide());
 		if(FMLCommonHandler.instance().getSide().isClient() && checkIfPlayer()){
 			if(Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())){
 				IceAndFire.channel.sendToServer(new MessageModKeys(1));
@@ -30,12 +28,15 @@ public class EventKeys {
 			if(Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode())){
 				IceAndFire.channel.sendToServer(new MessageModKeys(4));
 			}
+			if(Keyboard.isKeyDown(ModKeys.dragon_dismount.getKeyCode())){
+				IceAndFire.channel.sendToServer(new MessageModKeys(5));
+			}
 		}
 	}
 
 	public boolean checkIfPlayer(){
 		if(Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().thePlayer != null){
-			return Minecraft.getMinecraft().thePlayer.ticksExisted % 10 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote;
+			return Minecraft.getMinecraft().thePlayer.ticksExisted % 2 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote;
 		}
 		else{
 			return false;

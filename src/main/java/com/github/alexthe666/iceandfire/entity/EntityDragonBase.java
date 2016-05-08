@@ -89,8 +89,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int attackTick;
 	public int flameTick;
 	public AnimalChest inv;
-	public static Animation animation_flame1 = Animation.create(1, 20);
-	public static Animation animation_bite1 = Animation.create(2, 45);
+	public static Animation animation_flame = Animation.create(1, 20);
+	public static Animation animation_bite = Animation.create(2, 45);
+	public static Animation animation_stretch = Animation.create(3, 40);
+	public static Animation animation_shakehead = Animation.create(4, 50);
+	public static Animation animation_tailslap = Animation.create(5, 55);
+	public static Animation animation_roar = Animation.create(5, 60);
+
 	public List<Class> blacklist = new ArrayList<Class>();
 	public boolean enableFlight = false;
 	public BlockPos airTarget;
@@ -297,7 +302,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.setHovering(true);
 			//IceAndFire.channel.sendToAll(new MessageDragonUpdate(this.getEntityId(), (byte)0, hoverProgress, prevHoverProgress));
 		}
-		if(this.getPassengers().isEmpty()){
+		if(!this.getPassengers().isEmpty()){
 			if(ticksTillStopFire > 0 && !worldObj.isRemote){
 				ticksTillStopFire--;
 			}else if(ticksTillStopFire == 0 && isBreathingFire && !worldObj.isRemote){
@@ -327,7 +332,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			attackTick++;
 		}
 
-		if(this.getAnimation() == animation_flame1 && this.getAnimationTick() != 0 && this.getAnimationTick() < 30){
+		if(this.getAnimation() == animation_flame && this.getAnimationTick() != 0 && this.getAnimationTick() < 30){
 			if(getAttackTarget() != null)
 				this.getLookHelper().setLookPosition(getAttackTarget().posX, getAttackTarget().posY + (double)getAttackTarget().getEyeHeight(), getAttackTarget().posZ, 10.0F, (float)getVerticalFaceSpeed());	
 		}
@@ -335,8 +340,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if(attackTick == 25){
 			attackTick = 0;
 			float f = (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-			if(getAttackTarget() != null)
+			if(getAttackTarget() != null){
 				getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+				getAttackTarget().knockBack(getAttackTarget(), 0.5F, 0.5F, 0.5F);
+			}		
 			else{
 				List<EntityLivingBase> list = this.getEntityLivingBaseNearby(posX, posY, posZ, getDragonSize() * 1.8F);
 				for (Entity prey1 : list)
@@ -348,7 +355,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}
 		} 
 
-		if(this.getAnimation() == animation_flame1){
+		if(this.getAnimation() == animation_flame){
 			if(this.getAnimationTick() >= 15){
 				if(getAttackTarget() != null && this.getControllingRider() == null)
 					shootFire(getAttackTarget());
@@ -425,7 +432,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
 			double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 			double extraZ = (double) (radius * MathHelper.cos(angle));
-			double extraY = 0.4F *  (1.7F * getDragonSize());
+			double extraY = 0.5F * getDragonSize();
 			this.getControllingRider().setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 			this.bobPrey(this.getControllingRider(), 0.1F, 0.2F, this.ticksExisted, 1);
 
@@ -548,7 +555,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public int getFireBurnTick(){
-		return 40 + (this.getDragonAge() * 20);
+		return isBreathingFire ? 40 + (this.getDragonAge() * 5) : 0;
 	}
 
 	public void onUpdate(){
@@ -558,8 +565,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.currentOrder = EnumOrder.WANDER;
 			}
 		}
-		if(animation_flame1.getDuration() != 25 + getFireBurnTick()){
-			animation_flame1 = Animation.create(25 + getFireBurnTick());
+		if(animation_flame.getDuration() != 25 + getFireBurnTick()){
+			animation_flame = Animation.create(25 + getFireBurnTick());
 		}
 		rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
@@ -567,24 +574,40 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if(this.getAttackTarget() != null && this.getAnimation() == this.NO_ANIMATION && (this.getControllingRider() == null || this.getControllingRider() != null && !(this.getControllingRider() instanceof EntityPlayer))){
 			float d = this.getDistanceToEntity(getAttackTarget());
 			if(d <= 1.78F * this.getDragonSize()){
-				if(this.getAnimation() != animation_bite1){
-					this.setAnimation(animation_bite1);
+				if(this.getAnimation() != animation_bite && this.getAnimation() != animation_tailslap){
+					this.setAnimation(rand.nextBoolean() ? animation_bite : animation_tailslap);
 				}
 				this.attackTick = 1;
-
+				this.isBreathingFire = false;
 			}else{
-				if(this.getAnimation() != animation_flame1){
-					this.setAnimation(animation_flame1);
+				this.isBreathingFire = true;
+				if(this.getAnimation() != animation_flame){
+					this.setAnimation(animation_flame);
 				}
 			}
+			
 		}
+		System.out.println(this.getAnimation() == animation_roar);
 		tailbuffer.calculateChainSwingBuffer(70F, 5, 4, this);
 		if(this.isOffGround(5, true)){
 			rollbuffer.calculateChainRollBuffer(50F, 5, 4, this);
 		}else{
 			rollbuffer.resetRotations();
 		}
-
+		if(this.rand.nextInt(50) == 0 && this.getAnimation() == NO_ANIMATION && this.getAttackTarget() == null){
+			int ran = this.rand.nextInt(3);
+			switch(ran){
+			case 0:
+				this.setAnimation(animation_stretch);
+				break;
+			case 1:
+				this.setAnimation(animation_shakehead);
+				break;
+			case 2:
+				this.setAnimation(animation_roar);
+				break;
+			}
+		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 	}
 
@@ -1128,7 +1151,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public final Animation[] getAnimations() {
-		return new Animation[]{this.NO_ANIMATION, this.animation_flame1, this.animation_bite1};
+		return new Animation[]{this.NO_ANIMATION, this.animation_flame, this.animation_bite, this.animation_stretch, this.animation_shakehead, this.animation_tailslap, this.animation_roar};
 	}
 
 	public boolean canAttackMob(EntityLivingBase targetEntity) {
