@@ -14,7 +14,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	public static final double baseDamage = 1;
 	public static final double baseSpeed = 0.25D;
 	public static final double maxHealth = 700;
-	public static final double maxDamage = 12;
+	public static final double maxDamage = 20;
 	public static final double maxSpeed = 0.6D;
 	public EntityFireDragon(World worldIn) {
 		super(worldIn);
@@ -48,7 +48,7 @@ public class EntityFireDragon extends EntityDragonBase{
 	}
 	@Override
 	public void onSpawn() {
-		this.setDragonAge(1);
+		this.setDragonAge(100);
 		this.updateSize();
 		this.jump();
 		this.setColor(this.getRNG().nextInt(5));
@@ -98,10 +98,10 @@ public class EntityFireDragon extends EntityDragonBase{
 	public void onInventoryChanged(InventoryBasic inventory) {
 		
 	}
-
-    protected SoundEvent getLivingSound()
+ 
+	protected SoundEvent getAmbientSound()
     {
-        return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
+        return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;
     }
 
     protected SoundEvent getHurtSound()

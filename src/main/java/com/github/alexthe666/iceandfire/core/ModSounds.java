@@ -17,7 +17,8 @@ public class ModSounds {
 	public static SoundEvent firedragon_adult_hurt;
 	public static SoundEvent firedragon_adult_death;
 	public static SoundEvent firedragon_adult_roar;
-
+	public static int soundID = 367;
+	
 	public static void init(){
 		dragon_hatch = getRegisteredSoundEvent("iceandfire:dragonegg.hatch");
 		firedragon_child_idle = getRegisteredSoundEvent("iceandfire:firedragon.child.idle");
@@ -34,8 +35,8 @@ public class ModSounds {
 		firedragon_adult_roar = getRegisteredSoundEvent("iceandfire:firedragon.adult.roar");
 	}
 
-    private static SoundEvent getRegisteredSoundEvent(String id)
-    {
+    private static SoundEvent getRegisteredSoundEvent(String id){
+    	registerSound(id);
         SoundEvent soundevent = (SoundEvent)SoundEvent.soundEventRegistry.getObject(new ResourceLocation(id));
 
         if (soundevent == null)
@@ -46,5 +47,10 @@ public class ModSounds {
         {
             return soundevent;
         }
+    }
+    
+    private static void registerSound(String soundNameIn){
+        ResourceLocation resourcelocation = new ResourceLocation(soundNameIn);
+        SoundEvent.soundEventRegistry.register(soundID++, resourcelocation, new SoundEvent(resourcelocation));
     }
 }

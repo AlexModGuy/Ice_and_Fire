@@ -1,7 +1,14 @@
 package com.github.alexthe666.iceandfire;
 
+import java.util.Random;
+
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -37,8 +44,8 @@ public class IceAndFire
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
-    public static DamageSource dragon = (new DamageSource("dragon")).setFireDamage();
-    public static DamageSource dragonFire = (new DamageSource("dragonFire")).setFireDamage();
+    public static DamageSource dragon;
+    public static DamageSource dragonFire;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -52,6 +59,22 @@ public class IceAndFire
 	public void init(FMLInitializationEvent event)
 	{
 		tab = new CreativeTab(MODID);
+		dragon = new DamageSource("dragon"){
+		    public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
+		    {
+		        String s = "death.attack.dragon";
+		        String s1 = s + ".player_" + new Random().nextInt(2);
+		        return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)): new TextComponentTranslation(s, new Object[] {entityLivingBaseIn.getDisplayName()});
+		    }
+		};
+		dragonFire = new DamageSource("dragon_fire"){
+			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
+		    {
+				 String s = "death.attack.dragon_fire";
+			        String s1 = s + ".player_" + new Random().nextInt(2);
+			        return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)): new TextComponentTranslation(s, new Object[] {entityLivingBaseIn.getDisplayName()});
+		    }
+		};
 		ModBlocks.init();
 		ModItems.init();
 		ModRecipes.init();

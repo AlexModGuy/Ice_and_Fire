@@ -103,7 +103,12 @@ message.iceandfire.dragonGrown=This dragon has grown to Stage
 message.iceandfire.dragonGrownEnd=!
 message.iceandfire.dragonGrownName= has grown to Stage 
 
-key.dragon_up=Fly Dragon Up
-key.dragon_down=Fly Dragon Down
+death.attack.dragon.player_0=was split in two by a dragon
+death.attack.dragon.player_1=was torn to shreds by a dragon
+death.attack.dragon.player_2=was devoured by a dragon
+death.attack.dragon_fire.player_0=was turned into KFC by a dragon
+death.attack.dragon_fire.player_1=was incinerated by a dragon
+death.attack.dragon_fire.player_2=was turned to ash by a dragon
 key.dragon_strike=Dragon Strike
 key.dragon_fireAttack=Dragon Breath
+key.dragon_dismount=Dragon Dismount

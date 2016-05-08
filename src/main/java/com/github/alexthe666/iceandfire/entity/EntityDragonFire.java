@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.structures.WorldUtils;
 
@@ -67,7 +68,7 @@ public class EntityDragonFire extends EntityFireball
 			}
 
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity){
-				movingObject.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, movingObject.entityHit), 6.0F);
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 6.0F);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 			}else{
 
