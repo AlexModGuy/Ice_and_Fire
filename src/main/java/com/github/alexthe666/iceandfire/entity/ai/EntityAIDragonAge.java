@@ -11,7 +11,7 @@ public class EntityAIDragonAge extends EntityAIBase
 
 	public EntityAIDragonAge(EntityDragonBase dragon)
 	{
-		this.dragon =dragon;
+		this.dragon = dragon;
 	}
 
 	/**
