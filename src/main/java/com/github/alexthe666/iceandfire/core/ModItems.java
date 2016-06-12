@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -68,11 +69,11 @@ public class ModItems {
 	public static Item dragon_skull;
 	public static Item dragon_armor_iron;
 
-	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, null);
-	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[] { 2, 7, 6, 2 }, 15, null);
-	public static ArmorMaterial bronze = EnumHelper.addArmorMaterial("DragonBronze", "iceandfire:armor_bronze", 25, new int[] { 2, 7, 6, 2 }, 15, null);
-	public static ArmorMaterial green = EnumHelper.addArmorMaterial("DragonGreen", "iceandfire:armor_green", 25, new int[] { 2, 7, 6, 2 }, 15, null);
-	public static ArmorMaterial gray = EnumHelper.addArmorMaterial("DragonGray", "iceandfire:armor_gray", 25, new int[] { 2, 7, 6, 2 }, 15, null);
+	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
+	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
+	public static ArmorMaterial bronze = EnumHelper.addArmorMaterial("DragonBronze", "iceandfire:armor_bronze", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
+	public static ArmorMaterial green = EnumHelper.addArmorMaterial("DragonGreen", "iceandfire:armor_green", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
+	public static ArmorMaterial gray = EnumHelper.addArmorMaterial("DragonGray", "iceandfire:armor_gray", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
 	public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 
