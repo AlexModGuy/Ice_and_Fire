@@ -10,9 +10,9 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityDrop(LivingDropsEvent event) {
 
-		if(event.getEntityLiving() instanceof EntitySkeleton) {
-			if(((EntitySkeleton)event.getEntityLiving()).getSkeletonType() == 1){
-			event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
+		if (event.getEntityLiving() instanceof EntitySkeleton) {
+			if (((EntitySkeleton) event.getEntityLiving()).getSkeletonType() == 1) {
+				event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
 			}
 		}
 	}

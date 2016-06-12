@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 
 public class RenderDragonEgg extends RenderLiving {
@@ -17,9 +16,9 @@ public class RenderDragonEgg extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if(entity instanceof EntityDragonEgg){
-			return new ResourceLocation(((EntityDragonEgg)entity).getTexture());
-		}else{
+		if (entity instanceof EntityDragonEgg) {
+			return new ResourceLocation(((EntityDragonEgg) entity).getTexture());
+		} else {
 			return new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
 		}
 	}

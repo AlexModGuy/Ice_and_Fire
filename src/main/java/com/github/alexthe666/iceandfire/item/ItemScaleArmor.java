@@ -14,19 +14,21 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
-public class ItemScaleArmor extends ItemArmor{
+public class ItemScaleArmor extends ItemArmor {
 
 	public EnumDragonArmor type;
 	public EnumDragonEgg eggType;
+
 	public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
 		super(material, renderIndex, slot);
 		this.type = armorType;
 		this.eggType = eggType;
 		this.setCreativeTab(IceAndFire.tab);
 	}
-	
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 		tooltip.add(eggType.color + StatCollector.translateToLocal("dragon." + eggType.toString().toLowerCase()));
-	}	
+	}
 }

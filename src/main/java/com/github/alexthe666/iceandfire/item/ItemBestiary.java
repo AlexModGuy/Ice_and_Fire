@@ -19,45 +19,46 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 
-public class ItemBestiary extends Item{
+public class ItemBestiary extends Item {
 
-	public ItemBestiary(){
+	public ItemBestiary() {
 		this.maxStackSize = 1;
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.bestiary");
 		GameRegistry.registerItem(this, "bestiary");
 	}
 
+	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
 		itemStack.setTagCompound(new NBTTagCompound());
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems)
-	{
+	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
 		subItems.add(new ItemStack(itemIn, 1, 0));
 	}
 
+	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-		if(stack.getTagCompound() == null){
+		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setIntArray("Pages", new int[]{EnumBestiaryPages.INTRO.ordinal()});
+			stack.getTagCompound().setIntArray("Pages", new int[] { EnumBestiaryPages.INTRO.ordinal() });
 
 		}
 	}
 
-
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
-		if(stack.getTagCompound() != null){
+		if (stack.getTagCompound() != null) {
 			list.add(StatCollector.translateToLocal("bestiary.contains"));
 			List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.getList(stack.getTagCompound().getIntArray("Pages")));
 			Iterator itr = pages.iterator();
-			while(itr.hasNext()) {
-				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[((EnumBestiaryPages)itr.next()).ordinal()].toString().toLowerCase()));
+			while (itr.hasNext()) {
+				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[((EnumBestiaryPages) itr.next()).ordinal()].toString().toLowerCase()));
 			}
 
 		}
 	}
 
 }
-

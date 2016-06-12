@@ -24,31 +24,31 @@ public class GuiHandler implements IGuiHandler {
 		Entity entity = world.getEntityByID(x);
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 
-		switch(id) {
+		switch (id) {
 
 		case 0:
-			if(entity != null) {
+			if (entity != null) {
 
 				if (entity instanceof EntityDragonBase) {
-					return new ContainerDragon((EntityDragonBase)entity, player);
+					return new ContainerDragon((EntityDragonBase) entity, player);
 				}
 			}
 			break;
 
 		case 1:
-			if(tile != null) {
+			if (tile != null) {
 
 				if (tile instanceof TileEntityPodium) {
-					return new ContainerPodium(player.inventory, (TileEntityPodium)tile, player);
+					return new ContainerPodium(player.inventory, (TileEntityPodium) tile, player);
 				}
 			}
 			break;
-			
+
 		case 2:
-			if(tile != null) {
+			if (tile != null) {
 
 				if (tile instanceof TileEntityLectern) {
-					return new ContainerLectern(player.inventory, (TileEntityLectern)tile);
+					return new ContainerLectern(player.inventory, (TileEntityLectern) tile);
 				}
 			}
 			break;
@@ -61,31 +61,31 @@ public class GuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		Entity entity = world.getEntityByID(x);
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-		switch(id) {
+		switch (id) {
 
 		case 0:
-			if(entity != null) {
+			if (entity != null) {
 
 				if (entity instanceof EntityDragonBase) {
-					return new GuiDragon(player.inventory, (EntityDragonBase)entity);
+					return new GuiDragon(player.inventory, (EntityDragonBase) entity);
 				}
 			}
 			break;
-			
+
 		case 1:
-			if(tile != null) {
+			if (tile != null) {
 
 				if (tile instanceof TileEntityPodium) {
-					return new GuiPodium(player.inventory, (TileEntityPodium)tile);
+					return new GuiPodium(player.inventory, (TileEntityPodium) tile);
 				}
 			}
 			break;
-			
+
 		case 2:
-			if(tile != null) {
+			if (tile != null) {
 
 				if (tile instanceof TileEntityLectern) {
-					return new GuiLectern(player.inventory, (TileEntityLectern)tile);
+					return new GuiLectern(player.inventory, (TileEntityLectern) tile);
 				}
 			}
 			break;

@@ -6,60 +6,60 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 
 public class RollBuffer {
-    private int yawTimer;
-    private float yawVariation;
-    private float[] yawArray;
+	private int yawTimer;
+	private float yawVariation;
+	private float[] yawArray;
 
-    public RollBuffer(int numberOfParentedBoxes) {
-        yawTimer = 0;
-        yawVariation = 0f;
-        yawArray = new float[numberOfParentedBoxes];
-    }
+	public RollBuffer(int numberOfParentedBoxes) {
+		yawTimer = 0;
+		yawVariation = 0f;
+		yawArray = new float[numberOfParentedBoxes];
+	}
 
-    public void resetRotations() {
-        yawVariation = 0f;
-    }
-    
-    public void calculateChainRollBuffer(float maxAngle, int bufferTime, float angleDecrement, EntityLivingBase entity) {
-        if (entity.renderYawOffset != entity.prevRenderYawOffset && MathHelper.abs(yawVariation) < maxAngle) {
-            yawVariation += (entity.prevRenderYawOffset - entity.renderYawOffset);
-        }
+	public void resetRotations() {
+		yawVariation = 0f;
+	}
 
-        if (yawVariation > 0.7f * angleDecrement) {
-            if (yawTimer > bufferTime) {
-                yawVariation -= angleDecrement;
-                if (MathHelper.abs(yawVariation) < angleDecrement) {
-                    yawVariation = 0f;
-                    yawTimer = 0;
-                }
-            } else {
-                yawTimer++;
-            }
-        } else if (yawVariation < -0.7f * angleDecrement) {
-            if (yawTimer > bufferTime) {
-                yawVariation += angleDecrement;
-                if (MathHelper.abs(yawVariation) < angleDecrement) {
-                    yawVariation = 0f;
-                    yawTimer = 0;
-                }
-            } else {
-                yawTimer++;
-            }
-        }
+	public void calculateChainRollBuffer(float maxAngle, int bufferTime, float angleDecrement, EntityLivingBase entity) {
+		if (entity.renderYawOffset != entity.prevRenderYawOffset && MathHelper.abs(yawVariation) < maxAngle) {
+			yawVariation += (entity.prevRenderYawOffset - entity.renderYawOffset);
+		}
 
-        for (int i = 0; i < yawArray.length; i++) {
-            yawArray[i] = 0.01745329251f * yawVariation / yawArray.length;
-        }
-    }
+		if (yawVariation > 0.7f * angleDecrement) {
+			if (yawTimer > bufferTime) {
+				yawVariation -= angleDecrement;
+				if (MathHelper.abs(yawVariation) < angleDecrement) {
+					yawVariation = 0f;
+					yawTimer = 0;
+				}
+			} else {
+				yawTimer++;
+			}
+		} else if (yawVariation < -0.7f * angleDecrement) {
+			if (yawTimer > bufferTime) {
+				yawVariation += angleDecrement;
+				if (MathHelper.abs(yawVariation) < angleDecrement) {
+					yawVariation = 0f;
+					yawTimer = 0;
+				}
+			} else {
+				yawTimer++;
+			}
+		}
 
-    public void applyChainRollBuffer(AdvancedModelRenderer[] boxes) {
-        if (boxes.length == yawArray.length) {
-            for (int i = 0; i < boxes.length; i++) {
-                boxes[i].rotateAngleZ += yawArray[i];
-            }
-        } else {
-            LLibrary.LOGGER.error("Wrong array length being used in the buffer! (Y axis)");
-        }
-    }
+		for (int i = 0; i < yawArray.length; i++) {
+			yawArray[i] = 0.01745329251f * yawVariation / yawArray.length;
+		}
+	}
+
+	public void applyChainRollBuffer(AdvancedModelRenderer[] boxes) {
+		if (boxes.length == yawArray.length) {
+			for (int i = 0; i < boxes.length; i++) {
+				boxes[i].rotateAngleZ += yawArray[i];
+			}
+		} else {
+			LLibrary.LOGGER.error("Wrong array length being used in the buffer! (Y axis)");
+		}
+	}
 
 }

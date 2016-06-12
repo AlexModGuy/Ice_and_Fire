@@ -45,103 +45,92 @@ public class BlockEggInIce extends BlockContainer {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World worldIn, BlockPos pos)
-	{
+	public Item getItem(World worldIn, BlockPos pos) {
 		return Item.getItemFromBlock(Blocks.ice);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer()
-	{
+	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockstate, IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-	{
+	public boolean shouldSideBeRendered(IBlockState blockstate, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
-		if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate)
-		{
+		if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate) {
 			return true;
 		}
 
-		if (block == this)
-		{
+		if (block == this) {
 			return false;
 		}
 
 		return block == this ? false : super.shouldSideBeRendered(iblockstate, worldIn, pos, side);
 	}
 
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
-	{
-		if(worldIn.getTileEntity(pos) != null){
-			if(worldIn.getTileEntity(pos) instanceof TileEntityEggInIce){
-				TileEntityEggInIce tile = (TileEntityEggInIce)worldIn.getTileEntity(pos);
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		if (worldIn.getTileEntity(pos) != null) {
+			if (worldIn.getTileEntity(pos) instanceof TileEntityEggInIce) {
+				TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getTileEntity(pos);
 				tile.spawnEgg();
 			}
 		}
-        player.addStat(StatList.func_188055_a(this));
-        player.addExhaustion(0.025F);
+		player.addStat(StatList.func_188055_a(this));
+		player.addExhaustion(0.025F);
 
-        if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, stack) > 0)
-        {
-            java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
-            ItemStack itemstack =new ItemStack(Blocks.ice, 1);
+		if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, stack) > 0) {
+			java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
+			ItemStack itemstack = new ItemStack(Blocks.ice, 1);
 
-            if (itemstack != null)
-            {
-                items.add(itemstack);
-            }
+			if (itemstack != null) {
+				items.add(itemstack);
+			}
 
-            net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
-            for (ItemStack is : items)
-                spawnAsEntity(worldIn, pos, is);
-        }
-        else
-        {
-            if (worldIn.provider.doesWaterVaporize())
-            {
-                worldIn.setBlockToAir(pos);
-                return;
-            }
+			net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
+			for (ItemStack is : items)
+				spawnAsEntity(worldIn, pos, is);
+		} else {
+			if (worldIn.provider.doesWaterVaporize()) {
+				worldIn.setBlockToAir(pos);
+				return;
+			}
 
-            int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, stack);
-            harvesters.set(player);
-            this.dropBlockAsItem(worldIn, pos, state, i);
-            harvesters.set(null);
-            Material material = worldIn.getBlockState(pos.down()).getMaterial();
+			int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, stack);
+			harvesters.set(player);
+			this.dropBlockAsItem(worldIn, pos, state, i);
+			harvesters.set(null);
+			Material material = worldIn.getBlockState(pos.down()).getMaterial();
 
-            if (material.blocksMovement() || material.isLiquid())
-            {
-                worldIn.setBlockState(pos, Blocks.flowing_water.getDefaultState());
-            }
-        }
+			if (material.blocksMovement() || material.isLiquid()) {
+				worldIn.setBlockState(pos, Blocks.flowing_water.getDefaultState());
+			}
+		}
 	}
 
-
-	public int quantityDropped(Random random)
-	{
+	@Override
+	public int quantityDropped(Random random) {
 		return 0;
 	}
 
-	public int getMobilityFlag()
-	{
+	public int getMobilityFlag() {
 		return 0;
 	}
 
-	public boolean isOpaqueCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public boolean isFullCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public int getRenderType(){
+	public int getRenderType() {
 		return 3;
 	}
 }

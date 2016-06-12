@@ -22,18 +22,19 @@ public class RenderDragonBase extends RenderLiving {
 		this.layerRenderers.add(new LayerDragonArmor(this, 4, "firedragon"));
 	}
 
+	@Override
 	protected void preRenderCallback(EntityLivingBase entity, float f) {
-		if(entity instanceof EntityDragonBase){
-			this.shadowSize = ((EntityDragonBase)entity).getDragonSize();
-			GL11.glScalef(((EntityDragonBase)entity).getDragonSize(), ((EntityDragonBase)entity).getDragonSize(), ((EntityDragonBase)entity).getDragonSize());
+		if (entity instanceof EntityDragonBase) {
+			this.shadowSize = ((EntityDragonBase) entity).getDragonSize();
+			GL11.glScalef(((EntityDragonBase) entity).getDragonSize(), ((EntityDragonBase) entity).getDragonSize(), ((EntityDragonBase) entity).getDragonSize());
 		}
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if(entity instanceof EntityDragonBase){
-			return new ResourceLocation(((EntityDragonBase)entity).getTexture());
-		}else{
+		if (entity instanceof EntityDragonBase) {
+			return new ResourceLocation(((EntityDragonBase) entity).getTexture());
+		} else {
 			return new ResourceLocation("iceandfire:textures/models/firedragon/red_4");
 		}
 	}

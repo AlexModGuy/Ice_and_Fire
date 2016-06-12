@@ -27,11 +27,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 
-public class BlockLectern extends BlockContainer
-{
+public class BlockLectern extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public BlockLectern()
-	{
+
+	public BlockLectern() {
 		super(Material.wood);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
@@ -42,87 +41,84 @@ public class BlockLectern extends BlockContainer
 		GameRegistry.registerBlock(this, "lectern");
 		GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
 	}
-	
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-	{
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
 	}
 
-	public boolean isOpaqueCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public boolean isFullCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
-	{
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState iblockstate = worldIn.getBlockState(pos.down());
 		Block block = iblockstate.getBlock();
 		return iblockstate.isOpaqueCube();
 	}
 
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-	{
+	@Override
+	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		if (!this.canPlaceBlockAt(worldIn, pos))
-		{
+	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
 
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
+	@Override
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
-	public IBlockState getStateFromMeta(int meta)
-	{
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
 	}
 
-	public int getMetaFromState(IBlockState state)
-	{
-		return ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex();
 	}
 
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, new IProperty[] {FACING});
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer()
-	{
+	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	public EnumBlockRenderType getRenderType(IBlockState state)
-	{
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
-		if(playerIn.isSneaking()){
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (playerIn.isSneaking()) {
 			return false;
-		}else{
+		} else {
 			playerIn.openGui(IceAndFire.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 	}
+
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityLectern();

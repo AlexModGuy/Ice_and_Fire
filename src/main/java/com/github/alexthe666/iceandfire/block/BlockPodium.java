@@ -33,122 +33,110 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 
-public class BlockPodium extends BlockContainer
-{
+public class BlockPodium extends BlockContainer {
 	public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
 
-	public BlockPodium()
-	{
+	public BlockPodium() {
 		super(Material.wood);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
 		this.setHardness(2.0F);
-  		this.setStepSound(SoundType.WOOD);
+		this.setStepSound(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.podium");
 		GameRegistry.registerBlock(this, ItemBlockPodium.class, "podium");
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
 	}
 
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-	{
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
 	}
 
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		if(worldIn.getTileEntity(pos) instanceof TileEntityPodium){
-			TileEntityPodium podium = (TileEntityPodium)worldIn.getTileEntity(pos);
-			if(podium.getStackInSlot(0) != null){
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if (worldIn.getTileEntity(pos) instanceof TileEntityPodium) {
+			TileEntityPodium podium = (TileEntityPodium) worldIn.getTileEntity(pos);
+			if (podium.getStackInSlot(0) != null) {
 				worldIn.spawnEntityInWorld(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, podium.getStackInSlot(0)));
 			}
 		}
 		super.breakBlock(worldIn, pos, state);
 	}
-	public int damageDropped(IBlockState state)
-	{
-		return ((BlockPodium.EnumType)state.getValue(VARIANT)).getMetadata();
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
 	}
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
-		if(playerIn.isSneaking()){
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (playerIn.isSneaking()) {
 			return false;
-		}else{
+		} else {
 			playerIn.openGui(IceAndFire.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
-	{
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
 		BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
 		int i = aenumtype.length;
 
-		for (int j = 0; j < i; ++j)
-		{
+		for (int j = 0; j < i; ++j) {
 			BlockPodium.EnumType enumtype = aenumtype[j];
 			list.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
 		}
 	}
 
-	public IBlockState getStateFromMeta(int meta)
-	{
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, BlockPodium.EnumType.byMetadata(meta));
 	}
 
-	public int getMetaFromState(IBlockState state)
-	{
-		return ((BlockPodium.EnumType)state.getValue(VARIANT)).getMetadata();
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
 	}
 
-	protected BlockStateContainer createBlockState()
-	{
-		return new BlockStateContainer(this, new IProperty[] {VARIANT});
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { VARIANT });
 	}
 
-	public boolean isOpaqueCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public boolean isFullCube(IBlockState blockstate)
-	{
+	@Override
+	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}
 
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
-	{
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState iblockstate = worldIn.getBlockState(pos.down());
 		return iblockstate.isOpaqueCube();
 	}
 
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-	{
+	@Override
+	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-		if (!this.canPlaceBlockAt(worldIn, pos))
-		{
+	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
 
-
-	public static enum EnumType implements IStringSerializable
-	{
-		OAK(0, "oak"),
-		SPRUCE(1, "spruce"),
-		BIRCH(2, "birch"),
-		JUNGLE(3, "jungle"),
-		ACACIA(4, "acacia"),
-		DARK_OAK(5, "dark_oak", "big_oak");
+	public static enum EnumType implements IStringSerializable {
+		OAK(0, "oak"), SPRUCE(1, "spruce"), BIRCH(2, "birch"), JUNGLE(3, "jungle"), ACACIA(4, "acacia"), DARK_OAK(5, "dark_oak", "big_oak");
 		private static final BlockPodium.EnumType[] META_LOOKUP = new BlockPodium.EnumType[values().length];
 		private final int meta;
 		private final String name;
@@ -156,69 +144,61 @@ public class BlockPodium extends BlockContainer
 
 		private static final String __OBFID = "CL_00002081";
 
-		private EnumType(int meta, String name)
-		{
+		private EnumType(int meta, String name) {
 			this(meta, name, name);
 		}
 
-		private EnumType(int meta, String name, String unlocalizedName)
-		{
+		private EnumType(int meta, String name, String unlocalizedName) {
 			this.meta = meta;
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;
 		}
 
-		public int getMetadata()
-		{
+		public int getMetadata() {
 			return this.meta;
 		}
 
-		public String toString()
-		{
+		@Override
+		public String toString() {
 			return this.name;
 		}
 
-		public static BlockPodium.EnumType byMetadata(int meta)
-		{
-			if (meta < 0 || meta >= META_LOOKUP.length)
-			{
+		public static BlockPodium.EnumType byMetadata(int meta) {
+			if (meta < 0 || meta >= META_LOOKUP.length) {
 				meta = 0;
 			}
 
 			return META_LOOKUP[meta];
 		}
 
-		public String getName()
-		{
+		@Override
+		public String getName() {
 			return this.name;
 		}
 
-		public String getUnlocalizedName()
-		{
+		public String getUnlocalizedName() {
 			return this.unlocalizedName;
 		}
 
-		static
-		{
+		static {
 			BlockPodium.EnumType[] var0 = values();
 			int var1 = var0.length;
 
-			for (int var2 = 0; var2 < var1; ++var2)
-			{
+			for (int var2 = 0; var2 < var1; ++var2) {
 				BlockPodium.EnumType var3 = var0[var2];
 				META_LOOKUP[var3.getMetadata()] = var3;
 			}
 		}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer()
-	{
+	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	public EnumBlockRenderType getRenderType(IBlockState state)
-	{
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 

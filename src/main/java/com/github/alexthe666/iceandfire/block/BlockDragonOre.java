@@ -18,8 +18,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 
 public class BlockDragonOre extends Block {
 
-	public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName)
-	{
+	public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
 		super(Material.rock);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setHarvestLevel("pickaxe", toollevel);
@@ -29,17 +28,17 @@ public class BlockDragonOre extends Block {
 		GameRegistry.registerBlock(this, gameName);
 
 	}
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
-	{
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
 	}
+
 	@Override
-	public int getExpDrop(IBlockState blockstate, IBlockAccess world, BlockPos pos, int fortune)
-	{
-		if (this == Blocks.emerald_ore)
-		{
+	public int getExpDrop(IBlockState blockstate, IBlockAccess world, BlockPos pos, int fortune) {
+		if (this == Blocks.emerald_ore) {
 			return MathHelper.getRandomIntegerInRange(new Random(), 3, 7);
-		}else{
+		} else {
 			return 0;
 		}
 	}

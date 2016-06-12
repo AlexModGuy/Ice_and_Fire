@@ -11,50 +11,40 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.google.common.base.Predicates;
 
-public class EntityAIDragonHunt extends EntityAINearestAttackableTarget
-{
+public class EntityAIDragonHunt extends EntityAINearestAttackableTarget {
 	private EntityDragonBase dragon;
 	private final Class targetClass;
 
-	public EntityAIDragonHunt(EntityDragonBase mob, Class prey, boolean see, boolean isFire)
-	{
+	public EntityAIDragonHunt(EntityDragonBase mob, Class prey, boolean see, boolean isFire) {
 		super(mob, prey, see);
 		this.dragon = mob;
 		this.targetClass = prey;
 	}
 
-
-	public boolean shouldExecute()
-	{
-		if (this.taskOwner.getRNG().nextInt(10) != 0)
-		{
+	@Override
+	public boolean shouldExecute() {
+		if (this.taskOwner.getRNG().nextInt(10) != 0) {
 			return false;
-		}
-		else
-		{
+		} else {
 			double d0 = this.getTargetDistance();
 			List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand(d0, 4.0D, d0), Predicates.and(this.targetEntitySelector, EntitySelectors.NOT_SPECTATING));
 			Collections.sort(list, this.theNearestAttackableTargetSorter);
 
-			if (list.isEmpty())
-			{
+			if (list.isEmpty()) {
 				return false;
-			}
-			else
-			{
-				this.targetEntity = (EntityLivingBase)list.get(0);
+			} else {
+				this.targetEntity = (EntityLivingBase) list.get(0);
 
-				if(dragon.isTamed() && targetEntity == dragon.getOwner()){
+				if (dragon.isTamed() && targetEntity == dragon.getOwner()) {
 					return false;
 				}
-				if(!(targetEntity instanceof EntityFireDragon) && dragon.canAttackMob(targetEntity)){
+				if (!(targetEntity instanceof EntityFireDragon) && dragon.canAttackMob(targetEntity)) {
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 			}
 		}
 	}
-	
 
 }

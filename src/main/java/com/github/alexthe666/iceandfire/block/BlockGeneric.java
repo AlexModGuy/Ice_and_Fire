@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
-public class BlockGeneric extends Block{
-	
+public class BlockGeneric extends Block {
+
 	public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
@@ -18,7 +18,7 @@ public class BlockGeneric extends Block{
 		this.setStepSound(sound);
 		this.setCreativeTab(IceAndFire.tab);
 		GameRegistry.registerBlock(this, gameName);
-		
+
 	}
 
 	public BlockGeneric(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound) {
@@ -29,7 +29,7 @@ public class BlockGeneric extends Block{
 		this.setStepSound(sound);
 		this.setCreativeTab(IceAndFire.tab);
 		GameRegistry.registerBlock(this, gameName);
-		
+
 	}
 
 }

@@ -14,42 +14,42 @@ import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 
 @SideOnly(Side.CLIENT)
-public class GuiLectern extends GuiContainer
-{
+public class GuiLectern extends GuiContainer {
 	private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("iceandfire:textures/gui/lectern.png");
 	private final InventoryPlayer playerInventory;
 	private IInventory tileFurnace;
 
-	public GuiLectern(InventoryPlayer playerInv, IInventory furnaceInv)
-	{
+	public GuiLectern(InventoryPlayer playerInv, IInventory furnaceInv) {
 		super(new ContainerLectern(playerInv, furnaceInv));
 		this.playerInventory = playerInv;
 		this.tileFurnace = furnaceInv;
 	}
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-	{
-		if(tileFurnace != null){
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		if (tileFurnace != null) {
 			String s = this.tileFurnace.getDisplayName().getUnformattedText();
 			this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 		}
 		this.fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 		String s1 = StatCollector.translateToLocal("lectern.nopages");
-		if(hasAllPages()) this.fontRendererObj.drawString(s1, this.xSize / 2 - this.fontRendererObj.getStringWidth("No new information can be added.") / 2, 20, 4210752);
+		if (hasAllPages())
+			this.fontRendererObj.drawString(s1, this.xSize / 2 - this.fontRendererObj.getStringWidth("No new information can be added.") / 2, 20, 4210752);
 	}
 
-	public boolean hasAllPages(){
-		if(tileFurnace.getStackInSlot(0) != null){
-			if(tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary){
-				if(EnumBestiaryPages.hasAllPages(tileFurnace.getStackInSlot(0))){
+	public boolean hasAllPages() {
+		if (tileFurnace.getStackInSlot(0) != null) {
+			if (tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
+				if (EnumBestiaryPages.hasAllPages(tileFurnace.getStackInSlot(0))) {
 					return true;
 				}
 			}
 		}
-		return false; 	
+		return false;
 	}
 
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
-	{
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(furnaceGuiTextures);
 		int k = (this.width - this.xSize) / 2;
@@ -60,9 +60,7 @@ public class GuiLectern extends GuiContainer
 		this.drawTexturedModalRect(k + 76, l + 36, 176, 0, i1, 16);
 	}
 
-
-	private int func_175381_h(int p_175381_1_)
-	{
+	private int func_175381_h(int p_175381_1_) {
 		int j = this.tileFurnace.getField(2);
 		int k = this.tileFurnace.getField(3);
 		return k != 0 && j != 0 ? j * p_175381_1_ / k : 0;

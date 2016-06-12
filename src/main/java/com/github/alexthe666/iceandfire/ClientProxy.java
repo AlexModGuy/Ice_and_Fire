@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import javax.swing.plaf.basic.BasicComboBoxUI.ItemHandler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -40,16 +38,18 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 
-public class ClientProxy extends CommonProxy{
+public class ClientProxy extends CommonProxy {
 
-	public void render(){
+	@Override
+	public void render() {
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
 		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
 		MinecraftForge.EVENT_BUS.register(new EventKeys());
 		renderItems();
 		renderEntities();
 	}
-	private void renderEntities() {	
+
+	private void renderEntities() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelFireDragon()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonEgg.class, new RenderDragonEgg(Minecraft.getMinecraft().getRenderManager(), new ModelDragonEgg()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonArrow.class, new RenderDragonArrow(Minecraft.getMinecraft().getRenderManager()));
@@ -59,7 +59,8 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
 	}
-	public void renderItems(){
+
+	public void renderItems() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.lectern), 0, new ModelResourceLocation("iceandfire:lectern", "inventory"));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.podium), new ResourceLocation("iceandfire:podium_oak"), new ResourceLocation("iceandfire:podium_spruce"), new ResourceLocation("iceandfire:podium_birch"), new ResourceLocation("iceandfire:podium_jungle"), new ResourceLocation("iceandfire:podium_acacia"), new ResourceLocation("iceandfire:podium_dark_oak"));
@@ -132,7 +133,9 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 2, new ModelResourceLocation("iceandfire:dragonarmor_iron_body", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_iron, 3, new ModelResourceLocation("iceandfire:dragonarmor_iron_tail", "inventory"));
 	}
-	public void renderArmors(EnumDragonArmor armor){
+
+	@Override
+	public void renderArmors(EnumDragonArmor armor) {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		renderItem.getItemModelMesher().register(armor.helmet, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_helmet", "inventory"));
 		renderItem.getItemModelMesher().register(armor.chestplate, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_chestplate", "inventory"));
@@ -140,15 +143,15 @@ public class ClientProxy extends CommonProxy{
 		renderItem.getItemModelMesher().register(armor.boots, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_boots", "inventory"));
 	}
 
-	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ){
-		if(name == "snowflake"){
+	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+		if (name == "snowflake") {
 			Minecraft.getMinecraft().effectRenderer.addEffect(new EntityFXSnowflake(world, x, y, z, motX, motY, motZ));
 		}
 	}
 
-	public void openBestiaryGui(){
+	@Override
+	public void openBestiaryGui() {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary());
 	}
 
 }
-

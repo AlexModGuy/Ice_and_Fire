@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemDragonBone extends Item {
 
-	public ItemDragonBone(){
+	public ItemDragonBone() {
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.dragonbone");
 		this.maxStackSize = 8;

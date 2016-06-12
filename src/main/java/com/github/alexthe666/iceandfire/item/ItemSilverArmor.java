@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
-public class ItemSilverArmor extends ItemArmor{
+public class ItemSilverArmor extends ItemArmor {
 
 	public ItemSilverArmor(ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot, String gameName, String name) {
 		super(material, renderIndex, slot);

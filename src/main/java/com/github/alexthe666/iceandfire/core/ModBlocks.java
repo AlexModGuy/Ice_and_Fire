@@ -28,7 +28,7 @@ public class ModBlocks {
 	public static Block charedGravel;
 	public static Block eggInIce;
 
-	public static void init(){
+	public static void init() {
 		lectern = new BlockLectern();
 		podium = new BlockPodium();
 		goldPile = new BlockGoldPile();
@@ -42,6 +42,6 @@ public class ModBlocks {
 		charedCobblestone = new BlockGeneric(Material.rock, "chared_cobblestone", "iceandfire.charedCobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE);
 		charedGravel = new BlockFallingGeneric(Material.ground, "chared_gravel", "iceandfire.charedGravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND);
 		eggInIce = new BlockEggInIce();
-	}	
-	
+	}
+
 }

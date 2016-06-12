@@ -7,12 +7,12 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @MCVersion("1.9")
-@TransformerExclusions({"com.github.alexthe666.iceandfire.access."})
-public class IceAndFireForgeLoading implements IFMLLoadingPlugin{
+@TransformerExclusions({ "com.github.alexthe666.iceandfire.access." })
+public class IceAndFireForgeLoading implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] {IceAndFireTransformer.class.getCanonicalName()};
+		return new String[] { IceAndFireTransformer.class.getCanonicalName() };
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class IceAndFireForgeLoading implements IFMLLoadingPlugin{
 
 	@Override
 	public void injectData(Map<String, Object> data) {
-		
+
 	}
 
 	@Override

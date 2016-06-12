@@ -12,11 +12,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
-import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 
-public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory{
-	private static final int[] slotsTop = new int[] {0};
+public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
+	private static final int[] slotsTop = new int[] { 0 };
 	private ItemStack[] stacks = new ItemStack[1];
 
 	@Override
@@ -24,100 +23,84 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	}
 
-	public int getSizeInventory()
-	{
+	@Override
+	public int getSizeInventory() {
 		return this.stacks.length;
 	}
 
-	public ItemStack getStackInSlot(int index)
-	{
+	@Override
+	public ItemStack getStackInSlot(int index) {
 		return this.stacks[index];
 	}
 
-	public ItemStack decrStackSize(int index, int count)
-	{
-		if (this.stacks[index] != null)
-		{
+	@Override
+	public ItemStack decrStackSize(int index, int count) {
+		if (this.stacks[index] != null) {
 			ItemStack itemstack;
 
-			if (this.stacks[index].stackSize <= count)
-			{
+			if (this.stacks[index].stackSize <= count) {
 				itemstack = this.stacks[index];
 				this.stacks[index] = null;
 				return itemstack;
-			}
-			else
-			{
+			} else {
 				itemstack = this.stacks[index].splitStack(count);
 
-				if (this.stacks[index].stackSize == 0)
-				{
+				if (this.stacks[index].stackSize == 0) {
 					this.stacks[index] = null;
 				}
 
 				return itemstack;
 			}
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int index)
-	{
-		if (this.stacks[index] != null)
-		{
+	public ItemStack getStackInSlotOnClosing(int index) {
+		if (this.stacks[index] != null) {
 			ItemStack itemstack = this.stacks[index];
 			this.stacks[index] = null;
 			return itemstack;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-	public void setInventorySlotContents(int index, ItemStack stack)
-	{
+	@Override
+	public void setInventorySlotContents(int index, ItemStack stack) {
 		boolean flag = stack != null && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
 		this.stacks[index] = stack;
 
-		if (stack != null && stack.stackSize > this.getInventoryStackLimit())
-		{
+		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
 			stack.stackSize = this.getInventoryStackLimit();
 		}
 	}
 
-	public void readFromNBT(NBTTagCompound compound)
-	{
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		NBTTagList nbttaglist = compound.getTagList("Items", 10);
 		this.stacks = new ItemStack[this.getSizeInventory()];
 
-		for (int i = 0; i < nbttaglist.tagCount(); ++i)
-		{
+		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte b0 = nbttagcompound1.getByte("Slot");
 
-			if (b0 >= 0 && b0 < this.stacks.length)
-			{
+			if (b0 >= 0 && b0 < this.stacks.length) {
 				this.stacks[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
 	}
 
-	public void writeToNBT(NBTTagCompound compound)
-	{
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < this.stacks.length; ++i)
-		{
-			if (this.stacks[i] != null)
-			{
+		for (int i = 0; i < this.stacks.length; ++i) {
+			if (this.stacks[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte)i);
+				nbttagcompound1.setByte("Slot", (byte) i);
 				this.stacks[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
@@ -125,13 +108,16 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		compound.setTag("Items", nbttaglist);
 	}
 
-	public void openInventory(EntityPlayer player) {}
+	@Override
+	public void openInventory(EntityPlayer player) {
+	}
 
-	public void closeInventory(EntityPlayer player) {}
+	@Override
+	public void closeInventory(EntityPlayer player) {
+	}
 
-
-	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction)
-	{
+	@Override
+	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
 		return index != 0 ? true : stack.getItem() instanceof ItemDragonEgg;
 	}
 
@@ -145,33 +131,34 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return true;
 	}
 
-	public int getField(int id){
+	@Override
+	public int getField(int id) {
 		return 0;
 	}
 
-	public void setField(int id, int value){}
+	@Override
+	public void setField(int id, int value) {
+	}
 
-	public int getFieldCount()
-	{
+	@Override
+	public int getFieldCount() {
 		return 4;
 	}
 
-
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.stacks.length; ++i)
-		{
+		for (int i = 0; i < this.stacks.length; ++i) {
 			this.stacks[i] = null;
 		}
 	}
 
-	public String getName()
-	{
+	@Override
+	public String getName() {
 		return "tile.iceandfire.podium.name";
 	}
 
-	public int[] getSlotsForFace(EnumFacing side)
-	{
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
 		return slotsTop;
 	}
 
@@ -197,7 +184,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ITextComponent getDisplayName() {
-        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
 	}
 
 }

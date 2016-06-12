@@ -22,7 +22,7 @@ public class IAFVillage implements IVillageCreationHandler {
 	}
 
 	@Override
-	public Village buildComponent(PieceWeight villagePiece, Start startPiece,List pieces, Random random, int p1, int p2, int p3, EnumFacing facing, int p5) {
+	public Village buildComponent(PieceWeight villagePiece, Start startPiece, List pieces, Random random, int p1, int p2, int p3, EnumFacing facing, int p5) {
 		return null;
 	}
 

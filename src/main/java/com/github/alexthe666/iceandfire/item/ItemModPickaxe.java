@@ -17,24 +17,26 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 
 public class ItemModPickaxe extends ItemPickaxe {
 
-	public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name){
+	public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.tab);
 		GameRegistry.registerItem(this, gameName);
 	}
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
-	{
-		if(this == ModItems.silver_pickaxe){
-			if(target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD){
+
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		if (this == ModItems.silver_pickaxe) {
+			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
 				target.attackEntityFrom(DamageSource.magic, 2);
 			}
 		}
 		return super.hitEntity(stack, target, attacker);
 	}
 
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
-		if(this == ModItems.silver_pickaxe)
-		list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+		if (this == ModItems.silver_pickaxe)
+			list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
 	}
 }

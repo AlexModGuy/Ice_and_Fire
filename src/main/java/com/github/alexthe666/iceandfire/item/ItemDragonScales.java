@@ -15,8 +15,8 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class ItemDragonScales extends Item {
 	EnumDragonEgg type;
-	public ItemDragonScales(String name, EnumDragonEgg type)
-	{
+
+	public ItemDragonScales(String name, EnumDragonEgg type) {
 		this.setHasSubtypes(true);
 		this.setCreativeTab(IceAndFire.tab);
 		this.type = type;
@@ -24,6 +24,7 @@ public class ItemDragonScales extends Item {
 		GameRegistry.registerItem(this, name);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 		tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));

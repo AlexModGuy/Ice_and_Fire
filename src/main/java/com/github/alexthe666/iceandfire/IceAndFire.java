@@ -33,8 +33,7 @@ import com.github.alexthe666.iceandfire.message.MessageModKeys;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
-public class IceAndFire
-{
+public class IceAndFire {
 
 	public static final String MODID = "iceandfire";
 	public static final String VERSION = "0.1.4";
@@ -44,36 +43,34 @@ public class IceAndFire
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
-    public static DamageSource dragon;
-    public static DamageSource dragonFire;
+	public static DamageSource dragon;
+	public static DamageSource dragonFire;
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
+	public void preInit(FMLPreInitializationEvent event) {
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 		channel.registerMessage(MessageModKeys.Handler.class, MessageModKeys.class, 0, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
-	
+
 	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{
+	public void init(FMLInitializationEvent event) {
 		tab = new CreativeTab(MODID);
-		dragon = new DamageSource("dragon"){
-		    public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
-		    {
-		        String s = "death.attack.dragon";
-		        String s1 = s + ".player_" + new Random().nextInt(2);
-		        return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)): new TextComponentTranslation(s, new Object[] {entityLivingBaseIn.getDisplayName()});
-		    }
+		dragon = new DamageSource("dragon") {
+			@Override
+			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+				String s = "death.attack.dragon";
+				String s1 = s + ".player_" + new Random().nextInt(2);
+				return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)) : new TextComponentTranslation(s, new Object[] { entityLivingBaseIn.getDisplayName() });
+			}
 		};
-		dragonFire = new DamageSource("dragon_fire"){
-			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
-		    {
-				 String s = "death.attack.dragon_fire";
-			        String s1 = s + ".player_" + new Random().nextInt(2);
-			        return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)): new TextComponentTranslation(s, new Object[] {entityLivingBaseIn.getDisplayName()});
-		    }
+		dragonFire = new DamageSource("dragon_fire") {
+			@Override
+			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+				String s = "death.attack.dragon_fire";
+				String s1 = s + ".player_" + new Random().nextInt(2);
+				return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)) : new TextComponentTranslation(s, new Object[] { entityLivingBaseIn.getDisplayName() });
+			}
 		};
 		ModBlocks.init();
 		ModItems.init();
