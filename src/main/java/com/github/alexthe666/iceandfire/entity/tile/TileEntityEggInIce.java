@@ -20,11 +20,10 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag.setByte("Color", (byte) type.meta);
 		tag.setByte("Age", (byte) age);
-
+		return super.writeToNBT(tag);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket(){
 		NBTTagCompound tag = new NBTTagCompound();
 		this.writeToNBT(tag);
 		return new SPacketUpdateTileEntity(pos, 1, tag);

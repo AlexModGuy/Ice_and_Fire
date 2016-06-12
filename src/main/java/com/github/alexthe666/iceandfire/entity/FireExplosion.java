@@ -89,7 +89,7 @@ public class FireExplosion extends Explosion {
 							BlockPos blockpos = new BlockPos(d4, d6, d8);
 							IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
 
-							if (iblockstate.getMaterial() != Material.air) {
+							if (iblockstate.getMaterial() != Material.AIR) {
 								float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, (Entity) null, this);
 								f -= (f2 + 0.3F) * 0.3F;
 							}
@@ -141,7 +141,7 @@ public class FireExplosion extends Explosion {
 						double d11 = 1.0D;
 
 						if (entity instanceof EntityLivingBase) {
-							d11 = EnchantmentProtection.func_92092_a((EntityLivingBase) entity, d10);
+							d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
 						}
 						entity.motionX += d5 * d11;
 						entity.motionY += d7 * d11;
@@ -187,7 +187,7 @@ public class FireExplosion extends Explosion {
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
 
-				if (state.getMaterial() != Material.air) {
+				if (state.getMaterial() != Material.AIR) {
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
 					}
@@ -196,17 +196,17 @@ public class FireExplosion extends Explosion {
 						worldObj.setBlockState(blockpos, ModBlocks.charedDirt.getDefaultState());
 					}
 
-					if (block instanceof BlockLeaves || state.getMaterial() == Material.water) {
-						worldObj.setBlockState(blockpos, Blocks.air.getDefaultState());
+					if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
+						worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
 					}
 
 					if (block instanceof BlockGravel) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
 					}
 
-					if (state.getMaterial() == Material.rock && (block != ModBlocks.charedCobblestone && block != Blocks.cobblestone && block != Blocks.mossy_cobblestone && block != Blocks.cobblestone_wall)) {
+					if (state.getMaterial() == Material.ROCK && (block != ModBlocks.charedCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedStone.getDefaultState());
-					} else if (state.getMaterial() == Material.rock) {
+					} else if (state.getMaterial() == Material.ROCK) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedCobblestone.getDefaultState());
 					}
 				}
@@ -214,8 +214,8 @@ public class FireExplosion extends Explosion {
 		}
 
 		for (BlockPos blockpos1 : this.affectedBlockPositions) {
-			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.air && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
-				this.worldObj.setBlockState(blockpos1, Blocks.fire.getDefaultState());
+			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
+				this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());
 			}
 		}
 	}

@@ -37,10 +37,10 @@ public class BlockPodium extends BlockContainer {
 	public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
 
 	public BlockPodium() {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
 		this.setHardness(2.0F);
-		this.setStepSound(SoundType.WOOD);
+		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.podium");
 		GameRegistry.registerBlock(this, ItemBlockPodium.class, "podium");
@@ -122,10 +122,10 @@ public class BlockPodium extends BlockContainer {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-		this.checkAndDropBlock(worldIn, pos, state);
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		this.onNeighborChange(world, pos, neighbor);
 	}
-
+	
 	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);

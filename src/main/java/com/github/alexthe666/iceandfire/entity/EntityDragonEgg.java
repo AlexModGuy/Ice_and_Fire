@@ -61,8 +61,8 @@ public class EntityDragonEgg extends EntityLiving {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.register(DRAGON_TYPE, 0);
-		this.dataWatcher.register(DRAGON_AGE, 0);
+		this.getDataManager().register(DRAGON_TYPE, 0);
+		this.getDataManager().register(DRAGON_AGE, 0);
 	}
 
 	public EnumDragonEgg getType() {
@@ -93,19 +93,19 @@ public class EntityDragonEgg extends EntityLiving {
 		int j = MathHelper.floor_double(this.posY);
 		int k = MathHelper.floor_double(this.posZ);
 		BlockPos pos = new BlockPos(i, j, k);
-		if (worldObj.getBlockState(pos).getMaterial() == Material.fire && getType().isFire) {
+		if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
 			this.setDragonAge(this.getDragonAge() + 1);
 		}
-		if (worldObj.getBlockState(pos).getMaterial() == Material.water && !getType().isFire && this.getRNG().nextInt(500) == 0) {
+		if (worldObj.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
 			worldObj.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
-			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.block_glass_break, this.getSoundCategory(), 2.5F, 1.0F, false);
+			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
 			if (worldObj.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
 				((TileEntityEggInIce) worldObj.getTileEntity(pos)).type = this.getType();
 				this.setDead();
 			}
 		}
 		if (this.getDragonAge() == 60) {
-			if (worldObj.getBlockState(pos).getMaterial() == Material.fire && getType().isFire) {
+			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
 				worldObj.destroyBlock(pos, false);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
 				dragon.setColor(getType().meta);

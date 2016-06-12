@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -38,8 +38,8 @@ public class ContainerLectern extends Container {
 	}
 
 	@Override
-	public void onCraftGuiOpened(ICrafting listener) {
-		super.onCraftGuiOpened(listener);
+	public void addListener(IContainerListener listener) {
+		super.addListener(listener);
 		listener.sendAllWindowProperties(this, this.tileFurnace);
 	}
 
@@ -47,8 +47,8 @@ public class ContainerLectern extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < this.crafters.size(); ++i) {
-			ICrafting icrafting = this.crafters.get(i);
+		for (int i = 0; i < this.listeners.size(); ++i) {
+			IContainerListener icrafting = this.listeners.get(i);
 
 			if (this.field_178152_f != this.tileFurnace.getField(2)) {
 				icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));

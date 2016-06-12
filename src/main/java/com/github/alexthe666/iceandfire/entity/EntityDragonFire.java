@@ -81,7 +81,7 @@ public class EntityDragonFire extends EntityFireball {
 	private void triggerBlockTransformation(int a, int b, int c) {
 		BlockPos pos = new BlockPos(a, b, c);
 		if (worldObj.getBlockState(pos).getBlock() instanceof BlockBush) {
-			WorldUtils.setBlock(worldObj, a, b, c, Blocks.deadbush, 0, 2);
+			WorldUtils.setBlock(worldObj, a, b, c, Blocks.DEADBUSH, 0, 2);
 		}
 		if (worldObj.getBlockState(pos).getBlock() instanceof BlockGrass) {
 			WorldUtils.setBlock(worldObj, a, b, c, ModBlocks.charedGrass, 0, 2);

@@ -205,8 +205,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < this.stacks.length; ++i) {
@@ -221,6 +220,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 		compound.setShort("BurnTime", (short) this.furnaceBurnTime);
 		compound.setShort("CookTime", (short) this.cookTime);
 		compound.setShort("CookTimeTotal", (short) this.totalCookTime);
+		return super.writeToNBT(compound);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setHarvestLevel(toolUsed, toolStrength);
 		this.setHardness(hardness);
 		this.setResistance(resistance);
-		this.setStepSound(sound);
+		this.setSoundType(sound);
 		this.setCreativeTab(IceAndFire.tab);
 		GameRegistry.registerBlock(this, gameName);
 
@@ -26,7 +26,7 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setUnlocalizedName(name);
 		this.setHardness(hardness);
 		this.setResistance(resistance);
-		this.setStepSound(sound);
+		this.setSoundType(sound);
 		this.setCreativeTab(IceAndFire.tab);
 		GameRegistry.registerBlock(this, gameName);
 

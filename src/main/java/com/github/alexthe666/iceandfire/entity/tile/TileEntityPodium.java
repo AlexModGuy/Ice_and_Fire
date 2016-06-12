@@ -93,8 +93,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < this.stacks.length; ++i) {
@@ -106,6 +105,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 			}
 		}
 		compound.setTag("Items", nbttaglist);
+		return super.writeToNBT(compound);
 	}
 
 	@Override

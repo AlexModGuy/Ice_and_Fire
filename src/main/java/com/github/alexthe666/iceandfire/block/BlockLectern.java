@@ -31,11 +31,11 @@ public class BlockLectern extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockLectern() {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-		this.setStepSound(SoundType.WOOD);
+		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.lectern");
 		GameRegistry.registerBlock(this, "lectern");
@@ -65,8 +65,8 @@ public class BlockLectern extends BlockContainer {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-		this.checkAndDropBlock(worldIn, pos, state);
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		this.onNeighborChange(world, pos, neighbor);
 	}
 
 	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {

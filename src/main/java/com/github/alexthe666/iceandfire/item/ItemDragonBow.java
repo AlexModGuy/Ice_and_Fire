@@ -82,9 +82,9 @@ public class ItemDragonBow extends Item {
 	 */
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) {
+		/*if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, stack) > 0;
+			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 			ItemStack itemstack = this.func_185060_a(entityplayer);
 
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -152,7 +152,7 @@ public class ItemDragonBow extends Item {
 					entityplayer.addStat(StatList.func_188057_b(this));
 				}
 			}
-		}
+		}*/
 	}
 
 	public static float func_185059_b(int p_185059_0_) {

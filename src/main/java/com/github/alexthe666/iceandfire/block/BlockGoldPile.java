@@ -32,7 +32,7 @@ public class BlockGoldPile extends Block {
 	protected static final AxisAlignedBB[] SNOW_AABB = new AxisAlignedBB[] { new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D) };
 
 	public BlockGoldPile() {
-		super(Material.ground);
+		super(Material.GROUND);
 		GameRegistry.registerBlock(this, "goldpile");
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, Integer.valueOf(1)));
 		this.setTickRandomly(true);
@@ -75,7 +75,7 @@ public class BlockGoldPile extends Block {
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState iblockstate = worldIn.getBlockState(pos.down());
 		Block block = iblockstate.getBlock();
-		return block != Blocks.ice && block != Blocks.packed_ice ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : (block == this && iblockstate.getValue(LAYERS).intValue() >= 7 ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement())) : false;
+		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : (block == this && iblockstate.getValue(LAYERS).intValue() >= 7 ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement())) : false;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class BlockGoldPile extends Block {
 
 		if (item != null) {
 			if (item.getItem() != null) {
-				if (item.getItem() == Items.gold_nugget || item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
+				if (item.getItem() == Items.GOLD_NUGGET || item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
 					if (item != null) {
 						if (this.getMetaFromState(state) < 7) {
 							WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.goldPile, this.getMetaFromState(state) + 1, 3);
@@ -115,8 +115,8 @@ public class BlockGoldPile extends Block {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-		this.checkAndDropBlock(worldIn, pos, state);
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		this.onNeighborChange(world, pos, neighbor);
 	}
 
 	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
@@ -130,7 +130,7 @@ public class BlockGoldPile extends Block {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Items.gold_nugget;
+		return Items.GOLD_NUGGET;
 	}
 
 	@Override

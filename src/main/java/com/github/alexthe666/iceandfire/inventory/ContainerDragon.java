@@ -28,7 +28,7 @@ public class ContainerDragon extends Container {
 
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
+				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
 		});
@@ -40,7 +40,7 @@ public class ContainerDragon extends Container {
 
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
+				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
 		});
@@ -52,7 +52,7 @@ public class ContainerDragon extends Container {
 
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
+				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
 		});
@@ -64,7 +64,7 @@ public class ContainerDragon extends Container {
 
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.entity_horse_armor, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
+				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
 		});

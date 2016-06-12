@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -28,7 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
-import net.minecraft.inventory.IInvBasic;
+import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -38,6 +37,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -51,14 +51,12 @@ import com.github.alexthe666.iceandfire.client.RollBuffer;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAge;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonStarve;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IRangedAttackMob, IInvBasic {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IRangedAttackMob, IInventoryChangedListener {
 
 	private static final DataParameter<Integer> DRAGON_COLOR = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_GENDER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -122,20 +120,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.register(DRAGON_COLOR, 0);
-		this.dataWatcher.register(DRAGON_GENDER, 0);
-		this.dataWatcher.register(DRAGON_SLEEPING, 0);
-		this.dataWatcher.register(DRAGON_TIER, 0);
-		this.dataWatcher.register(DRAGON_AGE_TICK, 0);
-		this.dataWatcher.register(DRAGON_HUNGER, 30);
-		this.dataWatcher.register(DRAGON_ORDER, 0);
-		this.dataWatcher.register(DRAGON_CURRENT_ATTACK, 0);
-		this.dataWatcher.register(DRAGON_HOVERING, 0);
-		this.dataWatcher.register(DRAGON_FLYING, 0);
-		this.dataWatcher.register(DRAGON_HEAD, 0);
-		this.dataWatcher.register(DRAGON_NECK, 0);
-		this.dataWatcher.register(DRAGON_BODY, 0);
-		this.dataWatcher.register(DRAGON_TAIL, 0);
+		this.getDataManager().register(DRAGON_COLOR, 0);
+		this.getDataManager().register(DRAGON_GENDER, 0);
+		this.getDataManager().register(DRAGON_SLEEPING, 0);
+		this.getDataManager().register(DRAGON_TIER, 0);
+		this.getDataManager().register(DRAGON_AGE_TICK, 0);
+		this.getDataManager().register(DRAGON_HUNGER, 30);
+		this.getDataManager().register(DRAGON_ORDER, 0);
+		this.getDataManager().register(DRAGON_CURRENT_ATTACK, 0);
+		this.getDataManager().register(DRAGON_HOVERING, 0);
+		this.getDataManager().register(DRAGON_FLYING, 0);
+		this.getDataManager().register(DRAGON_HEAD, 0);
+		this.getDataManager().register(DRAGON_NECK, 0);
+		this.getDataManager().register(DRAGON_BODY, 0);
+		this.getDataManager().register(DRAGON_TAIL, 0);
 	}
 
 	public void initInv() {
@@ -210,7 +208,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 					for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 3) && (b <= 127); b++) {
 						for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
 							BlockPos pos = new BlockPos(a, b, c);
-							if (!(worldObj.getBlockState(pos).getBlock() instanceof BlockBush) && !(worldObj.getBlockState(pos).getBlock() instanceof BlockLiquid) && worldObj.getBlockState(pos).getBlock() != Blocks.bedrock) {
+							if (!(worldObj.getBlockState(pos).getBlock() instanceof BlockBush) && !(worldObj.getBlockState(pos).getBlock() instanceof BlockLiquid) && worldObj.getBlockState(pos).getBlock() != Blocks.BEDROCK) {
 								this.motionX *= 0.6D;
 								this.motionZ *= 0.6D;
 								worldObj.destroyBlock(pos, true);
@@ -283,7 +281,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 					double d2 = this.getControllingRider().getLook(1.0F).xCoord;
 					double d3 = this.getControllingRider().getLook(1.0F).yCoord;
 					double d4 = this.getControllingRider().getLook(1.0F).zCoord;
-					this.worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
+					this.worldObj.playSound(((EntityPlayer) null), new BlockPos(this), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 1, 1);
 					EntityDragonFire entitylargefireball = new EntityDragonFire(this.getControllingRider().worldObj, this, d2, d3, d4);
 					entitylargefireball.setLocationAndAngles(headPosX, headPosY, headPosZ, this.getControllingRider().rotationYaw, this.getControllingRider().rotationPitch);
 					this.worldObj.spawnEntityInWorld(entitylargefireball);
@@ -483,7 +481,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			double d2 = attackTarget.posX - (headPosX + vec3.xCoord * d1);
 			double d3 = attackTarget.getEntityBoundingBox().minY + attackTarget.height / 2.0F - (0.5D + headPosY + this.height / 2.0F);
 			double d4 = attackTarget.posZ - (headPosZ + vec3.zCoord * d1);
-			worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1008, new BlockPos(this), 0);
+			this.worldObj.playSound(((EntityPlayer) null), new BlockPos(this), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 1, 1);
 			EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 			entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 			worldObj.spawnEntityInWorld(entitylargefireball);
@@ -556,7 +554,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if (itemstack != null && itemstack.getItem() != null) {
 			Item item = itemstack.getItem();
-			if (item == Items.stick && this.getStage() > 2) {
+			if (item == Items.STICK && this.getStage() > 2) {
 				this.mountDragon(player);
 				return true;
 			}
@@ -973,7 +971,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			double targetZ = airTarget.getZ() + 0.5D - posZ;
 			moveEntity(motionX + (Math.signum(targetX) * 0.5D - motionX) * flightSpeed(), motionY + (Math.signum(targetY) * 0.5D - motionY) * flightSpeed(), motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * flightSpeed());
 			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) + 45.0F;
-			float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
+			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
 			moveForward = 0.5F;
 			rotationYaw += rotation;
 		}

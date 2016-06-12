@@ -54,9 +54,9 @@ public class EntityDragonSkull extends EntityAnimal {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.register(DRAGON_TYPE, 0);
-		this.dataWatcher.register(DRAGON_AGE, 0);
-		this.dataWatcher.register(DRAGON_STAGE, 0);
+		this.getDataManager().register(DRAGON_TYPE, 0);
+		this.getDataManager().register(DRAGON_AGE, 0);
+		this.getDataManager().register(DRAGON_STAGE, 0);
 
 	}
 

@@ -91,11 +91,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	}
 
 	@Override
-	public void onInventoryChanged(InventoryBasic inventory) {
-
-	}
-
-	@Override
 	protected SoundEvent getAmbientSound() {
 		return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;
 	}
@@ -108,6 +103,11 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
+	}
+
+	@Override
+	public void onInventoryChanged(InventoryBasic invBasic) {
+		
 	}
 
 }
