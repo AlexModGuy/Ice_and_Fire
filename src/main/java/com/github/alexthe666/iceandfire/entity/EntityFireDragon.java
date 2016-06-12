@@ -9,15 +9,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityFireDragon extends EntityDragonBase {
-	public static final double baseHealth = 10;
-	public static final double baseDamage = 1;
-	public static final double baseSpeed = 0.25D;
-	public static final double maxHealth = 700;
-	public static final double maxDamage = 20;
-	public static final double maxSpeed = 0.6D;
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn);
+		super(worldIn, 10, 1, 0.25, 700, 20, 0.6);
 		this.setSize(2.78F, 1.4F);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		minSize = 0.3F;
@@ -50,44 +44,10 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public void onSpawn() {
-		this.setDragonAge(100);
-		this.updateSize();
+		this.setAgeInDays(100);
+		this.updateAbilities();
 		this.jump();
 		this.setColor(this.getRNG().nextInt(5));
-	}
-
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(baseSpeed);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(baseHealth);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(baseDamage);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
-		updateSize();
-	}
-
-	@Override
-	public void updateSize() {
-		double healthStep;
-		double attackStep;
-		double speedStep;
-		healthStep = (EntityFireDragon.maxHealth - EntityFireDragon.baseHealth) / (126);
-		attackStep = (EntityFireDragon.maxDamage - EntityFireDragon.baseDamage) / (126);
-		speedStep = (EntityFireDragon.maxSpeed - EntityFireDragon.baseSpeed) / (126);
-
-		if (this.getDragonAge() <= 125) {
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(EntityFireDragon.baseHealth + (healthStep * this.getDragonAge())));
-			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(EntityFireDragon.baseDamage + (attackStep * this.getDragonAge())));
-			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(EntityFireDragon.baseSpeed + (speedStep * this.getDragonAge()));
-
-			if (this.isTeen()) {
-				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
-			} else if (this.isAdult()) {
-				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
-			} else {
-				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.0D);
-			}
-		}
 	}
 
 	@Override
@@ -107,7 +67,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public void onInventoryChanged(InventoryBasic invBasic) {
-		
+
 	}
 
 }

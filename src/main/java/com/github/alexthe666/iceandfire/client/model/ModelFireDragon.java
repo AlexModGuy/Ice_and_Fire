@@ -522,7 +522,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.faceTarget(f3, f4, 4, neckChestParts);
 		AdvancedModelRenderer[] rightLegParts = { this.ThighR, this.LegR };
 		AdvancedModelRenderer[] leftLegParts = { this.ThighL, this.LegL };
-		float walkspeed = 0.35F - 0.0018656F * dragon.getDragonAge();
+		float walkspeed = 0.35F - 0.0018656F * dragon.getAgeInDays();
 		float speed = 0.1F;
 		if (dragon.isFlying() || dragon.isHovering()) {
 

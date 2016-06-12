@@ -94,26 +94,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private float angle;
 	public boolean isBreathingFire;
 	public int ticksTillStopFire;
-
-	public EntityDragonBase(World worldIn) {
+	public double baseHealth;
+	public double baseDamage;
+	public double baseSpeed;
+	public double maxHealth;
+	public double maxDamage;
+	public double maxSpeed;
+	
+	public EntityDragonBase(World worldIn, double baseHealth, double baseDamage, double baseSpeed, double maxHealth, double maxDamage, double maxSpeed) {
 		super(worldIn);
 		currentAnimation = NO_ANIMATION;
 		blacklist.add(EntityArmorStand.class);
 		blacklist.add(EntityDragonEgg.class);
 		blacklist.add(EntityDragonSkull.class);
 		this.currentOrder = EnumOrder.WANDER;
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		// this.tasks.addTask(2, this.aiSit);
-		this.tasks.addTask(4, new EntityAIDragonAttackOnCollide(this, 1.0D, false));
-		this.tasks.addTask(5, new EntityAIDragonFollow(this, 10, 2));
-		this.tasks.addTask(7, new EntityAIDragonWander(this));
-		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		// this.tasks.addTask(9, new EntityAILookIdle(this));
-		// this.tasks.addTask(8, new EntityAIDragonDefend(this));
-		// this.tasks.addTask(9, new EntityAIDragonEatItem(this));
-		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, false));
 		this.setHunger(50);
 		this.setHealth(10F);
+		this.baseHealth = baseHealth;
+		this.baseDamage = baseDamage;
+		this.baseSpeed = baseSpeed;
+		this.maxHealth = maxHealth;
+		this.maxDamage = maxDamage;
+		this.maxSpeed = maxSpeed;
 		initInv();
 	}
 
@@ -194,11 +196,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		float step;
 		step = (this.maxSize - this.minSize) / (125);
 
-		if (this.getDragonAge() > 125) {
+		if (this.getAgeInDays() > 125) {
 			return this.minSize + (step * 125);
 		}
 
-		return this.minSize + (step * this.getDragonAge());
+		return this.minSize + (step * this.getAgeInDays());
 	}
 
 	public void breakBlock(float hardness) {
@@ -370,7 +372,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		tag.setByte("Gender", (byte) this.getGender());
 		tag.setByte("Sleeping", (byte) this.getSleeping());
 		tag.setByte("Tier", (byte) this.getTier());
-		tag.setByte("DragonAgeTick", (byte) this.getDragonAgeTick());
+		tag.setByte("DragonAgeTick", (byte) this.getAgeInTicks());
 		tag.setByte("Hunger", (byte) this.getHunger());
 		tag.setByte("Order", (byte) this.currentOrder.ordinal());
 		tag.setByte("CurrentAttack", (byte) this.getCurrentAttack());
@@ -398,7 +400,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setGender(tag.getByte("Gender"));
 		this.setSleeping(tag.getByte("Sleeping"));
 		this.setTier(tag.getByte("Tier"));
-		this.setDragonAgeTick(tag.getByte("DragonAgeTick"));
+		this.setAgeInTicks(tag.getByte("DragonAgeTick"));
 		this.setHunger(tag.getByte("Hunger"));
 		this.currentOrder = EnumOrder.values()[tag.getByte("Order")];
 		this.setCurrentAttack(tag.getByte("CurrentAttack"));
@@ -436,17 +438,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public int getFireBurnTick() {
-		return isBreathingFire ? 40 + (this.getDragonAge() * 5) : 0;
+		return isBreathingFire ? 40 + (this.getAgeInDays() * 5) : 0;
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.setDragonAgeTick(this.getDragonAgeTick() + 1);
-		if(this.getDragonAgeTick() % 24000 == 0){
-			this.updateSize();
+		this.setAgeInTicks(this.getAgeInTicks() + 1);
+		if(this.getAgeInTicks() % 24000 == 0){
+			this.updateAbilities();
 		}
-		if(this.getDragonAgeTick() % 1200 == 0){
+		if(this.getAgeInTicks() % 1200 == 0){
 			this.setHunger(Math.max(0, this.getHunger() - 1));
 		}
 		if (this.getControllingRider() != null) {
@@ -562,7 +564,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				boolean isWolfFood = ((ItemFood) item).isWolfsFavoriteMeat();
 				if (isWolfFood) {
 					this.setHunger(Math.min(100, this.getHunger() + 20));
-					this.updateSize();
+					this.updateAbilities();
 					this.destroyItem(player, getHeldItemMainhand());
 					this.heal(6);
 					float radius = 0.4F * (0.7F * getDragonSize()) * -3;
@@ -622,19 +624,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.getDataManager().set(DRAGON_TIER, Integer.valueOf(i));
 	}
 
-	public int getDragonAge() {
-		return this.getDragonAgeTick() / 24000;
+	public int getAgeInDays() {
+		return this.getAgeInTicks() / 24000;
 	}
 
-	public void setDragonAge(int i) {
+	public void setAgeInDays(int i) {
 		this.getDataManager().set(DRAGON_AGE_TICK, Integer.valueOf(i * 24000));
 	}
 
-	public int getDragonAgeTick() {
+	public int getAgeInTicks() {
 		return this.getDataManager().get(DRAGON_AGE_TICK).intValue();
 	}
 
-	public void setDragonAgeTick(int i) {
+	public void setAgeInTicks(int i) {
 		this.getDataManager().set(DRAGON_AGE_TICK, Integer.valueOf(i));
 	}
 
@@ -736,26 +738,44 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public abstract void onSpawn();
 
 	public boolean isAdult() {
-		return this.getDragonAge() >= 75;
+		return this.getAgeInDays() >= 75;
 	}
 
 	public boolean isTeen() {
-		return this.getDragonAge() > 20 && this.getDragonAge() < 75;
+		return this.getAgeInDays() > 20 && this.getAgeInDays() < 75;
 	}
 
 	@Override
 	public boolean isChild() {
-		return this.getDragonAge() <= 20;
+		return this.getAgeInDays() <= 20;
 	}
 
 	public abstract String getTexture();
 
-	public void updateSize() {
-		jump();
+	public void updateAbilities() {
+		double healthStep;
+		double attackStep;
+		double speedStep;
+		healthStep = (maxHealth - baseHealth) / (125);
+		attackStep = (maxDamage - baseDamage) / (125);
+		speedStep = (maxSpeed - baseSpeed) / (125);
+
+		if (this.getAgeInDays() <= 125) {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(baseHealth + (healthStep * this.getAgeInDays())));
+			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(baseDamage + (attackStep * this.getAgeInDays())));
+			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(baseSpeed + (speedStep * this.getAgeInDays()));
+			if (this.isTeen()) {
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
+			} else if (this.isAdult()) {
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
+			} else {
+				this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.0D);
+			}
+		}
 	}
 
 	public void tellAge() {
-		if (this.getDragonAge() == 6 || this.getDragonAge() == 13 || this.getDragonAge() == 76 || this.getDragonAge() == 101) {
+		if (this.getAgeInDays() == 6 || this.getAgeInDays() == 13 || this.getAgeInDays() == 76 || this.getAgeInDays() == 101) {
 			this.tellOtherPlayersAge();
 		}
 	}
@@ -779,15 +799,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public int getStage() {
-		if (this.getDragonAge() < 6) {
+		if (this.getAgeInDays() < 6) {
 			return 1;
-		} else if (this.getDragonAge() > 5 && this.getDragonAge() < 13) {
+		} else if (this.getAgeInDays() > 5 && this.getAgeInDays() < 13) {
 			return 2;
-		} else if (this.getDragonAge() > 12 && this.getDragonAge() < 76) {
+		} else if (this.getAgeInDays() > 12 && this.getAgeInDays() < 76) {
 			return 3;
-		} else if (this.getDragonAge() > 75 && this.getDragonAge() < 101) {
+		} else if (this.getAgeInDays() > 75 && this.getAgeInDays() < 101) {
 			return 4;
-		} else if (this.getDragonAge() > 100 && this.getDragonAge() < 126) {
+		} else if (this.getAgeInDays() > 100 && this.getAgeInDays() < 126) {
 			return 5;
 		} else {
 			return 1;
