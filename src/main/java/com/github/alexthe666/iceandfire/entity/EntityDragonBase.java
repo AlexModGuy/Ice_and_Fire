@@ -191,15 +191,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 
+	@Override
+	public void setScaleForAge(boolean par1) {
+		this.setScale(this.getDragonSize());
+	}
+
 	public float getDragonSize() {
-		float step;
-		step = (this.maxSize - this.minSize) / (125);
+		float step = (this.maxSize - this.minSize) / ((125 * 24000) + 1);
 
-		if (this.getAgeInDays() > 125) {
-			return this.minSize + (step * 125);
+		if (this.getAgeInTicks() > 125 * 24000) {
+			return this.minSize + ((step) * 125 * 24000);
 		}
-
-		return this.minSize + (step * this.getAgeInDays());
+		return this.minSize + ((step * this.getAgeInTicks()));
 	}
 
 	public void breakBlock(float hardness) {

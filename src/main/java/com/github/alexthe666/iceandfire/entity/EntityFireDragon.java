@@ -31,14 +31,6 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 2.0D));
-		this.tasks.addTask(2, new EntityAIMate(this, 1.0D));
-		this.tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.WHEAT, false));
-		this.tasks.addTask(4, new EntityAIFollowParent(this, 1.25D));
-		this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		this.tasks.addTask(7, new EntityAILookIdle(this));
 	}
 
 	@Override
@@ -65,7 +57,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public void onSpawn() {
-		this.setAgeInDays(100);
+		//this.setAgeInDays(100);
 		this.updateAbilities();
 		this.jump();
 		this.setColor(this.getRNG().nextInt(5));
