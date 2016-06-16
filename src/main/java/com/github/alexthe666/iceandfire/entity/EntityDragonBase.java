@@ -16,11 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -51,10 +47,10 @@ import com.github.alexthe666.iceandfire.client.RollBuffer;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonAttackOnCollide;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonFollow;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIDragonWander;
 import com.github.alexthe666.iceandfire.enums.EnumOrder;
+
+import fossilsarcheology.api.EnumDiet;
+import fossilsarcheology.api.FoodMappings;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IRangedAttackMob, IInventoryChangedListener {
 
@@ -100,8 +96,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public double maxHealth;
 	public double maxDamage;
 	public double maxSpeed;
-	
-	public EntityDragonBase(World worldIn, double baseHealth, double baseDamage, double baseSpeed, double maxHealth, double maxDamage, double maxSpeed) {
+	public EnumDiet diet;
+
+	public EntityDragonBase(World worldIn, double baseHealth, double baseDamage, double baseSpeed, double maxHealth, double maxDamage, double maxSpeed, EnumDiet diet) {
 		super(worldIn);
 		currentAnimation = NO_ANIMATION;
 		blacklist.add(EntityArmorStand.class);
@@ -116,7 +113,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.maxHealth = maxHealth;
 		this.maxDamage = maxDamage;
 		this.maxSpeed = maxSpeed;
+		this.diet = diet;
 		initInv();
+		this.updateAbilities();
 	}
 
 	@Override
@@ -445,10 +444,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void onUpdate() {
 		super.onUpdate();
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
-		if(this.getAgeInTicks() % 24000 == 0){
+		if (this.getAgeInTicks() % 24000 == 0) {
 			this.updateAbilities();
 		}
-		if(this.getAgeInTicks() % 1200 == 0){
+		if (this.getAgeInTicks() % 1200 == 0) {
 			this.setHunger(Math.max(0, this.getHunger() - 1));
 		}
 		if (this.getControllingRider() != null) {
@@ -459,7 +458,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (animation_flame.getDuration() != 25 + getFireBurnTick()) {
 			animation_flame = Animation.create(25 + getFireBurnTick());
 		}
-		//rotationYaw = renderYawOffset;
+		// rotationYaw = renderYawOffset;
 		repelEntities(this.posX, this.posY, this.posZ, 0.5F * this.getDragonSize());
 		if (this.getAnimation() == animation_roar && this.getAnimationTick() == 10) {
 			this.playSound(this.isAdult() ? ModSounds.firedragon_adult_roar : this.isChild() ? ModSounds.firedragon_child_roar : ModSounds.firedragon_teen_roar, 1, 1);
@@ -509,8 +508,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack) {
-		ItemStack itemstack = player.getHeldItemMainhand();
-		if (itemstack == null) {
+		if (stack == null) {
 			if (player.isSneaking()) {
 				this.currentOrder = this.currentOrder.next();
 				if (this.currentOrder == EnumOrder.SIT || this.currentOrder == EnumOrder.SLEEP) {
@@ -554,28 +552,27 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				player.openGui(IceAndFire.instance, 0, this.worldObj, getEntityId(), 0, 0);
 			}
 		}
-		if (itemstack != null && itemstack.getItem() != null) {
-			Item item = itemstack.getItem();
+		if (stack != null && stack.getItem() != null) {
+			Item item = stack.getItem();
 			if (item == Items.STICK && this.getStage() > 2) {
 				this.mountDragon(player);
 				return true;
 			}
-			if (item instanceof ItemFood) {
-				boolean isWolfFood = ((ItemFood) item).isWolfsFavoriteMeat();
-				if (isWolfFood) {
-					this.setHunger(Math.min(100, this.getHunger() + 20));
-					this.updateAbilities();
-					this.destroyItem(player, getHeldItemMainhand());
-					this.heal(6);
-					float radius = 0.4F * (0.7F * getDragonSize()) * -3;
-					float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
-					double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-					double extraZ = radius * MathHelper.cos(angle);
-					double extraY = 0.4F * (1.9F * getDragonSize());
-					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, extraX + (this.rand.nextDouble() - 0.5D), extraY + (this.rand.nextDouble() - 0.5D), extraZ + (this.rand.nextDouble() - 0.5D), 0, 0.05D, 0, new int[] { Item.getIdFromItem(itemstack.getItem()), itemstack.getMetadata() });
-					return true;
-
+			if (FoodMappings.instance().getItemFoodAmount(item, diet) > 0) {
+				this.setAgeInDays(this.getAgeInDays() + 1);
+				this.setHunger(Math.min(100, this.getHunger() + FoodMappings.instance().getItemFoodAmount(item, diet)));
+				this.updateAbilities();
+				this.destroyItem(player, getHeldItemMainhand());
+				this.heal((int) (FoodMappings.instance().getItemFoodAmount(item, diet) / 5));
+				float radius = 0.4F * (0.7F * getDragonSize()) * -3;
+				float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
+				double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+				double extraZ = radius * MathHelper.cos(angle);
+				double extraY = 0.4F * (1.9F * getDragonSize());
+				for (int i = 0; i < 50; i++) {
+					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, extraX + (this.rand.nextDouble() - 0.5D), extraY + (this.rand.nextDouble() - 0.5D), extraZ + (this.rand.nextDouble() - 0.5D), 0, 0.05D, 0, new int[] { Item.getIdFromItem(stack.getItem()), stack.getMetadata() });
 				}
+				return true;
 			}
 		}
 		return false;
@@ -732,6 +729,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData data) {
 		this.onSpawn();
+		this.updateAbilities();
 		return super.onInitialSpawn(difficulty, data);
 	}
 
@@ -787,7 +785,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-
 	}
 
 	public boolean isHungry() {

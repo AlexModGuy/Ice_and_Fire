@@ -24,7 +24,7 @@ group= "com.github.backtolife.backtolife" // http://maven.apache.org/guides/mini
 archivesBaseName = "iceandfire"
 
 minecraft {
-    version = "1.9.4-12.17.0.1917-1.9.4"
+    version = "1.9.4-12.17.0.1963"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.

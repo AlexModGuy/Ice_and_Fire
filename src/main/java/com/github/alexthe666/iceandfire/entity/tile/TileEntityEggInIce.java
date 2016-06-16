@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -34,7 +33,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	}
 
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket(){
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		this.writeToNBT(tag);
 		return new SPacketUpdateTileEntity(pos, 1, tag);

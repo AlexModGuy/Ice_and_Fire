@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.block;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -125,7 +124,7 @@ public class BlockPodium extends BlockContainer {
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
 		this.onNeighborChange(world, pos, neighbor);
 	}
-	
+
 	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);

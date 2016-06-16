@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModEntities;
+import com.github.alexthe666.iceandfire.core.ModFoods;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
@@ -77,6 +78,7 @@ public class IceAndFire {
 		ModRecipes.init();
 		ModEntities.init();
 		ModKeys.init();
+		ModFoods.init();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

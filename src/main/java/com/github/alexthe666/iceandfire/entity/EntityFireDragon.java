@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModSounds;
 
-import net.minecraft.entity.SharedMonsterAttributes;
+import fossilsarcheology.api.EnumDiet;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMate;
@@ -20,8 +20,8 @@ import net.minecraft.world.World;
 public class EntityFireDragon extends EntityDragonBase {
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, 10, 1, 0.25, 700, 20, 0.6);
-		this.setSize(2.78F, 1.4F);
+		super(worldIn, 10, 1, 0.15, 700, 20, 0.3, EnumDiet.CARNIVORE);
+		this.setSize(1.78F, 1.4F);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		minSize = 0.3F;
 		maxSize = 8.58F;
@@ -29,19 +29,18 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.ignoreFrustumCheck = true;
 	}
 
-	protected void initEntityAI()
-    {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIPanic(this, 2.0D));
-        this.tasks.addTask(2, new EntityAIMate(this, 1.0D));
-        this.tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.WHEAT, false));
-        this.tasks.addTask(4, new EntityAIFollowParent(this, 1.25D));
-        this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.tasks.addTask(7, new EntityAILookIdle(this));
-    }
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIPanic(this, 2.0D));
+		this.tasks.addTask(2, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.WHEAT, false));
+		this.tasks.addTask(4, new EntityAIFollowParent(this, 1.25D));
+		this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
+		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		this.tasks.addTask(7, new EntityAILookIdle(this));
+	}
 
-	
 	@Override
 	public String getTexture() {
 		if (this.getSleeping() == 1) {

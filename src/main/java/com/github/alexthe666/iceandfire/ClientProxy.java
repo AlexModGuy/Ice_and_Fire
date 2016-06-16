@@ -143,7 +143,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-		
+
 	}
 
 	@Override

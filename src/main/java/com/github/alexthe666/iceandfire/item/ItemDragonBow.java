@@ -1,21 +1,16 @@
 package com.github.alexthe666.iceandfire.item;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -82,77 +77,67 @@ public class ItemDragonBow extends Item {
 	 */
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		/*if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-			ItemStack itemstack = this.func_185060_a(entityplayer);
-
-			int i = this.getMaxItemUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i, itemstack != null || flag);
-			if (i < 0)
-				return;
-
-			if (itemstack != null || flag) {
-				if (itemstack == null) {
-					itemstack = new ItemStack(ModItems.dragonbone_arrow);
-				}
-
-				float f = func_185059_b(i);
-
-				if (f >= 0.1D) {
-					boolean flag1 = flag && itemstack.getItem() == ModItems.dragonbone_arrow; // Forge:
-																								// Fix
-																								// consuming
-																								// custom
-																								// arrows.
-
-					if (!worldIn.isRemote) {
-						EntityArrow entityarrow = makeTippedArrow(worldIn, itemstack, entityplayer);
-						entityarrow.func_184547_a(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-
-						if (f == 1.0F) {
-							entityarrow.setIsCritical(true);
-						}
-
-						int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.power, stack);
-
-						if (j > 0) {
-							entityarrow.setDamage(entityarrow.getDamage() + j * 0.5D + 0.5D);
-						}
-
-						int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch, stack);
-
-						if (k > 0) {
-							entityarrow.setKnockbackStrength(k);
-						}
-
-						if (EnchantmentHelper.getEnchantmentLevel(Enchantments.flame, stack) > 0) {
-							entityarrow.setFire(100);
-						}
-
-						stack.damageItem(1, entityplayer);
-
-						if (flag1) {
-							entityarrow.canBePickedUp = EntityArrow.PickupStatus.CREATIVE_ONLY;
-						}
-
-						// worldIn.spawnEntityInWorld(entityarrow);
-					}
-
-					worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.entity_arrow_shoot, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
-					if (!flag1) {
-						--itemstack.stackSize;
-
-						if (itemstack.stackSize == 0) {
-							entityplayer.inventory.deleteStack(itemstack);
-						}
-					}
-
-					entityplayer.addStat(StatList.func_188057_b(this));
-				}
-			}
-		}*/
+		/*
+		 * if (entityLiving instanceof EntityPlayer) { EntityPlayer entityplayer
+		 * = (EntityPlayer) entityLiving; boolean flag =
+		 * entityplayer.capabilities.isCreativeMode ||
+		 * EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) >
+		 * 0; ItemStack itemstack = this.func_185060_a(entityplayer);
+		 * 
+		 * int i = this.getMaxItemUseDuration(stack) - timeLeft; i =
+		 * net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack,
+		 * worldIn, (EntityPlayer) entityLiving, i, itemstack != null || flag);
+		 * if (i < 0) return;
+		 * 
+		 * if (itemstack != null || flag) { if (itemstack == null) { itemstack =
+		 * new ItemStack(ModItems.dragonbone_arrow); }
+		 * 
+		 * float f = func_185059_b(i);
+		 * 
+		 * if (f >= 0.1D) { boolean flag1 = flag && itemstack.getItem() ==
+		 * ModItems.dragonbone_arrow; // Forge: // Fix // consuming // custom //
+		 * arrows.
+		 * 
+		 * if (!worldIn.isRemote) { EntityArrow entityarrow =
+		 * makeTippedArrow(worldIn, itemstack, entityplayer);
+		 * entityarrow.func_184547_a(entityplayer, entityplayer.rotationPitch,
+		 * entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+		 * 
+		 * if (f == 1.0F) { entityarrow.setIsCritical(true); }
+		 * 
+		 * int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.power,
+		 * stack);
+		 * 
+		 * if (j > 0) { entityarrow.setDamage(entityarrow.getDamage() + j * 0.5D
+		 * + 0.5D); }
+		 * 
+		 * int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch,
+		 * stack);
+		 * 
+		 * if (k > 0) { entityarrow.setKnockbackStrength(k); }
+		 * 
+		 * if (EnchantmentHelper.getEnchantmentLevel(Enchantments.flame, stack)
+		 * > 0) { entityarrow.setFire(100); }
+		 * 
+		 * stack.damageItem(1, entityplayer);
+		 * 
+		 * if (flag1) { entityarrow.canBePickedUp =
+		 * EntityArrow.PickupStatus.CREATIVE_ONLY; }
+		 * 
+		 * // worldIn.spawnEntityInWorld(entityarrow); }
+		 * 
+		 * worldIn.playSound((EntityPlayer) null, entityplayer.posX,
+		 * entityplayer.posY, entityplayer.posZ, SoundEvents.entity_arrow_shoot,
+		 * SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F +
+		 * 1.2F) + f * 0.5F);
+		 * 
+		 * if (!flag1) { --itemstack.stackSize;
+		 * 
+		 * if (itemstack.stackSize == 0) {
+		 * entityplayer.inventory.deleteStack(itemstack); } }
+		 * 
+		 * entityplayer.addStat(StatList.func_188057_b(this)); } } }
+		 */
 	}
 
 	public static float func_185059_b(int p_185059_0_) {

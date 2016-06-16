@@ -41,9 +41,13 @@ public class FoodMappings {
 
 	/**
 	 * Add an item to a specific diet.
-	 * @param item The item to be added as Food.
-	 * @param food The amount of food points for the item.
-	 * @param diet The specific diet to add the item to.
+	 * 
+	 * @param item
+	 *            The item to be added as Food.
+	 * @param food
+	 *            The amount of food points for the item.
+	 * @param diet
+	 *            The specific diet to add the item to.
 	 */
 	public void addToItemMappings(Item item, int food, EnumDiet diet) {
 		if (item != null) {
@@ -52,7 +56,7 @@ public class FoodMappings {
 				if (carnivoreItemDiet == null) {
 					carnivoreItemDiet = Maps.newHashMap();
 				}
-				if(!carnivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!carnivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					carnivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -60,7 +64,7 @@ public class FoodMappings {
 				if (herbivoreItemDiet == null) {
 					herbivoreItemDiet = Maps.newHashMap();
 				}
-				if(!herbivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!herbivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					herbivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -68,7 +72,7 @@ public class FoodMappings {
 				if (omnivoreItemDiet == null) {
 					omnivoreItemDiet = Maps.newHashMap();
 				}
-				if(!omnivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!omnivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					omnivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -76,7 +80,7 @@ public class FoodMappings {
 				if (piscivoreItemDiet == null) {
 					piscivoreItemDiet = Maps.newHashMap();
 				}
-				if(!piscivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!piscivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					piscivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -84,7 +88,7 @@ public class FoodMappings {
 				if (carnivore_eggItemDiet == null) {
 					carnivore_eggItemDiet = Maps.newHashMap();
 				}
-				if(!carnivore_eggItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!carnivore_eggItemDiet.containsKey(Item.getIdFromItem(item))) {
 					carnivore_eggItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -92,7 +96,7 @@ public class FoodMappings {
 				if (insectivoreItemDiet == null) {
 					insectivoreItemDiet = Maps.newHashMap();
 				}
-				if(!insectivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!insectivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					insectivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -100,7 +104,7 @@ public class FoodMappings {
 				if (pisccarnivoreItemDiet == null) {
 					pisccarnivoreItemDiet = Maps.newHashMap();
 				}
-				if(!pisccarnivoreItemDiet.containsKey(Item.getIdFromItem(item))){
+				if (!pisccarnivoreItemDiet.containsKey(Item.getIdFromItem(item))) {
 					pisccarnivoreItemDiet.put(Item.getIdFromItem(item), food);
 				}
 				break;
@@ -112,8 +116,11 @@ public class FoodMappings {
 
 	/**
 	 * Get the amount of food points from an item in the mapping.
-	 * @param item The item to find.
-	 * @param diet The specific diet to find the item from.
+	 * 
+	 * @param item
+	 *            The item to find.
+	 * @param diet
+	 *            The specific diet to find the item from.
 	 */
 	public int getItemFoodAmount(Item item, EnumDiet diet) {
 		switch (diet) {
@@ -159,11 +166,18 @@ public class FoodMappings {
 	}
 
 	/**
-	 * Add an block to a specific diet. Usually only for herbivores and omnivores.
-	 * @param block The block to be added as Food.
-	 * @param food The amount of food points for the block.
-	 * @param diet The specific diet to add the block to.
-	 * @param registerItem Register the block's item as food or not. Usually true, but false for technical blocks like wheat.
+	 * Add an block to a specific diet. Usually only for herbivores and
+	 * omnivores.
+	 * 
+	 * @param block
+	 *            The block to be added as Food.
+	 * @param food
+	 *            The amount of food points for the block.
+	 * @param diet
+	 *            The specific diet to add the block to.
+	 * @param registerItem
+	 *            Register the block's item as food or not. Usually true, but
+	 *            false for technical blocks like wheat.
 	 */
 	public void addToBlockMappings(Block block, int food, EnumDiet diet, boolean registerItem) {
 		switch (diet) {
@@ -171,7 +185,7 @@ public class FoodMappings {
 			if (carnivoreBlockDiet == null) {
 				carnivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!carnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!carnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				carnivoreBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -179,7 +193,7 @@ public class FoodMappings {
 			if (herbivoreBlockDiet == null) {
 				herbivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!herbivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!herbivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				herbivoreBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -187,7 +201,7 @@ public class FoodMappings {
 			if (omnivoreBlockDiet == null) {
 				omnivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!omnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!omnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				omnivoreBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -195,7 +209,7 @@ public class FoodMappings {
 			if (piscivoreBlockDiet == null) {
 				piscivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!piscivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!piscivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				piscivoreBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -203,7 +217,7 @@ public class FoodMappings {
 			if (carnivore_eggBlockDiet == null) {
 				carnivore_eggBlockDiet = Maps.newHashMap();
 			}
-			if(!carnivore_eggBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!carnivore_eggBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				carnivore_eggBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -211,7 +225,7 @@ public class FoodMappings {
 			if (insectivoreBlockDiet == null) {
 				insectivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!insectivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!insectivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				insectivoreBlockDiet.put(Block.getIdFromBlock(block), food);
 			}
 			break;
@@ -219,9 +233,9 @@ public class FoodMappings {
 			if (pisccarnivoreBlockDiet == null) {
 				pisccarnivoreBlockDiet = Maps.newHashMap();
 			}
-			if(!pisccarnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))){
+			if (!pisccarnivoreBlockDiet.containsKey(Block.getIdFromBlock(block))) {
 				pisccarnivoreBlockDiet.put(Block.getIdFromBlock(block), food);
-			}	
+			}
 			break;
 		default:
 			break;
@@ -233,8 +247,11 @@ public class FoodMappings {
 
 	/**
 	 * Get the amount of food points from a block in the mapping.
-	 * @param block The block to find.
-	 * @param diet The specific diet to find the block from.
+	 * 
+	 * @param block
+	 *            The block to find.
+	 * @param diet
+	 *            The specific diet to find the block from.
 	 */
 	public int getBlockFoodAmount(Block block, EnumDiet diet) {
 		switch (diet) {
@@ -279,46 +296,45 @@ public class FoodMappings {
 		return 0;
 	}
 
-
 	public void addToEntityMappings(Class<? extends Entity> entity, int food, EnumDiet diet) {
 		switch (diet) {
 		case CARNIVORE:
 			if (carnivoreEntityDiet == null) {
 				carnivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!carnivoreEntityDiet.containsKey(entity)){
+			if (!carnivoreEntityDiet.containsKey(entity)) {
 				carnivoreEntityDiet.put(entity, food);
-			}	
+			}
 			break;
 		case HERBIVORE:
 			if (herbivoreEntityDiet == null) {
 				herbivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!herbivoreEntityDiet.containsKey(entity)){
+			if (!herbivoreEntityDiet.containsKey(entity)) {
 				herbivoreEntityDiet.put(entity, food);
-			}	
+			}
 			break;
 		case OMNIVORE:
 			if (omnivoreEntityDiet == null) {
 				omnivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!omnivoreEntityDiet.containsKey(entity)){
+			if (!omnivoreEntityDiet.containsKey(entity)) {
 				omnivoreEntityDiet.put(entity, food);
-			}	
+			}
 			break;
 		case PISCIVORE:
 			if (piscivoreEntityDiet == null) {
 				piscivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!piscivoreEntityDiet.containsKey(entity)){
+			if (!piscivoreEntityDiet.containsKey(entity)) {
 				piscivoreEntityDiet.put(entity, food);
-			}	
+			}
 			break;
 		case CARNIVORE_EGG:
 			if (carnivore_eggEntityDiet == null) {
 				carnivore_eggEntityDiet = Maps.newHashMap();
 			}
-			if(!carnivore_eggEntityDiet.containsKey(entity)){
+			if (!carnivore_eggEntityDiet.containsKey(entity)) {
 				carnivore_eggEntityDiet.put(entity, food);
 			}
 			break;
@@ -326,7 +342,7 @@ public class FoodMappings {
 			if (insectivoreEntityDiet == null) {
 				insectivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!insectivoreEntityDiet.containsKey(entity)){
+			if (!insectivoreEntityDiet.containsKey(entity)) {
 				insectivoreEntityDiet.put(entity, food);
 			}
 			break;
@@ -334,9 +350,9 @@ public class FoodMappings {
 			if (pisccarnivoreEntityDiet == null) {
 				pisccarnivoreEntityDiet = Maps.newHashMap();
 			}
-			if(!pisccarnivoreEntityDiet.containsKey(entity)){
+			if (!pisccarnivoreEntityDiet.containsKey(entity)) {
 				pisccarnivoreEntityDiet.put(entity, food);
-			}	
+			}
 			break;
 		default:
 			break;
@@ -344,10 +360,15 @@ public class FoodMappings {
 	}
 
 	/**
-	 * Add an entity to a specific diet. Usually only for carnivores and omnivores.
-	 * @param entity The entity class to be added as Food.
-	 * @param food The amount of food points for the entity.
-	 * @param diet The specific diet to add the entity to.
+	 * Add an entity to a specific diet. Usually only for carnivores and
+	 * omnivores.
+	 * 
+	 * @param entity
+	 *            The entity class to be added as Food.
+	 * @param food
+	 *            The amount of food points for the entity.
+	 * @param diet
+	 *            The specific diet to add the entity to.
 	 */
 	public int getEntityFoodAmount(Class<? extends Entity> entity, EnumDiet diet) {
 		switch (diet) {
@@ -394,7 +415,9 @@ public class FoodMappings {
 
 	/**
 	 * Gives out a list of all of the food items for a diet. Used in dinopedia.
-	 * @param diet The specific diet to show.
+	 * 
+	 * @param diet
+	 *            The specific diet to show.
 	 */
 	public Map<Integer, Integer> getFoodRenderList(EnumDiet diet) {
 		switch (diet) {
@@ -440,95 +463,101 @@ public class FoodMappings {
 
 	/**
 	 * Removes an item from the mapping.
-	 * @param diet The specific diet to show.
+	 * 
+	 * @param diet
+	 *            The specific diet to show.
 	 */
 	public void removeItemMapping(Item item, EnumDiet diet) {
 		this.getFoodRenderList(diet).remove(Item.getIdFromItem(item));
 	}
 
 	/**
-	 *  Adds a item, block, or entity class to all the carnivore mappings.
-	 * @param object The item, block, or entity class being registered.
-	 * @param food The amount of food points for the object.
+	 * Adds a item, block, or entity class to all the carnivore mappings.
+	 * 
+	 * @param object
+	 *            The item, block, or entity class being registered.
+	 * @param food
+	 *            The amount of food points for the object.
 	 */
-	public void addMeat(Object object, int food){
-		if(object instanceof Block){
-			this.addToBlockMappings((Block)object, food, EnumDiet.CARNIVORE, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.CARNIVORE_EGG, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.OMNIVORE, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.PISCCARNIVORE, true);
-		}
-		else if(object instanceof Item){
-			this.addToItemMappings((Item)object, food, EnumDiet.CARNIVORE);
-			this.addToItemMappings((Item)object, food, EnumDiet.CARNIVORE_EGG);
-			this.addToItemMappings((Item)object, food, EnumDiet.OMNIVORE);
-			this.addToItemMappings((Item)object, food, EnumDiet.PISCCARNIVORE);
-		}
-		else if(object instanceof Class){
-			this.addToEntityMappings((Class)object, food, EnumDiet.CARNIVORE);
-			this.addToEntityMappings((Class)object, food, EnumDiet.CARNIVORE_EGG);
-			this.addToEntityMappings((Class)object, food, EnumDiet.OMNIVORE);
-			this.addToEntityMappings((Class)object, food, EnumDiet.PISCCARNIVORE);
+	public void addMeat(Object object, int food) {
+		if (object instanceof Block) {
+			this.addToBlockMappings((Block) object, food, EnumDiet.CARNIVORE, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.CARNIVORE_EGG, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.OMNIVORE, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.PISCCARNIVORE, true);
+		} else if (object instanceof Item) {
+			this.addToItemMappings((Item) object, food, EnumDiet.CARNIVORE);
+			this.addToItemMappings((Item) object, food, EnumDiet.CARNIVORE_EGG);
+			this.addToItemMappings((Item) object, food, EnumDiet.OMNIVORE);
+			this.addToItemMappings((Item) object, food, EnumDiet.PISCCARNIVORE);
+		} else if (object instanceof Class) {
+			this.addToEntityMappings((Class) object, food, EnumDiet.CARNIVORE);
+			this.addToEntityMappings((Class) object, food, EnumDiet.CARNIVORE_EGG);
+			this.addToEntityMappings((Class) object, food, EnumDiet.OMNIVORE);
+			this.addToEntityMappings((Class) object, food, EnumDiet.PISCCARNIVORE);
 		}
 	}
 
 	/**
-	 *  Adds a item, block, or entity class to all the herbivore mappings.
-	 * @param object The item, block, or entity class being registered.
-	 * @param food The amount of food points for the object.
+	 * Adds a item, block, or entity class to all the herbivore mappings.
+	 * 
+	 * @param object
+	 *            The item, block, or entity class being registered.
+	 * @param food
+	 *            The amount of food points for the object.
 	 */
-	public void addPlant(Object object, int food){
-		if(object instanceof Block){
-			this.addToBlockMappings((Block)object, food, EnumDiet.HERBIVORE, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.OMNIVORE, true);
-		}
-		else if(object instanceof Item){
-			this.addToItemMappings((Item)object, food, EnumDiet.HERBIVORE);
-			this.addToItemMappings((Item)object, food, EnumDiet.OMNIVORE);
-		}
-		else if(object instanceof Class){
-			this.addToEntityMappings((Class)object, food, EnumDiet.HERBIVORE);
-			this.addToEntityMappings((Class)object, food, EnumDiet.OMNIVORE);
+	public void addPlant(Object object, int food) {
+		if (object instanceof Block) {
+			this.addToBlockMappings((Block) object, food, EnumDiet.HERBIVORE, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.OMNIVORE, true);
+		} else if (object instanceof Item) {
+			this.addToItemMappings((Item) object, food, EnumDiet.HERBIVORE);
+			this.addToItemMappings((Item) object, food, EnumDiet.OMNIVORE);
+		} else if (object instanceof Class) {
+			this.addToEntityMappings((Class) object, food, EnumDiet.HERBIVORE);
+			this.addToEntityMappings((Class) object, food, EnumDiet.OMNIVORE);
 		}
 	}
 
 	/**
-	 *  Adds a item, block, or entity class to all the piscivore mappings.
-	 * @param object The item, block, or entity class being registered.
-	 * @param food The amount of food points for the object.
+	 * Adds a item, block, or entity class to all the piscivore mappings.
+	 * 
+	 * @param object
+	 *            The item, block, or entity class being registered.
+	 * @param food
+	 *            The amount of food points for the object.
 	 */
-	public void addFish(Object object, int food){
-		if(object instanceof Block){
-			this.addToBlockMappings((Block)object, food, EnumDiet.PISCCARNIVORE, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.PISCIVORE, true);
-		}
-		else if(object instanceof Item){
-			this.addToItemMappings((Item)object, food, EnumDiet.PISCCARNIVORE);
-			this.addToItemMappings((Item)object, food, EnumDiet.PISCIVORE);
-		}
-		else if(object instanceof Class){
-			this.addToEntityMappings((Class)object, food, EnumDiet.PISCCARNIVORE);
-			this.addToEntityMappings((Class)object, food, EnumDiet.PISCIVORE);
+	public void addFish(Object object, int food) {
+		if (object instanceof Block) {
+			this.addToBlockMappings((Block) object, food, EnumDiet.PISCCARNIVORE, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.PISCIVORE, true);
+		} else if (object instanceof Item) {
+			this.addToItemMappings((Item) object, food, EnumDiet.PISCCARNIVORE);
+			this.addToItemMappings((Item) object, food, EnumDiet.PISCIVORE);
+		} else if (object instanceof Class) {
+			this.addToEntityMappings((Class) object, food, EnumDiet.PISCCARNIVORE);
+			this.addToEntityMappings((Class) object, food, EnumDiet.PISCIVORE);
 		}
 	}
 
 	/**
-	 *  Adds a item, block, or entity class to all the egg eating mappings.
-	 * @param object The item, block, or entity class being registered.
-	 * @param food The amount of food points for the object.
+	 * Adds a item, block, or entity class to all the egg eating mappings.
+	 * 
+	 * @param object
+	 *            The item, block, or entity class being registered.
+	 * @param food
+	 *            The amount of food points for the object.
 	 */
-	public void addEgg(Object object, int food){
-		if(object instanceof Block){
-			this.addToBlockMappings((Block)object, food, EnumDiet.CARNIVORE_EGG, true);
-			this.addToBlockMappings((Block)object, food, EnumDiet.OMNIVORE, true);
-		}
-		else if(object instanceof Item){
-			this.addToItemMappings((Item)object, food, EnumDiet.CARNIVORE_EGG);
-			this.addToItemMappings((Item)object, food, EnumDiet.OMNIVORE);
-		}
-		else if(object instanceof Class){
-			this.addToEntityMappings((Class)object, food, EnumDiet.CARNIVORE_EGG);
-			this.addToEntityMappings((Class)object, food, EnumDiet.OMNIVORE);
+	public void addEgg(Object object, int food) {
+		if (object instanceof Block) {
+			this.addToBlockMappings((Block) object, food, EnumDiet.CARNIVORE_EGG, true);
+			this.addToBlockMappings((Block) object, food, EnumDiet.OMNIVORE, true);
+		} else if (object instanceof Item) {
+			this.addToItemMappings((Item) object, food, EnumDiet.CARNIVORE_EGG);
+			this.addToItemMappings((Item) object, food, EnumDiet.OMNIVORE);
+		} else if (object instanceof Class) {
+			this.addToEntityMappings((Class) object, food, EnumDiet.CARNIVORE_EGG);
+			this.addToEntityMappings((Class) object, food, EnumDiet.OMNIVORE);
 		}
 	}
 }
