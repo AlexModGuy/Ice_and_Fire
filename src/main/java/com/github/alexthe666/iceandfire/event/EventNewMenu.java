@@ -27,7 +27,7 @@ public class EventNewMenu {
 		if (event.getEntityPlayer() == Minecraft.getMinecraft().thePlayer) {
 			EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			Field thirdPersonDistanceField = ReflectionHelper.findField(EntityRenderer.class, ObfuscationReflectionHelper.remapFieldNames(EntityRenderer.class.getName(), thirdPersonDistanceNames));
-			float thirdPersonDistance = 4 + (b ? ((EntityDragonBase) event.getEntityPlayer().getRidingEntity()).getDragonSize() : 0);
+			float thirdPersonDistance = 4 + (b ? ((EntityDragonBase) event.getEntityPlayer().getRidingEntity()).getRenderSize() : 0);
 			try {
 				Field modifier = Field.class.getDeclaredField("modifiers");
 				modifier.setAccessible(true);

@@ -15,7 +15,7 @@ public class ContainerDragon extends Container {
 
 	public ContainerDragon(final EntityDragonBase dragon, EntityPlayer player) {
 
-		this.dragonInv = dragon.inv;
+	/*	this.dragonInv = dragon.inv;
 		this.dragon = dragon;
 		byte b0 = 3;
 		dragon.inv.openInventory(player);
@@ -86,9 +86,6 @@ public class ContainerDragon extends Container {
 		return this.dragonInv.isUseableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistanceToEntity(playerIn) < 8.0F;
 	}
 
-	/**
-	 * Take a stack from the specified inventory slot.
-	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
 		ItemStack itemstack = null;
@@ -124,12 +121,15 @@ public class ContainerDragon extends Container {
 		return itemstack;
 	}
 
-	/**
-	 * Called when the container is closed.
-	 */
 	@Override
 	public void onContainerClosed(EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
 		this.dragonInv.closeInventory(playerIn);
+		*/
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer playerIn) {
+		return false;
 	}
 }

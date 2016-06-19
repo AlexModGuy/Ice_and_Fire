@@ -108,7 +108,7 @@ public class EntityDragonEgg extends EntityLiving {
 			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
 				worldObj.destroyBlock(pos, false);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
-				dragon.setColor(getType().meta);
+				dragon.setVariant(getType().meta);
 				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 				if (!worldObj.isRemote) {
 					worldObj.spawnEntityInWorld(dragon);

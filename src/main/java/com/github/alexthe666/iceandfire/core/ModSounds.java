@@ -35,8 +35,8 @@ public class ModSounds {
 		firedragon_adult_roar = registerSound("iceandfire:firedragon.adult.roar");
 	}
 
-	private static SoundEvent registerSound(String soundNameIn) {
-		ResourceLocation resourcelocation = new ResourceLocation(soundNameIn);
-		return GameRegistry.register(new SoundEvent(resourcelocation), resourcelocation);
+	private static SoundEvent registerSound(String sound) {
+		return GameRegistry.register(new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound)));
+
 	}
 }

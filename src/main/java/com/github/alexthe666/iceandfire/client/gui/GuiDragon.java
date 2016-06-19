@@ -27,7 +27,7 @@ public class GuiDragon extends GuiContainer {
 	public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
 		super(new ContainerDragon(dragon, Minecraft.getMinecraft().thePlayer));
 		this.playerInventory = playerInv;
-		this.dragonInv = dragon.inv;
+		//this.dragonInv = dragon.inv;
 		this.dragon = dragon;
 		this.allowUserInput = false;
 		this.ySize = 193;
@@ -41,7 +41,7 @@ public class GuiDragon extends GuiContainer {
 		this.fontRendererObj.drawString(s3, this.xSize / 2 - this.fontRendererObj.getStringWidth(s3) / 2, 77, 0XFFFFFF);
 		String s2 = StatCollector.translateToLocal("dragon.health") + dragon.getHealth() + "/" + dragon.getMaxHealth();
 		this.fontRendererObj.drawString(s2, this.xSize / 2 - this.fontRendererObj.getStringWidth(s2) / 2, 86, 0XFFFFFF);
-		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getStage();
+		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage();
 		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 94, 0XFFFFFF);
 	}
 
@@ -68,7 +68,7 @@ public class GuiDragon extends GuiContainer {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(posX, posY, 50.0F);
 		GlStateManager.scale((-scale), scale, scale);
-		GlStateManager.scale(1 / entity.getDragonSize(), 1 / entity.getDragonSize(), 1 / entity.getDragonSize());
+		GlStateManager.scale(1 / entity.getRenderSize(), 1 / entity.getRenderSize(), 1 / entity.getRenderSize());
 		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 		float f2 = entity.renderYawOffset;
 		float f3 = entity.rotationYaw;

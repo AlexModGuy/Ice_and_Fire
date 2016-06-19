@@ -1,30 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.core.ModSounds;
-
-import fossilsarcheology.api.EnumDiet;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
+import com.github.alexthe666.iceandfire.core.ModSounds;
+
+import fossilsarcheology.api.EnumDiet;
+
 public class EntityFireDragon extends EntityDragonBase {
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, 10, 1, 0.15, 700, 20, 0.5, EnumDiet.CARNIVORE);
-		this.setSize(1.78F, 1.4F);
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		minSize = 0.3F;
-		maxSize = 8.58F;
+		super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 700, 0.15F, 0.5F);
+		this.setSize(1.78F, 1.2F);
+		minimumSize = 0.3F;
+		maximumSize = 8.58F;
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 	}
@@ -36,15 +26,15 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTexture() {
-		if (this.isSleeping() == 1) {
-			return "iceandfire:textures/models/firedragon/" + this.getColorName() + this.getStage() + "_sleep.png";
+		if (this.isSleeping()) {
+			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
 		} else {
-			return "iceandfire:textures/models/firedragon/" + this.getColorName() + this.getStage() + ".png";
+			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
 		}
 	}
 
-	private String getColorName() {
-		switch (this.getColor()) {
+	public String getVariantName(int variant) {
+		switch (variant) {
 		default:
 			return "red_";
 		case 1:
@@ -54,14 +44,6 @@ public class EntityFireDragon extends EntityDragonBase {
 		case 3:
 			return "gray_";
 		}
-	}
-
-	@Override
-	public void onSpawn() {
-		//this.setAgeInDays(100);
-		this.updateAbilities();
-		this.jump();
-		this.setColor(this.getRNG().nextInt(5));
 	}
 
 	@Override
@@ -82,6 +64,11 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onInventoryChanged(InventoryBasic invBasic) {
 
+	}
+
+	@Override
+	public String getTextureOverlay() {
+		return null;
 	}
 
 }

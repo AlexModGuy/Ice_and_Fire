@@ -61,7 +61,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 		if (age == 60 && type != null && type.meta > 4) {
 			worldObj.destroyBlock(pos, false);
 			EntityFireDragon dragon = new EntityFireDragon(worldObj);
-			dragon.setColor(type.meta - 4);
+			dragon.setVariant(type.meta - 4);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			if (!worldObj.isRemote) {
 				worldObj.spawnEntityInWorld(dragon);

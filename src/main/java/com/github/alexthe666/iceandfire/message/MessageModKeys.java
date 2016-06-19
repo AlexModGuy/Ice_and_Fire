@@ -35,7 +35,7 @@ public class MessageModKeys implements IMessage {
 		@Override
 		public IMessage onMessage(MessageModKeys message, MessageContext ctx) {
 			if (ctx.side == Side.SERVER) {
-				if (ctx.getServerHandler().playerEntity.getRidingEntity() != null) {
+	/*			if (ctx.getServerHandler().playerEntity.getRidingEntity() != null) {
 					if (ctx.getServerHandler().playerEntity.getRidingEntity() instanceof EntityDragonBase) {
 						EntityDragonBase dragon = (EntityDragonBase) ctx.getServerHandler().playerEntity.getRidingEntity();
 						if (message.keyId == 1) {
@@ -67,7 +67,7 @@ public class MessageModKeys implements IMessage {
 							ctx.getServerHandler().playerEntity.dismountRidingEntity();
 						}
 					}
-				}
+				}*/
 			}
 			return null;
 		}

@@ -7,6 +7,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityTameable;
@@ -22,6 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
@@ -45,6 +47,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private int ageBoost;
 	private int animationTick;
 	private Animation currentAnimation;
+	protected float minimumSize;
+	protected float maximumSize;
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
@@ -99,7 +103,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 	}
-	
+
 	private void updateAttributes() {
 		double healthStep = (maximumHealth - minimumHealth) / (125);
 		double attackStep = (maximumDamage - minimumDamage) / (125);
@@ -185,10 +189,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 
-	public boolean canMove(){
+	public boolean canMove() {
 		return !this.isSitting() && !this.isSleeping();
 	}
-	
+
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
 		if (stack != null) {
@@ -210,7 +214,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		return super.processInteract(player, hand, stack);
 	}
-	
+
 	public void eatFoodBonus(ItemStack stack) {
 	}
 
@@ -223,12 +227,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
 		this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, f, f1, f2, motionX, motionY, motionZ, new int[] { Item.getIdFromItem(item) });
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		AnimationHandler.INSTANCE.updateAnimations(this);
-		if(ageBoost > 1){
+		if (ageBoost > 1) {
 			ageBoost -= 1;
 		}
 		this.setAgeInTicks(this.getAgeInTicks() + ageBoost);
@@ -241,7 +245,71 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			}
 		}
 	}
+
+	public abstract String getVariantName(int variant);
+
+	public abstract String getTexture();
+
+	public abstract String getTextureOverlay();
+
+	public int getDragonStage() {
+		int age = this.getAgeInDays();
+		if (age >= 100) {
+			return 5;
+		} else if (age >= 75) {
+			return 4;
+		} else if (age >= 50) {
+			return 3;
+		} else if (age >= 25) {
+			return 2;
+		} else {
+			return 1;
+		}
+	}
 	
+	public boolean isTeen() {
+		return getDragonStage() < 4 && getDragonStage() > 2;
+	}
+
+	public boolean isAdult() {
+		return getDragonStage() >= 4;
+	}
+
+	@Override
+	@Nullable
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		livingdata = super.onInitialSpawn(difficulty, livingdata);
+		this.setGender(this.getRNG().nextBoolean());
+		this.setAgeInDays(100);
+		this.setHunger(50);
+		this.updateAttributes();
+		this.setVariant(this.getRNG().nextInt(4));
+		return livingdata;
+	}
+	
+	@Override
+	public void onUpdate() {
+		this.setScale(getRenderSize());
+		super.onUpdate();
+		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead) {
+			this.setAttackTarget(null);
+		}
+	}
+
+	@Override
+	public void setScaleForAge(boolean par1) {
+		this.setScale(this.getRenderSize());
+	}
+	
+	public float getRenderSize() {
+		float step = (this.maximumSize - this.minimumSize) / ((125 * 24000));
+
+		if (this.getAgeInTicks() > 125 * 24000) {
+			return this.minimumSize + ((step) * 125 * 24000);
+		}
+		return this.minimumSize + ((step * this.getAgeInTicks()));
+	}
+
 	@Override
 	public void onInventoryChanged(InventoryBasic invBasic) {
 	}

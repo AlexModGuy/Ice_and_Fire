@@ -16,24 +16,24 @@ public class RenderDragonBase extends RenderLiving {
 
 	public RenderDragonBase(RenderManager renderManager, ModelBase model) {
 		super(renderManager, model, 0.8F);
-		this.layerRenderers.add(new LayerDragonArmor(this, 1, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 2, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 3, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 4, "firedragon"));
+		//this.layerRenderers.add(new LayerDragonArmor(this, 1, "firedragon"));
+		//this.layerRenderers.add(new LayerDragonArmor(this, 2, "firedragon"));
+		//this.layerRenderers.add(new LayerDragonArmor(this, 3, "firedragon"));
+		//this.layerRenderers.add(new LayerDragonArmor(this, 4, "firedragon"));
 	}
 
 	@Override
 	protected void preRenderCallback(EntityLivingBase entity, float f) {
 		if (entity instanceof EntityDragonBase) {
-			this.shadowSize = ((EntityDragonBase) entity).getDragonSize();
-			GL11.glScalef(((EntityDragonBase) entity).getDragonSize(), ((EntityDragonBase) entity).getDragonSize(), ((EntityDragonBase) entity).getDragonSize());
+			this.shadowSize = ((EntityDragonBase) entity).getRenderSize();
+			GL11.glScalef(shadowSize, shadowSize, shadowSize);
 		}
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		if (entity instanceof EntityDragonBase) {
-			return new ResourceLocation(((EntityDragonBase) entity).getTexture());
+			return new ResourceLocation(((EntityDragonBase) entity).getTexture() + ".png");
 		} else {
 			return new ResourceLocation("iceandfire:textures/models/firedragon/red_4");
 		}
