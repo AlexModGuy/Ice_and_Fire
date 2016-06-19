@@ -200,7 +200,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
 				if (itemFoodAmount > 0 && this.getHunger() < 100) {
 					this.setHunger(this.getHunger() + itemFoodAmount);
-					this.ageBoost = 24000;
+					this.ageBoost = itemFoodAmount * 10;
 					this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
 					this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
 					this.spawnItemCrackParticles(stack.getItem());
@@ -215,6 +215,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return super.processInteract(player, hand, stack);
 	}
 
+	@Override
+	public boolean canBePushed(){
+		return false;
+	}
+	
 	public void eatFoodBonus(ItemStack stack) {
 	}
 
@@ -280,7 +285,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setGender(this.getRNG().nextBoolean());
-		this.setAgeInDays(100);
+		this.setAgeInDays(75);
 		this.setHunger(50);
 		this.updateAttributes();
 		this.setVariant(this.getRNG().nextInt(4));
