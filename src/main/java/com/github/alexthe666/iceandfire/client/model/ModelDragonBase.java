@@ -8,49 +8,23 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
 public abstract class ModelDragonBase extends AdvancedModelBase {
 
-	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		EntityDragonBase dragon = (EntityDragonBase) entity;
-		// float hover = dragon.hoverProgress;
-		// hoverPose(hover);
-	}
 
-	public void progressAnimationRotation(AdvancedModelRenderer modelRenderer, float sitProgress, float rotX, float rotY, float rotZ) {
-		modelRenderer.rotateAngleX += sitProgress * rotX / 25.0F;
-		modelRenderer.rotateAngleY += sitProgress * rotY / 25.0F;
-		modelRenderer.rotateAngleZ += sitProgress * rotZ / 25.0F;
-	}
+    public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
+    	model.rotateAngleX = x;
+    	model.rotateAngleY = y;
+    	model.rotateAngleZ = z;
+    }
+    
+    public void progressRotation(AdvancedModelRenderer model, float progress, float rotX, float rotY, float rotZ) {
+    	model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 25.0F;
+    	model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 25.0F;
+    	model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / 25.0F;
+    }
 
-	public void progressAnimationPos(AdvancedModelRenderer modelRenderer, float sitProgress, float x, float y, float z) {
-		modelRenderer.rotationPointX += sitProgress * x / 20.0F;
-		modelRenderer.rotationPointY += sitProgress * y / 20.0F;
-		modelRenderer.rotationPointZ += sitProgress * z / 20.0F;
-	}
-
-	public void progressAnimationRotation(int progressMod, AdvancedModelRenderer modelRenderer, float sitProgress, float rotX, float rotY, float rotZ) {
-		modelRenderer.rotateAngleX += sitProgress * rotX / progressMod;
-		modelRenderer.rotateAngleY += sitProgress * rotY / progressMod;
-		modelRenderer.rotateAngleZ += sitProgress * rotZ / progressMod;
-	}
-
-	public void progressAnimationPos(int progressMod, AdvancedModelRenderer modelRenderer, float sitProgress, float x, float y, float z) {
-		modelRenderer.rotationPointX += sitProgress * x / progressMod;
-		modelRenderer.rotationPointY += sitProgress * y / progressMod;
-		modelRenderer.rotationPointZ += sitProgress * z / progressMod;
-	}
-
-	public abstract void flightPose(float progress);
-
-	public abstract void sitPose(float progress);
-
-	public abstract void sleepPose(float progress);
-
-	public abstract void hoverPose(float progress);
-
-	public abstract void deadPose(float progress);
-
-	public void normalPose() {
-	}
+    public void progressPosition(AdvancedModelRenderer model, float progress, float x, float y, float z) {
+    	model.rotationPointX += progress * (x - model.defaultPositionX) / 20.0F;
+    	model.rotationPointY += progress * (y - model.defaultPositionY) / 20.0F;
+        model.rotationPointZ += progress * (z - model.defaultPositionZ) / 20.0F;
+    }
 
 }

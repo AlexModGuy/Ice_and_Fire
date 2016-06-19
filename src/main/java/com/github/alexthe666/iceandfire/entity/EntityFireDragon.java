@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class EntityFireDragon extends EntityDragonBase {
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, 10, 1, 0.15, 700, 20, 0.3, EnumDiet.CARNIVORE);
+		super(worldIn, 10, 1, 0.15, 700, 20, 0.5, EnumDiet.CARNIVORE);
 		this.setSize(1.78F, 1.4F);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		minSize = 0.3F;
@@ -31,11 +31,12 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	protected void initEntityAI() {
+		
 	}
 
 	@Override
 	public String getTexture() {
-		if (this.getSleeping() == 1) {
+		if (this.isSleeping() == 1) {
 			return "iceandfire:textures/models/firedragon/" + this.getColorName() + this.getStage() + "_sleep.png";
 		} else {
 			return "iceandfire:textures/models/firedragon/" + this.getColorName() + this.getStage() + ".png";
