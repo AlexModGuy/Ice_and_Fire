@@ -219,13 +219,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return super.processInteract(player, hand, stack);
 	}
 
-	@Override
-	public boolean canBePushed() {
-		return false;
-	}
-
 	public void eatFoodBonus(ItemStack stack) {
-		int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
+ 
 	}
 
 	public void spawnItemCrackParticles(Item item) {
@@ -350,7 +345,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[] {};
+		return new Animation[] {this.ANIMATION_EAT};
 	}
 
 	@Override
