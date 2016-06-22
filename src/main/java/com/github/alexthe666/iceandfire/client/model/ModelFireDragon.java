@@ -532,5 +532,14 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.swing(ArmL1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 		this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
 		this.flap(ClawR, speed_walk, degree_walk * 1.2F, true, 0, -0.5F, f, f1);
+		this.bob(BodyLower, speed_idle, degree_idle * 1.3F, false, entity.ticksExisted, 1);
+		this.bob(ThighR, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+		this.bob(ThighL, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+		this.bob(ArmL1, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+		this.bob(ArmR1, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+		this.chainSwing(TAIL, speed_idle, degree_idle * 0.25F, -2, entity.ticksExisted, 1);
+		this.chainWave(TAIL, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
+		this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -3, entity.ticksExisted, 1);
+		this.walk(Neck1, speed_idle, degree_idle * 0.15F, false, 0, 0, entity.ticksExisted, 1);
 	}
 }
