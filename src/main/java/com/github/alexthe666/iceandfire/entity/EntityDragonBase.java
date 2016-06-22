@@ -47,7 +47,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SLEEPING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
-	private int ageBoost;
 	private int animationTick;
 	private Animation currentAnimation;
 	protected float minimumSize;
@@ -64,7 +63,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.maximumHealth = maximumHealth;
 		this.minimumSpeed = minimumSpeed;
 		this.maximumSpeed = maximumSpeed;
-		this.ageBoost = 1;
 		updateAttributes();
 	}
 
@@ -90,7 +88,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		compound.setBoolean("Gender", this.isMale());
 		compound.setInteger("Variant", this.getVariant());
 		compound.setBoolean("Sleeping", this.isSleeping());
-		compound.setInteger("AgeBoost", this.ageBoost);
 	}
 
 	@Override
@@ -101,7 +98,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setGender(compound.getBoolean("Gender"));
 		this.setVariant(compound.getInteger("Variant"));
 		this.setSleeping(compound.getBoolean("Sleeping"));
-		this.ageBoost = compound.getInteger("AgeBoost");
 	}
 
 	@Override
@@ -230,7 +226,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public void eatFoodBonus(ItemStack stack) {
 		int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
-		this.ageBoost = itemFoodAmount * 10;
 	}
 
 	public void spawnItemCrackParticles(Item item) {
@@ -247,10 +242,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		AnimationHandler.INSTANCE.updateAnimations(this);
-		if (ageBoost > 1) {
-			ageBoost -= 1;
-		}
-		this.setAgeInTicks(this.getAgeInTicks() + ageBoost);
+		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
 			this.updateAttributes();
 		}

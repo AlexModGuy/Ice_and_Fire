@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -18,6 +17,7 @@ import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.google.common.base.Predicate;
 
@@ -39,7 +39,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
+		this.tasks.addTask(4, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(5, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(5, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));

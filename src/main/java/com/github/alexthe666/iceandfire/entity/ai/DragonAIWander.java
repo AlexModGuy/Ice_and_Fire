@@ -56,6 +56,7 @@ public class DragonAIWander extends EntityAIBase {
 
 	@Override
 	public boolean continueExecuting() {
+		this.dragon.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);
 		return !this.dragon.getNavigator().noPath();
 	}
 
