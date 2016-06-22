@@ -1,17 +1,32 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.inventory.InventoryBasic;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
+import net.minecraft.entity.ai.EntityAISit;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
+import com.google.common.base.Predicate;
 
 import fossilsarcheology.api.EnumDiet;
 
 public class EntityFireDragon extends EntityDragonBase {
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 700, 0.15F, 0.5F);
+		super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 700, 0.5F, 0.5F);
 		this.setSize(1.78F, 1.2F);
 		minimumSize = 0.3F;
 		maximumSize = 8.58F;
@@ -21,7 +36,22 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	protected void initEntityAI() {
-		
+		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
+		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
+		this.tasks.addTask(5, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(5, new DragonAILookIdle(this));
+		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
+		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
+		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
+		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+			@Override
+			public boolean apply(@Nullable Entity entity) {
+				return entity instanceof EntityLivingBase;
+			}
+		}));	
+		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
 	}
 
 	@Override
@@ -59,11 +89,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
-	}
-
-	@Override
-	public void onInventoryChanged(InventoryBasic invBasic) {
-
 	}
 
 	@Override

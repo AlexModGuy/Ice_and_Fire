@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -21,14 +22,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import com.github.alexthe666.iceandfire.entity.ai.DragonMoveHelper;
+
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IRangedAttackMob, IInventoryChangedListener {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity {
 
 	public double minimumDamage;
 	public double maximumDamage;
@@ -49,9 +54,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private Animation currentAnimation;
 	protected float minimumSize;
 	protected float maximumSize;
+	public static Animation ANIMATION_EAT;
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
+		this.moveHelper = new DragonMoveHelper(this);
 		this.diet = diet;
 		this.minimumDamage = minimumDamage;
 		this.maximumDamage = maximumDamage;
@@ -61,6 +68,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.maximumSpeed = maximumSpeed;
 		this.ageBoost = 1;
 		updateAttributes();
+	}
+
+	public boolean isAIDisabled() {
+		return false;
 	}
 
 	@Override
@@ -91,14 +102,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setAgeInTicks(compound.getInteger("AgeTicks"));
 		this.setGender(compound.getBoolean("Gender"));
 		this.setVariant(compound.getInteger("AgeTicks"));
-		this.setSleeping(compound.getBoolean("Gender"));
+		this.setSleeping(compound.getBoolean("Sleeping"));
 		this.ageBoost = compound.getInteger("AgeBoost");
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
@@ -200,7 +211,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
 				if (itemFoodAmount > 0 && this.getHunger() < 100) {
 					this.setHunger(this.getHunger() + itemFoodAmount);
-					this.ageBoost = itemFoodAmount * 10;
 					this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
 					this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
 					this.spawnItemCrackParticles(stack.getItem());
@@ -216,11 +226,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	@Override
-	public boolean canBePushed(){
+	public boolean canBePushed() {
 		return false;
 	}
-	
+
 	public void eatFoodBonus(ItemStack stack) {
+		int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
+		this.ageBoost = itemFoodAmount * 10;
 	}
 
 	public void spawnItemCrackParticles(Item item) {
@@ -271,7 +283,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			return 1;
 		}
 	}
-	
+
 	public boolean isTeen() {
 		return getDragonStage() < 4 && getDragonStage() > 2;
 	}
@@ -285,17 +297,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setGender(this.getRNG().nextBoolean());
-		this.setAgeInDays(75);
+		this.setAgeInDays(3);
 		this.setHunger(50);
 		this.updateAttributes();
 		this.setVariant(this.getRNG().nextInt(4));
+		this.setSleeping(false);
 		return livingdata;
 	}
-	
+
 	@Override
 	public void onUpdate() {
-		this.setScale(getRenderSize());
 		super.onUpdate();
+		this.setScale(getRenderSize());
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead) {
 			this.setAttackTarget(null);
 		}
@@ -305,7 +318,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void setScaleForAge(boolean par1) {
 		this.setScale(this.getRenderSize());
 	}
-	
+
 	public float getRenderSize() {
 		float step = (this.maximumSize - this.minimumSize) / ((125 * 24000));
 
@@ -316,13 +329,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	@Override
-	public void onInventoryChanged(InventoryBasic invBasic) {
-	}
+	public boolean attackEntityAsMob(Entity entityIn) {
+		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 
-	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float cooldown) {
-	}
+		if (flag) {
+			this.applyEnchantments(this, entityIn);
+		}
 
+		return flag;
+	}
 	@Override
 	public int getAnimationTick() {
 		return animationTick;

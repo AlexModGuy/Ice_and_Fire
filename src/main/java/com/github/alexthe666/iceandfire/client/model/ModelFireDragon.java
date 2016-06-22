@@ -511,6 +511,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		float degree_idle = 0.5F;
 		AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[] { Neck2, Neck3, Head };
 		AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[] { Tail1, Tail2, Tail3, Tail4, Club };
+		this.faceTarget(f3, f4, 3, NECK);
 		this.walk(ThighR, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 		this.walk(LegR, speed_walk, degree_walk * 0.7F, true, 0, -0.2F, f, f1);
 		this.walk(ToeR1, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
