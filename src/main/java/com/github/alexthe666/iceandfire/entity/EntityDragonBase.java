@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -7,15 +9,11 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -101,7 +99,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setHunger(compound.getInteger("Hunger"));
 		this.setAgeInTicks(compound.getInteger("AgeTicks"));
 		this.setGender(compound.getBoolean("Gender"));
-		this.setVariant(compound.getInteger("AgeTicks"));
+		this.setVariant(compound.getInteger("Variant"));
 		this.setSleeping(compound.getBoolean("Sleeping"));
 		this.ageBoost = compound.getInteger("AgeBoost");
 	}
@@ -300,7 +298,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setAgeInDays(3);
 		this.setHunger(50);
 		this.updateAttributes();
-		this.setVariant(this.getRNG().nextInt(4));
+		this.setVariant(new Random().nextInt(4));
 		this.setSleeping(false);
 		return livingdata;
 	}
