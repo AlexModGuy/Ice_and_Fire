@@ -63,6 +63,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.minimumSpeed = minimumSpeed;
 		this.maximumSpeed = maximumSpeed;
 		updateAttributes();
+		ANIMATION_EAT = Animation.create(20);
 	}
 
 	public boolean isAIDisabled() {
@@ -344,7 +345,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[] {this.ANIMATION_EAT};
+		return new Animation[] {this.NO_ANIMATION, this.ANIMATION_EAT};
 	}
 
 	@Override
