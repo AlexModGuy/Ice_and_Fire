@@ -55,7 +55,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
-		this.moveHelper = new DragonMoveHelper(this);
 		this.diet = diet;
 		this.minimumDamage = minimumDamage;
 		this.maximumDamage = maximumDamage;
