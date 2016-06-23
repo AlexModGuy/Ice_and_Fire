@@ -36,7 +36,7 @@ public class DragonAIWander extends EntityAIBase {
 				return false;
 			}
 
-			if (this.dragon.getRNG().nextInt(1) != 0) {
+			if (this.dragon.getRNG().nextInt(executionChance) != 0) {
 				return false;
 			}
 		}
@@ -56,7 +56,6 @@ public class DragonAIWander extends EntityAIBase {
 
 	@Override
 	public boolean continueExecuting() {
-		this.dragon.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);
 		return !this.dragon.getNavigator().noPath();
 	}
 

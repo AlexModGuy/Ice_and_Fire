@@ -62,8 +62,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.maximumHealth = maximumHealth;
 		this.minimumSpeed = minimumSpeed;
 		this.maximumSpeed = maximumSpeed;
-		updateAttributes();
 		ANIMATION_EAT = Animation.create(20);
+		updateAttributes();
 	}
 
 	public boolean isAIDisabled() {
@@ -117,6 +117,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+			System.out.println("eee");
 		}
 	}
 
@@ -220,7 +221,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public void eatFoodBonus(ItemStack stack) {
- 
+
+	}
+
+	public void growDragon(int ageInDays) {
+		this.setAgeInDays(this.getAgeInDays() + 1);
+		this.updateAttributes();
+		this.setScaleForAge(false);
 	}
 
 	public void spawnItemCrackParticles(Item item) {
@@ -240,6 +247,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
 			this.updateAttributes();
+			this.setScale(this.getRenderSize());
 		}
 		if (this.getAgeInTicks() % 1200 == 0) {
 			if (this.getHunger() > 0) {
@@ -282,18 +290,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setGender(this.getRNG().nextBoolean());
-		this.setAgeInDays(3);
+		this.growDragon(25);
 		this.setHunger(50);
-		this.updateAttributes();
 		this.setVariant(new Random().nextInt(4));
 		this.setSleeping(false);
+		this.updateAttributes();
 		return livingdata;
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.setScale(getRenderSize());
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead) {
 			this.setAttackTarget(null);
 		}
@@ -323,6 +330,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 		return flag;
 	}
+
 	@Override
 	public int getAnimationTick() {
 		return animationTick;
@@ -345,7 +353,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[] {this.NO_ANIMATION, this.ANIMATION_EAT};
+		return new Animation[] { this.NO_ANIMATION, this.ANIMATION_EAT };
 	}
 
 	@Override
