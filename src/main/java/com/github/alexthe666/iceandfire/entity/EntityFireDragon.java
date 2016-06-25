@@ -105,7 +105,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTextureOverlay() {
-		return null;
+		return this.isSleeping() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
 
 }

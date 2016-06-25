@@ -16,9 +16,9 @@ public abstract class ModelDragonBase extends AdvancedModelBase {
     }
     
     public void progressRotation(AdvancedModelRenderer model, float progress, float rotX, float rotY, float rotZ) {
-    	model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 25.0F;
-    	model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 25.0F;
-    	model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / 25.0F;
+    	model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 20.0F;
+    	model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 20.0F;
+    	model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / 20.0F;
     }
 
     public void progressPosition(AdvancedModelRenderer model, float progress, float x, float y, float z) {

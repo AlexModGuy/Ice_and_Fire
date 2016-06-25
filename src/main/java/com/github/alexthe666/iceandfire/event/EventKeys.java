@@ -17,19 +17,19 @@ public class EventKeys {
 	public void handleClientTick(ClientTickEvent event) {
 		if (FMLCommonHandler.instance().getSide().isClient() && checkIfPlayer()) {
 			if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())) {
-				IceAndFire.channel.sendToServer(new MessageModKeys(1));
+				//IceAndFire.channel.sendToServer(new MessageModKeys(1));
 			}
 			if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode())) {
-				IceAndFire.channel.sendToServer(new MessageModKeys(2));
+				//IceAndFire.channel.sendToServer(new MessageModKeys(2));
 			}
 			if (Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode())) {
-				IceAndFire.channel.sendToServer(new MessageModKeys(3));
+				//IceAndFire.channel.sendToServer(new MessageModKeys(3));
 			}
 			if (Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode())) {
-				IceAndFire.channel.sendToServer(new MessageModKeys(4));
+				//IceAndFire.channel.sendToServer(new MessageModKeys(4));
 			}
 			if (Keyboard.isKeyDown(ModKeys.dragon_dismount.getKeyCode())) {
-				IceAndFire.channel.sendToServer(new MessageModKeys(5));
+				//IceAndFire.channel.sendToServer(new MessageModKeys(5));
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
@@ -23,10 +24,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.entity.ai.DragonMoveHelper;
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.message.MessageDaytime;
 
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
@@ -41,6 +46,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public double maximumSpeed;
 	public EnumDiet diet;
 	private boolean isSleeping;
+	public float sleepProgress;
 	private boolean isSitting;
 	private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -51,6 +57,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private Animation currentAnimation;
 	protected float minimumSize;
 	protected float maximumSize;
+	public boolean isDaytime;
 	public static Animation ANIMATION_EAT;
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
@@ -66,6 +73,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		updateAttributes();
 	}
 
+	@Override
 	public boolean isAIDisabled() {
 		return false;
 	}
@@ -240,9 +248,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, f, f1, f2, motionX, motionY, motionZ, new int[] { Item.getIdFromItem(item) });
 	}
 
+	public boolean isDaytime() {
+		if (worldObj.isRemote) {
+			return isDaytime;
+		} else {
+			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.worldObj.isDaytime()));
+			return this.worldObj.isDaytime();
+		}
+	}
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		boolean sleeping = isSleeping();
+		if (sleeping && sleepProgress < 20.0F) {
+			sleepProgress += 0.5F;
+		} else if (!sleeping && sleepProgress > 0.0F) {
+			sleepProgress -= 0.5F;
+		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
@@ -285,6 +308,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return getDragonStage() >= 4;
 	}
 
+	public boolean isMaterialNotInBB(Material materialIn) {
+		int i = MathHelper.floor_double(this.getEntityBoundingBox().minX);
+		int j = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxX);
+		int k = MathHelper.floor_double(this.getEntityBoundingBox().minY);
+		int l = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxY);
+		int i1 = MathHelper.floor_double(this.getEntityBoundingBox().minZ);
+		int j1 = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxZ);
+		BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+		for (int k1 = i; k1 < j; ++k1) {
+			for (int l1 = k; l1 < l; ++l1) {
+				for (int i2 = i1; i2 < j1; ++i2) {
+					if (worldObj.getBlockState(blockpos$pooledmutableblockpos.set(k1, l1, i2)).getMaterial() != materialIn || !worldObj.getBlockState(blockpos$pooledmutableblockpos.set(k1, l1, i2)).isFullCube()) {
+						blockpos$pooledmutableblockpos.release();
+						return true;
+					}
+				}
+			}
+		}
+		blockpos$pooledmutableblockpos.release();
+		return false;
+	}
+
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
@@ -300,10 +345,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource dmg, float i) {
+		if (i > 0) {
+			this.setSitting(false);
+			this.setSleeping(false);
+		}
+		return super.attackEntityFrom(dmg, i);
+	}
+	
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead) {
 			this.setAttackTarget(null);
+		}
+		if (!this.isInWater() && !this.isSleeping() && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
+			this.setSleeping(true);
+		}
+		if (this.isSleeping() && (this.isInWater() || this.isDaytime() || this.getAttackTarget() != null && !this.getPassengers().isEmpty())) {
+			this.setSleeping(false);
 		}
 	}
 
@@ -354,7 +414,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[] { this.NO_ANIMATION, this.ANIMATION_EAT };
+		return new Animation[] { IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT };
 	}
 
 	@Override

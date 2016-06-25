@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import java.util.Random;
 
+import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
@@ -19,7 +20,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -31,7 +31,7 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.message.MessageModKeys;
+import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
@@ -41,7 +41,8 @@ public class IceAndFire {
 	public static final String VERSION = "0.1.4";
 	@Instance(value = MODID)
 	public static IceAndFire instance;
-	public static SimpleNetworkWrapper channel;
+	@NetworkWrapper({ MessageDaytime.class })
+	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy proxy;
 	public static CreativeTabs tab;
@@ -50,8 +51,6 @@ public class IceAndFire {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-		channel.registerMessage(MessageModKeys.Handler.class, MessageModKeys.class, 0, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 	}
 
