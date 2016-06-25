@@ -28,6 +28,7 @@ import com.github.alexthe666.iceandfire.core.ModFoods;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.MessageModKeys;
@@ -79,6 +80,7 @@ public class IceAndFire {
 		ModEntities.init();
 		ModKeys.init();
 		ModFoods.init();
+		ModSounds.init();
 		proxy.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

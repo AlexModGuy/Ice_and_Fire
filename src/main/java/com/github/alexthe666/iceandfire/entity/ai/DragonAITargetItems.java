@@ -29,7 +29,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 	}
 
 	public DragonAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
-		this(creature, 10, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
+		this(creature, 20, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
 	}
 
 	public DragonAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {

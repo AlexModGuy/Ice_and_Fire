@@ -38,8 +38,8 @@ import fossilsarcheology.api.EnumDiet;
 public class EntityFireDragon extends EntityDragonBase {
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 700, 0.3F, 0.5F);
-		this.setSize(1.78F, 1.2F);
+		super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 500, 0.2F, 0.5F);
+		this.setSize(0.78F, 1.2F);
 		minimumSize = 0.3F;
 		maximumSize = 8.58F;
 		this.isImmuneToFire = true;

@@ -103,7 +103,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
@@ -117,7 +117,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
-			System.out.println("eee");
 		}
 	}
 
@@ -205,6 +204,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if (stack.getItem() != null) {
 				int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
 				if (itemFoodAmount > 0 && this.getHunger() < 100) {
+					this.growDragon(1);
 					this.setHunger(this.getHunger() + itemFoodAmount);
 					this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
 					this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
@@ -225,9 +225,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public void growDragon(int ageInDays) {
-		this.setAgeInDays(this.getAgeInDays() + 1);
-		this.updateAttributes();
+		this.setAgeInDays(this.getAgeInDays() + ageInDays);
 		this.setScaleForAge(false);
+		this.updateAttributes();
 	}
 
 	public void spawnItemCrackParticles(Item item) {
@@ -290,6 +290,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setGender(this.getRNG().nextBoolean());
+		this.setAgeInDays(1);
 		this.growDragon(25);
 		this.setHunger(50);
 		this.setVariant(new Random().nextInt(4));
