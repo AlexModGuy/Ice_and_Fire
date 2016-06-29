@@ -42,7 +42,6 @@ public class MessageDaytime extends AbstractMessage<MessageDaytime> {
     @SideOnly(Side.CLIENT)
 	public void onClientReceived(Minecraft client, MessageDaytime message, EntityPlayer player, MessageContext messageContext) {
 		 Entity entity = player.worldObj.getEntityByID(message.dragonId);
-
 	        if (entity instanceof EntityDragonBase) {
 	        	EntityDragonBase dragon = (EntityDragonBase) entity;
 	        	dragon.isDaytime = message.isDay;

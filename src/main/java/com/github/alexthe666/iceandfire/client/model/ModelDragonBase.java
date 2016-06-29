@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
-import net.minecraft.entity.Entity;
-
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
 public abstract class ModelDragonBase extends AdvancedModelBase {
 
@@ -13,6 +11,10 @@ public abstract class ModelDragonBase extends AdvancedModelBase {
     	model.rotateAngleX = x;
     	model.rotateAngleY = y;
     	model.rotateAngleZ = z;
+    }
+    
+    public void rotate(ModelAnimator animator, AdvancedModelRenderer model, float x, float y, float z) {
+    	animator.rotate(model, (float)Math.toRadians(x), (float)Math.toRadians(y), (float)Math.toRadians(z));
     }
     
     public void progressRotation(AdvancedModelRenderer model, float progress, float rotX, float rotY, float rotZ) {

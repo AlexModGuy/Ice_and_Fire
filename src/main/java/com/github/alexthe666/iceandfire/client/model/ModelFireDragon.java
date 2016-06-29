@@ -495,13 +495,108 @@ public class ModelFireDragon extends ModelDragonBase {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-		ModelUtils.renderAll(boxList);
+		this.BodyLower.render(f5);
 	}
 
 	public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.resetToDefaultPose();
 		animator.update(entity);
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+		animator.setAnimation(EntityFireDragon.ANIMATION_SPEAK);
+		animator.startKeyframe(15);
+		this.rotate(animator, Neck2, -7, 0, 0);
+		this.rotate(animator, Neck3, -5, 0, 0);
+		this.rotate(animator, Head, -20, 0, 0);
+		this.rotate(animator, Jaw, 18, 0, 0);
+		animator.move(Jaw, 0, 0, 0.2F);
+		animator.endKeyframe();
+		animator.setStaticKeyframe(5);
+		animator.startKeyframe(10);
+		this.rotate(animator, Jaw, 18, 0, 0);
+		animator.move(Jaw, 0, 0, 0.2F);
+		animator.move(Neck2, 0, 0, 0.2F);
+		animator.move(Neck3, 0, 0, 0.2F);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
+		animator.setAnimation(EntityFireDragon.ANIMATION_BITE);
+		animator.startKeyframe(15);
+		this.rotate(animator, Neck1, -12, 0, 0);
+		this.rotate(animator, Neck2, -5, 0, 0);
+		this.rotate(animator, Neck3, 5, 0, 0);
+		this.rotate(animator, Head, 36, 0, 0);
+		this.rotate(animator, Jaw, 20, 0, 0);
+		animator.move(Jaw, 0, 0, 0.2F);
+		animator.endKeyframe();
+		animator.startKeyframe(10);
+		this.rotate(animator, Neck1, -2, 0, 0);
+		this.rotate(animator, Neck2, 10, 0, 0);
+		this.rotate(animator, Neck3, 10, 0, 0);
+		this.rotate(animator, Head, 20, 0, 0);
+		this.rotate(animator, Jaw, 20, 0, 0);
+		animator.move(Jaw, 0, 0, 0.2F);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
+		animator.setAnimation(EntityFireDragon.ANIMATION_SHAKEPREY);
+		animator.startKeyframe(15);
+		this.rotate(animator, Neck1, -10F, 0, 0);
+		this.rotate(animator, Neck2, 15F, 0, 0);
+		this.rotate(animator, Neck3, 18F, 0, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.startKeyframe(10);
+		this.rotate(animator, Neck1, 0, -20, 0);
+		this.rotate(animator, Neck2, 0, -20, 0);
+		this.rotate(animator, Neck3, 0, -20, 0);
+		this.rotate(animator, Head, 0, -20, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.startKeyframe(10);
+		this.rotate(animator, Neck1, 0, 20, 0);
+		this.rotate(animator, Neck2, 0, 20, 0);
+		this.rotate(animator, Neck3, 0, 20, 0);
+		this.rotate(animator, Head, 0, 20, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.startKeyframe(10);
+		this.rotate(animator, Neck1, 0, -20, 0);
+		this.rotate(animator, Neck2, 0, -20, 0);
+		this.rotate(animator, Neck3, 0, -20, 0);
+		this.rotate(animator, Head, 0, -20, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.startKeyframe(10);
+		this.rotate(animator, Neck1, 0, 20, 0);
+		this.rotate(animator, Neck2, 0, 20, 0);
+		this.rotate(animator, Neck3, 0, 20, 0);
+		this.rotate(animator, Head, 0, 20, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
+		animator.setAnimation(EntityFireDragon.ANIMATION_TAILWHACK);
+		animator.startKeyframe(15);
+		this.rotate(animator, BodyLower, 0, -28F, 0);
+		this.rotate(animator, Tail1, 0, -15, 0);
+		this.rotate(animator, Tail2, 0, -10, 0);
+		this.rotate(animator, Tail3, 0, -13, 0);
+		this.rotate(animator, Tail4, 0, -13, 0);
+		this.rotate(animator, Club, 0, -20, 0);
+		animator.endKeyframe();
+		animator.setStaticKeyframe(5);
+		animator.startKeyframe(10);
+		this.rotate(animator, BodyLower, 0, 130F, 0);
+		this.rotate(animator, Tail1, 0, 15, 0);
+		this.rotate(animator, Tail2, 0, 10, 0);
+		this.rotate(animator, Tail3, 0, 13, 0);
+		this.rotate(animator, Tail4, 0, 13, 0);
+		this.rotate(animator, Club, 0, 20, 0);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
+
 	}
 
 	@Override
@@ -614,6 +709,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressPosition(BodyLower, dragon.sleepProgress, 0, 14, -6);
 		progressPosition(BodyUpper, dragon.sleepProgress, 0, 3, -6);
 		progressPosition(ArmL1, dragon.sleepProgress, 2.2F, -0.75F, 2.7F);
-		progressPosition(Neck2, dragon.sleepProgress, 0, -2F, -3.7F);
+		progressPosition(Neck1, dragon.sleepProgress, 0, -0.2F, 1.5F);
+		progressPosition(Neck2, dragon.sleepProgress, 0, -1F, -3.7F);
 	}
 }

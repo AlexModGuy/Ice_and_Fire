@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import fossilsarcheology.api.FoodMappings;
@@ -57,6 +58,7 @@ public class ModFoods {
 		FoodMappings.instance().addMeat(Items.RABBIT, 10);
 		FoodMappings.instance().addMeat(Items.COOKED_RABBIT, 15);
 		FoodMappings.instance().addMeat(EntityPlayer.class, 27);
+		FoodMappings.instance().addMeat(EntityPlayerMP.class, 27);
 		FoodMappings.instance().addMeat(EntityVillager.class, 27);
 		FoodMappings.instance().addMeat(EntityZombie.class, 23);
 		FoodMappings.instance().addMeat(EntityChicken.class, 5);

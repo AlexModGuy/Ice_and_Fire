@@ -7,9 +7,9 @@ import javax.annotation.Nullable;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityTameable;
@@ -24,8 +24,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -59,6 +57,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	protected float maximumSize;
 	public boolean isDaytime;
 	public static Animation ANIMATION_EAT;
+	public static Animation ANIMATION_SPEAK;
+	public static Animation ANIMATION_BITE;
+	public static Animation ANIMATION_SHAKEPREY;
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
@@ -184,6 +185,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return isSleeping;
 	}
 
+	protected boolean canFitPassenger(Entity passenger) {
+		return this.getPassengers().size() < 2;
+	}
+
 	@Override
 	public boolean isSitting() {
 		if (worldObj.isRemote) {
@@ -249,11 +254,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public boolean isDaytime() {
-		if (worldObj.isRemote) {
-			return isDaytime;
+		if (!this.firstUpdate && this.worldObj != null) {
+			if (worldObj.isRemote) {
+				return isDaytime;
+			} else {
+				IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.worldObj.isDaytime()));
+				return this.worldObj.isDaytime();
+			}
 		} else {
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.worldObj.isDaytime()));
-			return this.worldObj.isDaytime();
+			return true;
 		}
 	}
 
@@ -285,6 +294,36 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public abstract String getTextureOverlay();
 
+	public void updatePassenger(Entity passenger) {
+		if (this.isPassenger(passenger)) {
+			if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger && this.isOwner((EntityPlayer) passenger)) {
+				passenger.setPosition(this.posX, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ);
+			} else {
+				this.updatePreyInMouth(passenger);
+			}
+		}
+	}
+
+	private void updatePreyInMouth(Entity prey) {
+		if (this.getAnimationTick() > 55 && prey != null) {
+			prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth());
+			this.onKillEntity((EntityLivingBase) prey);
+		}
+		prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
+		float modTick_0 = this.getAnimationTick() - 15;
+		float modTick_1 = this.getAnimationTick() > 15 ? 6 * MathHelper.sin((float) (Math.PI + (modTick_0 * 0.3F))) : 0;
+		float modTick_2 = this.getAnimationTick() > 15 ? 15 : this.getAnimationTick();
+		this.rotationYaw *= 0;
+		prey.rotationYaw = this.rotationYaw + this.rotationYawHead + 180;
+		rotationYaw = renderYawOffset;
+		float radius = 0.75F * (0.7F * getRenderSize()) * -3;
+		float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
+		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraY = 0.8F * (getRenderSize() + (modTick_1 * 0.05) + (modTick_2 * 0.05) - 2);
+		prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+	}
+
 	public int getDragonStage() {
 		int age = this.getAgeInDays();
 		if (age >= 100) {
@@ -306,28 +345,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean isAdult() {
 		return getDragonStage() >= 4;
-	}
-
-	public boolean isMaterialNotInBB(Material materialIn) {
-		int i = MathHelper.floor_double(this.getEntityBoundingBox().minX);
-		int j = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxX);
-		int k = MathHelper.floor_double(this.getEntityBoundingBox().minY);
-		int l = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxY);
-		int i1 = MathHelper.floor_double(this.getEntityBoundingBox().minZ);
-		int j1 = MathHelper.ceiling_double_int(this.getEntityBoundingBox().maxZ);
-		BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
-		for (int k1 = i; k1 < j; ++k1) {
-			for (int l1 = k; l1 < l; ++l1) {
-				for (int i2 = i1; i2 < j1; ++i2) {
-					if (worldObj.getBlockState(blockpos$pooledmutableblockpos.set(k1, l1, i2)).getMaterial() != materialIn || !worldObj.getBlockState(blockpos$pooledmutableblockpos.set(k1, l1, i2)).isFullCube()) {
-						blockpos$pooledmutableblockpos.release();
-						return true;
-					}
-				}
-			}
-		}
-		blockpos$pooledmutableblockpos.release();
-		return false;
 	}
 
 	@Override
@@ -352,7 +369,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		return super.attackEntityFrom(dmg, i);
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -410,6 +427,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void setAnimation(Animation animation) {
 		currentAnimation = animation;
+	}
+
+	public void playLivingSound() {
+		if (this.getAnimation() == this.NO_ANIMATION) {
+			this.setAnimation(ANIMATION_SPEAK);
+		}
+		super.playLivingSound();
+	}
+
+	protected void playHurtSound(DamageSource source) {
+		if (this.getAnimation() == this.NO_ANIMATION) {
+			this.setAnimation(ANIMATION_SPEAK);
+		}
+		super.playHurtSound(source);
 	}
 
 	@Override
