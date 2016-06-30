@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
@@ -13,14 +14,23 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 	public EntityDragonFireCharge(World worldIn) {
 		super(worldIn);
+		
 	}
 
 	public EntityDragonFireCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
+        double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        this.accelerationX = accelX / d0 * 0.03D;
+        this.accelerationY = accelY / d0 * 0.03D;
+        this.accelerationZ = accelZ / d0 * 0.03D;
 	}
 
 	public EntityDragonFireCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
+        double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        this.accelerationX = accelX / d0 * 0.03D;
+        this.accelerationY = accelY / d0 * 0.03D;
+        this.accelerationZ = accelZ / d0 * 0.03D;
 	}
 
 	public void setSizes(float width, float height) {
@@ -35,7 +45,6 @@ public class EntityDragonFireCharge extends EntityFireball {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.extinguish();
 		for (int i = 0; i < 4; ++i) {
 			this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D, new int[0]);
 		}

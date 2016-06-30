@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 
 public class ModEntities {
 
@@ -25,5 +26,7 @@ public class ModEntities {
 		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);
 		registerUnspawnable(EntityDragonFire.class, "dragonfire", 4);
 		registerSpawnable(EntityFireDragon.class, "firedragon", 5, 0X340000, 0XA52929);
+		registerUnspawnable(EntityDragonFireCharge.class, "dragonfirecharge", 6);
+
 	}
 }
