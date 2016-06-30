@@ -596,6 +596,24 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.rotate(animator, Club, 0, 20, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
+		animator.setAnimation(EntityFireDragon.ANIMATION_FIRECHARGE);
+		animator.startKeyframe(15);
+		this.rotate(animator, Neck1, -10F, 0, 0);
+		this.rotate(animator, Neck2, -7F, 0, 0);
+		this.rotate(animator, Neck3, 13F, 0, 0);
+		this.rotate(animator, Head, 33F, 0, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.startKeyframe(15);
+		this.rotate(animator, Neck1, -10F, 0, 0);
+		this.rotate(animator, Neck2, 2F, 0, 0);
+		this.rotate(animator, Neck3, 13F, 0, 0);
+		this.rotate(animator, Head, -2F, 0, 0);
+		this.rotate(animator, Jaw, 25, 0, 0);
+		animator.move(Jaw, 0, 0, 0.4F);
+		animator.endKeyframe();
+		animator.resetKeyframe(10);
 	}
 
 	@Override

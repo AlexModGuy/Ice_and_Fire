@@ -64,7 +64,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public static Animation ANIMATION_SPEAK;
 	public static Animation ANIMATION_BITE;
 	public static Animation ANIMATION_SHAKEPREY;
-
+	public boolean attackDecision;
+	
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
 		this.diet = diet;
@@ -103,6 +104,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		compound.setInteger("Variant", this.getVariant());
 		compound.setBoolean("Sleeping", this.isSleeping());
 		compound.setBoolean("FireBreathing", this.isBreathingFire());
+		compound.setBoolean("AttackDecision", attackDecision);
 	}
 	
 	@Override
@@ -114,6 +116,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setVariant(compound.getInteger("Variant"));
 		this.setSleeping(compound.getBoolean("Sleeping"));
 		this.setBreathingFire(compound.getBoolean("FireBreathing"));
+		this.attackDecision = compound.getBoolean("AttackDecision");
 	}
 
 	@Override
@@ -320,6 +323,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.fireTicks++;
 			if(fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180) ){
 				this.setBreathingFire(false);
+				this.attackDecision = true;
 				fireTicks = 0;
 			}
 		}
@@ -349,6 +353,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (this.getAnimation() == this.ANIMATION_SHAKEPREY) {
 			if (this.getAnimationTick() > 55 && prey != null) {
 				prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
+				this.attackDecision = !this.attackDecision;
 				this.onKillEntity((EntityLivingBase) prey);
 			}
 			prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
