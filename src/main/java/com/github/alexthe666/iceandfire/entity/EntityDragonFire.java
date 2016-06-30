@@ -34,6 +34,10 @@ public class EntityDragonFire extends EntityFireball {
 		this.setSize(width, height);
 	}
 
+	protected boolean isFireballFiery() {
+		return false;
+	}
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return false;
@@ -42,12 +46,15 @@ public class EntityDragonFire extends EntityFireball {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.extinguish();
-		for (int i = 0; i < 2; ++i) {
+		for (int i = 0; i < 6; ++i) {
 			this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D, new int[0]);
 		}
-		if (ticksExisted > 30)
+		this.setSize((30 - Math.min(ticksExisted, 30)) * 0.05F, (30 - Math.min(ticksExisted, 30)) * 0.05F);
+		if (ticksExisted > 30) {
 			setDead();
+		}
+		if (this.onGround) {
+		}
 	}
 
 	@Override
@@ -56,19 +63,16 @@ public class EntityDragonFire extends EntityFireball {
 		if (!this.worldObj.isRemote) {
 
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, this.width, true);
+				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 				this.setDead();
 
 			}
-
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity) {
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 6.0F);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-			} else {
-
-				return;
+				this.setDead();
 			}
 
 			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire)) {
@@ -76,24 +80,16 @@ public class EntityDragonFire extends EntityFireball {
 				this.setDead();
 			}
 		}
+		this.setDead();
 	}
-
-	private void triggerBlockTransformation(int a, int b, int c) {
-		BlockPos pos = new BlockPos(a, b, c);
-		if (worldObj.getBlockState(pos).getBlock() instanceof BlockBush) {
-			WorldUtils.setBlock(worldObj, a, b, c, Blocks.DEADBUSH, 0, 2);
-		}
-		if (worldObj.getBlockState(pos).getBlock() instanceof BlockGrass) {
-			WorldUtils.setBlock(worldObj, a, b, c, ModBlocks.charedGrass, 0, 2);
-		}
-		if (worldObj.getBlockState(pos).getBlock() instanceof BlockDirt) {
-			WorldUtils.setBlock(worldObj, a, b, c, ModBlocks.charedDirt, 0, 2);
-		}
-	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return false;
+	}
+
+	public float getCollisionBorderSize() {
+		return 0F;
 	}
 
 }

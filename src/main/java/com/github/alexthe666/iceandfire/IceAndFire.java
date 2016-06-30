@@ -9,7 +9,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -62,7 +61,7 @@ public class IceAndFire {
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
 				String s = "death.attack.dragon";
 				String s1 = s + ".player_" + new Random().nextInt(2);
-				return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)) : new TextComponentTranslation(s, new Object[] { entityLivingBaseIn.getDisplayName() });
+				return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[] { entityLivingBaseIn.getDisplayName() }));
 			}
 		};
 		dragonFire = new DamageSource("dragon_fire") {
@@ -70,9 +69,9 @@ public class IceAndFire {
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
 				String s = "death.attack.dragon_fire";
 				String s1 = s + ".player_" + new Random().nextInt(2);
-				return I18n.canTranslate(s1) ? new TextComponentString(entityLivingBaseIn.getDisplayName() + I18n.translateToLocal(s1)) : new TextComponentTranslation(s, new Object[] { entityLivingBaseIn.getDisplayName() });
+				return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[] { entityLivingBaseIn.getDisplayName() }));
 			}
-		};
+		}.setFireDamage();
 		ModBlocks.init();
 		ModItems.init();
 		ModRecipes.init();

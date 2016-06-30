@@ -46,11 +46,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private boolean isSleeping;
 	public float sleepProgress;
 	private boolean isSitting;
+	private boolean isBreathingFire;
+	public float fireBreathProgress;
+	private int fireTicks;
 	private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SLEEPING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> FIREBREATHING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private int animationTick;
 	private Animation currentAnimation;
 	protected float minimumSize;
@@ -87,6 +91,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.dataManager.register(GENDER, Boolean.valueOf(false));
 		this.dataManager.register(VARIANT, Integer.valueOf(0));
 		this.dataManager.register(SLEEPING, Boolean.valueOf(false));
+		this.dataManager.register(FIREBREATHING, Boolean.valueOf(false));
 	}
 
 	@Override
@@ -97,8 +102,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		compound.setBoolean("Gender", this.isMale());
 		compound.setInteger("Variant", this.getVariant());
 		compound.setBoolean("Sleeping", this.isSleeping());
+		compound.setBoolean("FireBreathing", this.isBreathingFire());
 	}
-
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
@@ -107,6 +113,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setGender(compound.getBoolean("Gender"));
 		this.setVariant(compound.getInteger("Variant"));
 		this.setSleeping(compound.getBoolean("Sleeping"));
+		this.setBreathingFire(compound.getBoolean("FireBreathing"));
 	}
 
 	@Override
@@ -183,6 +190,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			return isSleeping;
 		}
 		return isSleeping;
+	}
+	
+	public void setBreathingFire(boolean breathing) {
+		this.dataManager.set(FIREBREATHING, Boolean.valueOf(breathing));
+		if (!worldObj.isRemote) {
+			this.isBreathingFire = breathing;
+		}
+	}
+
+	public boolean isBreathingFire() {
+		if (worldObj.isRemote) {
+			boolean breathing = this.dataManager.get(FIREBREATHING).booleanValue();
+			this.isBreathingFire = breathing;
+			return breathing;
+		}
+		return isBreathingFire;
 	}
 
 	protected boolean canFitPassenger(Entity passenger) {
@@ -275,6 +298,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else if (!sleeping && sleepProgress > 0.0F) {
 			sleepProgress -= 0.5F;
 		}
+		boolean fireBreathing = isBreathingFire();
+		if (fireBreathing && fireBreathProgress < 20.0F) {
+			fireBreathProgress += 0.5F;
+		} else if (!fireBreathing && fireBreathProgress > 0.0F) {
+			fireBreathProgress -= 0.5F;
+		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
@@ -286,6 +315,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.setHunger(this.getHunger() - 1);
 			}
 		}
+		
+		if(this.isBreathingFire()){
+			this.fireTicks++;
+			if(fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180) ){
+				this.setBreathingFire(false);
+				fireTicks = 0;
+			}
+		}
+	}
+	
+	public boolean isActuallyBreathingFire(){
+		return this.fireTicks > 20 && this.isBreathingFire();
 	}
 
 	public abstract String getVariantName(int variant);
@@ -305,23 +346,27 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private void updatePreyInMouth(Entity prey) {
-		if (this.getAnimationTick() > 55 && prey != null) {
-			prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth());
-			this.onKillEntity((EntityLivingBase) prey);
+		if (this.getAnimation() == this.ANIMATION_SHAKEPREY) {
+			if (this.getAnimationTick() > 55 && prey != null) {
+				prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
+				this.onKillEntity((EntityLivingBase) prey);
+			}
+			prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
+			float modTick_0 = this.getAnimationTick() - 15;
+			float modTick_1 = this.getAnimationTick() > 15 ? 6 * MathHelper.sin((float) (Math.PI + (modTick_0 * 0.3F))) : 0;
+			float modTick_2 = this.getAnimationTick() > 15 ? 15 : this.getAnimationTick();
+			this.rotationYaw *= 0;
+			prey.rotationYaw = this.rotationYaw + this.rotationYawHead + 180;
+			rotationYaw = renderYawOffset;
+			float radius = 0.75F * (0.7F * getRenderSize()) * -3;
+			float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
+			double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+			double extraZ = (double) (radius * MathHelper.cos(angle));
+			double extraY = 0.8F * (getRenderSize() + (modTick_1 * 0.05) + (modTick_2 * 0.05) - 2);
+			prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+		} else {
+			prey.dismountRidingEntity();
 		}
-		prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
-		float modTick_0 = this.getAnimationTick() - 15;
-		float modTick_1 = this.getAnimationTick() > 15 ? 6 * MathHelper.sin((float) (Math.PI + (modTick_0 * 0.3F))) : 0;
-		float modTick_2 = this.getAnimationTick() > 15 ? 15 : this.getAnimationTick();
-		this.rotationYaw *= 0;
-		prey.rotationYaw = this.rotationYaw + this.rotationYawHead + 180;
-		rotationYaw = renderYawOffset;
-		float radius = 0.75F * (0.7F * getRenderSize()) * -3;
-		float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
-		double extraY = 0.8F * (getRenderSize() + (modTick_1 * 0.05) + (modTick_2 * 0.05) - 2);
-		prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 	}
 
 	public int getDragonStage() {
@@ -452,5 +497,4 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
 	}
-
 }

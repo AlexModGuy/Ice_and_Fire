@@ -19,10 +19,8 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 	@Override
 	public boolean shouldExecute() {
 		if(super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())){	
-
 			if(this.dragon.width >= this.targetEntity.width){
 				if(this.targetEntity != dragon.getOwner() && FoodMappings.instance().getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0){
-					System.out.println(this.targetEntity);
 					return true;
 				}
 			}

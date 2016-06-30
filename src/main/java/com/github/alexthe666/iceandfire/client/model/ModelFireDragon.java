@@ -596,7 +596,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.rotate(animator, Club, 0, 20, 0);
 		animator.endKeyframe();
 		animator.resetKeyframe(10);
-
 	}
 
 	@Override
@@ -711,5 +710,10 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressPosition(ArmL1, dragon.sleepProgress, 2.2F, -0.75F, 2.7F);
 		progressPosition(Neck1, dragon.sleepProgress, 0, -0.2F, 1.5F);
 		progressPosition(Neck2, dragon.sleepProgress, 0, -1F, -3.7F);
+		progressRotation(Neck1, dragon.fireBreathProgress, (float) Math.toRadians(-2.0D), 0, 0);
+		progressRotation(Neck2, dragon.fireBreathProgress, (float) Math.toRadians(7.0D), 0, 0);
+		progressRotation(Neck3, dragon.fireBreathProgress, (float) Math.toRadians(2.0D), 0, 0);
+		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-5.0D), 0, 0);
+		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(28.0D), 0, 0);
 	}
 }
