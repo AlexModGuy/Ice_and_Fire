@@ -149,10 +149,8 @@ public class ClientProxy extends CommonProxy {
 
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
 		Particle particle = null;
-		switch(name){
-		case "dragonfire":
+		if(name.equals("dragonfire")){
 			particle = new ParticleDragonFire(world, x, y, z, motX, motY, motZ);
-			break;
 		}
 		if(particle != null){
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);

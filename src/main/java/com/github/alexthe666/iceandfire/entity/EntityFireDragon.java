@@ -213,7 +213,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						double d1 = 0D;
 						Vec3d vec3 = this.getLook(1.0F);
 	                    double d2 = entity.posX - headPosX;
-	                    double d3 = entity.getEntityBoundingBox().minY + (double)(entity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+	                    double d3 = entity.posY - headPosY;
 	                    double d4 = entity.posZ - headPosZ;
 						//double d2 = entity.posX - (headPosX + vec3.xCoord * d1);
 						//double d3 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2.0F) - (0.5D + headPosY + (double) (this.height / 2.0F));
