@@ -4,7 +4,6 @@ import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
 
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 
@@ -113,9 +112,9 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.FingerL1.addBox(-16.0F, -0.5F, -1.0F, 16, 1, 2, 0.0F);
 		this.setRotateAngle(FingerL1, 0.0F, -1.48352986419518F, 0.015707963267948967F);
 		this.FingerL3 = new AdvancedModelRenderer(this, 128, 31);
-        this.FingerL3.setRotationPoint(-6.801243498507322F, 0.3000000000000016F, 0.33797653349781775F);
-        this.FingerL3.addBox(-17.0F, -0.5F, -1.0F, 16, 1, 2, 0.0F);
-        this.setRotateAngle(FingerL3, -3.1415926535897927F, -0.767944870877505F, 3.141592653589793F);
+		this.FingerL3.setRotationPoint(-8.3F, 0.0F, -0.2F);
+		this.FingerL3.addBox(-17.0F, -0.5F, -1.0F, 16, 1, 2, 0.0F);
+		this.setRotateAngle(FingerL3, 0.0F, -1.9198621771937625F, 0.0F);
 		this.HeadFront = new AdvancedModelRenderer(this, 6, 44);
 		this.HeadFront.setRotationPoint(0.5F, 0.0F, 0.0F);
 		this.HeadFront.addBox(-1.5F, -2.8F, -8.8F, 3, 3, 5, 0.0F);
@@ -390,9 +389,9 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.Jaw.addBox(-1.5F, -0.4F, -5.5F, 3, 1, 5, 0.0F);
 		this.setRotateAngle(Jaw, -0.045553093477052F, -0.0F, 0.0F);
 		this.FingerR3 = new AdvancedModelRenderer(this, 128, 31);
-        this.FingerR3.setRotationPoint(6.801243498507315F, 0.0F, 0.33797653349782486F);
-        this.FingerR3.addBox(-17.0F, -0.5F, -1.0F, 16, 1, 2, 0.0F);
-        this.setRotateAngle(FingerR3, 0.0F, -0.7679448708775054F, 0.0F);
+		this.FingerR3.setRotationPoint(-8.3F, 0.0F, 0.2F);
+		this.FingerR3.addBox(-17.0F, -0.5F, -1.0F, 16, 1, 2, 0.0F);
+		this.setRotateAngle(FingerR3, 0.0F, 1.9198621771937625F, 0.0F);
 		this.Lmembrane2 = new AdvancedModelRenderer(this, 34, 74);
 		this.Lmembrane2.mirror = true;
 		this.Lmembrane2.setRotationPoint(-5.5F, 0.0F, 0.0F);
@@ -416,7 +415,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.ArmR2.addChild(this.FingerR1);
 		this.FingerR1.addChild(this.FingerR2);
 		this.ArmL2.addChild(this.FingerL1);
-		this.Lmembrane3.addChild(this.FingerL3);
+		this.ArmL2.addChild(this.FingerL3);
 		this.Head.addChild(this.HeadFront);
 		this.Tail1.addChild(this.Tail2);
 		this.Tail4.addChild(this.Club);
@@ -484,7 +483,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.Head.addChild(this.HornL3);
 		this.BodyLower.addChild(this.Spike9);
 		this.Head.addChild(this.Jaw);
-		this.Rmembrane3.addChild(this.FingerR3);
+		this.ArmR2.addChild(this.FingerR3);
 		this.ArmL2.addChild(this.Lmembrane2);
 		this.Head.addChild(this.HornL);
 		this.Tail2.addChild(this.Tail3);
@@ -626,8 +625,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		EntityFireDragon dragon = (EntityFireDragon) entity;
 		AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[] { Neck2, Neck3, Head };
 		AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[] { Tail1, Tail2, Tail3, Tail4, Club };
-		AdvancedModelRenderer[] LEFTWING = new AdvancedModelRenderer[] { ArmL1, ArmL2, FingerL1 };
-		AdvancedModelRenderer[] RIGHTWING = new AdvancedModelRenderer[] { ArmR1, ArmR2, FingerR1 };
 		this.faceTarget(f3, f4, 3, NECK);
 		this.walk(ThighR, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 		this.walk(LegR, speed_walk, degree_walk * 0.7F, true, 0, -0.2F, f, f1);
@@ -703,12 +700,12 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Rmembrane3, dragon.sleepProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D));
 		progressRotation(Spike7, dragon.sleepProgress, (float) Math.toRadians(46.86D), 0, 0);
 		progressRotation(Lmembrane1, dragon.sleepProgress, 0, (float) Math.toRadians(164.35D), 0);
-		progressRotation(FingerR3, dragon.sleepProgress, 0, (float) Math.toRadians(49.17D), 0);
+		progressRotation(FingerR3, dragon.sleepProgress, 0, (float) Math.toRadians(112.17D), 0);
 		progressRotation(ThighL, dragon.sleepProgress, -((float) Math.toRadians(31.0D)), 0, 0);
 		progressRotation(ArmL1, dragon.sleepProgress, -((float) Math.toRadians(20D)), ((float) Math.toRadians(210D)), (float) Math.toRadians(20.0D));
 		progressRotation(ArmR2, dragon.sleepProgress, (float) Math.toRadians(5.0D), -((float) Math.toRadians(49.0D)), 0);
 		progressRotation(BodyLower, dragon.sleepProgress, -((float) Math.toRadians(13.040000000000001D)), 0, 0);
-		progressRotation(FingerL3, dragon.sleepProgress, 0, -((float) Math.toRadians(49.17D)), 0);
+		progressRotation(FingerL3, dragon.sleepProgress, 0, -((float) Math.toRadians(112.17D)), 0);
 		progressRotation(Neck2, dragon.sleepProgress, -((float) Math.toRadians(3.82D)), (float) Math.toRadians(13.04D), 0);
 		progressRotation(ToeR1, dragon.sleepProgress, (float) Math.toRadians(75.0D), 0, 0);
 		progressRotation(ThighR, dragon.sleepProgress, -((float) Math.toRadians(31.0D)), 0, 0);
@@ -736,86 +733,92 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Neck3, dragon.fireBreathProgress, (float) Math.toRadians(2.0D), 0, 0);
 		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-5.0D), 0, 0);
 		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(28.0D), 0, 0);
-		/*progressRotation(ArmR2, 20, 0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(5.0D)));
-		progressRotation(FingerR2, 20, 0, (float) Math.toRadians(20.57D), 0);
-		progressRotation(HornR, 20, (float) Math.toRadians(18.0D), -((float) Math.toRadians(19.0D)), -((float) Math.toRadians(11.0D)));
-		progressRotation(Spike15, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(FingerR1, 20, 0, (float) Math.toRadians(9.0D), 0);
-		progressRotation(Spike16, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Rmembrane3, 20, (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D));
-		progressRotation(HornL, 20, (float) Math.toRadians(18.0D), (float) Math.toRadians(19.0D), (float) Math.toRadians(11.0D));
-		progressRotation(Spike8, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(FingerL4, 20, (float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D));
-		progressRotation(Spike19, 20, (float) Math.toRadians(38.3218472382285D), 0, 0);
-		progressRotation(Neck3, 20, (float) Math.toRadians(2.13D), 0, 0);
-		progressRotation(Tail2, 20, -((float) Math.toRadians(0.2600000000000019D)), 0, 0);
-		progressRotation(FingerR4, 20, (float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D));
-		progressRotation(LegL, 20, -((float) Math.toRadians(19.0D)), 0, 0);
-		progressRotation(Spike4, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Tail1, 20, -((float) Math.toRadians(3.6328892121619076D)), 0, 0);
-		progressRotation(Spike10, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike12, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(ToeR1, 20, (float) Math.toRadians(90.0D), 0, 0);
-		progressRotation(ToeL3, 20, (float) Math.toRadians(90.0D), 0, 0);
-		progressRotation(FingerL1, 20, 0, -((float) Math.toRadians(9.0D)), 0);
-		progressRotation(Spike1, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(ToeR3, 20, (float) Math.toRadians(90.0D), 0, 0);
-		progressRotation(Spike9, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(LegR, 20, -((float) Math.toRadians(19.0D)), 0, 0);
-		progressRotation(Head, 20, (float) Math.toRadians(5.22D), 0, 0);
-		progressRotation(Lmembrane3, 20, 0, (float) Math.toRadians(180.0D), 0);
-		progressRotation(HornR3, 20, -((float) Math.toRadians(3.0D)), -((float) Math.toRadians(18.0D)), 0);
-		progressRotation(HeadFront, 20, -((float) Math.toRadians(1.8548013008753204D)), 0, 0);
-		progressRotation(ArmR1, 20, 0, (float) Math.toRadians(4.0D), 0);
-		progressRotation(ArmL2, 20, 0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(5.0D)));
-		progressRotation(Spike3, 20, (float) Math.toRadians(51.750006438508166D), 0, 0);
-		progressRotation(HornR2, 20, -((float) Math.toRadians(4.3D)), 0, 0);
-		progressRotation(Lmembrane2, 20, 0, (float) Math.toRadians(180.0D), 0);
-		progressRotation(Rmembrane2, 20, 0, (float) Math.toRadians(0.0D), 0);
-		progressRotation(FingerL2, 20, 0, -((float) Math.toRadians(20.57D)), 0);
-		progressRotation(HornL3, 20, -((float) Math.toRadians(3.0D)), (float) Math.toRadians(18.0D), 0);
-		progressRotation(ArmL1, 20, 0, (float) Math.toRadians(176.0D), 0);
-		progressRotation(Tail3, 20, -((float) Math.toRadians(2.61D)), 0, 0);
-		progressRotation(Spike14, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Neck1, 20, -((float) Math.toRadians(5.22D)), 0, 0);
-		progressRotation(ToeL1, 20, (float) Math.toRadians(90.0D), 0, 0);
-		progressRotation(Spike13, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike18, 20, (float) Math.toRadians(36.86D), 0, 0);
-		progressRotation(ToeL2, 20, (float) Math.toRadians(100.0D), 0, 0);
-		progressRotation(ThighR, 20, (float) Math.toRadians(60.0D), 0, 0);
-		progressRotation(Club, 20, -((float) Math.toRadians(7.83D)), 0, 0);
-		progressRotation(ToeR2, 20, (float) Math.toRadians(100.0D), 0, 0);
-		progressRotation(Spike7, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Rmembrane4, 20, 0, (float) Math.toRadians(0.2D), 0);
-		progressRotation(BodyUpper, 20, (float) Math.toRadians(5.22D), 0, 0);
-		progressRotation(ThighL, 20, (float) Math.toRadians(60.0D), 0, 0);
-		progressRotation(Spike2, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike17, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Tail4, 20, (float) Math.toRadians(0.21D), 0, 0);
-		progressRotation(Jaw, 20, -((float) Math.toRadians(2.61D)), 0, 0);
-		progressRotation(HornL2, 20, -((float) Math.toRadians(4.3D)), 0, 0);
-		progressRotation(Spike5, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike20, 20, (float) Math.toRadians(21.377643555866484D), 0, 0);
-		progressRotation(Spike6, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike11, 20, (float) Math.toRadians(46.86D), 0, 0);*/
-		float speed_fly = 0.2F;
-		float degree_fly = 0.5F;
-		//this.chainFlap(LEFTWING, speed_fly, degree_fly * -1.5F, 1, entity.ticksExisted, 1);
-		//this.chainFlap(RIGHTWING, speed_fly, degree_fly * 1.5F, 1, entity.ticksExisted, 1);
-		//Lmembrane3.rotateAngleX += -(FingerL1.rotateAngleZ - FingerL1.defaultRotationZ) / 2;
-		//Rmembrane3.rotateAngleX += -(FingerR1.rotateAngleZ - FingerR1.defaultRotationZ) / 2;
-	}
+		progressRotation(ArmR2, dragon.flyProgress, 0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(5.0D)));
+		progressRotation(FingerR2, dragon.flyProgress, 0, (float) Math.toRadians(20.57D), 0);
+		progressRotation(HornR, dragon.flyProgress, (float) Math.toRadians(18.0D), -((float) Math.toRadians(19.0D)), -((float) Math.toRadians(11.0D)));
+		progressRotation(Spike15, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(FingerR1, dragon.flyProgress, 0, (float) Math.toRadians(9.0D), 0);
+		progressRotation(Spike16, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Rmembrane3, dragon.flyProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D));
+		progressRotation(HornL, dragon.flyProgress, (float) Math.toRadians(18.0D), (float) Math.toRadians(19.0D), (float) Math.toRadians(11.0D));
+		progressRotation(Spike8, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(FingerL4, dragon.flyProgress, (float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D));
+		progressRotation(Spike19, dragon.flyProgress, (float) Math.toRadians(38.3218472382285D), 0, 0);
+		progressRotation(Neck3, dragon.flyProgress, (float) Math.toRadians(2.13D), 0, 0);
+		progressRotation(Tail2, dragon.flyProgress, -((float) Math.toRadians(0.2600000000000019D)), 0, 0);
+		progressRotation(FingerR4, dragon.flyProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D));
+		progressRotation(LegL, dragon.flyProgress, -((float) Math.toRadians(19.0D)), 0, 0);
+		progressRotation(FingerR3, dragon.flyProgress, 0, (float) Math.toRadians(52.107872099509834D), 0);
+		progressRotation(Spike4, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Tail1, dragon.flyProgress, -((float) Math.toRadians(3.6328892121619076D)), 0, 0);
+		progressRotation(Spike10, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike12, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(ToeR1, dragon.flyProgress, (float) Math.toRadians(90.0D), 0, 0);
+		progressRotation(ToeL3, dragon.flyProgress, (float) Math.toRadians(90.0D), 0, 0);
+		progressRotation(FingerL1, dragon.flyProgress, 0, -((float) Math.toRadians(9.0D)), 0);
+		progressRotation(Spike1, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(ToeR3, dragon.flyProgress, (float) Math.toRadians(90.0D), 0, 0);
+		progressRotation(Spike9, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(LegR, dragon.flyProgress, -((float) Math.toRadians(19.0D)), 0, 0);
+		progressRotation(Head, dragon.flyProgress, (float) Math.toRadians(5.22D), 0, 0);
+		progressRotation(Lmembrane3, dragon.flyProgress, 0, (float) Math.toRadians(180.0D), 0);
+		progressRotation(HornR3, dragon.flyProgress, -((float) Math.toRadians(3.0D)), -((float) Math.toRadians(18.0D)), 0);
+		progressRotation(FingerL3, dragon.flyProgress, 0, -((float) Math.toRadians(52.11D)), 0);
+		progressRotation(HeadFront, dragon.flyProgress, -((float) Math.toRadians(1.8548013008753204D)), 0, 0);
+		progressRotation(ArmR1, dragon.flyProgress, 0, (float) Math.toRadians(4.0D), 0);
+		progressRotation(ArmL2, dragon.flyProgress, 0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(5.0D)));
+		progressRotation(Spike3, dragon.flyProgress, (float) Math.toRadians(51.750006438508166D), 0, 0);
+		progressRotation(HornR2, dragon.flyProgress, -((float) Math.toRadians(4.3D)), 0, 0);
+		progressRotation(Lmembrane2, dragon.flyProgress, 0, (float) Math.toRadians(180.0D), 0);
+		progressRotation(Rmembrane2, dragon.flyProgress, 0, (float) Math.toRadians(0.0D), 0);
+		progressRotation(FingerL2, dragon.flyProgress, 0, -((float) Math.toRadians(20.57D)), 0);
+		progressRotation(Lmembrane1, dragon.flyProgress, 0, (float) Math.toRadians(180.0D), 0);
+		progressRotation(HornL3, dragon.flyProgress, -((float) Math.toRadians(3.0D)), (float) Math.toRadians(18.0D), 0);
+		progressRotation(ArmL1, dragon.flyProgress, 0, (float) Math.toRadians(180.0D), 0);
+		progressRotation(Tail3, dragon.flyProgress, -((float) Math.toRadians(2.61D)), 0, 0);
+		progressRotation(Spike14, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Neck1, dragon.flyProgress, -((float) Math.toRadians(5.22D)), 0, 0);
+		progressRotation(ToeL1, dragon.flyProgress, (float) Math.toRadians(90.0D), 0, 0);
+		progressRotation(Spike13, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike18, dragon.flyProgress, (float) Math.toRadians(36.86D), 0, 0);
+		progressRotation(ToeL2, dragon.flyProgress, (float) Math.toRadians(100.0D), 0, 0);
+		progressRotation(ThighR, dragon.flyProgress, (float) Math.toRadians(60.0D), 0, 0);
+		progressRotation(Club, dragon.flyProgress, -((float) Math.toRadians(7.83D)), 0, 0);
+		progressRotation(ToeR2, dragon.flyProgress, (float) Math.toRadians(100.0D), 0, 0);
+		progressRotation(Spike7, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Rmembrane4, dragon.flyProgress, 0, (float) Math.toRadians(0.2D), 0);
+		progressRotation(BodyUpper, dragon.flyProgress, (float) Math.toRadians(5.22D), 0, 0);
+		progressRotation(ThighL, dragon.flyProgress, (float) Math.toRadians(60.0D), 0, 0);
+		progressRotation(Spike2, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike17, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Tail4, dragon.flyProgress, (float) Math.toRadians(0.21D), 0, 0);
+		progressRotation(Jaw, dragon.flyProgress, -((float) Math.toRadians(2.61D)), 0, 0);
+		progressRotation(HornL2, dragon.flyProgress, -((float) Math.toRadians(4.3D)), 0, 0);
+		progressRotation(Spike5, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike20, dragon.flyProgress, (float) Math.toRadians(21.377643555866484D), 0, 0);
+		progressRotation(Spike6, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike11, dragon.flyProgress, (float) Math.toRadians(46.86D), 0, 0);
+		AdvancedModelRenderer[] PARTS1 = new AdvancedModelRenderer[] { ClawL3, Lmembrane3, ArmR1, FingerL2, FingerR4, ArmL1, FingerR1, Lmembrane2, ClawL, FingerR3, FingerL3, FingerL1, Rmembrane2, Lmembrane4, Rmembrane3, FingerL4, Lmembrane1, ClawR, Rmembrane4, ClawR2, ClawR3, ClawL2, FingerR2, Rmembrane1, ArmL2, ArmR2 };
+		AdvancedModelRenderer[] PARTS2 = new AdvancedModelRenderer[] { ClawL2, Rmembrane2, FingerL1, ClawL3, FingerR4, FingerR2, FingerR3, Rmembrane1, ArmL1, ArmR1, Rmembrane3, Lmembrane3, Lmembrane1, FingerL2, ArmL2, FingerL4, ClawR3, FingerL3, FingerR1, ArmR2, Rmembrane4, ClawL, Lmembrane4, ClawR2, Lmembrane2, ClawR };
+		AdvancedModelRenderer[] PARTS3 = new AdvancedModelRenderer[] { FingerL2, Lmembrane1, ArmL2, ClawL3, ClawR, Lmembrane3, FingerR1, Lmembrane4, ClawL, Rmembrane2, ArmR1, FingerL4, Rmembrane1, FingerL1, Rmembrane4, ArmR2, ClawL2, Rmembrane3, ClawR2, FingerR3, ArmL1, FingerL3, FingerR4, ClawR3, FingerR2, Lmembrane2 };
+		AdvancedModelRenderer[] PARTS4 = new AdvancedModelRenderer[] { Lmembrane4, Rmembrane2, Lmembrane1, ClawR3, FingerL1, ClawL2, ClawL, FingerR2, FingerL3, Lmembrane3, ClawR, Lmembrane2, ArmL1, FingerR3, FingerR1, Rmembrane4, ClawL3, Rmembrane3, Rmembrane1, FingerR4, FingerL4, ClawR2, ArmR2, ArmL2, ArmR1, FingerL2 };
+		AdvancedModelRenderer[] PARTS5 = new AdvancedModelRenderer[] { ClawR3, Rmembrane2, Lmembrane1, Lmembrane4, Rmembrane3, ClawL3, ClawL, Lmembrane2, FingerL3, FingerL4, FingerL2, FingerR2, ArmL2, ArmR1, Lmembrane3, FingerR4, ArmL1, FingerR3, ArmR2, ClawL2, Rmembrane4, ClawR, FingerL1, ClawR2, Rmembrane1, FingerR1 };
+		AdvancedModelRenderer[] PARTS6 = new AdvancedModelRenderer[] { ArmL2, ClawR, ClawR2, Lmembrane2, Rmembrane1, FingerL4, ArmR2, ClawR3, FingerR4, FingerL3, FingerR1, ArmL1, Rmembrane3, FingerL2, ArmR1, ClawL3, Lmembrane3, Rmembrane2, Rmembrane4, FingerR3, ClawL2, ClawL, FingerR2, Lmembrane1, Lmembrane4, FingerL1 };
+		Vec3[] POSITIONS1 = new Vec3[] { new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(15.0D), (float) Math.toRadians(180.0D), 0), new Vec3(0, (float) Math.toRadians(4.0D), (float) Math.toRadians(25.0D)), new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(180.0D), -((float) Math.toRadians(25.0D))), new Vec3(0, (float) Math.toRadians(9.0D), -((float) Math.toRadians(30.0D))), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(18.0D), (float) Math.toRadians(52.11D), -((float) Math.toRadians(13.0D))), new Vec3(-((float) Math.toRadians(18.0D)), -((float) Math.toRadians(52.11D)), -((float) Math.toRadians(13.0D))), new Vec3(0, -((float) Math.toRadians(9.0D)), -((float) Math.toRadians(30.0D))), new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(195.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(20.0D))), new Vec3(0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(20.0D))) };
+		Vec3[] POSITIONS2 = new Vec3[] { new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(9.0D)), -((float) Math.toRadians(40.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3((float) Math.toRadians(18.0D), (float) Math.toRadians(52.11D), -((float) Math.toRadians(21.0D))), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), -((float) Math.toRadians(50.0D))), new Vec3(0, (float) Math.toRadians(4.0D), (float) Math.toRadians(50.0D)), new Vec3((float) Math.toRadians(200.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(20.0D), (float) Math.toRadians(180.0D), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3(0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(35.0D))), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(-((float) Math.toRadians(18.0D)), -((float) Math.toRadians(52.11D)), -((float) Math.toRadians(21.0D))), new Vec3(0, (float) Math.toRadians(9.0D), -((float) Math.toRadians(40.0D))), new Vec3(0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(35.0D))), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)) };
+		Vec3[] POSITIONS3 = new Vec3[] { new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(25.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(13.0D), (float) Math.toRadians(180.0D), 0), new Vec3(0, (float) Math.toRadians(9.0D), -((float) Math.toRadians(25.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(4.0D), (float) Math.toRadians(60.0D)), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(9.0D)), -((float) Math.toRadians(25.0D))), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3(0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(25.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(193.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(-((float) Math.toRadians(8.0D)), (float) Math.toRadians(52.11D), -((float) Math.toRadians(10.0D))), new Vec3(0, (float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D))), new Vec3(-((float) Math.toRadians(8.0D)), -((float) Math.toRadians(52.11D)), -((float) Math.toRadians(10.0D))), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0) };
+		Vec3[] POSITIONS4 = new Vec3[] { new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(9.0D)), 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, -((float) Math.toRadians(52.11D)), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, (float) Math.toRadians(180.0D), -((float) Math.toRadians(70.0D))), new Vec3(0, (float) Math.toRadians(52.11D), 0), new Vec3(0, (float) Math.toRadians(9.0D), 0), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(15.0D))), new Vec3(0, (float) Math.toRadians(8.0D), -((float) Math.toRadians(15.0D))), new Vec3(0, (float) Math.toRadians(4.0D), (float) Math.toRadians(70.0D)), new Vec3(0, -((float) Math.toRadians(20.57D)), 0) };
+		Vec3[] POSITIONS5 = new Vec3[] { new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, -((float) Math.toRadians(52.11D)), 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, (float) Math.toRadians(16.0D), -((float) Math.toRadians(5.0D))), new Vec3(0, (float) Math.toRadians(20.0D), -((float) Math.toRadians(20.0D))), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(160.0D), (float) Math.toRadians(20.0D)), new Vec3(0, (float) Math.toRadians(52.107872099509834D), 0), new Vec3(0, -((float) Math.toRadians(16.0D)), -((float) Math.toRadians(5.0D))), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(25.0D)), -((float) Math.toRadians(10.0D))), new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(25.0D), -((float) Math.toRadians(10.0D))) };
+		Vec3[] POSITIONS6 = new Vec3[] { new Vec3(0, (float) Math.toRadians(16.0D), -((float) Math.toRadians(25.0D))), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(16.0D)), -((float) Math.toRadians(25.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(3.0D), -((float) Math.toRadians(52.11D)), -((float) Math.toRadians(10.0D))), new Vec3(0, (float) Math.toRadians(25.0D), -((float) Math.toRadians(25.0D))), new Vec3(0, (float) Math.toRadians(160.0D), (float) Math.toRadians(50.0D)), new Vec3((float) Math.toRadians(193.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3(0, (float) Math.toRadians(20.0D), -((float) Math.toRadians(50.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(13.0D), (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3((float) Math.toRadians(3.0D), (float) Math.toRadians(52.11D), -((float) Math.toRadians(10.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(25.0D)), -((float) Math.toRadians(25.0D))) };
+		Vec3[][] POSITIONS = new Vec3[][] { POSITIONS1, POSITIONS2, POSITIONS3, POSITIONS4, POSITIONS5, POSITIONS6 };
+		AdvancedModelRenderer[][] PARTS = new AdvancedModelRenderer[][] { PARTS1, PARTS2, PARTS3, PARTS4, PARTS5, PARTS6 };
+		AdvancedModelRenderer[] currentSet = PARTS[dragon.animationCycle];
+		Vec3[] currentPosition = POSITIONS[dragon.animationCycle];
+		for (int index = 0; index < currentSet.length; index++) {
+			if(currentSet[index] != this.ClawL && currentSet[index] != this.ClawR){
+				this.setRotateAngle(currentSet[index], currentPosition[index].x, currentPosition[index].y, currentPosition[index].z);
 
-	private void singleFlap(AdvancedModelRenderer box, int index, float speed, float degree, double rootOffset, float swing, float swingAmount) {
-		float offset = calculateChainOffset(rootOffset, box, index);
-		box.rotateAngleZ += calculateChainRotation(speed, degree, swing, swingAmount, offset, index);
-	}
-
-	private float calculateChainRotation(float speed, float degree, float swing, float swingAmount, float offset, int boxIndex) {
-		return MathHelper.cos(swing * (speed) + offset * boxIndex) * swingAmount * (degree);
-	}
-
-	private float calculateChainOffset(double rootOffset, AdvancedModelRenderer box, int index) {
-		return (float) ((rootOffset * Math.PI) / (2 * index));
+			}
+		}
 	}
 }

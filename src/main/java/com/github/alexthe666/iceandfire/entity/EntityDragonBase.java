@@ -49,6 +49,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private boolean isBreathingFire;
 	public float fireBreathProgress;
 	private int fireTicks;
+	public float flyProgress = 20;
 	private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -65,7 +66,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public static Animation ANIMATION_BITE;
 	public static Animation ANIMATION_SHAKEPREY;
 	public boolean attackDecision;
-	
+	public int animationCycle;
+
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
 		this.diet = diet;
@@ -106,7 +108,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		compound.setBoolean("FireBreathing", this.isBreathingFire());
 		compound.setBoolean("AttackDecision", attackDecision);
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
@@ -194,7 +196,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		return isSleeping;
 	}
-	
+
 	public void setBreathingFire(boolean breathing) {
 		this.dataManager.set(FIREBREATHING, Boolean.valueOf(breathing));
 		if (!worldObj.isRemote) {
@@ -295,6 +297,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (animationCycle < 5) {
+			if (this.ticksExisted % 3 == 0) {
+				animationCycle++;
+			}
+		} else {
+			if (this.ticksExisted % 3 == 0) {
+				animationCycle = 0;
+			}
+		}
 		boolean sleeping = isSleeping();
 		if (sleeping && sleepProgress < 20.0F) {
 			sleepProgress += 0.5F;
@@ -318,18 +329,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.setHunger(this.getHunger() - 1);
 			}
 		}
-		
-		if(this.isBreathingFire()){
+
+		if (this.isBreathingFire()) {
 			this.fireTicks++;
-			if(fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180) ){
+			if (fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180)) {
 				this.setBreathingFire(false);
 				this.attackDecision = true;
 				fireTicks = 0;
 			}
 		}
 	}
-	
-	public boolean isActuallyBreathingFire(){
+
+	public boolean isActuallyBreathingFire() {
 		return this.fireTicks > 20 && this.isBreathingFire();
 	}
 
