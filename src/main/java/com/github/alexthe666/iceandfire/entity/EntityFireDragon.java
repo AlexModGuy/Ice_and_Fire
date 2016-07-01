@@ -175,10 +175,10 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	private void shootFireAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
-			if (this.getRNG().nextInt(5) == 0) {
+			if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
-				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 18) {
+				} else if (this.getAnimationTick()  == 15) {
 					rotationYaw = renderYawOffset;
 					float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
 					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
