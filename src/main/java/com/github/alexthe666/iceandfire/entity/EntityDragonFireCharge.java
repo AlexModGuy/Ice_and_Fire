@@ -20,17 +20,17 @@ public class EntityDragonFireCharge extends EntityFireball {
 	public EntityDragonFireCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
         double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.03D;
-        this.accelerationY = accelY / d0 * 0.03D;
-        this.accelerationZ = accelZ / d0 * 0.03D;
+        this.accelerationX = accelX / d0 * 0.07D;
+        this.accelerationY = accelY / d0 * 0.07D;
+        this.accelerationZ = accelZ / d0 * 0.07D;
 	}
 
 	public EntityDragonFireCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
         double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.03D;
-        this.accelerationY = accelY / d0 * 0.03D;
-        this.accelerationZ = accelZ / d0 * 0.03D;
+        this.accelerationX = accelX / d0 * 0.07D;
+        this.accelerationY = accelY / d0 * 0.07D;
+        this.accelerationZ = accelZ / d0 * 0.07D;
 	}
 
 	public void setSizes(float width, float height) {

@@ -170,6 +170,8 @@ public class EntityFireDragon extends EntityDragonBase {
 				shootFireAtMob(this.getAttackTarget());
 
 			}
+		}else{
+			this.setBreathingFire(false);
 		}
 	}
 
@@ -210,15 +212,20 @@ public class EntityFireDragon extends EntityDragonBase {
 						float headPosY = (float) (posY + 0.5 * getRenderSize());
 						double d1 = 0D;
 						Vec3d vec3 = this.getLook(1.0F);
-						double d2 = entity.posX - (headPosX + vec3.xCoord * d1);
-						double d3 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2.0F) - (0.5D + headPosY + (double) (this.height / 2.0F));
-						double d4 = entity.posZ - (headPosZ + vec3.zCoord * d1);
+	                    double d2 = entity.posX - headPosX;
+	                    double d3 = entity.getEntityBoundingBox().minY + (double)(entity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+	                    double d4 = entity.posZ - headPosZ;
+						//double d2 = entity.posX - (headPosX + vec3.xCoord * d1);
+						//double d3 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2.0F) - (0.5D + headPosY + (double) (this.height / 2.0F));
+						//double d4 = entity.posZ - (headPosZ + vec3.zCoord * d1);
 						worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 						EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-						entitylargefireball.setSizes(size, size);
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-						worldObj.spawnEntityInWorld(entitylargefireball);
+						if (!worldObj.isRemote && !entity.isDead) {
+							worldObj.spawnEntityInWorld(entitylargefireball);
+						}
+						entitylargefireball.setSizes(size, size);
 						if (entity.isDead) {
 							this.setBreathingFire(false);
 							this.attackDecision = true;

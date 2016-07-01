@@ -736,7 +736,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Neck3, dragon.fireBreathProgress, (float) Math.toRadians(2.0D), 0, 0);
 		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-5.0D), 0, 0);
 		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(28.0D), 0, 0);
-		progressRotation(ArmR2, 20, 0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(5.0D)));
+		/*progressRotation(ArmR2, 20, 0, -((float) Math.toRadians(8.0D)), -((float) Math.toRadians(5.0D)));
 		progressRotation(FingerR2, 20, 0, (float) Math.toRadians(20.57D), 0);
 		progressRotation(HornR, 20, (float) Math.toRadians(18.0D), -((float) Math.toRadians(19.0D)), -((float) Math.toRadians(11.0D)));
 		progressRotation(Spike15, 20, (float) Math.toRadians(46.86D), 0, 0);
@@ -797,13 +797,13 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Spike5, 20, (float) Math.toRadians(46.86D), 0, 0);
 		progressRotation(Spike20, 20, (float) Math.toRadians(21.377643555866484D), 0, 0);
 		progressRotation(Spike6, 20, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(Spike11, 20, (float) Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike11, 20, (float) Math.toRadians(46.86D), 0, 0);*/
 		float speed_fly = 0.2F;
 		float degree_fly = 0.5F;
-		this.chainFlap(LEFTWING, speed_fly, degree_fly * -1.5F, 1, entity.ticksExisted, 1);
-		this.chainFlap(RIGHTWING, speed_fly, degree_fly * 1.5F, 1, entity.ticksExisted, 1);
-		Lmembrane3.rotateAngleX += -(FingerL1.rotateAngleZ - FingerL1.defaultRotationZ) / 2;
-		Rmembrane3.rotateAngleX += -(FingerR1.rotateAngleZ - FingerR1.defaultRotationZ) / 2;
+		//this.chainFlap(LEFTWING, speed_fly, degree_fly * -1.5F, 1, entity.ticksExisted, 1);
+		//this.chainFlap(RIGHTWING, speed_fly, degree_fly * 1.5F, 1, entity.ticksExisted, 1);
+		//Lmembrane3.rotateAngleX += -(FingerL1.rotateAngleZ - FingerL1.defaultRotationZ) / 2;
+		//Rmembrane3.rotateAngleX += -(FingerR1.rotateAngleZ - FingerR1.defaultRotationZ) / 2;
 	}
 
 	private void singleFlap(AdvancedModelRenderer box, int index, float speed, float degree, double rootOffset, float swing, float swingAmount) {

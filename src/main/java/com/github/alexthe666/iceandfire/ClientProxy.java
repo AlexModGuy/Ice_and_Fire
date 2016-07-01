@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -14,13 +15,14 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
+import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonFireCharge;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonSkull;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderModCapes;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderNothing;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonFireCharge;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
@@ -29,9 +31,9 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
@@ -146,7 +148,15 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-
+		Particle particle = null;
+		switch(name){
+		case "dragonfire":
+			particle = new ParticleDragonFire(world, x, y, z, motX, motY, motZ);
+			break;
+		}
+		if(particle != null){
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		}
 	}
 
 	@Override
