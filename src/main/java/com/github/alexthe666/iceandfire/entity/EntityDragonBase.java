@@ -297,7 +297,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (animationCycle < 5) {
+		if (animationCycle < 15) {
 			animationCycle++;
 		} else {
 			animationCycle = 0;
