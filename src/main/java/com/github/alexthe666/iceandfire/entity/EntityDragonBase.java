@@ -298,13 +298,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (animationCycle < 5) {
-			if (this.ticksExisted % 3 == 0) {
-				animationCycle++;
-			}
+			animationCycle++;
 		} else {
-			if (this.ticksExisted % 3 == 0) {
-				animationCycle = 0;
-			}
+			animationCycle = 0;
 		}
 		boolean sleeping = isSleeping();
 		if (sleeping && sleepProgress < 20.0F) {
