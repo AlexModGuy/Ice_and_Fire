@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,19 +31,23 @@ public class GuiDragon extends GuiContainer {
 		//this.dragonInv = dragon.inv;
 		this.dragon = dragon;
 		this.allowUserInput = false;
-		this.ySize = 193;
+		this.ySize = 213;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String s1 = this.dragonInv.getDisplayName().getUnformattedText();
+		String s1 = new TextComponentTranslation("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText();
 		this.fontRendererObj.drawString(s1, this.xSize / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 6, 4210752);
 		String s3 = dragon.getCustomNameTag().length() == 0 ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomNameTag();
 		this.fontRendererObj.drawString(s3, this.xSize / 2 - this.fontRendererObj.getStringWidth(s3) / 2, 77, 0XFFFFFF);
 		String s2 = StatCollector.translateToLocal("dragon.health") + dragon.getHealth() + "/" + dragon.getMaxHealth();
 		this.fontRendererObj.drawString(s2, this.xSize / 2 - this.fontRendererObj.getStringWidth(s2) / 2, 86, 0XFFFFFF);
+		String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
+		this.fontRendererObj.drawString(s5, this.xSize / 2 - this.fontRendererObj.getStringWidth(s5) / 2, 95, 0XFFFFFF);
+		String s6 = StatCollector.translateToLocal("dragon.hunger") +  dragon.getHunger() + "/100";
+		this.fontRendererObj.drawString(s6, this.xSize / 2 - this.fontRendererObj.getStringWidth(s6) / 2, 104, 0XFFFFFF);
 		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage();
-		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 94, 0XFFFFFF);
+		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 113, 0XFFFFFF);
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class GuiDragon extends GuiContainer {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-		drawEntityOnScreen(k + 88, l + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, this.dragon);
+		drawEntityOnScreen(k + 88, l + (int)(0.5F * (dragon.flyProgress)) + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, this.dragon);
 
 	}
 

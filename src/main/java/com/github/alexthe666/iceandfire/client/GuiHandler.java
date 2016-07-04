@@ -28,7 +28,6 @@ public class GuiHandler implements IGuiHandler {
 
 		case 0:
 			if (entity != null) {
-
 				if (entity instanceof EntityDragonBase) {
 					return new ContainerDragon((EntityDragonBase) entity, player);
 				}

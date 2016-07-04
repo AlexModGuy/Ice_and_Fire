@@ -47,7 +47,7 @@ public class EntityDragonFire extends EntityFireball {
 	public void onUpdate() {
 		super.onUpdate();
 		for (int i = 0; i < 6; ++i) {
-			IceAndFire.proxy.spawnParticle("dragonfire", worldObj, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+			IceAndFire.PROXY.spawnParticle("dragonfire", worldObj, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 		}
 		this.setSize((30 - Math.min(ticksExisted, 30)) * 0.05F, (30 - Math.min(ticksExisted, 30)) * 0.05F);
 		if (ticksExisted > 30) {

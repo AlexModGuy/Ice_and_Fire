@@ -31,6 +31,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
+import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
@@ -40,10 +41,10 @@ public class IceAndFire {
 	public static final String VERSION = "0.1.4";
 	@Instance(value = MODID)
 	public static IceAndFire instance;
-	@NetworkWrapper({ MessageDaytime.class })
+	@NetworkWrapper({ MessageDaytime.class, MessageDragonArmor.class })
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
-	public static CommonProxy proxy;
+	public static CommonProxy PROXY;
 	public static CreativeTabs tab;
 	public static DamageSource dragon;
 	public static DamageSource dragonFire;
@@ -79,7 +80,7 @@ public class IceAndFire {
 		ModKeys.init();
 		ModFoods.init();
 		ModSounds.init();
-		proxy.render();
+		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 

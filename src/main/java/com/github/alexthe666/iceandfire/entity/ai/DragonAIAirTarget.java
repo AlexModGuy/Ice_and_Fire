@@ -25,6 +25,9 @@ public class DragonAIAirTarget extends EntityAIBase {
 			if (!dragon.isFlying()) {
 				return false;
 			}
+			if (dragon.isSleeping()) {
+				return false;
+			}
 			if (dragon.airTarget != null && dragon.getDistanceSquared(new Vec3d(dragon.airTarget.getX(), dragon.posY, dragon.airTarget.getZ())) > 3) {
 				dragon.airTarget = null;
 			}

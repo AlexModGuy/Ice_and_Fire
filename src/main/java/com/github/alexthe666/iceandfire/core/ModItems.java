@@ -68,6 +68,8 @@ public class ModItems {
 	public static Item dragonbone_bow;
 	public static Item dragon_skull;
 	public static Item dragon_armor_iron;
+	public static Item dragon_armor_gold;
+	public static Item dragon_armor_diamond;
 
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
@@ -121,5 +123,7 @@ public class ModItems {
 		dragonbone_bow = new ItemDragonBow();
 		dragon_skull = new ItemDragonSkull();
 		dragon_armor_iron = new ItemDragonArmor(0, "dragonarmor_iron");
+		dragon_armor_gold = new ItemDragonArmor(1, "dragonarmor_gold");
+		dragon_armor_diamond = new ItemDragonArmor(0, "dragonarmor_diamond");
 	}
 }
