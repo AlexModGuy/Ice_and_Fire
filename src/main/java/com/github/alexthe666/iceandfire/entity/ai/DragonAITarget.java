@@ -12,7 +12,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 	private EntityDragonBase dragon;
 
 	public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
-		super(entityIn, classTarget, 20, checkSight, false, targetSelector);
+		super(entityIn, classTarget, 1, checkSight, false, targetSelector);
 		this.dragon = entityIn;
 	}
 

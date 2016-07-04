@@ -64,7 +64,8 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
-				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 6.0F);
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 3.0F);
+				movingObject.entityHit.setFire(5);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				FireExplosion explosion = new FireExplosion(worldObj, null, this.posX, this.posY, this.posZ, 2, true);
 				if(shootingEntity != null){

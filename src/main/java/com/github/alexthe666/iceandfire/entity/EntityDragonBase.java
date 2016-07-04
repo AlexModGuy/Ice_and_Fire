@@ -80,7 +80,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int animationCycle;
 	public BlockPos airTarget;
 	public BlockPos homeArea;
-
+	protected int flyHovering;
+	
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
 		this.diet = diet;
@@ -381,11 +382,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if (this.isHovering()) {
 			this.hoverTicks++;
-			if (this.hoverTicks > 40) {
+			if (this.hoverTicks > 40 && flyHovering == 0) {
 				this.setHovering(false);
 				this.setFlying(true);
-
+				this.flyHovering = 0;
 				this.hoverTicks = 0;
+			}
+			if(flyHovering == 0){
+				//move upwards
+			}
+			if(flyHovering == 1){
+				//move down
+			}
+			if(flyHovering == 2){
+				this.motionY *= 0;
+				//stay still
 			}
 		}
 		this.motionY *= 0.6D;
@@ -397,8 +408,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (this.isFlying()) {
 			this.flyTicks++;
 		}
-		if (this.getRNG().nextInt(20) == 0 && !this.isFlying() && !this.isHovering() && this.canMove()) {
+		if (this.getRNG().nextInt(20) == 0 && !this.isFlying() && !this.isHovering() && this.canMove() && !this.doesWantToLand()) {
 			this.setHovering(true);
+			this.flyHovering = 0;
+			this.flyTicks = 0;
 		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
@@ -427,6 +440,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean isActuallyBreathingFire() {
 		return this.fireTicks > 20 && this.isBreathingFire();
+	}
+	
+	public boolean doesWantToLand() {
+		return this.flyTicks > 10;
 	}
 
 	public abstract String getVariantName(int variant);
@@ -622,6 +639,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			rotationYaw += rotation;
 		} else {
 			this.airTarget = null;
+		}
+		if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+			this.setFlying(false);
+			this.setHovering(true);
+			this.flyHovering = 1;
 		}
 	}
 

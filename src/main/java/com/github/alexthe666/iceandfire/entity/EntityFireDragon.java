@@ -163,12 +163,12 @@ public class EntityFireDragon extends EntityDragonBase {
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if (attackDecision) {
+			if (!attackDecision || this.isFlying()) {
+				shootFireAtMob(this.getAttackTarget());
+			} else {
 				if (this.getEntityBoundingBox().expand(10 * (this.getRenderSize() / this.maximumSize), 10 * (this.getRenderSize() / this.maximumSize), 10 * (this.getRenderSize() / this.maximumSize)).intersectsWith(this.getAttackTarget().getEntityBoundingBox())) {
 					attackEntityAsMob(this.getAttackTarget());
 				}
-			} else {
-				shootFireAtMob(this.getAttackTarget());
 
 			}
 		}else{
@@ -238,7 +238,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			}
 		}
 	}
-
+	
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;
