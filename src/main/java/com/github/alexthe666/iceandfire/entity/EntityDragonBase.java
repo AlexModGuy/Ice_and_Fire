@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,11 +25,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.model.Vec3;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 
 import fossilsarcheology.api.EnumDiet;
@@ -46,16 +50,23 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private boolean isSleeping;
 	public float sleepProgress;
 	private boolean isSitting;
+	private boolean isHovering;
+	public float hoverProgress;
+	private boolean isFlying;
+	public float flyProgress;
 	private boolean isBreathingFire;
 	public float fireBreathProgress;
 	private int fireTicks;
-	public float flyProgress = 20;
+	private int hoverTicks;
+	private int flyTicks;
 	private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SLEEPING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> FIREBREATHING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> HOVERING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean> createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
 	private int animationTick;
 	private Animation currentAnimation;
 	protected float minimumSize;
@@ -67,6 +78,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public static Animation ANIMATION_SHAKEPREY;
 	public boolean attackDecision;
 	public int animationCycle;
+	public BlockPos airTarget;
+	public BlockPos homeArea;
 
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
@@ -95,6 +108,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.dataManager.register(VARIANT, Integer.valueOf(0));
 		this.dataManager.register(SLEEPING, Boolean.valueOf(false));
 		this.dataManager.register(FIREBREATHING, Boolean.valueOf(false));
+		this.dataManager.register(HOVERING, Boolean.valueOf(false));
+		this.dataManager.register(FLYING, Boolean.valueOf(false));
 	}
 
 	@Override
@@ -107,6 +122,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		compound.setBoolean("Sleeping", this.isSleeping());
 		compound.setBoolean("FireBreathing", this.isBreathingFire());
 		compound.setBoolean("AttackDecision", attackDecision);
+		compound.setBoolean("Hovering", this.isHovering());
+		compound.setBoolean("Flying", this.isFlying());
+
 	}
 
 	@Override
@@ -119,6 +137,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setSleeping(compound.getBoolean("Sleeping"));
 		this.setBreathingFire(compound.getBoolean("FireBreathing"));
 		this.attackDecision = compound.getBoolean("AttackDecision");
+		this.setHovering(compound.getBoolean("Hovering"));
+		this.setFlying(compound.getBoolean("Flying"));
+
 	}
 
 	@Override
@@ -177,6 +198,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		return this.dataManager.get(GENDER).booleanValue();
 	}
 
+	public boolean isHovering() {
+		if (worldObj.isRemote) {
+			boolean isHovering = this.dataManager.get(HOVERING).booleanValue();
+			this.isHovering = isHovering;
+			return isHovering;
+		}
+		return isHovering;
+	}
+
+	public boolean isFlying() {
+		if (worldObj.isRemote) {
+			boolean isFlying = this.dataManager.get(FLYING).booleanValue();
+			this.isFlying = isFlying;
+			return isFlying;
+		}
+		return isFlying;
+	}
+
 	public void setGender(boolean male) {
 		this.dataManager.set(GENDER, Boolean.valueOf(male));
 	}
@@ -185,6 +224,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.dataManager.set(SLEEPING, Boolean.valueOf(sleeping));
 		if (!worldObj.isRemote) {
 			this.isSleeping = sleeping;
+		}
+	}
+
+	public void setHovering(boolean hovering) {
+		this.dataManager.set(HOVERING, Boolean.valueOf(hovering));
+		if (!worldObj.isRemote) {
+			this.isHovering = hovering;
+		}
+	}
+
+	public void setFlying(boolean flying) {
+		this.dataManager.set(FLYING, Boolean.valueOf(flying));
+		if (!worldObj.isRemote) {
+			this.isFlying = flying;
 		}
 	}
 
@@ -314,6 +367,39 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else if (!fireBreathing && fireBreathProgress > 0.0F) {
 			fireBreathProgress -= 0.5F;
 		}
+		boolean hovering = isHovering();
+		if (hovering && hoverProgress < 20.0F) {
+			hoverProgress += 0.5F;
+		} else if (!hovering && hoverProgress > 0.0F) {
+			hoverProgress -= 0.5F;
+		}
+		boolean flying = isFlying();
+		if (flying && flyProgress < 20.0F) {
+			flyProgress += 0.5F;
+		} else if (!flying && flyProgress > 0.0F) {
+			flyProgress -= 0.5F;
+		}
+		if (this.isHovering()) {
+			this.hoverTicks++;
+			if (this.hoverTicks > 40) {
+				this.setHovering(false);
+				this.setFlying(true);
+
+				this.hoverTicks = 0;
+			}
+		}
+		this.motionY *= 0.6D;
+		if (this.isFlying() && getAttackTarget() == null) {
+			flyAround();
+		} else if (getAttackTarget() != null) {
+			flyTowardsTarget();
+		}
+		if (this.isFlying()) {
+			this.flyTicks++;
+		}
+		if (this.getRNG().nextInt(20) == 0 && !this.isFlying() && !this.isHovering() && this.canMove()) {
+			this.setHovering(true);
+		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
@@ -334,6 +420,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				fireTicks = 0;
 			}
 		}
+	}
+
+	public void fall(float distance, float damageMultiplier) {
 	}
 
 	public boolean isActuallyBreathingFire() {
@@ -508,5 +597,46 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
+	}
+
+	public void flyAround() {
+		if (airTarget != null) {
+			if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000) {
+				airTarget = null;
+			}
+			flyTowardsTarget();
+		}
+	}
+
+	public void flyTowardsTarget() {
+		if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+			double targetX = airTarget.getX() + 0.5D - posX;
+			double targetY = airTarget.getY() + 1D - posY;
+			double targetZ = airTarget.getZ() + 0.5D - posZ;
+			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed();
+			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed();
+			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed();
+			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
+			moveForward = 0.5F;
+			rotationYaw += rotation;
+		} else {
+			this.airTarget = null;
+		}
+	}
+
+	private double getFlySpeed() {
+		return 2;
+	}
+
+	protected boolean isTargetInAir() {
+		return airTarget != null && (worldObj.getBlockState(airTarget).getMaterial() == Material.AIR && worldObj.getBlockState(airTarget).getMaterial() == Material.AIR);
+	}
+
+	public float getDistanceSquared(Vec3d vec3d) {
+		float f = (float) (this.posX - vec3d.xCoord);
+		float f1 = (float) (this.posY - vec3d.yCoord);
+		float f2 = (float) (this.posZ - vec3d.zCoord);
+		return f * f + f1 * f1 + f2 * f2;
 	}
 }
