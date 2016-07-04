@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -81,7 +83,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public BlockPos airTarget;
 	public BlockPos homeArea;
 	protected int flyHovering;
-	
+
 	public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
 		super(world);
 		this.diet = diet;
@@ -150,6 +152,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+
 	}
 
 	private void updateAttributes() {
@@ -160,6 +164,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+
 		}
 	}
 
@@ -356,6 +361,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else {
 			animationCycle = 0;
 		}
+		if (animationCycle > 12 && animationCycle < 15) {
+			for (int i = 0; i < 5; i++) {
+				for (int i1 = 0; i1 < 20; i1++) {
+					double motionX = getRNG().nextGaussian() * 0.07D;
+					double motionY = getRNG().nextGaussian() * 0.07D;
+					double motionZ = getRNG().nextGaussian() * 0.07D;
+					float radius = 0.75F * (0.7F * getRenderSize()) * -3;
+					float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
+					double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+					double extraZ = (double) (radius * MathHelper.cos(angle));
+					double extraY = 0.8F;
+
+					IBlockState iblockstate = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX + extraX), MathHelper.floor_double(this.posY + extraY) - 1, MathHelper.floor_double(this.posZ + extraZ)));
+					if (iblockstate.getMaterial() != Material.AIR) {
+						worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[] { Block.getStateId(iblockstate) });
+					}
+				}
+			}
+		}
 		boolean sleeping = isSleeping();
 		if (sleeping && sleepProgress < 20.0F) {
 			sleepProgress += 0.5F;
@@ -380,6 +404,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else if (!flying && flyProgress > 0.0F) {
 			flyProgress -= 0.5F;
 		}
+		if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
+			this.setHovering(false);
+			this.setFlying(false);
+		}
 		if (this.isHovering()) {
 			this.hoverTicks++;
 			if (this.hoverTicks > 40 && flyHovering == 0) {
@@ -388,15 +416,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				this.flyHovering = 0;
 				this.hoverTicks = 0;
 			}
-			if(flyHovering == 0){
-				//move upwards
+			if (flyHovering == 0) {
+				// move upwards
 			}
-			if(flyHovering == 1){
-				//move down
+			if (flyHovering == 1) {
+				// move down
 			}
-			if(flyHovering == 2){
+			if (flyHovering == 2) {
 				this.motionY *= 0;
-				//stay still
+				// stay still
 			}
 		}
 		this.motionY *= 0.6D;
@@ -408,8 +436,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (this.isFlying()) {
 			this.flyTicks++;
 		}
-		if (this.getRNG().nextInt(20) == 0 && !this.isFlying() && !this.isHovering() && this.canMove() && !this.doesWantToLand()) {
+		if (this.getRNG().nextInt(400) == 0 && !this.isFlying() && !this.isHovering() && !this.isSleeping() && !this.isSitting() && !this.doesWantToLand()) {
+			this.setSleeping(false);
 			this.setHovering(true);
+			this.setSitting(false);
 			this.flyHovering = 0;
 			this.flyTicks = 0;
 		}
@@ -441,9 +471,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public boolean isActuallyBreathingFire() {
 		return this.fireTicks > 20 && this.isBreathingFire();
 	}
-	
+
 	public boolean doesWantToLand() {
-		return this.flyTicks > 10;
+		return this.flyTicks > 5000;
 	}
 
 	public abstract String getVariantName(int variant);
