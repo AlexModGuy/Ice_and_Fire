@@ -79,12 +79,12 @@ public class ContainerDragon extends Container {
 		int k;
 		for (j = 0; j < 3; ++j) {
 			for (k = 0; k < 9; ++k) {
-				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 149 + j * 18 + i));
+				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 150 + j * 18 + i));
 			}
 		}
 
 		for (j = 0; j < 9; ++j) {
-			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 207 + i));
+			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 208 + i));
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -64,7 +65,10 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
-				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 3.0F);
+				if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)shootingEntity).getOwner()){
+					return;
+				}
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
 				movingObject.entityHit.setFire(5);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				FireExplosion explosion = new FireExplosion(worldObj, null, this.posX, this.posY, this.posZ, 2, true);

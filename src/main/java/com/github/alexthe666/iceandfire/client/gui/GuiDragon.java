@@ -31,7 +31,7 @@ public class GuiDragon extends GuiContainer {
 		//this.dragonInv = dragon.inv;
 		this.dragon = dragon;
 		this.allowUserInput = false;
-		this.ySize = 213;
+		this.ySize = 214;
 	}
 
 	@Override
@@ -39,15 +39,17 @@ public class GuiDragon extends GuiContainer {
 		String s1 = new TextComponentTranslation("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText();
 		this.fontRendererObj.drawString(s1, this.xSize / 2 - this.fontRendererObj.getStringWidth(s1) / 2, 6, 4210752);
 		String s3 = dragon.getCustomNameTag().length() == 0 ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomNameTag();
-		this.fontRendererObj.drawString(s3, this.xSize / 2 - this.fontRendererObj.getStringWidth(s3) / 2, 77, 0XFFFFFF);
-		String s2 = StatCollector.translateToLocal("dragon.health") + dragon.getHealth() + "/" + dragon.getMaxHealth();
-		this.fontRendererObj.drawString(s2, this.xSize / 2 - this.fontRendererObj.getStringWidth(s2) / 2, 86, 0XFFFFFF);
+		this.fontRendererObj.drawString(s3, this.xSize / 2 - this.fontRendererObj.getStringWidth(s3) / 2, 75, 0XFFFFFF);
+		String s2 = StatCollector.translateToLocal("dragon.health") + Math.min(dragon.getHealth(),  dragon.getMaxHealth()) + "/" + dragon.getMaxHealth();
+		this.fontRendererObj.drawString(s2, this.xSize / 2 - this.fontRendererObj.getStringWidth(s2) / 2, 84, 0XFFFFFF);
 		String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
-		this.fontRendererObj.drawString(s5, this.xSize / 2 - this.fontRendererObj.getStringWidth(s5) / 2, 95, 0XFFFFFF);
+		this.fontRendererObj.drawString(s5, this.xSize / 2 - this.fontRendererObj.getStringWidth(s5) / 2, 93, 0XFFFFFF);
 		String s6 = StatCollector.translateToLocal("dragon.hunger") +  dragon.getHunger() + "/100";
-		this.fontRendererObj.drawString(s6, this.xSize / 2 - this.fontRendererObj.getStringWidth(s6) / 2, 104, 0XFFFFFF);
+		this.fontRendererObj.drawString(s6, this.xSize / 2 - this.fontRendererObj.getStringWidth(s6) / 2, 102, 0XFFFFFF);
 		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage();
-		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 113, 0XFFFFFF);
+		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 111, 0XFFFFFF);
+		String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName() : StatCollector.translateToLocal("dragon.untamed");
+		this.fontRendererObj.drawString(s7, this.xSize / 2 - this.fontRendererObj.getStringWidth(s7) / 2, 120, 0XFFFFFF);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,7 +46,7 @@ public class EntityDragonEgg extends EntityLiving {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
-		tag.setByte("Color", (byte) this.getType().meta);
+		tag.setInteger("Color", (byte) this.getType().ordinal());
 		tag.setByte("DragonAge", (byte) this.getDragonAge());
 
 	}
@@ -53,7 +54,7 @@ public class EntityDragonEgg extends EntityLiving {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
-		this.setType(EnumDragonEgg.byMetadata(tag.getByte("Color")));
+		this.setType(EnumDragonEgg.values()[tag.getInteger("Color")]);
 		this.setDragonAge(tag.getByte("DragonAge"));
 
 	}
@@ -66,11 +67,11 @@ public class EntityDragonEgg extends EntityLiving {
 	}
 
 	public EnumDragonEgg getType() {
-		return EnumDragonEgg.byMetadata(this.getDataManager().get(DRAGON_TYPE).intValue());
+		return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE).intValue()];
 	}
 
 	public void setType(EnumDragonEgg newtype) {
-		this.getDataManager().set(DRAGON_TYPE, newtype.meta);
+		this.getDataManager().set(DRAGON_TYPE, newtype.ordinal());
 	}
 
 	@Override
@@ -83,16 +84,13 @@ public class EntityDragonEgg extends EntityLiving {
 	}
 
 	public void setDragonAge(int i) {
-		this.getDataManager().set(DRAGON_TYPE, i);
+		this.getDataManager().set(DRAGON_AGE, i);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.posY);
-		int k = MathHelper.floor_double(this.posZ);
-		BlockPos pos = new BlockPos(i, j, k);
+		BlockPos pos = new BlockPos(this);
 		if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
 			this.setDragonAge(this.getDragonAge() + 1);
 		}
@@ -104,36 +102,22 @@ public class EntityDragonEgg extends EntityLiving {
 				this.setDead();
 			}
 		}
-		if (this.getDragonAge() == 60) {
-			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
-				worldObj.destroyBlock(pos, false);
+		if (this.getDragonAge() > 20 * 60) {
+			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire && worldObj.getClosestPlayerToEntity(this, 5) != null) {
+				worldObj.setBlockToAir(pos);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
-				dragon.setVariant(getType().meta);
+				dragon.setVariant(getType().ordinal());
 				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 				if (!worldObj.isRemote) {
 					worldObj.spawnEntityInWorld(dragon);
 				}
+				dragon.setTamed(true);
+				dragon.setOwnerId(worldObj.getClosestPlayerToEntity(this, 5).getUniqueID());
 			}
+			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
 			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.dragon_hatch, this.getSoundCategory(), 2.5F, 1.0F, false);
 			this.setDead();
 		}
-		/*
-		 * if(this.getType().isFire){ for (int i = 0; i < 2; ++i) {
-		 * this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX
-		 * + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY +
-		 * this.rand.nextDouble() * (double)this.height, this.posZ +
-		 * (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D,
-		 * 0.0D, new int[0]); } }else{ if(this.rand.nextInt(10) == 0){ for (int
-		 * i = -1; i < 0; ++i) { //IceAndFire.proxy.spawnParticle("snowflake",
-		 * this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width,
-		 * this.posY + this.rand.nextDouble() * (double)this.height, this.posZ +
-		 * (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D,
-		 * 0.0D); this.worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK,
-		 * this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width,
-		 * this.posY + this.rand.nextDouble() * (double)this.height + 0.8D,
-		 * this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width,
-		 * 0.0D, 0.0D, 0.0D, new int[0]); } } }
-		 */
 	}
 
 	public String getTexture() {
@@ -162,7 +146,7 @@ public class EntityDragonEgg extends EntityLiving {
 	}
 
 	private ItemStack getItem() {
-		switch (getType().meta) {
+		switch (getType().ordinal()) {
 		default:
 			return new ItemStack(ModItems.dragonegg_red);
 		case 1:

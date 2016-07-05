@@ -1,9 +1,13 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,7 +24,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 		this.layerRenderers.add(new LayerDragonArmor(this, 1, "firedragon"));
 		this.layerRenderers.add(new LayerDragonArmor(this, 2, "firedragon"));
 		this.layerRenderers.add(new LayerDragonArmor(this, 3, "firedragon"));
-		
+
 	}
 
 	@Override
@@ -33,5 +37,6 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 	protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
 		return new ResourceLocation(((EntityDragonBase) entity).getTexture() + ".png");
 	}
+
 
 }

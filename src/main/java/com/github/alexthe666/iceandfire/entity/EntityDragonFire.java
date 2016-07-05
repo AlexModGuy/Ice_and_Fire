@@ -1,20 +1,13 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockGrass;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.structures.WorldUtils;
 
 public class EntityDragonFire extends EntityFireball {
 
@@ -70,8 +63,12 @@ public class EntityDragonFire extends EntityFireball {
 
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity) {
-				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 6.0F);
+				if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)shootingEntity).getOwner()){
+					return;
+				}
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 1.0F);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
+				movingObject.entityHit.setFire(3);
 				this.setDead();
 			}
 

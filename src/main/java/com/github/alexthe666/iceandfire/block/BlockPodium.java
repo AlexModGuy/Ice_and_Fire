@@ -122,10 +122,13 @@ public class BlockPodium extends BlockContainer {
 
 	@Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		this.onNeighborChange(world, pos, neighbor);
+		super.onNeighborChange(world, pos, neighbor);
+		if (world instanceof World) {
+			checkAndDropBlock((World)world, pos);
+		}
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+	private boolean checkAndDropBlock(World worldIn, BlockPos pos) {
 		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;

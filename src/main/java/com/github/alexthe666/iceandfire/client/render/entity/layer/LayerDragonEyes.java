@@ -22,22 +22,19 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
 		if (dragon.getTextureOverlay() != null) {
 			this.render.bindTexture(new ResourceLocation(dragon.getTextureOverlay() + ".png"));
 			GlStateManager.enableBlend();
-			GlStateManager.disableAlpha();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-			GlStateManager.depthMask(false);
+			GlStateManager.disableLighting();
+			GlStateManager.depthMask(!dragon.isInvisible());
 			int i = 61680;
-			int j = i % 65536;
-			int k = i / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+			int j = 61680;
+			int k = 0;
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+			GlStateManager.enableLighting();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			i = dragon.getBrightnessForRender(partialTicks);
-			j = i % 65536;
-			k = i / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
 			this.render.setLightmap(dragon, partialTicks);
+			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
-			GlStateManager.enableAlpha();
 		}
 	}
 

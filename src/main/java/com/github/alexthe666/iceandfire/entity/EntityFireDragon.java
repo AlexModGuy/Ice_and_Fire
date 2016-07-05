@@ -25,6 +25,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIRiding;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
@@ -56,11 +57,12 @@ public class EntityFireDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(4, new DragonAIAirTarget(this));
-		this.tasks.addTask(5, new DragonAIWander(this, 1.0D));
-		this.tasks.addTask(6, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-		this.tasks.addTask(6, new DragonAILookIdle(this));
+		this.tasks.addTask(3, new DragonAIRiding(this, 1.5D));
+		this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(5, new DragonAIAirTarget(this));
+		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
+		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(7, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
@@ -93,6 +95,10 @@ public class EntityFireDragon extends EntityDragonBase {
 		case 3:
 			return "gray_";
 		}
+	}
+
+	public boolean canBeSteered() {
+		return true;
 	}
 
 	@Override
@@ -172,7 +178,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				}
 
 			}
-		}else{
+		} else {
 			this.setBreathingFire(false);
 		}
 	}
@@ -182,7 +188,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
-				} else if (this.getAnimationTick()  == 15) {
+				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
 					float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
 					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
@@ -214,12 +220,16 @@ public class EntityFireDragon extends EntityDragonBase {
 						float headPosY = (float) (posY + 0.5 * getRenderSize());
 						double d1 = 0D;
 						Vec3d vec3 = this.getLook(1.0F);
-	                    double d2 = entity.posX - headPosX;
-	                    double d3 = entity.posY - headPosY;
-	                    double d4 = entity.posZ - headPosZ;
-						//double d2 = entity.posX - (headPosX + vec3.xCoord * d1);
-						//double d3 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2.0F) - (0.5D + headPosY + (double) (this.height / 2.0F));
-						//double d4 = entity.posZ - (headPosZ + vec3.zCoord * d1);
+						double d2 = entity.posX - headPosX;
+						double d3 = entity.posY - headPosY;
+						double d4 = entity.posZ - headPosZ;
+						// double d2 = entity.posX - (headPosX + vec3.xCoord *
+						// d1);
+						// double d3 = entity.getEntityBoundingBox().minY +
+						// (double) (entity.height / 2.0F) - (0.5D + headPosY +
+						// (double) (this.height / 2.0F));
+						// double d4 = entity.posZ - (headPosZ + vec3.zCoord *
+						// d1);
 						worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 						EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
@@ -239,7 +249,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			}
 		}
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;

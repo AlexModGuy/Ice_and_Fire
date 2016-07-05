@@ -20,7 +20,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-		tag.setByte("Color", (byte) type.meta);
+		tag.setByte("Color", (byte) type.ordinal());
 		tag.setByte("Age", (byte) age);
 		return super.writeToNBT(tag);
 	}
@@ -28,7 +28,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		type = EnumDragonEgg.byMetadata(tag.getByte("Color"));
+		type = EnumDragonEgg.values()[tag.getByte("Color")];
 		age = tag.getByte("Age");
 	}
 
@@ -58,10 +58,10 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		age++;
-		if (age == 60 && type != null && type.meta > 4) {
+		if (age == 60 && type != null && type.ordinal() > 4) {
 			worldObj.destroyBlock(pos, false);
 			EntityFireDragon dragon = new EntityFireDragon(worldObj);
-			dragon.setVariant(type.meta - 4);
+			dragon.setVariant(type.ordinal() - 4);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			if (!worldObj.isRemote) {
 				worldObj.spawnEntityInWorld(dragon);

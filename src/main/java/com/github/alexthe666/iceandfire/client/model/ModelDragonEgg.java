@@ -2,7 +2,9 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
@@ -59,8 +61,10 @@ public class ModelDragonEgg extends AdvancedModelBase {
 		this.resetToDefaultPose();
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		EntityDragonEgg dragon = (EntityDragonEgg) entity;
-		// this.walk(Egg1, 0.3F, 0.1F, true, 1, 0, entity.ticksExisted, 1);
-		// this.flap(Egg1, 0.3F, 0.1F, false, 0, 0, entity.ticksExisted, 1);
+		if (dragon.worldObj.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE) {
+			this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
+			this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+		}
 
 	}
 }

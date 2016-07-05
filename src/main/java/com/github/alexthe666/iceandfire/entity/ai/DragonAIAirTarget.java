@@ -28,6 +28,9 @@ public class DragonAIAirTarget extends EntityAIBase {
 			if (dragon.isSleeping()) {
 				return false;
 			}
+			if (dragon.isChild()) {
+				return false;
+			}
 			if (dragon.airTarget != null && dragon.getDistanceSquared(new Vec3d(dragon.airTarget.getX(), dragon.posY, dragon.airTarget.getZ())) > 3) {
 				dragon.airTarget = null;
 			}
@@ -58,7 +61,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 			for (int i = 0; i < 10; ++i) {
 				if(dragon.homeArea != null){
 					BlockPos blockpos1 = new BlockPos((int) this.dragon.homeArea.getX() + ((32 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)), ((int) this.dragon.homeArea.getY() + (3 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.homeArea.getZ() + ((32 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)));
-					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 3 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
+					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 7 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
 					if(dragon.doesWantToLand()){
 						return new Vec3d(dragon.homeArea.getX(), dragon.homeArea.getY(), dragon.homeArea.getZ());
 					}
@@ -73,7 +76,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 					}
 				}else{
 					BlockPos blockpos1 = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 3 + ((random.nextInt(6)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
-					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 3 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
+					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 7 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
 					if(dragon.doesWantToLand()){
 						return null;
 					}	
