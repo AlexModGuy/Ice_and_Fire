@@ -28,6 +28,7 @@ import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void render() {
+		ModKeys.init();
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
 		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
 		MinecraftForge.EVENT_BUS.register(new EventKeys());

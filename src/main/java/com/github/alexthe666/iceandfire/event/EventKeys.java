@@ -17,7 +17,7 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event) {
-		if (FMLCommonHandler.instance().getSide().isClient() && checkIfPlayer()) {
+		if (checkIfPlayer()) {
 			Entity dragon = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 			if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 0));

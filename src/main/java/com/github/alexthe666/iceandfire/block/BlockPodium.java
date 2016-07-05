@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire.block;
 
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -10,6 +13,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -120,15 +124,15 @@ public class BlockPodium extends BlockContainer {
 		return iblockstate.isOpaqueCube();
 	}
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		super.onNeighborChange(world, pos, neighbor);
-		if (world instanceof World) {
-			checkAndDropBlock((World)world, pos);
-		}
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos) {
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		this.checkFall(worldIn, pos);
+	}
+
+	private boolean checkFall(World worldIn, BlockPos pos) {
 		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;

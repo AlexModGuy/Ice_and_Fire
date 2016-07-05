@@ -30,11 +30,10 @@ public class RenderDragonFireCharge extends Render<EntityDragonFireCharge> {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		this.bindEntityTexture(entity);
-		GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate(-0.5F, 0F, 0.5F);
 		blockrendererdispatcher.renderBlockBrightness(Blocks.field_189877_df.getDefaultState(), entity.getBrightness(partialTicks));
-		GlStateManager.translate(0.0F, 0.0F, 1.0F);
+		GlStateManager.translate(-1.0F, 0.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
 

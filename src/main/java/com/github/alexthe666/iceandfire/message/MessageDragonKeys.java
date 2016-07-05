@@ -79,7 +79,7 @@ public class MessageDragonKeys extends AbstractMessage<MessageDragonKeys> {
 					dragon.fireStopTicks = 10;
 					break;
 				case 3:// strikekey
-					List<Entity> list = dragon.worldObj.getEntitiesWithinAABBExcludingEntity(dragon, dragon.getEntityBoundingBox().expand(dragon.getRenderSize() / 2, dragon.getRenderSize() / 2, dragon.getRenderSize() / 2));
+					List<Entity> list = dragon.worldObj.getEntitiesWithinAABBExcludingEntity(dragon, dragon.getEntityBoundingBox().expand(dragon.getRenderSize(), dragon.getRenderSize(), dragon.getRenderSize()));
 					if (!list.isEmpty()) {
 						Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(dragon));
 						Iterator<Entity> itr = list.iterator();

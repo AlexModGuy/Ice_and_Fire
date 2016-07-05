@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -64,12 +66,15 @@ public class BlockLectern extends BlockContainer {
 		return iblockstate.isOpaqueCube();
 	}
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		this.onNeighborChange(world, pos, neighbor);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 	}
 
-	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		this.checkFall(worldIn, pos);
+	}
+
+	private boolean checkFall(World worldIn, BlockPos pos) {
 		if (!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;
@@ -77,7 +82,6 @@ public class BlockLectern extends BlockContainer {
 			return true;
 		}
 	}
-
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());

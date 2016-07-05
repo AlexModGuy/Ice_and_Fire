@@ -78,7 +78,6 @@ public class IceAndFire {
 		ModItems.init();
 		ModRecipes.init();
 		ModEntities.init();
-		ModKeys.init();
 		ModFoods.init();
 		ModSounds.init();
 		PROXY.render();
