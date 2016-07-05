@@ -66,6 +66,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	private boolean isBreathingFire;
 	public float fireBreathProgress;
 	private int fireTicks;
+	public int fireStopTicks;
 	private int hoverTicks;
 	public int flyTicks;
 	private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer> createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -431,6 +432,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 	}
 
+	public void riderShootFire(Entity controller){}
+	
 	public void setArmorInSlot(int i, int armorType) {
 		switch (i) {
 		case 0:
@@ -456,7 +459,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
 		this.setTamed(true);
 		this.setOwnerId(player.getUniqueID());
-		player.startRiding(this);
 		if (stack != null) {
 			if (stack.getItem() != null) {
 				int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
@@ -474,7 +476,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 				}
 			}
 		} else {
-			this.openGUI(player);
+			if(player.isSneaking()){
+				player.startRiding(this);
+				this.setSleeping(false);
+				return true;
+			}else{
+				this.openGUI(player);	
+				return true;
+			}
 		}
 		return super.processInteract(player, hand, stack);
 	}
@@ -565,9 +574,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else if (!flying && flyProgress > 0.0F) {
 			flyProgress -= 0.5F;
 		}
-		if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
-			this.setHovering(false);
+		if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering()) ) {
 			this.setFlying(false);
+			if(this.isHovering() && this.hoverTicks >= 40){
+				this.setHovering(false);
+			}else{
+				this.setHovering(true);
+			}
 		}
 		if (this.isHovering()) {
 			this.hoverTicks++;
@@ -628,10 +641,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if (this.isBreathingFire()) {
 			this.fireTicks++;
-			if (fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180)) {
+			if (fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
 				this.setBreathingFire(false);
 				this.attackDecision = true;
 				fireTicks = 0;
+			}
+			if(fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())){
+				fireStopTicks--;
 			}
 		}
 	}
@@ -644,7 +660,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	public boolean doesWantToLand() {
-		return this.flyTicks > 5000;
+		return this.flyTicks > 5000 || this.getOwner() != null && this.getPassengers().contains(this.getOwner());
 	}
 
 	public abstract String getVariantName(int variant);
@@ -658,13 +674,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger && this.isOwner((EntityPlayer) passenger)) {
 				renderYawOffset = rotationYaw;
 				this.rotationYaw = passenger.rotationYaw;
-				float radius = 1F * (0.7F * getRenderSize());
+				float radius = 0.7F * (0.7F * getRenderSize());
 				float angle = (0.01745329251F * this.renderYawOffset);
 				double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 				double extraZ = (double) (radius * MathHelper.cos(angle));
-				float bob = (float) (Math.sin(ticksExisted * -0.05) * 1 * 0.25 - 1 * 0.25);
-
-				double extraY = 0.75F * (getRenderSize() + bob);
+				float fly = (float) (Math.sin(ticksExisted * 0.35) * 1 * 1F) - 1.55F;
+				float idle = (float) (Math.sin(ticksExisted * -0.05) * 1 * 0.25 - 1 * 0.25) + 0.6F;
+				float bob = (this.isFlying() || this.isHovering()) ? fly + idle : idle;
+				double extraY = 0.75F * (getRenderSize() + 0.1F + bob) + (this.isFlying() ? 20 * 0.1 : this.isHovering() ? this.hoverProgress * 0.1 : 0);
 				passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 				this.stepHeight = 1;
 			} else {
@@ -751,6 +768,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if(this.spacebarTicks > 0){
+			this.spacebarTicks--;
+		}
+		if(this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()){
+			this.setHovering(true);
+		}
 		roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead) {
 			this.setAttackTarget(null);

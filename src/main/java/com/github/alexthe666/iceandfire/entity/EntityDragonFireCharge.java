@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -55,8 +56,10 @@ public class EntityDragonFireCharge extends EntityFireball {
 	protected void onImpact(RayTraceResult movingObject) {
 
 		if (!this.worldObj.isRemote) {
-
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+				if(this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)movingObject.entityHit).getOwner()))){
+					return;
+				}
 				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
 				this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 1, true);
 				explosion.doExplosionA();
@@ -65,7 +68,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
-				if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)shootingEntity).getOwner()){
+				if(this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)movingObject.entityHit).getOwner()))){
 					return;
 				}
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
@@ -88,6 +91,40 @@ public class EntityDragonFireCharge extends EntityFireball {
 			}
 		}
 		this.setDead();
+	}
+	
+	public void setAim(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {
+		float f = -MathHelper.sin(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
+		float f1 = -MathHelper.sin(yaw * 0.017453292F);
+		float f2 = MathHelper.cos(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
+		this.setThrowableHeading(fireball, (double) f, (double) f1, (double) f2, b, c);
+		fireball.motionX += entity.motionX;
+		fireball.motionZ += entity.motionZ;
+
+		if (!entity.onGround) {
+			fireball.motionY += entity.motionY;
+		}
+	}
+
+	public void setThrowableHeading(Entity fireball, double x, double y, double z, float velocity, float inaccuracy) {
+		float f = MathHelper.sqrt_double(x * x + y * y + z * z);
+		x = x / (double) f;
+		y = y / (double) f;
+		z = z / (double) f;
+		x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		x = x * (double) velocity;
+		y = y * (double) velocity;
+		z = z * (double) velocity;
+		fireball.motionX = x;
+		fireball.motionY = y;
+		fireball.motionZ = z;
+		float f1 = MathHelper.sqrt_double(x * x + z * z);
+		fireball.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
+		fireball.rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
+		fireball.prevRotationYaw = fireball.rotationYaw;
+		fireball.prevRotationPitch = fireball.rotationPitch;
 	}
 	
 	@Override

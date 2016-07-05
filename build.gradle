@@ -20,9 +20,9 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.0"
+version = "006"
 group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+archivesBaseName = "iceandfire"
 
 minecraft {
     version = "1.10.2-12.18.0.2002-1.10.0"

@@ -31,6 +31,9 @@ public class DragonAIAirTarget extends EntityAIBase {
 			if (dragon.isChild()) {
 				return false;
 			}
+			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+				return false;
+			}
 			if (dragon.airTarget != null && dragon.getDistanceSquared(new Vec3d(dragon.airTarget.getX(), dragon.posY, dragon.airTarget.getZ())) > 3) {
 				dragon.airTarget = null;
 			}

@@ -36,10 +36,10 @@ public class EventKeys {
 			}
 		}
 	}
-	
+
 	public boolean checkIfPlayer() {
 		if (Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().thePlayer != null) {
-			return Minecraft.getMinecraft().thePlayer.ticksExisted % 2 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote  && Minecraft.getMinecraft().thePlayer.getRidingEntity() != null && Minecraft.getMinecraft().thePlayer.getRidingEntity() instanceof EntityDragonBase;
+			return Minecraft.getMinecraft().thePlayer.ticksExisted % 2 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote && Minecraft.getMinecraft().thePlayer.getRidingEntity() != null && Minecraft.getMinecraft().thePlayer.getRidingEntity() instanceof EntityDragonBase;
 		} else {
 			return false;
 		}

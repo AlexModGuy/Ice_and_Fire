@@ -22,20 +22,18 @@ public class EventNewMenu {
 	public static ResourceLocation[] panorama = new ResourceLocation[] { new ResourceLocation("iceandfire:textures/gui/panorama_0.png"), new ResourceLocation("textures/gui/title/background/panorama_1.png"), new ResourceLocation("textures/gui/title/background/panorama_2.png"), new ResourceLocation("textures/gui/title/background/panorama_3.png"), new ResourceLocation("textures/gui/title/background/panorama_4.png"), new ResourceLocation("textures/gui/title/background/panorama_5.png") };
 
 	@SubscribeEvent
-	public void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
+	public void onPlayerRenderPre(RenderPlayerEvent.Post event) {
 		boolean b = event.getEntityPlayer().getRidingEntity() != null && event.getEntityPlayer().getRidingEntity() instanceof EntityDragonBase;
 		if (event.getEntityPlayer() == Minecraft.getMinecraft().thePlayer) {
 			EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-			Field thirdPersonDistanceField = ReflectionHelper.findField(EntityRenderer.class, ObfuscationReflectionHelper.remapFieldNames(EntityRenderer.class.getName(), thirdPersonDistanceNames));
-			float thirdPersonDistance = 4 + (b ? ((EntityDragonBase) event.getEntityPlayer().getRidingEntity()).getRenderSize() : 0);
+			float thirdPersonDistance = 9 + (b ? ((EntityDragonBase) event.getEntityPlayer().getRidingEntity()).getRenderSize() : 0);
 			try {
-				Field modifier = Field.class.getDeclaredField("modifiers");
-				modifier.setAccessible(true);
-				modifier.setInt(thirdPersonDistanceField, thirdPersonDistanceField.getModifiers() & ~Modifier.FINAL);
-				thirdPersonDistanceField.set(renderer, thirdPersonDistance);
-			} catch (Exception e) {
+				ReflectionHelper.findField(EntityRenderer.class, new String[] { "thirdPersonDistance", "field_78490_B" }).set(renderer, thirdPersonDistance);
+			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
-			}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}	
 		}
 	}
 

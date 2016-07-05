@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -180,6 +179,59 @@ public class EntityFireDragon extends EntityDragonBase {
 			}
 		} else {
 			this.setBreathingFire(false);
+		}
+	}
+
+	public void riderShootFire(Entity controller) {
+		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
+			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
+				this.setAnimation(this.ANIMATION_FIRECHARGE);
+			} else if (this.getAnimationTick() == 15) {
+				rotationYaw = renderYawOffset;
+				float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
+				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
+				float headPosY = (float) (posY + 0.5 * getRenderSize());
+
+				worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+				EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(worldObj, this, 0, 0, 0);
+				float f = (float) 32000 / 20.0F;
+				f = (f * f + f * 2.0F) / 3.0F;
+				if (f > 1.0F) {
+					f = 1.0F;
+				}
+				entitylargefireball.setAim(entitylargefireball, controller, controller.rotationPitch, controller.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+				entitylargefireball.setSizes(size, size);
+				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+				if (!worldObj.isRemote) {
+					worldObj.spawnEntityInWorld(entitylargefireball);
+				}
+			}
+		} else {
+			if (this.isBreathingFire()) {
+				if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+					rotationYaw = renderYawOffset;
+					float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
+					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
+					float headPosY = (float) (posY + 0.5 * getRenderSize());
+					EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, 0, 0, 0);
+					float f = (float) 32000 / 20.0F;
+					f = (f * f + f * 2.0F) / 3.0F;
+					if (f > 1.0F) {
+						f = 1.0F;
+					}
+					entitylargefireball.setAim(entitylargefireball, controller, controller.rotationPitch, controller.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+					worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+					if (!worldObj.isRemote) {
+						worldObj.spawnEntityInWorld(entitylargefireball);
+					}
+					entitylargefireball.setSizes(size, size);
+				}
+			} else {
+				this.setBreathingFire(true);
+			}
 		}
 	}
 
