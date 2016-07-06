@@ -60,4 +60,19 @@ public enum EnumDragonArmor {
 			return ModItems.dragonscales_red;
 		}
 	}
+	
+	public static Item getEggItem(EnumDragonArmor armor) {
+		switch (armor) {
+		case armor_red:
+			return ModItems.dragonegg_red;
+		case armor_bronze:
+			return ModItems.dragonegg_bronze;
+		case armor_green:
+			return ModItems.dragonegg_green;
+		case armor_gray:
+			return ModItems.dragonegg_gray;
+		default:
+			return ModItems.dragonegg_red;
+		}
+	}
 }

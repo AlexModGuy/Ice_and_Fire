@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.settings.KeyBindingMap;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import org.lwjgl.input.Keyboard;

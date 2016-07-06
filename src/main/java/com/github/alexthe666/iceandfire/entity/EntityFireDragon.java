@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
@@ -76,6 +78,13 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTexture() {
+		if(this.isModelDead()){
+			if(this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
+				return "iceandfire:textures/models/firedragon/skeleton";
+			}else{
+				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";	
+			}
+		}
 		if (this.isSleeping()) {
 			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
 		} else {
@@ -93,6 +102,32 @@ public class EntityFireDragon extends EntityDragonBase {
 			return "bronze_";
 		case 3:
 			return "gray_";
+		}
+	}
+	
+	public Item getVariantScale(int variant) {
+		switch (variant) {
+		default:
+			return ModItems.dragonscales_red;
+		case 1:
+			return ModItems.dragonscales_green;
+		case 2:
+			return ModItems.dragonscales_bronze;
+		case 3:
+			return ModItems.dragonscales_gray;
+		}
+	}
+	
+	public Item getVariantEgg(int variant) {
+		switch (variant) {
+		default:
+			return ModItems.dragonegg_red;
+		case 1:
+			return ModItems.dragonegg_green;
+		case 2:
+			return ModItems.dragonegg_bronze;
+		case 3:
+			return ModItems.dragonegg_gray;
 		}
 	}
 
@@ -168,6 +203,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(!this.isModelDead()){
+			this.setHealth(1);
+		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 			if (!attackDecision || this.isFlying()) {
 				shootFireAtMob(this.getAttackTarget());
@@ -324,7 +362,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTextureOverlay() {
-		return this.isSleeping() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
+		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
 
 }

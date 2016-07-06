@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -19,19 +21,19 @@ public class EventKeys {
 	public void handleClientTick(ClientTickEvent event) {
 		if (checkIfPlayer()) {
 			Entity dragon = Minecraft.getMinecraft().thePlayer.getRidingEntity();
-			if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode())) {
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 0));
 			}
-			if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode())) {
+			if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown()) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 1));
 			}
-			if (Keyboard.isKeyDown(ModKeys.dragon_fireAttack.getKeyCode())) {
+			if (ModKeys.dragon_fireAttack.isKeyDown()) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 2));
 			}
-			if (Keyboard.isKeyDown(ModKeys.dragon_strike.getKeyCode())) {
+			if (ModKeys.dragon_strike.isKeyDown()) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 3));
 			}
-			if (Keyboard.isKeyDown(ModKeys.dragon_dismount.getKeyCode())) {
+			if (ModKeys.dragon_dismount.isKeyDown()) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 4));
 			}
 		}

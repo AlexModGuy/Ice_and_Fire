@@ -80,6 +80,7 @@ public class IceAndFire {
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();
+		
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

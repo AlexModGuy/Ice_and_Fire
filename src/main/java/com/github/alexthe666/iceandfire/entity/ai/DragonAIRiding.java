@@ -15,8 +15,6 @@ public class DragonAIRiding extends EntityAIBase {
 	public DragonAIRiding(EntityDragonBase dinosaur, double speed) {
 		this.dragon = dinosaur;
 		this.speed = speed;
-		setMutexBits(-1);
-
 	}
 
 	@Override
@@ -26,7 +24,6 @@ public class DragonAIRiding extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-
 		dragon.getNavigator().clearPathEntity();
 	}
 
