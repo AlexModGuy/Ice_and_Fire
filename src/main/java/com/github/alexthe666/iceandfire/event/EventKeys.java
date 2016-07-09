@@ -2,9 +2,8 @@ package com.github.alexthe666.iceandfire.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
@@ -19,31 +18,30 @@ public class EventKeys {
 
 	@SubscribeEvent
 	public void handleClientTick(ClientTickEvent event) {
-		if (checkIfPlayer()) {
-			Entity dragon = Minecraft.getMinecraft().thePlayer.getRidingEntity();
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 0));
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.thePlayer;
+		if (mc.inGameHasFocus && player != null) {
+			if (player.ticksExisted % 2 == 0 && player.getRidingEntity() instanceof EntityDragonBase) {
+				
+				Entity dragon = player.getRidingEntity();
+				player.worldObj.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY + 2, player.posZ, 0, 0, 0, new int[0]);
+				if (mc.gameSettings.keyBindJump.isKeyDown()) {
+					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 0));
+				}
+				if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+					player.worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, player.posX, player.posY + 2, player.posZ, 0, 0, 0, new int[0]);
+					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 1));
+				}
+				if (ModKeys.dragon_fireAttack.isKeyDown()) {
+					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 2));
+				}
+				if (ModKeys.dragon_strike.isKeyDown()) {
+					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 3));
+				}
+				if (ModKeys.dragon_dismount.isKeyDown()) {
+					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 4));
+				}
 			}
-			if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown()) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 1));
-			}
-			if (ModKeys.dragon_fireAttack.isKeyDown()) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 2));
-			}
-			if (ModKeys.dragon_strike.isKeyDown()) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 3));
-			}
-			if (ModKeys.dragon_dismount.isKeyDown()) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(dragon.getEntityId(), 4));
-			}
-		}
-	}
-
-	public boolean checkIfPlayer() {
-		if (Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().thePlayer != null) {
-			return Minecraft.getMinecraft().thePlayer.ticksExisted % 2 == 0 && Minecraft.getMinecraft().thePlayer.worldObj.isRemote && Minecraft.getMinecraft().thePlayer.getRidingEntity() != null && Minecraft.getMinecraft().thePlayer.getRidingEntity() instanceof EntityDragonBase;
-		} else {
-			return false;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import java.util.Random;
 
+import net.ilexiconn.llibrary.server.config.Config;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,6 +10,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.BiomeManager.BiomeEntry;
+import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -25,7 +32,6 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModFoods;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
@@ -34,6 +40,7 @@ import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonKeys;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
+import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 
 @Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
 public class IceAndFire {
@@ -49,6 +56,9 @@ public class IceAndFire {
 	public static CreativeTabs tab;
 	public static DamageSource dragon;
 	public static DamageSource dragonFire;
+	public static Biome glacier;
+	@Config
+	public static IceAndFireConfig CONFIG;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -80,7 +90,11 @@ public class IceAndFire {
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();
-		
+		glacier = new BiomeGlacier().setRegistryName(MODID, "glacier");
+		GameRegistry.register(glacier);
+		BiomeDictionary.registerBiomeType(glacier, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
+		BiomeManager.addSpawnBiome(glacier);
+		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(glacier, 70));
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
