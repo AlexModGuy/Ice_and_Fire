@@ -10,6 +10,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -43,9 +44,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
+import com.github.alexthe666.iceandfire.message.MessageDragonKeys;
 
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
@@ -317,9 +320,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Nullable
 	public Entity getControllingPassenger() {
-		return this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) ? this.getOwner() : null;
+		return this.getOwner() != null && this.isPassenger(this.getOwner()) ? this.getOwner() : null;
 	}
 
+	public boolean isRidingPlayer(EntityPlayer player){
+		return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
+	}
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -532,10 +539,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
-		System.out.println(this.getDeathStage());
 		if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
-			System.out.println("HELP");
-
 			if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
 				ItemStack skull = new ItemStack(ModItems.dragon_skull, 1);
 				skull.setTagCompound(new NBTTagCompound());
@@ -646,6 +650,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (worldObj.isRemote) {
+			this.updateClientControls();
+		}
 		if (this.isFlying() || this.isHovering()) {
 			if (animationCycle < 15) {
 				animationCycle++;
@@ -889,7 +896,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public boolean attackEntityFrom(DamageSource dmg, float i) {
-		if(this.isModelDead()){
+		if (this.isModelDead()) {
 			return false;
 		}
 		if (i > 0) {
@@ -1093,4 +1100,34 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public abstract Item getVariantEgg(int variant);
 
+	@SideOnly(Side.CLIENT)
+	protected void updateClientControls() {
+		Minecraft mc = Minecraft.getMinecraft();
+		if (this.isRidingPlayer(mc.thePlayer)) {
+			if (mc.gameSettings.keyBindJump.isKeyDown()) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(this.getEntityId(), 0));
+				if (!this.isFlying() && !this.isHovering()) {
+					this.spacebarTicks += 2;
+				}
+				if (this.isFlying() || this.isHovering()) {
+					this.motionY += 0.1D;
+				}
+			}
+			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(this.getEntityId(), 1));
+				if (this.isFlying() || this.isHovering()) {
+					this.motionY -= 0.2D;
+				}
+			}
+			if (ModKeys.dragon_fireAttack.isKeyDown()) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(this.getEntityId(), 2));
+			}
+			if (ModKeys.dragon_strike.isKeyDown()) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(this.getEntityId(), 3));
+			}
+			if (ModKeys.dragon_dismount.isKeyDown()) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonKeys(this.getEntityId(), 4));
+			}
+		}
+	}
 }

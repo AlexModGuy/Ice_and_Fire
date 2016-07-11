@@ -13,8 +13,8 @@ public class DragonAIWatchClosest extends EntityAIWatchClosest {
 	}
 
 	@Override
-	public boolean shouldExecute(){
-		if(this.theWatcher instanceof EntityDragonBase && ((EntityDragonBase)this.theWatcher).isSleeping()){
+	public boolean shouldExecute() {
+		if (this.theWatcher instanceof EntityDragonBase && ((EntityDragonBase) this.theWatcher).isSleeping()) {
 			return false;
 		}
 		return super.shouldExecute();

@@ -78,11 +78,11 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTexture() {
-		if(this.isModelDead()){
-			if(this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
+		if (this.isModelDead()) {
+			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
 				return "iceandfire:textures/models/firedragon/skeleton";
-			}else{
-				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";	
+			} else {
+				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
 			}
 		}
 		if (this.isSleeping()) {
@@ -104,7 +104,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			return "gray_";
 		}
 	}
-	
+
 	public Item getVariantScale(int variant) {
 		switch (variant) {
 		default:
@@ -117,7 +117,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			return ModItems.dragonscales_gray;
 		}
 	}
-	
+
 	public Item getVariantEgg(int variant) {
 		switch (variant) {
 		default:
@@ -203,7 +203,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if(!this.isModelDead()){
+		if (!this.isModelDead()) {
 			this.setHealth(1);
 		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {

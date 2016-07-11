@@ -33,7 +33,7 @@ public class EventNewMenu {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 	}
 

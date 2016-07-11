@@ -19,7 +19,7 @@ public class DragonAIRiding extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return !dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner());
+		return dragon.getControllingPassenger() != null;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class DragonAIRiding extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+		if (dragon.getControllingPassenger() != null) {
 			float speedX = dragon.getOwner().moveForward / dragon.getDragonStage();
 			float speedZ = dragon.getOwner().moveStrafing / dragon.getDragonStage();
 			float speedPlayer = Math.max(Math.abs(speedX), Math.abs(speedZ));

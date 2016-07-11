@@ -55,10 +55,13 @@ public class MessageDragonKeys extends AbstractMessage<MessageDragonKeys> {
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageDragonKeys message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.worldObj.getEntityByID(message.dragonId);
+
 		if (entity instanceof EntityDragonBase) {
+
 			EntityDragonBase dragon = (EntityDragonBase) entity;
-			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
-				Entity owner = dragon.getOwner();
+
+				if(dragon.isOwner(player)){
+
 				switch (message.keyId) {
 				default:// jumpkey
 					if (!dragon.isFlying() && !dragon.isHovering()) {
@@ -75,7 +78,7 @@ public class MessageDragonKeys extends AbstractMessage<MessageDragonKeys> {
 					break;
 				case 2:// firekey
 					dragon.setBreathingFire(true);
-					dragon.riderShootFire(owner);
+					dragon.riderShootFire(player);
 					dragon.fireStopTicks = 10;
 					break;
 				case 3:// strikekey
@@ -83,16 +86,16 @@ public class MessageDragonKeys extends AbstractMessage<MessageDragonKeys> {
 					if (!list.isEmpty()) {
 						Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(dragon));
 						Iterator<Entity> itr = list.iterator();
-						while(itr.hasNext()){
+						while (itr.hasNext()) {
 							Entity mob = itr.next();
-							if(mob instanceof EntityLivingBase && !dragon.getPassengers().contains(mob) && !dragon.isOwner((EntityLivingBase)mob) && mob != dragon){
+							if (mob instanceof EntityLivingBase && !dragon.getPassengers().contains(mob) && !dragon.isOwner((EntityLivingBase) mob) && mob != dragon) {
 								dragon.attackEntityAsMob(dragon);
 							}
 						}
 					}
 					break;
 				case 4:// dismountkey
-					owner.dismountRidingEntity();
+					player.dismountRidingEntity();
 					break;
 				}
 			}

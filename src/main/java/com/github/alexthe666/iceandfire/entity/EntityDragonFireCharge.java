@@ -16,23 +16,23 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 	public EntityDragonFireCharge(World worldIn) {
 		super(worldIn);
-		
+
 	}
 
 	public EntityDragonFireCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
-        double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
+		double d0 = (double) MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		this.accelerationX = accelX / d0 * 0.07D;
+		this.accelerationY = accelY / d0 * 0.07D;
+		this.accelerationZ = accelZ / d0 * 0.07D;
 	}
 
 	public EntityDragonFireCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
-        double d0 = (double)MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
+		double d0 = (double) MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		this.accelerationX = accelX / d0 * 0.07D;
+		this.accelerationY = accelY / d0 * 0.07D;
+		this.accelerationZ = accelZ / d0 * 0.07D;
 	}
 
 	public void setSizes(float width, float height) {
@@ -57,7 +57,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 		if (!this.worldObj.isRemote) {
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				if(this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)movingObject.entityHit).getOwner()))){
+				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
 				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
@@ -68,15 +68,15 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
-				if(this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase)shootingEntity).getOwner() == ((EntityTameable)movingObject.entityHit).getOwner()))){
+				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
 				movingObject.entityHit.setFire(5);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				FireExplosion explosion = new FireExplosion(worldObj, null, this.posX, this.posY, this.posZ, 2, true);
-				if(shootingEntity != null){
-					((EntityDragonBase)this.shootingEntity).attackDecision = true;
+				if (shootingEntity != null) {
+					((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
 				}
 				explosion.doExplosionA();
@@ -92,7 +92,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 		}
 		this.setDead();
 	}
-	
+
 	public void setAim(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {
 		float f = -MathHelper.sin(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
 		float f1 = -MathHelper.sin(yaw * 0.017453292F);
@@ -126,7 +126,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 		fireball.prevRotationYaw = fireball.rotationYaw;
 		fireball.prevRotationPitch = fireball.rotationPitch;
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return false;

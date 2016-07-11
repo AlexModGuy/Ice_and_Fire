@@ -26,7 +26,7 @@ public class RenderDragonFireCharge extends Render<EntityDragonFireCharge> {
 
 	@Override
 	public void doRender(EntityDragonFireCharge entity, double x, double y, double z, float yee, float partialTicks) {
-        BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		this.bindEntityTexture(entity);

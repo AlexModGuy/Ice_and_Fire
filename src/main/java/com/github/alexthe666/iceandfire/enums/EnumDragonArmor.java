@@ -60,7 +60,7 @@ public enum EnumDragonArmor {
 			return ModItems.dragonscales_red;
 		}
 	}
-	
+
 	public static Item getEggItem(EnumDragonArmor armor) {
 		switch (armor) {
 		case armor_red:

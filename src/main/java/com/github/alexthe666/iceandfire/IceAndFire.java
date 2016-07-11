@@ -35,6 +35,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventMapGen;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
@@ -63,6 +64,7 @@ public class IceAndFire {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
+		MinecraftForge.EVENT_BUS.register(new EventMapGen());
 	}
 
 	@EventHandler
@@ -90,11 +92,11 @@ public class IceAndFire {
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();
-		glacier = new BiomeGlacier().setRegistryName(MODID, "glacier");
+		glacier = new BiomeGlacier().setRegistryName(MODID, "Glacier");
 		GameRegistry.register(glacier);
 		BiomeDictionary.registerBiomeType(glacier, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
 		BiomeManager.addSpawnBiome(glacier);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(glacier, 70));
+		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(glacier, 45));
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

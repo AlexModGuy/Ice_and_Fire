@@ -38,5 +38,4 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 		return new ResourceLocation(((EntityDragonBase) entity).getTexture() + ".png");
 	}
 
-
 }

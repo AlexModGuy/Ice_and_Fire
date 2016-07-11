@@ -127,7 +127,7 @@ public class EntityDragonFire extends EntityFireball {
 		fireball.prevRotationYaw = fireball.rotationYaw;
 		fireball.prevRotationPitch = fireball.rotationPitch;
 	}
-	
+
 	public float getCollisionBorderSize() {
 		return 0F;
 	}

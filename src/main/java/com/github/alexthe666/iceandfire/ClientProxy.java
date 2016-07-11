@@ -39,7 +39,6 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.event.EventKeys;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 
 public class ClientProxy extends CommonProxy {
@@ -49,7 +48,6 @@ public class ClientProxy extends CommonProxy {
 		ModKeys.init();
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
 		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
-		MinecraftForge.EVENT_BUS.register(new EventKeys());
 		renderItems();
 		renderEntities();
 	}
@@ -148,7 +146,7 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_diamond, 1, new ModelResourceLocation("iceandfire:dragonarmor_diamond_neck", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_diamond, 2, new ModelResourceLocation("iceandfire:dragonarmor_diamond_body", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_armor_diamond, 3, new ModelResourceLocation("iceandfire:dragonarmor_diamond_tail", "inventory"));
-	
+
 	}
 
 	@Override
@@ -162,10 +160,10 @@ public class ClientProxy extends CommonProxy {
 
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
 		Particle particle = null;
-		if(name.equals("dragonfire")){
+		if (name.equals("dragonfire")) {
 			particle = new ParticleDragonFire(world, x, y, z, motX, motY, motZ);
 		}
-		if(particle != null){
+		if (particle != null) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 	}

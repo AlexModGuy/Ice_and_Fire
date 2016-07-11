@@ -17,7 +17,7 @@ public class DragonAILookIdle extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if(!this.dragon.canMove()){
+		if (!this.dragon.canMove()) {
 			return false;
 		}
 		return this.dragon.getRNG().nextFloat() < 0.02F;

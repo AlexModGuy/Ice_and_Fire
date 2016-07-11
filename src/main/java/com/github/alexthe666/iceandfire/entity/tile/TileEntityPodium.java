@@ -190,7 +190,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return null;

@@ -14,7 +14,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 public class BiomeGlacier extends BiomeSnow {
 
 	public BiomeGlacier() {
-		super(false, new BiomeProperties("biome.glacier").setBaseHeight(2.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(0.5F).setSnowEnabled());
+		super(false, new BiomeProperties("Glacier").setBaseHeight(2.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(0.5F).setSnowEnabled());
 		this.topBlock = Blocks.SNOW.getDefaultState();
 		this.fillerBlock = Blocks.PACKED_ICE.getDefaultState();
 	}
