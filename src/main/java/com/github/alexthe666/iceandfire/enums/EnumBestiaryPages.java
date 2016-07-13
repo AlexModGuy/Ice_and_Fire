@@ -25,8 +25,8 @@ public enum EnumBestiaryPages {
 
 	public static List<Integer> getList(int[] containedpages) {
 		List<Integer> intList = new ArrayList<Integer>();
-		for (int index = 0; index < containedpages.length; index++) {
-			intList.add(containedpages[index]);
+		for (int containedpage : containedpages) {
+			intList.add(containedpage);
 		}
 		return intList;
 	}
@@ -53,9 +53,7 @@ public enum EnumBestiaryPages {
 			allPages.add(EnumBestiaryPages.values()[i]);
 		}
 		List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.getList(book.getTagCompound().getIntArray("Pages")));
-		Iterator itr = allPages.iterator();
-		while (itr.hasNext()) {
-			EnumBestiaryPages page = (EnumBestiaryPages) itr.next();
+		for (EnumBestiaryPages page : allPages) {
 			if (!pages.contains(page)) {
 				return true;
 			} else {

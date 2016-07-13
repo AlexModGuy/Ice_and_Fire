@@ -30,11 +30,12 @@ public class DragonAIRiding extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (dragon.getControllingPassenger() != null) {
-			float speedX = dragon.getOwner().moveForward / dragon.getDragonStage();
-			float speedZ = dragon.getOwner().moveStrafing / dragon.getDragonStage();
+		if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)dragon.getControllingPassenger();
+			float speedX = player.moveForward / dragon.getDragonStage();
+			float speedZ = player.moveStrafing / dragon.getDragonStage();
 			float speedPlayer = Math.max(Math.abs(speedX), Math.abs(speedZ));
-			Vec3d look = dragon.getOwner().getLookVec();
+			Vec3d look = player.getLookVec();
 			float dir = Math.min(speedX, 0) * -1;
 			dir += speedZ / (speedX * 2 + (speedX < 0 ? -2 : 2));
 			if (dir != 0) {
@@ -42,8 +43,8 @@ public class DragonAIRiding extends EntityAIBase {
 			}
 			if (speedPlayer > 0) {
 				if ((dragon.isFlying() || dragon.isHovering()) && !dragon.onGround) {
-					dragon.motionX = (double) (-MathHelper.sin(dragon.getOwner().rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(dragon.getOwner().rotationPitch / 180.0F * (float) Math.PI));
-					dragon.motionZ = (double) (MathHelper.cos(dragon.getOwner().rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(dragon.getOwner().rotationPitch / 180.0F * (float) Math.PI));
+					dragon.motionX = (double) (-MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI));
+					dragon.motionZ = (double) (MathHelper.cos(player.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI));
 				} else {
 					dragon.getMoveHelper().setMoveTo(dragon.posX + look.xCoord, dragon.posY, dragon.posZ + look.zCoord, speed);
 				}

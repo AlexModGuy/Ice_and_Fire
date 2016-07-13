@@ -67,7 +67,7 @@ public class EntityDragonEgg extends EntityLiving {
 	}
 
 	public EnumDragonEgg getType() {
-		return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE).intValue()];
+		return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE)];
 	}
 
 	public void setType(EnumDragonEgg newtype) {
@@ -80,7 +80,7 @@ public class EntityDragonEgg extends EntityLiving {
 	}
 
 	public int getDragonAge() {
-		return this.getDataManager().get(DRAGON_AGE).intValue();
+		return this.getDataManager().get(DRAGON_AGE);
 	}
 
 	public void setDragonAge(int i) {

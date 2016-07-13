@@ -61,27 +61,27 @@ public class EntityDragonSkull extends EntityAnimal {
 	}
 
 	public int getType() {
-		return this.getDataManager().get(DRAGON_TYPE).intValue();
+		return this.getDataManager().get(DRAGON_TYPE);
 	}
 
 	public void setType(int var1) {
-		this.getDataManager().set(DRAGON_TYPE, Integer.valueOf(var1));
+		this.getDataManager().set(DRAGON_TYPE, var1);
 	}
 
 	public int getStage() {
-		return this.getDataManager().get(DRAGON_STAGE).intValue();
+		return this.getDataManager().get(DRAGON_STAGE);
 	}
 
 	public void setStage(int var1) {
-		this.getDataManager().set(DRAGON_STAGE, Integer.valueOf(var1));
+		this.getDataManager().set(DRAGON_STAGE, var1);
 	}
 
 	public int getDragonAge() {
-		return this.getDataManager().get(DRAGON_AGE).intValue();
+		return this.getDataManager().get(DRAGON_AGE);
 	}
 
 	public void setDragonAge(int var1) {
-		this.getDataManager().set(DRAGON_AGE, Integer.valueOf(var1));
+		this.getDataManager().set(DRAGON_AGE, var1);
 	}
 
 	@Override

@@ -35,8 +35,8 @@ public class ItemBestiary extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
-		subItems.add(new ItemStack(itemIn, 1, 0));
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
+		subItems.add(new ItemStack(item, 1, 0));
 	}
 
 	@Override
@@ -49,13 +49,12 @@ public class ItemBestiary extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
 		if (stack.getTagCompound() != null) {
 			list.add(StatCollector.translateToLocal("bestiary.contains"));
 			List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.getList(stack.getTagCompound().getIntArray("Pages")));
-			Iterator itr = pages.iterator();
-			while (itr.hasNext()) {
-				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[((EnumBestiaryPages) itr.next()).ordinal()].toString().toLowerCase()));
+			for (EnumBestiaryPages page : pages) {
+				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
 			}
 
 		}

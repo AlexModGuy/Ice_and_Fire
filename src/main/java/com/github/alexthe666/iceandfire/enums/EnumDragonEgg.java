@@ -21,7 +21,7 @@ public enum EnumDragonEgg {
 	}
 
 	public static EnumDragonEgg byMetadata(int meta) {
-		EnumDragonEgg i = (EnumDragonEgg) META_LOOKUP.get(Integer.valueOf(meta));
+		EnumDragonEgg i = (EnumDragonEgg) META_LOOKUP.get(meta);
 		return i == null ? RED : i;
 	}
 
@@ -29,9 +29,8 @@ public enum EnumDragonEgg {
 		EnumDragonEgg[] var0 = values();
 		int var1 = var0.length;
 
-		for (int var2 = 0; var2 < var1; ++var2) {
-			EnumDragonEgg var3 = var0[var2];
-			META_LOOKUP.put(Integer.valueOf(var3.meta), var3);
+		for (EnumDragonEgg var3 : var0) {
+			META_LOOKUP.put(var3.meta, var3);
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class BlockGoldPile extends Block {
 	public BlockGoldPile() {
 		super(Material.GROUND);
 		GameRegistry.registerBlock(this, "goldpile");
-		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, Integer.valueOf(1)));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
 		this.setTickRandomly(true);
 		this.setCreativeTab(IceAndFire.tab);
 		this.setUnlocalizedName("iceandfire.goldpile");
@@ -43,12 +43,12 @@ public class BlockGoldPile extends Block {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return SNOW_AABB[state.getValue(LAYERS).intValue()];
+		return SNOW_AABB[state.getValue(LAYERS)];
 	}
 
 	@Override
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).getValue(LAYERS).intValue() < 5;
+		return worldIn.getBlockState(pos).getValue(LAYERS) < 5;
 	}
 
 	/**
@@ -60,12 +60,12 @@ public class BlockGoldPile extends Block {
 	 */
 	@Override
 	public boolean isFullyOpaque(IBlockState state) {
-		return state.getValue(LAYERS).intValue() == 7;
+		return state.getValue(LAYERS) == 7;
 	}
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		int i = blockState.getValue(LAYERS).intValue() - 1;
+		int i = blockState.getValue(LAYERS) - 1;
 		float f = 0.125F;
 		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(worldIn, pos);
 		return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, i * f, axisalignedbb.maxZ);
@@ -75,7 +75,7 @@ public class BlockGoldPile extends Block {
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState iblockstate = worldIn.getBlockState(pos.down());
 		Block block = iblockstate.getBlock();
-		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : (block == this && iblockstate.getValue(LAYERS).intValue() >= 7 ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement())) : false;
+		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : (block == this && iblockstate.getValue(LAYERS) >= 7 ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement())) : false;
 	}
 
 	@Override
@@ -141,17 +141,17 @@ public class BlockGoldPile extends Block {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(LAYERS, Integer.valueOf((meta & 7) + 1));
+		return this.getDefaultState().withProperty(LAYERS, (meta & 7) + 1);
 	}
 
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).getValue(LAYERS).intValue() == 1;
+		return worldIn.getBlockState(pos).getValue(LAYERS) == 1;
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(LAYERS).intValue() - 1;
+		return state.getValue(LAYERS) - 1;
 	}
 
 	@Override

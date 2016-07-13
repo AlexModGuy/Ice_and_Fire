@@ -119,8 +119,7 @@ public class FireExplosion extends Explosion {
 		net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.worldObj, this, list, f3);
 		Vec3d Vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
 
-		for (int k2 = 0; k2 < list.size(); ++k2) {
-			Entity entity = list.get(k2);
+		for (Entity entity : list) {
 			if (!(entity instanceof EntityDragonFire)) {
 				if (!entity.isImmuneToExplosions()) {
 					double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;

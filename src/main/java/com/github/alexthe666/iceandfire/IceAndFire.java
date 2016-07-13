@@ -39,7 +39,7 @@ import com.github.alexthe666.iceandfire.event.EventMapGen;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
-import com.github.alexthe666.iceandfire.message.MessageDragonKeys;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 
@@ -50,7 +50,7 @@ public class IceAndFire {
 	public static final String VERSION = "0.1.4";
 	@Instance(value = MODID)
 	public static IceAndFire instance;
-	@NetworkWrapper({ MessageDaytime.class, MessageDragonArmor.class, MessageDragonKeys.class })
+	@NetworkWrapper({ MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class })
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy PROXY;

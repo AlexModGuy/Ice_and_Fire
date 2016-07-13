@@ -9,9 +9,7 @@ import net.minecraft.client.model.ModelRenderer;
 
 public class ModelUtils {
 	public static void renderAll(List boxList) {
-		Iterator itr = boxList.iterator();
-		while (itr.hasNext()) {
-			Object element = itr.next();
+		for (Object element : boxList) {
 			if (element instanceof AdvancedModelRenderer) {
 				AdvancedModelRenderer box = (AdvancedModelRenderer) element;
 				if (box.getParent() == null) {

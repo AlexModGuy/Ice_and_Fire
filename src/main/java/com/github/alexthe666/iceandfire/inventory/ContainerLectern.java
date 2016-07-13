@@ -47,9 +47,7 @@ public class ContainerLectern extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < this.listeners.size(); ++i) {
-			IContainerListener icrafting = this.listeners.get(i);
-
+		for (IContainerListener icrafting : this.listeners) {
 			if (this.field_178152_f != this.tileFurnace.getField(2)) {
 				icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
 			}

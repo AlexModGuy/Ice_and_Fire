@@ -108,18 +108,20 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		return !this.taskOwner.getNavigator().noPath();
 	}
 
-	public static class Sorter implements Comparator<Entity> {
-		private final Entity theEntity;
+    public static class Sorter implements Comparator<Entity>
+    {
+        private final Entity theEntity;
 
-		public Sorter(Entity theEntityIn) {
-			this.theEntity = theEntityIn;
-		}
+        public Sorter(Entity theEntityIn)
+        {
+            this.theEntity = theEntityIn;
+        }
 
-		@Override
-		public int compare(Entity entity_1, Entity entity_2) {
-			double d0 = this.theEntity.getDistanceSqToEntity(entity_1);
-			double d1 = this.theEntity.getDistanceSqToEntity(entity_2);
-			return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
-		}
-	}
+        public int compare(Entity p_compare_1_, Entity p_compare_2_)
+        {
+            double d0 = this.theEntity.getDistanceSqToEntity(p_compare_1_);
+            double d1 = this.theEntity.getDistanceSqToEntity(p_compare_2_);
+            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+        }
+    }
 }
