@@ -203,9 +203,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (!this.isModelDead()) {
-			this.setHealth(1);
-		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 			if (!attackDecision || this.isFlying()) {
 				shootFireAtMob(this.getAttackTarget());

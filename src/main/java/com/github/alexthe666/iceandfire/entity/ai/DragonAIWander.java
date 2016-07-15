@@ -40,7 +40,6 @@ public class DragonAIWander extends EntityAIBase {
 				return false;
 			}
 		}
-
 		Vec3d vec3d = RandomPositionGenerator.findRandomTarget(this.dragon, 10, 7);
 		if (vec3d == null) {
 			return false;

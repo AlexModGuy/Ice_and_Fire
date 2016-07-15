@@ -456,27 +456,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isModelDead() {
         if (worldObj.isRemote) {
-            boolean ismodelDead = this.dataManager.get(MODEL_DEAD);
-            this.isModelDead = ismodelDead;
-            return isModelDead;
+            return this.isModelDead = this.dataManager.get(MODEL_DEAD);
         }
         return isModelDead;
     }
 
     public boolean isHovering() {
         if (worldObj.isRemote) {
-            boolean isHovering = this.dataManager.get(HOVERING);
-            this.isHovering = isHovering;
-            return isHovering;
+            return this.isHovering = this.dataManager.get(HOVERING);
         }
         return isHovering;
     }
 
     public boolean isFlying() {
         if (worldObj.isRemote) {
-            boolean isFlying = this.dataManager.get(FLYING);
-            this.isFlying = isFlying;
-            return isFlying;
+            return this.isFlying = this.dataManager.get(FLYING);
         }
         return isFlying;
     }
@@ -639,6 +633,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             } else {
                 if (player.isSneaking()) {
+                    player.setSneaking(false);
                     player.startRiding(this, true);
                     System.out.println(this.isServerWorld());
                     this.setSleeping(false);
@@ -875,9 +870,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void updatePassenger(Entity passenger) {
         if (this.isPassenger(passenger)) {
             if (this.getControllingPassenger() != null && passenger == this.getControllingPassenger()) {
-                this.rotationYaw = passenger.rotationYaw;
-                this.rotationYawHead = passenger.rotationYaw;
                 renderYawOffset = rotationYaw;
+                this.rotationYaw = passenger.rotationYaw;
                 float radius = 0.7F * (0.7F * getRenderSize());
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
@@ -885,7 +879,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float fly = (float) (Math.sin(ticksExisted * 0.35) * 1 * 1F) - 1.55F;
                 float idle = (float) (Math.sin(ticksExisted * -0.05) * 1 * 0.25 - 1 * 0.25) + 0.6F;
                 float bob = (this.isFlying() || this.isHovering()) ? fly + idle : idle;
-                double extraY = 0.75F * (getRenderSize() + 0.1F + bob) + (this.isFlying() ? 20 * 0.1 : this.isHovering() ? this.hoverProgress * 0.1 : 0);
+                float flightAddition = (float)(this.isFlying() ? 1 - this.flyProgress * 0.1 : 0);
+                System.out.println(hoverProgress);
+                float hoverAddition = (float)(this.isHovering() ? this.hoverProgress  * 0.2 : 0);
+                double extraY = 0.75F * (getRenderSize() + 0.1F + bob + flightAddition + hoverAddition);
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             } else {
