@@ -375,8 +375,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Nullable
     public Entity getControllingPassenger() {
-        for(Entity passenger : this.getPassengers()){
-            if(passenger instanceof EntityPlayer && this.getAttackTarget() != passenger){
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
                 return passenger;
             }
         }
@@ -780,6 +780,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             } else {
                 this.setHovering(true);
             }
+        }
+        if(this.onGround && this.getControlState() != (1 << 0) && (this.isFlying() || this.isHovering())){
+            this.setFlying(false);
+            this.setHovering(false);
         }
         if (this.isHovering()) {
             this.hoverTicks++;
@@ -1208,5 +1212,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
             }
         }
+    }
+
+    @Override
+    public void moveEntityWithHeading(float strafe, float forward) {
+        if (this.isBeingRidden() && this.canBeSteered()) {
+            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
+            if (controller != null) {
+                strafe = controller.moveStrafing * 0.5F;
+                forward = controller.moveForward;
+                if (forward <= 0.0F) {
+                    forward *= 0.25F;
+                }
+                jumpMovementFactor = 0.125F;
+                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
+            }
+        }
+        super.moveEntityWithHeading(strafe, forward);
     }
 }

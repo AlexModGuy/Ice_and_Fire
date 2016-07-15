@@ -968,6 +968,10 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.walk(ToeL1, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
 			this.walk(ToeL2, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
 			this.walk(ToeL3, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
+			this.swing(ArmR1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
+			this.swing(ArmL1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
+			this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
+			this.flap(ClawR, speed_walk, degree_walk * 1.2F, true, 0, -0.5F, f, f1);
 		}
 		this.faceTarget(f3, f4, 3, NECK);
 		this.bob(BodyLower, speed_walk * 2, degree_walk * 1.7F, false, f, f1);
@@ -977,10 +981,6 @@ public class ModelFireDragon extends ModelDragonBase {
 		this.chainWave(TAIL, speed_walk, degree_walk * 0.15F, 2, f, f1);
 		this.chainSwing(NECK, speed_walk, degree_walk * 0.15F, 2, f, f1);
 		this.chainWave(NECK, speed_walk, degree_walk * 0.05F, -2, f, f1);
-		this.swing(ArmR1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
-		this.swing(ArmL1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
-		this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
-		this.flap(ClawR, speed_walk, degree_walk * 1.2F, true, 0, -0.5F, f, f1);
 		this.bob(BodyLower, speed_idle, degree_idle * 1.3F, false, entity.ticksExisted, 1);
 		this.bob(ThighR, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
 		this.bob(ThighL, speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
