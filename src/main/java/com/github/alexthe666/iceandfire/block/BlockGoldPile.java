@@ -116,7 +116,9 @@ public class BlockGoldPile extends Block {
 
 	@Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		this.onNeighborChange(world, pos, neighbor);
+		if(world instanceof World){
+			this.checkAndDropBlock((World)world, pos, ((World)world).getBlockState(neighbor));
+		}
 	}
 
 	private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
