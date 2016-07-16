@@ -49,9 +49,10 @@ dependencies {
 }
 
 jar {
+    classifier = 'universal'
     manifest {
-        attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"
-        attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes ('FMLCorePlugin': 'com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading')
+        attributes ('FMLCorePluginContainsFMLMod': 'true')
     }
 }
 
