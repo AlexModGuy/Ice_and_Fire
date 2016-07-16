@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -804,6 +805,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!this.onGround && this.motionY < 0.0D || this.isHovering() || this.isFlying()) {
             this.motionY *= 0.6D;
         }
+        if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
+            this.motionY /= 0.6D;
+        }
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
         } else if (getAttackTarget() != null) {
@@ -879,10 +883,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float fly = (float) (Math.sin(ticksExisted * 0.35) * 1 * 1F) - 1.55F;
                 float idle = (float) (Math.sin(ticksExisted * -0.05) * 1 * 0.25 - 1 * 0.25) + 0.6F;
                 float bob = (this.isFlying() || this.isHovering()) ? fly + idle : idle;
-                float flightAddition = (float)(this.isFlying() ? 1 - this.flyProgress * 0.1 : 0);
+                float flightAddition = this.flyProgress * 0.15F;
                 System.out.println(hoverProgress);
-                float hoverAddition = (float)(this.isHovering() ? this.hoverProgress  * 0.2 : 0);
-                double extraY = 0.75F * (getRenderSize() + 0.1F + bob + flightAddition + hoverAddition);
+                float hoverAddition = (this.hoverProgress * 0.2F) + (this.hoverProgress * 0.2F);
+                double extraY = 0.75F * (getRenderSize() + bob + flightAddition + (this.isHovering() ? hoverAddition : 0));
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             } else {
