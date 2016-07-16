@@ -50,7 +50,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes "FMLCorePlugin": "<com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading>"
+        attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"
         attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
