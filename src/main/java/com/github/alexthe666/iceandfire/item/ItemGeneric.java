@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemGeneric extends Item {
 	public ItemGeneric(String gameName, String name) {
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName(name);
 		GameRegistry.registerItem(this, gameName);
 	}

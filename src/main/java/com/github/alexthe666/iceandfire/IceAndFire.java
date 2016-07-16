@@ -43,21 +43,23 @@ import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 
-@Mod(modid = IceAndFire.MODID, version = IceAndFire.VERSION)
+@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name  = IceAndFire.NAME)
 public class IceAndFire {
-
 	public static final String MODID = "iceandfire";
 	public static final String VERSION = "0.1.4";
+	public static final String LLIBRARY_VERSION = "1.4.1";
+	public static final String NAME = "Ice And Fire";
+
 	@Instance(value = MODID)
-	public static IceAndFire instance;
+	public static IceAndFire INSTANCE;
 	@NetworkWrapper({ MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class })
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy PROXY;
-	public static CreativeTabs tab;
+	public static CreativeTabs TAB;
 	public static DamageSource dragon;
 	public static DamageSource dragonFire;
-	public static Biome glacier;
+	public static Biome GLACIER;
 	@Config
 	public static IceAndFireConfig CONFIG;
 
@@ -69,7 +71,7 @@ public class IceAndFire {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		tab = new CreativeTab(MODID);
+		TAB = new CreativeTab(MODID);
 		dragon = new DamageSource("dragon") {
 			@Override
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
@@ -92,11 +94,11 @@ public class IceAndFire {
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();
-		glacier = new BiomeGlacier().setRegistryName(MODID, "Glacier");
-		GameRegistry.register(glacier);
-		BiomeDictionary.registerBiomeType(glacier, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
-		BiomeManager.addSpawnBiome(glacier);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(glacier, 45));
+		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
+		GameRegistry.register(GLACIER);
+		BiomeDictionary.registerBiomeType(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
+		BiomeManager.addSpawnBiome(GLACIER);
+		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, 45));
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

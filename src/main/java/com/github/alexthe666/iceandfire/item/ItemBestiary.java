@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +22,7 @@ public class ItemBestiary extends Item {
 
 	public ItemBestiary() {
 		this.maxStackSize = 1;
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.bestiary");
 		GameRegistry.registerItem(this, "bestiary");
 	}

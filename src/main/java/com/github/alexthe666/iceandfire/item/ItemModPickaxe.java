@@ -20,7 +20,7 @@ public class ItemModPickaxe extends ItemPickaxe {
 	public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
 		this.setUnlocalizedName(name);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		GameRegistry.registerItem(this, gameName);
 	}
 

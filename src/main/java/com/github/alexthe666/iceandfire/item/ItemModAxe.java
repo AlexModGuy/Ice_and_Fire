@@ -31,7 +31,7 @@ public class ItemModAxe extends ItemTool {
 		this.damageVsEntity = ATTACK_DAMAGES[toolmaterial.ordinal() - 1];
 		this.attackSpeed = ATTACK_SPEEDS[toolmaterial.ordinal() - 1];
 		this.setUnlocalizedName(name);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		GameRegistry.registerItem(this, gameName);
 	}
 

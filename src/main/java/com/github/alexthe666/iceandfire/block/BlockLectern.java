@@ -38,7 +38,7 @@ public class BlockLectern extends BlockContainer {
 		this.setResistance(5.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setSoundType(SoundType.WOOD);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.lectern");
 		GameRegistry.registerBlock(this, "lectern");
 		GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
@@ -119,7 +119,7 @@ public class BlockLectern extends BlockContainer {
 		if (playerIn.isSneaking()) {
 			return false;
 		} else {
-			playerIn.openGui(IceAndFire.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			playerIn.openGui(IceAndFire.INSTANCE, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 	}

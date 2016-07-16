@@ -13,11 +13,11 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 public class ModEntities {
 
 	public static void registerSpawnable(Class entityClass, String name, int id, int mainColor, int subColor) {
-		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.instance, 64, 3, true, mainColor, subColor);
+		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true, mainColor, subColor);
 	}
 
 	public static void registerUnspawnable(Class entityClass, String name, int id) {
-		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.instance, 64, 3, true);
+		EntityRegistry.registerModEntity(entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true);
 	}
 
 	public static void init() {

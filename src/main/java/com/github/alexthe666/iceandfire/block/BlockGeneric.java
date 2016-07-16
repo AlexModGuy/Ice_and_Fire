@@ -16,7 +16,7 @@ public class BlockGeneric extends Block {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		GameRegistry.registerBlock(this, gameName);
 
 	}
@@ -27,7 +27,7 @@ public class BlockGeneric extends Block {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		GameRegistry.registerBlock(this, gameName);
 
 	}

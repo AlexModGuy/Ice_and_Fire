@@ -18,7 +18,7 @@ public class ItemDragonScales extends Item {
 
 	public ItemDragonScales(String name, EnumDragonEgg type) {
 		this.setHasSubtypes(true);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.type = type;
 		this.setUnlocalizedName("iceandfire.dragonscales");
 		GameRegistry.registerItem(this, name);

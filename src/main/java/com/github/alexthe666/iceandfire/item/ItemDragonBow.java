@@ -25,7 +25,7 @@ public class ItemDragonBow extends Item {
 	public ItemDragonBow() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(584);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragonbone_bow");
 		GameRegistry.registerItem(this, "dragonbone_bow");
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {

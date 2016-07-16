@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -13,7 +12,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -44,7 +42,7 @@ public class BlockPodium extends BlockContainer {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
 		this.setHardness(2.0F);
 		this.setSoundType(SoundType.WOOD);
-		this.setCreativeTab(IceAndFire.tab);
+		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.podium");
 		GameRegistry.registerBlock(this, ItemBlockPodium.class, "podium");
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
@@ -76,7 +74,7 @@ public class BlockPodium extends BlockContainer {
 		if (playerIn.isSneaking()) {
 			return false;
 		} else {
-			playerIn.openGui(IceAndFire.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			playerIn.openGui(IceAndFire.INSTANCE, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 	}

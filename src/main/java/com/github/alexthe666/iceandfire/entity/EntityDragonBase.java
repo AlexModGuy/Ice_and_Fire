@@ -20,7 +20,6 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -164,7 +163,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void openGUI(EntityPlayer playerEntity) {
         if (!this.worldObj.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
-            playerEntity.openGui(IceAndFire.instance, 0, this.worldObj, this.getEntityId(), 0, 0);
+            playerEntity.openGui(IceAndFire.INSTANCE, 0, this.worldObj, this.getEntityId(), 0, 0);
         }
     }
 
@@ -636,7 +635,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 if (player.isSneaking()) {
                     player.setSneaking(false);
                     player.startRiding(this, true);
-                    System.out.println(this.isServerWorld());
                     this.setSleeping(false);
                     return true;
                 } else {
@@ -884,7 +882,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float idle = (float) (Math.sin(ticksExisted * -0.05) * 1 * 0.25 - 1 * 0.25) + 0.6F;
                 float bob = (this.isFlying() || this.isHovering()) ? fly + idle : idle;
                 float flightAddition = this.flyProgress * 0.15F;
-                System.out.println(hoverProgress);
                 float hoverAddition = (this.hoverProgress * 0.2F) + (this.hoverProgress * 0.2F);
                 double extraY = 0.75F * (getRenderSize() + bob + flightAddition + (this.isHovering() ? hoverAddition : 0));
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
