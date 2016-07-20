@@ -90,8 +90,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public AnimalChest dragonInv;
     private int animationTick;
     private Animation currentAnimation;
-    protected float minimumSize;
-    protected float maximumSize;
     public boolean isDaytime;
     public static Animation ANIMATION_EAT;
     public static Animation ANIMATION_SPEAK;
@@ -106,7 +104,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public RollBuffer roll_buffer;
     public int spacebarTicks;
     public int spacebarTickCounter;
-
+    public float[][] growth_stages;
     public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
         this.diet = diet;
@@ -618,7 +616,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (stack != null) {
                 if (stack.getItem() != null) {
                     int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
-                    if (itemFoodAmount > 0 && this.getHunger() < 100) {
+                    if (itemFoodAmount > 0) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + itemFoodAmount);
                         this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
@@ -705,6 +703,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        System.out.println(this.getAgeInDays());
         if (worldObj.isRemote) {
             this.updateClientControls();
         }
@@ -876,16 +875,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (this.getControllingPassenger() != null && passenger == this.getControllingPassenger()) {
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float radius = 0.7F * (0.7F * getRenderSize());
+                float radius = 0.7F * (0.3F * getRenderSize());
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                float bob0 = this.bob(0.2F * 2, 0.5F * 1.7F, false, this.limbSwing, this.limbSwingAmount);
-                float bob1 = this.bob(0.05F, 0.5F * 1.3F, false, this.ticksExisted, 1);
-                float bob2 = this.isFlying() || this.isHovering() ? this.bob(-0.35F, 0.5F * 5, false, ticksExisted, 1) : 0;
+                float bob0 = 0;//this.bob(0.2F * 2, 0.5F * 1.7F, false, this.limbSwing, this.limbSwingAmount);
+                float bob1 = 0;//this.bob(0.05F, -0.5F * 1.3F, false, this.ticksExisted, 1);
+                float bob2 = 0;//this.isFlying() || this.isHovering() ? this.bob(-0.35F, 0.5F * 5, false, ticksExisted, 1) : 0;
                 float flightAddition = this.flyProgress * 0.15F;
                 float hoverAddition = (this.hoverProgress * 0.2F) + (this.hoverProgress * 0.2F);
-                double extraY = 1.05F * getRenderSize();
+                double extraY = getRenderSize() * 0.3;
                 double animationY = -0.05F * getRenderSize() * (bob0 + bob1 + bob2 + flightAddition + (this.isHovering() ? hoverAddition : 0));
                 passenger.setPosition(this.posX + extraX, this.posY + extraY + animationY, this.posZ + extraZ);
                 this.stepHeight = 1;
@@ -960,8 +959,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setGender(this.getRNG().nextBoolean());
-        int age = this.getRNG().nextInt(80) + 1;
-        this.growDragon(age);
+        //int age = this.getRNG().nextInt(80) + 1;
+        this.growDragon(0);
         this.setHunger(50);
         this.setVariant(new Random().nextInt(4));
         this.setSleeping(false);
@@ -1005,7 +1004,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.fireStopTicks = 10;
         }
         if (this.strike()) {
-            List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize(), this.getRenderSize(), this.getRenderSize()));
+            List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() * 0.3F, this.getRenderSize() * 0.3F, this.getRenderSize() * 0.3F));
             if (!list.isEmpty()) {
                 Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
                 for (Entity mob : list) {
@@ -1038,18 +1037,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void setScaleForAge(boolean par1) {
-        this.setScale(Math.min(this.getRenderSize(), maximumSize));
+        this.setScale(Math.min(this.getRenderSize() * 0.3F, 8.58F));
     }
 
     public float getRenderSize() {
-        float step = (this.maximumSize - this.minimumSize) / ((125 * 24000));
-
-        if (this.getAgeInTicks() > 125 * 24000) {
-            return this.minimumSize + ((step) * 125 * 24000);
+        float step = (growth_stages[this.getDragonStage() - 1][1] - growth_stages[this.getDragonStage() - 1][0]) / 25;
+        if (this.getAgeInDays() > 125) {
+            return growth_stages[this.getDragonStage() - 1][0] + ((step * 25));
         }
-        return this.minimumSize + ((step * this.getAgeInTicks()));
+        return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
     }
 
+    private int getAgeFactor(){
+        return (this.getDragonStage() > 1 ? this.getAgeInDays() - (25 * (this.getDragonStage() - 1)) : this.getAgeInDays());
+    }
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));

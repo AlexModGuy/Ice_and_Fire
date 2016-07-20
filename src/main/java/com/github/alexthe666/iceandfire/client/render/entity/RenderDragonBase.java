@@ -29,7 +29,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
 	@Override
 	protected void preRenderCallback(EntityDragonBase entity, float f) {
-		this.shadowSize = ((EntityDragonBase) entity).getRenderSize();
+		this.shadowSize = ((EntityDragonBase) entity).getRenderSize() / 3;
 		GL11.glScalef(shadowSize, shadowSize, shadowSize);
 	}
 
