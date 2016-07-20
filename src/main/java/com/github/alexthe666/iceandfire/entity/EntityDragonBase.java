@@ -674,6 +674,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void growDragon(int ageInDays) {
         this.setAgeInDays(this.getAgeInDays() + ageInDays);
         this.setScaleForAge(false);
+        if(this.getAgeInDays() % 25 == 0){
+            for(int i = 0; i < this.getRenderSize() * 4; i++) {
+                double motionX = getRNG().nextGaussian() * 0.07D;
+                double motionY = getRNG().nextGaussian() * 0.07D;
+                double motionZ = getRNG().nextGaussian() * 0.07D;
+                float f = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX) + this.getEntityBoundingBox().minX);
+                float f1 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) + this.getEntityBoundingBox().minY);
+                float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
+                this.worldObj.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ, new int[]{});
+            }
+        }
         this.updateAttributes();
     }
 
@@ -882,10 +893,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float bob0 = 0;//this.bob(0.2F * 2, 0.5F * 1.7F, false, this.limbSwing, this.limbSwingAmount);
                 float bob1 = 0;//this.bob(0.05F, -0.5F * 1.3F, false, this.ticksExisted, 1);
                 float bob2 = 0;//this.isFlying() || this.isHovering() ? this.bob(-0.35F, 0.5F * 5, false, ticksExisted, 1) : 0;
-                float flightAddition = this.flyProgress * 0.15F;
-                float hoverAddition = (this.hoverProgress * 0.2F) + (this.hoverProgress * 0.2F);
+                float flightAddition = this.flyProgress * 0.01F;
+                float hoverAddition = this.hoverProgress  < 10 ? hoverProgress * 0.1F : 0;
                 double extraY = getRenderSize() * 0.3;
-                double animationY = -0.05F * getRenderSize() * (bob0 + bob1 + bob2 + flightAddition + (this.isHovering() ? hoverAddition : 0));
+                double animationY = extraY * (bob0 + bob1 + bob2 + flightAddition + hoverAddition);
                 passenger.setPosition(this.posX + extraX, this.posY + extraY + animationY, this.posZ + extraZ);
                 this.stepHeight = 1;
             } else {
@@ -1030,7 +1041,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
             this.setSleeping(true);
         }
-        if (this.isSleeping() && (this.isInWater() || this.isDaytime() || this.getAttackTarget() != null && !this.getPassengers().isEmpty())) {
+        if (this.isSleeping() && (this.isInWater() || this.isDaytime() || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
             this.setSleeping(false);
         }
     }

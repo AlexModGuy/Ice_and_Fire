@@ -29,10 +29,10 @@ public class DragonAIBreakBlocks extends EntityAIBase {
                     IBlockState state = dragon.worldObj.getBlockState(pos);
                     if(state.getBlockHardness(dragon.worldObj, pos) > -1 && state.getBlockHardness(dragon.worldObj, pos) < 5 && !dragon.worldObj.isAirBlock(pos) && state.getMaterial().getMobilityFlag() != EnumPushReaction.DESTROY){
                         if(dragon.getDragonStage() == 3 && state.getBlockHardness(dragon.worldObj, pos) < 1.5){
-                            dragon.worldObj.destroyBlock(pos, true);
+                            dragon.worldObj.destroyBlock(pos, false);
                         }
                         if(dragon.getDragonStage() > 3){
-                            dragon.worldObj.destroyBlock(pos, true);
+                            dragon.worldObj.destroyBlock(pos, false);
                         }
                     }
                 }

@@ -221,9 +221,9 @@ public class EntityFireDragon extends EntityDragonBase {
 				this.setAnimation(this.ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
-				float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
-				float headPosY = (float) (posY + 0.5 * getRenderSize());
+				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
 
 				worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 				EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(worldObj, this, 0, 0, 0);
@@ -244,9 +244,9 @@ public class EntityFireDragon extends EntityDragonBase {
 			if (this.isBreathingFire()) {
 				if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize());
+					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
 					EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, 0, 0, 0);
 					float f = (float) 32000 / 20.0F;
 					f = (f * f + f * 2.0F) / 3.0F;
@@ -274,9 +274,9 @@ public class EntityFireDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize());
+					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
 					double d1 = -1D;
 					Vec3d vec3 = this.getLook(1.0F);
 					double d2 = entity.posX - (headPosX + vec3.xCoord * d1);
@@ -299,9 +299,9 @@ public class EntityFireDragon extends EntityDragonBase {
 				if (this.isBreathingFire()) {
 					if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 						rotationYaw = renderYawOffset;
-						float headPosX = (float) (posX + 1.8F * getRenderSize() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-						float headPosZ = (float) (posZ + 1.8F * getRenderSize() * Math.sin((rotationYaw + 90) * Math.PI / 180));
-						float headPosY = (float) (posY + 0.5 * getRenderSize());
+						float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+						float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+						float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
 						double d1 = 0D;
 						Vec3d vec3 = this.getLook(1.0F);
 						double d2 = entity.posX - headPosX;
