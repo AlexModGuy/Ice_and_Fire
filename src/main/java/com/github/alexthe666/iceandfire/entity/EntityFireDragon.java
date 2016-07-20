@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
@@ -23,14 +24,6 @@ import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAirTarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIRiding;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.google.common.base.Predicate;
 
 import fossilsarcheology.api.EnumDiet;
@@ -64,6 +57,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(7, new DragonAILookIdle(this));
+		this.tasks.addTask(8, new DragonAIBreakBlocks(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
@@ -262,7 +256,6 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (!worldObj.isRemote) {
 						worldObj.spawnEntityInWorld(entitylargefireball);
 					}
-					entitylargefireball.setSizes(size, size);
 				}
 			} else {
 				this.setBreathingFire(true);

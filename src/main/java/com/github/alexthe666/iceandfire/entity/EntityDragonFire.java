@@ -23,6 +23,7 @@ public class EntityDragonFire extends EntityFireball {
 
 	public EntityDragonFire(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
+		this.setSize(0.5F, 0.5F);
 		double d0 = (double) MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.accelerationX = accelX / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationY = accelY / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
@@ -48,8 +49,7 @@ public class EntityDragonFire extends EntityFireball {
 		for (int i = 0; i < 6; ++i) {
 			IceAndFire.PROXY.spawnParticle("dragonfire", worldObj, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 		}
-		this.setSize((30 - Math.min(ticksExisted, 30)) * 0.05F, (30 - Math.min(ticksExisted, 30)) * 0.05F);
-		if (ticksExisted > 60) {
+		if (ticksExisted > 160) {
 			setDead();
 		}
 		if (this.onGround) {

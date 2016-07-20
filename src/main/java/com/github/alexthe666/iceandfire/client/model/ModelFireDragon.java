@@ -960,14 +960,14 @@ public class ModelFireDragon extends ModelDragonBase {
 		} else {
 			this.walk(ThighR, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 			this.walk(LegR, speed_walk, degree_walk * 0.7F, true, 0, -0.2F, f, f1);
-			this.walk(ToeR1, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
-			this.walk(ToeR2, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
-			this.walk(ToeR3, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
+			this.walk(ToeR1, -speed_walk * 2, degree_walk * 0.7F, false, -0.7F, 0.4F, f, f1);
+			this.walk(ToeR2, -speed_walk * 2, degree_walk * 0.7F, false, -0.7F, 0.4F, f, f1);
+			this.walk(ToeR3, -speed_walk * 2, degree_walk * 0.7F, false, -0.7F, 0.4F, f, f1);
 			this.walk(ThighL, speed_walk, degree_walk * 1.2F, false, 0, 0F, f, f1);
-			this.walk(LegL, speed_walk, degree_walk * 0.7F, false, 0, -0.2F, f, f1);
-			this.walk(ToeL1, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
-			this.walk(ToeL2, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
-			this.walk(ToeL3, -speed_walk, degree_walk * 0.7F, false, -0.7F, 0F, f, f1);
+			this.walk(LegL, speed_walk, degree_walk * 0.7F, false, 0, 0.2F, f, f1);
+			this.walk(ToeL1, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
+			this.walk(ToeL2, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
+			this.walk(ToeL3, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
 			this.swing(ArmR1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 			this.swing(ArmL1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
 			this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
