@@ -18,21 +18,20 @@ public class IceAndFireTransformer implements IClassTransformer {
 		{
 			boolean obf;
 			ClassNode classNode = new ClassNode();
-			if ((obf = "yn".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
+			if ((obf = "zs".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
 				ClassReader classReader = new ClassReader(classBytes);
 				classReader.accept(classNode, 0);
-				String doRenderName = obf ? "ab" : "updateRidden";
-				String doRenderDesc = "()V";
+				String updateRiddenName = obf ? "aw" : "updateRidden";
+				String updateRiddenDesc = "()V";
 				for (int i = 0; i < classNode.methods.size(); i++) {
 					MethodNode method = classNode.methods.get(i);
-					if (doRenderName.equals(method.name) && doRenderDesc.equals(method.desc)) {
+					if (updateRiddenName.equals(method.name) && updateRiddenDesc.equals(method.desc)) {
 						InsnList insnList = method.instructions;
-						for (int j = 0; j < insnList.size(); j++) {
-							{
+						for (int j = 0; j < insnList.size(); j++) {{
 								AbstractInsnNode insnNote = method.instructions.get(j);
 								if (insnNote.getOpcode() == Opcodes.INVOKEVIRTUAL) {
 									MethodInsnNode method_0 = (MethodInsnNode) insnNote;
-									if (method_0.name.equals(obf ? "bA" : "dismountRidingEntity")) {
+									if (method_0.name.equals(obf ? "p" : "dismountRidingEntity")) {
 										MethodInsnNode method_1 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/alexthe666/iceandfire/access/IceAndFireHooks", "dismount", obf ? "(Lyz;)V" : "(Lnet/minecraft/entity/player/EntityPlayer;)V", false);
 										insnList.insertBefore(method_0, method_1);
 										insnList.remove(method_0);

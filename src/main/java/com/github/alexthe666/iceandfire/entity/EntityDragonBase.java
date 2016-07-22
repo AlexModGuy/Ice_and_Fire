@@ -1009,7 +1009,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setSitting(false);
             this.setSleeping(false);
         }
-        i -= damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail);
+        i -= damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail;
         return super.attackEntityFrom(dmg, i);
     }
 
