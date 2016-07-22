@@ -723,6 +723,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(worldObj.isRemote){
+            this.updateClientControls();
+        }
         if (this.isFlying() || this.isHovering()) {
             if (animationCycle < 15) {
                 animationCycle++;
@@ -1107,13 +1110,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void updateRiding(Entity riding) {
         if (riding.isPassenger(this) && riding instanceof EntityPlayer)
         {
-            float radius = 0.4F;
-            float angle = (0.01745329251F * ((EntityPlayer)riding).renderYawOffset) + 90;
+            int i = riding.getPassengers().indexOf(this);
+            float radius = i == 2 ? 0F : 0.4F;
+            float angle = (0.01745329251F * ((EntityPlayer)riding).renderYawOffset) + (i == 1 ? -90 : i == 0 ? 90 : 0);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
-            double extraY = 1.4D;
+            double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYaw = ((EntityPlayer)riding).rotationYawHead;
             this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
+            if(this.getControlState() == 1 << 4){
+                this.dismountRidingEntity();
+            }
         }
     }
         @Override
@@ -1270,6 +1277,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             down(mc.gameSettings.keyBindSneak.isKeyDown());
             attack(ModKeys.dragon_fireAttack.isKeyDown());
             strike(ModKeys.dragon_strike.isKeyDown());
+            dismount(ModKeys.dragon_dismount.isKeyDown());
+            byte controlState = getControlState();
+            if (controlState != previousState) {
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+            }
+        }
+        if (this.getRidingEntity() != null && this.getRidingEntity() == mc.thePlayer) {
+            byte previousState = getControlState();
             dismount(ModKeys.dragon_dismount.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {

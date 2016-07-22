@@ -75,7 +75,8 @@ public class GuiDragon extends GuiContainer {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(posX, posY, 50.0F);
 		GlStateManager.scale((-scale), scale, scale);
-		GlStateManager.scale(1 / entity.getRenderSize() * 0.3F, 1 / entity.getRenderSize() * 0.3F, 1 / entity.getRenderSize() * 0.3F);
+		float dragonscale = entity.getRenderSize() / 3;
+		GlStateManager.scale(1 / dragonscale, 1 / dragonscale, 1 / dragonscale);
 		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 		float f2 = entity.renderYawOffset;
 		float f3 = entity.rotationYaw;
