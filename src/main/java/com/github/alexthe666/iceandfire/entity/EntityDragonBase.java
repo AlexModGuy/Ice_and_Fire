@@ -71,6 +71,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public int flyTicks;
     private boolean isModelDead;
     public float modelDeadProgress;
+    public float ridingProgress;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -631,9 +632,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             } else {
                 if (player.isSneaking()) {
-                    player.setSneaking(false);
-                    player.startRiding(this, true);
-                    this.setSleeping(false);
+                    if(this.getDragonStage() > 2){
+                        player.setSneaking(false);
+                        player.startRiding(this, true);
+                        this.setSleeping(false);
+                    }else if(this.isRiding()){
+                        this.dismountRidingEntity();
+                    }else{
+                        this.startRiding(player, true);
+
+                    }
+
                     return true;
                 } else {
                     this.openGUI(player);
@@ -714,10 +723,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        System.out.println(this.getAgeInDays());
-        if (worldObj.isRemote) {
-            this.updateClientControls();
-        }
         if (this.isFlying() || this.isHovering()) {
             if (animationCycle < 15) {
                 animationCycle++;
@@ -773,6 +778,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             modelDeadProgress += 0.5F;
         } else if (!modeldead && modelDeadProgress > 0.0F) {
             modelDeadProgress -= 0.5F;
+        }
+        boolean riding = isRiding();
+        if (riding && ridingProgress < 20.0F) {
+            ridingProgress += 0.5F;
+        } else if (!riding && ridingProgress > 0.0F) {
+            ridingProgress -= 0.5F;
         }
         if (this.isModelDead()) {
             return;
@@ -984,6 +995,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead()) {
             return false;
         }
+        if (dmg == DamageSource.inWall && this.isRiding()) {
+            return false;
+        }
         if (i > 0) {
             this.setSitting(false);
             this.setSleeping(false);
@@ -1073,7 +1087,36 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         return flag;
     }
 
-    @Override
+    public void updateRidden() {
+        Entity entity = this.getRidingEntity();
+        if (this.isRiding() && entity.isDead) {
+            this.dismountRidingEntity();
+        }
+        else
+        {
+            this.motionX = 0.0D;
+            this.motionY = 0.0D;
+            this.motionZ = 0.0D;
+            this.onUpdate();
+            if (this.isRiding()) {
+                this.updateRiding(entity);
+            }
+        }
+    }
+
+    public void updateRiding(Entity riding) {
+        if (riding.isPassenger(this) && riding instanceof EntityPlayer)
+        {
+            float radius = 0.4F;
+            float angle = (0.01745329251F * ((EntityPlayer)riding).renderYawOffset) + 90;
+            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraY = 1.4D;
+            this.rotationYaw = ((EntityPlayer)riding).rotationYawHead;
+            this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
+        }
+    }
+        @Override
     public int getAnimationTick() {
         return animationTick;
     }

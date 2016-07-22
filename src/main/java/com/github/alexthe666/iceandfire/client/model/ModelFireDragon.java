@@ -905,6 +905,75 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(HornR2, dragon.modelDeadProgress, -((float) Math.toRadians(4.3D)), 0, 0);
 		progressRotation(FingerL4, dragon.modelDeadProgress, (float) Math.toRadians(180.0D), -((float) Math.toRadians(18.26D)), (float) Math.toRadians(180.0D));
 		progressPosition(BodyLower, dragon.modelDeadProgress, 0, 17, -6);
+		progressRotation(ToeL3, dragon.ridingProgress, (float)Math.toRadians(30.0D), 0, 0);
+		progressRotation(FingerR4, dragon.ridingProgress, (float)Math.toRadians(180.0D), (float)Math.toRadians(26.0D), (float)Math.toRadians(180.0D));
+		progressRotation(FingerL3, dragon.ridingProgress, 0, -((float)Math.toRadians(110.0D)), 0);
+		progressRotation(FingerL1, dragon.ridingProgress, 0, -((float)Math.toRadians(85.0D)), (float)Math.toRadians(0.9D));
+		progressRotation(Spike2, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Jaw, dragon.ridingProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressRotation(ThighL, dragon.ridingProgress, (float)Math.toRadians(40.0D), 0, 0);
+		progressRotation(LegL, dragon.ridingProgress, -((float)Math.toRadians(19.0D)), 0, 0);
+		progressRotation(Spike8, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike9, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike6, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(FingerR3, dragon.ridingProgress, 0, (float)Math.toRadians(110.0D), 0);
+		progressRotation(HornL2, dragon.ridingProgress, -((float)Math.toRadians(4.3D)), 0, 0);
+		progressRotation(Rmembrane4, dragon.ridingProgress, 0, (float)Math.toRadians(0.2D), 0);
+		progressRotation(Tail3, dragon.ridingProgress, (float)Math.toRadians(5.22D), 0, 0);
+		progressRotation(Spike14, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(ArmR2, dragon.ridingProgress, (float)Math.toRadians(5.0D), -((float)Math.toRadians(49.0D)), -((float)Math.toRadians(16.0D)));
+		progressRotation(ThighR, dragon.ridingProgress, (float)Math.toRadians(40.0D), 0, 0);
+		progressRotation(Club, dragon.ridingProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressRotation(Rmembrane2, dragon.ridingProgress, 0, (float)Math.toRadians(35.0D), 0);
+		progressRotation(Spike17, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Tail2, dragon.ridingProgress, -((float)Math.toRadians(2.61D)), 0, 0);
+		progressRotation(Spike1, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(BodyUpper, dragon.ridingProgress, (float)Math.toRadians(5.22D), 0, 0);
+		progressRotation(HornR, dragon.ridingProgress, (float)Math.toRadians(18.0D), -((float)Math.toRadians(19.0D)), -((float)Math.toRadians(11.0D)));
+		progressRotation(Rmembrane3, dragon.ridingProgress, (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D), (float)Math.toRadians(180.0D));
+		progressRotation(ToeR2, dragon.ridingProgress, (float)Math.toRadians(37.0D), 0, 0);
+		progressRotation(Spike19, dragon.ridingProgress, (float)Math.toRadians(38.3218472382285D), 0, 0);
+		progressRotation(Spike5, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(ArmL2, dragon.ridingProgress, -((float)Math.toRadians(5.0D)), (float)Math.toRadians(49.0D), -((float)Math.toRadians(16.0D)));
+		progressRotation(ToeR1, dragon.ridingProgress, (float)Math.toRadians(30.0D), 0, 0);
+		progressRotation(ClawRPivot, dragon.ridingProgress, (float)Math.toRadians(180.0D), (float)Math.toRadians(50.0D), -((float)Math.toRadians(205.0D)));
+		progressRotation(Spike16, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Lmembrane1, dragon.ridingProgress, 0, (float)Math.toRadians(180.0D), 0);
+		progressRotation(Spike3, dragon.ridingProgress, (float)Math.toRadians(51.750006438508166D), 0, 0);
+		progressRotation(FingerL2, dragon.ridingProgress, 0, -((float)Math.toRadians(20.57D)), 0);
+		progressRotation(ArmL1, dragon.ridingProgress, -((float)Math.toRadians(28.0D)), (float)Math.toRadians(120.0D), (float)Math.toRadians(48.0D));
+		progressRotation(ArmR1, dragon.ridingProgress, (float)Math.toRadians(28.0D), (float)Math.toRadians(60.0D), -((float)Math.toRadians(48.0D)));
+		progressRotation(HornR2, dragon.ridingProgress, -((float)Math.toRadians(4.3D)), 0, 0);
+		progressRotation(ToeL2, dragon.ridingProgress, (float)Math.toRadians(37.0D), 0, 0);
+		progressRotation(Spike13, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Tail1, dragon.ridingProgress, -((float)Math.toRadians(7.83D)), 0, 0);
+		progressRotation(Neck2, dragon.ridingProgress, (float)Math.toRadians(6.18D), 0, 0);
+		progressRotation(Spike10, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(HornL3, dragon.ridingProgress, -((float)Math.toRadians(3.0D)), (float)Math.toRadians(18.0D), 0);
+		progressRotation(ToeR3, dragon.ridingProgress, (float)Math.toRadians(30.0D), 0, 0);
+		progressRotation(HornR3, dragon.ridingProgress, -((float)Math.toRadians(3.0D)), -((float)Math.toRadians(18.0D)), 0);
+		progressRotation(LegR, dragon.ridingProgress, -((float)Math.toRadians(19.0D)), 0, 0);
+		progressRotation(Lmembrane2, dragon.ridingProgress, 0, (float)Math.toRadians(145.0D), 0);
+		progressRotation(BodyLower, dragon.ridingProgress, -((float)Math.toRadians(46.96D)), 0, 0);
+		progressRotation(FingerR2, dragon.ridingProgress, 0, (float)Math.toRadians(20.57D), 0);
+		progressRotation(Spike15, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike12, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Neck3, dragon.ridingProgress, (float)Math.toRadians(12.0D), 0, 0);
+		progressRotation(ClawLPivot, dragon.ridingProgress, (float)Math.toRadians(180.0D), -((float)Math.toRadians(50.0D)), -((float)Math.toRadians(205.0D)));
+		progressRotation(Spike18, dragon.ridingProgress, (float)Math.toRadians(36.86D), 0, 0);
+		progressRotation(Neck1, dragon.ridingProgress, (float)Math.toRadians(10.43D), 0, 0);
+		progressRotation(ToeL1, dragon.ridingProgress, (float)Math.toRadians(30.0D), 0, 0);
+		progressRotation(Spike7, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(HeadFront, dragon.ridingProgress, -((float)Math.toRadians(1.8548013008753204D)), 0, 0);
+		progressRotation(Head, dragon.ridingProgress, (float)Math.toRadians(31.87D), 0, 0);
+		progressRotation(FingerL4, dragon.ridingProgress, (float)Math.toRadians(180.0D), -((float)Math.toRadians(26.0D)), (float)Math.toRadians(180.0D));
+		progressRotation(Lmembrane3, dragon.ridingProgress, 0, (float)Math.toRadians(180.0D), 0);
+		progressRotation(FingerR1, dragon.ridingProgress, 0, (float)Math.toRadians(85.0D), (float)Math.toRadians(0.9D));
+		progressRotation(Spike20, dragon.ridingProgress, (float)Math.toRadians(21.377643555866484D), 0, 0);
+		progressRotation(Spike11, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(Spike4, dragon.ridingProgress, (float)Math.toRadians(46.86D), 0, 0);
+		progressRotation(HornL, dragon.ridingProgress, (float)Math.toRadians(18.0D), (float)Math.toRadians(19.0D), (float)Math.toRadians(11.0D));
+
 		if (dragon.isModelDead()) {
 			return;
 		}
@@ -973,7 +1042,9 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
 			this.flap(ClawR, speed_walk, degree_walk * 1.2F, true, 0, -0.5F, f, f1);
 		}
-		this.faceTarget(f3, f4, 3, NECK);
+		if(!dragon.isRiding()){
+			this.faceTarget(f3, f4, 3, NECK);
+		}
 		this.bob(BodyLower, speed_walk * 2, degree_walk * 1.7F, false, f, f1);
 		this.bob(ThighR, speed_walk, degree_walk * 1.7F, false, f, f1);
 		this.bob(ThighL, speed_walk, degree_walk * 1.7F, false, f, f1);

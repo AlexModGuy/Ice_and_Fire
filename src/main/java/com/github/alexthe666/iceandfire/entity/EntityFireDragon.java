@@ -32,7 +32,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
-	public static float[] growth_stage_1 = new float[]{1.5F, 3F};
+	public static float[] growth_stage_1 = new float[]{1F, 3F};
 	public static float[] growth_stage_2 = new float[]{3F, 7F};
 	public static float[] growth_stage_3 = new float[]{7F, 12.5F};
 	public static float[] growth_stage_4 = new float[]{12.5F, 20F};
