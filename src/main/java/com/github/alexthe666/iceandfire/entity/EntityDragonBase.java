@@ -1001,15 +1001,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (dmg == DamageSource.inWall && this.isRiding()) {
             return false;
         }
-        float damageReductionHead = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
-        float damageReductionNeck = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
-        float damageReductionBody = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.3F;
-        float damageReductionTail = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
+        float damageReductionHead = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
+        float damageReductionNeck = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
+        float damageReductionBody = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.3F;
+        float damageReductionTail = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
         if (i > 0) {
             this.setSitting(false);
             this.setSleeping(false);
         }
-        i -= (damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail);
+        i -= damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail);
         return super.attackEntityFrom(dmg, i);
     }
 
