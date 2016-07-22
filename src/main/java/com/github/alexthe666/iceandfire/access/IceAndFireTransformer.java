@@ -32,7 +32,7 @@ public class IceAndFireTransformer implements IClassTransformer {
 								if (insnNote.getOpcode() == Opcodes.INVOKEVIRTUAL) {
 									MethodInsnNode method_0 = (MethodInsnNode) insnNote;
 									if (method_0.name.equals(obf ? "p" : "dismountRidingEntity")) {
-										MethodInsnNode method_1 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/alexthe666/iceandfire/access/IceAndFireHooks", "dismount", obf ? "(zs;)V" : "(Lnet/minecraft/entity/player/EntityPlayer;)V", false);
+										MethodInsnNode method_1 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/alexthe666/iceandfire/access/IceAndFireHooks", "dismount", obf ? "(Lzs;)V" : "(Lnet/minecraft/entity/player/EntityPlayer;)V", false);
 										insnList.insertBefore(method_0, method_1);
 										insnList.remove(method_0);
 										break;
