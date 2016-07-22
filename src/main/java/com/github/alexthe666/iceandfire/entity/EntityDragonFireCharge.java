@@ -57,11 +57,11 @@ public class EntityDragonFireCharge extends EntityFireball {
 
 		if (!this.worldObj.isRemote) {
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
+				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;
 				}
 				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
-				this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, 1, true);
+				this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 				this.setDead();

@@ -867,7 +867,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.isBreathingFire()) {
             this.fireTicks++;
-            if (fireTicks > (this.isChild() ? 60 : this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+            if (fireTicks > (this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
                 this.attackDecision = true;
                 fireTicks = 0;
@@ -1001,10 +1001,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (dmg == DamageSource.inWall && this.isRiding()) {
             return false;
         }
+        float damageReductionHead = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
+        float damageReductionNeck = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
+        float damageReductionBody = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.3F;
+        float damageReductionTail = getIntFromArmor(this.dragonInv.getStackInSlot(0)) * 0.2F;
         if (i > 0) {
             this.setSitting(false);
             this.setSleeping(false);
         }
+        i -= (damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail);
         return super.attackEntityFrom(dmg, i);
     }
 
@@ -1026,7 +1031,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.motionY -= 0.2D;
             }
         }
-        if (this.attack() && this.getControllingPassenger() != null) {
+        if (this.attack() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
             this.setBreathingFire(true);
             this.riderShootFire(this.getControllingPassenger());
             this.fireStopTicks = 10;
@@ -1111,16 +1116,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (riding.isPassenger(this) && riding instanceof EntityPlayer)
         {
             int i = riding.getPassengers().indexOf(this);
-            float radius = i == 2 ? 0F : 0.4F;
+            float radius = (i == 2 ? 0F : 0.4F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
             float angle = (0.01745329251F * ((EntityPlayer)riding).renderYawOffset) + (i == 1 ? -90 : i == 0 ? 90 : 0);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYaw = ((EntityPlayer)riding).rotationYawHead;
+            this.rotationYawHead = ((EntityPlayer)riding).rotationYawHead;
+            this.prevRotationYaw = ((EntityPlayer)riding).rotationYawHead;
             this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
-            if(this.getControlState() == 1 << 4){
+            if(this.getControlState() == 1 << 4 || ((EntityPlayer) riding).isElytraFlying()){
                 this.dismountRidingEntity();
             }
+
         }
     }
         @Override

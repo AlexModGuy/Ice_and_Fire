@@ -16,6 +16,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -201,8 +202,17 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(this.getDragonStage() < 2 && this.getRNG().nextInt(200) == 0){
+			for(int i = 0; i < 10; i++){
+				float radius = 1.8F + (i * 0.1F);
+				float headPosX = (float) (radius * getRenderSize() * 0.3F * Math.cos((rotationYawHead + 90) * Math.PI / 180));
+				float headPosZ = (float) (radius * getRenderSize() * 0.3F * Math.sin((rotationYawHead + 90) * Math.PI / 180));
+				float headPosY = (float) (0.5 * getRenderSize() * 0.3F);
+				this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + headPosX, posY + headPosY, posZ + headPosZ, 0, 0, 0, new int[]{});
+			}
+		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if (!attackDecision || this.isFlying()) {
+			if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
 			} else {
 				if (this.getEntityBoundingBox().expand((this.getRenderSize() / this.growth_stages[this.getDragonStage() - 1][1]), (this.getRenderSize() / this.growth_stages[this.getDragonStage() - 1][1]), (this.getRenderSize() / this.growth_stages[this.getDragonStage() - 1][1])).intersectsWith(this.getAttackTarget().getEntityBoundingBox())) {
@@ -269,6 +279,11 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	private void shootFireAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
+			if(this.getDragonStage() < 2){
+				this.setBreathingFire(false);
+				this.attackDecision = !this.attackDecision;
+				return;
+			}
 			if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
