@@ -129,13 +129,16 @@ public class WorldGenFireDragonCave extends WorldGenerator{
             if(chance > 70 && chance < 80){
                 world.setBlockState(pos, Blocks.LAPIS_ORE.getDefaultState(), 3);
             }
-            if(chance > 80 && chance <= 100){
+            if(chance > 80 && chance < 90){
                 world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
+            }
+            if(chance > 90 && chance < 1000){
+                world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState(), 3);
             }
         }
         boolean burnt_chance = new Random().nextInt(5) == 0;
         if(burnt_chance){
-            int chance = new Random().nextInt(1);
+            int chance = new Random().nextInt(2);
             if(chance == 0) {
                 world.setBlockState(pos, ModBlocks.charedStone.getDefaultState(), 3);
             }else{
