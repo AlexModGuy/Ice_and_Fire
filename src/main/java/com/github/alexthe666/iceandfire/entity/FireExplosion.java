@@ -190,25 +190,37 @@ public class FireExplosion extends Explosion {
 				if (state.getMaterial() != Material.AIR) {
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
+						return;
 					}
 
 					if (block instanceof BlockDirt) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedDirt.getDefaultState());
+						return;
 					}
 
 					if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
 						worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+						return;
 					}
 
 					if (block instanceof BlockGravel) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
+						return;
 					}
 
 					if (state.getMaterial() == Material.ROCK && (block != ModBlocks.charedCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedStone.getDefaultState());
+						return;
 					} else if (state.getMaterial() == Material.ROCK) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedCobblestone.getDefaultState());
+						return;
 					}
+					if(block == Blocks.GRASS_PATH){
+						worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
+						return;
+					}
+					worldObj.setBlockState(blockpos, ModBlocks.ash.getDefaultState());
+					return;
 				}
 			}
 		}

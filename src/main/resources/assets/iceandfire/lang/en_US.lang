@@ -18,6 +18,8 @@ tile.iceandfire.charedGrass.name=Charred Grass
 tile.iceandfire.charedStone.name=Charred Stone
 tile.iceandfire.charedCobblestone.name=Charred Cobblestone
 tile.iceandfire.charedGravel.name=Charred Gravel
+tile.iceandfire.charedGrassPath.name=Charred Grass Path
+tile.iceandfire.ash.name=Ash
 tile.iceandfire.egginice.name=Frozen Dragon Egg
 
 item.iceandfire.bestiary.name=Bestiary

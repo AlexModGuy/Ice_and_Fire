@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import java.util.Random;
 
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
+import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
@@ -22,6 +23,7 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 public class StructureGenerator implements IWorldGenerator {
 
 	private static final WorldGenFireDragonCave FIRE_DRAGON_CAVE = new WorldGenFireDragonCave();
+
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		int x = (chunkX * 16) + random.nextInt(16);
@@ -42,17 +44,11 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.generateDragonDens) {
+		if (IceAndFire.CONFIG.generateDragonRoosts) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
-			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) || isHills) {
-				if(random.nextInt(isHills ? 180 : 360) == 0){
-					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
-					BlockPos pos = new BlockPos(x, newY, z);
-					if(!world.canBlockSeeSky(pos)){
-						FIRE_DRAGON_CAVE.generate(world, random, pos);
-					}
+				if(random.nextInt(50) == 0) {
+					new WorldGenFireDragonRoosts().generate(world, random, height);
 				}
-			}
 		}
 		if (IceAndFire.CONFIG.generateSilverOre) {
 			for (int silverAmount = 0; silverAmount < 2; silverAmount++) {

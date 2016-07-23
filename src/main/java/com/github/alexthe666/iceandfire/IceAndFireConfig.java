@@ -12,5 +12,5 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "generation")
 	public boolean generateDragonDens = true;
 	@ConfigEntry(category = "generation")
-	public int glacierBiomeID = 98;
+	public boolean generateDragonRoosts = true;
 }
