@@ -8,12 +8,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventMapGen {
 
-	public MapGenDragonDens dragon_dens = new MapGenDragonDens();
-
 	@SubscribeEvent
 	public void onBiomeReplaceBlocks(ReplaceBiomeBlocks event) {
 		if (IceAndFire.CONFIG.generateDragonDens) {
-			dragon_dens.generate(event.getWorld(), event.getX(), event.getZ(), event.getPrimer());
+		//	dragon_dens.generate(event.getWorld(), event.getX(), event.getZ(), event.getPrimer());
 		}
 	}
 }

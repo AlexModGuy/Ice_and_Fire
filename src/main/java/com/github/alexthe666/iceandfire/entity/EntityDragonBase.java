@@ -843,39 +843,41 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.flyTicks++;
         }
         if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
-            this.setFlying(false);
-            this.setHovering(false);
-        }
-        if (this.getRNG().nextInt(4000) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && !this.isSitting() && !this.doesWantToLand()) {
-            this.setSleeping(false);
-            this.setHovering(true);
-            this.setSitting(false);
-            this.flyHovering = 0;
-            this.flyTicks = 0;
-        }
-        if (getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
-            this.setAttackTarget(null);
-        }
-        AnimationHandler.INSTANCE.updateAnimations(this);
-        this.setAgeInTicks(this.getAgeInTicks() + 1);
-        if (this.getAgeInTicks() % 24000 == 0) {
-            this.updateAttributes();
-            this.setScale(this.getRenderSize());
-        }
-        if (this.getAgeInTicks() % 1200 == 0) {
-            if (this.getHunger() > 0) {
-                this.setHunger(this.getHunger() - 1);
+            if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
+                this.setFlying(false);
+                this.setHovering(false);
             }
-        }
-        if (this.isBreathingFire()) {
-            this.fireTicks++;
-            if (fireTicks > (this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
-                this.setBreathingFire(false);
-                this.attackDecision = true;
-                fireTicks = 0;
+            if (this.getRNG().nextInt(4000) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && !this.isSitting() && !this.doesWantToLand() && this.isTamed()) {
+                this.setSleeping(false);
+                this.setHovering(true);
+                this.setSitting(false);
+                this.flyHovering = 0;
+                this.flyTicks = 0;
             }
-            if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
-                fireStopTicks--;
+            if (getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
+                this.setAttackTarget(null);
+            }
+            AnimationHandler.INSTANCE.updateAnimations(this);
+            this.setAgeInTicks(this.getAgeInTicks() + 1);
+            if (this.getAgeInTicks() % 24000 == 0) {
+                this.updateAttributes();
+                this.setScale(this.getRenderSize());
+            }
+            if (this.getAgeInTicks() % 1200 == 0) {
+                if (this.getHunger() > 0) {
+                    this.setHunger(this.getHunger() - 1);
+                }
+            }
+            if (this.isBreathingFire()) {
+                this.fireTicks++;
+                if (fireTicks > (this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+                    this.setBreathingFire(false);
+                    this.attackDecision = true;
+                    fireTicks = 0;
+                }
+                if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
+                    fireStopTicks--;
+                }
             }
         }
     }
@@ -943,7 +945,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.rotationYaw *= 0;
             prey.rotationYaw = this.rotationYaw + this.rotationYawHead + 180;
             rotationYaw = renderYawOffset;
-            float radius = 0.75F * (0.7F * getRenderSize()) * -3;
+            float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
             float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
@@ -1065,7 +1067,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
             this.setSleeping(true);
         }
-        if (this.isSleeping() && (this.isInWater() || this.isDaytime() || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
+        if (this.isSleeping() && (this.isInWater() || (this.worldObj.canBlockSeeSky(new BlockPos(this)) && this.isDaytime() && !this.isTamed() || this.isDaytime() && this.isTamed()) || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
             this.setSleeping(false);
         }
     }

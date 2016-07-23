@@ -61,15 +61,16 @@ public class EntityDragonFire extends EntityFireball {
 
 		if (!this.worldObj.isRemote) {
 
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
-				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
-				explosion.doExplosionA();
-				explosion.doExplosionB(true);
+				if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
+					FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
+					explosion.doExplosionA();
+					explosion.doExplosionB(true);
+				}
 				this.setDead();
-
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFire) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
