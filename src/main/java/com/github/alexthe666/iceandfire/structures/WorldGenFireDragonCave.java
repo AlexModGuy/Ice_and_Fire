@@ -2,7 +2,9 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -56,23 +58,23 @@ public class WorldGenFireDragonCave extends WorldGenerator{
         }
         for (int i = 0; i2 >= 0 && i < 3; ++i) {
             int j = i2 + rand.nextInt(2);
-            int k = (i2 + rand.nextInt(2)) / 2;
-            int l = i2 + rand.nextInt(2);
-            float f = (float)(j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-                if (blockpos.distanceSq(position) <= (double)(f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
-                    this.setGoldPile(worldIn, blockpos);
-                }
-            }
-        }
-        for (int i = 0; i2 >= 0 && i < 3; ++i) {
-            int j = i2 + rand.nextInt(2);
             int k = (i2 + rand.nextInt(2));
             int l = i2 + rand.nextInt(2);
             float f = (float)(j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
                 if (blockpos.distanceSq(position) <= (double)(f * f) && worldIn.getBlockState(blockpos).getMaterial() == Material.ROCK) {
                     this.setOres(worldIn, blockpos);
+                }
+            }
+        }
+        for (int i = 0; i2 >= 0 && i < 3; ++i) {
+            int j = i2 + rand.nextInt(2);
+            int k = (i2 + rand.nextInt(2)) / 2;
+            int l = i2 + rand.nextInt(2);
+            float f = (float)(j + k + l) * 0.333F + 0.5F;
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
+                if (blockpos.distanceSq(position) <= (double)(f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
+                    this.setGoldPile(worldIn, blockpos);
                 }
             }
         }
@@ -95,8 +97,8 @@ public class WorldGenFireDragonCave extends WorldGenerator{
         }
 
         if(chance < 60){
-            world.setBlockState(pos, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 +  new Random().nextInt(7)), 3);
-        }else if(chance > 60 && chance < 62){
+                world.setBlockState(pos, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 +  new Random().nextInt(7)), 3);
+            }else if(chance > 60 && chance < 62){
             world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
             if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                 TileEntity tileentity1 = world.getTileEntity(pos);

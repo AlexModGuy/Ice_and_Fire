@@ -45,7 +45,7 @@ public class StructureGenerator implements IWorldGenerator {
 		if (IceAndFire.CONFIG.generateDragonDens) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
 			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) || isHills) {
-				if(random.nextInt(360) == 0){
+				if(random.nextInt(isHills ? 180 : 360) == 0){
 					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
 					BlockPos pos = new BlockPos(x, newY, z);
 					if(!world.canBlockSeeSky(pos)){
