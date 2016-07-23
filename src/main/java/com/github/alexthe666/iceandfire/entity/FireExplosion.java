@@ -161,30 +161,31 @@ public class FireExplosion extends Explosion {
 	 */
 	@Override
 	public void doExplosionB(boolean spawnParticles) {
-		if (this.isSmoking) {
 			for (BlockPos blockpos : this.affectedBlockPositions) {
 				IBlockState state = this.worldObj.getBlockState(blockpos);
 				Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
 				if (spawnParticles) {
-					double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
-					double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();
-					double d2 = blockpos.getZ() + this.worldObj.rand.nextFloat();
-					double d3 = d0 - this.explosionX;
-					double d4 = d1 - this.explosionY;
-					double d5 = d2 - this.explosionZ;
-					double d6 = MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
-					d3 = d3 / d6;
-					d4 = d4 / d6;
-					d5 = d5 / d6;
-					double d7 = 0.5D / (d6 / this.explosionSize + 0.1D);
-					d7 = d7 * (this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
-					d3 = d3 * d7;
-					d4 = d4 * d7;
-					d5 = d5 * d7;
-					this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5, new int[0]);
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+					if (this.isSmoking) {
+						double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
+						double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();
+						double d2 = blockpos.getZ() + this.worldObj.rand.nextFloat();
+						double d3 = d0 - this.explosionX;
+						double d4 = d1 - this.explosionY;
+						double d5 = d2 - this.explosionZ;
+						double d6 = MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+						d3 = d3 / d6;
+						d4 = d4 / d6;
+						d5 = d5 / d6;
+						double d7 = 0.5D / (d6 / this.explosionSize + 0.1D);
+						d7 = d7 * (this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
+						d3 = d3 * d7;
+						d4 = d4 * d7;
+						d5 = d5 * d7;
+						this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5, new int[0]);
+						this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+						this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+					}
 				}
 
 				if (state.getMaterial() != Material.AIR) {
@@ -215,7 +216,7 @@ public class FireExplosion extends Explosion {
 						worldObj.setBlockState(blockpos, ModBlocks.charedCobblestone.getDefaultState());
 						return;
 					}
-					if(block == Blocks.GRASS_PATH){
+					if (block == Blocks.GRASS_PATH) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
 						return;
 					}
@@ -223,8 +224,6 @@ public class FireExplosion extends Explosion {
 					return;
 				}
 			}
-		}
-
 		for (BlockPos blockpos1 : this.affectedBlockPositions) {
 			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
 				this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());

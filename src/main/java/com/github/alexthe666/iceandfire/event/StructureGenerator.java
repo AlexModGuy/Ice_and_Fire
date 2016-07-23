@@ -23,6 +23,7 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 public class StructureGenerator implements IWorldGenerator {
 
 	private static final WorldGenFireDragonCave FIRE_DRAGON_CAVE = new WorldGenFireDragonCave();
+	private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -46,9 +47,24 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonRoosts) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
-				if(random.nextInt(50) == 0) {
-					new WorldGenFireDragonRoosts().generate(world, random, height);
+			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) || isHills) {
+				if (random.nextInt(isHills ? 180 : 360) == 0) {
+					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					FIRE_DRAGON_ROOST.generate(world, random, surface);
 				}
+			}
+		}
+		if (IceAndFire.CONFIG.generateDragonDens) {
+			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
+			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET)|| isHills) {
+				if (random.nextInt(isHills ? 180 : 360) == 0) {
+					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
+					BlockPos pos = new BlockPos(x, newY, z);
+					if (!world.canBlockSeeSky(pos)) {
+						FIRE_DRAGON_CAVE.generate(world, random, pos);
+					}
+				}
+			}
 		}
 		if (IceAndFire.CONFIG.generateSilverOre) {
 			for (int silverAmount = 0; silverAmount < 2; silverAmount++) {

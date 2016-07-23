@@ -60,10 +60,10 @@ public class EntityDragonFireCharge extends EntityFireball {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;
 				}
-				this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
-				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
+				FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
+				this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase)this.shootingEntity).getDragonStage(), true);
 				this.setDead();
 
 			}

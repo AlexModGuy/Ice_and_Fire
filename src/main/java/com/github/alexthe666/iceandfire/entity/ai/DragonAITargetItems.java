@@ -40,7 +40,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item instanceof EntityItem && item.getEntityItem() != null && item.getEntityItem().getItem() != null && FoodMappings.instance().getItemFoodAmount(item.getEntityItem().getItem(), ((EntityDragonBase) DragonAITargetItems.this.taskOwner).diet) > 0;
+				return item instanceof EntityItem && item.getEntityItem() != null && item.getEntityItem().getItem() != null && FoodMappings.INSTANCE.getItemFoodAmount(item.getEntityItem().getItem(), ((EntityDragonBase) DragonAITargetItems.this.taskOwner).diet) > 0;
 			}
 		};
 	}
@@ -89,10 +89,10 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
 			this.targetEntity.getEntityItem().stackSize--;
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-			int hunger = FoodMappings.instance().getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
+			int hunger = FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
 			((EntityDragonBase) this.taskOwner).setHunger(Math.min(100, ((EntityDragonBase) this.taskOwner).getHunger() + hunger));
 			((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getEntityItem());
-			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodMappings.instance().getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet) / 10)));
+			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet) / 10)));
 			if (EntityDragonBase.ANIMATION_EAT != null) {
 				((EntityDragonBase) this.taskOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
 			}

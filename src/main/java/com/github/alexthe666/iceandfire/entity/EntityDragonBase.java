@@ -610,12 +610,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
             return true;
-        } else {
-            this.setTamed(true);
-            this.setOwnerId(player.getUniqueID());
+        } else if(this.isTamed()){
             if (stack != null) {
                 if (stack.getItem() != null) {
-                    int itemFoodAmount = FoodMappings.instance().getItemFoodAmount(stack.getItem(), diet);
+                    int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
                     if (itemFoodAmount > 0) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + itemFoodAmount);
@@ -857,7 +855,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
                 this.setAttackTarget(null);
             }
-            AnimationHandler.INSTANCE.updateAnimations(this);
             this.setAgeInTicks(this.getAgeInTicks() + 1);
             if (this.getAgeInTicks() % 24000 == 0) {
                 this.updateAttributes();
@@ -901,7 +898,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void updatePassenger(Entity passenger) {
         if (this.isPassenger(passenger)) {
-            if (this.getControllingPassenger() != null && passenger == this.getControllingPassenger()) {
+            if (this.getControllingPassenger() != null && passenger == this.getControllingPassenger() && this.isTamed()) {
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
                 float radius = 0.7F * (0.3F * getRenderSize());
@@ -932,9 +929,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void updatePreyInMouth(Entity prey) {
+        System.out.println(this.getAnimation());
         if (this.getAnimation() == this.ANIMATION_SHAKEPREY) {
+            System.out.println("prey");
             if (this.getAnimationTick() > 55 && prey != null) {
-                prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
+                //prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
                 this.attackDecision = !this.attackDecision;
                 this.onKillEntity((EntityLivingBase) prey);
             }
@@ -952,7 +951,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             double extraY = 0.8F * (getRenderSize() + (modTick_1 * 0.05) + (modTick_2 * 0.05) - 2);
             prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
         } else {
-            prey.dismountRidingEntity();
+           // prey.dismountRidingEntity();
         }
     }
 
@@ -988,8 +987,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setGender(this.getRNG().nextBoolean());
-        //int age = this.getRNG().nextInt(80) + 1;
-        this.growDragon(0);
+        int age = this.getRNG().nextInt(80) + 1;
+        this.growDragon(age);
         this.setHunger(50);
         this.setVariant(new Random().nextInt(4));
         this.setSleeping(false);
@@ -1020,6 +1019,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
+        AnimationHandler.INSTANCE.updateAnimations(this);
         if (this.isModelDead()) {
             return;
         }
@@ -1091,11 +1091,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-
         if (flag) {
             this.applyEnchantments(this, entityIn);
         }
-
         return flag;
     }
 
