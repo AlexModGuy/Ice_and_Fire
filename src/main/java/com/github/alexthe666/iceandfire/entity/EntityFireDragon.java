@@ -138,7 +138,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	public boolean attackEntityAsMob(Entity entityIn) {
 		switch (this.getRNG().nextInt(2)) {
 		case 0:
-			System.out.println("borke 1");
 			if (this.getAnimation() != this.ANIMATION_BITE) {
 				this.setAnimation(this.ANIMATION_BITE);
 				return false;
@@ -149,15 +148,13 @@ public class EntityFireDragon extends EntityDragonBase {
 			}
 			break;
 		case 1:
-			System.out.println("borke 2");
 			if (entityIn.width < this.width * 0.5F) {
 				if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 					this.setAnimation(this.ANIMATION_SHAKEPREY);
-					entityIn.startRiding(this, true);
+					entityIn.startRiding(this);
 					return false;
 				}
 			} else {
-				System.out.println("borke 3");
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
@@ -205,15 +202,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if(this.getDragonStage() < 2 && this.getRNG().nextInt(200) == 0){
-			for(int i = 0; i < 10; i++){
-				float radius = 1.8F + (i * 0.1F);
-				float headPosX = (float) (radius * getRenderSize() * 0.3F * Math.cos((rotationYawHead + 90) * Math.PI / 180));
-				float headPosZ = (float) (radius * getRenderSize() * 0.3F * Math.sin((rotationYawHead + 90) * Math.PI / 180));
-				float headPosY = (float) (0.5 * getRenderSize() * 0.3F);
-				this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + headPosX, posY + headPosY, posZ + headPosZ, 0, 0, 0, new int[]{});
-			}
-		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 			if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
@@ -229,7 +217,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	}
 
 	public void riderShootFire(Entity controller) {
-		if (this.getRNG().nextInt(5) == 0 && this.getDragonStage() > 2) {
+		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
 				this.setAnimation(this.ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
@@ -283,9 +271,19 @@ public class EntityFireDragon extends EntityDragonBase {
 	private void shootFireAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if(this.getDragonStage() < 2){
+				for(int i = 0; i < 10; i ++){
+					float radius = 1.8F + (i * 0.3F);
+					float headPosX = (float) (posX + radius * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+					float headPosZ = (float) (posZ + radius * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0, new int[]{});
+				}
 				this.setBreathingFire(false);
-				this.attackDecision = true;
+				this.attackDecision = !this.attackDecision;
 				return;
+			}
+			if(!this.isBreathingFire()){
+				this.setBreathingFire(true);
 			}
 			if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
