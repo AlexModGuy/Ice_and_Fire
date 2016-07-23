@@ -42,7 +42,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -726,7 +725,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(worldObj.isRemote){
             this.updateClientControls();
         }
-        if (this.isFlying() || this.isHovering()) {
+        if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
             if (animationCycle < 15) {
                 animationCycle++;
             } else {
@@ -751,6 +750,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     }
                 }
             }
+        }
+        if(this.isModelDead() && animationCycle != 0){
+            animationCycle = 0;
         }
         boolean sleeping = isSleeping();
         if (sleeping && sleepProgress < 20.0F) {
