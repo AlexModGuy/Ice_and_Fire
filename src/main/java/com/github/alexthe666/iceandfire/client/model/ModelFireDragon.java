@@ -701,8 +701,8 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Neck1, dragon.fireBreathProgress, (float) Math.toRadians(-2.0D), 0, 0);
 		progressRotation(Neck2, dragon.fireBreathProgress, (float) Math.toRadians(7.0D), 0, 0);
 		progressRotation(Neck3, dragon.fireBreathProgress, (float) Math.toRadians(2.0D), 0, 0);
-		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-5.0D), 0, 0);
-		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(28.0D), 0, 0);
+		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-10.0D), 0, 0);
+		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(48.0D), 0, 0);
 		progressRotation(ClawR, dragon.hoverProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D));
 		progressRotation(Spike4, dragon.hoverProgress, (float) Math.toRadians(46.86D), 0, 0);
 		progressRotation(BodyUpper, dragon.hoverProgress, (float) Math.toRadians(13.040000000000001D), 0, 0);

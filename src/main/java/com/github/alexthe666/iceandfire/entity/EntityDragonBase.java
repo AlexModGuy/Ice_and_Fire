@@ -868,16 +868,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.setHunger(this.getHunger() - 1);
                 }
             }
-            if (this.isBreathingFire()) {
-                this.fireTicks++;
-                if (fireTicks > (this.isAdult() ? 400 : 180) || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
-                    this.setBreathingFire(false);
-                    this.attackDecision = true;
-                    fireTicks = 0;
-                }
-                if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
-                    fireStopTicks--;
-                }
+        }
+        if (this.isBreathingFire()) {
+            this.fireTicks++;
+            if (fireTicks > 400 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+                this.setBreathingFire(false);
+                this.attackDecision = true;
+                fireTicks = 0;
+            }
+            if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
+                fireStopTicks--;
             }
         }
     }
