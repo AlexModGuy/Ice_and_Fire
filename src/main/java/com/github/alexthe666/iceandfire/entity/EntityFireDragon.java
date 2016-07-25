@@ -136,7 +136,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		switch (this.getRNG().nextInt(2)) {
+		switch (this.getRNG().nextInt(3)) {
 		case 0:
 			if (this.getAnimation() != this.ANIMATION_BITE) {
 				this.setAnimation(this.ANIMATION_BITE);

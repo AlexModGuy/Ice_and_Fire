@@ -36,7 +36,9 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-
+		if(!dragon.canMove()){
+			return false;
+		}
 		if (entitylivingbase == null) {
 			return false;
 		} else if (!entitylivingbase.isEntityAlive()) {
@@ -85,23 +87,25 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-		this.dragon.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
-		double d0 = this.dragon.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
-		double d1 = this.getAttackReachSqr(entitylivingbase);
+		EntityLivingBase entity = this.dragon.getAttackTarget();
+		if(!dragon.isPassenger(entity)){
+			this.dragon.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
+		}
+		double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+		double d1 = this.getAttackReachSqr(entity);
 		--this.delayCounter;
 
-		if ((this.longMemory || this.dragon.getEntitySenses().canSee(entitylivingbase)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entitylivingbase.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
-			this.targetX = entitylivingbase.posX;
-			this.targetY = entitylivingbase.getEntityBoundingBox().minY;
-			this.targetZ = entitylivingbase.posZ;
+		if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
+			this.targetX = entity.posX;
+			this.targetY = entity.getEntityBoundingBox().minY;
+			this.targetZ = entity.posZ;
 			this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
 
 			if (this.canPenalize) {
 				this.delayCounter += failedPathFindingPenalty;
 				if (this.dragon.getNavigator().getPath() != null) {
 					net.minecraft.pathfinding.PathPoint finalPathPoint = this.dragon.getNavigator().getPath().getFinalPathPoint();
-					if (finalPathPoint != null && entitylivingbase.getDistanceSq(finalPathPoint.xCoord, finalPathPoint.yCoord, finalPathPoint.zCoord) < 1)
+					if (finalPathPoint != null && entity.getDistanceSq(finalPathPoint.xCoord, finalPathPoint.yCoord, finalPathPoint.zCoord) < 1)
 						failedPathFindingPenalty = 0;
 					else
 						failedPathFindingPenalty += 10;
@@ -116,7 +120,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 				this.delayCounter += 5;
 			}
 			if (!dragon.isBreathingFire()) {
-				if (!this.dragon.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.speedTowardsTarget) && this.dragon.canMove()) {
+				if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
 					this.delayCounter += 15;
 				}
 			} else {
@@ -129,7 +133,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (d0 <= d1 && this.attackTick <= 0) {
 			this.attackTick = 20;
 			this.dragon.swingArm(EnumHand.MAIN_HAND);
-			this.dragon.attackEntityAsMob(entitylivingbase);
+			this.dragon.attackEntityAsMob(entity);
 		}
 	}
 

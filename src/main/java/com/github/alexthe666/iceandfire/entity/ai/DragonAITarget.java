@@ -20,7 +20,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 	public boolean shouldExecute() {
 		if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
 			if (this.dragon.width >= this.targetEntity.width) {
-				if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0) {
+				if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0 && dragon.canMove()) {
 					return true;
 				}
 			}

@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -135,7 +136,19 @@ public class FireExplosion extends Explosion {
 							d9 = d9 / d13;
 							double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
 							double d10 = (1.0D - d12) * d14;
-							entity.attackEntityFrom(IceAndFire.dragonFire, ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * f3 + 1.0D)));
+							if(exploder instanceof EntityDragonBase){
+								if(entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())){
+									return;
+								}
+								if(entity instanceof EntityLivingBase && ((EntityDragonBase)exploder).isOwner((EntityLivingBase)entity)){
+									entity.attackEntityFrom(IceAndFire.dragonFire, ((float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D))) / 3);
+								}else{
+									entity.attackEntityFrom(IceAndFire.dragonFire, (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
+								}
+								if(entity.isDead){
+									((EntityDragonBase) this.exploder).attackDecision = true;
+								}
+							}
 							double d11 = 1.0D;
 
 							if (entity instanceof EntityLivingBase) {

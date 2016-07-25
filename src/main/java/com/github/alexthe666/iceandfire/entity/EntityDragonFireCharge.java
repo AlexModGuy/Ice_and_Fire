@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -63,21 +64,26 @@ public class EntityDragonFireCharge extends EntityFireball {
 					FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-					this.worldObj.createExplosion(this.shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
+					FireChargeExplosion explosion2 = new FireChargeExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, true);
+					explosion2.doExplosionA();
+					explosion2.doExplosionB(true);
 				}
 				this.setDead();
-
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
-				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
+				if(this.shootingEntity != null){
+					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
+					if(movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase)movingObject.entityHit).getHealth() == 0){
+						((EntityDragonBase) this.shootingEntity).attackDecision = true;
+					}
+				}
 				movingObject.entityHit.setFire(5);
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				FireExplosion explosion = new FireExplosion(worldObj, null, this.posX, this.posY, this.posZ, 2, true);
 				if (shootingEntity != null) {
-					((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
 				}
 				explosion.doExplosionA();

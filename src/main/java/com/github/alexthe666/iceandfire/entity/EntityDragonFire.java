@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -76,7 +77,12 @@ public class EntityDragonFire extends EntityFireball {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
-				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 1.0F);
+				if(this.shootingEntity != null){
+					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 1.0F);
+					if(movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase)movingObject.entityHit).getHealth() == 0){
+						((EntityDragonBase) this.shootingEntity).attackDecision = true;
+					}
+				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.setFire(3);
 				this.setDead();

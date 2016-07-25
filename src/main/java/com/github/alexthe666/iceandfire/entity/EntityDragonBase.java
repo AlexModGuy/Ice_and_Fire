@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -722,6 +723,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
         if(worldObj.isRemote){
             this.updateClientControls();
@@ -901,7 +903,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void updatePassenger(Entity passenger) {
         if (this.isPassenger(passenger)) {
-            if (this.getControllingPassenger() != null && passenger == this.getControllingPassenger()) {
+            if(this.getControllingPassenger() == null){
+                updatePreyInMouth(passenger);
+            }else{
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
                 float radius = 0.7F * (0.3F * getRenderSize());
@@ -917,8 +921,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 double animationY = extraY * (bob0 + bob1 + bob2 + flightAddition + hoverAddition);
                 passenger.setPosition(this.posX + extraX, this.posY + extraY + animationY, this.posZ + extraZ);
                 this.stepHeight = 1;
-            } else {
-                this.updatePreyInMouth(passenger);
             }
         }
     }
@@ -938,18 +940,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.attackDecision = !this.attackDecision;
                 this.onKillEntity((EntityLivingBase) prey);
             }
+            renderYawOffset = rotationYaw;
+            this.rotationYaw = prey.rotationYaw;
             prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
             float modTick_0 = this.getAnimationTick() - 15;
             float modTick_1 = this.getAnimationTick() > 15 ? 6 * MathHelper.sin((float) (Math.PI + (modTick_0 * 0.3F))) : 0;
-            float modTick_2 = this.getAnimationTick() > 15 ? 15 : this.getAnimationTick();
-            this.rotationYaw *= 0;
-            prey.rotationYaw = this.rotationYaw + this.rotationYawHead + 180;
-            rotationYaw = renderYawOffset;
+            float modTick_2 = this.getAnimationTick() > 20 ? 10 : this.getAnimationTick() - 10;
             float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
             float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
-            double extraY = 0.8F * (getRenderSize() + (modTick_1 * 0.05) + (modTick_2 * 0.05) - 2);
+            double extraY = 0.1F * ((getRenderSize() / 3) + (modTick_2 * 0.15 * (getRenderSize() / 3)));
             prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
         } else {
             prey.dismountRidingEntity();
@@ -1074,7 +1075,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void setScaleForAge(boolean par1) {
-        this.setScale(Math.min(this.getRenderSize() * 0.3F, 8.58F));
+        this.setScale(Math.min(this.getRenderSize() * 0.3F, 7F));
     }
 
     public float getRenderSize() {
@@ -1320,5 +1321,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         super.moveEntityWithHeading(strafe, forward);
+    }
+
+    public void updateCheckPlayer(){
+        if(!this.isTamed() && this.isSleeping()){
+            EntityPlayer player = worldObj.getClosestPlayerToEntity(this, this.getRenderSize() / 2);
+            if(player != null && !this.isOwner(player)){
+                this.setSleeping(false);
+                this.setSitting(false);
+                if(!player.capabilities.isCreativeMode){
+                    this.setAttackTarget(player);
+                }
+            }
+        }
     }
 }
