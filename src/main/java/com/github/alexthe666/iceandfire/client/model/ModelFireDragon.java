@@ -703,7 +703,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(Neck3, dragon.fireBreathProgress, (float) Math.toRadians(2.0D), 0, 0);
 		progressRotation(Head, dragon.fireBreathProgress, (float) Math.toRadians(-10.0D), 0, 0);
 		progressRotation(Jaw, dragon.fireBreathProgress, (float) Math.toRadians(48.0D), 0, 0);
-		progressRotation(ClawR, dragon.hoverProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D));
+		progressRotation(ClawRPivot, dragon.hoverProgress, (float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D));
 		progressRotation(Spike4, dragon.hoverProgress, (float) Math.toRadians(46.86D), 0, 0);
 		progressRotation(BodyUpper, dragon.hoverProgress, (float) Math.toRadians(13.040000000000001D), 0, 0);
 		progressRotation(HornL3, dragon.hoverProgress, -((float) Math.toRadians(3.0D)), (float) Math.toRadians(18.0D), 0);
@@ -742,7 +742,7 @@ public class ModelFireDragon extends ModelDragonBase {
 		progressRotation(HeadFront, dragon.hoverProgress, -((float) Math.toRadians(1.8548013008753204D)), 0, 0);
 		progressRotation(Spike17, dragon.hoverProgress, (float) Math.toRadians(46.86D), 0, 0);
 		progressRotation(Spike15, dragon.hoverProgress, (float) Math.toRadians(46.86D), 0, 0);
-		progressRotation(ClawL, dragon.hoverProgress, (float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D));
+		progressRotation(ClawLPivot, dragon.hoverProgress, (float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D));
 		progressRotation(FingerL2, dragon.hoverProgress, 0, -((float) Math.toRadians(20.57D)), 0);
 		progressRotation(LegL, dragon.hoverProgress, -((float) Math.toRadians(19.0D)), 0, 0);
 		progressRotation(Neck3, dragon.hoverProgress, (float) Math.toRadians(10.43D), 0, 0);

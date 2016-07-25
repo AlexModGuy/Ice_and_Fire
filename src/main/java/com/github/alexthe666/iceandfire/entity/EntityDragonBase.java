@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
+import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -638,7 +639,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         this.setSleeping(false);
                     }else if(this.isRiding()){
                         this.dismountRidingEntity();
-                    }else{
+                    }else if(this.getDragonStage() < 2) {
                         this.startRiding(player, true);
 
                     }
@@ -655,7 +656,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private ItemStack getRandomDrop() {
-
         int chance = this.rand.nextInt(99) + 1;
         if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
             this.playSound(SoundEvents.field_190036_ha, 1, 1);
@@ -740,7 +740,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         double motionX = getRNG().nextGaussian() * 0.07D;
                         double motionY = getRNG().nextGaussian() * 0.07D;
                         double motionZ = getRNG().nextGaussian() * 0.07D;
-                        float radius = 0.75F * (0.7F * getRenderSize()) * -3;
+                        float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
                         float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
                         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                         double extraZ = (double) (radius * MathHelper.cos(angle));
@@ -906,31 +906,48 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if(this.getControllingPassenger() == null){
                 updatePreyInMouth(passenger);
             }else{
+                float speed_walk = 0.2F;
+                float speed_idle = 0.05F;
+                float speed_fly = 0.35F;
+                float degree_walk = 0.5F;
+                float degree_idle = 0.5F;
+                float degree_fly = 0.5F;
+                //this.walk(BodyLower, speed_fly, (float) (degree_fly * 0.15), false, 0, 0, entity.ticksExisted, 1);
+                //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
+                float hoverAddition = -hoverProgress * 0.0055F;
+                float flyAddition = -flyProgress * 0.0095F;
                 float radius = 0.7F * (0.3F * getRenderSize());
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                float bob0 = 0;//this.bob(0.2F * 2, 0.5F * 1.7F, false, this.limbSwing, this.limbSwingAmount);
-                float bob1 = 0;//this.bob(0.05F, -0.5F * 1.3F, false, this.ticksExisted, 1);
-                float bob2 = 0;//this.isFlying() || this.isHovering() ? this.bob(-0.35F, 0.5F * 5, false, ticksExisted, 1) : 0;
-                float flightAddition = this.flyProgress * 0.01F;
-                float hoverAddition = this.hoverProgress  < 10 ? hoverProgress * 0.1F : 0;
-                double extraY = getRenderSize() * 0.3;
-                double animationY = extraY * (bob0 + bob1 + bob2 + flightAddition + hoverAddition);
-                passenger.setPosition(this.posX + extraX, this.posY + extraY + animationY, this.posZ + extraZ);
+                float bob0 = this.isFlying() ? this.bob(speed_fly, degree_fly * 15, true, this.ticksExisted, 1) : 0;
+                float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
+                float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, 1);
+                double extraY = (getRenderSize() * 0.27) + (getRenderSize() * hoverAddition) + (getRenderSize() * flyAddition) + bob0 + bob1 + bob2;
+                double animationY = extraY * (bob0 + bob1 + bob2 + hoverAddition);
+                passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             }
         }
     }
 
     private float bob(float speed, float degree, boolean bounce, float f, float f1) {
+        degree /= this.getRenderSize() / 3;
+        speed = -speed;
         float bob = (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
         if (bounce) {
             bob = (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
         }
         return bob;
+    }
+
+    private float walk(float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
+        float movementScale =  this.getRenderSize() / 3;
+        speed = -speed;
+        float rotation = (MathHelper.cos(f * (speed * movementScale) + offset) * (degree * movementScale) * f1) + (weight * f1);
+        return invert ? -rotation : rotation;
     }
 
     private void updatePreyInMouth(Entity prey) {
@@ -1319,7 +1336,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 jumpMovementFactor = 0.125F;
                 this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
             }
+            if(this.isInWater() && this.isInsideOfMaterial(Material.AIR) && motionY > 1){
+                this.motionY = 0;
+            }
         }
+
         super.moveEntityWithHeading(strafe, forward);
     }
 
@@ -1335,4 +1356,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
     }
+
+    public boolean shouldDismountInWater(Entity rider){
+        return false;
+    }
+
 }

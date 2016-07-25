@@ -11,38 +11,20 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
 public class EventNewMenu {
-	public static final String[] titlePanoramaPaths = new String[] { "titlePanoramaPaths", "field_73978_o" };
-	public static final String[] splashText = new String[] { "splashText", "field_73975_c" };
-	public static final String[] thirdPersonDistanceNames = new String[] { "thirdPersonDistance", "field_78490_B" };
+
 	public static ResourceLocation[] panorama = new ResourceLocation[] { new ResourceLocation("iceandfire:textures/gui/panorama_0.png"), new ResourceLocation("textures/gui/title/background/panorama_1.png"), new ResourceLocation("textures/gui/title/background/panorama_2.png"), new ResourceLocation("textures/gui/title/background/panorama_3.png"), new ResourceLocation("textures/gui/title/background/panorama_4.png"), new ResourceLocation("textures/gui/title/background/panorama_5.png") };
 
 	@SubscribeEvent
-	public void onPlayerRenderPre(RenderPlayerEvent.Post event) {
-		boolean b = event.getEntityPlayer().getRidingEntity() != null && event.getEntityPlayer().getRidingEntity() instanceof EntityDragonBase;
-		if (event.getEntityPlayer() == Minecraft.getMinecraft().thePlayer) {
-			EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-			float thirdPersonDistance = 9 + (b ? ((EntityDragonBase) event.getEntityPlayer().getRidingEntity()).getRenderSize() : 0);
-			try {
-				ReflectionHelper.findField(EntityRenderer.class, new String[] { "thirdPersonDistance", "field_78490_B" }).set(renderer, thirdPersonDistance);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@SubscribeEvent
 	public void openMainMenu(GuiOpenEvent event) {
-
 		if (event.getGui() instanceof GuiMainMenu) {
 			GuiMainMenu mainMenu = (GuiMainMenu) event.getGui();
-			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), titlePanoramaPaths));
+			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), new String[] { "titlePanoramaPaths", "field_73978_o" }));
 			try {
 				Field modifier = Field.class.getDeclaredField("modifiers");
 				modifier.setAccessible(true);

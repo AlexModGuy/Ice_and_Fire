@@ -46,7 +46,7 @@ public class GuiDragon extends GuiContainer {
 		this.fontRendererObj.drawString(s5, this.xSize / 2 - this.fontRendererObj.getStringWidth(s5) / 2, 93, 0XFFFFFF);
 		String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
 		this.fontRendererObj.drawString(s6, this.xSize / 2 - this.fontRendererObj.getStringWidth(s6) / 2, 102, 0XFFFFFF);
-		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage();
+		String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front")+ dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
 		this.fontRendererObj.drawString(s4, this.xSize / 2 - this.fontRendererObj.getStringWidth(s4) / 2, 111, 0XFFFFFF);
 		String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName() : StatCollector.translateToLocal("dragon.untamed");
 		this.fontRendererObj.drawString(s7, this.xSize / 2 - this.fontRendererObj.getStringWidth(s7) / 2, 120, 0XFFFFFF);
