@@ -1,16 +1,9 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.block.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-
-import com.github.alexthe666.iceandfire.block.BlockDragonOre;
-import com.github.alexthe666.iceandfire.block.BlockEggInIce;
-import com.github.alexthe666.iceandfire.block.BlockFallingGeneric;
-import com.github.alexthe666.iceandfire.block.BlockGeneric;
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import com.github.alexthe666.iceandfire.block.BlockLectern;
-import com.github.alexthe666.iceandfire.block.BlockPodium;
 
 public class ModBlocks {
 
@@ -43,7 +36,7 @@ public class ModBlocks {
 		charedStone = new BlockGeneric(Material.ROCK, "chared_stone", "iceandfire.charedStone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE);
 		charedCobblestone = new BlockGeneric(Material.ROCK, "chared_cobblestone", "iceandfire.charedCobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE);
 		charedGravel = new BlockGeneric(Material.GROUND, "chared_gravel", "iceandfire.charedGravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND);
-		charedGrassPath = new BlockGeneric(Material.GROUND, "chared_grass_path", "iceandfire.charedGrassPath", "shovel", 0, 0.6F, 0F, SoundType.GROUND);
+		charedGrassPath = new BlockCharedPath(true);
 		ash = new BlockFallingGeneric(Material.SAND, "ash", "iceandfire.ash", "shovel", 0, 0.5F, 0F, SoundType.SAND);
 		eggInIce = new BlockEggInIce();
 	}

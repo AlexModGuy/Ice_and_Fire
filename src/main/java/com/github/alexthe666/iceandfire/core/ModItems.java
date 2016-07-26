@@ -1,28 +1,22 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.item.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.item.ItemBestiary;
-import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-import com.github.alexthe666.iceandfire.item.ItemDragonBone;
-import com.github.alexthe666.iceandfire.item.ItemDragonBow;
-import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
-import com.github.alexthe666.iceandfire.item.ItemDragonScales;
-import com.github.alexthe666.iceandfire.item.ItemDragonSkull;
-import com.github.alexthe666.iceandfire.item.ItemGeneric;
-import com.github.alexthe666.iceandfire.item.ItemModAxe;
-import com.github.alexthe666.iceandfire.item.ItemModHoe;
-import com.github.alexthe666.iceandfire.item.ItemModPickaxe;
-import com.github.alexthe666.iceandfire.item.ItemModShovel;
-import com.github.alexthe666.iceandfire.item.ItemModSword;
-import com.github.alexthe666.iceandfire.item.ItemSilverArmor;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModItems {
 
@@ -70,6 +64,9 @@ public class ModItems {
 	public static Item dragon_armor_iron;
 	public static Item dragon_armor_gold;
 	public static Item dragon_armor_diamond;
+	public static Item dragon_meal;
+	public static Item fire_dragon_flesh;
+	public static Item ice_dragon_flesh;
 
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
@@ -125,5 +122,8 @@ public class ModItems {
 		dragon_armor_iron = new ItemDragonArmor(0, "dragonarmor_iron");
 		dragon_armor_gold = new ItemDragonArmor(1, "dragonarmor_gold");
 		dragon_armor_diamond = new ItemDragonArmor(0, "dragonarmor_diamond");
+		dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
+		fire_dragon_flesh = new ItemDragonFlesh(true);
+		ice_dragon_flesh = new ItemDragonFlesh(false);
 	}
 }

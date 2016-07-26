@@ -22,6 +22,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -619,7 +620,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 if (stack.getItem() != null) {
                     int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
                     if (itemFoodAmount > 0) {
-                        this.growDragon(1);
+                        //this.growDragon(1);
                         this.setHunger(this.getHunger() + itemFoodAmount);
                         this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
                         this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
@@ -629,6 +630,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             stack.stackSize--;
                         }
                         return true;
+                    }
+                    if(stack.getItem() == ModItems.dragon_meal){
+                        this.growDragon(1);
+                        this.setHunger(this.getHunger() + 20);
+                        this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getMaxHealth() / 3)));
+                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                        this.spawnItemCrackParticles(stack.getItem());
+                        this.spawnItemCrackParticles(Items.BONE);
+                        this.spawnItemCrackParticles(Items.DYE);
+                        this.eatFoodBonus(stack);
+                        if (!player.isCreative()) {
+                            stack.stackSize--;
+                        }
                     }
                 }
             } else {
