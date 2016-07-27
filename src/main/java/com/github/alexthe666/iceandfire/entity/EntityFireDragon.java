@@ -56,9 +56,8 @@ public class EntityFireDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(3, new DragonAIRiding(this, 1.5D));
-		this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(5, new DragonAIAirTarget(this));
+		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(4, new DragonAIAirTarget(this));
 		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(7, new DragonAILookIdle(this));

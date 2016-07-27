@@ -186,9 +186,13 @@ public class ClientProxy extends CommonProxy {
 	public Object getArmorModel(int armorId){
 		switch(armorId){
 			case 0:
-				return new ModelFireDragonArmor(1.1F);
+				return new ModelFireDragonArmor(0.5F);
 			case 1:
-				return new ModelIceDragonArmor(1.1F);
+				return new ModelFireDragonArmor(0.2F);
+			case 2:
+				return new ModelIceDragonArmor(0.5F);
+			case 3:
+				return new ModelIceDragonArmor(0.2F);
 		}
 		return null;
 	}

@@ -141,9 +141,9 @@ public class FireExplosion extends Explosion {
 									return;
 								}
 								if(entity instanceof EntityLivingBase && ((EntityDragonBase)exploder).isOwner((EntityLivingBase)entity)){
-									entity.attackEntityFrom(IceAndFire.dragonFire, ((float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D))) / 3);
+									entity.attackEntityFrom(IceAndFire.dragonFire, ((float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D))) / 6);
 								}else{
-									entity.attackEntityFrom(IceAndFire.dragonFire, (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
+									entity.attackEntityFrom(IceAndFire.dragonFire, (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)) / 3);
 								}
 								if(entity.isDead){
 									((EntityDragonBase) this.exploder).attackDecision = true;

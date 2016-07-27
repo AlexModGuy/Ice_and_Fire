@@ -732,13 +732,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void spawnItemCrackParticles(Item item) {
-        double motionX = getRNG().nextGaussian() * 0.07D;
-        double motionY = getRNG().nextGaussian() * 0.07D;
-        double motionZ = getRNG().nextGaussian() * 0.07D;
-        float f = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX) + this.getEntityBoundingBox().minX);
-        float f1 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) + this.getEntityBoundingBox().minY);
-        float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
-        this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, f, f1, f2, motionX, motionY, motionZ, new int[] { Item.getIdFromItem(item) });
+        for(int i = 0; i < 15; i++) {
+            double motionX = getRNG().nextGaussian() * 0.07D;
+            double motionY = getRNG().nextGaussian() * 0.07D;
+            double motionZ = getRNG().nextGaussian() * 0.07D;
+            float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+            float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+            float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, headPosX, headPosZ, headPosY, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
+        }
     }
 
     public boolean isDaytime() {
@@ -1362,6 +1364,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void moveEntityWithHeading(float strafe, float forward) {
+        if(!this.canMove()){
+            strafe = 0;
+            forward = 0;
+        }
         if (this.isBeingRidden() && this.canBeSteered()) {
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
             if (controller != null) {

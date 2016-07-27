@@ -31,11 +31,11 @@ public class ItemScaleArmor extends ItemArmor {
 
 	@SideOnly(Side.CLIENT)
 	public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
-		return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() > 3 ? 2 : 1));
+		return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (renderIndex == 2 ? 1 : 0) : (renderIndex == 2 ? 3 : 2)));
 	}
 
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "iceandfire:textures/models/armor/" + armor_type.name() + ".png";
+        return "iceandfire:textures/models/armor/" + armor_type.name() + (renderIndex == 2 ? "_legs.png" : ".png");
     }
 
 	@Override
