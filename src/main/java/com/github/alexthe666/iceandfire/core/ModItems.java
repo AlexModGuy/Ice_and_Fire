@@ -67,12 +67,13 @@ public class ModItems {
 	public static Item dragon_meal;
 	public static Item fire_dragon_flesh;
 	public static Item ice_dragon_flesh;
-
+	public static Item fire_dragon_heart;
+	public static Item ice_dragon_heart;
+	public static Item fire_dragon_blood;
+	public static Item ice_dragon_blood;
+	
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-	public static ArmorMaterial red = EnumHelper.addArmorMaterial("DragonRed", "iceandfire:armor_red", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-	public static ArmorMaterial bronze = EnumHelper.addArmorMaterial("DragonBronze", "iceandfire:armor_bronze", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-	public static ArmorMaterial green = EnumHelper.addArmorMaterial("DragonGreen", "iceandfire:armor_green", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-	public static ArmorMaterial gray = EnumHelper.addArmorMaterial("DragonGray", "iceandfire:armor_gray", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
+	public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 
@@ -125,5 +126,9 @@ public class ModItems {
 		dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
 		fire_dragon_flesh = new ItemDragonFlesh(true);
 		ice_dragon_flesh = new ItemDragonFlesh(false);
+		fire_dragon_heart = new ItemGeneric("fire_dragon_heart", "iceandfire.fire_dragon_heart");
+		ice_dragon_heart = new ItemGeneric("ice_dragon_heart", "iceandfire.ice_dragon_heart");
+		fire_dragon_blood = new ItemGeneric("fire_dragon_blood", "iceandfire.fire_dragon_blood");
+		ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
 	}
 }

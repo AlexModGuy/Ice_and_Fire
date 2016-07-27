@@ -37,12 +37,6 @@ public class ItemDragonArmor extends Item {
 
 	}
 
-	/*
-	 * public String getUnlocalizedName(ItemStack stack) { String base =
-	 * "iceandfire." + name; switch(stack.getMetadata()){ default: return base +
-	 * "_head"; case 1: return base + "_neck"; case 2: return base + "_body";
-	 * case 3: return base + "_tail"; } }
-	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
@@ -63,18 +57,4 @@ public class ItemDragonArmor extends Item {
 		}
 		tooltip.add(StatCollector.translateToLocal(words));
 	}
-
-	/*
-	 * @Override public ModelResourceLocation getModel(ItemStack stack,
-	 * EntityPlayer player, int useRemaining) { switch(stack.getMetadata()){
-	 * default: return new
-	 * ModelResourceLocation("iceandfire:dragonarmor_iron_head", "inventory");
-	 * case 1: return new
-	 * ModelResourceLocation("iceandfire:dragonarmor_iron_neck", "inventory");
-	 * case 2: return new
-	 * ModelResourceLocation("iceandfire:dragonarmor_iron_body", "inventory");
-	 * case 3: return new
-	 * ModelResourceLocation("iceandfire:dragonarmor_iron_tail", "inventory"); }
-	 * }
-	 */
 }

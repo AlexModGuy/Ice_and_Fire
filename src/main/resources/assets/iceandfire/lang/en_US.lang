@@ -59,6 +59,10 @@ item.iceandfire.dragonarmor_diamond.name=Diamond Dragon Armor
 item.iceandfire.dragon_meal.name=Dragon Meal
 item.iceandfire.fire_dragon_flesh.name=Fire Dragon Flesh
 item.iceandfire.ice_dragon_flesh.name=Ice Dragon Flesh
+item.iceandfire.fire_dragon_heart.name=Fire Dragon Heart
+item.iceandfire.ice_dragon_heart.name=Ice Dragon Heart
+item.iceandfire.fire_dragon_blood.name=Fire Dragon Blood
+item.iceandfire.ice_dragon_blood.name=Ice Dragon Blood
 
 entity.iceandfire.firedragon.name=Fire Dragon
 entity.iceandfire.dragonegg.name=Dragon Egg

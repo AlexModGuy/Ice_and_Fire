@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
@@ -151,7 +153,10 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.dragon_meal, 0, new ModelResourceLocation("iceandfire:dragon_meal", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.fire_dragon_flesh, 0, new ModelResourceLocation("iceandfire:fire_dragon_flesh", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.ice_dragon_flesh, 0, new ModelResourceLocation("iceandfire:ice_dragon_flesh", "inventory"));
-
+		renderItem.getItemModelMesher().register(ModItems.fire_dragon_heart, 0, new ModelResourceLocation("iceandfire:fire_dragon_heart", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.ice_dragon_heart, 0, new ModelResourceLocation("iceandfire:ice_dragon_heart", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.fire_dragon_blood, 0, new ModelResourceLocation("iceandfire:fire_dragon_blood", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.ice_dragon_blood, 0, new ModelResourceLocation("iceandfire:ice_dragon_blood", "inventory"));
 	}
 
 	@Override
@@ -176,6 +181,16 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void openBestiaryGui() {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary());
+	}
+
+	public Object getArmorModel(int armorId){
+		switch(armorId){
+			case 0:
+				return new ModelFireDragonArmor(1.1F);
+			case 1:
+				return new ModelIceDragonArmor(1.1F);
+		}
+		return null;
 	}
 
 }

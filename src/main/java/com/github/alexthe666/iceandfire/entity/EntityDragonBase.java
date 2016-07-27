@@ -595,21 +595,37 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
         if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
-            if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
-                ItemStack skull = new ItemStack(ModItems.dragon_skull, 1);
-                skull.setTagCompound(new NBTTagCompound());
-                skull.getTagCompound().setInteger("Stage", this.getDragonStage());
-                skull.getTagCompound().setInteger("DragonType", 0);
-                skull.getTagCompound().setInteger("DragonAge", this.getAgeInDays());
-                this.setDeathStage(this.getDeathStage() + 1);
-                if (!worldObj.isRemote) {
-                    this.entityDropItem(skull, 1);
+            if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
+                if(!player.isCreative()){
+                    if(stack.stackSize > 1){
+                        stack.stackSize--;
+                    }else{
+                        stack = null;
+                    }
                 }
-            } else {
-                this.setDeathStage(this.getDeathStage() + 1);
-                ItemStack drop = getRandomDrop();
-                if (drop != null && !worldObj.isRemote) {
-                    this.entityDropItem(drop, 1);
+                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
+            }else {
+                if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
+                    ItemStack skull = new ItemStack(ModItems.dragon_skull, 1);
+                    skull.setTagCompound(new NBTTagCompound());
+                    skull.getTagCompound().setInteger("Stage", this.getDragonStage());
+                    skull.getTagCompound().setInteger("DragonType", 0);
+                    skull.getTagCompound().setInteger("DragonAge", this.getAgeInDays());
+                    this.setDeathStage(this.getDeathStage() + 1);
+                    if (!worldObj.isRemote) {
+                        this.entityDropItem(skull, 1);
+                    }
+                } else if (this.getDeathStage() == (this.getAgeInDays() / 5) - 2) {
+                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, 1);
+                    if (!worldObj.isRemote) {
+                        this.entityDropItem(heart, 1);
+                    }
+                } else {
+                    this.setDeathStage(this.getDeathStage() + 1);
+                    ItemStack drop = getRandomDrop();
+                    if (drop != null && !worldObj.isRemote) {
+                        this.entityDropItem(drop, 1);
+                    }
                 }
             }
             return true;
@@ -643,6 +659,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         if (!player.isCreative()) {
                             stack.stackSize--;
                         }
+                        return true;
                     }
                 }
             } else {
@@ -677,10 +694,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else {
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
 
-            if (chance > 0 && chance < 30) {
+            if (chance > 0 && chance < 20) {
                 return new ItemStack(ModItems.dragonbone, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
             }
-            if (chance >= 30 && chance < 90) {
+            if (chance >= 20 && chance < 40) {
+                return new ItemStack(ModItems.dragonbone, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
+            }
+            if (chance >= 40 && chance < 90) {
                 return new ItemStack(this.getVariantScale(this.getVariant()), 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 5)));
             }
             if (chance >= 90 && chance <= 100 && this.getDragonStage() > 3) {

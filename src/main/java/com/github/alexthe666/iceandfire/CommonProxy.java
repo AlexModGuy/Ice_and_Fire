@@ -16,4 +16,6 @@ public class CommonProxy {
 
 	public void openBestiaryGui() {
 	}
+
+	public Object getArmorModel(int armorId){return null;}
 }

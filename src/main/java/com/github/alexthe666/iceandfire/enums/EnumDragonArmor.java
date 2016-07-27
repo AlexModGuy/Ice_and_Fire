@@ -12,7 +12,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public enum EnumDragonArmor {
 
-	armor_red(ModItems.red, 12, EnumDragonEgg.RED), armor_bronze(ModItems.bronze, 13, EnumDragonEgg.BRONZE), armor_green(ModItems.green, 14, EnumDragonEgg.GREEN), armor_gray(ModItems.gray, 15, EnumDragonEgg.GRAY);
+	armor_red(ModItems.dragon, 12, EnumDragonEgg.RED),
+	armor_bronze(ModItems.dragon, 13, EnumDragonEgg.BRONZE),
+	armor_green(ModItems.dragon, 14, EnumDragonEgg.GREEN),
+	armor_gray(ModItems.dragon, 15, EnumDragonEgg.GRAY),
+	armor_blue(ModItems.dragon, 12, EnumDragonEgg.BLUE),
+	armor_white(ModItems.dragon, 13, EnumDragonEgg.WHITE),
+	armor_sapphire(ModItems.dragon, 14, EnumDragonEgg.SAPPHIRE),
+	armor_silver(ModItems.dragon, 15, EnumDragonEgg.SILVER);
 
 	public ArmorMaterial material;
 	public int armorId;
