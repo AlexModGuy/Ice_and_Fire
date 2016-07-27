@@ -25,21 +25,24 @@ public class BlockCharedPath extends BlockGrassPath{
         this.setUnlocalizedName(isFire ? "iceandfire.charedGrassPath" : "iceandfire.frozenGrassPath");
         this.setHarvestLevel("shovel", 0);
         this.setHardness(0.6F);
-        this.setSoundType(SoundType.GROUND);
+        this.setSoundType(isFire ? SoundType.GROUND : SoundType.GLASS);
         this.setCreativeTab(IceAndFire.TAB);
         GameRegistry.registerBlock(this, isFire ? "chared_grass_path" : "frozen_grass_path");
+        if(!isFire){
+            this.slipperiness = 0.98F;
+        }
     }
 
     @Nullable
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return isFire ? ModBlocks.charedDirt.getItemDropped(Blocks.DIRT.getDefaultState(), rand, fortune) : ModBlocks.charedDirt.getItemDropped(Blocks.DIRT.getDefaultState(), rand, fortune);
+        return isFire ? ModBlocks.charedDirt.getItemDropped(Blocks.DIRT.getDefaultState(), rand, fortune) : ModBlocks.frozenDirt.getItemDropped(Blocks.DIRT.getDefaultState(), rand, fortune);
     }
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         super.neighborChanged(state, worldIn, pos, blockIn);
 
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? ModBlocks.charedDirt.getDefaultState() : ModBlocks.charedDirt.getDefaultState());
+            worldIn.setBlockState(pos, isFire ? ModBlocks.charedDirt.getDefaultState() : ModBlocks.frozenDirt.getDefaultState());
         }
     }
 

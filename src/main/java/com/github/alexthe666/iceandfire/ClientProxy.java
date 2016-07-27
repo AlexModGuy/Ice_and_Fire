@@ -88,7 +88,16 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedGravel), 0, new ModelResourceLocation("iceandfire:chared_gravel", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.charedGrassPath), 0, new ModelResourceLocation("iceandfire:chared_grass_path", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.ash), 0, new ModelResourceLocation("iceandfire:ash", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenDirt), 0, new ModelResourceLocation("iceandfire:frozen_dirt", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenGrass), 0, new ModelResourceLocation("iceandfire:frozen_grass", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenStone), 0, new ModelResourceLocation("iceandfire:frozen_stone", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenCobblestone), 0, new ModelResourceLocation("iceandfire:frozen_cobblestone", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenGravel), 0, new ModelResourceLocation("iceandfire:frozen_gravel", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenGrassPath), 0, new ModelResourceLocation("iceandfire:frozen_grass_path", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.dragon_ice), 0, new ModelResourceLocation("iceandfire:dragon_ice", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.dragon_ice_spikes), 0, new ModelResourceLocation("iceandfire:dragon_ice_spikes", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.eggInIce), 0, new ModelResourceLocation("iceandfire:egginice", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.silverPile), 0, new ModelResourceLocation("iceandfire:silverpile", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.bestiary, 0, new ModelResourceLocation("iceandfire:bestiary", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.manuscript, 0, new ModelResourceLocation("iceandfire:manuscript", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.sapphireGem, 0, new ModelResourceLocation("iceandfire:sapphire_gem", "inventory"));
