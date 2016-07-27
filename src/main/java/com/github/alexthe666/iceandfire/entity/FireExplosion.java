@@ -198,7 +198,9 @@ public class FireExplosion extends Explosion {
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
-
+				if(block == Blocks.GRASS_PATH){
+					worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
+				}
 				if (state.getMaterial() != Material.AIR) {
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());

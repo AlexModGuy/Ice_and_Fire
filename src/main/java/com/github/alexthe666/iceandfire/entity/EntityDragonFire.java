@@ -105,20 +105,15 @@ public class EntityDragonFire extends EntityFireball {
 		float f = -MathHelper.sin(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
 		float f1 = -MathHelper.sin(p_184547_2_ * 0.017453292F);
 		float f2 = MathHelper.cos(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
-		this.setThrowableHeading(fireball, (double) f, (double) f1, (double) f2, p_184547_5_, p_184547_6_);
-		fireball.motionX += entity.motionX;
-		fireball.motionZ += entity.motionZ;
-
+		fireball.motionX = entity.motionX;
+		fireball.motionZ = entity.motionZ;
 		if (!entity.onGround) {
-			fireball.motionY += entity.motionY;
+			fireball.motionY= entity.motionY;
 		}
+		this.setThrowableHeading(fireball, (double) f, (double) f1, (double) f2, p_184547_5_, p_184547_6_);
 	}
 
 	public void setThrowableHeading(Entity fireball, double x, double y, double z, float velocity, float inaccuracy) {
-		float f = MathHelper.sqrt_double(x * x + y * y + z * z);
-		x = x / (double) f;
-		y = y / (double) f;
-		z = z / (double) f;
 		x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
 		y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
 		z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
@@ -136,7 +131,7 @@ public class EntityDragonFire extends EntityFireball {
 	}
 
 	public float getCollisionBorderSize() {
-		return 0F;
+		return 1F;
 	}
 
 }

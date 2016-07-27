@@ -27,7 +27,7 @@ public class DragonAIBreakBlocks extends EntityAIBase {
 
     public void updateTask() {
         for (int a = (int) Math.round(dragon.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(dragon.getEntityBoundingBox().maxX) + 1; a++) {
-            for (int b = (int) Math.round(dragon.getEntityBoundingBox().minY) + (dragon.isFlying() ||dragon.isHovering() ? 0 : 1); (b <= (int) Math.round(dragon.getEntityBoundingBox().maxY) + 3) && (b <= 127); b++) {
+            for (int b = (int) Math.round(dragon.getEntityBoundingBox().minY) + (dragon.isFlying() ||dragon.isHovering() ? 0 : 1); (b <= (int) Math.round(dragon.getEntityBoundingBox().maxY) + 5) && (b <= 127); b++) {
                 for (int c = (int) Math.round(dragon.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(dragon.getEntityBoundingBox().maxZ) + 1; c++) {
                     BlockPos pos = new BlockPos(a, b, c);
                     IBlockState state = dragon.worldObj.getBlockState(pos);

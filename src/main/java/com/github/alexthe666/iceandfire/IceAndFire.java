@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire;
 
 import java.util.Random;
 
+import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
+import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
 import net.ilexiconn.llibrary.server.config.Config;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -11,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
@@ -42,14 +45,14 @@ import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 @Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name  = IceAndFire.NAME)
 public class IceAndFire {
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "0.1.4";
+	public static final String VERSION = "017";
 	public static final String LLIBRARY_VERSION = "1.4.1";
 	public static final String NAME = "Ice And Fire";
-
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
 	@NetworkWrapper({ MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class })
@@ -59,6 +62,7 @@ public class IceAndFire {
 	public static CreativeTabs TAB;
 	public static DamageSource dragon;
 	public static DamageSource dragonFire;
+	public static DamageSource dragonIce;
 	public static Biome GLACIER;
 	@Config
 	public static IceAndFireConfig CONFIG;
@@ -88,12 +92,25 @@ public class IceAndFire {
 				return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[] { entityLivingBaseIn.getDisplayName() }));
 			}
 		}.setFireDamage();
+		dragonIce = new DamageSource("dragon_ice") {
+			@Override
+			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+				String s = "death.attack.dragon_ice";
+				String s1 = s + ".player_" + new Random().nextInt(2);
+				return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[] { entityLivingBaseIn.getDisplayName() }));
+			}
+		};
 		ModBlocks.init();
 		ModItems.init();
 		ModRecipes.init();
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();
+		try {
+			MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
+		} catch (Exception e) {
+		}
+		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
 		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
 		GameRegistry.register(GLACIER);
 		BiomeDictionary.registerBiomeType(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
