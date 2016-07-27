@@ -871,14 +871,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isFlying()) {
             this.flyTicks++;
         }
-        if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
             if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
                 this.setFlying(false);
                 this.setHovering(false);
             }
-            if (this.getRNG().nextInt(4000) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && !this.isSitting() && !this.doesWantToLand() && this.isTamed()) {
-                this.setSleeping(false);
+            if (this.getRNG().nextInt(4000) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove()) {
                 this.setHovering(true);
+                this.setSleeping(false);
                 this.setSitting(false);
                 this.flyHovering = 0;
                 this.flyTicks = 0;
@@ -896,7 +895,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.setHunger(this.getHunger() - 1);
                 }
             }
-        }
         if((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2){
             this.attackDecision = true;
             for(int i = 0; i < 5; i++){
