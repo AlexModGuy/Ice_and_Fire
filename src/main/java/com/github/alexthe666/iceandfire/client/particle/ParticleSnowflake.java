@@ -18,7 +18,7 @@ public class ParticleSnowflake extends ParticleFlame {
 
     public ParticleSnowflake(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-        this.setParticleTextureIndex(new Random().nextInt(1));
+        this.setParticleTextureIndex(2 + new Random().nextInt(1));
     }
 
     public int getBrightnessForRender(float partialTicks)

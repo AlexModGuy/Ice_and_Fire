@@ -78,6 +78,8 @@ public class BlockGeneric extends Block {
 			if (block == this) {
 				return false;
 			}
+		}else{
+			return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 		}
 		return block != this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}

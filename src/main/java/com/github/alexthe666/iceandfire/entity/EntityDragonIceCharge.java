@@ -63,7 +63,7 @@ public class EntityDragonIceCharge extends EntityFireball {
 					IceExplosion explosion = new IceExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, true);
+					FireChargeExplosion explosion2 = new FireChargeExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), false, false);
 					explosion2.doExplosionA();
 					explosion2.doExplosionB(true);
 				}

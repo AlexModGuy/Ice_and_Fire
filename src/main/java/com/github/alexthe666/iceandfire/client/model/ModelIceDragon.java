@@ -530,14 +530,10 @@ public class ModelIceDragon extends ModelDragonBase {
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
 		animator.setAnimation(EntityIceDragon.ANIMATION_SPEAK);
 		animator.startKeyframe(15);
-		this.rotate(animator, JawBottom, 18, 0, 0);
+		this.rotate(animator, JawBottom, 25, 0, 0);
 		animator.move(JawBottom, 0, 0, 0.2F);
 		animator.endKeyframe();
-		animator.setStaticKeyframe(5);
-		animator.startKeyframe(10);
-		this.rotate(animator, JawBottom, 18, 0, 0);
-		animator.move(JawBottom, 0, 0, 0.2F);
-		animator.endKeyframe();
+		animator.setStaticKeyframe(15);
 		animator.resetKeyframe(10);
 		animator.setAnimation(EntityIceDragon.ANIMATION_BITE);
 		animator.startKeyframe(15);
