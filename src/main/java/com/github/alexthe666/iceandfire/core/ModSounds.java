@@ -18,6 +18,18 @@ public class ModSounds {
 	public static SoundEvent firedragon_adult_hurt;
 	public static SoundEvent firedragon_adult_death;
 	public static SoundEvent firedragon_adult_roar;
+	public static SoundEvent icedragon_child_idle;
+	public static SoundEvent icedragon_child_hurt;
+	public static SoundEvent icedragon_child_death;
+	public static SoundEvent icedragon_child_roar;
+	public static SoundEvent icedragon_teen_idle;
+	public static SoundEvent icedragon_teen_hurt;
+	public static SoundEvent icedragon_teen_death;
+	public static SoundEvent icedragon_teen_roar;
+	public static SoundEvent icedragon_adult_idle;
+	public static SoundEvent icedragon_adult_hurt;
+	public static SoundEvent icedragon_adult_death;
+	public static SoundEvent icedragon_adult_roar;
 
 	public static void init() {
 		dragon_hatch = registerSound("dragonegg.hatch");
@@ -33,6 +45,18 @@ public class ModSounds {
 		firedragon_adult_hurt = registerSound("firedragon.adult.hurt");
 		firedragon_adult_death = registerSound("firedragon.adult.death");
 		firedragon_adult_roar = registerSound("firedragon.adult.roar");
+		icedragon_child_idle = registerSound("icedragon.child.idle");
+		icedragon_child_hurt = registerSound("icedragon.child.hurt");
+		icedragon_child_death = registerSound("icedragon.child.death");
+		icedragon_child_roar = registerSound("icedragon.child.roar");
+		icedragon_teen_idle = registerSound("icedragon.teen.idle");
+		icedragon_teen_hurt = registerSound("icedragon.teen.hurt");
+		icedragon_teen_death = registerSound("icedragon.teen.death");
+		icedragon_teen_roar = registerSound("icedragon.teen.roar");
+		icedragon_adult_idle = registerSound("icedragon.adult.idle");
+		icedragon_adult_hurt = registerSound("icedragon.adult.hurt");
+		icedragon_adult_death = registerSound("icedragon.adult.death");
+		icedragon_adult_roar = registerSound("icedragon.adult.roar");
 	}
 
 	private static SoundEvent registerSound(String sound) {
