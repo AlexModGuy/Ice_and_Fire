@@ -135,9 +135,9 @@ public class IceExplosion extends Explosion {
 									return;
 								}
 								if(entity instanceof EntityLivingBase && ((EntityDragonBase)exploder).isOwner((EntityLivingBase)entity)){
-									entity.attackEntityFrom(IceAndFire.dragonFire, ((float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D))) / 6);
+									entity.attackEntityFrom(IceAndFire.dragonIce, ((float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D))) / 6);
 								}else{
-									entity.attackEntityFrom(IceAndFire.dragonFire, (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)) / 3);
+									entity.attackEntityFrom(IceAndFire.dragonIce, (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)) / 3);
 								}
 								if(entity.isDead){
 									((EntityDragonBase) this.exploder).attackDecision = true;
@@ -223,7 +223,7 @@ public class IceExplosion extends Explosion {
 
 		for (BlockPos blockpos1 : this.affectedBlockPositions) {
 			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
-				this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());
+				this.worldObj.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, explosionRNG.nextInt(7) + 1));
 			}
 		}
 	}

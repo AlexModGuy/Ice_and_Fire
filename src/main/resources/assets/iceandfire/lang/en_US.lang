@@ -74,11 +74,14 @@ item.iceandfire.fire_dragon_blood.name=Fire Dragon Blood
 item.iceandfire.ice_dragon_blood.name=Ice Dragon Blood
 
 entity.iceandfire.firedragon.name=Fire Dragon
+entity.iceandfire.icedragon.name=Ice Dragon
 entity.iceandfire.dragonegg.name=Dragon Egg
 entity.iceandfire.dragonarrow.name=Dragon Bone Arrow
 entity.iceandfire.dragonskull.name=Dragon Skull
 entity.iceandfire.dragonfire.name=Dragon Fire
-
+entity.iceandfire.dragonfirecharge.name=Dragon Fire Charge
+entity.iceandfire.dragonice.name=Dragon Ice
+entity.iceandfire.dragonicecharge.name=Dragon Ice Charge
 dragon.red=Red
 dragon.green=Green
 dragon.bronze=Bronze

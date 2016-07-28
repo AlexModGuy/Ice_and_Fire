@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,10 +21,10 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 	public RenderDragonBase(RenderManager renderManager, ModelBase model) {
 		super(renderManager, model, 0.8F);
 		this.addLayer(new LayerDragonEyes(this));
-		this.layerRenderers.add(new LayerDragonArmor(this, 0, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 1, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 2, "firedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 3, "firedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 0, model instanceof ModelFireDragon ? model instanceof ModelFireDragon ? "firedragon" : "icedragon" : "icedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 1, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 2, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 3, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
 
 	}
 

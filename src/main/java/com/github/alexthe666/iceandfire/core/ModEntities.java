@@ -1,14 +1,9 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 
 public class ModEntities {
 
@@ -26,7 +21,10 @@ public class ModEntities {
 		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);
 		registerUnspawnable(EntityDragonFire.class, "dragonfire", 4);
 		registerSpawnable(EntityFireDragon.class, "firedragon", 5, 0X340000, 0XA52929);
-		registerUnspawnable(EntityDragonFireCharge.class, "dragonfirecharge", 6);
+		registerUnspawnable(EntityDragonIceProjectile.class, "dragonice", 6);
+		registerSpawnable(EntityIceDragon.class, "icedragon", 7, 0XB5DDFB, 0X7EBAF0);
+		registerUnspawnable(EntityDragonFireCharge.class, "dragonfirecharge", 8);
+		registerUnspawnable(EntityDragonIceCharge.class, "dragonicecharge", 9);
 
 	}
 }

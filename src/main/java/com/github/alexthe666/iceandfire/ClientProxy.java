@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
-import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
+import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
@@ -17,8 +17,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
-import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
@@ -33,12 +31,6 @@ import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
@@ -58,11 +50,14 @@ public class ClientProxy extends CommonProxy {
 
 	private void renderEntities() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelFireDragon()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIceDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelIceDragon()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonEgg.class, new RenderDragonEgg(Minecraft.getMinecraft().getRenderManager(), new ModelDragonEgg()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonArrow.class, new RenderDragonArrow(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonSkull.class, new RenderDragonSkull(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFire.class, new RenderNothing(Minecraft.getMinecraft().getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFireCharge.class, new RenderDragonFireCharge(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFireCharge.class, new RenderDragonFireCharge(Minecraft.getMinecraft().getRenderManager(), true));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonIceProjectile.class, new RenderNothing(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonIceCharge.class, new RenderDragonFireCharge(Minecraft.getMinecraft().getRenderManager(), false));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
