@@ -777,6 +777,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             } else {
                 animationCycle = 0;
             }
+            if(animationCycle == 13){
+                this.worldObj.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundCategory(), 10.0F, 0.4F + this.rand.nextFloat() * 0.3F, false);
+            }
             if (animationCycle > 12 && animationCycle < 15) {
                 for (int i = 0; i < this.getRenderSize(); i++) {
                     for (int i1 = 0; i1 < 20; i1++) {
@@ -909,9 +912,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
                 float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
                 float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-                this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
+                if(this.isFire){
+                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
+                }else{
+                    IceAndFire.PROXY.spawnParticle("snowflake", this.worldObj, headPosX, headPosY, headPosZ, 0, 0, 0);
+                }
             }
-            this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
+            if(this.isFire){
+                this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
+            }else {
+                this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+            }
         }
         if (this.isBreathingFire()) {
             this.fireTicks++;

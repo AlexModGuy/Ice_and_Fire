@@ -82,7 +82,7 @@ public class EntityDragonIceProjectile extends EntityFireball {
 					}
 				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-				movingObject.entityHit.setFire(3);
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 1);
 				this.setDead();
 			}
 
