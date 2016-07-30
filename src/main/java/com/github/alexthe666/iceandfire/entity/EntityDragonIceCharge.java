@@ -39,6 +39,10 @@ public class EntityDragonIceCharge extends EntityFireball {
 		this.setSize(width, height);
 	}
 
+	protected boolean isFireballFiery() {
+		return false;
+	}
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return false;
@@ -47,8 +51,8 @@ public class EntityDragonIceCharge extends EntityFireball {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		for (int i = 0; i < 4; ++i) {
-			IceAndFire.PROXY.spawnParticle("snowflake", worldObj, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+		for (int i = 0; i < 14; ++i) {
+			IceAndFire.PROXY.spawnParticle("snowflake", worldObj, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
 		}
 	}
 

@@ -13,6 +13,10 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +34,10 @@ public class EntityIceDragon extends EntityDragonBase {
 	public static float[] growth_stage_3 = new float[]{7F, 12.5F};
 	public static float[] growth_stage_4 = new float[]{12.5F, 20F};
 	public static float[] growth_stage_5 = new float[]{20F, 30F};
+	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
+	public boolean isSwimming;
+	public float swimProgress;
+	public int ticksSwiming;
 
 	public EntityIceDragon(World worldIn) {
 		super(worldIn, EnumDiet.PISCCARNIVORE, 1, 18, 20, 500, 0.2F, 0.5F);
@@ -45,14 +53,14 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(4, new DragonAIAirTarget(this));
-		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
-		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-		this.tasks.addTask(7, new DragonAILookIdle(this));
-		this.tasks.addTask(8, new DragonAIBreakBlocks(this));
+		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
+		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(3, new DragonAIAirTarget(this));
+		this.tasks.addTask(3, new DragonAIWaterTarget(this));
+		this.tasks.addTask(4, new DragonAIWander(this, 1.0D));
+		this.tasks.addTask(5, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(5, new DragonAILookIdle(this));
+		this.tasks.addTask(6, new DragonAIBreakBlocks(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
@@ -63,6 +71,12 @@ public class EntityIceDragon extends EntityDragonBase {
 			}
 		}));
 		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(SWIMMING, false);
 	}
 
 	@Override
@@ -118,6 +132,20 @@ public class EntityIceDragon extends EntityDragonBase {
 		case 3:
 			return ModItems.dragonegg_silver;
 		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("Swimming", this.isSwimming());
+		compound.setInteger("SwimmingTicks", this.ticksSwiming);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.setSwimming(compound.getBoolean("Swimming"));
+		this.ticksSwiming = compound.getInteger("SwimmingTicks");
 	}
 
 	public boolean canBeSteered() {
@@ -203,6 +231,26 @@ public class EntityIceDragon extends EntityDragonBase {
 			}
 		} else {
 			this.setBreathingFire(false);
+		}
+		boolean swimming = isSwimming();
+		if (swimming && swimProgress < 20.0F) {
+			swimProgress += 0.5F;
+		} else if (!swimming && swimProgress > 0.0F) {
+			swimProgress -= 0.5F;
+		}
+		if (this.isInWater() && !this.isSwimming()) {
+			this.setSwimming(true);
+			ticksSwiming = 0;
+		}
+		if (!this.isInWater() && this.isSwimming()) {
+			this.setSwimming(false);
+			ticksSwiming = 0;
+		}
+		if(this.isSwimming()){
+			ticksSwiming++;
+			if (this.isInWater() && ticksSwiming > 1000 && !this.isChild() && !this.isHovering() && !this.isFlying()) {
+				this.setHovering(true);
+			}
 		}
 	}
 
@@ -315,6 +363,22 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 			}
 		}
+	}
+
+	public void setSwimming(boolean swimming) {
+		this.dataManager.set(SWIMMING, swimming);
+		if (!worldObj.isRemote) {
+			this.isSwimming = swimming;
+		}
+	}
+
+	public boolean isSwimming() {
+		if (worldObj.isRemote) {
+			boolean swimming = this.dataManager.get(SWIMMING);
+			this.isSwimming = swimming;
+			return swimming;
+		}
+		return isSwimming;
 	}
 
 	@Override
