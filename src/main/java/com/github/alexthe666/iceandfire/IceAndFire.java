@@ -8,6 +8,7 @@ import net.ilexiconn.llibrary.server.config.Config;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -64,6 +65,8 @@ public class IceAndFire {
 	public static DamageSource dragonFire;
 	public static DamageSource dragonIce;
 	public static Biome GLACIER;
+	public static Potion FROZEN_POTION;
+
 	@Config
 	public static IceAndFireConfig CONFIG;
 

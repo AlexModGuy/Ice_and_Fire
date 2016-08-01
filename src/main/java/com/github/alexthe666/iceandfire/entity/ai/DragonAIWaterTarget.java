@@ -33,6 +33,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
                 return false;
             } else {
                 dragon.airTarget = new BlockPos(vec3);
+                System.out.println( dragon.airTarget );
                 return true;
             }
         }

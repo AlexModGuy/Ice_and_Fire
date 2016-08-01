@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -108,6 +110,10 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 	}
 
+	public boolean canBreatheUnderwater(){
+		return true;
+	}
+
 	public Item getVariantScale(int variant) {
 		switch (variant) {
 		default:
@@ -119,6 +125,48 @@ public class EntityIceDragon extends EntityDragonBase {
 		case 3:
 			return ModItems.dragonscales_silver;
 		}
+	}
+
+	@Override
+	public void moveEntityWithHeading(float x, float z) {
+		double d0;
+		float f6;
+		if (this.isServerWorld()) {
+			float f4;
+			float f5;
+			if (this.isInWater()) {
+				d0 = this.posY;
+				f4 = 0.8F;
+				f5 = 0.02F;
+				f6 = (float) EnchantmentHelper.getDepthStriderModifier(this);
+				if (f6 > 3.0F) {
+					f6 = 3.0F;
+				}
+				if (f6 > 0.0F) {
+					f4 += (0.54600006F - f4) * f6 / 3.0F;
+					f5 += (this.getAIMoveSpeed() * 1.0F - f5) * f6 / 3.0F;
+				}
+				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.motionX *= (double) f4;
+				this.motionX *= 0.900000011920929D;
+				this.motionY *= 0.900000011920929D;
+				this.motionZ *= 0.900000011920929D;
+				this.motionZ *= (double) f4;
+			} else {
+					super.moveEntityWithHeading(x, z);
+				}
+			}
+		this.prevLimbSwingAmount = this.limbSwingAmount;
+		d0 = this.posX - this.prevPosX;
+		double d1 = this.posZ - this.prevPosZ;
+		f6 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
+
+		if (f6 > 1.0F) {
+			f6 = 1.0F;
+		}
+
+		this.limbSwingAmount += (f6 - this.limbSwingAmount) * 0.4F;
+		this.limbSwing += this.limbSwingAmount;
 	}
 
 	public Item getVariantEgg(int variant) {
@@ -134,6 +182,41 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 	}
 
+	public boolean isPushedByWater() {
+		return false;
+	}
+
+	public void flyAround() {
+		if (airTarget != null) {
+			if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000) {
+				airTarget = null;
+			}
+			flyTowardsTarget();
+		}
+	}
+
+	public void flyTowardsTarget() {
+		if (airTarget != null && isTargetInAir() && (this.isSwimming() || this.isFlying()) && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+			double targetX = airTarget.getX() + 0.5D - posX;
+			double targetY = airTarget.getY() + 1D - posY;
+			double targetZ = airTarget.getZ() + 0.5D - posZ;
+			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * 2;
+			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * 2;
+			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * 2;
+			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
+			moveForward = 0.5F;
+			prevRotationYaw = rotationYaw;
+			rotationYaw += rotation;
+		} else {
+			this.airTarget = null;
+		}
+		if (airTarget != null && isTargetInAir() && (this.isSwimming() || this.isFlying()) && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+			this.setFlying(false);
+			this.setHovering(true);
+			this.flyHovering = 1;
+		}
+	}
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);

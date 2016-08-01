@@ -1292,7 +1292,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected boolean isTargetInAir() {
-        return airTarget != null && (worldObj.getBlockState(airTarget).getMaterial() == Material.AIR && worldObj.getBlockState(airTarget).getMaterial() == Material.AIR);
+        return airTarget != null && ((worldObj.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (worldObj.getBlockState(airTarget).getMaterial() == Material.WATER || worldObj.getBlockState(airTarget).getMaterial() == Material.AIR)));
     }
 
     public float getDistanceSquared(Vec3d vec3d) {
