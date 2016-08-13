@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class ParticleDragonIce extends ParticleFlame {
 
     public static ResourceLocation texture = new ResourceLocation("iceandfire:textures/particles.png");
+    public static ResourceLocation particles = new ResourceLocation("textures/particle/particles.png");
 
     public ParticleDragonIce(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
@@ -38,7 +39,6 @@ public class ParticleDragonIce extends ParticleFlame {
     public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         GL11.glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        GL11.glPushMatrix();
         particleScale = 0.3F * (this.particleMaxAge - (this.particleAge));
         float f = (float) this.particleTextureIndexX / 16.0F;
         float f1 = f + 0.0624375F;
@@ -79,7 +79,8 @@ public class ParticleDragonIce extends ParticleFlame {
         worldRendererIn.pos((double) f5 + avec3d[2].xCoord, (double) f6 + avec3d[2].yCoord, (double) f7 + avec3d[2].zCoord).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         worldRendererIn.pos((double) f5 + avec3d[3].xCoord, (double) f6 + avec3d[3].yCoord, (double) f7 + avec3d[3].zCoord).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         GL11.glPopMatrix();
-        GL11.glPopMatrix();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(particles);
+
     }
 
     public void onUpdate() {

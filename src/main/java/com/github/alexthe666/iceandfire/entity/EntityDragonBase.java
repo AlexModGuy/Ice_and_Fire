@@ -970,7 +970,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float hoverAddition = -hoverProgress * 0.0055F;
+                float hoverAddition = -hoverProgress * 0.0065F;
                 float flyAddition = -flyProgress * 0.0095F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
                 float radius = 0.7F * ((0.3F - flyBody) * getRenderSize());
@@ -1109,6 +1109,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
+        if (!this.down() && (this.isFlying() || this.isHovering())) {
+            this.motionY += 0.02D;
+        }
         if (this.attack() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
             this.setBreathingFire(true);
             this.riderShootFire(this.getControllingPassenger());
@@ -1127,6 +1130,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.dismount() && this.getControllingPassenger() != null) {
             this.getControllingPassenger().dismountRidingEntity();
+        }
+        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
+            this.setHovering(true);
+            this.setFlying(false);
+        }
+        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
+            this.setFlying(true);
+            this.setHovering(false);
         }
         if (this.spacebarTicks > 0) {
             this.spacebarTicks--;

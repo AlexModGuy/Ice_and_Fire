@@ -24,8 +24,8 @@
             "rotation": [ 0, 0, 0 ],
             "translation": [ 1.13, 3.2, 1.13 ],
             "scale": [ 0.48, 0.48, 0.48 ]
-        }
-,  "thirdperson_righthand": {
+        },
+        "thirdperson_righthand": {
             "rotation": [ 0, 0, 0],
             "translation": [ 0, 0, 0 ],
             "scale": [ 0.45, 0.45, 0.45 ]
@@ -34,5 +34,12 @@
             "rotation": [ 0, 0, 0],
             "translation": [ 0, 0, 0 ],
             "scale": [ 0.45, 0.45, 0.45 ]
-        }    }
+        },
+        "ground": {
+          "rotation": [ 0, 0, 0 ],
+          "translation": [ 0, 3, 0],
+          "scale":[ 0.25, 0.25, 0.25 ]
+        }
+
+    }
 }

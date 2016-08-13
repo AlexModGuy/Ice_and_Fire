@@ -346,15 +346,11 @@ public class EntityIceDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-
 				worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
-				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(worldObj, this, 0, 0, 0);
-				float f = (float) 32000 / 20.0F;
-				f = (f * f + f * 2.0F) / 3.0F;
-				if (f > 1.0F) {
-					f = 1.0F;
-				}
-				entitylargefireball.setAim(entitylargefireball, controller, controller.rotationPitch, controller.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+				double d2 = controller.getLookVec().xCoord;
+				double d3 = controller.getLookVec().yCoord;
+				double d4 = controller.getLookVec().zCoord;
+				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(worldObj, this, d2, d3, d4);
 				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
 				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -370,13 +366,10 @@ public class EntityIceDragon extends EntityDragonBase {
 					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(worldObj, this, 0, 0, 0);
-					float f = (float) 32000 / 20.0F;
-					f = (f * f + f * 2.0F) / 3.0F;
-					if (f > 1.0F) {
-						f = 1.0F;
-					}
-					entitylargefireball.setAim(entitylargefireball, controller, controller.rotationPitch, controller.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+					double d2 = controller.getLookVec().xCoord;
+					double d3 = controller.getLookVec().yCoord;
+					double d4 = controller.getLookVec().zCoord;
+					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(worldObj, this, d2, d3, d4);
 					worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
