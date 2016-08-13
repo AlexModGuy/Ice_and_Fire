@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -50,6 +51,8 @@ public class EntityIceDragon extends EntityDragonBase {
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(40);
+		this.moveHelper = new EntityIceDragon.SwimmingMoveHelper();
+		this.navigator = new PathNavigateSwimmer(this, worldIn);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -127,48 +130,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 	}
 
-	@Override
-	public void moveEntityWithHeading(float x, float z) {
-		double d0;
-		float f6;
-		if (this.isServerWorld()) {
-			float f4;
-			float f5;
-			if (this.isInWater()) {
-				d0 = this.posY;
-				f4 = 0.8F;
-				f5 = 0.02F;
-				f6 = (float) EnchantmentHelper.getDepthStriderModifier(this);
-				if (f6 > 3.0F) {
-					f6 = 3.0F;
-				}
-				if (f6 > 0.0F) {
-					f4 += (0.54600006F - f4) * f6 / 3.0F;
-					f5 += (this.getAIMoveSpeed() * 1.0F - f5) * f6 / 3.0F;
-				}
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
-				this.motionX *= (double) f4;
-				this.motionX *= 0.900000011920929D;
-				this.motionY *= 0.900000011920929D;
-				this.motionZ *= 0.900000011920929D;
-				this.motionZ *= (double) f4;
-			} else {
-					super.moveEntityWithHeading(x, z);
-				}
-			}
-		this.prevLimbSwingAmount = this.limbSwingAmount;
-		d0 = this.posX - this.prevPosX;
-		double d1 = this.posZ - this.prevPosZ;
-		f6 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
-
-		if (f6 > 1.0F) {
-			f6 = 1.0F;
-		}
-
-		this.limbSwingAmount += (f6 - this.limbSwingAmount) * 0.4F;
-		this.limbSwing += this.limbSwingAmount;
-	}
-
 	public Item getVariantEgg(int variant) {
 		switch (variant) {
 		default:
@@ -195,28 +156,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 	}
 
-	public void flyTowardsTarget() {
-		if (airTarget != null && isTargetInAir() && (this.isSwimming() || this.isFlying()) && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
-			double targetX = airTarget.getX() + 0.5D - posX;
-			double targetY = airTarget.getY() + 1D - posY;
-			double targetZ = airTarget.getZ() + 0.5D - posZ;
-			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * 2;
-			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * 2;
-			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * 2;
-			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
-			moveForward = 0.5F;
-			prevRotationYaw = rotationYaw;
-			rotationYaw += rotation;
-		} else {
-			this.airTarget = null;
-		}
-		if (airTarget != null && isTargetInAir() && (this.isSwimming() || this.isFlying()) && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
-			this.setFlying(false);
-			this.setHovering(true);
-			this.flyHovering = 1;
-		}
-	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
@@ -480,6 +420,32 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public String getTextureOverlay() {
 		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
+	}
+
+	class SwimmingMoveHelper extends EntityMoveHelper {
+		private EntityIceDragon swimmingEntity = EntityIceDragon.this;
+
+		public SwimmingMoveHelper() {
+			super(EntityIceDragon.this);
+		}
+
+		@Override
+		public void onUpdateMoveHelper() {
+			if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.swimmingEntity.getNavigator().noPath() && this.swimmingEntity.isInWater()) {
+				double distanceX = this.posX - this.swimmingEntity.posX;
+				double distanceY = this.posY - this.swimmingEntity.posY;
+				double distanceZ = this.posZ - this.swimmingEntity.posZ;
+				double distance = Math.abs(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+				distance = (double) MathHelper.sqrt_double(distance);
+				distanceY /= distance;
+				float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
+				this.swimmingEntity.rotationYaw = this.limitAngle(this.swimmingEntity.rotationYaw, angle, 30.0F);
+				this.swimmingEntity.setAIMoveSpeed(7.0F);
+				this.swimmingEntity.motionY += (double) this.swimmingEntity.getAIMoveSpeed() * distanceY * 0.1D;
+			} else {
+				super.onUpdateMoveHelper();
+			}
+		}
 	}
 
 }
