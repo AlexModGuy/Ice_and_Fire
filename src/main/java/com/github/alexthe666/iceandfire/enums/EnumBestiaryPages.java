@@ -13,7 +13,13 @@ import com.github.alexthe666.iceandfire.item.ItemBestiary;
 
 public enum EnumBestiaryPages {
 
-	INTRO(new ItemStack(ModItems.bestiary), 0), FIREDRAGONS(new ItemStack(ModItems.dragon_skull), 0), FIREEGGS(new ItemStack(ModItems.dragonegg_red), 0), ICEDRAGONS(new ItemStack(ModItems.dragon_skull, 1), 0), ICEEGGS(new ItemStack(ModItems.dragonscales_blue), 1), DRAGONSCALES(new ItemStack(ModItems.dragonscales_red), 1), DRAGONBONES(new ItemStack(ModItems.dragonbone), 1);
+	INTRO(new ItemStack(ModItems.bestiary), 0),
+	FIREDRAGONS(new ItemStack(ModItems.dragon_skull), 0),
+	FIREEGGS(new ItemStack(ModItems.dragonegg_red), 0),
+	ICEDRAGONS(new ItemStack(ModItems.dragon_skull, 1), 0),
+	ICEEGGS(new ItemStack(ModItems.dragonscales_blue), 1),
+	DRAGONSCALES(new ItemStack(ModItems.dragonscales_red), 1),
+	DRAGONBONES(new ItemStack(ModItems.dragonbone), 1);
 
 	public ItemStack stack;
 	public int indexPage;
@@ -23,7 +29,7 @@ public enum EnumBestiaryPages {
 		indexPage = onPage;
 	}
 
-	public static List<Integer> getList(int[] containedpages) {
+	public static List<Integer> toList(int[] containedpages) {
 		List<Integer> intList = new ArrayList<Integer>();
 		for (int containedpage : containedpages) {
 			intList.add(containedpage);
@@ -52,7 +58,7 @@ public enum EnumBestiaryPages {
 		for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
 			allPages.add(EnumBestiaryPages.values()[i]);
 		}
-		List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.getList(book.getTagCompound().getIntArray("Pages")));
+		List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
 		for (EnumBestiaryPages page : allPages) {
 			if (!pages.contains(page)) {
 				return true;
@@ -83,7 +89,7 @@ public enum EnumBestiaryPages {
 
 			Random rand = new Random();
 			NBTTagCompound tag = book.getTagCompound();
-			List<EnumBestiaryPages> enumlist = containedPages(getList(tag.getIntArray("Pages")));
+			List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
 			int random = rand.nextInt(EnumBestiaryPages.values().length + 1);
 			while (enumlist.contains(random)) {
 				random = rand.nextInt(EnumBestiaryPages.values().length + 1);
@@ -95,7 +101,7 @@ public enum EnumBestiaryPages {
 	public static void addPage(EnumBestiaryPages page, ItemStack book) {
 		if (book.getItem() instanceof ItemBestiary) {
 			NBTTagCompound tag = book.getTagCompound();
-			List<EnumBestiaryPages> enumlist = containedPages(getList(tag.getIntArray("Pages")));
+			List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
 			if (!enumlist.contains(page)) {
 				enumlist.add(page);
 			}

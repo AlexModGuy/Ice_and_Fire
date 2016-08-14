@@ -51,7 +51,7 @@ public class ItemBestiary extends Item {
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
 		if (stack.getTagCompound() != null) {
 			list.add(StatCollector.translateToLocal("bestiary.contains"));
-			List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.getList(stack.getTagCompound().getIntArray("Pages")));
+			List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTagCompound().getIntArray("Pages")));
 			for (EnumBestiaryPages page : pages) {
 				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
 			}
