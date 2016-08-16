@@ -52,7 +52,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(40);
 		this.moveHelper = new EntityIceDragon.SwimmingMoveHelper();
-		this.navigator = new PathNavigateSwimmer(this, worldIn);
+		this.navigator = new IceDragonPathNavigate(this, worldIn);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 

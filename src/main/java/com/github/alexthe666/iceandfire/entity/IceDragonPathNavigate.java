@@ -16,7 +16,9 @@ public class IceDragonPathNavigate extends PathNavigate {
     }
 
     protected PathFinder getPathFinder() {
-        return new PathFinder(this.isInLiquid() ? new SwimNodeProcessor() : new WalkNodeProcessor());
+        this.nodeProcessor = new WalkNodeProcessor();
+        this.nodeProcessor.setCanEnterDoors(true);
+        return new PathFinder(this.isInLiquid() ? new SwimNodeProcessor() : nodeProcessor);
     }
 
     protected boolean canNavigate() {
