@@ -75,7 +75,11 @@ public class EntitySnowVillager extends EntityVillager {
 
     public MerchantRecipeList getRecipes(EntityPlayer player) {
         MerchantRecipeList recipes = super.getRecipes(player);
-        this.getEntityData().setInteger("Career", intFromProfesion(this.getEntityData().getString("ProfessionName")));
+        try {
+            ReflectionHelper.findField(EntityVillager.class, new String[]{"field_175563_bv", "careerId"}).set(this, 1);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return recipes;
     }
     private net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof;
