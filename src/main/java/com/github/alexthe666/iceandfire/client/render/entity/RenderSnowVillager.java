@@ -6,9 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderVillager;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import org.lwjgl.opengl.GL11;
 
 public class RenderSnowVillager extends RenderVillager{
@@ -20,10 +26,13 @@ public class RenderSnowVillager extends RenderVillager{
     protected void preRenderCallback(EntityVillager entity, float partialTickTime) {
         super.preRenderCallback(entity, partialTickTime);
         if(entity.getProfessionForge() == ModVillagers.INSTANCE.fisherman) {
-            GL11.glRotatef(-180, 1.0F, 0.0F, 0.0F);
-            GL11.glTranslatef(0F, -1.02F, 0.23F);
-            GL11.glScalef(0.4F, 0.4F, 0.4F);
-            Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(ModItems.fishing_spear), ItemCameraTransforms.TransformType.FIXED);
+            GL11.glPushMatrix();
+            GL11.glTranslatef(0.125F, -1.0F, -0.3F);
+            GL11.glRotatef(-80, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(10, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(90, 0.0F, 0.0F, 1.0F);
+            Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(ModItems.fishing_spear), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND);
+            GL11.glPopMatrix();
         }
     }
 }

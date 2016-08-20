@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.google.common.collect.Maps;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.common.registry.RegistryBuilder;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class ModVillagers {
@@ -23,38 +25,35 @@ public class ModVillagers {
     public VillagerRegistry.VillagerProfession fisherman;
     public VillagerRegistry.VillagerProfession craftsman;
     public VillagerRegistry.VillagerProfession shaman;
-    public FMLControlledNamespacedRegistry<VillagerRegistry.VillagerProfession> professions;
+    public Map<Integer, VillagerRegistry.VillagerProfession> professions = Maps.newHashMap();
 
     public void init() {
-        professions = new RegistryBuilder().<VillagerRegistry.VillagerProfession>create();
-
-        fisherman = new VillagerRegistry.VillagerProfession("iceandfire:fisherman", "iceandfire:textures/model/icevillager/fisherman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+        fisherman = new VillagerRegistry.VillagerProfession("iceandfire:fisherman", "iceandfire:textures/models/snowvillager/fisherman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
         {
-            register(fisherman, new ResourceLocation("iceandfire:fisherman"), 0);
+            register(fisherman, 0);
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(fisherman, "fisherman");
             career.addTrade(1, new SapphireForItems(ModItems.fishing_spear, new EntityVillager.PriceInfo(4, 1)));
         }
-        craftsman = new VillagerRegistry.VillagerProfession("iceandfire:craftsman", "iceandfire:textures/model/icevillager/craftsman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+        craftsman = new VillagerRegistry.VillagerProfession("iceandfire:craftsman", "iceandfire:textures/models/snowvillager/craftsman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
         {
-            register(craftsman, new ResourceLocation("iceandfire:craftsman"), 1);
+            register(craftsman, 1);
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(craftsman, "craftsman");
             career.addTrade(1, new SapphireForItems(ModItems.silverIngot, new EntityVillager.PriceInfo(4, 9)));
         }
-        shaman = new VillagerRegistry.VillagerProfession("iceandfire:shaman", "iceandfire:textures/model/icevillager/shaman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+        shaman = new VillagerRegistry.VillagerProfession("iceandfire:shaman", "iceandfire:textures/models/snowvillager/shaman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
         {
-            register(shaman, new ResourceLocation("iceandfire:craftsman"), 2);
+            register(shaman, 2);
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(shaman, "shaman");
             career.addTrade(1, new SapphireForItems(ModItems.ice_dragon_blood, new EntityVillager.PriceInfo(10, 1)));
         }
     }
 
     public void setRandomProfession(EntityVillager entity, Random rand) {
-        List<VillagerRegistry.VillagerProfession> entries = professions.getValues();
-        entity.setProfession(entries.get(rand.nextInt(entries.size())));
+        entity.setProfession(professions.get(rand.nextInt(professions.size())));
     }
 
-    private void register(VillagerRegistry.VillagerProfession prof, ResourceLocation name, int id) {
-        professions.register(id, name, prof);
+    private void register(VillagerRegistry.VillagerProfession prof, int id) {
+        professions.put(id, prof);
     }
 
     /** Sell items for sapphires */
