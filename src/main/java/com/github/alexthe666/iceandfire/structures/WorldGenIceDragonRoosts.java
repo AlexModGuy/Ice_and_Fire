@@ -16,7 +16,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class WorldGenFireDragonRoosts extends WorldGenerator {
+public class WorldGenIceDragonRoosts extends WorldGenerator {
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
@@ -43,23 +43,23 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
                 if (blockpos.distanceSq(position) <= (double)(f * f)) {
                     IBlockState state = world.getBlockState(blockpos);
-                    if(state.getMaterial() == Material.GRASS){
-                        world.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
+                    if(state.getMaterial() == Material.GRASS || state.getMaterial() == Material.PACKED_ICE && world.canBlockSeeSky(blockpos)){
+                        world.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
                     }
-                    else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT){
-                        world.setBlockState(blockpos, ModBlocks.charedDirt.getDefaultState());
+                    else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT || state.getMaterial() == Material.PACKED_ICE && !world.canBlockSeeSky(blockpos)){
+                        world.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
                     }
                     else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL){
-                        world.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
+                        world.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
                     }
                     else if(state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getUnlocalizedName().contains("cobblestone"))){
-                        world.setBlockState(blockpos, ModBlocks.charedCobblestone.getDefaultState());
+                        world.setBlockState(blockpos, ModBlocks.frozenCobblestone.getDefaultState());
                     }
                     else if(state.getMaterial() == Material.ROCK){
-                        world.setBlockState(blockpos, ModBlocks.charedStone.getDefaultState());
+                        world.setBlockState(blockpos, ModBlocks.frozenStone.getDefaultState());
                     }
                     else if(state.getBlock() == Blocks.GRASS_PATH){
-                        world.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
+                        world.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
                     }else if(state.getMaterial() == Material.WOOD){
                         world.setBlockState(blockpos, ModBlocks.ash.getDefaultState());
                     }else if(state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS){
@@ -77,7 +77,7 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
             int l = radius + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-                if (blockpos.distanceSq(position) <= (double) (f * f) && world.isAirBlock(blockpos) && world.getBlockState(blockpos.down()).getBlock().getUnlocalizedName().contains("chared")) {
+                if (blockpos.distanceSq(position) <= (double) (f * f) && world.isAirBlock(blockpos) && world.getBlockState(blockpos.down()).getBlock().getUnlocalizedName().contains("frozen")) {
                     int chance = rand.nextInt(100);
                     if(chance < 4){
                         int chance2 = rand.nextInt(20);
@@ -108,7 +108,7 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
             if (world.getBlockState(position).getBlock() instanceof BlockChest) {
                 TileEntity tileentity1 = world.getTileEntity(position);
                 if (tileentity1 instanceof TileEntityChest && !((TileEntityChest)tileentity1).isInvalid()) {
-                    ((TileEntityChest) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+                    ((TileEntityChest) tileentity1).setLootTable(WorldGenIceDragonCave.ICEDRAGON_CHEST, new Random().nextLong());
                 }
             }
         }else{
@@ -121,11 +121,11 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
         int height = 3 + rand.nextInt(1);
         int width = 1 + rand.nextInt(2);
         for(int sides = 0; sides < height; sides++){
-            world.setBlockState(position.up(sides).east(width / 2), ModBlocks.charedCobblestone.getDefaultState(), 3);
-            world.setBlockState(position.up(sides).west(width / 2), ModBlocks.charedCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(sides).east(width / 2), ModBlocks.frozenCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(sides).west(width / 2), ModBlocks.frozenCobblestone.getDefaultState(), 3);
         }
         for(int way = -1; way < width; way++){
-            world.setBlockState(position.up(height).east(way), ModBlocks.charedCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(height).east(way), ModBlocks.frozenCobblestone.getDefaultState(), 3);
         }
     }
 
@@ -133,11 +133,11 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
         int height = 3 + rand.nextInt(1);
         int width = 1 + rand.nextInt(2);
         for(int sides = 0; sides < height; sides++){
-            world.setBlockState(position.up(sides).north(width / 2), ModBlocks.charedCobblestone.getDefaultState(), 3);
-            world.setBlockState(position.up(sides).south(width / 2), ModBlocks.charedCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(sides).north(width / 2), ModBlocks.frozenCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(sides).south(width / 2), ModBlocks.frozenCobblestone.getDefaultState(), 3);
         }
         for(int way = 0; way < width; way++){
-            world.setBlockState(position.up(height).south(way), ModBlocks.charedCobblestone.getDefaultState(), 3);
+            world.setBlockState(position.up(height).south(way), ModBlocks.frozenCobblestone.getDefaultState(), 3);
         }
     }
 }

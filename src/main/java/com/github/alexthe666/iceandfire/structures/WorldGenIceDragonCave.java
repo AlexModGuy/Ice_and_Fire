@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
@@ -20,9 +21,9 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import java.util.Random;
 
-public class WorldGenFireDragonCave extends WorldGenerator{
+public class WorldGenIceDragonCave extends WorldGenerator{
 
-    public static final ResourceLocation FIREDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_cave"));
+    public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_cave"));
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
@@ -78,7 +79,7 @@ public class WorldGenFireDragonCave extends WorldGenerator{
                 }
             }
         }
-        EntityFireDragon dragon = new EntityFireDragon(worldIn);
+        EntityIceDragon dragon = new EntityIceDragon(worldIn);
         dragon.setGender(dragon.getRNG().nextBoolean());
         dragon.growDragon(dragonAge);
         dragon.setHunger(50);
@@ -97,13 +98,13 @@ public class WorldGenFireDragonCave extends WorldGenerator{
         }
 
         if(chance < 60){
-            world.setBlockState(pos, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 +  new Random().nextInt(7)), 3);
+            world.setBlockState(pos, ModBlocks.silverPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 +  new Random().nextInt(7)), 3);
         }else if(chance > 60 && chance < 62){
             world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
             if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                 TileEntity tileentity1 = world.getTileEntity(pos);
                 if (tileentity1 instanceof TileEntityChest && !((TileEntityChest)tileentity1).isInvalid()) {
-                    ((TileEntityChest) tileentity1).setLootTable(FIREDRAGON_CHEST, new Random().nextLong());
+                    ((TileEntityChest) tileentity1).setLootTable(ICEDRAGON_CHEST, new Random().nextLong());
                 }
             }
         }
@@ -135,16 +136,16 @@ public class WorldGenFireDragonCave extends WorldGenerator{
                 world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
             }
             if(chance > 90 && chance < 1000){
-                world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState(), 3);
+                world.setBlockState(pos, ModBlocks.sapphireOre.getDefaultState(), 3);
             }
         }
         boolean burnt_chance = new Random().nextInt(5) == 0;
         if(burnt_chance){
             int chance = new Random().nextInt(2);
             if(chance == 0) {
-                world.setBlockState(pos, ModBlocks.charedStone.getDefaultState(), 3);
+                world.setBlockState(pos, ModBlocks.frozenStone.getDefaultState(), 3);
             }else{
-                world.setBlockState(pos, ModBlocks.charedCobblestone.getDefaultState(), 3);
+                world.setBlockState(pos, ModBlocks.frozenCobblestone.getDefaultState(), 3);
             }
         }
     }

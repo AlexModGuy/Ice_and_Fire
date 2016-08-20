@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
+import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
@@ -24,6 +26,8 @@ public class StructureGenerator implements IWorldGenerator {
 
 	private static final WorldGenFireDragonCave FIRE_DRAGON_CAVE = new WorldGenFireDragonCave();
 	private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
+	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
+	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -53,6 +57,12 @@ public class StructureGenerator implements IWorldGenerator {
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
+			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
+				if (random.nextInt(isHills ? 180 : 360) == 0) {
+					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					ICE_DRAGON_ROOST.generate(world, random, surface);
+				}
+			}
 		}
 		if (IceAndFire.CONFIG.generateDragonDens) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
@@ -63,6 +73,12 @@ public class StructureGenerator implements IWorldGenerator {
 					if (!world.canBlockSeeSky(pos)) {
 						FIRE_DRAGON_CAVE.generate(world, random, pos);
 					}
+				}
+			}
+			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
+				if (random.nextInt(isHills ? 180 : 360) == 0) {
+					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					ICE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
 		}

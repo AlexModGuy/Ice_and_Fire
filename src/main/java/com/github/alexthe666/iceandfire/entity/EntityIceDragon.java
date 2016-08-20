@@ -230,7 +230,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		} else {
 			this.setBreathingFire(false);
 		}
-		boolean swimming = isSwimming() && !isHovering() && !isFlying();
+		boolean swimming = isSwimming() && !isHovering() && !isFlying() && ridingProgress == 0;
 		if (swimming && swimProgress < 20.0F) {
 			swimProgress += 0.5F;
 		} else if (!swimming && swimProgress > 0.0F) {
