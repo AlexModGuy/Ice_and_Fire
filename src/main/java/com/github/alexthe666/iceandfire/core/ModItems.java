@@ -52,6 +52,7 @@ public class ModItems {
 	public static Item dragonscales_silver;
 	public static Item dragonbone;
 	public static Item witherbone;
+	public static Item fishing_spear;
 	public static Item wither_shard;
 	public static Item dragonbone_sword;
 	public static Item dragonbone_shovel;
@@ -111,6 +112,7 @@ public class ModItems {
 		EnumDragonArmor.initArmors();
 		dragonbone = new ItemDragonBone();
 		witherbone = new ItemGeneric("witherbone", "iceandfire.witherbone");
+		fishing_spear = new ItemFishingSpear();
 		wither_shard = new ItemGeneric("wither_shard", "iceandfire.wither_shard");
 		dragonbone_sword = new ItemModSword(boneTools, "dragonbone_sword", "iceandfire.dragonbone_sword");
 		dragonbone_shovel = new ItemModShovel(boneTools, "dragonbone_shovel", "iceandfire.dragonbone_shovel");
