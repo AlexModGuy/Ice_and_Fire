@@ -834,7 +834,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else if (!modeldead && modelDeadProgress > 0.0F) {
             modelDeadProgress -= 0.5F;
         }
-        boolean riding = isRiding();
+        boolean riding = isRiding() && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer;
         if (riding && ridingProgress < 20.0F) {
             ridingProgress += 0.5F;
         } else if (!riding && ridingProgress > 0.0F) {
@@ -1411,8 +1411,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.motionY = 0;
             }
         }
-
+        if(this.isInWater() && this.isTamed()){
+            this.motionY += 0.02;
+        }
         super.moveEntityWithHeading(strafe, forward);
+    }
+
+    public boolean isInWater() {
+        return this.inWater || this.isInsideOfMaterial(Material.WATER);
     }
 
     public void updateCheckPlayer(){

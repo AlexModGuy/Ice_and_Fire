@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,6 +42,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	public boolean isSwimming;
 	public float swimProgress;
 	public int ticksSwiming;
+	public BlockPos waterTarget;
 
 	public EntityIceDragon(World worldIn) {
 		super(worldIn, EnumDiet.PISCCARNIVORE, 1, 18, 20, 500, 0.2F, 0.5F);
@@ -51,8 +53,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(40);
-		this.moveHelper = new EntityIceDragon.SwimmingMoveHelper();
-		this.navigator = new IceDragonPathNavigate(this, worldIn);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -147,15 +147,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		return false;
 	}
 
-	public void flyAround() {
-		if (airTarget != null) {
-			if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000) {
-				airTarget = null;
-			}
-			flyTowardsTarget();
-		}
-	}
-
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
@@ -224,22 +215,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		return false;
 	}
 
-	public void moveEntityTowards(Entity entity, double x, double y, double z, float velocity, float inaccuracy) {
-		float f = MathHelper.sqrt_double(x * x + y * y + z * z);
-		x = x / (double) f;
-		y = y / (double) f;
-		z = z / (double) f;
-		x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		x = x * (double) velocity;
-		y = y * (double) velocity;
-		z = z * (double) velocity;
-		entity.motionX = x;
-		entity.motionY = y;
-		entity.motionZ = z;
-	}
-
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -255,7 +230,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		} else {
 			this.setBreathingFire(false);
 		}
-		boolean swimming = isSwimming();
+		boolean swimming = isSwimming() && !isHovering() && !isFlying();
 		if (swimming && swimProgress < 20.0F) {
 			swimProgress += 0.5F;
 		} else if (!swimming && swimProgress > 0.0F) {
@@ -264,6 +239,9 @@ public class EntityIceDragon extends EntityDragonBase {
 		if (this.isInWater() && !this.isSwimming()) {
 			this.setSwimming(true);
 			ticksSwiming = 0;
+		}
+		if(this.isInWater()){
+			swimAround();
 		}
 		if (!this.isInWater() && this.isSwimming()) {
 			this.setSwimming(false);
@@ -323,6 +301,38 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 	}
 
+	public void swimAround() {
+		if (waterTarget != null) {
+			System.out.println();
+			if (!isTargetInWater() || getDistance(waterTarget.getX() + 0.5D, waterTarget.getY() + 0.5D, waterTarget.getZ() + 0.5D) < 2 || ticksSwiming > 6000) {
+				waterTarget = null;
+			}
+			swimTowardsTarget();
+		}
+	}
+
+	public void swimTowardsTarget() {
+		if (waterTarget != null && isTargetInWater() && this.isInWater() && this.getDistanceSquared(new Vec3d(waterTarget.getX(), this.posY, waterTarget.getZ())) > 3) {
+			double targetX = waterTarget.getX() + 0.5D - posX;
+			double targetY = waterTarget.getY() + 1D - posY;
+			double targetZ = waterTarget.getZ() + 0.5D - posZ;
+			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
+			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
+			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
+			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
+			moveForward = 0.5F;
+			prevRotationYaw = rotationYaw;
+			rotationYaw += rotation;
+		} else {
+			this.waterTarget = null;
+		}
+	}
+
+	protected boolean isTargetInWater() {
+		return waterTarget != null && (worldObj.getBlockState(waterTarget).getMaterial() == Material.WATER);
+	}
+
 	private void shootIceAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if (this.getRNG().nextInt(5) == 0) {
@@ -366,8 +376,6 @@ public class EntityIceDragon extends EntityDragonBase {
 						if (!worldObj.isRemote && !entity.isDead) {
 							worldObj.spawnEntityInWorld(entitylargefireball);
 						}
-						System.out.println(this.attackDecision);
-
 						entitylargefireball.setSizes(size, size);
 						if (entity.isDead || entity == null) {
 							this.setBreathingFire(false);
@@ -421,31 +429,4 @@ public class EntityIceDragon extends EntityDragonBase {
 	public String getTextureOverlay() {
 		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
-
-	class SwimmingMoveHelper extends EntityMoveHelper {
-		private EntityIceDragon swimmingEntity = EntityIceDragon.this;
-
-		public SwimmingMoveHelper() {
-			super(EntityIceDragon.this);
-		}
-
-		@Override
-		public void onUpdateMoveHelper() {
-			if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.swimmingEntity.getNavigator().noPath() && this.swimmingEntity.isInWater()) {
-				double distanceX = this.posX - this.swimmingEntity.posX;
-				double distanceY = this.posY - this.swimmingEntity.posY;
-				double distanceZ = this.posZ - this.swimmingEntity.posZ;
-				double distance = Math.abs(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
-				distance = (double) MathHelper.sqrt_double(distance);
-				distanceY /= distance;
-				float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-				this.swimmingEntity.rotationYaw = this.limitAngle(this.swimmingEntity.rotationYaw, angle, 30.0F);
-				this.swimmingEntity.setAIMoveSpeed(7.0F);
-				this.swimmingEntity.motionY += (double) this.swimmingEntity.getAIMoveSpeed() * distanceY * 0.1D;
-			} else {
-				super.onUpdateMoveHelper();
-			}
-		}
-	}
-
 }

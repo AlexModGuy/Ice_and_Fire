@@ -31,7 +31,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
             if (this.dragon.getNavigator().noPath()) {
                 Vec3d vec3 = this.findWaterTarget();
                 if (vec3 != null) {
-                    this.dragon.getNavigator().tryMoveToXYZ(vec3.xCoord, vec3.yCoord, vec3.zCoord, 1.0);
+                    dragon.waterTarget = new BlockPos(vec3.xCoord, vec3.yCoord, vec3.zCoord);
                     return true;
                 }
             }
@@ -47,9 +47,10 @@ public class DragonAIWaterTarget extends EntityAIBase {
     public Vec3d findWaterTarget() {
         if (this.dragon.getAttackTarget() == null) {
             List<Vec3d> water = new ArrayList<Vec3d>();
-            for (int x = (int) this.dragon.posX - 5; x < (int) this.dragon.posX + 5; x++) {
-                for (int y = (int) this.dragon.posY - 5; y < (int) this.dragon.posY + 5; y++) {
-                    for (int z = (int) this.dragon.posZ - 5; z < (int) this.dragon.posZ + 5; z++) {
+            int radius = 5;
+            for (int x = (int) this.dragon.posX - radius; x < (int) this.dragon.posX + radius; x++) {
+                for (int y = (int) this.dragon.posY - radius; y < (int) this.dragon.posY + radius; y++) {
+                    for (int z = (int) this.dragon.posZ - radius; z < (int) this.dragon.posZ + radius; z++) {
                         if (this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(x, y, z))) {
                             water.add(new Vec3d(x, y, z));
                         }
@@ -60,7 +61,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
                 return water.get(this.dragon.getRNG().nextInt(water.size()));
             }
         } else {
-            BlockPos blockpos1 = new BlockPos(this.dragon.getAttackTarget());
+            BlockPos blockpos1 = new BlockPos(this.dragon.getAttackTarget()).down();
             if (this.dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.WATER) {
                 return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
             }
