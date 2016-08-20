@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.structures;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +24,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
         int dragonAge = 50 + rand.nextInt(25);
         burnGround(worldIn, rand, position, dragonAge / 5);
         generateStructures(worldIn, rand, position, dragonAge / 5);
-        EntityFireDragon dragon = new EntityFireDragon(worldIn);
+        EntityIceDragon dragon = new EntityIceDragon(worldIn);
         dragon.setGender(dragon.getRNG().nextBoolean());
         dragon.growDragon(dragonAge);
         dragon.setHunger(50);
@@ -43,10 +44,10 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
                 if (blockpos.distanceSq(position) <= (double)(f * f)) {
                     IBlockState state = world.getBlockState(blockpos);
-                    if(state.getMaterial() == Material.GRASS || state.getMaterial() == Material.PACKED_ICE && world.canBlockSeeSky(blockpos)){
+                    if(state.getMaterial() == Material.GRASS || state.getMaterial() == Material.CRAFTED_SNOW && world.canBlockSeeSky(blockpos)){
                         world.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
                     }
-                    else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT || state.getMaterial() == Material.PACKED_ICE && !world.canBlockSeeSky(blockpos)){
+                    else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT || state.getMaterial() == Material.CRAFTED_SNOW && !world.canBlockSeeSky(blockpos)){
                         world.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
                     }
                     else if(state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL){
@@ -62,7 +63,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                         world.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
                     }else if(state.getMaterial() == Material.WOOD){
                         world.setBlockState(blockpos, ModBlocks.ash.getDefaultState());
-                    }else if(state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS){
+                    }else if(state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS || state.getBlock() == Blocks.SNOW_LAYER){
                         world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                     }
                 }
@@ -112,7 +113,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                 }
             }
         }else{
-            world.setBlockState(position, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, height), 3);
+            world.setBlockState(position, ModBlocks.silverPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, height), 3);
         }
 
     }

@@ -23,7 +23,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "iceandfire:sapphire",
+                    "name": "iceandfire:sapphire_gem",
                     "functions": [
                         {
                             "function": "set_count",

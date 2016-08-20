@@ -61,6 +61,7 @@ public class StructureGenerator implements IWorldGenerator {
 				if (random.nextInt(isHills ? 180 : 360) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					ICE_DRAGON_ROOST.generate(world, random, surface);
+					System.out.println("roost at:" + surface);
 				}
 			}
 		}
@@ -77,8 +78,10 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
 				if (random.nextInt(isHills ? 180 : 360) == 0) {
-					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-					ICE_DRAGON_ROOST.generate(world, random, surface);
+					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
+					BlockPos pos = new BlockPos(x, newY, z);
+					ICE_DRAGON_CAVE.generate(world, random, pos);
+					System.out.println("cave at:" + pos);
 				}
 			}
 		}
