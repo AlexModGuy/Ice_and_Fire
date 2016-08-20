@@ -1,14 +1,17 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModVillagers;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -64,6 +67,17 @@ public class EntitySnowVillager extends EntityVillager {
         }
     }
 
+    public EntityVillager createChild(EntityAgeable ageable) {
+        EntitySnowVillager entityvillager = new EntitySnowVillager(this.worldObj);
+        entityvillager.onInitialSpawn(this.worldObj.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData)null);
+        return entityvillager;
+    }
+
+    public MerchantRecipeList getRecipes(EntityPlayer player) {
+        MerchantRecipeList recipes = super.getRecipes(player);
+        this.getEntityData().setInteger("Career", intFromProfesion(this.getEntityData().getString("ProfessionName")));
+        return recipes;
+    }
     private net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof;
 
     public net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession getProfessionForge()

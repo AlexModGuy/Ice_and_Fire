@@ -69,7 +69,6 @@ public class IceAndFire {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 		MinecraftForge.EVENT_BUS.register(new EventMapGen());
-		ModVillagers.INSTANCE.init();
 	}
 
 
@@ -103,6 +102,7 @@ public class IceAndFire {
 		ModBlocks.init();
 		ModItems.init();
 		ModRecipes.init();
+		ModVillagers.INSTANCE.init();
 		ModEntities.init();
 		ModFoods.init();
 		ModSounds.init();

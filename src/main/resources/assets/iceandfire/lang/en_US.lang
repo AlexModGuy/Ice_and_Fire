@@ -84,6 +84,10 @@ entity.iceandfire.dragonfirecharge.name=Dragon Fire Charge
 entity.iceandfire.dragonice.name=Dragon Ice
 entity.iceandfire.dragonicecharge.name=Dragon Ice Charge
 entity.iceandfire.snowvillager.name=Snow Villager
+entity.Villager.craftsman=Craftsman
+entity.Villager.fisherman=Fisherman
+entity.Villager.shaman=Shaman
+
 dragon.red=Red
 dragon.green=Green
 dragon.bronze=Bronze
