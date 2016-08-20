@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import java.util.Random;
 
+import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
 import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
 import net.ilexiconn.llibrary.server.config.Config;
@@ -32,12 +33,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.github.alexthe666.iceandfire.client.GuiHandler;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModEntities;
-import com.github.alexthe666.iceandfire.core.ModFoods;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.EventMapGen;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
@@ -74,7 +69,9 @@ public class IceAndFire {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 		MinecraftForge.EVENT_BUS.register(new EventMapGen());
+		ModVillagers.INSTANCE.init();
 	}
+
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
