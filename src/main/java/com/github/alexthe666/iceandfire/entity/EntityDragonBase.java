@@ -980,7 +980,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float bob0 = hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0;
                 float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
                 float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
-                double extraY = this.getEyeHeight() - 0.7F + (getRenderSize() * hoverAddition) + (getRenderSize() * flyAddition) + bob0 + bob1 + bob2;
+                double extraY = this.getEyeHeight() - (getRenderSize() * hoverAddition) + (getRenderSize() * flyAddition) + bob0 + bob1 + bob2;
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             }
@@ -1146,7 +1146,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setHovering(true);
         }
         roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
-        if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isModelDead()) {
+        if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
         }
         if (!this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
@@ -1299,7 +1299,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private double getFlySpeed() {
-        return 2;
+        return 2 + (this.getAgeInDays() / 125) * 2;
     }
 
     protected boolean isTargetInAir() {

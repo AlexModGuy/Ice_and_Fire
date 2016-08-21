@@ -73,15 +73,6 @@ public class EntitySnowVillager extends EntityVillager {
         return entityvillager;
     }
 
-    public MerchantRecipeList getRecipes(EntityPlayer player) {
-        MerchantRecipeList recipes = super.getRecipes(player);
-        try {
-            ReflectionHelper.findField(EntityVillager.class, new String[]{"field_175563_bv", "careerId"}).set(this, 1);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return recipes;
-    }
     private net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof;
 
     public net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession getProfessionForge()
@@ -89,6 +80,11 @@ public class EntitySnowVillager extends EntityVillager {
         if (this.prof == null) {
             String p = this.getEntityData().getString("ProfessionName");
             this.prof = ModVillagers.INSTANCE.professions.get(intFromProfesion(p));
+            try {
+                ReflectionHelper.findField(EntityVillager.class, new String[]{"field_175563_bv", "careerId"}).set(this, 1);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return this.prof;
     }
