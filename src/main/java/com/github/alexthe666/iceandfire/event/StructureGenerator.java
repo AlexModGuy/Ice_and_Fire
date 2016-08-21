@@ -6,11 +6,14 @@ import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
+import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -28,6 +31,7 @@ public class StructureGenerator implements IWorldGenerator {
 	private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
 	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
 	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
+	public static final MapGenSnowVillage SNOW_VILLAGE = new MapGenSnowVillage();
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -107,6 +111,9 @@ public class StructureGenerator implements IWorldGenerator {
 					}
 				}
 			}
+		}
+		if (IceAndFire.CONFIG.generateSnowVillages) {
+			SNOW_VILLAGE.generate(world, random, height);
 		}
 	}
 

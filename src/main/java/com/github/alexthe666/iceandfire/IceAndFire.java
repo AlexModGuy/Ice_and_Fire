@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
+import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
 import net.ilexiconn.llibrary.server.config.Config;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
@@ -104,6 +105,7 @@ public class IceAndFire {
 		ModRecipes.init();
 		ModVillagers.INSTANCE.init();
 		ModEntities.init();
+		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		ModFoods.init();
 		ModSounds.init();
 		try {

@@ -14,4 +14,6 @@ public class IceAndFireConfig {
 	public boolean generateDragonDens = true;
 	@ConfigEntry(category = "generation")
 	public boolean generateDragonRoosts = true;
+	@ConfigEntry(category = "generation")
+	public boolean generateSnowVillages = true;
 }
