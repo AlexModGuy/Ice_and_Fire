@@ -13,21 +13,7 @@ import com.github.alexthe666.iceandfire.item.ItemBestiary;
 
 public enum EnumBestiaryPages {
 
-	INTRO(new ItemStack(ModItems.bestiary), 0),
-	FIREDRAGONS(new ItemStack(ModItems.dragon_skull), 0),
-	FIREEGGS(new ItemStack(ModItems.dragonegg_red), 0),
-	ICEDRAGONS(new ItemStack(ModItems.dragon_skull, 1), 0),
-	ICEEGGS(new ItemStack(ModItems.dragonscales_blue), 1),
-	DRAGONSCALES(new ItemStack(ModItems.dragonscales_red), 1),
-	DRAGONBONES(new ItemStack(ModItems.dragonbone), 1);
-
-	public ItemStack stack;
-	public int indexPage;
-
-	private EnumBestiaryPages(ItemStack displayItem, int onPage) {
-		stack = displayItem;
-		indexPage = onPage;
-	}
+	INTRODUCTION, FIREDRAGON, FIREDRAGONEGG, ICEDRAGON, ICEDRAGONEGG, TAMEDDRAGONS, MATERIALS, ALCHEMY, VILLAGERS;
 
 	public static List<Integer> toList(int[] containedpages) {
 		List<Integer> intList = new ArrayList<Integer>();

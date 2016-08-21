@@ -117,13 +117,15 @@ dragon.hatchtime=Hatches in:
 dragon.days.front=(
 dragon.days.back=Days)
 bestiary.contains=Contains: 
-bestiary.intro=Introduction
-bestiary.firedragons=Fire Dragons
-bestiary.fireeggs=Fire Dragon Eggs
-bestiary.icedragons=Ice Dragons
-bestiary.iceeggs=Ice Dragon Eggs
-bestiary.dragonscales=Dragon Scales
-bestiary.dragonbones=Dragon Bones
+bestiary.introduction=Introduction
+bestiary.firedragon=Fire Dragon
+bestiary.firedragonegg=Fire Dragon Eggs
+bestiary.icedragon=Ice Dragon
+bestiary.icedragonegg=Ice Dragon Eggs
+bestiary.materials=Dragon Materials
+bestiary.alchemy=Blood Alchemy
+bestiary.villagers=Snow Villagers
+
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead
 

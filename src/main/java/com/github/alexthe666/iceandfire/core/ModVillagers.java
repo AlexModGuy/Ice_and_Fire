@@ -35,7 +35,7 @@ public class ModVillagers {
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(fisherman, "fisherman");
             career.addTrade(1, new SapphireForItems(Items.FISH, new EntityVillager.PriceInfo(1, 10)));
             career.addTrade(2, new ListItemForSapphires(Items.FISHING_ROD, new EntityVillager.PriceInfo(1, 3)));
-            career.addTrade(1, new SapphireForItems(ModItems.fishing_spear, new EntityVillager.PriceInfo(5, 1)));
+            career.addTrade(1, new SapphireForItems(ModItems.fishing_spear, new EntityVillager.PriceInfo(1, 5)));
             career.addTrade(2, new ListItemForSapphires(Items.COOKED_FISH, new EntityVillager.PriceInfo(5, 4)));
             register(fisherman, 0);
         }
@@ -62,7 +62,7 @@ public class ModVillagers {
             career.addTrade(1, new SapphireForItems(Items.BLAZE_POWDER, new EntityVillager.PriceInfo(2, 3)));
             career.addTrade(1, new SapphireForItems(Items.GHAST_TEAR, new EntityVillager.PriceInfo(1, 4)));
             career.addTrade(2, new SapphireForItems(Items.BREWING_STAND, new EntityVillager.PriceInfo(1, 9)));
-            career.addTrade(1, new SapphireForItems(ModItems.dragonbone, new EntityVillager.PriceInfo(1, 12)));
+            career.addTrade(1, new SapphireForItems(ModItems.dragonbone, new EntityVillager.PriceInfo(12, 1)));
             career.addTrade(2, new ListItemForSapphires(ModItems.bestiary, new EntityVillager.PriceInfo(1, 3)));
             career.addTrade(1, new ListItemForSapphires(ModItems.manuscript, new EntityVillager.PriceInfo(1, 2)));
             career.addTrade(3, new ListItemForSapphires(ModItems.ice_dragon_flesh, new EntityVillager.PriceInfo(1, 5)));

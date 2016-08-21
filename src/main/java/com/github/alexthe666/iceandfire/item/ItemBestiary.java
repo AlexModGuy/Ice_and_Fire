@@ -42,7 +42,7 @@ public class ItemBestiary extends Item {
 	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setIntArray("Pages", new int[] { EnumBestiaryPages.INTRO.ordinal() });
+			stack.getTagCompound().setIntArray("Pages", new int[] { EnumBestiaryPages.INTRODUCTION.ordinal() });
 
 		}
 	}
