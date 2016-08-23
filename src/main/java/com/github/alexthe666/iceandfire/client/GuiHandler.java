@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client;
 
+import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -52,7 +53,7 @@ public class GuiHandler implements IGuiHandler {
 			}
 			break;
 		}
-		return entity;
+		return null;
 
 	}
 
@@ -88,6 +89,8 @@ public class GuiHandler implements IGuiHandler {
 				}
 			}
 			break;
+			case 3:
+				return new GuiBestiary();
 		}
 		return entity;
 	}
