@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
+import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -11,6 +12,7 @@ public class GuiBestiary extends GuiScreen {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
     protected static final int X = 390;
     protected static final int Y = 245;
+    public EnumBestiaryPages pageType;
 
     public GuiBestiary(){
     }
