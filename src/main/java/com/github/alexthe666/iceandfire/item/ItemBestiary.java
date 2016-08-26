@@ -40,7 +40,7 @@ public class ItemBestiary extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if (worldIn.isRemote) {
-            playerIn.openGui(IceAndFire.INSTANCE, 3, worldIn, 0, 0, 0);
+            IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }
         return new ActionResult(EnumActionResult.PASS, itemStackIn);
     }

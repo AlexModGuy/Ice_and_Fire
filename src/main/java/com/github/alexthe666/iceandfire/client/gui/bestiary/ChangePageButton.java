@@ -5,13 +5,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class PageButton extends GuiButton {
+public class ChangePageButton extends GuiButton {
     private final boolean right;
     private int page;
-    private int lastpage = 1;
+    public int lastpage = 1;
 
-    public PageButton(int id, int xPos, int yPos, boolean right, int bookpage) {
-        super(id, xPos, yPos, 34, 24, "");
+    public ChangePageButton(int id, int x, int y, boolean right, int bookpage) {
+        super(id, x, y, 23, 13, "");
         this.right = right;
         page = bookpage;
     }
@@ -31,7 +31,8 @@ public class PageButton extends GuiButton {
             if (!this.right) {
                 j += 13;
             }
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, width, height, 23, 13);
+
+            this.drawTexturedModalRect(this.xPosition, this.yPosition, i, j, width, height);
         }
     }
 }

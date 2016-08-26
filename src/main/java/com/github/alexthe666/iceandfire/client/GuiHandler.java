@@ -90,7 +90,7 @@ public class GuiHandler implements IGuiHandler {
 			}
 			break;
 			case 3:
-				return new GuiBestiary();
+				return new GuiBestiary(player.getActiveItemStack());
 		}
 		return entity;
 	}
