@@ -13,8 +13,13 @@ import com.github.alexthe666.iceandfire.item.ItemBestiary;
 
 public enum EnumBestiaryPages {
 
-	INTRODUCTION, FIREDRAGON, FIREDRAGONEGG, ICEDRAGON, ICEDRAGONEGG, TAMEDDRAGONS, MATERIALS, ALCHEMY, VILLAGERS;
+	INTRODUCTION(3), FIREDRAGON(3), FIREDRAGONEGG(3), ICEDRAGON(3), ICEDRAGONEGG(3), TAMEDDRAGONS(3), MATERIALS(3), ALCHEMY(3), VILLAGERS(3);
 
+	public int pages;
+
+	EnumBestiaryPages(int pages){
+		this.pages = pages;
+	}
 	public static List<Integer> toList(int[] containedpages) {
 		List<Integer> intList = new ArrayList<Integer>();
 		for (int containedpage : containedpages) {

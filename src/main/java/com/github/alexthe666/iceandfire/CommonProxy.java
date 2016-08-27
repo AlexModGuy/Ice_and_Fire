@@ -6,6 +6,10 @@ import net.minecraft.world.World;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 
 public class CommonProxy {
+
+	public void preRender() {
+
+	}
 	public void render() {
 	}
 
@@ -18,5 +22,11 @@ public class CommonProxy {
 	public void openBestiaryGui(ItemStack book) {
 	}
 
-	public Object getArmorModel(int armorId){return null;}
+	public Object getArmorModel(int armorId) {
+		return null;
+	}
+
+	public Object getFontRenderer() {
+		return null;
+	}
 }

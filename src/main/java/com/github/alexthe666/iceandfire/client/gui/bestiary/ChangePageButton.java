@@ -23,7 +23,7 @@ public class ChangePageButton extends GuiButton {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             mc.renderEngine.bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
             int i = 0;
-            int j = 32;
+            int j = 64;
             if (flag) {
                 i += 23;
             }

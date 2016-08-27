@@ -6,10 +6,13 @@ import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -34,8 +37,12 @@ import com.github.alexthe666.iceandfire.event.EventNewMenu;
 
 public class ClientProxy extends CommonProxy {
 
+	private FontRenderer bestiaryFontRenderer;
+
 	@Override
 	public void render() {
+		this.bestiaryFontRenderer = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("iceandfire:textures/font/bestiary.png"), Minecraft.getMinecraft().renderEngine, false);
+		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
 		ModKeys.init();
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
 		MinecraftForge.EVENT_BUS.register(new EventNewMenu());
@@ -192,8 +199,8 @@ public class ClientProxy extends CommonProxy {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary(book));
 	}
 
-	public Object getArmorModel(int armorId){
-		switch(armorId){
+	public Object getArmorModel(int armorId) {
+		switch (armorId) {
 			case 0:
 				return new ModelFireDragonArmor(0.5F);
 			case 1:
@@ -205,5 +212,8 @@ public class ClientProxy extends CommonProxy {
 		}
 		return null;
 	}
-
+	
+	public Object getFontRenderer() {
+		return this.bestiaryFontRenderer;
+	}
 }
