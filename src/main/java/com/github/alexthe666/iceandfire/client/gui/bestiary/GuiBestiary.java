@@ -110,8 +110,8 @@ public class GuiBestiary extends GuiScreen {
         GL11.glDisable(GL11.GL_LIGHTING);
         if(!index){
             drawPerPage(bookPages);
-            int pageLeft = bookPages + 1;
-            int pageRight = bookPages + 2;
+            int pageLeft = bookPages * 2 + 1;
+            int pageRight = pageLeft + 1;
             font.drawString("" + pageLeft, this.X / 4, this.Y - (int)(this.Y * 0.13), 0X303030, false);
             font.drawString("" + pageRight,this.X - (int)(this.X * 0.24), this.Y - (int)(this.Y * 0.13), 0X303030, false);
         }
