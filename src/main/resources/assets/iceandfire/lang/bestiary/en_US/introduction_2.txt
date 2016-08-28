@@ -1,0 +1,16 @@
+    Once a lectern has been placed,
+it can be interacted with by
+clicking on it. The inside will
+have three slots, the leftmost
+for bestiaries, the bottom for
+manuscripts, and the leftmost
+for output bestiaries. For
+every three manuscripts, a new
+page will apear in the index
+of the bestiary. These new
+pages can range from
+information about mythical
+creatures, different types
+of peoples, informitave
+crafting guides, and even
+ basic alchemy.

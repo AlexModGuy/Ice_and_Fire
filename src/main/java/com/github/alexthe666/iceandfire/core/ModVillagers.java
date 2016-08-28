@@ -62,7 +62,7 @@ public class ModVillagers {
             career.addTrade(1, new SapphireForItems(Items.BLAZE_POWDER, new EntityVillager.PriceInfo(2, 3)));
             career.addTrade(1, new SapphireForItems(Items.GHAST_TEAR, new EntityVillager.PriceInfo(1, 4)));
             career.addTrade(2, new SapphireForItems(Items.BREWING_STAND, new EntityVillager.PriceInfo(1, 9)));
-            career.addTrade(1, new SapphireForItems(ModItems.dragonbone, new EntityVillager.PriceInfo(12, 1)));
+            career.addTrade(1, new SapphireForItems(ModItems.dragonbone, new EntityVillager.PriceInfo(1, 12)));
             career.addTrade(2, new ListItemForSapphires(ModItems.bestiary, new EntityVillager.PriceInfo(1, 3)));
             career.addTrade(1, new ListItemForSapphires(ModItems.manuscript, new EntityVillager.PriceInfo(1, 2)));
             career.addTrade(3, new ListItemForSapphires(ModItems.ice_dragon_flesh, new EntityVillager.PriceInfo(1, 5)));
