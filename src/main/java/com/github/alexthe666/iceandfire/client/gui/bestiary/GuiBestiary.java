@@ -175,6 +175,13 @@ public class GuiBestiary extends GuiScreen {
                 writeFromTxt();
                 break;
             case FIREDRAGON:
+                if(bookPages == 0) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 20, 50, 127, 0, 88, 62, 512F);
+                    GL11.glPopMatrix();
+                }
+                writeFromTxt();
                 break;
             case FIREDRAGONEGG:
                 break;

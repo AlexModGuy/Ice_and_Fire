@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,6 +36,16 @@ public class ItemBestiary extends Item {
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
         itemStack.setTagCompound(new NBTTagCompound());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+        subItems.add(new ItemStack(itemIn));
+        ItemStack stack = new ItemStack(ModItems.bestiary);
+        stack.setTagCompound(new NBTTagCompound());
+        stack.getTagCompound().setIntArray("Pages", new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8});
+        subItems.add(stack);
+
     }
 
     @Override
