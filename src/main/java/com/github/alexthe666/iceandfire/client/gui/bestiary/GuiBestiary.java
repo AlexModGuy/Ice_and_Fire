@@ -181,6 +181,13 @@ public class GuiBestiary extends GuiScreen {
                     drawImage(DRAWINGS_0, 20, 50, 127, 0, 88, 62, 512F);
                     GL11.glPopMatrix();
                 }
+                if(bookPages == 1) {
+                    GL11.glPushMatrix();
+                    drawImage(DRAWINGS_0, 38, 60, 0, 0, 127, 62, 512F);
+                    drawImage(DRAWINGS_0, 240, 5, 0, 185, 114, 62, 512F);
+                    drawImage(DRAWINGS_0, 240, 150, 0, 62, 99, 37, 512F);
+                    GL11.glPopMatrix();
+                }
                 writeFromTxt();
                 break;
             case FIREDRAGONEGG:
