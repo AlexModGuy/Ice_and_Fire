@@ -11,7 +11,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
-public class EntityDragonIceProjectile extends EntityFireball {
+public class EntityDragonIceProjectile extends EntityFireball implements IDragonProjectile {
 
 	public EntityDragonIceProjectile(World worldIn) {
 		super(worldIn);
@@ -60,7 +60,7 @@ public class EntityDragonIceProjectile extends EntityFireball {
 	protected void onImpact(RayTraceResult movingObject) {
 
 		if (!this.worldObj.isRemote) {
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
@@ -71,7 +71,7 @@ public class EntityDragonIceProjectile extends EntityFireball {
 				}
 				this.setDead();
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceProjectile) && movingObject.entityHit != shootingEntity) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
@@ -86,7 +86,7 @@ public class EntityDragonIceProjectile extends EntityFireball {
 				this.setDead();
 			}
 
-			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceProjectile)) {
+			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
 				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
 				this.setDead();
 			}

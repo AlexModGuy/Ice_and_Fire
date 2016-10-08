@@ -12,7 +12,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
-public class EntityDragonIceCharge extends EntityFireball {
+public class EntityDragonIceCharge extends EntityFireball implements IDragonProjectile {
 
 	public EntityDragonIceCharge(World worldIn) {
 		super(worldIn);
@@ -59,7 +59,7 @@ public class EntityDragonIceCharge extends EntityFireball {
 	@Override
 	protected void onImpact(RayTraceResult movingObject) {
 		if (!this.worldObj.isRemote) {
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceCharge) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;
 				}
@@ -73,7 +73,7 @@ public class EntityDragonIceCharge extends EntityFireball {
 				}
 				this.setDead();
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceCharge) && movingObject.entityHit != shootingEntity) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
@@ -95,7 +95,7 @@ public class EntityDragonIceCharge extends EntityFireball {
 				this.setDead();
 			}
 
-			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonIceCharge)) {
+			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
 				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
 				this.setDead();
 			}

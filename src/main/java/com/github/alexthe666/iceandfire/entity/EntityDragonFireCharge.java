@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
-public class EntityDragonFireCharge extends EntityFireball {
+public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile{
 
 	public EntityDragonFireCharge(World worldIn) {
 		super(worldIn);
@@ -56,7 +56,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 	@Override
 	protected void onImpact(RayTraceResult movingObject) {
 		if (!this.worldObj.isRemote) {
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;
 				}
@@ -70,7 +70,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 				}
 				this.setDead();
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge) && movingObject.entityHit != shootingEntity) {
+			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
@@ -92,7 +92,7 @@ public class EntityDragonFireCharge extends EntityFireball {
 				this.setDead();
 			}
 
-			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof EntityDragonFireCharge)) {
+			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
 				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
 				this.setDead();
 			}
