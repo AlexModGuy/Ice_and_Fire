@@ -778,8 +778,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             } else {
                 animationCycle = 0;
             }
-            if(animationCycle == 13){
-                this.worldObj.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundCategory(), 10.0F, 0.4F + this.rand.nextFloat() * 0.3F, false);
+            if(animationCycle == 12){
+                this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, 10 * this.getSoundVolume(), 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());
             }
             if (animationCycle > 12 && animationCycle < 15) {
                 for (int i = 0; i < this.getRenderSize(); i++) {
@@ -970,17 +970,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float hoverAddition = -hoverProgress * 0.0065F;
+                float hoverAddition = hoverProgress * 0.0065F;
                 float flyAddition = -flyProgress * 0.0095F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
-                float radius = 0.7F * ((0.3F - flyBody) * getRenderSize());
+                float radius = 0.7F * ((0.3F - flyBody) * getRenderSize()) + (this.getRenderSize() * flyAddition * 0.0065F);
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
                 float bob0 = hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0;
                 float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
                 float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
-                double extraY = this.getEyeHeight() - (getRenderSize() * hoverAddition) + (getRenderSize() * flyAddition) + bob0 + bob1 + bob2;
+                double extraY = ((0.2F * this.getRenderSize()) - (this.getRenderSize() * hoverAddition) + (this.getRenderSize() * flyAddition)) + bob0 + bob1 + bob2;
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             }
