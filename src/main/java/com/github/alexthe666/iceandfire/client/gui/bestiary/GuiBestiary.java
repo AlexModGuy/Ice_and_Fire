@@ -254,6 +254,21 @@ public class GuiBestiary extends GuiScreen {
                 writeFromTxt();
                 break;
             case ICEDRAGONEGG:
+                if(bookPages == 0) {
+                    GL11.glPushMatrix();
+                    drawImage(DRAWINGS_0, 20, 95, 327, 366, 24, 33, 512F);
+                    drawImage(DRAWINGS_0, 60, 95, 303, 366, 24, 33, 512F);
+                    drawImage(DRAWINGS_0, 95, 95, 351, 366, 24, 33, 512F);
+                    drawImage(DRAWINGS_0, 135, 95, 375, 366, 24, 33, 512F);
+                    GL11.glPopMatrix();
+                }
+                if(bookPages == 1) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 25, 20, 303, 309, 71, 56, 512F);
+                    GL11.glPopMatrix();
+                }
+                writeFromTxt();
                 break;
             case TAMEDDRAGONS:
                 break;
