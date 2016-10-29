@@ -3,14 +3,14 @@ means different changes to
 their behavior and attacks.
 In the earliest stage, the
 dragon is unable to spout
-flames and is limited to
+blasts and is limited to
 biting attacks. Once it is
 in it's second stage, it
-can breath weak flames and
+can breath weak frost and
 do mild amounts of damage.
 The most notable development
 of the third stage is the
-gaining of the fire charge
+gaining of the ice charge
 attack, which can deal large
 amounts of damage.
 
@@ -24,13 +24,13 @@ when a dragon is a mature adult,
 capable of creating eggs. Stage
 4 is generally more powerful and
 cannot be found in roosts. They
-occupy large caverns beneath the
-earth's surface.
+occupy large caverns beneath a
+snow biome's surface.
 
 Stage 5 produces a truly terrifying
 animal. They follow all the other
 rules of a stage 4 dragon, except
 much more powerful and deadly.
-They are incredibly rare, and it is
-unheard of for a single soul to
+They are incredibly rare, and it
+is unheard of for a single soul to
 defeat one.

@@ -1046,14 +1046,7 @@ public class SnowVillagePieces {
         }
 
         protected BlockDoor func_189925_i() {
-            switch (this.field_189928_h) {
-                case 2:
-                    return Blocks.ACACIA_DOOR;
-                case 3:
-                    return Blocks.SPRUCE_DOOR;
-                default:
-                    return Blocks.OAK_DOOR;
-            }
+            return Blocks.SPRUCE_DOOR;
         }
 
         protected void func_189927_a(World p_189927_1_, StructureBoundingBox p_189927_2_, Random p_189927_3_, int p_189927_4_, int p_189927_5_, int p_189927_6_, EnumFacing p_189927_7_) {

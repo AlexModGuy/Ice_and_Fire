@@ -1,5 +1,5 @@
 This is the main attack of the
-Fire Dragon. It is powerful, and
+Ice Dragon. It is powerful, and
 quick, but is not usually instantly
 deadly. However, the dragon has a
 rarer melee attack: shaking its
@@ -27,13 +27,13 @@ while to build up.
 
 Taking down a dragon of any stage
 is not a very easy task. Since
-Fire dragons use elemental ranged
+Ice dragons use elemental ranged
 attacks, it would be smart
 thinking to use protective potions
 and long range weaponry. If you
 want to take down one of these
-beasts, try and avoid flames, and
-watch for charge up behavior for
+beasts, try and avoid ice blasts,
+and watch for charge up behavior for
 many attacks. Once you've defeated
 one, you will have access to some
 valuable commodities.
