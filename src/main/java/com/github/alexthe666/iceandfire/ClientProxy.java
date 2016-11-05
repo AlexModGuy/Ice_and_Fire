@@ -168,6 +168,7 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.fire_dragon_blood, 0, new ModelResourceLocation("iceandfire:fire_dragon_blood", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.ice_dragon_blood, 0, new ModelResourceLocation("iceandfire:ice_dragon_blood", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_stick, 0, new ModelResourceLocation("iceandfire:dragon_stick", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_horn, 0, new ModelResourceLocation("iceandfire:dragon_horn", "inventory"));
 
 	}
 

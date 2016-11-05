@@ -1,22 +1,15 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.*;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModItems {
 
@@ -73,6 +66,9 @@ public class ModItems {
 	public static Item fire_dragon_blood;
 	public static Item ice_dragon_blood;
 	public static Item dragon_stick;
+	public static Item dragon_horn;
+	public static Item dragon_horn_fire;
+	public static Item dragon_horn_ice;
 
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 25, new int[] { 2, 7, 6, 2 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 25, new int[] { 2, 7, 6, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
@@ -134,5 +130,9 @@ public class ModItems {
 		fire_dragon_blood = new ItemGeneric("fire_dragon_blood", "iceandfire.fire_dragon_blood");
 		ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
 		dragon_stick = new ItemGeneric("dragon_stick", "iceandfire.dragon_stick");
+		dragon_horn = new ItemDragonHornStatic();
+		dragon_horn_fire = new ItemDragonHornActive();
+		dragon_horn_ice = new ItemDragonHornActive();
+
 	}
 }

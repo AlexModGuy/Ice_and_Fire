@@ -674,12 +674,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             return true;
                         }
                         if (stack.getItem() == ModItems.dragon_stick) {
-
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
                             this.setSitting(!this.isSitting());
                             if(worldObj.isRemote){
                                 player.addChatComponentMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
                             }
+                            return true;
+                        }
+
+                        if (stack.getItem() == ModItems.dragon_horn) {
+                            this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, this.getSoundVolume(), this.getSoundPitch());
+                            stack.setTagCompound(new NBTTagCompound());
+                            this.writeEntityToNBT(stack.getTagCompound());
                             return true;
                         }
                     }
