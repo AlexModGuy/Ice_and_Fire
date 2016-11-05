@@ -140,8 +140,6 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_arrow, 0, new ModelResourceLocation("iceandfire:dragonbone_arrow", "inventory"));
 		ModelBakery.registerItemVariants(ModItems.dragon_skull, new ResourceLocation("iceandfire:dragonbone_bow"), new ResourceLocation("iceandfire:dragonbone_bow_pulling_0"), new ResourceLocation("iceandfire:dragonbone_bow_pulling_1"));
 		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 0, new ModelResourceLocation("iceandfire:dragonbone_bow", "inventory"));
-		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 1, new ModelResourceLocation("iceandfire:dragonbone_bow_pulling_0", "inventory"));
-		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 2, new ModelResourceLocation("iceandfire:dragonbone_bow_pulling_1", "inventory"));
 		ModelBakery.registerItemVariants(ModItems.dragon_skull, new ResourceLocation("iceandfire:dragon_skull_fire"), new ResourceLocation("iceandfire:dragon_skull_ice"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 0, new ModelResourceLocation("iceandfire:dragon_skull_fire", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_skull, 1, new ModelResourceLocation("iceandfire:dragon_skull_ice", "inventory"));
@@ -169,6 +167,9 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.ice_dragon_blood, 0, new ModelResourceLocation("iceandfire:ice_dragon_blood", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_stick, 0, new ModelResourceLocation("iceandfire:dragon_stick", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragon_horn, 0, new ModelResourceLocation("iceandfire:dragon_horn", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragonbone_bow, 0, new ModelResourceLocation("iceandfire:dragonbone_bow", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_horn_fire, 0, new ModelResourceLocation("iceandfire:dragon_horn_fire", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.dragon_horn_ice, 0, new ModelResourceLocation("iceandfire:dragon_horn_ice", "inventory"));
 
 	}
 

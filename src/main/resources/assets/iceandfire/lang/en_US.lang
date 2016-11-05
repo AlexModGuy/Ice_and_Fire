@@ -74,6 +74,9 @@ item.iceandfire.ice_dragon_heart.name=Ice Dragon Heart
 item.iceandfire.fire_dragon_blood.name=Fire Dragon Blood
 item.iceandfire.ice_dragon_blood.name=Ice Dragon Blood
 item.iceandfire.dragon_stick.name=Dragon Command Staff
+item.iceandfire.dragon_horn.name=Dragon Horn
+item.iceandfire.dragon_horn_fire.name=Dragon Horn
+item.iceandfire.dragon_horn_ice.name=Dragon Horn
 
 entity.iceandfire.firedragon.name=Fire Dragon
 entity.iceandfire.icedragon.name=Ice Dragon

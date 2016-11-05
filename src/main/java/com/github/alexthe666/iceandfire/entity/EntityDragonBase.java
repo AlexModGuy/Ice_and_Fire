@@ -684,6 +684,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
                         if (stack.getItem() == ModItems.dragon_horn) {
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, this.getSoundVolume(), this.getSoundPitch());
+                            stack = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
                             stack.setTagCompound(new NBTTagCompound());
                             this.writeEntityToNBT(stack.getTagCompound());
                             return true;

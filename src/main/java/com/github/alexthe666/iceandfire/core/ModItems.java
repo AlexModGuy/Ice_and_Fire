@@ -131,8 +131,8 @@ public class ModItems {
 		ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
 		dragon_stick = new ItemGeneric("dragon_stick", "iceandfire.dragon_stick");
 		dragon_horn = new ItemDragonHornStatic();
-		dragon_horn_fire = new ItemDragonHornActive();
-		dragon_horn_ice = new ItemDragonHornActive();
+		dragon_horn_fire = new ItemDragonHornActive("dragon_horn_fire");
+		dragon_horn_ice = new ItemDragonHornActive("dragon_horn_ice");
 
 	}
 }

@@ -2,5 +2,5 @@
     "parent": "item/handheld",
     "textures": {
         "layer0": "iceandfire:items/dragon_horn"
-    },
+    }
 }
