@@ -73,6 +73,7 @@ item.iceandfire.fire_dragon_heart.name=Fire Dragon Heart
 item.iceandfire.ice_dragon_heart.name=Ice Dragon Heart
 item.iceandfire.fire_dragon_blood.name=Fire Dragon Blood
 item.iceandfire.ice_dragon_blood.name=Ice Dragon Blood
+item.iceandfire.dragon_stick.name=Dragon Command Staff
 
 entity.iceandfire.firedragon.name=Fire Dragon
 entity.iceandfire.icedragon.name=Ice Dragon
@@ -116,6 +117,8 @@ dragon.armor_tail=Tail
 dragon.hatchtime=Hatches in:
 dragon.days.front=(
 dragon.days.back=Days)
+dragon.command.sit=This dragon is staying.
+dragon.command.stand=This dragon is wandering.
 bestiary.contains=Contains: 
 bestiary.introduction=Introduction
 bestiary.firedragon=Fire Dragon

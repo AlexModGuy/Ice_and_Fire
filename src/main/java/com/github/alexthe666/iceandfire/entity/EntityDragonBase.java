@@ -42,6 +42,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -640,53 +642,65 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else {
             this.setTamed(true);
             this.setOwnerId(player.getUniqueID());
-            if (stack != null) {
-                if (stack.getItem() != null) {
-                    int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
-                    if (itemFoodAmount > 0) {
-                        //this.growDragon(1);
-                        this.setHunger(this.getHunger() + itemFoodAmount);
-                        this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
-                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                        this.spawnItemCrackParticles(stack.getItem());
-                        this.eatFoodBonus(stack);
-                        if (!player.isCreative()) {
-                            stack.stackSize--;
-                        }
-                        return true;
-                    }
-                    if(stack.getItem() == ModItems.dragon_meal){
-                        this.growDragon(1);
-                        this.setHunger(this.getHunger() + 20);
-                        this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getMaxHealth() / 3)));
-                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                        this.spawnItemCrackParticles(stack.getItem());
-                        this.spawnItemCrackParticles(Items.BONE);
-                        this.spawnItemCrackParticles(Items.DYE);
-                        this.eatFoodBonus(stack);
-                        if (!player.isCreative()) {
-                            stack.stackSize--;
-                        }
-                        return true;
-                    }
-                }
-            } else {
-                if (player.isSneaking()) {
-                    if(this.getDragonStage() > 2){
-                        player.setSneaking(false);
-                        player.startRiding(this, true);
-                        this.setSleeping(false);
-                    }else if(this.isRiding()){
-                        this.dismountRidingEntity();
-                    }else if(this.getDragonStage() < 2) {
-                        this.startRiding(player, true);
 
-                    }
+            if(this.isOwner(player)) {
+                if (stack != null) {
+                    if (stack.getItem() != null) {
+                        int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
+                        if (itemFoodAmount > 0) {
+                            //this.growDragon(1);
+                            this.setHunger(this.getHunger() + itemFoodAmount);
+                            this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
+                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                            this.spawnItemCrackParticles(stack.getItem());
+                            this.eatFoodBonus(stack);
+                            if (!player.isCreative()) {
+                                stack.stackSize--;
+                            }
+                            return true;
+                        }
+                        if (stack.getItem() == ModItems.dragon_meal) {
+                            this.growDragon(1);
+                            this.setHunger(this.getHunger() + 20);
+                            this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getMaxHealth() / 3)));
+                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                            this.spawnItemCrackParticles(stack.getItem());
+                            this.spawnItemCrackParticles(Items.BONE);
+                            this.spawnItemCrackParticles(Items.DYE);
+                            this.eatFoodBonus(stack);
+                            if (!player.isCreative()) {
+                                stack.stackSize--;
+                            }
+                            return true;
+                        }
+                        if (stack.getItem() == ModItems.dragon_stick) {
 
-                    return true;
+                            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
+                            this.setSitting(!this.isSitting());
+                            if(worldObj.isRemote){
+                                player.addChatComponentMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+                            }
+                            return true;
+                        }
+                    }
                 } else {
-                    this.openGUI(player);
-                    return true;
+                    if (player.isSneaking()) {
+                        if (this.getDragonStage() > 2) {
+                            player.setSneaking(false);
+                            player.startRiding(this, true);
+                            this.setSleeping(false);
+                        } else if (this.isRiding()) {
+                            this.dismountRidingEntity();
+                        } else if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+
+                        }
+
+                        return true;
+                    } else {
+                        this.openGUI(player);
+                        return true;
+                    }
                 }
             }
         }
@@ -886,7 +900,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setFlying(false);
                 this.setHovering(false);
             }
-            if (this.getRNG().nextInt(4000) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove()) {
+            if (this.getRNG().nextInt(2500) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove()) {
                 this.setHovering(true);
                 this.setSleeping(false);
                 this.setSitting(false);

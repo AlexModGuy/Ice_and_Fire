@@ -112,7 +112,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.generateSnowVillages) {
+		if (IceAndFire.CONFIG.generateSnowVillages && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
 	}
