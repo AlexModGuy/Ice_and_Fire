@@ -44,8 +44,5 @@ public class ItemDragonHornStatic extends Item {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
-        if (stack.getTagCompound() != null) {
-            list.add("" + stack.getTagCompound().getBoolean("Gender"));
-        }
     }
 }

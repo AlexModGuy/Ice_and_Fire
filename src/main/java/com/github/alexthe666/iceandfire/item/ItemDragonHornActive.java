@@ -26,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -38,7 +39,6 @@ public class ItemDragonHornActive extends Item {
 
     public ItemDragonHornActive(String name) {
         this.maxStackSize = 1;
-        this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire." + name);
         GameRegistry.registerItem(this, name);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
@@ -107,6 +107,7 @@ public class ItemDragonHornActive extends Item {
                 return;
             }else {
                 BlockPos pos = raytraceresult.getBlockPos();
+                worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
                 if (this == ModItems.dragon_horn_fire) {
                     EntityFireDragon dragon = new EntityFireDragon(worldIn);
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
@@ -116,6 +117,7 @@ public class ItemDragonHornActive extends Item {
                     if (!worldIn.isRemote) {
                         worldIn.spawnEntityInWorld(dragon);
                     }
+                    entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
 
                 }
                 if (this == ModItems.dragon_horn_ice) {
@@ -127,6 +129,7 @@ public class ItemDragonHornActive extends Item {
                     if (!worldIn.isRemote) {
                         worldIn.spawnEntityInWorld(dragon);
                     }
+                    entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
                 }
                 stack = new ItemStack(ModItems.dragon_horn);
                 entityplayer.addStat(StatList.getObjectUseStats(this));
@@ -157,42 +160,24 @@ public class ItemDragonHornActive extends Item {
         entityplayer.setActiveHand(hand);
         Vec3d vec3d1 = vec3d.addVector((double)f7 * 5.0D, (double)f6 * 5.0D, (double)f8 * 5.0D);
         RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
-        if (raytraceresult == null) {
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
-        }
-        if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
-        }else {
-            BlockPos pos = raytraceresult.getBlockPos();
-            if(this == ModItems.dragon_horn_fire){
-                EntityFireDragon dragon = new EntityFireDragon(worldIn);
-                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                if(itemStackIn.getTagCompound() != null){
-                    dragon.readEntityFromNBT(itemStackIn.getTagCompound());
-                }
-                if (!worldIn.isRemote) {
-                    worldIn.spawnEntityInWorld(dragon);
-                }
-            }
-            if(this == ModItems.dragon_horn_ice){
-                EntityIceDragon dragon = new EntityIceDragon(worldIn);
-                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                if(itemStackIn.getTagCompound() != null){
-                    dragon.readEntityFromNBT(itemStackIn.getTagCompound());
-                }
-                if (!worldIn.isRemote) {
-                    worldIn.spawnEntityInWorld(dragon);
-                }
-            }
-            entityplayer.addStat(StatList.getObjectUseStats(this));
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
-        }
+        return new ActionResult(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
         if (stack.getTagCompound() != null) {
-            list.add("" + stack.getTagCompound().getBoolean("Gender"));
+            String fire = new TextComponentTranslation("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText();
+            String ice = new TextComponentTranslation("entity.iceandfire.icedragon.name", new Object[0]).getUnformattedText();
+            list.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
+            String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
+            list.add("" + name);
+            String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
+            list.add("" + gender);
+            int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
+            String stage = StatCollector.translateToLocal("dragon.stage") + stagenumber % 25 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
+            list.add("" + stage);
+
+            //list.add("" + (stack.getTagCompound().getBoolean("CustomName") ? );
         }
     }
 }

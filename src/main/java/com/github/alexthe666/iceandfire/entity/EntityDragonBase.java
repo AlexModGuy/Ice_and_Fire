@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
@@ -350,7 +351,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             compound.setBoolean("ModelDead", this.isModelDead());
             compound.setFloat("DeadProg", this.modelDeadProgress);
         }
+        if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
+            compound.setString("CustomName", this.getCustomNameTag());
+        }
     }
+
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
@@ -382,6 +387,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.setDeathStage(compound.getInteger("DeathStage"));
         this.setModelDead(compound.getBoolean("ModelDead"));
         this.modelDeadProgress = compound.getFloat("DeadProg");
+        if (!compound.getString("CustomName").isEmpty()) {
+            this.setCustomNameTag(compound.getString("CustomName"));
+        }
     }
 
     @Nullable
@@ -683,10 +691,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         }
 
                         if (stack.getItem() == ModItems.dragon_horn) {
-                            this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, this.getSoundVolume(), this.getSoundPitch());
-                            stack = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
-                            stack.setTagCompound(new NBTTagCompound());
-                            this.writeEntityToNBT(stack.getTagCompound());
+                            this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
+                            ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
+                            stack1.setTagCompound(new NBTTagCompound());
+                            this.writeEntityToNBT(stack1.getTagCompound());
+                            player.setHeldItem(hand, stack1);
+                            this.setDead();
                             return true;
                         }
                     }
