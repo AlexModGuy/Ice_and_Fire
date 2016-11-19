@@ -62,7 +62,7 @@ public class ModRecipes {
 
 	public static TileEntityBanner.EnumBannerPattern addBanner(String name, ItemStack craftingStack) {
 		Class<?>[] classes = { String.class, String.class, ItemStack.class };
-		Object[] names = { "iceandfire_" + name, "iceandfire." + name, craftingStack };
+		Object[] names = { name, "iceandfire." + name, craftingStack };
 		return EnumHelper.addEnum(TileEntityBanner.EnumBannerPattern.class, name.toUpperCase(), classes, names);
 	}
 }
