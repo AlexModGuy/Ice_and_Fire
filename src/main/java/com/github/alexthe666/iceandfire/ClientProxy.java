@@ -76,6 +76,8 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 3, new ModelResourceLocation("iceandfire:podium_jungle", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 4, new ModelResourceLocation("iceandfire:podium_acacia", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.podium), 5, new ModelResourceLocation("iceandfire:podium_dark_oak", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.fire_lily), 0, new ModelResourceLocation("iceandfire:fire_lily", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frost_lily), 0, new ModelResourceLocation("iceandfire:frost_lily", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.goldPile), 0, new ModelResourceLocation("iceandfire:goldpile", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.silverOre), 0, new ModelResourceLocation("iceandfire:silver_ore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.sapphireOre), 0, new ModelResourceLocation("iceandfire:sapphire_ore", "inventory"));
@@ -112,6 +114,8 @@ public class ClientProxy extends CommonProxy {
 		renderItem.getItemModelMesher().register(ModItems.silver_pickaxe, 0, new ModelResourceLocation("iceandfire:silver_pickaxe", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.silver_axe, 0, new ModelResourceLocation("iceandfire:silver_axe", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.silver_hoe, 0, new ModelResourceLocation("iceandfire:silver_hoe", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.frost_stew, 0, new ModelResourceLocation("iceandfire:frost_stew", "inventory"));
+		renderItem.getItemModelMesher().register(ModItems.fire_stew, 0, new ModelResourceLocation("iceandfire:fire_stew", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonegg_red, 0, new ModelResourceLocation("iceandfire:dragonegg_red", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonegg_green, 0, new ModelResourceLocation("iceandfire:dragonegg_green", "inventory"));
 		renderItem.getItemModelMesher().register(ModItems.dragonegg_bronze, 0, new ModelResourceLocation("iceandfire:dragonegg_bronze", "inventory"));

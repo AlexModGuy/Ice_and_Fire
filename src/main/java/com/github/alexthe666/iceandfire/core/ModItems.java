@@ -27,6 +27,8 @@ public class ModItems {
 	public static Item silver_pickaxe;
 	public static Item silver_axe;
 	public static Item silver_hoe;
+	public static Item fire_stew;
+	public static Item frost_stew;
 	public static Item dragonegg_red;
 	public static Item dragonegg_green;
 	public static Item dragonegg_bronze;
@@ -94,6 +96,8 @@ public class ModItems {
 		silver_pickaxe = new ItemModPickaxe(silverTools, "silver_pickaxe", "iceandfire.silver_pickaxe");
 		silver_axe = new ItemModAxe(silverTools, "silver_axe", "iceandfire.silver_axe");
 		silver_hoe = new ItemModHoe(silverTools, "silver_hoe", "iceandfire.silver_hoe");
+		fire_stew = new ItemGeneric("fire_stew", "iceandfire.fire_stew");
+		frost_stew = new ItemGeneric("frost_stew", "iceandfire.frost_stew");
 		dragonegg_red = new ItemDragonEgg("dragonegg_red", EnumDragonEgg.RED);
 		dragonegg_green = new ItemDragonEgg("dragonegg_green", EnumDragonEgg.GREEN);
 		dragonegg_bronze = new ItemDragonEgg("dragonegg_bronze", EnumDragonEgg.BRONZE);

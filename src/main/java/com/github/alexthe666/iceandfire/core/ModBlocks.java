@@ -9,6 +9,8 @@ public class ModBlocks {
 
 	public static Block lectern;
 	public static Block podium;
+	public static Block fire_lily;
+	public static Block frost_lily;
 	public static Block goldPile;
 	public static Block silverPile;
 	public static Block silverOre;
@@ -35,6 +37,8 @@ public class ModBlocks {
 	public static void init() {
 		lectern = new BlockLectern();
 		podium = new BlockPodium();
+		fire_lily = new BlockElementalFlower(true);
+		frost_lily = new BlockElementalFlower(false);
 		goldPile = new BlockGoldPile();
 		silverPile = new BlockSilverPile();
 		silverOre = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");

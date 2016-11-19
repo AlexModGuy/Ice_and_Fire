@@ -32,8 +32,10 @@ public class ModRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.bestiary, 1, 0), ModItems.manuscript, ModItems.manuscript, ModItems.manuscript);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.silverNugget, 9, 0), ModItems.silverIngot);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.wither_shard, 3, 0), ModItems.witherbone);
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragon_horn_fire, 3, 0), ModItems.dragonbone_sword, ModItems.fire_dragon_blood);
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragon_horn_ice, 3, 0), ModItems.dragonbone_sword, ModItems.ice_dragon_blood);
+		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_fire, 1, 0), ModItems.dragonbone_sword, ModItems.fire_dragon_blood);
+		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_ice, 1, 0), ModItems.dragonbone_sword, ModItems.ice_dragon_blood);
+		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.fire_stew, 1, 0), Items.BOWL, ModBlocks.fire_lily, Items.BLAZE_ROD);
+		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.frost_stew, 1, 0), Items.BOWL, ModBlocks.frost_lily, Items.PRISMARINE_CRYSTALS);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silverIngot, 1, 0), new Object[] { "XXX", "XXX", "XXX", Character.valueOf('X'), "nuggetSilver" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_helmet, 1, 0), new Object[] { "XXX", "X X", Character.valueOf('X'), "ingotSilver" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_chestplate, 1, 0), new Object[] { "X X", "XXX", "XXX", Character.valueOf('X'), "ingotSilver" }));

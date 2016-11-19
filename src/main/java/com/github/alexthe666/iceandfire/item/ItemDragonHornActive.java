@@ -174,7 +174,21 @@ public class ItemDragonHornActive extends Item {
             String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
             list.add("" + gender);
             int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
-            String stage = StatCollector.translateToLocal("dragon.stage") + stagenumber % 25 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
+            int stage1 = 0;
+            {
+                if (stagenumber >= 100) {
+                    stage1 = 5;
+                } else if (stagenumber >= 75) {
+                    stage1 = 4;
+                } else if (stagenumber >= 50) {
+                    stage1 = 3;
+                } else if (stagenumber >= 25) {
+                    stage1 = 2;
+                } else {
+                    stage1 = 1;
+                }
+            }
+            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
             list.add("" + stage);
         }
     }

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -10,11 +11,13 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -28,6 +31,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 
@@ -60,12 +64,14 @@ public class EntityIceDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(3, new DragonAIAirTarget(this));
-		this.tasks.addTask(3, new DragonAIWaterTarget(this));
-		this.tasks.addTask(4, new DragonAIWander(this, 1.0D));
-		this.tasks.addTask(5, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-		this.tasks.addTask(5, new DragonAILookIdle(this));
-		this.tasks.addTask(6, new DragonAIBreakBlocks(this));
+		this.tasks.addTask(3, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(4, new EntityAITempt(this, 1.0D, ModItems.frost_stew, false));
+		this.tasks.addTask(5, new DragonAIAirTarget(this));
+		this.tasks.addTask(5, new DragonAIWaterTarget(this));
+		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
+		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(7, new DragonAILookIdle(this));
+		this.tasks.addTask(8, new DragonAIBreakBlocks(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
@@ -429,4 +435,25 @@ public class EntityIceDragon extends EntityDragonBase {
 	public String getTextureOverlay() {
 		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
+
+	public boolean isBreedingItem(@Nullable ItemStack stack) {
+		return stack != null && stack.getItem() != null && stack.getItem() == ModItems.frost_stew;
+	}
+
+	public EntityIceDragon createChild(EntityAgeable ageable) {
+		if(!this.isMale()){
+			int i = MathHelper.floor_double(this.posX);
+			int j = MathHelper.floor_double(this.posY);
+			int k = MathHelper.floor_double(this.posZ);
+			BlockPos pos = new BlockPos(i, j, k);
+			EntityDragonEgg dragon = new EntityDragonEgg(this.worldObj);
+			dragon.setType(EnumDragonEgg.byMetadata(4 + new Random().nextInt(3)));
+			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			if (!worldObj.isRemote) {
+				worldObj.spawnEntityInWorld(dragon);
+			}
+		}
+		return null;
+	}
+
 }

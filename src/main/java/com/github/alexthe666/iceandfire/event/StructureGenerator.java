@@ -115,6 +115,21 @@ public class StructureGenerator implements IWorldGenerator {
 		if (IceAndFire.CONFIG.generateSnowVillages && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
+		if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
+			if (random.nextInt(15) == 0) {
+				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+				if(ModBlocks.frost_lily.canPlaceBlockAt(world, surface)){
+					world.setBlockState(surface, ModBlocks.frost_lily.getDefaultState());
+				}
+			}
+		}
+		if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HOT) && (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SANDY) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.NETHER))) {
+			if (random.nextInt(5) == 0) {
+				if(ModBlocks.fire_lily.canPlaceBlockAt(world, height.up())){
+					world.setBlockState(height.up(), ModBlocks.fire_lily.getDefaultState());
+				}
+			}
+		}
 	}
 
 	public static BlockPos getHeight(World world, BlockPos pos) {
