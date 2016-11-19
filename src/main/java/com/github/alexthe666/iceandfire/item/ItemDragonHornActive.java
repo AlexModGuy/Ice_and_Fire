@@ -176,8 +176,6 @@ public class ItemDragonHornActive extends Item {
             int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
             String stage = StatCollector.translateToLocal("dragon.stage") + stagenumber % 25 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
             list.add("" + stage);
-
-            //list.add("" + (stack.getTagCompound().getBoolean("CustomName") ? );
         }
     }
 }
