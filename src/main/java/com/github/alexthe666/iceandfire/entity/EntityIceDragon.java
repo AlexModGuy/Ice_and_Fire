@@ -9,7 +9,6 @@ import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -64,7 +62,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(3, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
 		this.tasks.addTask(4, new EntityAITempt(this, 1.0D, ModItems.frost_stew, false));
 		this.tasks.addTask(5, new DragonAIAirTarget(this));
 		this.tasks.addTask(5, new DragonAIWaterTarget(this));
@@ -438,22 +436,6 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public boolean isBreedingItem(@Nullable ItemStack stack) {
 		return stack != null && stack.getItem() != null && stack.getItem() == ModItems.frost_stew;
-	}
-
-	public EntityIceDragon createChild(EntityAgeable ageable) {
-		if(!this.isMale()){
-			int i = MathHelper.floor_double(this.posX);
-			int j = MathHelper.floor_double(this.posY);
-			int k = MathHelper.floor_double(this.posZ);
-			BlockPos pos = new BlockPos(i, j, k);
-			EntityDragonEgg dragon = new EntityDragonEgg(this.worldObj);
-			dragon.setType(EnumDragonEgg.byMetadata(4 + new Random().nextInt(3)));
-			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			if (!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(dragon);
-			}
-		}
-		return null;
 	}
 
 }

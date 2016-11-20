@@ -59,7 +59,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
-		this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
 		this.tasks.addTask(5, new EntityAITempt(this, 1.0D, ModItems.fire_stew, false));
 		this.tasks.addTask(6, new DragonAIAirTarget(this));
 		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
@@ -345,22 +345,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public String getTextureOverlay() {
 		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
-	}
-
-	public EntityFireDragon createChild(EntityAgeable ageable) {
-		if(!this.isMale()){
-			int i = MathHelper.floor_double(this.posX);
-			int j = MathHelper.floor_double(this.posY);
-			int k = MathHelper.floor_double(this.posZ);
-			BlockPos pos = new BlockPos(i, j, k);
-			EntityDragonEgg dragon = new EntityDragonEgg(this.worldObj);
-			dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3)));
-			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			if (!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(dragon);
-			}
-		}
-		return null;
 	}
 
 	public boolean isBreedingItem(@Nullable ItemStack stack) {

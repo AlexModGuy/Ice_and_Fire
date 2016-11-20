@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -21,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -653,6 +655,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
             if(this.isOwner(player)) {
                 if (stack != null) {
+                    if (this.isBreedingItem(stack) && this.isAdult() && !this.isInLove()) {
+                        this.consumeItemFromStack(player, stack);
+                        this.setInLove(player);
+                        return true;
+                    }
                     if (stack.getItem() != null) {
                         int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
                         if (itemFoodAmount > 0) {
@@ -1011,7 +1018,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float bob0 = hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0;
                 float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
                 float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
-                double extraY = ((0.2F * this.getRenderSize()) - (this.getRenderSize() * hoverAddition) + (this.getRenderSize() * flyAddition)) + bob0 + bob1 + bob2;
+                double extraY_pre = (0.28F * this.getRenderSize()) + (0.002F * this.getRenderSize());
+                double extraY = (extraY_pre - (hoverAddition) + (flyAddition)) + bob0 + bob1 + bob2;
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
                 this.stepHeight = 1;
             }
@@ -1295,6 +1303,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
         return null;
+    }
+
+    @Override
+    public boolean canMateWith(EntityAnimal otherAnimal) {
+        if(otherAnimal instanceof EntityDragonBase && super.canMateWith(otherAnimal)){
+            EntityDragonBase dragon = (EntityDragonBase)otherAnimal;
+            if(this.isMale() && !dragon.isMale() || !this.isMale() && dragon.isMale()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public EntityDragonEgg createEgg(EntityDragonBase ageable) {
+            int i = MathHelper.floor_double(this.posX);
+            int j = MathHelper.floor_double(this.posY);
+            int k = MathHelper.floor_double(this.posZ);
+            BlockPos pos = new BlockPos(i, j, k);
+            EntityDragonEgg dragon = new EntityDragonEgg(this.worldObj);
+            dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + (this.isFire ? 0 : 4)));
+            dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+           return dragon;
     }
 
     public void flyAround() {
