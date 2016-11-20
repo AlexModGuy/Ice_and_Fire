@@ -168,10 +168,6 @@ public class GuiBestiary extends GuiScreen {
 
 
                 }
-                if(bookPages == 2) {
-
-
-                }
                 writeFromTxt();
                 break;
             case FIREDRAGON:
@@ -271,6 +267,32 @@ public class GuiBestiary extends GuiScreen {
                 writeFromTxt();
                 break;
             case TAMEDDRAGONS:
+                if(bookPages == 0){
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(Items.BONE), 145, 124, 1.5F);
+                    drawItemStack(new ItemStack(Items.PORKCHOP), 145, 107, 1.5F);
+                    drawItemStack(new ItemStack(Items.BONE), 145, 91, 1.5F);
+                    drawItemStack(new ItemStack(Items.PORKCHOP), 161, 124, 1.5F);
+                    drawItemStack(new ItemStack(Items.BONE), 161, 107, 1.5F);
+                    drawItemStack(new ItemStack(Items.PORKCHOP), 161, 91, 1.5F);
+                    drawItemStack(new ItemStack(Items.BONE), 177, 124, 1.5F);
+                    drawItemStack(new ItemStack(Items.PORKCHOP), 177, 107, 1.5F);
+                    drawItemStack(new ItemStack(Items.BONE), 177, 91, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_meal), 151, 78, 2F);
+                }
+                if(bookPages == 1){
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.dragon_skull), 161, 17, 1.5F);
+                    drawItemStack(new ItemStack(Items.STICK), 161, 32, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_stick), 151, 10, 2F);
+                }
+                writeFromTxt();
                 break;
             case MATERIALS:
                 break;

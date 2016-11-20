@@ -20,6 +20,18 @@ public class ModRecipes {
 		OreDictionary.registerOre("oreSilver", ModBlocks.sapphireOre);
 		OreDictionary.registerOre("blockSilver", ModBlocks.silverBlock);
 		OreDictionary.registerOre("boneWither", ModItems.witherbone);
+		OreDictionary.registerOre("foodMeat", Items.CHICKEN);
+		OreDictionary.registerOre("foodMeat", Items.COOKED_CHICKEN);
+		OreDictionary.registerOre("foodMeat", Items.BEEF);
+		OreDictionary.registerOre("foodMeat", Items.COOKED_BEEF);
+		OreDictionary.registerOre("foodMeat", Items.PORKCHOP);
+		OreDictionary.registerOre("foodMeat", Items.COOKED_PORKCHOP);
+		OreDictionary.registerOre("foodMeat", Items.MUTTON);
+		OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
+		OreDictionary.registerOre("foodMeat", Items.RABBIT);
+		OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_stick, 1, 0), new Object[] { "X", "Y", Character.valueOf('X'), ModItems.dragon_skull, Character.valueOf('Y'), "stickWood" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.lectern, 1, 0), new Object[] { " X ", " Y ", " Y ", Character.valueOf('X'), Items.BOOK, Character.valueOf('Y'), "plankWood" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 0), new Object[] { "XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 0) }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 1), new Object[] { "XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 1), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 1) }));
@@ -29,6 +41,7 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 5), new Object[] { "XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 5), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 5) }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.sapphireBlock, 1, 0), new Object[] { "XXX", "XXX", "XXX", Character.valueOf('X'), ModItems.sapphireGem }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.silverBlock, 1, 0), new Object[] { "XXX", "XXX", "XXX", Character.valueOf('X'), "ingotSilver" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.silverBlock, 1, 0), new Object[] { "XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "foodMeat" }));
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.bestiary, 1, 0), ModItems.manuscript, ModItems.manuscript, ModItems.manuscript);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.silverNugget, 9, 0), ModItems.silverIngot);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.wither_shard, 3, 0), ModItems.witherbone);
