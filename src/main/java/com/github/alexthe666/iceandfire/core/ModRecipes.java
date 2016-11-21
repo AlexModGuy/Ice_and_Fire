@@ -31,6 +31,7 @@ public class ModRecipes {
 		OreDictionary.registerOre("foodMeat", Items.RABBIT);
 		OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
 
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_horn, 1, 0), new Object[] { "XY ", " YY", "  Y", Character.valueOf('Y'), ModItems.dragonbone, Character.valueOf('X'), "stickWood" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_stick, 1, 0), new Object[] { "X", "Y", Character.valueOf('X'), ModItems.dragon_skull, Character.valueOf('Y'), "stickWood" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.lectern, 1, 0), new Object[] { " X ", " Y ", " Y ", Character.valueOf('X'), Items.BOOK, Character.valueOf('Y'), "plankWood" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 0), new Object[] { "XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 0) }));

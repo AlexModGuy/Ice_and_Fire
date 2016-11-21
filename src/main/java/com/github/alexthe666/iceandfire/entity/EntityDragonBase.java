@@ -635,7 +635,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     if (!worldObj.isRemote) {
                         this.entityDropItem(skull, 1);
                     }
-                } else if (this.getDeathStage() == (this.getAgeInDays() / 5) - 2) {
+                } else if (this.getDeathStage() > (this.getAgeInDays() / 5) && this.getDeathStage() < (this.getAgeInDays() / 5 ) + 1) {
                     ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, 1);
                     if (!worldObj.isRemote) {
                         this.entityDropItem(heart, 1);
@@ -649,7 +649,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
             return true;
-        } else {
+        } else if(!this.isModelDead()){
             this.setTamed(true);
             this.setOwnerId(player.getUniqueID());
 
@@ -721,7 +721,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         }
 
                         return true;
-                    } else {
+                    } else if(stack == null && !player.isSneaking()){
                         this.openGUI(player);
                         return true;
                     }
@@ -1280,7 +1280,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void playLivingSound() {
-        if (!this.isSleeping()) {
+        if (!this.isSleeping() && !this.isModelDead()) {
             if (this.getAnimation() == this.NO_ANIMATION) {
                 this.setAnimation(ANIMATION_SPEAK);
             }
@@ -1289,10 +1289,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected void playHurtSound(DamageSource source) {
-        if (this.getAnimation() == this.NO_ANIMATION) {
-            this.setAnimation(ANIMATION_SPEAK);
+        if(!this.isModelDead()) {
+            if (this.getAnimation() == this.NO_ANIMATION) {
+                this.setAnimation(ANIMATION_SPEAK);
+            }
+            super.playHurtSound(source);
         }
-        super.playHurtSound(source);
     }
 
     @Override

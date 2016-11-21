@@ -47,6 +47,7 @@ public class StructureGenerator implements IWorldGenerator {
 				firedragon.setDeathStage(dragonage / 2);
 				firedragon.modelDeadProgress = 20;
 				firedragon.setModelDead(true);
+				firedragon.setDeathStage(dragonage / 5);
 				firedragon.rotationYaw = random.nextInt(360);
 				if (!world.isRemote) {
 					world.spawnEntityInWorld(firedragon);
