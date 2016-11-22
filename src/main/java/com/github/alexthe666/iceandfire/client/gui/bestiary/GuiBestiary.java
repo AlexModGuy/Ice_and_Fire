@@ -399,7 +399,11 @@ public class GuiBestiary extends GuiScreen {
                 if(bookPages == 0) {
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 20, 50, 388, 52, 58, 36, 512F);
+                    drawImage(DRAWINGS_0, 35, 50, 388, 52, 58, 36, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.fishing_spear), 70, 2, 2.5F);
                     GL11.glPopMatrix();
                 }
                 writeFromTxt();
