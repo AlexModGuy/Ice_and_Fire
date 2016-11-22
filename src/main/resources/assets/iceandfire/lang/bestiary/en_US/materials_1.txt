@@ -1,0 +1,36 @@
+
+
+
+Wither bone can also be made into
+wither bone shards, which replace
+flint when making dragon bone
+arrows.
+
+
+
+
+
+
+
+Dragon flesh can also be harvested
+from dragons. This meat cannot be
+cooked, and has different effects
+based on what type of dragon it
+came from. Fire Dragon flesh will
+
+smite its eater, and Ice Dragon
+flesh can slow its consumer to
+a halt. All flesh sates as much
+as cooked beef.
+
+
+
+
+
+
+
+Dragon hearts can only be dropped
+once by each corpse. I currently
+am not aware of their purpose...
+
+

@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -322,9 +323,59 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(ModItems.dragon_horn), 151, 60, 2F);
 
                 }
+                if(bookPages == 3){
+                    int j = 18;
+                    drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 0), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 1), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 2), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 3), j += 16, 60, 1.5F);
+                }
                 writeFromTxt();
                 break;
             case MATERIALS:
+                if(bookPages == 0) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.dragonscales_red), 18, 16, 2.5F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 70, 10, 2.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.witherbone), 112, 70, 2.5F);
+                    {
+                        int j = 18;
+                        drawItemStack(new ItemStack(EnumDragonArmor.armor_red.helmet), j += 16, 115, 1.5F);
+                        drawItemStack(new ItemStack(EnumDragonArmor.armor_red.chestplate), j += 16, 115, 1.5F);
+                        drawItemStack(new ItemStack(EnumDragonArmor.armor_red.leggings), j += 16, 115, 1.5F);
+                        drawItemStack(new ItemStack(EnumDragonArmor.armor_red.boots), j += 16, 115, 1.5F);
+                    }
+                }
+                if(bookPages == 1){
+                    {
+                        int j = 1;
+                        drawItemStack(new ItemStack(ModItems.dragonbone_sword), j += 16, 14, 1.5F);
+                        drawItemStack(new ItemStack(ModItems.dragonbone_pickaxe), j += 16, 14, 1.5F);
+                        drawItemStack(new ItemStack(ModItems.dragonbone_axe), j += 16, 14, 1.5F);
+                        drawItemStack(new ItemStack(ModItems.dragonbone_shovel), j += 16, 14, 1.5F);
+                        drawItemStack(new ItemStack(ModItems.dragonbone_hoe), j += 16, 14, 1.5F);
+                        drawItemStack(new ItemStack(ModItems.dragonbone_bow), j += 16, 14, 1.5F);
+                    }
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.fire_dragon_flesh), 18, 24, 2.5F);
+                    drawItemStack(new ItemStack(ModItems.fire_dragon_heart), 70, 14, 2.5F);
+                    drawItemStack(new ItemStack(ModItems.dragon_skull), 70, 39, 2.5F);
+                    GL11.glPopMatrix();
+                }
+                if(bookPages == 2){
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.fire_dragon_blood), 18, 24, 2.5F);
+                    GL11.glPopMatrix();
+                }
+                writeFromTxt();
                 break;
             case ALCHEMY:
                 break;
