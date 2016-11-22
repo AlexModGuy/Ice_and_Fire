@@ -292,6 +292,36 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(Items.STICK), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(ModItems.dragon_stick), 151, 10, 2F);
                 }
+                if(bookPages == 2){
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModBlocks.fire_lily), 5, 14, 2.5F);
+                    drawItemStack(new ItemStack(ModBlocks.frost_lily), 30, 14, 2.5F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    boolean drawFire = Minecraft.getMinecraft().thePlayer.ticksExisted % 40 < 20;
+                    drawItemStack(new ItemStack(drawFire ? ModBlocks.fire_lily : ModBlocks.frost_lily), 161, 17, 1.5F);
+                    drawItemStack(new ItemStack(Items.BOWL), 161, 32, 1.5F);
+                    drawItemStack(new ItemStack(drawFire ? Items.BLAZE_ROD : Items.PRISMARINE_CRYSTALS), 177, 17, 1.5F);
+                    drawItemStack(new ItemStack(drawFire ? ModItems.fire_stew : ModItems.frost_stew), 151, 10, 2F);
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 65, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(Items.STICK), 144, 97, 1.5F);
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 180, 110, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 180, 92, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 198, 92, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 198, 74, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.dragon_horn), 151, 60, 2F);
+
+                }
                 writeFromTxt();
                 break;
             case MATERIALS:

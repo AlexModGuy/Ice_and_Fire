@@ -44,7 +44,6 @@ public class StructureGenerator implements IWorldGenerator {
 				firedragon.setPosition(x, height.getY() + 1, z);
 				int dragonage = 10 + random.nextInt(100);
 				firedragon.growDragon(dragonage);
-				firedragon.setDeathStage(dragonage / 2);
 				firedragon.modelDeadProgress = 20;
 				firedragon.setModelDead(true);
 				firedragon.setDeathStage(dragonage / 5);
@@ -117,7 +116,7 @@ public class StructureGenerator implements IWorldGenerator {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
 		if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
-			if (random.nextInt(15) == 0) {
+			if (random.nextInt(5) == 0) {
 				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 				if(ModBlocks.frost_lily.canPlaceBlockAt(world, surface)){
 					world.setBlockState(surface, ModBlocks.frost_lily.getDefaultState());
