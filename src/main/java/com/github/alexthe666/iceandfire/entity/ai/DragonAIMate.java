@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.List;
 import java.util.Random;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -112,6 +113,7 @@ public class DragonAIMate extends EntityAIBase
             if (entityplayer != null)
             {
                 entityplayer.addStat(StatList.ANIMALS_BRED);
+                entityplayer.addStat(ModAchievements.dragonBreed);
             }
 
             this.dragon.setGrowingAge(6000);

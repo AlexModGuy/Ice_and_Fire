@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
@@ -174,18 +175,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void openGUI(EntityPlayer playerEntity) {
         if (!this.worldObj.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 0, this.worldObj, this.getEntityId(), 0, 0);
-        }
-    }
-
-    public void onDeath(DamageSource cause) {
-        super.onDeath(cause);
-        if (dragonInv != null && !this.worldObj.isRemote) {
-            for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
-                ItemStack itemstack = dragonInv.getStackInSlot(i);
-                if (itemstack != null) {
-                    this.entityDropItem(itemstack, 0.0F);
-                }
-            }
         }
     }
 
@@ -615,6 +604,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
         if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
+            player.addStat(ModAchievements.dragonHarvest, 1);
             if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
                 if(!player.isCreative()){
                     if(stack.stackSize > 1){
@@ -623,6 +613,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         stack = null;
                     }
                 }
+
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
             }else {
                 if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
@@ -712,6 +703,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         if (this.getDragonStage() > 2) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
+                            player.addStat(ModAchievements.dragonRide, 1);
                             this.setSleeping(false);
                         } else if (this.isRiding()) {
                             this.dismountRidingEntity();
@@ -1485,8 +1477,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void updateCheckPlayer(){
+        EntityPlayer player = worldObj.getClosestPlayerToEntity(this, this.getRenderSize() / 2);
         if(!this.isTamed() && this.isSleeping()){
-            EntityPlayer player = worldObj.getClosestPlayerToEntity(this, this.getRenderSize() / 2);
             if(player != null && !this.isOwner(player)){
                 this.setSleeping(false);
                 this.setSitting(false);
@@ -1494,6 +1486,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.setAttackTarget(player);
                 }
             }
+        }
+        if(player != null){
+            player.addStat(ModAchievements.dragonEncounter, 1);
         }
     }
 
@@ -1505,4 +1500,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         RayTraceResult movingobjectposition = this.worldObj.rayTraceBlocks(vec1, new Vec3d(vec2.xCoord, vec2.yCoord + (double)this.height * 0.5D, vec2.zCoord), false, true, false);
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
+
+    public void onKillEntity(EntityLivingBase entityLivingIn) {
+        if(entityLivingIn instanceof EntityPlayer){
+            ((EntityPlayer)entityLivingIn).addStat(ModAchievements.dragonKillPlayer, 1);
+        }
+    }
+
+    public void onDeath(DamageSource cause) {
+        if(cause.getEntity() != null) {
+            if (cause.getEntity() instanceof EntityPlayer) {
+                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonKillPlayer, 1);
+            }
+        }
+        super.onDeath(cause);
+        if (dragonInv != null && !this.worldObj.isRemote) {
+            for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
+                ItemStack itemstack = dragonInv.getStackInSlot(i);
+                if (itemstack != null) {
+                    this.entityDropItem(itemstack, 0.0F);
+                }
+            }
+        }
+    }
+
 }

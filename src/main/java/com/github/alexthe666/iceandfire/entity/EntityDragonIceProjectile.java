@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -77,6 +79,9 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 				}
 				if(this.shootingEntity != null){
 					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 1.0F);
+					if(movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer){
+						((EntityPlayer)movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
+					}
 					if(movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase)movingObject.entityHit).getHealth() == 0){
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					}

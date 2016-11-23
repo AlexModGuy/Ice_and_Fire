@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -81,6 +83,9 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 					}
 				}
 				movingObject.entityHit.setFire(5);
+				if(movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer){
+					((EntityPlayer)movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
+				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				FireExplosion explosion = new FireExplosion(worldObj, null, this.posX, this.posY, this.posZ, 2, true);
 				if (shootingEntity != null) {

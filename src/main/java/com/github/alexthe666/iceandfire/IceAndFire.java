@@ -108,6 +108,7 @@ public class IceAndFire {
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		ModFoods.init();
 		ModSounds.init();
+		ModAchievements.init();
 		try {
 			MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		} catch (Exception e) {

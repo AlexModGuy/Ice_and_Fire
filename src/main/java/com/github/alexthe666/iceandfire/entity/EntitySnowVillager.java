@@ -39,6 +39,7 @@ public class EntitySnowVillager extends EntityVillager {
         return livingdata;
     }
 
+
     public void setProfession(int professionId) {
         if(professionId > 2){
             professionId = 2;

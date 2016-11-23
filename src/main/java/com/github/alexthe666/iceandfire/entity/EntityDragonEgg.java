@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -113,6 +114,7 @@ public class EntityDragonEgg extends EntityLiving {
 				}
 				dragon.setTamed(true);
 				dragon.setOwnerId(worldObj.getClosestPlayerToEntity(this, 5).getUniqueID());
+				worldObj.getClosestPlayerToEntity(this, 5).addStat(ModAchievements.dragonHatch, 1);
 			}
 			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
 			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.dragon_hatch, this.getSoundCategory(), 2.5F, 1.0F, false);
