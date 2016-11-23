@@ -41,8 +41,8 @@ public class ModAchievements {
         dragonBreed = new Achievement("achievement.dragonBreed", "dragonBreed", 4, -5, new ItemStack(ModItems.fire_stew), dragonHatch).registerStat();
         boneTool = new Achievement("achievement.boneTool", "boneTool", 2, 3, new ItemStack(ModItems.dragonbone_pickaxe), dragonHarvest).registerStat();
         dragonArmor = new Achievement("achievement.dragonArmor", "dragonArmor", 4, 2, new ItemStack(EnumDragonArmor.armor_red.helmet), dragonHarvest).registerStat();
-        fireSword = new Achievement("achievement.fireSword", "fireSword", 2, 5, new ItemStack(ModItems.dragonbone_sword_fire), boneTool).registerStat();
-        iceSword = new Achievement("achievement.iceSword", "iceSword", 6, 5, new ItemStack(ModItems.dragonbone_sword_ice), boneTool).registerStat();
+        fireSword = new Achievement("achievement.fireSword", "fireSword", 0, 5, new ItemStack(ModItems.dragonbone_sword_fire), boneTool).registerStat();
+        iceSword = new Achievement("achievement.iceSword", "iceSword", 4, 5, new ItemStack(ModItems.dragonbone_sword_ice), boneTool).registerStat();
 
         AchievementPage.registerAchievementPage(new AchievementPage("Ice And Fire", manuscript, bestiary, silver, silverTool, sapphire, dragonEncounter, dragonKillPlayer, dragonKill, dragonHarvest, dragonHatch, dragonRide, dragonBreed, boneTool, dragonArmor, fireSword, iceSword));
     }

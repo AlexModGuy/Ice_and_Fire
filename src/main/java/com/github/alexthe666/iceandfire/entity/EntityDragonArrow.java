@@ -24,13 +24,13 @@ public class EntityDragonArrow extends EntityArrow {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tagCompound) {
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setDouble("damage", 5);
+		tagCompound.setDouble("damage", 8);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompund) {
 		super.readEntityFromNBT(tagCompund);
-		tagCompund.setDouble("damage", 5);
+		tagCompund.setDouble("damage", 8);
 	}
 
 	@Override
