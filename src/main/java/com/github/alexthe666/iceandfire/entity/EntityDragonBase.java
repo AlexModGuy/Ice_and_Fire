@@ -641,9 +641,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
             return true;
         } else if(!this.isModelDead()){
-            this.setTamed(true);
-            this.setOwnerId(player.getUniqueID());
-
             if(this.isOwner(player)) {
                 if (stack != null) {
                     if (this.isBreedingItem(stack) && this.isAdult() && !this.isInLove()) {
