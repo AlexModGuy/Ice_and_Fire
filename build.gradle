@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    compile "net.ilexiconn:llibrary:1.5.1-1.10.2:dev"
+    compile "net.ilexiconn:llibrary:1.7.1-1.10.2:dev"
 }
 
 jar {

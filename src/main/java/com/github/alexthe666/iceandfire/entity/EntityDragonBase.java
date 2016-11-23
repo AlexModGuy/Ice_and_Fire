@@ -1086,8 +1086,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setGender(this.getRNG().nextBoolean());
-        //int age = this.getRNG().nextInt(80) + 1;
-        this.growDragon(0);
+        int age = this.getRNG().nextInt(80) + 1;
+        this.growDragon(age);
         this.setHunger(50);
         this.setVariant(new Random().nextInt(4));
         this.setSleeping(false);
