@@ -39,14 +39,14 @@ public class StructureGenerator implements IWorldGenerator {
 		int z = (chunkZ * 16) + random.nextInt(16);
 		BlockPos height = getHeight(world, new BlockPos(x, 0, z));
 		if (IceAndFire.CONFIG.generateDragonSkeletons) {
-			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.DRY) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SANDY) && random.nextInt(250) == 0) {
+			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.DRY) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SANDY) && random.nextInt(150) == 0) {
 				EntityFireDragon firedragon = new EntityFireDragon(world);
 				firedragon.setPosition(x, height.getY() + 1, z);
 				int dragonage = 10 + random.nextInt(100);
 				firedragon.growDragon(dragonage);
 				firedragon.modelDeadProgress = 20;
 				firedragon.setModelDead(true);
-				firedragon.setDeathStage(dragonage / 5);
+				firedragon.setDeathStage((dragonage / 5) / 2);
 				firedragon.rotationYaw = random.nextInt(360);
 				if (!world.isRemote) {
 					world.spawnEntityInWorld(firedragon);

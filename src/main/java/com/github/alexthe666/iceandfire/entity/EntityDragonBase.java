@@ -629,6 +629,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     if (!worldObj.isRemote) {
                         this.entityDropItem(skull, 1);
                     }
+                    this.setDead();
                 } else if (this.getDeathStage() > (this.getAgeInDays() / 5) && this.getDeathStage() < (this.getAgeInDays() / 5 ) + 1) {
                     ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, 1);
                     if (!worldObj.isRemote) {
