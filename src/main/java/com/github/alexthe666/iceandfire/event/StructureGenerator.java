@@ -56,13 +56,13 @@ public class StructureGenerator implements IWorldGenerator {
 		if (IceAndFire.CONFIG.generateDragonRoosts) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
 			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER) || isHills) {
-				if (random.nextInt(isHills ? 180 : 360) == 0) {
+				if (random.nextInt(isHills ? 360 : 720) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
 			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
-				if (random.nextInt(isHills ? 180 : 360) == 0) {
+				if (random.nextInt(isHills ? 360 : 720) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					ICE_DRAGON_ROOST.generate(world, random, surface);
 					System.out.println("roost at:" + surface);
