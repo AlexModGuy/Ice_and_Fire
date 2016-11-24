@@ -73,7 +73,7 @@ public class StructureGenerator implements IWorldGenerator {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
 			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER)|| isHills) {
 				if (random.nextInt(isHills ? 180 : 360) == 0) {
-					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
+					int newY = 30 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);
 					if (!world.canBlockSeeSky(pos)) {
 						FIRE_DRAGON_CAVE.generate(world, random, pos);
@@ -82,7 +82,7 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 			if (BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY)) {
 				if (random.nextInt(isHills ? 180 : 360) == 0) {
-					int newY = 30 + (isHills ? random.nextInt(90) : random.nextInt(10));
+					int newY = 30 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);
 					ICE_DRAGON_CAVE.generate(world, random, pos);
 					System.out.println("cave at:" + pos);
