@@ -31,6 +31,7 @@ public class BlockCharedPath extends BlockGrassPath{
         if(!isFire){
             this.slipperiness = 0.98F;
         }
+        this.setLightOpacity(255);
     }
 
     @Nullable

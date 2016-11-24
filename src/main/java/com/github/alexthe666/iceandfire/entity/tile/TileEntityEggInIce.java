@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -20,7 +22,11 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-		tag.setByte("Color", (byte) type.ordinal());
+		if(type != null){
+			tag.setByte("Color", (byte) type.ordinal());
+		}else{
+			tag.setByte("Color", (byte) 0);
+		}
 		tag.setByte("Age", (byte) age);
 		return super.writeToNBT(tag);
 	}
@@ -58,11 +64,14 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		age++;
-		if (age == 60 && type != null && type.ordinal() > 4) {
+		if (age == 20 * 60 && type != null) {
 			worldObj.destroyBlock(pos, false);
-			EntityFireDragon dragon = new EntityFireDragon(worldObj);
-			dragon.setVariant(type.ordinal() - 4);
+			System.out.println(type.ordinal());
+			System.out.println(type.ordinal() - 4);
+			worldObj.setBlockState(pos, Blocks.WATER.getDefaultState());
+			EntityIceDragon dragon = new EntityIceDragon(worldObj);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			dragon.setVariant(type.ordinal() - 4);
 			if (!worldObj.isRemote) {
 				worldObj.spawnEntityInWorld(dragon);
 			}

@@ -1484,8 +1484,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
-        if(player != null){
-            player.addStat(ModAchievements.dragonEncounter, 1);
+        EntityPlayer player1 = worldObj.getClosestPlayerToEntity(this, (this.getRenderSize() / 2) + 15);
+        if(player1 != null){
+            player1.addStat(ModAchievements.dragonEncounter, 1);
         }
     }
 
