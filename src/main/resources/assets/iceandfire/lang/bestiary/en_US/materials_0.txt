@@ -28,7 +28,7 @@ receive are dragon bones.
 
 
 Dragon bones are used in many
-recipes, but are mostly or crafting
+recipes, but are mostly for crafting
 tools and weapons. These recipes
 usually involve the use of wither
 bone instead of sticks. Wither bone
