@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -64,14 +66,18 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		age++;
-		if (age == 20 * 60 && type != null) {
+		EntityPlayer player = worldObj.getClosestPlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 5, false);
+		if (age == 20 * 60 && type != null && player != null) {
 			worldObj.destroyBlock(pos, false);
-			System.out.println(type.ordinal());
-			System.out.println(type.ordinal() - 4);
 			worldObj.setBlockState(pos, Blocks.WATER.getDefaultState());
 			EntityIceDragon dragon = new EntityIceDragon(worldObj);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			dragon.setVariant(type.ordinal() - 4);
+			dragon.setTamed(true);
+			if(player != null){
+				dragon.setOwnerId(player.getUniqueID());
+				player.addStat(ModAchievements.dragonHatch, 1);
+			}
 			if (!worldObj.isRemote) {
 				worldObj.spawnEntityInWorld(dragon);
 			}
