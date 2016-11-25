@@ -32,6 +32,7 @@ public class ContainerDragon extends Container {
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 0, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(0))));
+				dragon.setArmorInSlot(0, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(0)));
 				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
@@ -45,6 +46,7 @@ public class ContainerDragon extends Container {
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 1, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(1))));
+				dragon.setArmorInSlot(1, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(1)));
 				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
@@ -58,6 +60,7 @@ public class ContainerDragon extends Container {
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 2, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(2))));
+				dragon.setArmorInSlot(2, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(2)));
 				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}
@@ -71,6 +74,7 @@ public class ContainerDragon extends Container {
 			@Override
 			public void onSlotChange(ItemStack stack, ItemStack stack2) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 3, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(3))));
+				dragon.setArmorInSlot(3, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(3)));
 				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
 				super.onSlotChange(stack, stack2);
 			}

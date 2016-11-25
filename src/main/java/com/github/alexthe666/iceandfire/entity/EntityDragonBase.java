@@ -326,6 +326,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         compound.setInteger("ArmorNeck", this.getArmorInSlot(1));
         compound.setInteger("ArmorBody", this.getArmorInSlot(2));
         compound.setInteger("ArmorTail", this.getArmorInSlot(3));
+        compound.setInteger("DeathStage", this.getDeathStage());
+        compound.setBoolean("ModelDead", this.isModelDead());
+        compound.setFloat("DeadProg", this.modelDeadProgress);
         if (dragonInv != null) {
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.dragonInv.getSizeInventory(); ++i) {
@@ -338,9 +341,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
             compound.setTag("Items", nbttaglist);
-            compound.setInteger("DeathStage", this.getDeathStage());
-            compound.setBoolean("ModelDead", this.isModelDead());
-            compound.setFloat("DeadProg", this.modelDeadProgress);
         }
         if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
@@ -370,11 +370,29 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
                 int j = nbttagcompound.getByte("Slot") & 255;
-                if (j >= 2 && j < this.dragonInv.getSizeInventory()) {
+                if (j <= 4) {
                     this.dragonInv.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
                 }
             }
+        }else{
+            NBTTagList nbttaglist = compound.getTagList("Items", 10);
+            this.initDragonInv();
+            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
+                int j = nbttagcompound.getByte("Slot") & 255;
+                    this.initDragonInv();
+                    this.dragonInv.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
+                    this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
+
+                    if (worldObj.isRemote) {
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
+                    }
+            }
         }
+
         this.setDeathStage(compound.getInteger("DeathStage"));
         this.setModelDead(compound.getBoolean("ModelDead"));
         this.modelDeadProgress = compound.getFloat("DeadProg");
