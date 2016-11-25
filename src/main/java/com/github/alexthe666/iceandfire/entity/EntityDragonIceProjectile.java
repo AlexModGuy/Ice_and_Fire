@@ -78,7 +78,6 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 					return;
 				}
 				if(this.shootingEntity != null){
-					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 1.0F);
 					if(movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer){
 						((EntityPlayer)movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
 					}

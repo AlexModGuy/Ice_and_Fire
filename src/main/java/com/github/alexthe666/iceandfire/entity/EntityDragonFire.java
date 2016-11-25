@@ -80,7 +80,6 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 					return;
 				}
 				if(this.shootingEntity != null){
-					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 1.0F);
 					if(movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase)movingObject.entityHit).getHealth() == 0){
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					}

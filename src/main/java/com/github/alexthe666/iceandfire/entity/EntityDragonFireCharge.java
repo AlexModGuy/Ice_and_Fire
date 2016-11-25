@@ -63,10 +63,10 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 					return;
 				}
 				if(this.shootingEntity != null) {
-					FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
+					FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 4 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, true);
+					FireChargeExplosion explosion2 = new FireChargeExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, true);
 					explosion2.doExplosionA();
 					explosion2.doExplosionB(true);
 				}
