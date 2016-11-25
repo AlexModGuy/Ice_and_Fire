@@ -880,7 +880,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.isHovering()) {
             this.hoverTicks++;
-            if (this.hoverTicks > 40 && flyHovering == 0) {
+            this.motionY += 0.18D;
+            if (this.hoverTicks > 40) {
                 if (!this.isChild()) {
                     this.setFlying(true);
                 }
@@ -905,6 +906,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
             this.motionY /= 0.6D;
         }
+        if(!this.isFlying() && !this.isHovering() && this.airTarget != null){
+            this.airTarget = null;
+        }
+        if(this.isFlying()&& this.airTarget == null && this.onGround){
+            this.setFlying(false);
+        }
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
         } else if (getAttackTarget() != null) {
@@ -922,6 +929,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setSleeping(false);
                 this.setSitting(false);
                 this.flyHovering = 0;
+                this.hoverTicks = 0;
                 this.flyTicks = 0;
             }
             if (getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {

@@ -22,9 +22,10 @@ public class DragonAIAirTarget extends EntityAIBase {
 
 	public boolean shouldExecute() {
 		if (dragon != null) {
-			if (!dragon.isFlying()) {
+			if (!dragon.isFlying() && !dragon.isHovering()) {
 				return false;
 			}
+			System.out.println("help");
 			if (dragon.isSleeping()) {
 				return false;
 			}
