@@ -388,7 +388,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
                 EntityPlayer player = (EntityPlayer)passenger;
-                if(this.getOwnerId().equals(player.getUniqueID())){
+                if(this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())){
                     return player;
                 }
             }
