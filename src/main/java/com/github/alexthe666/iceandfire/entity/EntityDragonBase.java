@@ -619,7 +619,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null;
+        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead();
     }
 
     @Override
@@ -1235,6 +1235,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+
+        if(this.isModelDead()){
+            return false;
+        }
         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 
         if (flag) {
