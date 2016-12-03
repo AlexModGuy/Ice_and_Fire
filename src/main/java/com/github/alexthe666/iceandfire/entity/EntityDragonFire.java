@@ -55,6 +55,9 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 		if (ticksExisted > 160) {
 			setDead();
 		}
+		if(this.isInWater()){
+			setDead();
+		}
 		if (this.onGround) {
 		}
 	}

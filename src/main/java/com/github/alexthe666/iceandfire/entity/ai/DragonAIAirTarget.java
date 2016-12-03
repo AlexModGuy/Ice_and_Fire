@@ -25,7 +25,6 @@ public class DragonAIAirTarget extends EntityAIBase {
 			if (!dragon.isFlying() && !dragon.isHovering()) {
 				return false;
 			}
-			System.out.println("help");
 			if (dragon.isSleeping()) {
 				return false;
 			}

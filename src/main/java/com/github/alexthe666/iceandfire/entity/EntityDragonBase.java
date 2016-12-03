@@ -1203,7 +1203,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
-        roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
+        if(worldObj.isRemote){
+            roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
+        }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
         }
