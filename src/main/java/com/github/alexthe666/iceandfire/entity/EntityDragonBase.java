@@ -638,7 +638,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
             }else {
                 if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
-                    ItemStack skull = new ItemStack(ModItems.dragon_skull, 1);
+                    ItemStack skull = new ItemStack(ModItems.dragon_skull, 1, this.isFire ? 0 : 1);
                     skull.setTagCompound(new NBTTagCompound());
                     skull.getTagCompound().setInteger("Stage", this.getDragonStage());
                     skull.getTagCompound().setInteger("DragonType", 0);
