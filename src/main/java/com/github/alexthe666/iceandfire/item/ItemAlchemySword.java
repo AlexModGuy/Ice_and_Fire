@@ -35,14 +35,14 @@ public class ItemAlchemySword extends ItemSword {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if (this == ModItems.dragonbone_sword_fire) {
             if (target instanceof EntityIceDragon) {
-                target.attackEntityFrom(DamageSource.magic, 8);
+                target.attackEntityFrom(DamageSource.inFire, 13.5F);
             }
             target.setFire(5);
             target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
         }
         if (this == ModItems.dragonbone_sword_ice) {
             if (target instanceof EntityFireDragon) {
-                target.attackEntityFrom(DamageSource.magic, 8);
+                target.attackEntityFrom(DamageSource.drown, 13.5F);
             }
             target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
             target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
