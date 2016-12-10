@@ -1296,11 +1296,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public Animation getAnimation() {
+        if (this.isModelDead()) {
+            return this.NO_ANIMATION;
+        }
         return currentAnimation;
     }
 
     @Override
     public void setAnimation(Animation animation) {
+        if (this.isModelDead()) {
+            return;
+        }
         currentAnimation = animation;
     }
 
@@ -1483,6 +1489,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(!this.canMove()){
             strafe = 0;
             forward = 0;
+            return;
         }
         if (this.isBeingRidden() && this.canBeSteered()) {
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
