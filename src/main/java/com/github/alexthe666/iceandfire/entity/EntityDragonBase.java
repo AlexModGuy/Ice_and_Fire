@@ -196,14 +196,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1, new int[0]);
+                if(worldObj.isRemote) {
+                    this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1, new int[0]);
+                }
             }
             for (int k = 0; k < 3; ++k) {
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 if(isFire){
-                    this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1, new int[0]);
+                    if(worldObj.isRemote) {
+                        this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1, new int[0]);
+                    }
                 }else{
                     IceAndFire.PROXY.spawnParticle("snowflake", this.worldObj, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
@@ -782,7 +786,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float f = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX) + this.getEntityBoundingBox().minX);
                 float f1 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) + this.getEntityBoundingBox().minY);
                 float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
-                this.worldObj.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ, new int[]{});
+                if (worldObj.isRemote) {
+                    this.worldObj.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ, new int[]{});
+                }
             }
         }
         this.updateAttributes();
@@ -796,7 +802,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
             float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
             float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, headPosX, headPosZ, headPosY, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
+            if (worldObj.isRemote) {
+                this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, headPosX, headPosZ, headPosY, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
+            }
         }
     }
 
@@ -844,7 +852,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
                         IBlockState iblockstate = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX + extraX), MathHelper.floor_double(this.posY + extraY) - 1, MathHelper.floor_double(this.posZ + extraZ)));
                         if (iblockstate.getMaterial() != Material.AIR) {
-                            worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[] { Block.getStateId(iblockstate) });
+                            if(worldObj.isRemote){
+                                worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[] { Block.getStateId(iblockstate) });
+                            }
                         }
                     }
                 }
@@ -970,7 +980,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
                 float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
                 float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-                if(this.isFire){
+                if(this.isFire && worldObj.isRemote){
                     this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
                 }else{
                     IceAndFire.PROXY.spawnParticle("snowflake", this.worldObj, headPosX, headPosY, headPosZ, 0, 0, 0);
