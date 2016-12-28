@@ -44,15 +44,15 @@ public class ModVillagers {
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(craftsman, "craftsman");
             //over 30 words for ice
             career.addTrade(1, new SapphireForItems(Item.getItemFromBlock(Blocks.SNOW), new EntityVillager.PriceInfo(1, 32)));
-            career.addTrade(2, new ListItemForSapphires(Item.getItemFromBlock(Blocks.PACKED_ICE), new EntityVillager.PriceInfo(1, 3)));
-            career.addTrade(1, new ListItemForSapphires(Items.IRON_SHOVEL, new EntityVillager.PriceInfo(3, 1)));
-            career.addTrade(2, new ListItemForSapphires(ModItems.silver_shovel, new EntityVillager.PriceInfo(5, 1)));
-            career.addTrade(3, new ListItemForSapphires(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(9, 1)));
-            career.addTrade(2, new ListItemForSapphires(Items.LEATHER, new EntityVillager.PriceInfo(1, 10)));
-            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_BOOTS, new EntityVillager.PriceInfo(3, 1)));
-            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_HELMET, new EntityVillager.PriceInfo(4, 1)));
-            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_CHESTPLATE, new EntityVillager.PriceInfo(6, 1)));
-            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_LEGGINGS, new EntityVillager.PriceInfo(5, 1)));
+            career.addTrade(2, new ListItemForSapphires(Item.getItemFromBlock(Blocks.PACKED_ICE), new EntityVillager.PriceInfo(3, 1)));
+            career.addTrade(1, new ListItemForSapphires(Items.IRON_SHOVEL, new EntityVillager.PriceInfo(1, 4)));
+            career.addTrade(2, new ListItemForSapphires(ModItems.silver_shovel, new EntityVillager.PriceInfo(1, 5)));
+            career.addTrade(3, new ListItemForSapphires(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(1, 9)));
+            career.addTrade(2, new ListItemForSapphires(Items.LEATHER, new EntityVillager.PriceInfo(10, 1)));
+            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_BOOTS, new EntityVillager.PriceInfo(1, 3)));
+            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_HELMET, new EntityVillager.PriceInfo(1, 4)));
+            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_CHESTPLATE, new EntityVillager.PriceInfo(1, 6)));
+            career.addTrade(3, new ListItemForSapphires(Items.LEATHER_LEGGINGS, new EntityVillager.PriceInfo(1, 6)));
             career.addTrade(3, new SapphireForItems(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(7, 1)));
             register(craftsman, 1);
         }
