@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.minecraft.block.Block;
@@ -32,10 +33,10 @@ public class DragonAIBreakBlocks extends EntityAIBase {
                     BlockPos pos = new BlockPos(a, b, c);
                     IBlockState state = dragon.worldObj.getBlockState(pos);
                     if (state.getBlockHardness(dragon.worldObj, pos) > -1 && state.getBlockHardness(dragon.worldObj, pos) < 5 && !dragon.worldObj.isAirBlock(pos) && state.getMaterial() != Material.PLANTS && !(state.getBlock() instanceof BlockFluidBase || state.getBlock() instanceof BlockLiquid)) {
-                        if (dragon.getDragonStage() == 3 && state.getBlockHardness(dragon.worldObj, pos) <= 2F) {
+                        if ((dragon.getDragonStage() == 3 || IceAndFire.CONFIG.dragonGriefing != 2) && state.getBlockHardness(dragon.worldObj, pos) <= 2F) {
                             dragon.worldObj.destroyBlock(pos, false);
                         }
-                        if (dragon.getDragonStage() > 3) {
+                        else if (dragon.getDragonStage() > 3 && IceAndFire.CONFIG.dragonGriefing == 0) {
                             dragon.worldObj.destroyBlock(pos, false);
                         }
                     }

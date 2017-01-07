@@ -9,9 +9,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -32,6 +36,25 @@ public class BlockCharedPath extends BlockGrassPath{
             this.slipperiness = 0.98F;
         }
         this.setLightOpacity(255);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    {
+        switch (side)
+        {
+            case UP:
+                return true;
+            case NORTH:
+            case SOUTH:
+            case WEST:
+            case EAST:
+                IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+                Block block = iblockstate.getBlock();
+                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != ModBlocks.charedGrassPath && block != ModBlocks.frozenGrassPath;
+            default:
+                return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+        }
     }
 
     @Nullable
