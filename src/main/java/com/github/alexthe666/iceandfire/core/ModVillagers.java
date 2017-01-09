@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.passive.EntityVillager;
@@ -7,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
@@ -35,8 +37,8 @@ public class ModVillagers {
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(fisherman, "fisherman");
             career.addTrade(1, new SapphireForItems(Items.FISH, new EntityVillager.PriceInfo(1, 10)));
             career.addTrade(2, new ListItemForSapphires(Items.FISHING_ROD, new EntityVillager.PriceInfo(1, 3)));
-            career.addTrade(1, new SapphireForItems(ModItems.fishing_spear, new EntityVillager.PriceInfo(1, 5)));
-            career.addTrade(2, new ListItemForSapphires(Items.COOKED_FISH, new EntityVillager.PriceInfo(5, 4)));
+            career.addTrade(1, new ListItemForSapphires(ModItems.fishing_spear, new EntityVillager.PriceInfo(1, 5)));
+            career.addTrade(2, new ListItemForSapphires(Items.COOKED_FISH, new EntityVillager.PriceInfo(1, 5)));
             register(fisherman, 0);
         }
         craftsman = new VillagerRegistry.VillagerProfession("iceandfire:craftsman", "iceandfire:textures/models/snowvillager/craftsman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
@@ -44,7 +46,7 @@ public class ModVillagers {
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(craftsman, "craftsman");
             //over 30 words for ice
             career.addTrade(1, new SapphireForItems(Item.getItemFromBlock(Blocks.SNOW), new EntityVillager.PriceInfo(1, 32)));
-            career.addTrade(2, new ListItemForSapphires(Item.getItemFromBlock(Blocks.PACKED_ICE), new EntityVillager.PriceInfo(3, 1)));
+            career.addTrade(2, new ListItemForSapphires(Item.getItemFromBlock(Blocks.PACKED_ICE), new EntityVillager.PriceInfo(1, 3)));
             career.addTrade(1, new ListItemForSapphires(Items.IRON_SHOVEL, new EntityVillager.PriceInfo(1, 4)));
             career.addTrade(2, new ListItemForSapphires(ModItems.silver_shovel, new EntityVillager.PriceInfo(1, 5)));
             career.addTrade(3, new ListItemForSapphires(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(1, 9)));
@@ -53,7 +55,7 @@ public class ModVillagers {
             career.addTrade(3, new ListItemForSapphires(Items.LEATHER_HELMET, new EntityVillager.PriceInfo(1, 4)));
             career.addTrade(3, new ListItemForSapphires(Items.LEATHER_CHESTPLATE, new EntityVillager.PriceInfo(1, 6)));
             career.addTrade(3, new ListItemForSapphires(Items.LEATHER_LEGGINGS, new EntityVillager.PriceInfo(1, 6)));
-            career.addTrade(3, new SapphireForItems(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(7, 1)));
+            career.addTrade(3, new SapphireForItems(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(1, 7)));
             register(craftsman, 1);
         }
         shaman = new VillagerRegistry.VillagerProfession("iceandfire:shaman", "iceandfire:textures/models/snowvillager/shaman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
@@ -61,9 +63,13 @@ public class ModVillagers {
             VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(shaman, "shaman");
             career.addTrade(1, new SapphireForItems(Items.BLAZE_POWDER, new EntityVillager.PriceInfo(2, 3)));
             career.addTrade(1, new SapphireForItems(Items.GHAST_TEAR, new EntityVillager.PriceInfo(1, 4)));
-            career.addTrade(2, new SapphireForItems(Items.BREWING_STAND, new EntityVillager.PriceInfo(1, 9)));
+            career.addTrade(2, new SapphireForItems(Items.BREWING_STAND, new EntityVillager.PriceInfo(9, 1)));
             career.addTrade(1, new SapphireForItems(ModItems.dragonbone, new EntityVillager.PriceInfo(1, 12)));
-            career.addTrade(2, new ListItemForSapphires(ModItems.bestiary, new EntityVillager.PriceInfo(1, 3)));
+            ItemStack stack = new ItemStack(ModItems.bestiary);
+            stack.setTagCompound(new NBTTagCompound());
+            stack.getTagCompound().setIntArray("Pages", new int[]{EnumBestiaryPages.INTRODUCTION.ordinal()});
+
+            career.addTrade(2, new ListItemForSapphires(stack, new EntityVillager.PriceInfo(1, 3)));
             career.addTrade(1, new ListItemForSapphires(ModItems.manuscript, new EntityVillager.PriceInfo(1, 2)));
             career.addTrade(3, new ListItemForSapphires(ModItems.ice_dragon_flesh, new EntityVillager.PriceInfo(1, 5)));
             career.addTrade(3, new ListItemForSapphires(ModItems.ice_dragon_blood, new EntityVillager.PriceInfo(1, 12)));
