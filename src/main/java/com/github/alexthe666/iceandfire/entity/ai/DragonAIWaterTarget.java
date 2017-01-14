@@ -20,7 +20,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (!this.dragon.isInWater()) {
+        if (!this.dragon.isInsideWaterBlock()) {
             return false;
         }
         if (this.dragon.getRNG().nextFloat() < 0.5F) {

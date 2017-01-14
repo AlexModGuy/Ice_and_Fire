@@ -659,8 +659,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.setDead();
                 } else if (this.getDeathStage() > (this.getAgeInDays() / 5) && this.getDeathStage() < (this.getAgeInDays() / 5 ) + 1) {
                     ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, 1);
+                    ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(3)), 1);
                     if (!worldObj.isRemote) {
                         this.entityDropItem(heart, 1);
+                        if(!this.isMale() && this.getDragonStage() > 3){
+                            this.entityDropItem(egg, 1);
+                        }
                     }
                 } else {
                     this.setDeathStage(this.getDeathStage() + 1);
@@ -768,9 +772,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
             if (chance >= 40 && chance < 90) {
                 return new ItemStack(this.getVariantScale(this.getVariant()), 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 5)));
-            }
-            if (chance >= 90 && chance <= 100 && this.getDragonStage() > 3) {
-                return new ItemStack(this.getVariantEgg(this.rand.nextInt(3)), 1);
             }
         }
         return null;
@@ -935,6 +936,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (!this.onGround && this.motionY < 0.0D || this.isHovering() || this.isFlying()) {
             this.motionY *= 0.6D;
+        }else if(!this.onGround && !(this.isHovering() || this.isFlying())){
+            this.motionY *= 1.6D;
+
         }
         if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
             this.motionY /= 0.6D;
@@ -943,6 +947,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.airTarget = null;
         }
         if(this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
+            this.setFlying(false);
+        }
+        if(this.isFlying() && this.airTarget == null && !this.onGround && this.getControllingPassenger() == null){
             this.setFlying(false);
         }
         if (this.isFlying() && getAttackTarget() == null) {
@@ -1513,6 +1520,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(!this.canMove() && !this.isBeingRidden()){
             strafe = 0;
             forward = 0;
+            super.moveEntityWithHeading(strafe, forward);
             return;
         }
         if (this.isBeingRidden() && this.canBeSteered()) {
@@ -1536,10 +1544,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.motionY += 0.02;
         }
         super.moveEntityWithHeading(strafe, forward);
-    }
-
-    public boolean isInWater() {
-        return this.inWater || this.isInsideOfMaterial(Material.WATER);
     }
 
     public void updateCheckPlayer(){
