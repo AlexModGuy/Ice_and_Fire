@@ -62,6 +62,9 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 	protected void onImpact(RayTraceResult movingObject) {
 
 		if (!this.worldObj.isRemote) {
+			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile){
+				return;
+			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;

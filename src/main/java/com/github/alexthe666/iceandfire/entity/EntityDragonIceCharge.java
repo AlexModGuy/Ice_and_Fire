@@ -61,6 +61,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 	@Override
 	protected void onImpact(RayTraceResult movingObject) {
 		if (!this.worldObj.isRemote) {
+			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile){
+				return;
+			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;

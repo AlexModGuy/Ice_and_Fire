@@ -35,10 +35,6 @@ public class DragonAIWander extends EntityAIBase {
 			return false;
 		}
 		if (!this.mustUpdate) {
-			if (this.dragon.getAge() >= 100) {
-				return false;
-			}
-
 			if (this.dragon.getRNG().nextInt(executionChance) != 0) {
 				return false;
 			}
