@@ -46,6 +46,10 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 @Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name  = IceAndFire.NAME)
 public class IceAndFire {
+	/*
+	-Dfml.coreMods.load=com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading
+	This is here because Idea keeps deleting the VM arguments...
+	 */
 	public static final String MODID = "iceandfire";
 	public static final String VERSION = "017";
 	public static final String LLIBRARY_VERSION = "1.4.1";
