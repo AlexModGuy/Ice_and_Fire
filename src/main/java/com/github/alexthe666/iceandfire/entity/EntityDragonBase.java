@@ -935,10 +935,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
             this.motionY /= 0.6D;
         }
-        if(!this.isFlying() && !this.isHovering() && this.airTarget != null){
+        if(!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround){
             this.airTarget = null;
         }
-        if(this.isFlying()&& this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
+        if(this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
             this.setFlying(false);
         }
         if (this.isFlying() && getAttackTarget() == null) {
@@ -1381,7 +1381,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - posX;
             double targetY = airTarget.getY() + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;
@@ -1393,6 +1393,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             moveForward = 0.5F;
             prevRotationYaw = rotationYaw;
             rotationYaw += rotation;
+            if(!this.isFlying()){
+                this.setFlying(true);
+            }
         } else {
             this.airTarget = null;
         }
