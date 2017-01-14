@@ -87,7 +87,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
 			}
 		}
-		if (this.isSleeping()) {
+		if (this.isSleeping() || this.isBlinking()) {
 			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
 		} else {
 			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
@@ -344,7 +344,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public String getTextureOverlay() {
-		return this.isSleeping() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
+		return this.isSleeping() || this.isBlinking() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
 
 	public boolean isBreedingItem(@Nullable ItemStack stack) {

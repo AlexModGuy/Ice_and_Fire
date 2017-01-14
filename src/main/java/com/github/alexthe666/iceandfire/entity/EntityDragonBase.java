@@ -552,6 +552,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         return isSleeping;
     }
 
+    public boolean isBlinking() {
+        return this.ticksExisted % 40 > 30;
+    }
+
     public void setBreathingFire(boolean breathing) {
         this.dataManager.set(FIREBREATHING, breathing);
         if (!worldObj.isRemote) {

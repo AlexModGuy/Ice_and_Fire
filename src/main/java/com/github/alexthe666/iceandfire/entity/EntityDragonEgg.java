@@ -103,7 +103,7 @@ public class EntityDragonEgg extends EntityLiving {
 				this.setDead();
 			}
 		}
-		if (this.getDragonAge() > 20 * 60) {
+		if (this.getDragonAge() > 20 * 60 ) {
 			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire && worldObj.getClosestPlayerToEntity(this, 5) != null) {
 				worldObj.setBlockToAir(pos);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
@@ -141,7 +141,7 @@ public class EntityDragonEgg extends EntityLiving {
 	@Override
 	public boolean attackEntityFrom(DamageSource var1, float var2) {
 		if (!worldObj.isRemote && !var1.canHarmInCreative()) {
-			this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, this.posX, this.posY, this.posZ, this.getItem()));
+			this.dropItem(this.getItem().getItem(), 1);
 		}
 		this.setDead();
 		return super.attackEntityFrom(var1, var2);

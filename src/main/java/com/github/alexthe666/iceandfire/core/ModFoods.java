@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
@@ -61,6 +62,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(Items.COOKED_RABBIT, 15);
 		FoodMappings.INSTANCE.addMeat(EntityPlayer.class, 27);
 		FoodMappings.INSTANCE.addMeat(EntityPlayerMP.class, 27);
+		FoodMappings.INSTANCE.addMeat(EntitySnowVillager.class, 27);
 		FoodMappings.INSTANCE.addMeat(EntityVillager.class, 27);
 		FoodMappings.INSTANCE.addMeat(EntityZombie.class, 23);
 		FoodMappings.INSTANCE.addMeat(EntityChicken.class, 5);
