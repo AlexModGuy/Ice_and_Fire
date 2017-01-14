@@ -25,12 +25,10 @@ public class LayerDragonArmor implements LayerRenderer {
 	}
 
 	public void doRenderLayer(EntityDragonBase entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-		if (entity.dragonInv.getStackInSlot(slot) != null) {
 			if (entity.getArmorInSlot(slot) != 0) {
 				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/" + dragonType + "/armor_" + armorPart() + "_" + entity.getArmorInSlot(slot) + ".png"));
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
-		}
 	}
 
 	public String armorPart() {

@@ -136,32 +136,33 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void initDragonInv() {
-        AnimalChest animalchest = this.dragonInv;
-        this.dragonInv = new AnimalChest("dragonInv", 4);
-        this.dragonInv.setCustomName(this.getName());
-        if (animalchest != null) {
-            animalchest.removeInventoryChangeListener(this);
-            int i = Math.min(animalchest.getSizeInventory(), this.dragonInv.getSizeInventory());
+            AnimalChest animalchest = this.dragonInv;
+            this.dragonInv = new AnimalChest("dragonInv", 4);
+            this.dragonInv.setCustomName(this.getName());
+            if (animalchest != null) {
+                animalchest.removeInventoryChangeListener(this);
+                int i = Math.min(animalchest.getSizeInventory(), this.dragonInv.getSizeInventory());
 
-            for (int j = 0; j < i; ++j) {
-                ItemStack itemstack = animalchest.getStackInSlot(j);
+                for (int j = 0; j < i; ++j) {
+                    ItemStack itemstack = animalchest.getStackInSlot(j);
 
-                if (itemstack != null) {
-                    this.dragonInv.setInventorySlotContents(j, itemstack.copy());
+                    if (itemstack != null) {
+                        this.dragonInv.setInventorySlotContents(j, itemstack.copy());
+                        //this.updateDragonSlots();
+                    }
                 }
             }
-        }
 
         this.dragonInv.addInventoryChangeListener(this);
-        this.updateDragonSlots();
+
         this.itemHandler = new net.minecraftforge.items.wrapper.InvWrapper(this.dragonInv);
-        if (worldObj.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(this.dragonInv.getStackInSlot(0))));
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(this.dragonInv.getStackInSlot(1))));
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(this.dragonInv.getStackInSlot(2))));
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(this.dragonInv.getStackInSlot(3))));
+            if (worldObj.isRemote) {
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(this.dragonInv.getStackInSlot(0))));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(this.dragonInv.getStackInSlot(1))));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(this.dragonInv.getStackInSlot(2))));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(this.dragonInv.getStackInSlot(3))));
+            }
         }
-    }
 
     private void updateDragonSlots() {
         if (!this.worldObj.isRemote) {
@@ -386,7 +387,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 int j = nbttagcompound.getByte("Slot") & 255;
                     this.initDragonInv();
                     this.dragonInv.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
-                    this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
+                    //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
 
                     if (worldObj.isRemote) {
                         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));

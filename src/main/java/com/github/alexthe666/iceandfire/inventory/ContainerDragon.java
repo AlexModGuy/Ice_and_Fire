@@ -28,27 +28,11 @@ public class ContainerDragon extends Container {
 			public boolean isItemValid(ItemStack stack) {
 				return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 0;
 			}
-
-			@Override
-			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 0, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(0))));
-				dragon.setArmorInSlot(0, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(0)));
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
-				super.onSlotChange(stack, stack2);
-			}
 		});
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 1, 8, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 1;
-			}
-
-			@Override
-			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 1, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(1))));
-				dragon.setArmorInSlot(1, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(1)));
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
-				super.onSlotChange(stack, stack2);
 			}
 		});
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 2, 153, 18) {
@@ -56,27 +40,11 @@ public class ContainerDragon extends Container {
 			public boolean isItemValid(ItemStack stack) {
 				return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 2;
 			}
-
-			@Override
-			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 2, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(2))));
-				dragon.setArmorInSlot(2, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(2)));
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
-				super.onSlotChange(stack, stack2);
-			}
 		});
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 3, 153, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 3;
-			}
-
-			@Override
-			public void onSlotChange(ItemStack stack, ItemStack stack2) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(dragon.getEntityId(), 3, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(3))));
-				dragon.setArmorInSlot(3, dragon.getIntFromArmor(dragon.dragonInv.getStackInSlot(3)));
-				dragon.worldObj.playSound((EntityPlayer) null, dragon.posX, dragon.posY, dragon.posZ, SoundEvents.ENTITY_HORSE_ARMOR, dragon.getSoundCategory(), 1.0F, 1.0F + (dragon.getRNG().nextFloat() - dragon.getRNG().nextFloat()) * 0.2F);
-				super.onSlotChange(stack, stack2);
 			}
 		});
 		int j;
@@ -112,6 +80,7 @@ public class ContainerDragon extends Container {
 				if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
 					return null;
 				}
+
 			} else if (this.getSlot(0).isItemValid(itemstack1)) {
 				if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
 					return null;
