@@ -1137,6 +1137,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.setVariant(new Random().nextInt(4));
         this.setSleeping(false);
         this.updateAttributes();
+        double healthStep = (maximumHealth - minimumHealth) / (125);
+        this.heal((Math.round(minimumHealth + (healthStep * age))));
         return livingdata;
     }
 

@@ -240,25 +240,30 @@ public class EntityIceDragon extends EntityDragonBase {
 		} else if (!swimming && swimProgress > 0.0F) {
 			swimProgress -= 0.5F;
 		}
-		if (this.isInWater() && !this.isSwimming()) {
+		if (this.isInsideWaterBlock() && !this.isSwimming()) {
 			this.setSwimming(true);
 			ticksSwiming = 0;
 		}
-		if(this.isInWater()){
+		if(this.isInsideWaterBlock()){
 			swimAround();
 		}
-		if (!this.isInWater() && this.isSwimming()) {
+		if (!this.isInsideWaterBlock() && this.isSwimming()) {
 			this.setSwimming(false);
 			ticksSwiming = 0;
 		}
 		if(this.isSwimming()){
 			ticksSwiming++;
-			if (this.isInWater() && ticksSwiming > 1000 && !this.isChild() && !this.isHovering() && !this.isFlying()) {
+			if (this.isInsideWaterBlock() && ticksSwiming > 1000 && !this.isChild() && !this.isHovering() && !this.isFlying()) {
 				this.setHovering(true);
 			}
 		}
 	}
 
+	public boolean isInsideWaterBlock() {
+		return this.isInsideOfMaterial(Material.WATER);
+	}
+
+	
 	public void riderShootFire(Entity controller) {
 		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
@@ -316,7 +321,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	}
 
 	public void swimTowardsTarget() {
-		if (waterTarget != null && isTargetInWater() && this.isInWater() && this.getDistanceSquared(new Vec3d(waterTarget.getX(), this.posY, waterTarget.getZ())) > 3) {
+		if (waterTarget != null && isTargetInWater() && this.isInsideWaterBlock() && this.getDistanceSquared(new Vec3d(waterTarget.getX(), this.posY, waterTarget.getZ())) > 3) {
 			double targetX = waterTarget.getX() + 0.5D - posX;
 			double targetY = waterTarget.getY() + 1D - posY;
 			double targetZ = waterTarget.getZ() + 0.5D - posZ;
