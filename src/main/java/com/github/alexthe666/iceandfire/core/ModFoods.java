@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntityZombie;
@@ -71,8 +73,11 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(EntityPig.class, 20);
 		FoodMappings.INSTANCE.addMeat(EntitySheep.class, 35);
 		FoodMappings.INSTANCE.addMeat(EntityRabbit.class, 20);
-		FoodMappings.INSTANCE.addFish(EntitySquid.class, 30);
-		FoodMappings.INSTANCE.addFish(EntityWolf.class, 30);
-		FoodMappings.INSTANCE.addFish(EntityPolarBear.class, 70);
+		FoodMappings.INSTANCE.addMeat(EntitySquid.class, 30);
+		FoodMappings.INSTANCE.addMeat(EntityWolf.class, 30);
+		FoodMappings.INSTANCE.addMeat(EntityPolarBear.class, 70);
+		FoodMappings.INSTANCE.addMeat(EntityIceDragon.class, 100);
+		FoodMappings.INSTANCE.addMeat(EntityFireDragon.class, 100);
+
 	}
 }
