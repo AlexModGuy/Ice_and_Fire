@@ -936,6 +936,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (!this.onGround && this.motionY < 0.0D || this.isHovering() || this.isFlying()) {
             this.motionY *= 0.6D;
+        }else if(!this.onGround && !(this.isHovering() || this.isFlying())){
+            this.motionY *= 1.6D;
+
         }
         if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
             this.motionY /= 0.6D;
@@ -953,11 +956,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             flyAround();
         } else if (getAttackTarget() != null) {
             flyTowardsTarget();
-        }
-        if(doesWantToLand() && (this.isFlying() || this.isHovering())){
-            this.setFlying(false);
-            this.setHovering(false);
-            flyTicks = 0;
         }
         if (this.isFlying()) {
             this.flyTicks++;
@@ -1027,7 +1025,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 6000 || down();
+        return this.flyTicks > 5000 || down();
     }
 
     public abstract String getVariantName(int variant);
