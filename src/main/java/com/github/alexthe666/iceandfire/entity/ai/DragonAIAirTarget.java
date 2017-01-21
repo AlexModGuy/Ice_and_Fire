@@ -70,16 +70,16 @@ public class DragonAIAirTarget extends EntityAIBase {
 					}
 					if (dragon.onGround) {
 						if (dragon.worldObj.getBlockState(blockpos1ground).getMaterial() == Material.AIR) {
-							return new Vec3d(blockpos1ground.getX(), Math.min(256, blockpos1ground.getY()), blockpos1ground.getZ());
+							return new Vec3d(blockpos1ground.getX(), blockpos1ground.getY(), blockpos1ground.getZ());
 						}
 					} else {
 						if (dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR) {
-							return new Vec3d(blockpos1.getX(), Math.min(256, blockpos1.getY()), blockpos1.getZ());
+							return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
 						}
 					}
 				} else {
-					BlockPos blockpos1 = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), Math.min(256, (int) this.dragon.posY + 3 + ((random.nextInt(6)) * (random.nextBoolean() ? -1 : 1))), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
-					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), Math.min(256, (int) this.dragon.posY + 7 + random.nextInt(6)), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
+					BlockPos blockpos1 = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 3 + ((random.nextInt(6)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
+					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 7 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
 					if (dragon.doesWantToLand()) {
 						return null;
 					}
