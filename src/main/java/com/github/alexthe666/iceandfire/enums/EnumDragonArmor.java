@@ -63,6 +63,14 @@ public enum EnumDragonArmor {
 			return ModItems.dragonscales_green;
 		case armor_gray:
 			return ModItems.dragonscales_gray;
+			case armor_blue:
+				return ModItems.dragonscales_blue;
+			case armor_white:
+				return ModItems.dragonscales_white;
+			case armor_sapphire:
+				return ModItems.dragonscales_sapphire;
+			case armor_silver:
+				return ModItems.dragonscales_silver;
 		default:
 			return ModItems.dragonscales_red;
 		}

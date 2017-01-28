@@ -1008,7 +1008,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
                 if(this.isFire && worldObj.isRemote){
                     this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
-                }else{
+                }else if(worldObj.isRemote){
                     IceAndFire.PROXY.spawnParticle("snowflake", this.worldObj, headPosX, headPosY, headPosZ, 0, 0, 0);
                 }
             }
