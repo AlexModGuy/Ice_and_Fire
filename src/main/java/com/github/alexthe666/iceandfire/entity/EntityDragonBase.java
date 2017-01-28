@@ -914,15 +914,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.isHovering()) {
             this.hoverTicks++;
-            this.motionY += 0.18D;
-            if (this.hoverTicks > 40) {
-                if (!this.isChild()) {
-                    this.setFlying(true);
+            if (this.doesWantToLand()) {
+                this.motionY -= 0.25D;
+            }else{
+                this.motionY += 0.18D;
+                if (this.hoverTicks > 40) {
+                    if (!this.isChild()) {
+                        this.setFlying(true);
+                    }
+                    this.setHovering(false);
+                    this.flyHovering = 0;
+                    this.hoverTicks = 0;
                 }
-                this.setHovering(false);
-                this.flyHovering = 0;
-                this.hoverTicks = 0;
             }
+
             if (flyHovering == 0) {
                 // move upwards
             }
@@ -949,13 +954,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
             this.setFlying(false);
         }
-        if(this.isFlying() && this.airTarget == null && !this.onGround && this.getControllingPassenger() == null){
-            this.setFlying(false);
-        }
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
         } else if (getAttackTarget() != null) {
             flyTowardsTarget();
+        }
+        if(this.onGround && flyTicks != 0){
+            flyTicks = 0;
+        }
+        if(this.isFlying() && this.doesWantToLand()){
+            this.setFlying(false);
+            this.setHovering(!this.onGround);
+            if(this.onGround){
+                flyTicks = 0;
+                this.setFlying(false);
+            }
+            //this.motionY -= 0.26D;
         }
         if (this.isFlying()) {
             this.flyTicks++;
@@ -964,7 +978,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setFlying(false);
                 this.setHovering(false);
             }
-            if (this.getRNG().nextInt(2500) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove()) {
+            if (!worldObj.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove() && this.onGround) {
                 this.setHovering(true);
                 this.setSleeping(false);
                 this.setSitting(false);
@@ -1025,7 +1039,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 5000 || down();
+        return this.flyTicks > 6000 || down();
     }
 
     public abstract String getVariantName(int variant);
@@ -1386,7 +1400,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void flyAround() {
         if (airTarget != null) {
-            if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000) {
+            if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000 || !this.isFlying()) {
                 airTarget = null;
             }
             flyTowardsTarget();
@@ -1396,7 +1410,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void flyTowardsTarget() {
         if (airTarget != null && isTargetInAir() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - posX;
-            double targetY = airTarget.getY() + 1D - posY;
+            double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;
             motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed();
             motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed();
@@ -1524,8 +1538,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return;
         }
         if (this.isBeingRidden() && this.canBeSteered()) {
-            System.out.println(this.isBeingRidden());
-
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
             if (controller != null) {
                 strafe = controller.moveStrafing * 0.5F;
