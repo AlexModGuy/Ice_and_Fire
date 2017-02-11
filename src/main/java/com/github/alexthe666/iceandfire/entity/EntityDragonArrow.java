@@ -11,6 +11,7 @@ public class EntityDragonArrow extends EntityArrow {
 
 	public EntityDragonArrow(World worldIn) {
 		super(worldIn);
+		this.setDamage(8);
 	}
 
 	public EntityDragonArrow(World worldIn, double x, double y, double z) {
