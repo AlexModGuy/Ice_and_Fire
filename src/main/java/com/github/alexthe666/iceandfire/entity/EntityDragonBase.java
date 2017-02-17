@@ -639,7 +639,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 if(!player.isCreative()){
                     if(stack.stackSize > 1){
                         stack.stackSize--;
-                    }else{
+                    }else{//change dialouge options for turians
                         stack = null;
                     }
                 }
@@ -869,7 +869,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.isModelDead() && animationCycle != 0){
             animationCycle = 0;
         }
-        boolean sleeping = isSleeping();
+        boolean sleeping = isSleeping() && !isHovering() && !isSleeping();
         if (sleeping && sleepProgress < 20.0F) {
             sleepProgress += 0.5F;
         } else if (!sleeping && sleepProgress > 0.0F) {
@@ -913,11 +913,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setHovering(false);
         }
         if (this.isHovering()) {
+            if(this.isSleeping()){
+                this.setHovering(false);
+            }
             this.hoverTicks++;
             if (this.doesWantToLand()) {
                 this.motionY -= 0.25D;
             }else{
-                this.motionY += 0.18D;
+                this.motionY += 0.08D;
                 if (this.hoverTicks > 40) {
                     if (!this.isChild()) {
                         this.setFlying(true);
@@ -925,6 +928,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.setHovering(false);
                     this.flyHovering = 0;
                     this.hoverTicks = 0;
+                    this.flyTicks = 0;
                 }
             }
 
@@ -939,12 +943,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 // stay still
             }
         }
-        if (!this.onGround && this.motionY < 0.0D || this.isHovering() || this.isFlying()) {
-            this.motionY *= 0.6D;
-        }else if(!this.onGround && !(this.isHovering() || this.isFlying())){
-            this.motionY *= 1.6D;
-
-        }
         if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
             this.motionY /= 0.6D;
         }
@@ -953,6 +951,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if(this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
             this.setFlying(false);
+        }
+        if(this.airTarget != null && !(this.isHovering() || this.isFlying())){
+            this.setSleeping(false);
+            this.setFlying(true);
         }
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
@@ -978,7 +980,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setFlying(false);
                 this.setHovering(false);
             }
-            if (!worldObj.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && this.canMove() && this.onGround) {
+            if (!worldObj.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering()&& !this.isSleeping() && this.canMove() && this.onGround) {
                 this.setHovering(true);
                 this.setSleeping(false);
                 this.setSitting(false);
@@ -1250,7 +1252,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() &&  this.getAttackTarget() == null && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
             this.setSleeping(true);
         }
-        if (this.isSleeping() && (this.isInWater() || (this.worldObj.canBlockSeeSky(new BlockPos(this)) && this.isDaytime() && !this.isTamed() || this.isDaytime() && this.isTamed()) || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
+        if (this.isSleeping() && (this.isFlying() || this.isHovering() || this.isInWater() || (this.worldObj.canBlockSeeSky(new BlockPos(this)) && this.isDaytime() && !this.isTamed() || this.isDaytime() && this.isTamed()) || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
             this.setSleeping(false);
         }
     }
