@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +34,7 @@ public class BlockCharedPath extends BlockGrassPath{
         if(!isFire){
             this.slipperiness = 0.98F;
         }
-        this.setLightOpacity(255);
+        this.setLightOpacity(0);
     }
 
     @SideOnly(Side.CLIENT)
