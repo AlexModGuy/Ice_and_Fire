@@ -823,6 +823,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()){
+            this.setFlying(false);
+            this.setFlying(true);
+            this.setSleeping(false);
+        }
         if(this.getControllingPassenger() != null) {
             if (motionY > 0.5) {
                 this.motionY = 0.5;
@@ -898,7 +903,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else if (!hovering && hoverProgress > 0.0F) {
             hoverProgress -= 0.5F;
         }
-        boolean flying = isFlying();
+        boolean flying = this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
@@ -931,7 +936,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (this.doesWantToLand()) {
                 this.motionY -= 0.25D;
             }else{
-                this.motionY += 0.08D;
+                this.motionY += 0.08;
                 if (this.hoverTicks > 40) {
                     if (!this.isChild()) {
                         this.setFlying(true);
@@ -962,10 +967,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null){
             this.setFlying(false);
         }
-        if(this.airTarget != null && !(this.isHovering() || this.isFlying())){
-            this.setSleeping(false);
-            this.setFlying(true);
-        }
+
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
         } else if (getAttackTarget() != null) {
@@ -1032,7 +1034,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.isBreathingFire()) {
             this.fireTicks++;
-            if (fireTicks > 400 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+            if (fireTicks > this.getDragonStage() * 12 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
                 this.attackDecision = true;
                 fireTicks = 0;
@@ -1051,7 +1053,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 6000 || down();
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0;
     }
 
     public abstract String getVariantName(int variant);
@@ -1242,6 +1244,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
             this.setHovering(true);
             this.setFlying(false);
+        }
+        if((this.isFlying() || this.isHovering()) && this.isInWater()){
+            this.motionY += 0.2;
         }
         if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
             this.setFlying(true);
