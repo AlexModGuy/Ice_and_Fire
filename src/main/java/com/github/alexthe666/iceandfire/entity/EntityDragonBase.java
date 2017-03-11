@@ -823,6 +823,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.getControllingPassenger() != null) {
+            if (motionY > 0.5) {
+                this.motionY = 0.5;
+            }
+            if (motionY < -0.5) {
+                this.motionY = -0.5;
+            }
+        }else{
+            if (motionY > 0.8) {
+                this.motionY = 0.5;
+            }
+            if (motionY < -0.8) {
+                this.motionY = -0.8;
+            }
+            if (motionY > 1) {
+                this.motionY = 0;
+            }
+        }
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
         if(worldObj.isRemote){
@@ -862,7 +880,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(this.isModelDead() && animationCycle != 0){
             animationCycle = 0;
         }
-        boolean sleeping = isSleeping() && !isHovering() && !isSleeping();
+        boolean sleeping = isSleeping() && !isHovering() && !isFlying();
         if (sleeping && sleepProgress < 20.0F) {
             sleepProgress += 0.5F;
         } else if (!sleeping && sleepProgress > 0.0F) {
@@ -1057,8 +1075,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float hoverAddition = hoverProgress * 0.016F;
-                float flyAddition = -flyProgress * 0.028F;
+                float hoverAddition = hoverProgress * 0.02F;
+                float flyAddition = -flyProgress * 0.03F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
                 float radius = 0.7F * ((0.3F - flyBody) * getRenderSize()) + ((this.getRenderSize() / 3) * flyAddition * 0.0065F);
                 float angle = (0.01745329251F * this.renderYawOffset);
