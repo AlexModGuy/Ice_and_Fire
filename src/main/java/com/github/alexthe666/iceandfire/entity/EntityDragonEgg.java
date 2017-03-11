@@ -1,11 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.core.ModAchievements;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,18 +18,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import com.github.alexthe666.iceandfire.block.BlockEggInIce;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class EntityDragonEgg extends EntityLiving {
 
@@ -108,6 +104,7 @@ public class EntityDragonEgg extends EntityLiving {
 				worldObj.setBlockToAir(pos);
 				EntityFireDragon dragon = new EntityFireDragon(worldObj);
 				dragon.setVariant(getType().ordinal());
+				dragon.setGender(rand.nextBoolean());
 				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 				if (!worldObj.isRemote) {
 					worldObj.spawnEntityInWorld(dragon);
