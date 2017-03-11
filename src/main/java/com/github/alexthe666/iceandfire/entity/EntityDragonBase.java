@@ -1,18 +1,15 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
-import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -29,7 +26,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.AnimalChest;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
@@ -46,13 +42,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -636,15 +632,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
             player.addStat(ModAchievements.dragonHarvest, 1);
             if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
-                if(!player.isCreative()){
-                    if(stack.stackSize > 1){
-                        stack.stackSize--;
-                    }else{//change dialouge options for turians
-                        stack = null;
-                    }
+                if (!player.capabilities.isCreativeMode) {
+                    --stack.stackSize;
                 }
-
+                this.setDeathStage(this.getDeathStage() + 1);
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
+                return true;
             }else {
                 if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
                     ItemStack skull = new ItemStack(ModItems.dragon_skull, 1, this.isFire ? 0 : 1);
@@ -939,7 +932,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 // move down
             }
             if (flyHovering == 2) {
-                this.motionY *= 0;
                 // stay still
             }
         }
