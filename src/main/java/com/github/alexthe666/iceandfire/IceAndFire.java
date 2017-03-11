@@ -1,8 +1,15 @@
 package com.github.alexthe666.iceandfire;
 
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventMapGen;
+import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.message.MessageDaytime;
+import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.misc.CreativeTab;
+import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
@@ -32,17 +39,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import com.github.alexthe666.iceandfire.client.GuiHandler;
-import com.github.alexthe666.iceandfire.event.EventLiving;
-import com.github.alexthe666.iceandfire.event.EventMapGen;
-import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.message.MessageDaytime;
-import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.github.alexthe666.iceandfire.misc.CreativeTab;
-import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+
+import java.util.Random;
 
 @Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name  = IceAndFire.NAME)
 public class IceAndFire {
@@ -122,7 +121,7 @@ public class IceAndFire {
 		GameRegistry.register(GLACIER);
 		BiomeDictionary.registerBiomeType(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
 		BiomeManager.addSpawnBiome(GLACIER);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, 45));
+		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, 10));
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
