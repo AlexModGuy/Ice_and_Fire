@@ -1,16 +1,13 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import java.util.Arrays;
-
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
 
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import java.util.Arrays;
 
 public class ModelFireDragon extends ModelDragonBase {
 	public AdvancedModelRenderer BodyLower;
@@ -1038,10 +1035,10 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.walk(ToeL1, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
 			this.walk(ToeL2, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
 			this.walk(ToeL3, -speed_walk * 2, degree_walk * 0.7F, false, 0.7F, 0.4F, f, f1);
-			this.swing(ArmR1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
-			this.swing(ArmL1, speed_walk, degree_walk * 1.2F, true, 0, 0F, f, f1);
-			this.flap(ClawL, speed_walk, degree_walk * 1.2F, false, 0, 0.5F, f, f1);
-			this.flap(ClawR, speed_walk, degree_walk * 1.2F, true, 0, -0.5F, f, f1);
+			this.swing(ArmR1, speed_walk, degree_walk * 1.2F, false, 0, 0F, f, f1);
+			this.swing(ArmL1, speed_walk, degree_walk * 1.2F, false, 0, 0F, f, f1);
+			this.flap(ClawL, speed_walk, degree_walk * 1.2F, true, 0, 0.5F, f, f1);
+			this.flap(ClawR, speed_walk, degree_walk * 1.2F, false, 0, -0.5F, f, f1);
 		}
 		if(!dragon.isRiding()){
 			this.faceTarget(f3, f4, 3, NECK);

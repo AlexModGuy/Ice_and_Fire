@@ -1539,11 +1539,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 if (forward <= 0.0F) {
                     forward *= 0.25F;
                 }
-                jumpMovementFactor = 0.125F;
+                jumpMovementFactor = 0.05F;
                 this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
             }
             if(this.isInWater() && this.isInsideOfMaterial(Material.AIR) && motionY > 1){
-                this.motionY = 0;
+                //this.motionY = 0;
             }
         }
         if(this.isInWater() && this.isTamed()){
