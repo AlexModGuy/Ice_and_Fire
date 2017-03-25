@@ -1139,7 +1139,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             double extraY = 0.1F * ((getRenderSize() / 3) + (modTick_2 * 0.15 * (getRenderSize() / 3)));
             prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
         } else {
-            prey.dismountRidingEntity();
+           // prey.dismountRidingEntity();
         }
     }
 
