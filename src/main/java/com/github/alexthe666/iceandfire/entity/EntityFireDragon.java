@@ -307,8 +307,6 @@ public class EntityFireDragon extends EntityDragonBase {
 						if (!worldObj.isRemote && !entity.isDead) {
 							worldObj.spawnEntityInWorld(entitylargefireball);
 						}
-						System.out.println(this.attackDecision);
-
 						entitylargefireball.setSizes(size, size);
 						if (entity.isDead || entity == null) {
 							this.setBreathingFire(false);

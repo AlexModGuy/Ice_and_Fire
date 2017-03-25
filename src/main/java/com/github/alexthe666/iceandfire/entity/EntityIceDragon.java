@@ -312,7 +312,6 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public void swimAround() {
 		if (waterTarget != null) {
-			System.out.println();
 			if (!isTargetInWater() || getDistance(waterTarget.getX() + 0.5D, waterTarget.getY() + 0.5D, waterTarget.getZ() + 0.5D) < 2 || ticksSwiming > 6000) {
 				waterTarget = null;
 			}

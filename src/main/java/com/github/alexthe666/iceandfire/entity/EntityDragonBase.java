@@ -629,7 +629,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
-        System.out.println(this.getHealth() + "/" + this.getMaxHealth());
         if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
             player.addStat(ModAchievements.dragonHarvest, 1);
             if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){

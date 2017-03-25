@@ -82,7 +82,6 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                     int chance = rand.nextInt(100);
                     if(chance < 4){
                         int chance2 = rand.nextInt(20);
-                        System.out.println(chance2);
                         switch(chance2){
                             default:
                                 generateGoldPile(world, rand, blockpos);

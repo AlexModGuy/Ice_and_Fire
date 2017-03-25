@@ -64,7 +64,6 @@ public class StructureGenerator implements IWorldGenerator {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					ICE_DRAGON_ROOST.generate(world, random, surface);
-					System.out.println("roost at:" + surface);
 				}
 			}
 		}
