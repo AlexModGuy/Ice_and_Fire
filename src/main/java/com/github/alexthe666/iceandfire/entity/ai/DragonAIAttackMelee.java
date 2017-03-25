@@ -39,6 +39,9 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if(!dragon.canMove()){
 			return false;
 		}
+		if(!dragon.isSleeping()){
+			return false;
+		}
 		if (entitylivingbase == null) {
 			return false;
 		} else if (!entitylivingbase.isEntityAlive()) {
