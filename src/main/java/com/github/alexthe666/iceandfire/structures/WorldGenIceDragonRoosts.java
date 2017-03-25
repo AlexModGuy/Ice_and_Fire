@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
@@ -27,6 +26,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
         EntityIceDragon dragon = new EntityIceDragon(worldIn);
         dragon.setGender(dragon.getRNG().nextBoolean());
         dragon.growDragon(dragonAge);
+        dragon.setHealth(dragon.getMaxHealth());
         dragon.setHunger(50);
         dragon.setVariant(new Random().nextInt(4));
         dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);

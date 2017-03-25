@@ -629,6 +629,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
+        System.out.println(this.getHealth() + "/" + this.getMaxHealth());
         if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
             player.addStat(ModAchievements.dragonHarvest, 1);
             if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
@@ -958,8 +959,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 // stay still
             }
         }
-        if(this.getControllingPassenger() != null && !(this.isFlying() || this.isHovering())){
-            this.motionY /= 0.6D;
+        if(this.isSleeping()){
+            this.getNavigator().clearPathEntity();
         }
         if(!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround){
             this.airTarget = null;
@@ -992,7 +993,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setFlying(false);
                 this.setHovering(false);
             }
-            if (!worldObj.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering()&& !this.isSleeping() && this.canMove() && this.onGround) {
+            if (!worldObj.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
                 this.setHovering(true);
                 this.setSleeping(false);
                 this.setSitting(false);
@@ -1220,7 +1221,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         if (!this.down() && (this.isFlying() || this.isHovering())) {
-            this.motionY += 0.02D;
+            this.motionY += 0.01D;
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
             this.setBreathingFire(true);
@@ -1246,7 +1247,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setFlying(false);
         }
         if((this.isFlying() || this.isHovering()) && this.isInWater()){
-            this.motionY += 0.2;
+            //this.motionY += 0.2;
         }
         if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
             this.setFlying(true);
@@ -1570,7 +1571,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         if(this.isInWater() && this.isTamed()){
-            this.motionY += 0.02;
+           // this.motionY += 0.02;
         }
         super.moveEntityWithHeading(strafe, forward);
     }

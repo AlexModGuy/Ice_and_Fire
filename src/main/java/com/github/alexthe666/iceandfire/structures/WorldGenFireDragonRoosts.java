@@ -26,6 +26,7 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
         EntityFireDragon dragon = new EntityFireDragon(worldIn);
         dragon.setGender(dragon.getRNG().nextBoolean());
         dragon.growDragon(dragonAge);
+        dragon.setHealth(dragon.getMaxHealth());
         dragon.setHunger(50);
         dragon.setVariant(new Random().nextInt(4));
         dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
