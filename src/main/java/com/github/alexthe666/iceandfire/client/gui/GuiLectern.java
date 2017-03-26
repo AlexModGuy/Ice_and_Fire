@@ -40,9 +40,7 @@ public class GuiLectern extends GuiContainer {
 	public boolean hasAllPages() {
 		if (tileFurnace.getStackInSlot(0) != null) {
 			if (tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
-				if (EnumBestiaryPages.hasAllPages(tileFurnace.getStackInSlot(0))) {
-					return true;
-				}
+				return EnumBestiaryPages.possiblePages(tileFurnace.getStackInSlot(0)).isEmpty();
 			}
 		}
 		return false;

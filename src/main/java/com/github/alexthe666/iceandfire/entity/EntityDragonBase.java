@@ -549,7 +549,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isBlinking() {
-        return this.ticksExisted % 40 > 30;
+        return this.ticksExisted % 50 > 43;
     }
 
     public void setBreathingFire(boolean breathing) {

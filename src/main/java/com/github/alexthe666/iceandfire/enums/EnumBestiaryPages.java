@@ -1,15 +1,13 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.item.ItemBestiary;
 
 public enum EnumBestiaryPages {
 
@@ -75,19 +73,37 @@ public enum EnumBestiaryPages {
 	}
 
 	public static void addRandomPage(ItemStack book) {
+		if (book.getItem() instanceof ItemBestiary) {
+			if(!possiblePages(book).isEmpty()){
+				addPage(possiblePages(book).get(new Random().nextInt(possiblePages(book).size())), book);
+			}
+		}
+	}
+
+	public static List<EnumBestiaryPages> possiblePages(ItemStack book) {
 
 		if (book.getItem() instanceof ItemBestiary) {
 
 			Random rand = new Random();
 			NBTTagCompound tag = book.getTagCompound();
-			List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
-			int random = rand.nextInt(EnumBestiaryPages.values().length + 1);
-			while (enumlist.contains(random)) {
-				random = rand.nextInt(EnumBestiaryPages.values().length + 1);
+			List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
+			for (EnumBestiaryPages page : EnumBestiaryPages.values()) {
+				allPages.add(page);
 			}
-			addPage(EnumBestiaryPages.values()[random], book);
+			List<EnumBestiaryPages> containedPages = containedPages(toList(tag.getIntArray("Pages")));
+			List<EnumBestiaryPages> possiblePages = new ArrayList<EnumBestiaryPages>();
+			Iterator itr = allPages.iterator();
+			while (itr.hasNext()) {
+				EnumBestiaryPages page = (EnumBestiaryPages) itr.next();
+				if (!containedPages.contains(page)) {
+					possiblePages.add(page);
+				}
+			}
+			return possiblePages;
 		}
+		return null;
 	}
+
 
 	public static void addPage(EnumBestiaryPages page, ItemStack book) {
 		if (book.getItem() instanceof ItemBestiary) {

@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -23,9 +24,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
+import java.util.Random;
 
 public class TileEntityLectern extends TileEntity implements ITickable, ISidedInventory {
 	private static final int[] slotsTop = new int[] { 0 };
@@ -79,7 +78,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
 					if (this.cookTime == this.totalCookTime) {
 						this.cookTime = 0;
-						this.totalCookTime = 900;
+						this.totalCookTime = 300;
 						this.smeltItem();
 						flag1 = true;
 					}
@@ -127,7 +126,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 			if (itemstack == null)
 				return false;
 			if (itemstack.getItem() == ModItems.bestiary) {
-				if (EnumBestiaryPages.hasAllPages(itemstack)) {
+				if (EnumBestiaryPages.possiblePages(itemstack).isEmpty()) {
 					return false;
 				}
 			}
@@ -180,7 +179,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 			stack.stackSize = this.getInventoryStackLimit();
 		}
 		if (index == 0 && !flag) {
-			this.totalCookTime = 900;
+			this.totalCookTime = 300;
 			this.cookTime = 0;
 			this.markDirty();
 		}
@@ -285,6 +284,11 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 			if (this.stacks[0].getItem() == ModItems.bestiary) {
 				EnumBestiaryPages.addRandomPage(itemstack);
 			}
+			--this.stacks[0].stackSize;
+
+			if (this.stacks[0].stackSize <= 0) {
+				this.stacks[0] = null;
+			}
 
 			if (this.stacks[2] == null) {
 				this.stacks[2] = itemstack.copy();
@@ -292,11 +296,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 				this.stacks[2].stackSize += itemstack.stackSize;
 			}
 
-			--this.stacks[0].stackSize;
 
-			if (this.stacks[0].stackSize <= 0) {
-				this.stacks[0] = null;
-			}
 		}
 	}
 
