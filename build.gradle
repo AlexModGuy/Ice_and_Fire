@@ -41,6 +41,14 @@ repositories {
     }
 }
 
+
+jar {
+    manifest {
+        attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"
+        attributes "FMLCorePluginContainsFMLMod": "true"
+    }
+}
+
 dependencies {
     compile "net.ilexiconn:llibrary:1.7.4-1.10.2:dev"
 }
