@@ -629,9 +629,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
-        if (this.isModelDead() && this.getDeathStage() < this.getAgeInDays() / 5) {
+        int lastDeathStage = this.getAgeInDays() / 5;
+        if (this.isModelDead() && this.getDeathStage() < lastDeathStage) {
             player.addStat(ModAchievements.dragonHarvest, 1);
-            if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() >= (this.getAgeInDays() / 5) / 2){
+            if(stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() > lastDeathStage / 2){
                 if (!player.capabilities.isCreativeMode) {
                     --stack.stackSize;
                 }
@@ -639,7 +640,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
                 return true;
             }else {
-                if (this.getDeathStage() == (this.getAgeInDays() / 5) - 1) {
+                if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = new ItemStack(ModItems.dragon_skull, 1, this.isFire ? 0 : 1);
                     skull.setTagCompound(new NBTTagCompound());
                     skull.getTagCompound().setInteger("Stage", this.getDragonStage());
@@ -650,7 +651,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         this.entityDropItem(skull, 1);
                     }
                     this.setDead();
-                } else if (this.getDeathStage() > (this.getAgeInDays() / 5) && this.getDeathStage() < (this.getAgeInDays() / 5 ) + 1) {
+                } else if (this.getDeathStage() == (int)(lastDeathStage / 2) - 1) {
                     ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(3)), 1);
                     if (!worldObj.isRemote) {
@@ -659,6 +660,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.entityDropItem(egg, 1);
                         }
                     }
+                    this.setDeathStage(this.getDeathStage() + 1);
                 } else {
                     this.setDeathStage(this.getDeathStage() + 1);
                     ItemStack drop = getRandomDrop();
@@ -751,19 +753,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     private ItemStack getRandomDrop() {
         int chance = this.rand.nextInt(99) + 1;
+        Item flesh = isFire ? ModItems.fire_dragon_flesh : ModItems.ice_dragon_flesh;
         if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
             this.playSound(SoundEvents.field_190036_ha, 1, 1);
             return new ItemStack(ModItems.dragonbone, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
         } else {
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
-
-            if (chance > 0 && chance < 20) {
-                return new ItemStack(ModItems.dragonbone, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
+            if (chance >= 0 && chance < 40) {
+                return new ItemStack(flesh, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
             }
-            if (chance >= 20 && chance < 40) {
-                return new ItemStack(ModItems.dragonbone, 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 25)));
-            }
-            if (chance >= 40 && chance < 90) {
+            if (chance >= 40 && chance < 100) {
                 return new ItemStack(this.getVariantScale(this.getVariant()), 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 5)));
             }
         }
