@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
@@ -20,9 +21,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import java.util.Random;
 
 public class StructureGenerator implements IWorldGenerator {
 
@@ -54,7 +53,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonRoosts) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
-			if (world.getBiomeGenForCoords(height) != Biomes.ICE_PLAINS && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER) || isHills) {
+			if (world.getBiomeGenForCoords(height).getTemperature() > -0.5 && world.getBiomeGenForCoords(height) != Biomes.ICE_PLAINS && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER) || isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
@@ -69,7 +68,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonDens) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.MOUNTAIN);
-			if (!BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER)|| isHills) {
+			if (world.getBiomeGenForCoords(height).getTemperature() > -0.5 && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(height), Type.RIVER)|| isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
 					int newY = 20 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);

@@ -1566,9 +1566,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
             if (controller != null) {
                 strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
+                forward = controller.moveForward ;
                 if (forward <= 0.0F) {
                     forward *= 0.25F;
+                }
+                if(this.isFlying() || this.isHovering()){
+                    motionX *= 1.06;
+                    motionZ *= 1.06;
                 }
                 jumpMovementFactor = 0.05F;
                 this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
