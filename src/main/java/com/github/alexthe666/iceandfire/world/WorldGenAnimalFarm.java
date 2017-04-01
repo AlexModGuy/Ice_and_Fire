@@ -2,8 +2,6 @@ package com.github.alexthe666.iceandfire.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.*;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -23,7 +21,7 @@ public class WorldGenAnimalFarm extends WorldGenerator{
             return false;
         }
 
-        Biome biome = worldIn.getBiomeGenForCoords(position);
+        Biome biome = worldIn.getBiome(position);
         Block fence = Blocks.OAK_FENCE;
         Block fence_gate = Blocks.OAK_FENCE_GATE;
         if( BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SAVANNA)){
@@ -32,21 +30,21 @@ public class WorldGenAnimalFarm extends WorldGenerator{
             for(int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityCow(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
-                worldIn.spawnEntityInWorld(animal);
+                worldIn.spawnEntity(animal);
             }        }else if( BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.CONIFEROUS)){
             fence = Blocks.SPRUCE_FENCE;
             fence_gate = Blocks.SPRUCE_FENCE_GATE;
             for(int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntitySheep(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
-                worldIn.spawnEntityInWorld(animal);
+                worldIn.spawnEntity(animal);
             }        }else if( BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.JUNGLE)){
             fence = Blocks.JUNGLE_FENCE;
             fence_gate = Blocks.JUNGLE_FENCE_GATE;
             for(int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityChicken(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
-                worldIn.spawnEntityInWorld(animal);
+                worldIn.spawnEntity(animal);
             }
         }else if(BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST) && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DENSE)){
             fence = Blocks.DARK_OAK_FENCE;
@@ -59,14 +57,14 @@ public class WorldGenAnimalFarm extends WorldGenerator{
             for(int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityPig(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
-                worldIn.spawnEntityInWorld(animal);
+                worldIn.spawnEntity(animal);
             }
         }
         if( BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.PLAINS)){
             for(int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityChicken(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
-                worldIn.spawnEntityInWorld(animal);
+                worldIn.spawnEntity(animal);
             }
         }
         for(int x = - 4; x < + 5; x++){

@@ -5,16 +5,11 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collections;
-import java.util.List;
 
 public class MessageDragonControl extends AbstractMessage<MessageDragonControl> {
 
@@ -50,7 +45,7 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.worldObj.getEntityByID(message.dragonId);
+        Entity entity = player.world.getEntityByID(message.dragonId);
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             if (dragon.isOwner(player)) {

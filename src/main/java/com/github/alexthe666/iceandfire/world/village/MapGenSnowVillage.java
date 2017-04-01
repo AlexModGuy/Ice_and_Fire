@@ -1,11 +1,5 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Map.Entry;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +8,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.world.gen.structure.*;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class MapGenSnowVillage extends WorldGenerator {
     public static List<Biome> VILLAGE_SPAWN_BIOMES = Arrays.<Biome>asList(new Biome[]{Biomes.ICE_MOUNTAINS, Biomes.ICE_PLAINS, Biomes.MUTATED_ICE_FLATS, IceAndFire.GLACIER, Biomes.COLD_TAIGA_HILLS, Biomes.FROZEN_OCEAN, Biomes.COLD_TAIGA});
@@ -42,9 +45,9 @@ public class MapGenSnowVillage extends WorldGenerator {
         this();
         for (Entry<String, String> entry : map.entrySet()) {
             if (((String) entry.getKey()).equals("size")) {
-                this.size = MathHelper.parseIntWithDefaultAndMax((String) entry.getValue(), this.size, 0);
+                this.size = MathHelper.getInt((String) entry.getValue(), this.size, 0);
             } else if (((String) entry.getKey()).equals("distance")) {
-                this.distance = MathHelper.parseIntWithDefaultAndMax((String) entry.getValue(), this.distance, 9);
+                this.distance = MathHelper.getInt((String) entry.getValue(), this.distance, 9);
             }
         }
     }

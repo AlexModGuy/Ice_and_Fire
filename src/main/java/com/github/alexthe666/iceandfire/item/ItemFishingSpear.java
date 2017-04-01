@@ -2,35 +2,25 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.List;
-import java.util.Random;
 
 public class ItemFishingSpear extends Item {
 
@@ -85,7 +75,7 @@ public class ItemFishingSpear extends Item {
                 entityplayer.addStat(StatList.getObjectUseStats(this));
                 if(!worldIn.isRemote){
                     EntityItem item = new EntityItem(worldIn, raytraceresult.getBlockPos().getX() + 0.5D, raytraceresult.getBlockPos().getY() + 1.5D, raytraceresult.getBlockPos().getZ() + 0.5D, new ItemStack(Items.FISH, 1, itemRand.nextInt(4)));
-                    worldIn.spawnEntityInWorld(item);
+                    worldIn.spawnEntity(item);
                 }
                 worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.1F);
             }

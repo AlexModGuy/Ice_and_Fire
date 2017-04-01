@@ -31,7 +31,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
         dragon.setVariant(new Random().nextInt(4));
         dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         dragon.homeArea = position;
-        worldIn.spawnEntityInWorld(dragon);
+        worldIn.spawnEntity(dragon);
         return true;
     }
 

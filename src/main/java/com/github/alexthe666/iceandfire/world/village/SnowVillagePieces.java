@@ -4,18 +4,11 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import com.google.common.collect.Lists;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.ZombieType;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -25,14 +18,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeDesert;
 import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.biome.BiomeSavanna;
-import net.minecraft.world.biome.BiomeTaiga;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.storage.loot.LootTableList;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class SnowVillagePieces {
 
@@ -44,8 +38,8 @@ public class SnowVillagePieces {
 
     public static List<SnowVillagePieces.PieceWeight> getStructureVillageWeightedPieceList(Random random, int size) {
         List<SnowVillagePieces.PieceWeight> list = Lists.<PieceWeight>newArrayList();
-        list.add(new PieceWeight(TorchNew.class, 75, MathHelper.getRandomIntegerInRange(random, 5 + size, 6 + size)));
-        list.add(new PieceWeight(WoodHut.class, 65, MathHelper.getRandomIntegerInRange(random, 3 + size, 5 + size)));
+        list.add(new PieceWeight(TorchNew.class, 75, MathHelper.getInt(random, 5 + size, 6 + size)));
+        list.add(new PieceWeight(WoodHut.class, 65, MathHelper.getInt(random, 3 + size, 5 + size)));
         Iterator<SnowVillagePieces.PieceWeight> iterator = list.iterator();
         while (iterator.hasNext()) {
             if (((PieceWeight) iterator.next()).villagePiecesLimit == 0) {
@@ -643,7 +637,7 @@ public class SnowVillagePieces {
         }
 
         public static StructureBoundingBox findPieceBox(Start start, List<StructureComponent> p_175848_1_, Random rand, int p_175848_3_, int p_175848_4_, int p_175848_5_, EnumFacing facing) {
-            for (int i = 7 * MathHelper.getRandomIntegerInRange(rand, 3, 5); i >= 7; i -= 7) {
+            for (int i = 7 * MathHelper.getInt(rand, 3, 5); i >= 7; i -= 7) {
                 StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 3, 3, i, facing);
 
                 if (StructureComponent.findIntersecting(p_175848_1_, structureboundingbox) == null) {
@@ -754,7 +748,7 @@ public class SnowVillagePieces {
             this.worldChunkMngr = chunkManagerIn;
             this.structureVillageWeightedPieceList = p_i2104_6_;
             this.terrainType = p_i2104_7_;
-            Biome biome = chunkManagerIn.getBiomeGenerator(new BlockPos(p_i2104_4_, 0, p_i2104_5_), Biomes.DEFAULT);
+            Biome biome = chunkManagerIn.getBiome(new BlockPos(p_i2104_4_, 0, p_i2104_5_), Biomes.DEFAULT);
             this.biome = biome;
             this.startPiece = this;
             this.func_189924_a(this.field_189928_h);
@@ -954,13 +948,13 @@ public class SnowVillagePieces {
                         entityzombie.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityzombie)), (IEntityLivingData) null);
                         entityzombie.setVillagerType(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
                         entityzombie.enablePersistence();
-                        worldIn.spawnEntityInWorld(entityzombie);
+                        worldIn.spawnEntity(entityzombie);
                     } else {
                         EntitySnowVillager entityvillager = new EntitySnowVillager(worldIn);
                         entityvillager.setLocationAndAngles((double) j + 0.5D, (double) k, (double) l + 0.5D, 0.0F, 0.0F);
                         entityvillager.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData) null);
                         ModVillagers.INSTANCE.setRandomProfession(entityvillager, worldIn.rand);
-                        worldIn.spawnEntityInWorld(entityvillager);
+                        worldIn.spawnEntity(entityvillager);
                     }
                 }
             }

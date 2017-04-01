@@ -1,19 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
@@ -27,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -115,7 +107,7 @@ public class ItemDragonHornActive extends Item {
                         dragon.readEntityFromNBT(stack.getTagCompound());
                     }
                     if (!worldIn.isRemote) {
-                        worldIn.spawnEntityInWorld(dragon);
+                        worldIn.spawnEntity(dragon);
                     }
                     entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
 
@@ -127,7 +119,7 @@ public class ItemDragonHornActive extends Item {
                         dragon.readEntityFromNBT(stack.getTagCompound());
                     }
                     if (!worldIn.isRemote) {
-                        worldIn.spawnEntityInWorld(dragon);
+                        worldIn.spawnEntity(dragon);
                     }
                     entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
                 }

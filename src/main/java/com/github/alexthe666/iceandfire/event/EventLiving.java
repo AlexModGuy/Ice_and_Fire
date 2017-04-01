@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.SkeletonType;
@@ -10,21 +11,18 @@ import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class EventLiving {
 	@SubscribeEvent
 	public void onEntityDrop(LivingDropsEvent event) {
 		if (event.getEntityLiving() instanceof EntitySkeleton) {
-			if (((EntitySkeleton) event.getEntityLiving()).func_189771_df() == SkeletonType.WITHER) {
+			if (((EntitySkeleton) event.getEntityLiving()).getSkeletonType() == SkeletonType.WITHER) {
 				event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
 			}
 		}

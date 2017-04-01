@@ -79,7 +79,7 @@ public class ContainerLectern extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.tileFurnace.isUseableByPlayer(playerIn);
+		return this.tileFurnace.isUsableByPlayer(playerIn);
 	}
 
 	@Override

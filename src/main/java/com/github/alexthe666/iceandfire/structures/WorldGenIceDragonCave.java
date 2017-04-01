@@ -84,7 +84,7 @@ public class WorldGenIceDragonCave extends WorldGenerator{
         dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         dragon.setSleeping(true);
         dragon.homeArea = position;
-        worldIn.spawnEntityInWorld(dragon);
+        worldIn.spawnEntity(dragon);
         return true;
     }
 

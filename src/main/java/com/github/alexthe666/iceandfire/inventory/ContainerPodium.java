@@ -31,7 +31,7 @@ public class ContainerPodium extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.podium.isUseableByPlayer(playerIn);
+		return this.podium.isUsableByPlayer(playerIn);
 	}
 
 	/**
