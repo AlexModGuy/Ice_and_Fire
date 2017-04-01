@@ -20,6 +20,8 @@ compileJava {
     sourceCompatibility = targetCompatibility = "1.6"
 }
 
+jar {     manifest {         attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"         attributes "FMLCorePluginContainsFMLMod": "true"     } }
+
 minecraft {
     version = "1.10.2-12.18.3.2185"
     runDir = "run"
@@ -29,7 +31,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20161111"
+mappings = "stable_29"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -38,14 +40,6 @@ repositories {
     maven {
         name = "ilexiconn"
         url = "http://maven.mcmoddev.com"
-    }
-}
-
-
-jar {
-    manifest {
-        attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"
-        attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
 
@@ -72,4 +66,3 @@ processResources
         exclude 'mcmod.info'
     }
 }
-
