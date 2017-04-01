@@ -142,7 +142,7 @@ public class EntityFireDragon extends EntityDragonBase {
 			}
 			break;
 		case 1:
-			if (entityIn.width < this.width * 0.5F) {
+			if (entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null) {
 				if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 					this.setAnimation(this.ANIMATION_SHAKEPREY);
 					entityIn.startRiding(this);

@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -36,6 +37,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -401,6 +403,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setCustomNameTag(compound.getString("CustomName"));
         }
     }
+
 
     @Nullable
     public Entity getControllingPassenger() {
@@ -1235,16 +1238,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.riderShootFire(this.getControllingPassenger());
             this.fireStopTicks = 10;
         }
-        if (this.strike()) {
-            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() * 0.3F, this.getRenderSize() * 0.3F, this.getRenderSize() * 0.3F));
-            if (!list.isEmpty()) {
-                Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
-                for (Entity mob : list) {
-                    if (mob instanceof EntityLivingBase && !this.getPassengers().contains(mob) && !this.isOwner((EntityLivingBase) mob) && mob != this) {
-                        this.attackEntityAsMob(this);
-                    }
+        if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
+
+            Entity entity = null;
+            List list = this.world.<EntityLivingBase>getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2), new EntityDragonBase.DragonRiderSelector(this));
+            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
+            if(!list.isEmpty()) {
+                entity = (Entity) list.get(0);
+                System.out.println(entity);
+                if (this.getAnimation() != this.ANIMATION_BITE) {
+                    this.setAnimation(this.ANIMATION_BITE);
+                    entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    this.attackDecision = false;
                 }
             }
+
         }
         if (this.dismount() && this.getControllingPassenger() != null) {
             this.getControllingPassenger().dismountRidingEntity();
@@ -1633,6 +1641,33 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.entityDropItem(itemstack, 0.0F);
                 }
             }
+        }
+    }
+    static class DragonRiderSelector implements Predicate<Entity>
+    {
+        private final EntityDragonBase parentEntity;
+
+        public DragonRiderSelector(EntityDragonBase dragon)
+        {
+            this.parentEntity = dragon;
+        }
+
+        public boolean apply(@Nullable Entity prey)
+        {
+            return prey instanceof EntityLivingBase && !sharesOwner((EntityLivingBase)prey) && !parentEntity.isOwner((EntityLivingBase)prey) && EntitySelectors.NOT_SPECTATING.apply(prey);
+        }
+
+        public boolean sharesOwner(EntityLivingBase prey){
+            if(prey != null && prey instanceof EntityLivingBase){
+                if(prey instanceof EntityTameable && parentEntity.getOwner() != null && ((EntityTameable)prey).getOwner() != null){
+                    EntityLivingBase dragonOwner = parentEntity.getOwner();
+                    EntityLivingBase dogOwner = ((EntityTameable)prey).getOwner();
+                    if(dragonOwner != dogOwner){
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 
