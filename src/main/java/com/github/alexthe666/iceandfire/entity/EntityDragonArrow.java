@@ -11,7 +11,7 @@ public class EntityDragonArrow extends EntityArrow {
 
 	public EntityDragonArrow(World worldIn) {
 		super(worldIn);
-		this.setDamage(8);
+		this.setDamage(10);
 	}
 
 	public EntityDragonArrow(World worldIn, double x, double y, double z) {
@@ -25,13 +25,13 @@ public class EntityDragonArrow extends EntityArrow {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tagCompound) {
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setDouble("damage", 8);
+		tagCompound.setDouble("damage", 10);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompund) {
 		super.readEntityFromNBT(tagCompund);
-		tagCompund.setDouble("damage", 8);
+		tagCompund.setDouble("damage", 10);
 	}
 
 	@Override

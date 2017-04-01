@@ -2,13 +2,13 @@
 {
   "modid": "iceandfire",
   "name": "Ice and Fire",
-  "description": "Amazing dragons that revolutionize the way Minecraft works.",
-  "version": "005",
+  "description": "Ice and Fire shines a whole new light on dragons.",
+  "version": "1.0",
   "mcversion": "1.10.2",
   "url": "",
   "updateUrl": "",
   "authorList": ["Alexthe666", "Raptorfarian"],
-  "credits": "",
+  "credits": "gegy1000, Paul Fulham, 4f6f3b, and iLexiconn - Thanks for all the help!",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
