@@ -9,10 +9,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
 
 public class RenderDragonFireCharge extends Render {
 
@@ -36,7 +33,7 @@ public class RenderDragonFireCharge extends Render {
 		this.bindEntityTexture(entity);
 		GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate(-0.5F, 0F, 0.5F);
-		blockrendererdispatcher.renderBlockBrightness(isFire ? Blocks.field_189877_df.getDefaultState() : Blocks.PACKED_ICE.getDefaultState(), entity.getBrightness(partialTicks));
+		blockrendererdispatcher.renderBlockBrightness(isFire ? Blocks.MAGMA.getDefaultState() : Blocks.PACKED_ICE.getDefaultState(), entity.getBrightness(partialTicks));
 		GlStateManager.translate(-1.0F, 0.0F, 1.0F);
 		GL11.glPopMatrix();
 	}

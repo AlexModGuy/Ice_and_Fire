@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.List;
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
+import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -17,11 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -30,9 +26,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
+import java.util.List;
+import java.util.Random;
 
 public class BlockPodium extends BlockContainer {
 	public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
@@ -58,7 +53,7 @@ public class BlockPodium extends BlockContainer {
 		if (worldIn.getTileEntity(pos) instanceof TileEntityPodium) {
 			TileEntityPodium podium = (TileEntityPodium) worldIn.getTileEntity(pos);
 			if (podium.getStackInSlot(0) != null) {
-				worldIn.spawnEntityInWorld(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, podium.getStackInSlot(0)));
+				worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, podium.getStackInSlot(0)));
 			}
 		}
 		super.breakBlock(worldIn, pos, state);

@@ -51,10 +51,10 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 			--this.furnaceBurnTime;
 		}
 
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (!this.isBurning() && (this.stacks[1] == null || this.stacks[0] == null)) {
 				if (!this.isBurning() && this.cookTime > 0) {
-					this.cookTime = MathHelper.clamp_int(this.cookTime - 2, 0, this.totalCookTime);
+					this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.totalCookTime);
 				}
 			} else {
 				if (!this.isBurning() && this.canSmelt()) {
@@ -102,7 +102,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 		this.pageFlipPrev = this.pageFlip;
 		float f = (this.pageHelp1 - this.pageFlip) * 0.04F;
 		float f3 = 0.02F;
-		f = MathHelper.clamp_float(f, -f3, f3);
+		f = MathHelper.clamp(f, -f3, f3);
 		this.pageHelp2 += (f - this.pageHelp2) * 0.9F;
 		this.pageFlip += this.pageHelp2;
 	}
@@ -243,7 +243,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 

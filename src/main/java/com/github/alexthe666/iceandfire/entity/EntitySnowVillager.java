@@ -5,14 +5,10 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -35,7 +31,7 @@ public class EntitySnowVillager extends EntityVillager {
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-        ModVillagers.INSTANCE.setRandomProfession(this, this.worldObj.rand);
+        ModVillagers.INSTANCE.setRandomProfession(this, this.world.rand);
         return livingdata;
     }
 
@@ -48,7 +44,7 @@ public class EntitySnowVillager extends EntityVillager {
     }
 
     public void onDeath(DamageSource cause) {
-        if(cause.getEntity() != null && cause.getEntity() instanceof EntityZombie && (this.worldObj.getDifficulty() == EnumDifficulty.NORMAL || this.worldObj.getDifficulty() == EnumDifficulty.HARD)){
+        if(cause.getEntity() != null && cause.getEntity() instanceof EntityZombie && (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD)){
             return;
         }else{
             super.onDeath(cause);
@@ -64,13 +60,13 @@ public class EntitySnowVillager extends EntityVillager {
             }
             this.prof = prof;
         }else{
-            ModVillagers.INSTANCE.setRandomProfession(this, this.worldObj.rand);
+            ModVillagers.INSTANCE.setRandomProfession(this, this.world.rand);
         }
     }
 
     public EntityVillager createChild(EntityAgeable ageable) {
-        EntitySnowVillager entityvillager = new EntitySnowVillager(this.worldObj);
-        entityvillager.onInitialSpawn(this.worldObj.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData)null);
+        EntitySnowVillager entityvillager = new EntitySnowVillager(this.world);
+        entityvillager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData)null);
         return entityvillager;
     }
 

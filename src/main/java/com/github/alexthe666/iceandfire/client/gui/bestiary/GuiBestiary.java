@@ -10,25 +10,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class GuiBestiary extends GuiScreen {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
@@ -154,7 +150,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    boolean drawGold = Minecraft.getMinecraft().thePlayer.ticksExisted % 20 < 10;
+                    boolean drawGold = Minecraft.getMinecraft().player.ticksExisted % 20 < 10;
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : ModItems.silverNugget), 144, 34, 1.5F);
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : ModItems.silverNugget), 161, 34, 1.5F);
                     drawItemStack(new ItemStack(drawGold ? ModBlocks.goldPile : ModBlocks.silverPile), 151, 7, 2F);
@@ -303,7 +299,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    boolean drawFire = Minecraft.getMinecraft().thePlayer.ticksExisted % 40 < 20;
+                    boolean drawFire = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
                     drawItemStack(new ItemStack(drawFire ? ModBlocks.fire_lily : ModBlocks.frost_lily), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(Items.BOWL), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? Items.BLAZE_ROD : Items.PRISMARINE_CRYSTALS), 177, 17, 1.5F);
@@ -385,7 +381,7 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(ModItems.fire_dragon_blood), 10, 24, 2.5F);
                     drawItemStack(new ItemStack(ModItems.ice_dragon_blood), 26, 24, 2.5F);
                     GL11.glPopMatrix();
-                    boolean drawFire = Minecraft.getMinecraft().thePlayer.ticksExisted % 40 < 20;
+                    boolean drawFire = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
                     drawItemStack(new ItemStack(ModItems.dragonbone_sword), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? ModItems.dragonbone_sword_fire : ModItems.dragonbone_sword_ice), 151, 10, 2F);

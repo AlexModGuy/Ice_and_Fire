@@ -129,7 +129,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 

@@ -27,7 +27,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 	public EntityDragonFire(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
 		this.setSize(0.5F, 0.5F);
-		double d0 = (double) MathHelper.sqrt_double(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.accelerationX = accelX / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationY = accelY / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationZ = accelZ / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
@@ -50,7 +50,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 	public void onUpdate() {
 		super.onUpdate();
 		for (int i = 0; i < 6; ++i) {
-			IceAndFire.PROXY.spawnParticle("dragonfire", worldObj, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+			IceAndFire.PROXY.spawnParticle("dragonfire", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 		}
 		if (ticksExisted > 160) {
 			setDead();
@@ -65,7 +65,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 	@Override
 	protected void onImpact(RayTraceResult movingObject) {
 
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile){
 				return;
 			}
@@ -74,7 +74,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 					return;
 				}
 				if(this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-					FireExplosion explosion = new FireExplosion(worldObj, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, true);
+					FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, true);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
 				}
@@ -98,7 +98,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 			}
 
 			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
-				boolean flag = this.worldObj.getGameRules().getBoolean("mobGriefing");
+				boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 				this.setDead();
 			}
 		}
@@ -132,7 +132,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 		fireball.motionX = x;
 		fireball.motionY = y;
 		fireball.motionZ = z;
-		float f1 = MathHelper.sqrt_double(x * x + z * z);
+		float f1 = MathHelper.sqrt(x * x + z * z);
 		fireball.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
 		fireball.rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
 		fireball.prevRotationYaw = fireball.rotationYaw;

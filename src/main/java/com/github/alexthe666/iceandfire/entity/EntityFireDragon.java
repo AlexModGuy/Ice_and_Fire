@@ -1,35 +1,26 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.google.common.base.Predicate;
+import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.google.common.base.Predicate;
-
-import fossilsarcheology.api.EnumDiet;
-
-import java.util.Random;
+import javax.annotation.Nullable;
 
 public class EntityFireDragon extends EntityDragonBase {
 
@@ -187,7 +178,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	}
 
 	public void moveEntityTowards(Entity entity, double x, double y, double z, float velocity, float inaccuracy) {
-		float f = MathHelper.sqrt_double(x * x + y * y + z * z);
+		float f = MathHelper.sqrt(x * x + y * y + z * z);
 		x = x / (double) f;
 		y = y / (double) f;
 		z = z / (double) f;
@@ -228,15 +219,15 @@ public class EntityFireDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+				world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 				double d2 = controller.getLookVec().xCoord;
 				double d3 = controller.getLookVec().yCoord;
 				double d4 = controller.getLookVec().zCoord;
-				EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(worldObj, this, d2, d3, d4);				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+				EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
 				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-				if (!worldObj.isRemote) {
-					worldObj.spawnEntityInWorld(entitylargefireball);
+				if (!world.isRemote) {
+					world.spawnEntity(entitylargefireball);
 				}
 
 			}
@@ -250,12 +241,12 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = controller.getLookVec().xCoord;
 					double d3 = controller.getLookVec().yCoord;
 					double d4 = controller.getLookVec().zCoord;
-					EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
-					worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+					EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
+					world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					if (!worldObj.isRemote) {
-						worldObj.spawnEntityInWorld(entitylargefireball);
+					if (!world.isRemote) {
+						world.spawnEntity(entitylargefireball);
 					}
 				}
 			} else {
@@ -277,13 +268,13 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
-					worldObj.playEvent(null, 1016, new BlockPos(this), 0);
-					EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(worldObj, this, d2, d3, d4);
+					world.playEvent(null, 1016, new BlockPos(this), 0);
+					EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					if (!worldObj.isRemote) {
-						worldObj.spawnEntityInWorld(entitylargefireball);
+					if (!world.isRemote) {
+						world.spawnEntity(entitylargefireball);
 					}
 					if (entity.isDead || entity == null) {
 						this.setBreathingFire(false);
@@ -300,12 +291,12 @@ public class EntityFireDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
-						worldObj.playEvent(null, 1016, new BlockPos(this), 0);
-						EntityDragonFire entitylargefireball = new EntityDragonFire(worldObj, this, d2, d3, d4);
+						world.playEvent(null, 1016, new BlockPos(this), 0);
+						EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-						if (!worldObj.isRemote && !entity.isDead) {
-							worldObj.spawnEntityInWorld(entitylargefireball);
+						if (!world.isRemote && !entity.isDead) {
+							world.spawnEntity(entitylargefireball);
 						}
 						entitylargefireball.setSizes(size, size);
 						if (entity.isDead || entity == null) {

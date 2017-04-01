@@ -65,7 +65,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
             }
         } else {
             BlockPos blockpos1 = new BlockPos(this.dragon.getAttackTarget()).down();
-            if (this.dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.WATER) {
+            if (this.dragon.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
                 return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
             }
         }

@@ -1,18 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.List;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.core.ModAchievements;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class DragonAIMate extends EntityAIBase
 {
@@ -24,7 +23,7 @@ public class DragonAIMate extends EntityAIBase
 
     public DragonAIMate(EntityDragonBase dragon, double speedIn) {
         this.dragon = dragon;
-        this.theWorld = dragon.worldObj;
+        this.theWorld = dragon.world;
         this.moveSpeed = speedIn;
         this.setMutexBits(3);
     }
@@ -121,7 +120,7 @@ public class DragonAIMate extends EntityAIBase
             this.dragon.resetInLove();
             this.targetMate.resetInLove();
             egg.setLocationAndAngles(this.dragon.posX, this.dragon.posY, this.dragon.posZ, 0.0F, 0.0F);
-            this.theWorld.spawnEntityInWorld(egg);
+            this.theWorld.spawnEntity(egg);
             Random random = this.dragon.getRNG();
 
             for (int i = 0; i < 17; ++i)
@@ -137,7 +136,7 @@ public class DragonAIMate extends EntityAIBase
 
             if (this.theWorld.getGameRules().getBoolean("doMobLoot"))
             {
-                this.theWorld.spawnEntityInWorld(new EntityXPOrb(this.theWorld, this.dragon.posX, this.dragon.posY, this.dragon.posZ, random.nextInt(15) + 10));
+                this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.posX, this.dragon.posY, this.dragon.posZ, random.nextInt(15) + 10));
             }
         }
     }

@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.core.ModAchievements;
+import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,10 +11,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 public class TileEntityEggInIce extends TileEntity implements ITickable {
 	public EnumDragonEgg type;
@@ -54,11 +52,11 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 
 	public void spawnEgg() {
 		if (type != null) {
-			EntityDragonEgg egg = new EntityDragonEgg(worldObj);
+			EntityDragonEgg egg = new EntityDragonEgg(world);
 			egg.setType(type);
 			egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			if (!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(egg);
+			if (!world.isRemote) {
+				world.spawnEntity(egg);
 			}
 		}
 	}
@@ -66,11 +64,11 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		age++;
-		EntityPlayer player = worldObj.getClosestPlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 5, false);
+		EntityPlayer player = world.getClosestPlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 5, false);
 		if (age == 20 * 60 && type != null && player != null) {
-			worldObj.destroyBlock(pos, false);
-			worldObj.setBlockState(pos, Blocks.WATER.getDefaultState());
-			EntityIceDragon dragon = new EntityIceDragon(worldObj);
+			world.destroyBlock(pos, false);
+			world.setBlockState(pos, Blocks.WATER.getDefaultState());
+			EntityIceDragon dragon = new EntityIceDragon(world);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			dragon.setVariant(type.ordinal() - 4);
 			dragon.setTamed(true);
@@ -78,8 +76,8 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 				dragon.setOwnerId(player.getUniqueID());
 				player.addStat(ModAchievements.dragonHatch, 1);
 			}
-			if (!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(dragon);
+			if (!world.isRemote) {
+				world.spawnEntity(dragon);
 			}
 		}
 		ticksExisted++;

@@ -28,8 +28,8 @@ public class RenderLectern extends TileEntitySpecialRenderer {
 		this.bindTexture(bookTex);
 		float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.25F;
 		float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.75F;
-		f4 = (f4 - MathHelper.truncateDoubleToInt(f4)) * 1.6F - 0.3F;
-		f5 = (f5 - MathHelper.truncateDoubleToInt(f5)) * 1.6F - 0.3F;
+		f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
+		f5 = (f5 - MathHelper.fastFloor(f5)) * 1.6F - 0.3F;
 
 		if (f4 < 0.0F) {
 			f4 = 0.0F;

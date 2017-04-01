@@ -1,15 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Random;
-
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.client.model.Vec3;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import java.util.Random;
 
 public class DragonAIAirTarget extends EntityAIBase {
 	private EntityDragonBase dragon;
@@ -17,7 +15,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 
 	public DragonAIAirTarget(EntityDragonBase dragon) {
 		this.dragon = dragon;
-		this.theWorld = dragon.worldObj;
+		this.theWorld = dragon.world;
 	}
 
 	public boolean shouldExecute() {
@@ -69,11 +67,11 @@ public class DragonAIAirTarget extends EntityAIBase {
 						return new Vec3d(dragon.homeArea.getX(), dragon.homeArea.getY(), dragon.homeArea.getZ());
 					}
 					if (dragon.onGround) {
-						if (dragon.worldObj.getBlockState(blockpos1ground).getMaterial() == Material.AIR) {
+						if (dragon.world.getBlockState(blockpos1ground).getMaterial() == Material.AIR) {
 							return new Vec3d(blockpos1ground.getX(), blockpos1ground.getY(), blockpos1ground.getZ());
 						}
 					} else {
-						if (dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR) {
+						if (dragon.world.getBlockState(blockpos1).getMaterial() == Material.AIR) {
 							return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
 						}
 					}
@@ -84,11 +82,11 @@ public class DragonAIAirTarget extends EntityAIBase {
 						return null;
 					}
 					if (dragon.onGround) {
-						if (dragon.worldObj.getBlockState(blockpos1ground).getMaterial() == Material.AIR) {
+						if (dragon.world.getBlockState(blockpos1ground).getMaterial() == Material.AIR) {
 							return new Vec3d(blockpos1ground.getX(), blockpos1ground.getY(), blockpos1ground.getZ());
 						}
 					} else {
-						if (dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR) {
+						if (dragon.world.getBlockState(blockpos1).getMaterial() == Material.AIR) {
 							return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
 						}
 					}
@@ -96,7 +94,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 			}
 		} else {
 			BlockPos blockpos1 = new BlockPos((int) dragon.getAttackTarget().posX, (int) dragon.getAttackTarget().posY, (int) dragon.getAttackTarget().posZ);
-			if (dragon.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR) {
+			if (dragon.world.getBlockState(blockpos1).getMaterial() == Material.AIR) {
 				return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
 			}
 		}

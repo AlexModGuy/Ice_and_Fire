@@ -3,14 +3,12 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -29,7 +27,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 
@@ -273,16 +270,16 @@ public class EntityIceDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+				world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 				double d2 = controller.getLookVec().xCoord;
 				double d3 = controller.getLookVec().yCoord;
 				double d4 = controller.getLookVec().zCoord;
-				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(worldObj, this, d2, d3, d4);
+				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
 				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-				if (!worldObj.isRemote) {
-					worldObj.spawnEntityInWorld(entitylargefireball);
+				if (!world.isRemote) {
+					world.spawnEntity(entitylargefireball);
 				}
 
 			}
@@ -296,12 +293,12 @@ public class EntityIceDragon extends EntityDragonBase {
 					double d2 = controller.getLookVec().xCoord;
 					double d3 = controller.getLookVec().yCoord;
 					double d4 = controller.getLookVec().zCoord;
-					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(worldObj, this, d2, d3, d4);
-					worldObj.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
+					world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					if (!worldObj.isRemote) {
-						worldObj.spawnEntityInWorld(entitylargefireball);
+					if (!world.isRemote) {
+						world.spawnEntity(entitylargefireball);
 					}
 				}
 			} else {
@@ -338,7 +335,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	}
 
 	protected boolean isTargetInWater() {
-		return waterTarget != null && (worldObj.getBlockState(waterTarget).getMaterial() == Material.WATER);
+		return waterTarget != null && (world.getBlockState(waterTarget).getMaterial() == Material.WATER);
 	}
 
 	private void shootIceAtMob(EntityLivingBase entity) {
@@ -354,13 +351,13 @@ public class EntityIceDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
-					worldObj.playEvent(null, 1016, new BlockPos(this), 0);
-					EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(worldObj, this, d2, d3, d4);
+					world.playEvent(null, 1016, new BlockPos(this), 0);
+					EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					if (!worldObj.isRemote) {
-						worldObj.spawnEntityInWorld(entitylargefireball);
+					if (!world.isRemote) {
+						world.spawnEntity(entitylargefireball);
 					}
 					if (entity.isDead || entity == null) {
 						this.setBreathingFire(false);
@@ -377,12 +374,12 @@ public class EntityIceDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
-						worldObj.playEvent(null, 1016, new BlockPos(this), 0);
-						EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(worldObj, this, d2, d3, d4);
+						world.playEvent(null, 1016, new BlockPos(this), 0);
+						EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-						if (!worldObj.isRemote && !entity.isDead) {
-							worldObj.spawnEntityInWorld(entitylargefireball);
+						if (!world.isRemote && !entity.isDead) {
+							world.spawnEntity(entitylargefireball);
 						}
 						entitylargefireball.setSizes(size, size);
 						if (entity.isDead || entity == null) {
@@ -399,13 +396,13 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public void setSwimming(boolean swimming) {
 		this.dataManager.set(SWIMMING, swimming);
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			this.isSwimming = swimming;
 		}
 	}
 
 	public boolean isSwimming() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			boolean swimming = this.dataManager.get(SWIMMING);
 			this.isSwimming = swimming;
 			return swimming;

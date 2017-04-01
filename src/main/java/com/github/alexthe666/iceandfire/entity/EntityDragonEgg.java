@@ -88,33 +88,33 @@ public class EntityDragonEgg extends EntityLiving {
 	public void onUpdate() {
 		super.onUpdate();
 		BlockPos pos = new BlockPos(this);
-		if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
+		if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
 			this.setDragonAge(this.getDragonAge() + 1);
 		}
-		if (worldObj.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
-			worldObj.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
-			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
-			if (worldObj.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
-				((TileEntityEggInIce) worldObj.getTileEntity(pos)).type = this.getType();
+		if (world.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
+			world.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
+			this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
+			if (world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
+				((TileEntityEggInIce) world.getTileEntity(pos)).type = this.getType();
 				this.setDead();
 			}
 		}
 		if (this.getDragonAge() > 20 * 60 ) {
-			if (worldObj.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire && worldObj.getClosestPlayerToEntity(this, 5) != null) {
-				worldObj.setBlockToAir(pos);
-				EntityFireDragon dragon = new EntityFireDragon(worldObj);
+			if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire && world.getClosestPlayerToEntity(this, 5) != null) {
+				world.setBlockToAir(pos);
+				EntityFireDragon dragon = new EntityFireDragon(world);
 				dragon.setVariant(getType().ordinal());
 				dragon.setGender(rand.nextBoolean());
 				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-				if (!worldObj.isRemote) {
-					worldObj.spawnEntityInWorld(dragon);
+				if (!world.isRemote) {
+					world.spawnEntity(dragon);
 				}
 				dragon.setTamed(true);
-				dragon.setOwnerId(worldObj.getClosestPlayerToEntity(this, 5).getUniqueID());
-				worldObj.getClosestPlayerToEntity(this, 5).addStat(ModAchievements.dragonHatch, 1);
+				dragon.setOwnerId(world.getClosestPlayerToEntity(this, 5).getUniqueID());
+				world.getClosestPlayerToEntity(this, 5).addStat(ModAchievements.dragonHatch, 1);
 			}
-			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
-			this.worldObj.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.dragon_hatch, this.getSoundCategory(), 2.5F, 1.0F, false);
+			this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
+			this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.dragon_hatch, this.getSoundCategory(), 2.5F, 1.0F, false);
 			this.setDead();
 		}
 	}
@@ -137,7 +137,7 @@ public class EntityDragonEgg extends EntityLiving {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource var1, float var2) {
-		if (!worldObj.isRemote && !var1.canHarmInCreative()) {
+		if (!world.isRemote && !var1.canHarmInCreative()) {
 			this.dropItem(this.getItem().getItem(), 1);
 		}
 		this.setDead();

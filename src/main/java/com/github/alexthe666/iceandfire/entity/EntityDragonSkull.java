@@ -101,7 +101,7 @@ public class EntityDragonSkull extends EntityAnimal {
 		stack.getTagCompound().setInteger("Stage", this.getStage());
 		stack.getTagCompound().setInteger("DragonType", this.getType());
 		stack.getTagCompound().setInteger("DragonAge", this.getDragonAge());
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 			this.entityDropItem(stack, 0.0F);
 		this.setDead();
 

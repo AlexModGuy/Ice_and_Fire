@@ -26,7 +26,7 @@ public class GuiDragon extends GuiContainer {
 	private float mousePosY;
 
 	public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
-		super(new ContainerDragon(dragon, Minecraft.getMinecraft().thePlayer));
+		super(new ContainerDragon(dragon, Minecraft.getMinecraft().player));
 		this.playerInventory = playerInv;
 		// this.dragonInv = dragon.inv;
 		this.dragon = dragon;

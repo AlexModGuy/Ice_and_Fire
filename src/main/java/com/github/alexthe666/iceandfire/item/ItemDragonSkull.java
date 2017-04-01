@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.StatCollector;
+import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,15 +13,12 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+import java.util.List;
 
 public class ItemDragonSkull extends Item {
 
@@ -78,12 +76,11 @@ public class ItemDragonSkull extends Item {
 				skull.setType(stack.getMetadata());
 				skull.setStage(stack.getTagCompound().getInteger("Stage"));
 				skull.setDragonAge(stack.getTagCompound().getInteger("DragonAge"));
-				float f3 = MathHelper.floor_float((MathHelper.wrapDegrees(player.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 				skull.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0);
 				skull.rotationYaw = player.rotationYaw;
 
 				if (!worldIn.isRemote) {
-					worldIn.spawnEntityInWorld(skull);
+					worldIn.spawnEntity(skull);
 				}
 				if (!player.capabilities.isCreativeMode) {
 					--stack.stackSize;

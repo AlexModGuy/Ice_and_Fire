@@ -18,7 +18,7 @@ public class GuiPodium extends GuiContainer {
 	private IInventory podiumInventory;
 
 	public GuiPodium(InventoryPlayer playerInv, IInventory podiumInv) {
-		super(new ContainerPodium(playerInv, podiumInv, Minecraft.getMinecraft().thePlayer));
+		super(new ContainerPodium(playerInv, podiumInv, Minecraft.getMinecraft().player));
 		this.playerInventory = playerInv;
 		this.podiumInventory = podiumInv;
 		this.allowUserInput = false;

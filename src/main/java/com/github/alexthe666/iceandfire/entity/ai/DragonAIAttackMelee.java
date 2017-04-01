@@ -27,7 +27,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
 	public DragonAIAttackMelee(EntityDragonBase prehistoric, double speedIn, boolean useLongMemory) {
 		this.dragon = prehistoric;
-		this.worldObj = prehistoric.worldObj;
+		this.worldObj = prehistoric.world;
 		this.speedTowardsTarget = speedIn;
 		this.longMemory = useLongMemory;
 		this.setMutexBits(3);
