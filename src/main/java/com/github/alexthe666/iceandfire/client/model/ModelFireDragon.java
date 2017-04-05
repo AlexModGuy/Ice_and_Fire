@@ -1040,7 +1040,7 @@ public class ModelFireDragon extends ModelDragonBase {
 			this.flap(ClawL, speed_walk, degree_walk * 1.2F, true, 0, 0.5F, f, f1);
 			this.flap(ClawR, speed_walk, degree_walk * 1.2F, false, 0, -0.5F, f, f1);
 		}
-		if(!dragon.isRiding()){
+		if(!dragon.isRiding() || dragon.getAttackTarget() == null || dragon.getAttackTarget() != null && !dragon.getAttackTarget().isRidingOrBeingRiddenBy(dragon)){
 			this.faceTarget(f3, f4, 3, NECK);
 		}
 		this.bob(BodyLower, speed_walk * 2, degree_walk * 1.7F, false, f, f1);

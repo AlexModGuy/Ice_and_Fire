@@ -28,15 +28,31 @@ public class DragonAIBreakBlocks extends EntityAIBase {
                     BlockPos pos = new BlockPos(a, b, c);
                     IBlockState state = dragon.world.getBlockState(pos);
                     if (state.getBlockHardness(dragon.world, pos) > -1 && state.getBlockHardness(dragon.world, pos) < 5 && !dragon.world.isAirBlock(pos) && state.getMaterial() != Material.PLANTS && !(state.getBlock() instanceof BlockFluidBase || state.getBlock() instanceof BlockLiquid)) {
-                        if ((dragon.getDragonStage() == 3 || IceAndFire.CONFIG.dragonGriefing != 2) && state.getBlockHardness(dragon.world, pos) <= 2F) {
-                            dragon.world.destroyBlock(pos, false);
+                        switch(IceAndFire.CONFIG.dragonGriefing){
+                            case 2:
+                                break;
+                            case 1:
+                                if(state.getBlockHardness(dragon.world, pos) < 1.5F){
+                                    dragon.world.setBlockToAir(pos);
+                                }
+                                break;
+                            case 0:
+                                if (dragon.getDragonStage() > 3){
+                                    if(state.getBlockHardness(dragon.world, pos) < 1.5F){
+                                        dragon.world.setBlockToAir(pos);
+                                    }
+                                }else{
+                                    if(state.getBlockHardness(dragon.world, pos) <= 5F){
+                                        dragon.world.setBlockToAir(pos);
+                                    }
+                                }
+                                break;
                         }
-                        else if (dragon.getDragonStage() > 3 && IceAndFire.CONFIG.dragonGriefing == 0) {
-                            dragon.world.destroyBlock(pos, false);
-                        }
+                        return;
                     }
                 }
             }
         }
     }
+
 }

@@ -24,6 +24,10 @@ public class IceAndFireConfig {
 	public boolean generateSnowVillages = true;
 	@ConfigEntry(category = "generation")
 	public int generateSnowVillageChance = 100;
+	@ConfigEntry(category = "generation")
+	public int[] dragonBlacklistedDimensions = new int[]{1, -1};
+	@ConfigEntry(category = "generation")
+	public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
 	@ConfigEntry(category = "dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default")
 	public int dragonGriefing = 0;
 }

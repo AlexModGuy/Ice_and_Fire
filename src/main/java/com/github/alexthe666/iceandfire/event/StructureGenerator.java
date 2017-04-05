@@ -21,6 +21,8 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class StructureGenerator implements IWorldGenerator {
@@ -51,7 +53,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.generateDragonRoosts) {
+		if (IceAndFire.CONFIG.generateDragonRoosts && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.MOUNTAIN);
 			if (world.getBiome(height).getTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER) || isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
@@ -66,7 +68,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.generateDragonDens) {
+		if (IceAndFire.CONFIG.generateDragonDens && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.MOUNTAIN);
 			if (world.getBiome(height).getTemperature() > -0.5 && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER)|| isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
@@ -108,7 +110,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.generateSnowVillages && BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY)) {
+		if (IceAndFire.CONFIG.generateSnowVillages && !isDimensionBlacklisted(world.provider.getDimension(), false) && BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY)) {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
 		if (BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY)) {
@@ -136,5 +138,17 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 		}
 		return pos;
+	}
+
+	private boolean isDimensionBlacklisted(int id, boolean dragons){
+		int[] blacklistedArray = dragons ? IceAndFire.CONFIG.dragonBlacklistedDimensions :IceAndFire.CONFIG.snowVillageBlacklistedDimensions;
+		List<Integer> dimList = new ArrayList<Integer>();
+		for (int dimension : blacklistedArray) {
+			dimList.add(dimension);
+		}
+		if(dimList.contains(id)){
+			return true;
+		}
+		return false;
 	}
 }

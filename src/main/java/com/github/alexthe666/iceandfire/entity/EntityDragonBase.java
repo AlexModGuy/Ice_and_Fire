@@ -888,6 +888,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
+        if(this.isModelDead() && this.isFlying() || this.isHovering()){
+            this.setFlying(false);
+            this.setHovering(false);
+        }
         if(this.isModelDead() && animationCycle != 0){
             animationCycle = 0;
         }
