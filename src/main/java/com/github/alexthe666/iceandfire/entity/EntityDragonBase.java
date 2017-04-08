@@ -901,7 +901,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
-        if(this.isModelDead() && this.isFlying() || this.isHovering()){
+        if(this.isModelDead() && (this.isFlying() || this.isHovering())){
             this.setFlying(false);
             this.setHovering(false);
         }
@@ -1265,7 +1265,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
             if(!list.isEmpty()) {
                 entity = (Entity) list.get(0);
-                System.out.println(entity);
                 if (this.getAnimation() != this.ANIMATION_BITE) {
                     this.setAnimation(this.ANIMATION_BITE);
                     entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -1296,11 +1295,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if(world.isRemote){
             roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
+
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
         }
-        if (!this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() &&  this.getAttackTarget() == null && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
+        if (!world.isRemote && !this.isInWater() && !this.isSleeping() && this.onGround && !this.isFlying() && !this.isHovering() &&  this.getAttackTarget() == null && !this.isDaytime() && this.getRNG().nextInt(250) == 0 && this.getAttackTarget() == null && this.getPassengers().isEmpty()) {
             this.setSleeping(true);
         }
         if (this.isSleeping() && (this.isFlying() || this.isHovering() || this.isInWater() || (this.world.canBlockSeeSky(new BlockPos(this)) && this.isDaytime() && !this.isTamed() || this.isDaytime() && this.isTamed()) || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
@@ -1618,12 +1618,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void updateCheckPlayer(){
         EntityPlayer player = world.getClosestPlayerToEntity(this, this.getRenderSize() / 2);
         if(!this.isTamed() && this.isSleeping()){
-            if(player != null && !this.isOwner(player)){
+            if(player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode){
                 this.setSleeping(false);
                 this.setSitting(false);
-                if(!player.capabilities.isCreativeMode){
-                    this.setAttackTarget(player);
-                }
+                this.setAttackTarget(player);
             }
         }
         EntityPlayer player1 = world.getClosestPlayerToEntity(this, (this.getRenderSize() / 2) + 15);
