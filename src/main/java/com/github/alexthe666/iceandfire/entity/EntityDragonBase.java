@@ -1641,14 +1641,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void onKillEntity(EntityLivingBase entityLivingIn) {
         if(entityLivingIn instanceof EntityPlayer){
-            ((EntityPlayer)entityLivingIn).addStat(ModAchievements.dragonKillPlayer, 1);
+            ((EntityPlayer)entityLivingIn).addStat(ModAchievements.dragonKill, 1);
         }
     }
 
     public void onDeath(DamageSource cause) {
         if(cause.getEntity() != null) {
             if (cause.getEntity() instanceof EntityPlayer) {
-                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonKill, 1);
+                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonKillPlayer, 1);
             }
         }
         super.onDeath(cause);

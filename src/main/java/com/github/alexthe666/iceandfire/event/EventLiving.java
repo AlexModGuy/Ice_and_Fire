@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +18,8 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+
+import java.util.Iterator;
 
 public class EventLiving {
 	@SubscribeEvent
@@ -38,6 +41,15 @@ public class EventLiving {
 		}
 	}
 
+	@SubscribeEvent
+	public void onPlayerLeaveEvent(PlayerEvent.PlayerLoggedOutEvent event){
+		if(event.player != null && !event.player.getPassengers().isEmpty()){
+			Iterator itr = event.player.getPassengers().iterator();
+			while(itr.hasNext()){
+				((Entity)itr.next()).dismountRidingEntity();
+			}
+		}
+	}
 	@SubscribeEvent
 	public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
 		if (event.pickedUp.getEntityItem().getItem() == ModItems.manuscript) {
