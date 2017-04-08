@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,18 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import java.util.List;
 
 public class ItemBestiary extends Item {
 
@@ -36,6 +33,8 @@ public class ItemBestiary extends Item {
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
         itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.getTagCompound().setIntArray("Pages", new int[]{0});
+
     }
 
     @SideOnly(Side.CLIENT)
