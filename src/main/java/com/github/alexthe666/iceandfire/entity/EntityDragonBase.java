@@ -1207,6 +1207,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead()) {
             return false;
         }
+        if(this.isBeingRidden() && dmg.getEntity() != null && this.getControllingPassenger() != null && dmg.getEntity() == this.getControllingPassenger()){
+            return false;
+        }
         if (dmg == DamageSource.inWall && this.isRiding()) {
             return false;
         }
@@ -1220,6 +1223,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         i -= damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail;
         return super.attackEntityFrom(dmg, i);
+
     }
 
     @Override
