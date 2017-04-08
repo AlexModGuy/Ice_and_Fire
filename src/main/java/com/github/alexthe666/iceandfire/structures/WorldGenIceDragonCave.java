@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -108,7 +109,7 @@ public class WorldGenIceDragonCave extends WorldGenerator{
     }
 
     public static void setOres(World world, BlockPos pos){
-        boolean vien_chance = new Random().nextInt(4) == 0;
+        boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
         if(vien_chance){
             int chance = new Random().nextInt(199) + 1;
             if(chance < 30){
@@ -135,9 +136,7 @@ public class WorldGenIceDragonCave extends WorldGenerator{
             if(chance > 90 && chance < 1000){
                 world.setBlockState(pos, ModBlocks.sapphireOre.getDefaultState(), 3);
             }
-        }
-        boolean burnt_chance = new Random().nextInt(5) == 0;
-        if(burnt_chance){
+        }else{
             int chance = new Random().nextInt(2);
             if(chance == 0) {
                 world.setBlockState(pos, ModBlocks.frozenStone.getDefaultState(), 3);
