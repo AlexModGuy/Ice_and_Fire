@@ -123,8 +123,13 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 		} else {
 			ItemStack itemstack = this.stacks[0].copy();
 
-			if (itemstack == null)
+			if (itemstack == null) {
 				return false;
+			}
+			if (itemstack.getItem() != ModItems.bestiary) {
+				return false;
+			}
+
 			if (itemstack.getItem() == ModItems.bestiary) {
 				if (EnumBestiaryPages.possiblePages(itemstack).isEmpty()) {
 					return false;
