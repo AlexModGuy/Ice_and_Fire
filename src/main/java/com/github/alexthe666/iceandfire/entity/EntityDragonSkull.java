@@ -96,10 +96,9 @@ public class EntityDragonSkull extends EntityAnimal {
 	}
 
 	public void turnIntoItem() {
-		ItemStack stack = new ItemStack(ModItems.dragon_skull, 1);
+		ItemStack stack = new ItemStack(ModItems.dragon_skull, 1, getType());
 		stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setInteger("Stage", this.getStage());
-		stack.getTagCompound().setInteger("DragonType", this.getType());
 		stack.getTagCompound().setInteger("DragonAge", this.getDragonAge());
 		if (!this.world.isRemote)
 			this.entityDropItem(stack, 0.0F);
