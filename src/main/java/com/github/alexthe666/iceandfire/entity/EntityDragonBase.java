@@ -349,10 +349,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
         }
-        compound.setInteger("HomeAreaX", homeArea.getX());
-        compound.setInteger("HomeAreaY", homeArea.getY());
-        compound.setInteger("HomeAreaZ", homeArea.getZ());
-
+        if(homeArea != null) {
+            compound.setInteger("HomeAreaX", homeArea.getX());
+            compound.setInteger("HomeAreaY", homeArea.getY());
+            compound.setInteger("HomeAreaZ", homeArea.getZ());
+        }
     }
 
 
@@ -408,7 +409,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!compound.getString("CustomName").isEmpty()) {
             this.setCustomNameTag(compound.getString("CustomName"));
         }
-        homeArea = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
+        if(compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0){
+            homeArea = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
+        }
     }
 
 
@@ -634,7 +637,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress > 0;
+        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0;
     }
 
     @Override
@@ -1136,11 +1139,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void updatePreyInMouth(Entity prey) {
-        if (this.getAnimation() == this.ANIMATION_SHAKEPREY) {
-            if (this.getAnimationTick() > 55 && prey != null) {
+        if(getControllingPassenger() != null && prey == getControllingPassenger()) {
+            return;
+        }
+            if (this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null|| this.getAnimation() == NO_ANIMATION) {
                 prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
                 this.attackDecision = !this.attackDecision;
-                this.onKillEntity((EntityLivingBase) prey);
+                prey.dismountRidingEntity();
             }
             renderYawOffset = rotationYaw;
             this.rotationYaw = prey.rotationYaw;
@@ -1154,9 +1159,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = 0.1F * ((getRenderSize() / 3) + (modTick_2 * 0.15 * (getRenderSize() / 3)));
             prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
-        } else {
-           // prey.dismountRidingEntity();
-        }
     }
 
     public int getDragonStage() {
@@ -1193,12 +1195,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.setGender(this.getRNG().nextBoolean());
         int age = this.getRNG().nextInt(80) + 1;
         this.growDragon(age);
-        this.setHunger(50);
         this.setVariant(new Random().nextInt(4));
         this.setSleeping(false);
         this.updateAttributes();
         double healthStep = (maximumHealth - minimumHealth) / (125);
         this.heal((Math.round(minimumHealth + (healthStep * age))));
+        this.setHunger(50);
         return livingdata;
     }
 
@@ -1648,7 +1650,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void onDeath(DamageSource cause) {
         if(cause.getEntity() != null) {
             if (cause.getEntity() instanceof EntityPlayer) {
-                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonKillPlayer, 1);
+                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonKill, 1);
             }
         }
         super.onDeath(cause);
