@@ -61,7 +61,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 		if (dragon.getAttackTarget() == null) {
 			for (int i = 0; i < 10; ++i) {
 				if (dragon.homeArea != null) {
-					BlockPos blockpos1 = new BlockPos((int) this.dragon.homeArea.getX() + ((32 + random.nextInt(32)) * (random.nextBoolean() ? -1 : 1)), ((int) this.dragon.homeArea.getY() + ((3 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1))), (int) this.dragon.homeArea.getZ() + ((32 + random.nextInt(32)) * (random.nextBoolean() ? -1 : 1)));
+					BlockPos blockpos1 = new BlockPos((int) this.dragon.homeArea.getX() + ((32 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)), ((int) this.dragon.homeArea.getY() + (3 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.homeArea.getZ() + ((32 + random.nextInt(64)) * (random.nextBoolean() ? -1 : 1)));
 					BlockPos blockpos1ground = new BlockPos((int) this.dragon.posX + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)), (int) this.dragon.posY + 7 + random.nextInt(6), (int) this.dragon.posZ + ((6 + random.nextInt(10)) * (random.nextBoolean() ? -1 : 1)));
 					if (dragon.doesWantToLand()) {
 						return new Vec3d(dragon.homeArea.getX(), dragon.homeArea.getY(), dragon.homeArea.getZ());

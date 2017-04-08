@@ -349,11 +349,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
         }
-        if(homeArea != null) {
-            compound.setInteger("HomeAreaX", homeArea.getX());
-            compound.setInteger("HomeAreaY", homeArea.getY());
-            compound.setInteger("HomeAreaZ", homeArea.getZ());
-        }
     }
 
 
@@ -409,9 +404,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!compound.getString("CustomName").isEmpty()) {
             this.setCustomNameTag(compound.getString("CustomName"));
         }
-        if(compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0){
-            homeArea = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
-        }
+
     }
 
 
