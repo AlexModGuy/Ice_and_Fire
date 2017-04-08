@@ -106,6 +106,8 @@ public class ItemDragonHornActive extends Item {
                     if (stack.getTagCompound() != null) {
                         dragon.readEntityFromNBT(stack.getTagCompound());
                     }
+                    dragon.setFlying(false);
+                    dragon.setHovering(false);
                     if (!worldIn.isRemote) {
                         worldIn.spawnEntity(dragon);
                     }
