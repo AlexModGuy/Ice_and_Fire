@@ -55,7 +55,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonRoosts && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.MOUNTAIN);
-			if (world.getBiome(height).getTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER) || isHills) {
+			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER) || isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
@@ -70,7 +70,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonDens && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
 			boolean isHills = BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.HILLS) || BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.MOUNTAIN);
-			if (world.getBiome(height).getTemperature() > -0.5 && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER)|| isHills) {
+			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getTemperature() > -0.5 && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.COLD) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.WET) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.isBiomeOfType(world.getBiome(height), Type.RIVER)|| isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
 					int newY = 20 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);
