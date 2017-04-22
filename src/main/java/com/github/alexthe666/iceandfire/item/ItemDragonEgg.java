@@ -54,9 +54,9 @@ public class ItemDragonEgg extends Item {
                 worldIn.spawnEntity(egg);
             }
             if (!player.capabilities.isCreativeMode) {
-                --stack.getCount(1);
+                stack.getCount();
 
-                if (stack.getMaxStackSize() <= 0) {
+                if (stack.getCount() <= 0) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                 }
             }
