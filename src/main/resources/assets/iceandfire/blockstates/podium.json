@@ -1,11 +1,25 @@
 {
-    "variants": {
-        "inventory":  { "model": "iceandfire:podium_oak" },
-        "variant=oak":  { "model": "iceandfire:podium_oak" },
-        "variant=spruce":  { "model": "iceandfire:podium_spruce" },
-        "variant=birch":  { "model": "iceandfire:podium_birch" },
-        "variant=jungle":  { "model": "iceandfire:podium_jungle" },
-        "variant=acacia":  { "model": "iceandfire:podium_acacia" },
-        "variant=dark_oak":  { "model": "iceandfire:podium_dark_oak" }
-    }
+  "variants": {
+	"inventory": {
+	  "model": "iceandfire:podium_oak"
+	},
+	"variant=oak": {
+	  "model": "iceandfire:podium_oak"
+	},
+	"variant=spruce": {
+	  "model": "iceandfire:podium_spruce"
+	},
+	"variant=birch": {
+	  "model": "iceandfire:podium_birch"
+	},
+	"variant=jungle": {
+	  "model": "iceandfire:podium_jungle"
+	},
+	"variant=acacia": {
+	  "model": "iceandfire:podium_acacia"
+	},
+	"variant=dark_oak": {
+	  "model": "iceandfire:podium_dark_oak"
+	}
+  }
 }

@@ -1,8 +1,8 @@
 {
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "iceandfire:blocks/chared_dirt",
-        "top": "iceandfire:blocks/chared_grass_top",
-        "side": "iceandfire:blocks/chared_grass_side"
-    }
+  "parent": "block/cube_bottom_top",
+  "textures": {
+	"bottom": "iceandfire:blocks/chared_dirt",
+	"top": "iceandfire:blocks/chared_grass_top",
+	"side": "iceandfire:blocks/chared_grass_side"
+  }
 }

@@ -1,63 +1,60 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.*;
+import net.minecraft.inventory.*;
+import net.minecraft.item.*;
 
 public class ContainerPodium extends Container {
 	private final IInventory podium;
 
-	public ContainerPodium(InventoryPlayer playerInventory, IInventory podiumIn, EntityPlayer player) {
+	public ContainerPodium (InventoryPlayer playerInventory, IInventory podiumIn, EntityPlayer player) {
 		this.podium = podiumIn;
-		podiumIn.openInventory(player);
+		podiumIn.openInventory (player);
 		byte b0 = 51;
 		int i;
 
-		this.addSlotToContainer(new Slot(podiumIn, 0, 80, 20));
+		this.addSlotToContainer (new Slot (podiumIn, 0, 80, 20));
 
 		for (i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
-				this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
+				this.addSlotToContainer (new Slot (playerInventory, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
 			}
 		}
 
 		for (i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 58 + b0));
+			this.addSlotToContainer (new Slot (playerInventory, i, 8 + i * 18, 58 + b0));
 		}
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.podium.isUsableByPlayer(playerIn);
+	public boolean canInteractWith (EntityPlayer playerIn) {
+		return this.podium.isUsableByPlayer (playerIn);
 	}
 
 	/**
 	 * Take a stack from the specified inventory slot.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public ItemStack transferStackInSlot (EntityPlayer playerIn, int index) {
 		ItemStack itemstack = null;
-		Slot slot = this.inventorySlots.get(index);
+		Slot slot = this.inventorySlots.get (index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+		if (slot != null && slot.getHasStack ()) {
+			ItemStack itemstack1 = slot.getStack ();
+			itemstack = itemstack1.copy ();
 
-			if (index < this.podium.getSizeInventory()) {
-				if (!this.mergeItemStack(itemstack1, this.podium.getSizeInventory(), this.inventorySlots.size(), true)) {
+			if (index < this.podium.getSizeInventory ()) {
+				if (!this.mergeItemStack (itemstack1, this.podium.getSizeInventory (), this.inventorySlots.size (), true)) {
 					return null;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, this.podium.getSizeInventory(), false)) {
+			} else if (!this.mergeItemStack (itemstack1, 0, this.podium.getSizeInventory (), false)) {
 				return null;
 			}
 
 			if (itemstack1.stackSize == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack ((ItemStack) null);
 			} else {
-				slot.onSlotChanged();
+				slot.onSlotChanged ();
 			}
 		}
 
@@ -68,8 +65,8 @@ public class ContainerPodium extends Container {
 	 * Called when the container is closed.
 	 */
 	@Override
-	public void onContainerClosed(EntityPlayer playerIn) {
-		super.onContainerClosed(playerIn);
-		this.podium.closeInventory(playerIn);
+	public void onContainerClosed (EntityPlayer playerIn) {
+		super.onContainerClosed (playerIn);
+		this.podium.closeInventory (playerIn);
 	}
 }

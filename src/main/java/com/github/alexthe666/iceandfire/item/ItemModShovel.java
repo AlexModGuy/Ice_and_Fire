@@ -1,42 +1,39 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
+import com.github.alexthe666.iceandfire.*;
+import com.github.alexthe666.iceandfire.client.*;
+import com.github.alexthe666.iceandfire.core.*;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
+import net.minecraft.util.*;
+import net.minecraft.util.text.*;
+import net.minecraftforge.fml.common.registry.*;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import java.util.*;
 
 public class ItemModShovel extends ItemSpade {
 
-	public ItemModShovel(ToolMaterial toolmaterial, String gameName, String name) {
-		super(toolmaterial);
-		this.setUnlocalizedName(name);
-		this.setCreativeTab(IceAndFire.TAB);
-		GameRegistry.registerItem(this, gameName);
+	public ItemModShovel (ToolMaterial toolmaterial, String gameName, String name) {
+		super (toolmaterial);
+		this.setUnlocalizedName (name);
+		this.setCreativeTab (IceAndFire.TAB);
+		GameRegistry.registerItem (this, gameName);
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity (ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (this == ModItems.silver_shovel) {
-			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-				target.attackEntityFrom(DamageSource.magic, 2);
+			if (target.getCreatureAttribute () == EnumCreatureAttribute.UNDEAD) {
+				target.attackEntityFrom (DamageSource.magic, 2);
 			}
 		}
-		return super.hitEntity(stack, target, attacker);
+		return super.hitEntity (stack, target, attacker);
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
+	public void addInformation (ItemStack stack, EntityPlayer player, List list, boolean f) {
 		if (this == ModItems.silver_shovel)
-			list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+			list.add (TextFormatting.GREEN + StatCollector.translateToLocal ("silvertools.hurt"));
 	}
 }

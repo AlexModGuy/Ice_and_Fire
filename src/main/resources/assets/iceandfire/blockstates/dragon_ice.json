@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "iceandfire:dragon_ice" }
-    }
+  "variants": {
+	"normal": {
+	  "model": "iceandfire:dragon_ice"
+	}
+  }
 }

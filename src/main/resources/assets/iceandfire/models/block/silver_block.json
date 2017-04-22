@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "iceandfire:blocks/silver_block"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+	"all": "iceandfire:blocks/silver_block"
+  }
 }

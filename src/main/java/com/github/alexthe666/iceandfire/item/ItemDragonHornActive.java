@@ -1,189 +1,180 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.StatList;
+import com.github.alexthe666.iceandfire.client.*;
+import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.entity.*;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
+import net.minecraft.stats.*;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.*;
+import net.minecraft.world.*;
+import net.minecraftforge.fml.common.registry.*;
+import net.minecraftforge.fml.relauncher.*;
 
-import java.util.List;
+import java.util.*;
 
 public class ItemDragonHornActive extends Item {
 
-    public ItemDragonHornActive(String name) {
-        this.maxStackSize = 1;
-        this.setUnlocalizedName("iceandfire." + name);
-        GameRegistry.registerItem(this, name);
-        this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-                if (entityIn == null) {
-                    return 0.0F;
-                } else {
-                    ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-                }
-            }
-        });
-        this.addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-                return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-            }
-        });
-    }
+	public ItemDragonHornActive (String name) {
+		this.maxStackSize = 1;
+		this.setUnlocalizedName ("iceandfire." + name);
+		GameRegistry.registerItem (this, name);
+		this.addPropertyOverride (new ResourceLocation ("pull"), new IItemPropertyGetter () {
+			@Override
+			@SideOnly (Side.CLIENT)
+			public float apply (ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemstack = entityIn.getActiveItemStack ();
+					return itemstack != null && itemstack.getItem () instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration () - entityIn.getItemInUseCount ()) / 20.0F : 0.0F;
+				}
+			}
+		});
+		this.addPropertyOverride (new ResourceLocation ("pulling"), new IItemPropertyGetter () {
+			@Override
+			@SideOnly (Side.CLIENT)
+			public float apply (ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+				return entityIn != null && entityIn.isHandActive () && entityIn.getActiveItemStack () == stack ? 1.0F : 0.0F;
+			}
+		});
+	}
 
-    @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
-    }
+	@Override
+	public void onCreated (ItemStack itemStack, World world, EntityPlayer player) {
+		itemStack.setTagCompound (new NBTTagCompound ());
+	}
 
-    @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
-        }
-    }
+	@Override
+	public void onUpdate (ItemStack stack, World world, Entity entity, int f, boolean f1) {
+		if (stack.getTagCompound () == null) {
+			stack.setTagCompound (new NBTTagCompound ());
+		}
+	}
 
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
-    }
+	public EnumAction getItemUseAction (ItemStack stack) {
+		return EnumAction.BOW;
+	}
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer)entityLiving;
-            boolean flag = entityplayer.capabilities.isCreativeMode;
-            int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            if (i < 20){
-                return;
-            }
-            double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-            double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double)entityplayer.getEyeHeight();
-            double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
-            float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
-            float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
-            Vec3d vec3d = new Vec3d(d0, d1, d2);
-            float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-            float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
-            float f5 = -MathHelper.cos(-f1 * 0.017453292F);
-            float f6 = MathHelper.sin(-f1 * 0.017453292F);
-            float f7 = f4 * f5;
-            float f8 = f3 * f5;
-            Vec3d vec3d1 = vec3d.addVector((double)f7 * 5.0D, (double)f6 * 5.0D, (double)f8 * 5.0D);
-            RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
-            if (raytraceresult == null) {
-                return;
-            }
-            if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-                return;
-            }else {
-                BlockPos pos = raytraceresult.getBlockPos();
-                worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
-                if (this == ModItems.dragon_horn_fire) {
-                    EntityFireDragon dragon = new EntityFireDragon(worldIn);
-                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                    if (stack.getTagCompound() != null) {
-                        dragon.readEntityFromNBT(stack.getTagCompound());
-                    }
-                    dragon.setFlying(false);
-                    dragon.setHovering(false);
-                    if (!worldIn.isRemote) {
-                        worldIn.spawnEntity(dragon);
-                    }
-                    entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
+	public void onPlayerStoppedUsing (ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		if (entityLiving instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+			boolean flag = entityplayer.capabilities.isCreativeMode;
+			int i = this.getMaxItemUseDuration (stack) - timeLeft;
+			if (i < 20) {
+				return;
+			}
+			double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
+			double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight ();
+			double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
+			float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
+			float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
+			Vec3d vec3d = new Vec3d (d0, d1, d2);
+			float f3 = MathHelper.cos (-f2 * 0.017453292F - (float) Math.PI);
+			float f4 = MathHelper.sin (-f2 * 0.017453292F - (float) Math.PI);
+			float f5 = -MathHelper.cos (-f1 * 0.017453292F);
+			float f6 = MathHelper.sin (-f1 * 0.017453292F);
+			float f7 = f4 * f5;
+			float f8 = f3 * f5;
+			Vec3d vec3d1 = vec3d.addVector ((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+			RayTraceResult raytraceresult = worldIn.rayTraceBlocks (vec3d, vec3d1, true);
+			if (raytraceresult == null) {
+				return;
+			}
+			if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
+				return;
+			} else {
+				BlockPos pos = raytraceresult.getBlockPos ();
+				worldIn.playSound (entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
+				if (this == ModItems.dragon_horn_fire) {
+					EntityFireDragon dragon = new EntityFireDragon (worldIn);
+					dragon.setPosition (pos.getX () + 0.5, pos.getY () + 1, pos.getZ () + 0.5);
+					if (stack.getTagCompound () != null) {
+						dragon.readEntityFromNBT (stack.getTagCompound ());
+					}
+					dragon.setFlying (false);
+					dragon.setHovering (false);
+					if (!worldIn.isRemote) {
+						worldIn.spawnEntity (dragon);
+					}
+					entityplayer.setHeldItem (entityplayer.getActiveHand (), new ItemStack (ModItems.dragon_horn));
 
-                }
-                if (this == ModItems.dragon_horn_ice) {
-                    EntityIceDragon dragon = new EntityIceDragon(worldIn);
-                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                    if (stack.getTagCompound() != null) {
-                        dragon.readEntityFromNBT(stack.getTagCompound());
-                    }
-                    if (!worldIn.isRemote) {
-                        worldIn.spawnEntity(dragon);
-                    }
-                    entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
-                }
-                stack = new ItemStack(ModItems.dragon_horn);
-                entityplayer.addStat(StatList.getObjectUseStats(this));
-            }
-        }
+				}
+				if (this == ModItems.dragon_horn_ice) {
+					EntityIceDragon dragon = new EntityIceDragon (worldIn);
+					dragon.setPosition (pos.getX () + 0.5, pos.getY () + 1, pos.getZ () + 0.5);
+					if (stack.getTagCompound () != null) {
+						dragon.readEntityFromNBT (stack.getTagCompound ());
+					}
+					if (!worldIn.isRemote) {
+						worldIn.spawnEntity (dragon);
+					}
+					entityplayer.setHeldItem (entityplayer.getActiveHand (), new ItemStack (ModItems.dragon_horn));
+				}
+				stack = new ItemStack (ModItems.dragon_horn);
+				entityplayer.addStat (StatList.getObjectUseStats (this));
+			}
+		}
 
-    }
+	}
 
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 72000;
-    }
+	public int getMaxItemUseDuration (ItemStack stack) {
+		return 72000;
+	}
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer entityplayer, EnumHand hand) {
-        double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-        double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double)entityplayer.getEyeHeight();
-        double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
-        float f = 1.0F;
-        float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
-        float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
-        Vec3d vec3d = new Vec3d(d0, d1, d2);
-        float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
-        float f5 = -MathHelper.cos(-f1 * 0.017453292F);
-        float f6 = MathHelper.sin(-f1 * 0.017453292F);
-        float f7 = f4 * f5;
-        float f8 = f3 * f5;
-        double d3 = 5.0D;
-        entityplayer.setActiveHand(hand);
-        Vec3d vec3d1 = vec3d.addVector((double)f7 * 5.0D, (double)f6 * 5.0D, (double)f8 * 5.0D);
-        RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
-        return new ActionResult(EnumActionResult.PASS, itemStackIn);
-    }
+	public ActionResult<ItemStack> onItemRightClick (ItemStack itemStackIn, World worldIn, EntityPlayer entityplayer, EnumHand hand) {
+		double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
+		double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight ();
+		double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
+		float f = 1.0F;
+		float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
+		float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
+		Vec3d vec3d = new Vec3d (d0, d1, d2);
+		float f3 = MathHelper.cos (-f2 * 0.017453292F - (float) Math.PI);
+		float f4 = MathHelper.sin (-f2 * 0.017453292F - (float) Math.PI);
+		float f5 = -MathHelper.cos (-f1 * 0.017453292F);
+		float f6 = MathHelper.sin (-f1 * 0.017453292F);
+		float f7 = f4 * f5;
+		float f8 = f3 * f5;
+		double d3 = 5.0D;
+		entityplayer.setActiveHand (hand);
+		Vec3d vec3d1 = vec3d.addVector ((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+		RayTraceResult raytraceresult = worldIn.rayTraceBlocks (vec3d, vec3d1, true);
+		return new ActionResult (EnumActionResult.PASS, itemStackIn);
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
-        if (stack.getTagCompound() != null) {
-            String fire = new TextComponentTranslation("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText();
-            String ice = new TextComponentTranslation("entity.iceandfire.icedragon.name", new Object[0]).getUnformattedText();
-            list.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
-            String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
-            list.add("" + name);
-            String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
-            list.add("" + gender);
-            int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
-            int stage1 = 0;
-            {
-                if (stagenumber >= 100) {
-                    stage1 = 5;
-                } else if (stagenumber >= 75) {
-                    stage1 = 4;
-                } else if (stagenumber >= 50) {
-                    stage1 = 3;
-                } else if (stagenumber >= 25) {
-                    stage1 = 2;
-                } else {
-                    stage1 = 1;
-                }
-            }
-            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
-            list.add("" + stage);
-        }
-    }
+	@Override
+	public void addInformation (ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+		if (stack.getTagCompound () != null) {
+			String fire = new TextComponentTranslation ("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText ();
+			String ice = new TextComponentTranslation ("entity.iceandfire.icedragon.name", new Object[0]).getUnformattedText ();
+			list.add ("" + (this == ModItems.dragon_horn_fire ? fire : ice));
+			String name = stack.getTagCompound ().getString ("CustomName").isEmpty () ? StatCollector.translateToLocal ("dragon.unnamed") : StatCollector.translateToLocal ("dragon.name") + stack.getTagCompound ().getString ("CustomName");
+			list.add ("" + name);
+			String gender = StatCollector.translateToLocal ("dragon.gender") + StatCollector.translateToLocal ((stack.getTagCompound ().getBoolean ("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
+			list.add ("" + gender);
+			int stagenumber = stack.getTagCompound ().getInteger ("AgeTicks") / 24000;
+			int stage1 = 0;
+			{
+				if (stagenumber >= 100) {
+					stage1 = 5;
+				} else if (stagenumber >= 75) {
+					stage1 = 4;
+				} else if (stagenumber >= 50) {
+					stage1 = 3;
+				} else if (stagenumber >= 25) {
+					stage1 = 2;
+				} else {
+					stage1 = 1;
+				}
+			}
+			String stage = StatCollector.translateToLocal ("dragon.stage") + stage1 + " " + StatCollector.translateToLocal ("dragon.days.front") + stagenumber + " " + StatCollector.translateToLocal ("dragon.days.back");
+			list.add ("" + stage);
+		}
+	}
 }

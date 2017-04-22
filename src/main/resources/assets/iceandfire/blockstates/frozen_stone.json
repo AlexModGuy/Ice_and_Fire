@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "iceandfire:frozen_stone" }
-    }
+  "variants": {
+	"normal": {
+	  "model": "iceandfire:frozen_stone"
+	}
+  }
 }
