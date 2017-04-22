@@ -23,7 +23,7 @@ compileJava {
 
 
 minecraft {
-    version = "1.10.2-12.18.3.2185"
+    version = "1.11.2-13.20.0.2282"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    compile "net.ilexiconn:llibrary:1.7.4-1.10.2:dev"
+    compile "net.ilexiconn:llibrary:1.7.4-1.11.2:dev"
 }
 
 jar {     manifest {         attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"         attributes "FMLCorePluginContainsFMLMod": "true"     } }
