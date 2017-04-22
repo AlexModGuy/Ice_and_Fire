@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.math.Vec3d;
-
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.*;
+import net.minecraft.entity.ai.*;
+import net.minecraft.util.math.*;
 
 public class DragonAIWander extends EntityAIBase {
 	private EntityDragonBase dragon;
@@ -15,31 +13,31 @@ public class DragonAIWander extends EntityAIBase {
 	private int executionChance;
 	private boolean mustUpdate;
 
-	public DragonAIWander(EntityDragonBase creatureIn, double speedIn) {
-		this(creatureIn, speedIn, 20);
+	public DragonAIWander (EntityDragonBase creatureIn, double speedIn) {
+		this (creatureIn, speedIn, 20);
 	}
 
-	public DragonAIWander(EntityDragonBase creatureIn, double speedIn, int chance) {
+	public DragonAIWander (EntityDragonBase creatureIn, double speedIn, int chance) {
 		this.dragon = creatureIn;
 		this.speed = speedIn;
 		this.executionChance = chance;
-		this.setMutexBits(1);
+		this.setMutexBits (1);
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (!dragon.canMove()) {
+	public boolean shouldExecute () {
+		if (!dragon.canMove ()) {
 			return false;
 		}
-		if (dragon.isFlying() || dragon.isHovering()) {
+		if (dragon.isFlying () || dragon.isHovering ()) {
 			return false;
 		}
 		if (!this.mustUpdate) {
-			if (this.dragon.getRNG().nextInt(executionChance) != 0) {
+			if (this.dragon.getRNG ().nextInt (executionChance) != 0) {
 				return false;
 			}
 		}
-		Vec3d vec3d = RandomPositionGenerator.findRandomTarget(this.dragon, 10, 7);
+		Vec3d vec3d = RandomPositionGenerator.findRandomTarget (this.dragon, 10, 7);
 		if (vec3d == null) {
 			return false;
 		} else {
@@ -53,20 +51,20 @@ public class DragonAIWander extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		return !this.dragon.getNavigator().noPath();
+	public boolean continueExecuting () {
+		return !this.dragon.getNavigator ().noPath ();
 	}
 
 	@Override
-	public void startExecuting() {
-		this.dragon.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);
+	public void startExecuting () {
+		this.dragon.getNavigator ().tryMoveToXYZ (this.xPosition, this.yPosition, this.zPosition, this.speed);
 	}
 
-	public void makeUpdate() {
+	public void makeUpdate () {
 		this.mustUpdate = true;
 	}
 
-	public void setExecutionChance(int newchance) {
+	public void setExecutionChance (int newchance) {
 		this.executionChance = newchance;
 	}
 }
