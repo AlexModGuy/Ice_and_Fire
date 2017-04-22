@@ -110,7 +110,7 @@ public class EntityDragonSkull extends EntityAnimal {
         if (player.isSneaking()) {
             this.rotationYaw = player.rotationYaw;
         }
-        return super.processInteract(player, hand, stack);
+        return super.processInteract(player, hand);
     }
 
     @Override

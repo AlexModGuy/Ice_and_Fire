@@ -42,7 +42,7 @@ public class ItemDragonEgg extends Item {
         tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
     }
 
-    @Override
+
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (side != EnumFacing.UP) {
             return EnumActionResult.PASS;
