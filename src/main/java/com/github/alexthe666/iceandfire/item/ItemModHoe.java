@@ -27,7 +27,7 @@ public class ItemModHoe extends ItemHoe {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if (this == ModItems.silver_hoe) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.magic, 2);
+                target.attackEntityFrom(DamageSource.MAGIC, 2);
             }
         }
         return super.hitEntity(stack, target, attacker);

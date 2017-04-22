@@ -27,7 +27,7 @@ public class ItemModSword extends ItemSword {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if (this == ModItems.silver_sword) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.magic, 2);
+                target.attackEntityFrom(DamageSource.MAGIC, 2);
             }
         }
         return super.hitEntity(stack, target, attacker);

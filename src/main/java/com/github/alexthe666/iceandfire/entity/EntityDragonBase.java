@@ -218,13 +218,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (stack != null && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
+        if (stack.isEmpty()) stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
             return 1;
         }
-        if (stack != null && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
+        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
             return 2;
         }
-        if (stack != null && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
+        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
             return 3;
         }
         return 0;

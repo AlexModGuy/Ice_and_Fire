@@ -36,7 +36,7 @@ public class ItemModAxe extends ItemTool {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if (this == ModItems.silver_axe) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.magic, 2);
+                target.attackEntityFrom(DamageSource.MAGIC, 2);
             }
         }
         return super.hitEntity(stack, target, attacker);

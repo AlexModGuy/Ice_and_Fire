@@ -54,10 +54,10 @@ public class ItemDragonEgg extends Item {
                 worldIn.spawnEntity(egg);
             }
             if (!player.capabilities.isCreativeMode) {
-                --stack.stackSize;
+                --stack.getCount(1);
 
-                if (stack.stackSize <= 0) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack) null);
+                if (stack.getMaxStackSize() <= 0) {
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                 }
             }
             return EnumActionResult.SUCCESS;
