@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "iceandfire:items/armor_bronze_boots"
+    "layer0": "iceandfire:items/armor_bronze_boots"
   }
 }
 }

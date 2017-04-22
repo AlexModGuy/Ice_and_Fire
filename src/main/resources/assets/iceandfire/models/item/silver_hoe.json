@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-	"layer0": "iceandfire:items/silver_hoe"
+    "layer0": "iceandfire:items/silver_hoe"
   }
 }
 }

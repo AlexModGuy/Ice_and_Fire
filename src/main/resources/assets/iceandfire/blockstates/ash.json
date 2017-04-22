@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:ash"
-	}
+    "normal": {
+      "model": "iceandfire:ash"
+    }
   }
 }

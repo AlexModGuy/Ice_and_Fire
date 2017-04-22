@@ -1,20 +1,20 @@
 {
   "variants": {
-	"facing=north": {
-	  "model": "iceandfire:lectern",
-	  "y": 180
-	},
-	"facing=south": {
-	  "model": "iceandfire:lectern",
-	  "y": 0
-	},
-	"facing=west": {
-	  "model": "iceandfire:lectern",
-	  "y": -270
-	},
-	"facing=east": {
-	  "model": "iceandfire:lectern",
-	  "y": -90
-	}
+    "facing=north": {
+      "model": "iceandfire:lectern",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "iceandfire:lectern",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "iceandfire:lectern",
+      "y": -270
+    },
+    "facing=east": {
+      "model": "iceandfire:lectern",
+      "y": -90
+    }
   }
 }

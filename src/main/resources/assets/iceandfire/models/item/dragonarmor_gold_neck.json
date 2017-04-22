@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "iceandfire:items/dragonarmor_gold_neck"
+    "layer0": "iceandfire:items/dragonarmor_gold_neck"
   }
 }
 }

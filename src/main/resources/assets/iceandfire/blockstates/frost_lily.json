@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:frost_lily"
-	}
+    "normal": {
+      "model": "iceandfire:frost_lily"
+    }
   }
 }

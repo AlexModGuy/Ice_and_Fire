@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "iceandfire:items/silver_nugget"
+    "layer0": "iceandfire:items/silver_nugget"
   }
 }
 }

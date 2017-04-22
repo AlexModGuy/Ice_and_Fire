@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.event;
 
-import net.minecraftforge.event.terraingen.ChunkGeneratorEvent.*;
-import net.minecraftforge.fml.common.eventhandler.*;
+import net.minecraftforge.event.terraingen.ChunkGeneratorEvent.ReplaceBiomeBlocks;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventMapGen {
 
-	@SubscribeEvent
-	public void onBiomeReplaceBlocks (ReplaceBiomeBlocks event) {
+    @SubscribeEvent
+    public void onBiomeReplaceBlocks(ReplaceBiomeBlocks event) {
 
-	}
+    }
 }

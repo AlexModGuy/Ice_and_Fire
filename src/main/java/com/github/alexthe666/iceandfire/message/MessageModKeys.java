@@ -1,36 +1,38 @@
 package com.github.alexthe666.iceandfire.message;
 
-import io.netty.buffer.*;
-import net.minecraftforge.fml.common.network.simpleimpl.*;
-import net.minecraftforge.fml.relauncher.*;
+import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageModKeys implements IMessage {
 
-	public int keyId;
+    public int keyId;
 
-	public MessageModKeys (int key) {
-		keyId = key;
-	}
+    public MessageModKeys(int key) {
+        keyId = key;
+    }
 
-	public MessageModKeys () {
-	}
+    public MessageModKeys() {
+    }
 
-	@Override
-	public void fromBytes (ByteBuf buf) {
-		keyId = buf.readInt ();
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        keyId = buf.readInt();
+    }
 
-	@Override
-	public void toBytes (ByteBuf buf) {
-		buf.writeInt (keyId);
-	}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(keyId);
+    }
 
-	public static class Handler implements IMessageHandler<MessageModKeys, IMessage> {
+    public static class Handler implements IMessageHandler<MessageModKeys, IMessage> {
 
-		@Override
-		public IMessage onMessage (MessageModKeys message, MessageContext ctx) {
-			if (ctx.side == Side.SERVER) {
-				/*
+        @Override
+        public IMessage onMessage(MessageModKeys message, MessageContext ctx) {
+            if (ctx.side == Side.SERVER) {
+                /*
 				 * if (ctx.getServerHandler().playerEntity.getRidingEntity() !=
 				 * null) { if
 				 * (ctx.getServerHandler().playerEntity.getRidingEntity()
@@ -54,9 +56,9 @@ public class MessageModKeys implements IMessage {
 				 * ctx.getServerHandler().playerEntity.dismountRidingEntity(); }
 				 * } }
 				 */
-			}
-			return null;
-		}
+            }
+            return null;
+        }
 
-	}
+    }
 }

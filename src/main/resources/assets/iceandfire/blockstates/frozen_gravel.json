@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:frozen_gravel"
-	}
+    "normal": {
+      "model": "iceandfire:frozen_gravel"
+    }
   }
 }

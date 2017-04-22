@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "iceandfire:items/fire_dragon_meat"
+    "layer0": "iceandfire:items/fire_dragon_meat"
   }
 }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:silver_ore"
-	}
+    "normal": {
+      "model": "iceandfire:silver_ore"
+    }
   }
 }

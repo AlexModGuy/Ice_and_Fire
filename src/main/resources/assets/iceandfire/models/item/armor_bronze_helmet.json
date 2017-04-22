@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "iceandfire:items/armor_bronze_helmet"
+    "layer0": "iceandfire:items/armor_bronze_helmet"
   }
 }
 }

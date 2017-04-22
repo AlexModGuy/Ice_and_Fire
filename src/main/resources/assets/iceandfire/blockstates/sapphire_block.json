@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:sapphire_block"
-	}
+    "normal": {
+      "model": "iceandfire:sapphire_block"
+    }
   }
 }

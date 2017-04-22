@@ -1,7 +1,7 @@
 {
   "variants": {
-	"normal": {
-	  "model": "iceandfire:chared_stone"
-	}
+    "normal": {
+      "model": "iceandfire:chared_stone"
+    }
   }
 }
