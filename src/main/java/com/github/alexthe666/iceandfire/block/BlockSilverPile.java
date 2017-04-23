@@ -32,7 +32,7 @@ public class BlockSilverPile extends Block {
 
     public BlockSilverPile() {
         super(Material.GROUND);
-        GameRegistry.registerBlock(this, "silverpile");
+        GameRegistry.register(this, "silverpile");
         this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB);

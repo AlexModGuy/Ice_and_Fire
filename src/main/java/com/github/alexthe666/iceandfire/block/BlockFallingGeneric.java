@@ -16,7 +16,7 @@ public class BlockFallingGeneric extends BlockFalling {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
 
     }
 
@@ -27,7 +27,7 @@ public class BlockFallingGeneric extends BlockFalling {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
 
     }
 

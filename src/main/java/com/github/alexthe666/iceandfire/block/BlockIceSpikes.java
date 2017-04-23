@@ -28,7 +28,7 @@ public class BlockIceSpikes extends Block {
         this.setUnlocalizedName("iceandfire.dragon_ice_spikes");
         this.setCreativeTab(IceAndFire.TAB);
         this.setSoundType(SoundType.GLASS);
-        GameRegistry.registerBlock(this, "dragon_ice_spikes");
+        GameRegistry.register(this, "dragon_ice_spikes");
     }
 
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {

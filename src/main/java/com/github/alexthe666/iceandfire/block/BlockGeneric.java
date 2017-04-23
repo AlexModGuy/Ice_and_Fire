@@ -24,7 +24,7 @@ public class BlockGeneric extends Block {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
     }
 
     public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
@@ -35,7 +35,7 @@ public class BlockGeneric extends Block {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
         if (slippery) {
             this.slipperiness = 0.98F;
         }
@@ -48,7 +48,7 @@ public class BlockGeneric extends Block {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
 
     }
 

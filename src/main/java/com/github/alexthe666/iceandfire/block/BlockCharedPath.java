@@ -30,7 +30,7 @@ public class BlockCharedPath extends BlockGrassPath {
         this.setHardness(0.6F);
         this.setSoundType(isFire ? SoundType.GROUND : SoundType.GLASS);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerBlock(this, isFire ? "chared_grass_path" : "frozen_grass_path");
+        GameRegistry.register(this, isFire ? "chared_grass_path" : "frozen_grass_path");
         if (!isFire) {
             this.slipperiness = 0.98F;
         }

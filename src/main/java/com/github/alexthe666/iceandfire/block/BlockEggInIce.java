@@ -35,7 +35,7 @@ public class BlockEggInIce extends BlockContainer {
         this.setLightOpacity(3);
         this.setSoundType(SoundType.GLASS);
         this.setUnlocalizedName("iceandfire.egginice");
-        GameRegistry.registerBlock(this, "egginice");
+        GameRegistry.register(this, "egginice");
         GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
     }
 

@@ -39,7 +39,7 @@ public class BlockLectern extends BlockContainer {
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.lectern");
-        GameRegistry.registerBlock(this, "lectern");
+        GameRegistry.register(this, "lectern");
         GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
     }
 

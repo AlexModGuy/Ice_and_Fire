@@ -20,7 +20,7 @@ public class BlockDragonOre extends Block {
         this.setResistance(resistance);
         this.setHardness(hardness);
         this.setUnlocalizedName(name);
-        GameRegistry.registerBlock(this, gameName);
+        GameRegistry.register(this, gameName);
 
     }
 

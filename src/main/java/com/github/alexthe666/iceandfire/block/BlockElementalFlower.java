@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockElementalFlower extends BlockBush {
     public BlockElementalFlower(boolean isFire) {
-        GameRegistry.registerBlock(this, isFire ? "iceandfire:fire_lily" : "iceandfire:frost_lily");
+        GameRegistry.register(this, isFire ? "iceandfire:fire_lily" : "iceandfire:frost_lily");
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");

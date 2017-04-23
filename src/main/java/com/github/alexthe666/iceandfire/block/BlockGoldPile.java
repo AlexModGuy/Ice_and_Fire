@@ -32,7 +32,7 @@ public class BlockGoldPile extends Block {
 
     public BlockGoldPile() {
         super(Material.GROUND);
-        GameRegistry.registerBlock(this, "goldpile");
+        GameRegistry.register(this, "goldpile");
         this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB);
