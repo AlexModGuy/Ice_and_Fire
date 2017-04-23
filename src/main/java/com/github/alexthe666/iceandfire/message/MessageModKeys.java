@@ -33,7 +33,7 @@ public class MessageModKeys implements IMessage {
         public IMessage onMessage(MessageModKeys message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
                 /*
-				 * if (ctx.getServerHandler().playerEntity.getRidingEntity() !=
+                 * if (ctx.getServerHandler().playerEntity.getRidingEntity() !=
 				 * null) { if
 				 * (ctx.getServerHandler().playerEntity.getRidingEntity()
 				 * instanceof EntityDragonBase) { EntityDragonBase dragon =
