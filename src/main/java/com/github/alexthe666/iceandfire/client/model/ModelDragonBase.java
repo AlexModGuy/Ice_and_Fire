@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.*;
+import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
+import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 
 public abstract class ModelDragonBase extends AdvancedModelBase {
 

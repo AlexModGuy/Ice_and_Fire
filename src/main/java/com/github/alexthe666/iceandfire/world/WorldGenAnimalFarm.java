@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.world;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.entity.passive.*;
-import net.minecraft.init.*;
+import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.*;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelRenderer;
 
 public class ModelIceDragonArmor extends ModelBiped {
     public ModelRenderer HornL;

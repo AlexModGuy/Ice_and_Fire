@@ -1,14 +1,5 @@
 /**
  * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
- * @author FossilsRevialTeam
  */
 /**
  * @author FossilsRevialTeam

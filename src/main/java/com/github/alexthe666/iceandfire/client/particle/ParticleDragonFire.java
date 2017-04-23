@@ -3,7 +3,8 @@ package com.github.alexthe666.iceandfire.client.particle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ParticleDragonFire extends ParticleFlame {

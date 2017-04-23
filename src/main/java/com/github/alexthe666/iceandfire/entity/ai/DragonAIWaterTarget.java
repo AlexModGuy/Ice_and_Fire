@@ -4,9 +4,11 @@ import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DragonAIWaterTarget extends EntityAIBase {
     private EntityIceDragon dragon;

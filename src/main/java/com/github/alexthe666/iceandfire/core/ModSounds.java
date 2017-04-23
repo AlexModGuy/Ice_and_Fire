@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModSounds {

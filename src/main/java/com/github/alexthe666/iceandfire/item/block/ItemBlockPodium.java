@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.item.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 
 public class ItemBlockPodium extends ItemBlock {
     final static String[] subBlocks = new String[]{"tile.iceandfire.podium_oak", "tile.iceandfire.podium_spruce", "tile.iceandfire.podium_birch", "tile.iceandfire.podium_jungle", "tile.iceandfire.podium_acacia", "tile.iceandfire.podium_dark_oak"};
