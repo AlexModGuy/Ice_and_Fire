@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.*;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import com.github.alexthe666.iceandfire.enums.*;
 
 import java.util.*;
 

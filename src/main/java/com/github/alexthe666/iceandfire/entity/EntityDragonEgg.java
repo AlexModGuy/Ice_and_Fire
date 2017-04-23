@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
@@ -12,11 +13,6 @@ import net.minecraft.network.datasync.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import com.github.alexthe666.iceandfire.*;
-import com.github.alexthe666.iceandfire.core.*;
-import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.block.*;
-import com.github.alexthe666.iceandfire.entity.tile.*;
 
 public class EntityDragonEgg extends EntityLiving {
 

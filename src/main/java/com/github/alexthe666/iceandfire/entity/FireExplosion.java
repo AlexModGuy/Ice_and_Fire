@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.*;
 import com.google.common.collect.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -12,8 +14,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
-import com.github.alexthe666.iceandfire.*;
-import com.github.alexthe666.iceandfire.core.*;
 
 import java.util.*;
 

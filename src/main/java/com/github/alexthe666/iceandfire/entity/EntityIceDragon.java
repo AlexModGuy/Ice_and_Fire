@@ -16,9 +16,6 @@ import net.minecraft.network.datasync.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import com.github.alexthe666.iceandfire.*;
-import com.github.alexthe666.iceandfire.core.*;
-import com.github.alexthe666.iceandfire.entity.*;
 
 import javax.annotation.Nullable;
 

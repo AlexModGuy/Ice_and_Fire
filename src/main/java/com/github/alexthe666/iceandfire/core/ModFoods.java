@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.entity.*;
-import fossilsarcheology.api.*;
+import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.init.*;
-import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.core.*;
 
 public class ModFoods {
 

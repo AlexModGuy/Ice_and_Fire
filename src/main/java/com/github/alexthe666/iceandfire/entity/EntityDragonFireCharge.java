@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +10,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
-import com.github.alexthe666.iceandfire.*;
-import com.github.alexthe666.iceandfire.core.*;
 
 public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile {
 
