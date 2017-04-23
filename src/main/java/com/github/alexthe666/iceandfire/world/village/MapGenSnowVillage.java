@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -25,7 +22,7 @@ public class ItemAlchemySword extends ItemSword {
         super(toolmaterial);
         this.setUnlocalizedName(name);
         this.setCreativeTab(IceAndFire.TAB);
-        this.setRegistryName(IceAndFire.MODID,gameName);
+        this.setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
     }
 

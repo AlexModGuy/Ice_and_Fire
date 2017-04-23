@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +25,7 @@ public class ItemDragonSkull extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragon_skull");
-        this.setRegistryName(IceAndFire.MODID,"dragon_skull");
+        this.setRegistryName(IceAndFire.MODID, "dragon_skull");
         GameRegistry.register(this);
     }
 
@@ -67,7 +65,7 @@ public class ItemDragonSkull extends Item {
         if (side != EnumFacing.UP) {
             return EnumActionResult.FAIL;
         } else {
-        	ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getHeldItem(hand);
             /*
 			 * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			 * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
@@ -90,8 +88,7 @@ public class ItemDragonSkull extends Item {
 
                     if (stack.isEmpty()) {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack.EMPTY));
-                    }
-                    else {
+                    } else {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
                     }
                 }

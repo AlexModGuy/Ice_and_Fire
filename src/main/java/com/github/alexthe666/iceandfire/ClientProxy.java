@@ -1,23 +1,12 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
-import com.github.alexthe666.iceandfire.client.model.*;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
-import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
-import com.github.alexthe666.iceandfire.client.render.entity.*;
+import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
+import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.event.EventNewMenu;
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;

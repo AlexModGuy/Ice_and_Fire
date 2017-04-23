@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 

@@ -1,13 +1,5 @@
 package com.github.alexthe666.iceandfire.event;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
-import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;

@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +11,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockElementalFlower extends BlockBush {
-	public Item itemBlock;
+    public Item itemBlock;
+
     public BlockElementalFlower(boolean isFire) {
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB);

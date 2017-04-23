@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.SoundType;
@@ -21,8 +19,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockCharedPath extends BlockGrassPath {
+    public Item itemBlock;
     boolean isFire;
-	public Item itemBlock;
 
     public BlockCharedPath(boolean isFire) {
         super();

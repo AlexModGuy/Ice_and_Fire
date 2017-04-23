@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.structures.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -31,6 +29,7 @@ public class BlockGoldPile extends Block {
     public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 8);
     protected static final AxisAlignedBB[] SNOW_AABB = new AxisAlignedBB[]{new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
     public Item itemBlock;
+
     public BlockGoldPile() {
         super(Material.GROUND);
         this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
@@ -38,7 +37,7 @@ public class BlockGoldPile extends Block {
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.goldpile");
         this.setHardness(0.3F);
-        setRegistryName(IceAndFire.MODID,"goldpile");
+        setRegistryName(IceAndFire.MODID, "goldpile");
         GameRegistry.register(this);
         GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
@@ -82,7 +81,7 @@ public class BlockGoldPile extends Block {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack item = playerIn.inventory.getCurrentItem();
-        
+
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
                 if (item.getItem() == Items.GOLD_NUGGET || item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
@@ -94,8 +93,7 @@ public class BlockGoldPile extends Block {
 
                                 if (item.isEmpty()) {
                                     playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, ItemStack.EMPTY);
-                                }
-                                else {
+                                } else {
                                     playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, item);
                                 }
                             }

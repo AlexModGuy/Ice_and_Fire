@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,7 +24,7 @@ public class ItemDragonBow extends Item {
         this.setMaxDamage(584);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragonbone_bow");
-        this.setRegistryName(IceAndFire.MODID,"dragonbone_bow");
+        this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
         GameRegistry.register(this);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
@@ -143,7 +142,7 @@ public class ItemDragonBow extends Item {
 
                     if (!flag1) {
                         itemstack.shrink(1);
-                        
+
                         if (itemstack.isEmpty()) {
                             entityplayer.inventory.deleteStack(itemstack);
                         }
@@ -172,7 +171,7 @@ public class ItemDragonBow extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-    	ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
         boolean flag = this.findAmmo(playerIn) != null;
 
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);

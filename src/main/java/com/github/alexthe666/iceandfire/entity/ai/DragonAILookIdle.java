@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class DragonAILookIdle extends EntityAIBase {

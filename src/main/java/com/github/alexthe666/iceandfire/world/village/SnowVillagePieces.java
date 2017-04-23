@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import com.google.common.collect.Lists;
@@ -8,7 +7,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -272,10 +270,10 @@ public class SnowVillagePieces {
             return 1;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			//
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            //
+        }
     }
 
     public static class House2 extends Village {
@@ -399,10 +397,10 @@ public class SnowVillagePieces {
             return 3;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class House3 extends Village {
@@ -557,10 +555,10 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class Path extends Road {
@@ -714,10 +712,10 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class PieceWeight {
@@ -821,10 +819,10 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public abstract static class Village extends StructureComponent {
@@ -1152,10 +1150,10 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class TorchNew extends Village {
@@ -1196,10 +1194,10 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class WoodHut extends Village {
@@ -1317,9 +1315,9 @@ public class SnowVillagePieces {
             return true;
         }
 
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
-			super.readStructureFromNBT(tagCompound);
-		}
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 }

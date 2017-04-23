@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -29,7 +28,7 @@ public class ItemFishingSpear extends Item {
         this.setUnlocalizedName("iceandfire.fishing_spear");
         this.maxStackSize = 1;
         this.setMaxDamage(64);
-        this.setRegistryName(IceAndFire.MODID,"fishing_spear");
+        this.setRegistryName(IceAndFire.MODID, "fishing_spear");
         GameRegistry.register(this);
     }
 

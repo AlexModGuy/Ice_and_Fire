@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
 import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.EntityLivingBase;

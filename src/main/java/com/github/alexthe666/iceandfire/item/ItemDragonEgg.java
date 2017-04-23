@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,7 +26,7 @@ public class ItemDragonEgg extends Item {
         this.type = type;
         this.setUnlocalizedName("iceandfire.dragonegg");
         this.maxStackSize = 1;
-        this.setRegistryName(IceAndFire.MODID,name);
+        this.setRegistryName(IceAndFire.MODID, name);
         GameRegistry.register(this);
     }
 

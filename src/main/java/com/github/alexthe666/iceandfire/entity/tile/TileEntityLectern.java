@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -35,7 +34,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public float pageFlipPrev;
     public float pageHelp1;
     public float pageHelp2;
-    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
+    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
     private int furnaceBurnTime;
     private int currentItemBurnTime;
     private int cookTime;
@@ -396,9 +395,9 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
     }
 
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean isEmpty() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

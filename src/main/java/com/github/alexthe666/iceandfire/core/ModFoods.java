@@ -1,8 +1,5 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntityZombie;

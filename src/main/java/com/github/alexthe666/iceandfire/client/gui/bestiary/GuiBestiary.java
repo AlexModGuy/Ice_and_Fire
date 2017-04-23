@@ -1,11 +1,7 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;

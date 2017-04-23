@@ -1,18 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.GuiHandler;
-import com.github.alexthe666.iceandfire.core.*;
-import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.event.EventMapGen;
-import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.message.MessageDaytime;
-import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
-import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
-import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
-import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
 import net.ilexiconn.llibrary.server.config.Config;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;

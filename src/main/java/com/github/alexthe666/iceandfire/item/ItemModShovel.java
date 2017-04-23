@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +19,7 @@ public class ItemModShovel extends ItemSpade {
         super(toolmaterial);
         this.setUnlocalizedName(name);
         this.setCreativeTab(IceAndFire.TAB);
-        this.setRegistryName(IceAndFire.MODID,gameName);
+        this.setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
     }
 

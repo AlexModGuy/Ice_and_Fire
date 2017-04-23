@@ -160,9 +160,9 @@ public enum FoodMappings {
     /**
      * Add an block to a specific diet. Usually only for herbivores and omnivores.
      *
-     * @param block        The block to be added as Food.
-     * @param food         The amount of food points for the block.
-     * @param diet         The specific diet to add the block to.
+     * @param block    The block to be added as Food.
+     * @param food     The amount of food points for the block.
+     * @param diet     The specific diet to add the block to.
      * @param register Register the block's item as food or not. Usually true, but false for technical blocks like wheat.
      */
     public void addToBlockMappings(Block block, int food, EnumDiet diet, boolean register) {

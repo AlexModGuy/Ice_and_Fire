@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -13,7 +11,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.Random;
 
 public class BlockDragonOre extends Block {
-	public Item itemBlock;
+    public Item itemBlock;
+
     public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
         super(Material.ROCK);
         this.setCreativeTab(IceAndFire.TAB);

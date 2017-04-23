@@ -29,7 +29,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -135,7 +134,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void initDragonInv() {
-    	ContainerHorseChest animalchest = this.dragonInv;
+        ContainerHorseChest animalchest = this.dragonInv;
         this.dragonInv = new ContainerHorseChest("dragonInv", 4);
         this.dragonInv.setCustomName(this.getName());
         if (animalchest != null) {
@@ -641,7 +640,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-    	ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage) {
             player.addStat(ModAchievements.dragonHarvest, 1);
@@ -1265,12 +1264,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
             if (!list.isEmpty()) {
                 entity = (Entity) list.get(0);
-                if (entity.getUniqueID().compareTo(this.getControllingPassenger().getUniqueID()) != 0){
-	                if (this.getAnimation() != this.ANIMATION_BITE) {
-	                    this.setAnimation(this.ANIMATION_BITE);
-	                    entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-	                    this.attackDecision = false;
-	                }
+                if (entity.getUniqueID().compareTo(this.getControllingPassenger().getUniqueID()) != 0) {
+                    if (this.getAnimation() != this.ANIMATION_BITE) {
+                        this.setAnimation(this.ANIMATION_BITE);
+                        entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        this.attackDecision = false;
+                    }
                 }
             }
 

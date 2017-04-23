@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.access;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class IceAndFireHooks {

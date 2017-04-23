@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +30,7 @@ public class ItemDragonHornActive extends Item {
     public ItemDragonHornActive(String name) {
         this.maxStackSize = 1;
         this.setUnlocalizedName("iceandfire." + name);
-        this.setRegistryName(IceAndFire.MODID,name);
+        this.setRegistryName(IceAndFire.MODID, name);
         GameRegistry.register(this);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override

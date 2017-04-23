@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -17,7 +16,7 @@ public class ItemDragonHornStatic extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragon_horn");
-        this.setRegistryName(IceAndFire.MODID,"dragon_horn");
+        this.setRegistryName(IceAndFire.MODID, "dragon_horn");
         GameRegistry.register(this);
     }
 

@@ -1,19 +1,17 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.*;
-
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 
     public static void registerSpawnable(Class entityClass, String name, int id, int mainColor, int subColor) {
-        EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID,name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true, mainColor, subColor);
+        EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID, name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true, mainColor, subColor);
     }
 
     public static void registerUnspawnable(Class entityClass, String name, int id) {
-        EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID,name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID, name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true);
     }
 
     public static void init() {

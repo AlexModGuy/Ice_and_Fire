@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.google.common.collect.Sets;
@@ -29,7 +28,7 @@ public class ItemModAxe extends ItemTool {
         this.attackSpeed = -3;
         this.setUnlocalizedName(name);
         this.setCreativeTab(IceAndFire.TAB);
-        this.setRegistryName(IceAndFire.MODID,gameName);
+        this.setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
     }
 

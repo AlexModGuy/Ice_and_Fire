@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -17,8 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGeneric extends Block {
-	public Item itemBlock;
-	
+    public Item itemBlock;
+
     public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(materialIn);
         this.setUnlocalizedName(name);
@@ -27,7 +25,7 @@ public class BlockGeneric extends Block {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        setRegistryName(IceAndFire.MODID,gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
         GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
@@ -43,7 +41,7 @@ public class BlockGeneric extends Block {
         if (slippery) {
             this.slipperiness = 0.98F;
         }
-        setRegistryName(IceAndFire.MODID,gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
         GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
@@ -55,7 +53,7 @@ public class BlockGeneric extends Block {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        setRegistryName(IceAndFire.MODID,gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
         GameRegistry.register(this);
         GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 

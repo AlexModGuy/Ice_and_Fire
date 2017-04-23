@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.item.*;
+import com.github.alexthe666.iceandfire.item.ItemDragonBone;
+import com.github.alexthe666.iceandfire.item.ItemSilverArmor;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;

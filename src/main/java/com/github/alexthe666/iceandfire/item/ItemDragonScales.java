@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +19,7 @@ public class ItemDragonScales extends Item {
         this.setCreativeTab(IceAndFire.TAB);
         this.type = type;
         this.setUnlocalizedName("iceandfire.dragonscales");
-        this.setRegistryName(IceAndFire.MODID,name);
+        this.setRegistryName(IceAndFire.MODID, name);
         GameRegistry.register(this);
     }
 

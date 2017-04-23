@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +25,7 @@ public class ItemBestiary extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.bestiary");
-        this.setRegistryName(IceAndFire.MODID,"bestiary");
+        this.setRegistryName(IceAndFire.MODID, "bestiary");
         GameRegistry.register(this);
     }
 
@@ -50,7 +48,7 @@ public class ItemBestiary extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-    	ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (worldIn.isRemote) {
             IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }

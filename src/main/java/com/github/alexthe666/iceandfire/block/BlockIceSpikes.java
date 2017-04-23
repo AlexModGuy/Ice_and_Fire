@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,6 +23,7 @@ import javax.annotation.Nullable;
 public class BlockIceSpikes extends Block {
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625, 0.0D, 0.0625D, 0.9375D, 0.6875, 0.9375D);
     public Item itemBlock;
+
     public BlockIceSpikes() {
         super(Material.PACKED_ICE);
         this.setHardness(5F);

@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -200,14 +199,14 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
         return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
     }
 
-	@Override
-	public boolean isEmpty() {
-		for (int i = 0; i < this.getSizeInventory(); i ++){
-			if (!this.getStackInSlot(i).isEmpty()){
-				return false;
-			}
-		}
-		return true;
-	}
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < this.getSizeInventory(); i++) {
+            if (!this.getStackInSlot(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
