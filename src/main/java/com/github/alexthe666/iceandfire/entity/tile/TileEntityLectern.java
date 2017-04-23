@@ -35,7 +35,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public float pageFlipPrev;
     public float pageHelp1;
     public float pageHelp2;
-    private ItemStack[] stacks = new ItemStack[3];
+    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
     private int furnaceBurnTime;
     private int currentItemBurnTime;
     private int cookTime;
@@ -48,7 +48,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     public static int getItemBurnTime(ItemStack i) {
-        if (i == null) {
+        if (i.isEmpty()) {
             return 0;
         } else {
             Item item = i.getItem();
@@ -70,7 +70,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         }
 
         if (!this.world.isRemote) {
-            if (!this.isBurning() && (this.stacks[1] == null || this.stacks[0] == null)) {
+            if (!this.isBurning() && (this.stacks[1].isEmpty() || this.stacks[0].isEmpty())) {
                 if (!this.isBurning() && this.cookTime > 0) {
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.totalCookTime);
                 }
@@ -81,10 +81,10 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
                     if (this.isBurning()) {
                         flag1 = true;
 
-                        if (this.stacks[1] != null) {
-                            --this.stacks[1].stackSize;
+                        if (!this.stacks[1].isEmpty()) {
+                            this.stacks[1].shrink(1);
 
-                            if (this.stacks[1].stackSize == 0) {
+                            if (this.stacks[1].isEmpty()) {
                                 this.stacks[1] = stacks[1].getItem().getContainerItem(stacks[1]);
                             }
                         }
@@ -136,12 +136,12 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     private boolean canSmelt() {
-        if (this.stacks[0] == null) {
+        if (this.stacks[0].isEmpty()) {
             return false;
         } else {
             ItemStack itemstack = this.stacks[0].copy();
 
-            if (itemstack == null) {
+            if (itemstack.isEmpty()) {
                 return false;
             }
             if (itemstack.getItem() != ModItems.bestiary) {
@@ -153,53 +153,53 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
                     return false;
                 }
             }
-            if (this.stacks[2] == null)
+            if (this.stacks[2].isEmpty())
                 return true;
-            int result = stacks[2].stackSize + itemstack.stackSize;
+            int result = stacks[2].getCount() + itemstack.getCount();
             return result <= getInventoryStackLimit() && result <= this.stacks[2].getMaxStackSize();
         }
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (this.stacks[index] != null) {
+        if (!this.stacks[index].isEmpty()) {
             ItemStack itemstack;
 
-            if (this.stacks[index].stackSize <= count) {
+            if (this.stacks[index].getCount() <= count) {
                 itemstack = this.stacks[index];
-                this.stacks[index] = null;
+                this.stacks[index] = ItemStack.EMPTY;
                 return itemstack;
             } else {
                 itemstack = this.stacks[index].splitStack(count);
 
-                if (this.stacks[index].stackSize == 0) {
-                    this.stacks[index] = null;
+                if (this.stacks[index].getCount() == 0) {
+                    this.stacks[index] = ItemStack.EMPTY;
                 }
 
                 return itemstack;
             }
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     public ItemStack getStackInSlotOnClosing(int index) {
-        if (this.stacks[index] != null) {
+        if (!this.stacks[index].isEmpty()) {
             ItemStack itemstack = this.stacks[index];
-            this.stacks[index] = null;
+            this.stacks[index] = ItemStack.EMPTY;
             return itemstack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = stack != null && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
         this.stacks[index] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
         }
         if (index == 0 && !flag) {
             this.totalCookTime = 300;
@@ -219,7 +219,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
             byte b0 = nbttagcompound1.getByte("Slot");
 
             if (b0 >= 0 && b0 < this.stacks.length) {
-                this.stacks[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                this.stacks[b0] = new ItemStack(nbttagcompound1);
             }
             this.furnaceBurnTime = compound.getShort("BurnTime");
             this.cookTime = compound.getShort("CookTime");
@@ -233,7 +233,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.stacks.length; ++i) {
-            if (this.stacks[i] != null) {
+            if (!this.stacks[i].isEmpty()) {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound1.setByte("Slot", (byte) i);
                 this.stacks[i].writeToNBT(nbttagcompound1);
@@ -273,7 +273,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     @Override
     public void clear() {
         for (int i = 0; i < this.stacks.length; ++i) {
-            this.stacks[i] = null;
+            this.stacks[i] = ItemStack.EMPTY;
         }
     }
 
@@ -302,16 +302,16 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
             if (this.stacks[0].getItem() == ModItems.bestiary) {
                 EnumBestiaryPages.addRandomPage(itemstack);
             }
-            --this.stacks[0].stackSize;
+            this.stacks[0].shrink(1);
 
-            if (this.stacks[0].stackSize <= 0) {
-                this.stacks[0] = null;
+            if (this.stacks[0].isEmpty()) {
+                this.stacks[0] = ItemStack.EMPTY;
             }
 
-            if (this.stacks[2] == null) {
+            if (this.stacks[2].isEmpty()) {
                 this.stacks[2] = itemstack.copy();
             } else if (this.stacks[2].getItem() == itemstack.getItem()) {
-                this.stacks[2].stackSize += itemstack.stackSize;
+                this.stacks[2].grow(itemstack.getCount());
             }
 
 
@@ -376,7 +376,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -395,4 +395,10 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public ITextComponent getDisplayName() {
         return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
     }
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

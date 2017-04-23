@@ -7,12 +7,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Random;
 
 public class BlockDragonOre extends Block {
-
+	public Item itemBlock;
     public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
         super(Material.ROCK);
         this.setCreativeTab(IceAndFire.TAB);
@@ -20,7 +21,9 @@ public class BlockDragonOre extends Block {
         this.setResistance(resistance);
         this.setHardness(hardness);
         this.setUnlocalizedName(name);
-        GameRegistry.register(this, gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
+        GameRegistry.register(this);
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
     }
 

@@ -22,25 +22,25 @@ public class ContainerDragon extends Container {
         this.addSlotToContainer(new Slot(dragon.dragonInv, 0, 8, 18) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 0;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 0;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 1, 8, 36) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 1;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 1;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 2, 153, 18) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 2;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 2;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 3, 153, 36) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && stack != null && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 3;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 3;
             }
         });
         int j;
@@ -63,29 +63,29 @@ public class ContainerDragon extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (index < this.dragonInv.getSizeInventory()) {
                 if (!this.mergeItemStack(itemstack1, this.dragonInv.getSizeInventory(), this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
                 if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
 
             } else if (this.getSlot(0).isItemValid(itemstack1)) {
                 if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (this.dragonInv.getSizeInventory() <= 2 || !this.mergeItemStack(itemstack1, 2, this.dragonInv.getSizeInventory(), false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
-            if (itemstack1.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.putStack((ItemStack) ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }

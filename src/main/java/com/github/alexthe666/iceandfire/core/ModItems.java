@@ -73,7 +73,7 @@ public class ModItems {
     public static Item dragon_horn_fire;
     public static Item dragon_horn_ice;
 
-    public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silverMetal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
+    public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
     public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 36, new int[]{3, 7, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
     public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
     public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
@@ -86,10 +86,10 @@ public class ModItems {
         sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
         silverIngot = new ItemGeneric("silver_ingot", "iceandfire.silverIngot");
         silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
-        silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silverMetal_helmet", "iceandfire.silver_helmet");
-        silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silverMetal_chestplate", "iceandfire.silver_chestplate");
-        silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silverMetal_leggings", "iceandfire.silver_leggings");
-        silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silverMetal_boots", "iceandfire.silver_boots");
+        silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
+        silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
+        silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
+        silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
         silver_sword = new ItemModSword(silverTools, "silver_sword", "iceandfire.silver_sword");
         silver_shovel = new ItemModShovel(silverTools, "silver_shovel", "iceandfire.silver_shovel");
         silver_pickaxe = new ItemModPickaxe(silverTools, "silver_pickaxe", "iceandfire.silver_pickaxe");

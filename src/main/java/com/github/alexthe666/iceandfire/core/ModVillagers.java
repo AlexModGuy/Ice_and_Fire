@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.collect.Maps;
+
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -98,7 +100,8 @@ public class ModVillagers {
             this.price = priceIn;
         }
 
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+        @Override
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
             int i = 1;
             if (this.price != null) {
                 i = this.price.getPrice(random);
@@ -126,8 +129,8 @@ public class ModVillagers {
             this.itemToBuy = stack;
             this.priceInfo = priceInfo;
         }
-
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+        @Override
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
             int i = 1;
 
             if (this.priceInfo != null) {

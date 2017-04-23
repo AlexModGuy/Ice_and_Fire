@@ -12,6 +12,8 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -30,6 +32,7 @@ import java.util.Random;
 
 public class BlockLectern extends BlockContainer {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public Item itemBlock;
 
     public BlockLectern() {
         super(Material.WOOD);
@@ -39,8 +42,10 @@ public class BlockLectern extends BlockContainer {
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.lectern");
-        GameRegistry.register(this, "lectern");
+        this.setRegistryName(IceAndFire.MODID, "lectern");
+        GameRegistry.register(this);
         GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
 
     @Override
@@ -113,8 +118,8 @@ public class BlockLectern extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (playerIn.isSneaking()) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    	if (playerIn.isSneaking()) {
             return false;
         } else {
             playerIn.openGui(IceAndFire.INSTANCE, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());

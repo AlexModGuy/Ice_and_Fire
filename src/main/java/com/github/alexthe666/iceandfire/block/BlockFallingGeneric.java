@@ -4,10 +4,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockFallingGeneric extends BlockFalling {
-
+	public Item itemBlock;
     public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(materialIn);
         this.setUnlocalizedName(name);
@@ -16,7 +18,9 @@ public class BlockFallingGeneric extends BlockFalling {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.register(this, gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
+        GameRegistry.register(this);
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
     }
 
@@ -27,7 +31,9 @@ public class BlockFallingGeneric extends BlockFalling {
         this.setResistance(resistance);
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.register(this, gameName);
+        setRegistryName(IceAndFire.MODID, gameName);
+        GameRegistry.register(this);
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
     }
 

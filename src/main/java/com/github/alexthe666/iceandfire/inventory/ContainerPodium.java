@@ -39,7 +39,7 @@ public class ContainerPodium extends Container {
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
@@ -48,14 +48,14 @@ public class ContainerPodium extends Container {
 
             if (index < this.podium.getSizeInventory()) {
                 if (!this.mergeItemStack(itemstack1, this.podium.getSizeInventory(), this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, this.podium.getSizeInventory(), false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.putStack((ItemStack) ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }

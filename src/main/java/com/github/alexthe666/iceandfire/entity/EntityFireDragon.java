@@ -338,8 +338,8 @@ public class EntityFireDragon extends EntityDragonBase {
         return this.isSleeping() || this.isBlinking() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
     }
 
-    public boolean isBreedingItem(@Nullable ItemStack stack) {
-        return stack != null && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
+    public boolean isBreedingItem(ItemStack stack) {
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
     }
 
     @Override

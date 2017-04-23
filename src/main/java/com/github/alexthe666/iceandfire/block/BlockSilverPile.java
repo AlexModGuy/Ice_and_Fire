@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,15 +30,17 @@ import java.util.Random;
 public class BlockSilverPile extends Block {
     public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 8);
     protected static final AxisAlignedBB[] SNOW_AABB = new AxisAlignedBB[]{new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
-
+    public Item itemBlock;
     public BlockSilverPile() {
         super(Material.GROUND);
-        GameRegistry.register(this, "silverpile");
         this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.silverpile");
         this.setHardness(0.3F);
+        setRegistryName(IceAndFire.MODID, "silverpile");
+        GameRegistry.register(this);
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
 
     @Override
@@ -71,20 +74,20 @@ public class BlockSilverPile extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack item = playerIn.inventory.getCurrentItem();
 
-        if (item != null) {
+        if (!item.isEmpty()) {
             if (item.getItem() != null) {
                 if (item.getItem() == ModItems.silverNugget || item.getItem() == Item.getItemFromBlock(ModBlocks.silverPile)) {
-                    if (item != null) {
+                    if (!item.isEmpty()) {
                         if (this.getMetaFromState(state) < 7) {
                             WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.silverPile, this.getMetaFromState(state) + 1, 3);
                             if (!playerIn.capabilities.isCreativeMode) {
-                                --item.stackSize;
+                                item.shrink(1);
 
-                                if (item.stackSize <= 0) {
-                                    playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, (ItemStack) null);
+                                if (item.isEmpty()) {
+                                    playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, ItemStack.EMPTY);
                                 }
                             }
                             return true;
@@ -93,7 +96,7 @@ public class BlockSilverPile extends Block {
                 }
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, item, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 
     @Override

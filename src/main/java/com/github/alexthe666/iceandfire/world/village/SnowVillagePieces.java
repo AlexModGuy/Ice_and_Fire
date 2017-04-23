@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -22,6 +23,7 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraft.world.storage.loot.LootTableList;
 
 import java.util.Iterator;
@@ -269,6 +271,11 @@ public class SnowVillagePieces {
         protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
             return 1;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			//
+		}
     }
 
     public static class House2 extends Village {
@@ -391,6 +398,11 @@ public class SnowVillagePieces {
         protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
             return 3;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public static class House3 extends Village {
@@ -544,6 +556,11 @@ public class SnowVillagePieces {
             this.spawnVillagers(worldIn, structureBoundingBoxIn, 4, 1, 2, 2);
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public static class Path extends Road {
@@ -696,6 +713,11 @@ public class SnowVillagePieces {
 
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public static class PieceWeight {
@@ -798,6 +820,11 @@ public class SnowVillagePieces {
             this.func_189926_a(worldIn, EnumFacing.SOUTH, 1, 3, -1, structureBoundingBoxIn);
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public abstract static class Village extends StructureComponent {
@@ -943,10 +970,10 @@ public class SnowVillagePieces {
                     ++this.villagersSpawned;
 
                     if (this.field_189929_i) {
-                        EntityZombie entityzombie = new EntityZombie(worldIn);
+                        EntityZombieVillager entityzombie = new EntityZombieVillager(worldIn);
                         entityzombie.setLocationAndAngles((double) j + 0.5D, (double) k, (double) l + 0.5D, 0.0F, 0.0F);
                         entityzombie.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityzombie)), (IEntityLivingData) null);
-                        entityzombie.setVillagerType(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
+                        entityzombie.setForgeProfession(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
                         entityzombie.enablePersistence();
                         worldIn.spawnEntity(entityzombie);
                     } else {
@@ -1045,7 +1072,7 @@ public class SnowVillagePieces {
 
         protected void func_189927_a(World p_189927_1_, StructureBoundingBox p_189927_2_, Random p_189927_3_, int p_189927_4_, int p_189927_5_, int p_189927_6_, EnumFacing p_189927_7_) {
             if (!this.field_189929_i) {
-                this.func_189915_a(p_189927_1_, p_189927_2_, p_189927_3_, p_189927_4_, p_189927_5_, p_189927_6_, EnumFacing.NORTH, this.func_189925_i());
+                this.generateDoor(p_189927_1_, p_189927_2_, p_189927_3_, p_189927_4_, p_189927_5_, p_189927_6_, EnumFacing.NORTH, this.func_189925_i());
             }
         }
 
@@ -1124,6 +1151,11 @@ public class SnowVillagePieces {
 
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public static class TorchNew extends Village {
@@ -1163,6 +1195,11 @@ public class SnowVillagePieces {
             this.func_189926_a(worldIn, EnumFacing.SOUTH, 1, 3, -1, structureBoundingBoxIn);
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 
     public static class WoodHut extends Village {
@@ -1279,5 +1316,10 @@ public class SnowVillagePieces {
             this.spawnVillagers(worldIn, structureBoundingBoxIn, 1, 1, 2, 1);
             return true;
         }
+
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+			super.readStructureFromNBT(tagCompound);
+		}
     }
 }

@@ -119,7 +119,7 @@ public class IceAndFire {
         VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
         GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
         GameRegistry.register(GLACIER);
-        BiomeDictionary.registerBiomeType(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
+        BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
         BiomeManager.addSpawnBiome(GLACIER);
         BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, 10));
         PROXY.render();

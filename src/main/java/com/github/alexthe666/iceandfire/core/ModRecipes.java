@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.core;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -84,12 +85,11 @@ public class ModRecipes {
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
-
     }
 
-    public static TileEntityBanner.EnumBannerPattern addBanner(String name, ItemStack craftingStack) {
+    public static BannerPattern addBanner(String name, ItemStack craftingStack) {
         Class<?>[] classes = {String.class, String.class, ItemStack.class};
         Object[] names = {name, "iceandfire." + name, craftingStack};
-        return EnumHelper.addEnum(TileEntityBanner.EnumBannerPattern.class, name.toUpperCase(), classes, names);
+        return EnumHelper.addEnum(BannerPattern.class, name.toUpperCase(), classes, names);
     }
 }

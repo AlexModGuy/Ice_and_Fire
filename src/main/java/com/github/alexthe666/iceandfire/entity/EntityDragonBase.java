@@ -26,6 +26,8 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
@@ -90,7 +92,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public int flyTicks;
     public float modelDeadProgress;
     public float ridingProgress;
-    public AnimalChest dragonInv;
+    public ContainerHorseChest dragonInv;
     public boolean isDaytime;
     public boolean attackDecision;
     public int animationCycle;
@@ -133,8 +135,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void initDragonInv() {
-        AnimalChest animalchest = this.dragonInv;
-        this.dragonInv = new AnimalChest("dragonInv", 4);
+    	ContainerHorseChest animalchest = this.dragonInv;
+        this.dragonInv = new ContainerHorseChest("dragonInv", 4);
         this.dragonInv.setCustomName(this.getName());
         if (animalchest != null) {
             animalchest.removeInventoryChangeListener(this);
@@ -143,7 +145,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             for (int j = 0; j < i; ++j) {
                 ItemStack itemstack = animalchest.getStackInSlot(j);
 
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     this.dragonInv.setInventorySlotContents(j, itemstack.copy());
                     //this.updateDragonSlots();
                 }
@@ -218,7 +220,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (stack.isEmpty()) stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
+        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
             return 1;
         }
         if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
@@ -336,7 +338,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.dragonInv.getSizeInventory(); ++i) {
                 ItemStack itemstack = this.dragonInv.getStackInSlot(i);
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
                     nbttagcompound.setByte("Slot", (byte) i);
                     itemstack.writeToNBT(nbttagcompound);
@@ -379,7 +381,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
                 int j = nbttagcompound.getByte("Slot") & 255;
                 if (j <= 4) {
-                    this.dragonInv.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
+                    this.dragonInv.setInventorySlotContents(j, new ItemStack(nbttagcompound));
                 }
             }
         } else {
@@ -389,14 +391,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
                 int j = nbttagcompound.getByte("Slot") & 255;
                 this.initDragonInv();
-                this.dragonInv.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
+                this.dragonInv.setInventorySlotContents(j, new ItemStack(nbttagcompound));
                 //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
 
                 if (world.isRemote) {
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound))));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(new ItemStack(nbttagcompound))));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(new ItemStack(nbttagcompound))));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(new ItemStack(nbttagcompound))));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(new ItemStack(nbttagcompound))));
                 }
             }
         }
@@ -638,13 +640,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack) {
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    	ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage) {
             player.addStat(ModAchievements.dragonHarvest, 1);
-            if (stack != null && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() > lastDeathStage / 2) {
+            if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() > lastDeathStage / 2) {
                 if (!player.capabilities.isCreativeMode) {
-                    --stack.stackSize;
+                    stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
@@ -674,7 +677,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 } else {
                     this.setDeathStage(this.getDeathStage() + 1);
                     ItemStack drop = getRandomDrop();
-                    if (drop != null && !world.isRemote) {
+                    if (!drop.isEmpty() && !world.isRemote) {
                         this.entityDropItem(drop, 1);
                     }
                 }
@@ -682,7 +685,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return true;
         } else if (!this.isModelDead()) {
             if (this.isOwner(player)) {
-                if (stack != null) {
+                if (!stack.isEmpty()) {
                     if (this.isBreedingItem(stack) && this.isAdult() && !this.isInLove()) {
                         this.consumeItemFromStack(player, stack);
                         this.setInLove(player);
@@ -698,7 +701,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.spawnItemCrackParticles(stack.getItem());
                             this.eatFoodBonus(stack);
                             if (!player.isCreative()) {
-                                stack.stackSize--;
+                                stack.shrink(1);
                             }
                             return true;
                         }
@@ -712,7 +715,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.spawnItemCrackParticles(Items.DYE);
                             this.eatFoodBonus(stack);
                             if (!player.isCreative()) {
-                                stack.stackSize--;
+                                stack.shrink(1);
                             }
                             return true;
                         }
@@ -720,7 +723,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
                             this.setSitting(!this.isSitting());
                             if (world.isRemote) {
-                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+                                player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
                             }
                             return true;
                         }
@@ -750,14 +753,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         }
 
                         return true;
-                    } else if (stack == null && !player.isSneaking()) {
+                    } else if (stack.isEmpty() && !player.isSneaking()) {
                         this.openGUI(player);
                         return true;
                     }
                 }
             }
         }
-        return super.processInteract(player, hand, stack);
+        return super.processInteract(player, hand);
 
     }
 
@@ -776,7 +779,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 return new ItemStack(this.getVariantScale(this.getVariant()), 1 + this.rand.nextInt(1 + (this.getAgeInDays() / 5)));
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public void eatFoodBonus(ItemStack stack) {
@@ -1258,14 +1261,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
             Entity entity = null;
-            List list = this.world.<EntityLivingBase>getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2), new EntityDragonBase.DragonRiderSelector(this));
+            List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2));
             Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
             if (!list.isEmpty()) {
                 entity = (Entity) list.get(0);
-                if (this.getAnimation() != this.ANIMATION_BITE) {
-                    this.setAnimation(this.ANIMATION_BITE);
-                    entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.attackDecision = false;
+                if (entity.getUniqueID().compareTo(this.getControllingPassenger().getUniqueID()) != 0){
+	                if (this.getAnimation() != this.ANIMATION_BITE) {
+	                    this.setAnimation(this.ANIMATION_BITE);
+	                    entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+	                    this.attackDecision = false;
+	                }
                 }
             }
 
@@ -1498,7 +1503,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     @Override
-    public void onInventoryChanged(InventoryBasic invBasic) {
+    public void onInventoryChanged(IInventory invBasic) {
         int dragonArmorHead = this.getArmorInSlot(0);
         int dragonArmorNeck = this.getArmorInSlot(1);
         int dragonArmorBody = this.getArmorInSlot(2);
@@ -1649,7 +1654,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (dragonInv != null && !this.world.isRemote) {
             for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
                 ItemStack itemstack = dragonInv.getStackInSlot(i);
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     this.entityDropItem(itemstack, 0.0F);
                 }
             }

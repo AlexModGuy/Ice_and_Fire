@@ -29,7 +29,8 @@ public class ItemFishingSpear extends Item {
         this.setUnlocalizedName("iceandfire.fishing_spear");
         this.maxStackSize = 1;
         this.setMaxDamage(64);
-        GameRegistry.register(this, "fishing_spear");
+        this.setRegistryName(IceAndFire.MODID,"fishing_spear");
+        GameRegistry.register(this);
     }
 
     public EnumAction getItemUseAction(ItemStack stack) {

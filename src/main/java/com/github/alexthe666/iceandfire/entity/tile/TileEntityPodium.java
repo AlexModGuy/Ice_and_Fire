@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
-    private ItemStack[] stacks = new ItemStack[1];
+    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY};
 
     @Override
     public void update() {
@@ -36,44 +36,44 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (this.stacks[index] != null) {
+        if (!this.stacks[index].isEmpty()) {
             ItemStack itemstack;
 
-            if (this.stacks[index].stackSize <= count) {
+            if (this.stacks[index].getCount() <= count) {
                 itemstack = this.stacks[index];
-                this.stacks[index] = null;
+                this.stacks[index] = ItemStack.EMPTY;
                 return itemstack;
             } else {
                 itemstack = this.stacks[index].splitStack(count);
 
-                if (this.stacks[index].stackSize == 0) {
-                    this.stacks[index] = null;
+                if (this.stacks[index].isEmpty()) {
+                    this.stacks[index] = ItemStack.EMPTY;
                 }
 
                 return itemstack;
             }
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     public ItemStack getStackInSlotOnClosing(int index) {
-        if (this.stacks[index] != null) {
+        if (!this.stacks[index].isEmpty()) {
             ItemStack itemstack = this.stacks[index];
-            this.stacks[index] = null;
+            this.stacks[index] = ItemStack.EMPTY;
             return itemstack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = stack != null && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
         this.stacks[index] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
         }
     }
 
@@ -88,7 +88,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
             byte b0 = nbttagcompound1.getByte("Slot");
 
             if (b0 >= 0 && b0 < this.stacks.length) {
-                this.stacks[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                this.stacks[b0] = new ItemStack(nbttagcompound1);
             }
         }
     }
@@ -98,7 +98,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.stacks.length; ++i) {
-            if (this.stacks[i] != null) {
+            if (!this.stacks[i].isEmpty()) {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound1.setByte("Slot", (byte) i);
                 this.stacks[i].writeToNBT(nbttagcompound1);
@@ -149,7 +149,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     @Override
     public void clear() {
         for (int i = 0; i < this.stacks.length; ++i) {
-            this.stacks[i] = null;
+            this.stacks[i] = ItemStack.EMPTY;
         }
     }
 
@@ -192,12 +192,22 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
     public ITextComponent getDisplayName() {
         return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
     }
+
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < this.getSizeInventory(); i ++){
+			if (!this.getStackInSlot(i).isEmpty()){
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

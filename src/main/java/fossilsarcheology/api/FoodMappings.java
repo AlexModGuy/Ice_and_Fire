@@ -639,7 +639,7 @@ public enum FoodMappings {
         List<ItemStack> stacks = OreDictionary.getOres(dict_name);
         if (!stacks.isEmpty()) {
             for (ItemStack stack : stacks) {
-                if (stack != null && stack.getItem() != null) {
+                if (!stack.isEmpty() && stack.getItem() != null) {
                     if (stack.getItem() instanceof ItemBlock) {
                         this.addToBlockMappings(((ItemBlock) stack.getItem()).block, food_value, diet, true);
                     } else {

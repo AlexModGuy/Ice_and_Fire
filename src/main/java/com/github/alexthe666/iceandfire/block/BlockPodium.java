@@ -15,6 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -31,6 +32,7 @@ import java.util.Random;
 
 public class BlockPodium extends BlockContainer {
     public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
+    public Item itemBlock;
 
     public BlockPodium() {
         super(Material.WOOD);
@@ -39,8 +41,10 @@ public class BlockPodium extends BlockContainer {
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.podium");
-        GameRegistry.register(this, ItemBlockPodium.class, "podium");
+        this.setRegistryName(IceAndFire.MODID, "podium");
+        GameRegistry.register(this);
         GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
+        GameRegistry.register(itemBlock = (new ItemBlockPodium(this).setRegistryName(this.getRegistryName())));
     }
 
     @Override
@@ -52,7 +56,7 @@ public class BlockPodium extends BlockContainer {
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityPodium) {
             TileEntityPodium podium = (TileEntityPodium) worldIn.getTileEntity(pos);
-            if (podium.getStackInSlot(0) != null) {
+            if (!podium.getStackInSlot(0).isEmpty()) {
                 worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, podium.getStackInSlot(0)));
             }
         }
@@ -65,7 +69,7 @@ public class BlockPodium extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking()) {
             return false;
         } else {
@@ -76,7 +80,7 @@ public class BlockPodium extends BlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
         BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
         int i = aenumtype.length;
 

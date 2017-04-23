@@ -17,7 +17,8 @@ public class ItemDragonFlesh extends ItemFood {
         super(8, 0.8F, true);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName(isFire ? "iceandfire.fire_dragon_flesh" : "iceandfire.ice_dragon_flesh");
-        GameRegistry.register(this, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        this.setRegistryName(IceAndFire.MODID,isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        GameRegistry.register(this);
         this.isFire = isFire;
     }
 

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -32,7 +33,8 @@ public class ItemDragonHornActive extends Item {
     public ItemDragonHornActive(String name) {
         this.maxStackSize = 1;
         this.setUnlocalizedName("iceandfire." + name);
-        GameRegistry.register(this, name);
+        this.setRegistryName(IceAndFire.MODID,name);
+        GameRegistry.register(this);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -41,7 +43,7 @@ public class ItemDragonHornActive extends Item {
                     return 0.0F;
                 } else {
                     ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+                    return !itemstack.isEmpty() && itemstack.getItem() instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
                 }
             }
         });

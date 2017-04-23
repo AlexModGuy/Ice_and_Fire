@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -26,7 +27,8 @@ public class ItemDragonSkull extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragon_skull");
-        GameRegistry.register(this, "dragon_skull");
+        this.setRegistryName(IceAndFire.MODID,"dragon_skull");
+        GameRegistry.register(this);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ItemDragonSkull extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         subItems.add(new ItemStack(itemIn, 1, 0));
         subItems.add(new ItemStack(itemIn, 1, 1));
     }
@@ -61,10 +63,11 @@ public class ItemDragonSkull extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (side != EnumFacing.UP) {
             return EnumActionResult.FAIL;
         } else {
+        	ItemStack stack = player.getHeldItem(hand);
             /*
 			 * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			 * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
@@ -83,10 +86,13 @@ public class ItemDragonSkull extends Item {
                     worldIn.spawnEntity(skull);
                 }
                 if (!player.capabilities.isCreativeMode) {
-                    --stack.stackSize;
+                    stack.shrink(1);
 
-                    if (stack.stackSize <= 0) {
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack) null);
+                    if (stack.isEmpty()) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack.EMPTY));
+                    }
+                    else {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
                     }
                 }
             }

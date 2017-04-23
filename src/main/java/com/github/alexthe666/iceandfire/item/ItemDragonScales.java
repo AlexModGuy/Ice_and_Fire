@@ -20,7 +20,8 @@ public class ItemDragonScales extends Item {
         this.setCreativeTab(IceAndFire.TAB);
         this.type = type;
         this.setUnlocalizedName("iceandfire.dragonscales");
-        GameRegistry.register(this, name);
+        this.setRegistryName(IceAndFire.MODID,name);
+        GameRegistry.register(this);
     }
 
     @Override

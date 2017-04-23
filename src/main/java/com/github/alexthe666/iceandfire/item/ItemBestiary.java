@@ -27,7 +27,8 @@ public class ItemBestiary extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.bestiary");
-        GameRegistry.register(this, "bestiary");
+        this.setRegistryName(IceAndFire.MODID,"bestiary");
+        GameRegistry.register(this);
     }
 
     @Override
@@ -48,7 +49,8 @@ public class ItemBestiary extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    	ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (worldIn.isRemote) {
             IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }

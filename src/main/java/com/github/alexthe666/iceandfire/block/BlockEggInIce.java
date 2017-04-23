@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockEggInIce extends BlockContainer {
-
+	public Item itemBlock;
     public BlockEggInIce() {
         super(Material.ICE);
         this.slipperiness = 0.98F;
@@ -35,8 +37,10 @@ public class BlockEggInIce extends BlockContainer {
         this.setLightOpacity(3);
         this.setSoundType(SoundType.GLASS);
         this.setUnlocalizedName("iceandfire.egginice");
-        GameRegistry.register(this, "egginice");
         GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
+        setRegistryName(IceAndFire.MODID, "egginice");
+        GameRegistry.register(this);
+        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
     }
 
     @Override
@@ -91,7 +95,7 @@ public class BlockEggInIce extends BlockContainer {
             java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
             ItemStack itemstack = new ItemStack(Blocks.ICE, 1);
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 items.add(itemstack);
             }
 

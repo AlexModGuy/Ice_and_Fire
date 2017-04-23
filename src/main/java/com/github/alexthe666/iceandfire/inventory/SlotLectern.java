@@ -22,16 +22,16 @@ public class SlotLectern extends Slot {
     @Override
     public ItemStack decrStackSize(int amount) {
         if (this.getHasStack()) {
-            this.field_75228_b += Math.min(amount, this.getStack().stackSize);
+            this.field_75228_b += Math.min(amount, this.getStack().getCount());
         }
 
         return super.decrStackSize(amount);
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
+    public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
         this.onCrafting(stack);
-        super.onPickupFromSlot(playerIn, stack);
+        return super.onTake(playerIn, stack);
     }
 
     /**

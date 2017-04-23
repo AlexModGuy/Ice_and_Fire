@@ -103,10 +103,10 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(ModItems.sapphireGem, 0, new ModelResourceLocation("iceandfire:sapphire_gem", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.silverIngot, 0, new ModelResourceLocation("iceandfire:silver_ingot", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.silverNugget, 0, new ModelResourceLocation("iceandfire:silver_nugget", "inventory"));
-        renderItem.getItemModelMesher().register(ModItems.silver_helmet, 0, new ModelResourceLocation("iceandfire:armor_silverMetal_helmet", "inventory"));
-        renderItem.getItemModelMesher().register(ModItems.silver_chestplate, 0, new ModelResourceLocation("iceandfire:armor_silverMetal_chestplate", "inventory"));
-        renderItem.getItemModelMesher().register(ModItems.silver_leggings, 0, new ModelResourceLocation("iceandfire:armor_silverMetal_leggings", "inventory"));
-        renderItem.getItemModelMesher().register(ModItems.silver_boots, 0, new ModelResourceLocation("iceandfire:armor_silverMetal_boots", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.silver_helmet, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_helmet", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.silver_chestplate, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_chestplate", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.silver_leggings, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_leggings", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.silver_boots, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_boots", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.silver_sword, 0, new ModelResourceLocation("iceandfire:silver_sword", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.silver_shovel, 0, new ModelResourceLocation("iceandfire:silver_shovel", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.silver_pickaxe, 0, new ModelResourceLocation("iceandfire:silver_pickaxe", "inventory"));

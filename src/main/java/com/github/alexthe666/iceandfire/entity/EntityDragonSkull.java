@@ -106,7 +106,7 @@ public class EntityDragonSkull extends EntityAnimal {
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack) {
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
             this.rotationYaw = player.rotationYaw;
         }

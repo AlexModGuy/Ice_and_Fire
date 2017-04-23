@@ -46,7 +46,7 @@ public class GuiBestiary extends GuiScreen {
 
     public GuiBestiary(ItemStack book) {
         this.book = book;
-        if (book != null && book.getItem() != null && book.getItem() == ModItems.bestiary) {
+        if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
             if (book.getTagCompound() != null) {
                 List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
@@ -450,7 +450,7 @@ public class GuiBestiary extends GuiScreen {
         this.zLevel = 200.0F;
         this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
-        if (stack != null) font = stack.getItem().getFontRenderer(stack);
+        if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = fontRendererObj;
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, null);

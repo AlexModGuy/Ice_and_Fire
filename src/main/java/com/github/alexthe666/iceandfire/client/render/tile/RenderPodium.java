@@ -22,7 +22,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
         ModelDragonEgg model = new ModelDragonEgg();
         TileEntityPodium podium = (TileEntityPodium) entity;
 
-        if (podium.getStackInSlot(0) != null) {
+        if (!podium.getStackInSlot(0).isEmpty()) {
             if (podium.getStackInSlot(0).getItem() != null) {
                 if (podium.getStackInSlot(0).getItem() instanceof ItemDragonEgg) {
 

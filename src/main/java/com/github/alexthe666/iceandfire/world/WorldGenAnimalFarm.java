@@ -24,7 +24,7 @@ public class WorldGenAnimalFarm extends WorldGenerator {
         Biome biome = worldIn.getBiome(position);
         Block fence = Blocks.OAK_FENCE;
         Block fence_gate = Blocks.OAK_FENCE_GATE;
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SAVANNA)) {
+        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)) {
             fence = Blocks.ACACIA_FENCE;
             fence_gate = Blocks.ACACIA_FENCE_GATE;
             for (int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
@@ -32,7 +32,7 @@ public class WorldGenAnimalFarm extends WorldGenerator {
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
                 worldIn.spawnEntity(animal);
             }
-        } else if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.CONIFEROUS)) {
+        } else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.CONIFEROUS)) {
             fence = Blocks.SPRUCE_FENCE;
             fence_gate = Blocks.SPRUCE_FENCE_GATE;
             for (int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
@@ -40,7 +40,7 @@ public class WorldGenAnimalFarm extends WorldGenerator {
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
                 worldIn.spawnEntity(animal);
             }
-        } else if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.JUNGLE)) {
+        } else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)) {
             fence = Blocks.JUNGLE_FENCE;
             fence_gate = Blocks.JUNGLE_FENCE_GATE;
             for (int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
@@ -48,21 +48,21 @@ public class WorldGenAnimalFarm extends WorldGenerator {
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
                 worldIn.spawnEntity(animal);
             }
-        } else if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST) && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DENSE)) {
+        } else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DENSE)) {
             fence = Blocks.DARK_OAK_FENCE;
             fence_gate = Blocks.DARK_OAK_FENCE_GATE;
         } else if (biome == Biomes.BIRCH_FOREST || biome == Biomes.BIRCH_FOREST_HILLS || biome == Biomes.MUTATED_BIRCH_FOREST || biome == Biomes.MUTATED_BIRCH_FOREST_HILLS) {
             fence = Blocks.BIRCH_FENCE;
             fence_gate = Blocks.BIRCH_FENCE_GATE;
         }
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY)) {
+        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY)) {
             for (int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityPig(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);
                 worldIn.spawnEntity(animal);
             }
         }
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.PLAINS)) {
+        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS)) {
             for (int animals = 0; animals < rand.nextInt(2) + 1; animals++) {
                 EntityAnimal animal = new EntityChicken(worldIn);
                 animal.setPositionAndRotation(position.getX() + 0.5F + (-3 + rand.nextInt(6)), position.getY() + 1.5F, position.getZ() + 0.5F + (-3 + rand.nextInt(6)), rand.nextFloat() * 360, 0);

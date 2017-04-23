@@ -11,6 +11,7 @@ public class ItemSilverArmor extends ItemArmor {
         super(material, renderIndex, slot);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName(name);
-        GameRegistry.register(this, gameName);
+        this.setRegistryName(IceAndFire.MODID,gameName);
+        GameRegistry.register(this);
     }
 }

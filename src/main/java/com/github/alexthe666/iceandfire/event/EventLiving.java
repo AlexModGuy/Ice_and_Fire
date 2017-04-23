@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -23,10 +24,8 @@ import java.util.Iterator;
 public class EventLiving {
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
-        if (event.getEntityLiving() instanceof EntitySkeleton) {
-            if (((EntitySkeleton) event.getEntityLiving()).getSkeletonType() == SkeletonType.WITHER) {
-                event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
-            }
+        if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
+               event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
         }
     }
 

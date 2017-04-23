@@ -25,7 +25,8 @@ public class ItemDragonBow extends Item {
         this.setMaxDamage(584);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragonbone_bow");
-        GameRegistry.register(this, "dragonbone_bow");
+        this.setRegistryName(IceAndFire.MODID,"dragonbone_bow");
+        GameRegistry.register(this);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -34,7 +35,7 @@ public class ItemDragonBow extends Item {
                     return 0.0F;
                 } else {
                     ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() == ModItems.dragonbone_bow ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+                    return !itemstack.isEmpty() && itemstack.getItem() == ModItems.dragonbone_bow ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
                 }
             }
         });
@@ -72,12 +73,12 @@ public class ItemDragonBow extends Item {
                 }
             }
 
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     protected boolean func_185058_h_(ItemStack stack) {
-        return stack != null && stack.getItem() == ModItems.dragonbone_arrow;
+        return !stack.isEmpty() && stack.getItem() == ModItems.dragonbone_arrow;
     }
 
     /**
@@ -92,11 +93,11 @@ public class ItemDragonBow extends Item {
             ItemStack itemstack = this.findAmmo(entityplayer);
 
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i, itemstack != null || flag);
+            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
 
-            if (itemstack != null || flag) {
-                if (itemstack == null) {
+            if (!itemstack.isEmpty() || flag) {
+                if (itemstack.isEmpty()) {
                     itemstack = new ItemStack(Items.ARROW);
                 }
 
@@ -141,9 +142,9 @@ public class ItemDragonBow extends Item {
                     worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
                     if (!flag1) {
-                        --itemstack.stackSize;
-
-                        if (itemstack.stackSize == 0) {
+                        itemstack.shrink(1);
+                        
+                        if (itemstack.isEmpty()) {
                             entityplayer.inventory.deleteStack(itemstack);
                         }
                     }
@@ -170,7 +171,8 @@ public class ItemDragonBow extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    	ItemStack itemStackIn = playerIn.getHeldItem(hand);
         boolean flag = this.findAmmo(playerIn) != null;
 
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
