@@ -29,7 +29,7 @@ public class ItemModAxe extends ItemTool {
         this.attackSpeed = -3;
         this.setUnlocalizedName(name);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerItem(this, gameName);
+        GameRegistry.register(this, gameName);
     }
 
     @Override

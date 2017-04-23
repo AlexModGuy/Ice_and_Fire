@@ -32,7 +32,7 @@ public class ItemDragonHornActive extends Item {
     public ItemDragonHornActive(String name) {
         this.maxStackSize = 1;
         this.setUnlocalizedName("iceandfire." + name);
-        GameRegistry.registerItem(this, name);
+        GameRegistry.register(this, name);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)

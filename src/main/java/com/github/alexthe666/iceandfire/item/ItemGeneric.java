@@ -14,7 +14,7 @@ public class ItemGeneric extends Item {
     public ItemGeneric(String gameName, String name) {
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName(name);
-        GameRegistry.registerItem(this, gameName);
+        GameRegistry.register(this, gameName);
     }
 
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {

@@ -163,9 +163,9 @@ public enum FoodMappings {
      * @param block        The block to be added as Food.
      * @param food         The amount of food points for the block.
      * @param diet         The specific diet to add the block to.
-     * @param registerItem Register the block's item as food or not. Usually true, but false for technical blocks like wheat.
+     * @param register Register the block's item as food or not. Usually true, but false for technical blocks like wheat.
      */
-    public void addToBlockMappings(Block block, int food, EnumDiet diet, boolean registerItem) {
+    public void addToBlockMappings(Block block, int food, EnumDiet diet, boolean register) {
         switch (diet) {
             case CARNIVORE:
                 if (carnivoreBlockDiet == null) {
@@ -226,7 +226,7 @@ public enum FoodMappings {
             default:
                 break;
         }
-        if (registerItem) {
+        if (register) {
             addToItemMappings(Item.getItemFromBlock(block), food, diet);
         }
     }

@@ -23,7 +23,7 @@ public class ItemDragonArmor extends Item {
         this.setUnlocalizedName("iceandfire." + name);
         this.setCreativeTab(IceAndFire.TAB);
         this.maxStackSize = 1;
-        GameRegistry.registerItem(this, name);
+        GameRegistry.register(this, name);
     }
 
     @Override

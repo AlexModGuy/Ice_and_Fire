@@ -40,10 +40,10 @@ public enum EnumDragonArmor {
             EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].material, 1, EntityEquipmentSlot.CHEST).setUnlocalizedName("iceandfire.dragonChestplate");
             EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].material, 2, EntityEquipmentSlot.LEGS).setUnlocalizedName("iceandfire.dragonLeggings");
             EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].material, 3, EntityEquipmentSlot.FEET).setUnlocalizedName("iceandfire.dragonBoots");
-            GameRegistry.registerItem(EnumDragonArmor.values()[i].helmet, EnumDragonArmor.values()[i].name() + "_helmet");
-            GameRegistry.registerItem(EnumDragonArmor.values()[i].chestplate, EnumDragonArmor.values()[i].name() + "_chestplate");
-            GameRegistry.registerItem(EnumDragonArmor.values()[i].leggings, EnumDragonArmor.values()[i].name() + "_leggings");
-            GameRegistry.registerItem(EnumDragonArmor.values()[i].boots, EnumDragonArmor.values()[i].name() + "_boots");
+            GameRegistry.register(EnumDragonArmor.values()[i].helmet, EnumDragonArmor.values()[i].name() + "_helmet");
+            GameRegistry.register(EnumDragonArmor.values()[i].chestplate, EnumDragonArmor.values()[i].name() + "_chestplate");
+            GameRegistry.register(EnumDragonArmor.values()[i].leggings, EnumDragonArmor.values()[i].name() + "_leggings");
+            GameRegistry.register(EnumDragonArmor.values()[i].boots, EnumDragonArmor.values()[i].name() + "_boots");
             GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].helmet, 1, 0), new Object[]{"XXX", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
             GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].chestplate, 1, 0), new Object[]{"X X", "XXX", "XXX", 'X', getScaleItem(EnumDragonArmor.values()[i])});
             GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].leggings, 1, 0), new Object[]{"XXX", "X X", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});

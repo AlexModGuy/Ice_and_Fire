@@ -10,6 +10,6 @@ public class ItemDragonBone extends Item {
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragonbone");
         this.maxStackSize = 8;
-        GameRegistry.registerItem(this, "dragonbone");
+        GameRegistry.register(this, "dragonbone");
     }
 }

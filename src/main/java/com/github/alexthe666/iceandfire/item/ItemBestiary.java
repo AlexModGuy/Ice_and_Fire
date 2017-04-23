@@ -27,7 +27,7 @@ public class ItemBestiary extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.bestiary");
-        GameRegistry.registerItem(this, "bestiary");
+        GameRegistry.register(this, "bestiary");
     }
 
     @Override

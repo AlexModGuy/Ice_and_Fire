@@ -20,7 +20,7 @@ public class ItemModHoe extends ItemHoe {
         super(toolmaterial);
         this.setUnlocalizedName(name);
         this.setCreativeTab(IceAndFire.TAB);
-        GameRegistry.registerItem(this, gameName);
+        GameRegistry.register(this, gameName);
     }
 
     @Override

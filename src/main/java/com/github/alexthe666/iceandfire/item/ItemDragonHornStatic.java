@@ -17,7 +17,7 @@ public class ItemDragonHornStatic extends Item {
         this.maxStackSize = 1;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.dragon_horn");
-        GameRegistry.registerItem(this, "dragon_horn");
+        GameRegistry.register(this, "dragon_horn");
     }
 
     @Override
