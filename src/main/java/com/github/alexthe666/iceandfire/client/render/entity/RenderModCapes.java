@@ -26,7 +26,7 @@ public class RenderModCapes {
                     /* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c"),
     };
     public UUID[] bluecapes = new UUID[]{
-	/* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),};
+    /* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),};
     public UUID[] betatesters = new UUID[]{
     };
 
@@ -66,7 +66,7 @@ public class RenderModCapes {
                 }
             }
         }
-		/*
+        /*
 		 * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
 		 * (hasRedCape(event.getEntityPlayer().getUniqueID())){
 		 * AbstractClientPlayer player =
