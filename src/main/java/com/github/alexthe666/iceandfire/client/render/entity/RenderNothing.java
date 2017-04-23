@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 

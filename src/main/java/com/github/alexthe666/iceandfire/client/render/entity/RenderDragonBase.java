@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.*;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonEyes;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
