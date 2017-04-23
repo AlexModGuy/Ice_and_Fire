@@ -8,6 +8,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+import com.github.alexthe666.iceandfire.*;
+import com.github.alexthe666.iceandfire.core.*;
 
 public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile {
 
