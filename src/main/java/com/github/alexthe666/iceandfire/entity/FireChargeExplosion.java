@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

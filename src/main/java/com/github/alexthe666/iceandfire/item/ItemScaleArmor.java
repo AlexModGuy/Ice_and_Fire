@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.enums.*;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;

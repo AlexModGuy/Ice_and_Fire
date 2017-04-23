@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
@@ -9,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.*;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import com.github.alexthe666.iceandfire.enums.*;
 
 import java.util.*;
 

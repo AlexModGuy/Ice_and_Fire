@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.block.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import com.github.alexthe666.iceandfire.block.*;
 
 public class ModBlocks {
 
