@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.*;
@@ -27,6 +26,9 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.*;
+import com.github.alexthe666.iceandfire.*;
+import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.entity.*;
 
 import javax.annotation.Nullable;
 import java.util.*;
