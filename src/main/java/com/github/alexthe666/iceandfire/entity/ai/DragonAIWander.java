@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.ai.*;
 import net.minecraft.util.math.Vec3d;
 

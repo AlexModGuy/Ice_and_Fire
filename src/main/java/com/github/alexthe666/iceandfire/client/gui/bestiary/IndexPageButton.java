@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;

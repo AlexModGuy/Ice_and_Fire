@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
