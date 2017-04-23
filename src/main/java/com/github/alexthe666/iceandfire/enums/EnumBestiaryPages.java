@@ -34,10 +34,10 @@ public enum EnumBestiaryPages {
     }
 
     public static List<EnumBestiaryPages> containedPages(List<Integer> pages) {
-        Iterator itr = pages.iterator();
+        Iterator<Integer> itr = pages.iterator();
         List<EnumBestiaryPages> list = new ArrayList<EnumBestiaryPages>();
         while (itr.hasNext()) {
-            list.add(EnumBestiaryPages.values()[(Integer) itr.next()]);
+            list.add(EnumBestiaryPages.values()[itr.next()]);
         }
         return list;
     }
@@ -59,10 +59,10 @@ public enum EnumBestiaryPages {
     }
 
     public static List<Integer> enumToInt(List<EnumBestiaryPages> pages) {
-        Iterator itr = pages.iterator();
+        Iterator<com.github.alexthe666.iceandfire.enums.EnumBestiaryPages> itr = pages.iterator();
         List<Integer> list = new ArrayList<Integer>();
         while (itr.hasNext()) {
-            list.add(EnumBestiaryPages.values()[((EnumBestiaryPages) itr.next()).ordinal()].ordinal());
+            list.add(EnumBestiaryPages.values()[(itr.next()).ordinal()].ordinal());
         }
         return list;
     }
@@ -92,9 +92,9 @@ public enum EnumBestiaryPages {
             }
             List<EnumBestiaryPages> containedPages = containedPages(toList(tag.getIntArray("Pages")));
             List<EnumBestiaryPages> possiblePages = new ArrayList<EnumBestiaryPages>();
-            Iterator itr = allPages.iterator();
+            Iterator<com.github.alexthe666.iceandfire.enums.EnumBestiaryPages> itr = allPages.iterator();
             while (itr.hasNext()) {
-                EnumBestiaryPages page = (EnumBestiaryPages) itr.next();
+                EnumBestiaryPages page = itr.next();
                 if (!containedPages.contains(page)) {
                     possiblePages.add(page);
                 }

@@ -7,7 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 import java.util.List;
 
 public class ModelUtils {
-    public static void renderAll(List boxList) {
+    public static void renderAll(List<ModelRenderer> boxList) {
         for (Object element : boxList) {
             if (element instanceof AdvancedModelRenderer) {
                 AdvancedModelRenderer box = (AdvancedModelRenderer) element;

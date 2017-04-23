@@ -108,18 +108,18 @@ public class ItemFishingSpear extends Item {
         Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
         RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
         if (raytraceresult == null) {
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
         }
         if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
         } else {
             Block block = worldIn.getBlockState(raytraceresult.getBlockPos()).getBlock();
             boolean flag1 = block == Blocks.WATER || block == Blocks.FLOWING_WATER;
             if (!flag1) {
-                return new ActionResult(EnumActionResult.PASS, itemStackIn);
+                return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
             }
             entityplayer.addStat(StatList.getObjectUseStats(this));
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
         }
     }
 }

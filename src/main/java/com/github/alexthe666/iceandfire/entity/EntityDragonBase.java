@@ -1260,10 +1260,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
             Entity entity = null;
-            List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2));
+            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2));
             Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
             if (!list.isEmpty()) {
-                entity = (Entity) list.get(0);
+                entity = list.get(0);
                 if (entity.getUniqueID().compareTo(this.getControllingPassenger().getUniqueID()) != 0) {
                     if (this.getAnimation() != this.ANIMATION_BITE) {
                         this.setAnimation(this.ANIMATION_BITE);

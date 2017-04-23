@@ -153,7 +153,7 @@ public class ItemDragonHornActive extends Item {
         entityplayer.setActiveHand(hand);
         Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
         RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
-        return new ActionResult(EnumActionResult.PASS, itemStackIn);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override

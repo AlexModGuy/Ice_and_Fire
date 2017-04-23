@@ -38,9 +38,9 @@ public class EventLiving {
     @SubscribeEvent
     public void onPlayerLeaveEvent(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.player != null && !event.player.getPassengers().isEmpty()) {
-            Iterator itr = event.player.getPassengers().iterator();
+            Iterator<Entity> itr = event.player.getPassengers().iterator();
             while (itr.hasNext()) {
-                ((Entity) itr.next()).dismountRidingEntity();
+                (itr.next()).dismountRidingEntity();
             }
         }
     }

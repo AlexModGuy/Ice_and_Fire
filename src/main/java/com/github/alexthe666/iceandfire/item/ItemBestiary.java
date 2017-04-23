@@ -52,7 +52,7 @@ public class ItemBestiary extends Item {
         if (worldIn.isRemote) {
             IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }
-        return new ActionResult(EnumActionResult.PASS, itemStackIn);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override

@@ -179,10 +179,10 @@ public class ItemDragonBow extends Item {
             return ret;
 
         if (!playerIn.capabilities.isCreativeMode && !flag) {
-            return !flag ? new ActionResult(EnumActionResult.FAIL, itemStackIn) : new ActionResult(EnumActionResult.PASS, itemStackIn);
+            return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
         } else {
             playerIn.setActiveHand(hand);
-            return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
         }
     }
 
