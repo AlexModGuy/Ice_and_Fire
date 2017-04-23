@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 
 public class DragonAIWatchClosest extends EntityAIWatchClosest {

@@ -1,12 +1,10 @@
 package com.github.alexthe666.iceandfire.world.village;
 
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraft.world.gen.structure.*;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class VillageAnimalFarmCreator implements VillagerRegistry.IVillageCreationHandler {
 

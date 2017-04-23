@@ -3,13 +3,10 @@ package fossilsarcheology.api;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public enum FoodMappings {
     INSTANCE;

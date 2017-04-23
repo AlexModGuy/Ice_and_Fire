@@ -3,18 +3,14 @@ package com.github.alexthe666.iceandfire.core;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.*;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
+import net.minecraft.village.*;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class ModVillagers {
 

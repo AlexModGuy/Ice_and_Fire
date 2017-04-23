@@ -1,26 +1,20 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
-import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
+import com.github.alexthe666.iceandfire.client.model.*;
+import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.*;
 
 public class ClientProxy extends CommonProxy {
 

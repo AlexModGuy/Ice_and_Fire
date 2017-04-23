@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public enum EnumBestiaryPages {
 

@@ -1,15 +1,10 @@
 package com.github.alexthe666.iceandfire.client;
 
-import com.github.alexthe666.iceandfire.client.gui.GuiDragon;
-import com.github.alexthe666.iceandfire.client.gui.GuiLectern;
-import com.github.alexthe666.iceandfire.client.gui.GuiPodium;
+import com.github.alexthe666.iceandfire.client.gui.*;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
-import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
-import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
+import com.github.alexthe666.iceandfire.entity.tile.*;
+import com.github.alexthe666.iceandfire.inventory.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

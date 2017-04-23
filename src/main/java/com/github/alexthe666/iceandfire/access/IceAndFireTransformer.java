@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.access;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 import org.objectweb.asm.tree.*;
 
 public class IceAndFireTransformer implements IClassTransformer {

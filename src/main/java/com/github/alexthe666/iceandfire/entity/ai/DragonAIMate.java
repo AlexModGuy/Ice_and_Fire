@@ -7,8 +7,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DragonAIMate extends EntityAIBase {
     private final EntityDragonBase dragon;

@@ -6,12 +6,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.*;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderModCapes {
@@ -67,7 +64,7 @@ public class RenderModCapes {
             }
         }
         /*
-		 * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
+         * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
 		 * (hasRedCape(event.getEntityPlayer().getUniqueID())){
 		 * AbstractClientPlayer player =
 		 * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
