@@ -1,8 +1,8 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "iceandfire:items/dragon_skull_fire"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "iceandfire:items/dragon_skull_fire"
+  }
 }
 }
 }

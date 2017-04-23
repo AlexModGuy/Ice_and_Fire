@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "iceandfire:sapphire_ore" }
+  "variants": {
+    "normal": {
+      "model": "iceandfire:sapphire_ore"
     }
+  }
 }

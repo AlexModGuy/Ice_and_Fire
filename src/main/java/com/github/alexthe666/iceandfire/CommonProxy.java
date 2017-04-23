@@ -1,32 +1,32 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-
 public class CommonProxy {
 
-	public void preRender() {
+    public void preRender() {
 
-	}
-	public void render() {
-	}
+    }
 
-	public void renderArmors(EnumDragonArmor armor) {
-	}
+    public void render() {
+    }
 
-	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-	}
+    public void renderArmors(EnumDragonArmor armor) {
+    }
 
-	public void openBestiaryGui(ItemStack book) {
-	}
+    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+    }
 
-	public Object getArmorModel(int armorId) {
-		return null;
-	}
+    public void openBestiaryGui(ItemStack book) {
+    }
 
-	public Object getFontRenderer() {
-		return null;
-	}
+    public Object getArmorModel(int armorId) {
+        return null;
+    }
+
+    public Object getFontRenderer() {
+        return null;
+    }
 }

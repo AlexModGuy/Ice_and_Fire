@@ -1,36 +1,36 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
 import net.minecraft.util.text.TextFormatting;
 
-import com.google.common.collect.Maps;
+import java.util.Map;
 
 public enum EnumDragonEgg {
-	RED(0, TextFormatting.DARK_RED, true), GREEN(1, TextFormatting.DARK_GREEN, true), BRONZE(2, TextFormatting.GOLD, true), GRAY(3, TextFormatting.GRAY, true), BLUE(4, TextFormatting.AQUA, false), WHITE(5, TextFormatting.WHITE, false), SAPPHIRE(6, TextFormatting.BLUE, false), SILVER(7, TextFormatting.DARK_GRAY, false);
+    RED(0, TextFormatting.DARK_RED, true), GREEN(1, TextFormatting.DARK_GREEN, true), BRONZE(2, TextFormatting.GOLD, true), GRAY(3, TextFormatting.GRAY, true), BLUE(4, TextFormatting.AQUA, false), WHITE(5, TextFormatting.WHITE, false), SAPPHIRE(6, TextFormatting.BLUE, false), SILVER(7, TextFormatting.DARK_GRAY, false);
 
-	private static final Map META_LOOKUP = Maps.newHashMap();
-	public int meta;
-	public TextFormatting color;
-	public boolean isFire;
+    private static final Map<Integer, EnumDragonEgg> META_LOOKUP = Maps.newHashMap();
 
-	private EnumDragonEgg(int meta, TextFormatting color, boolean isFire) {
-		this.meta = meta;
-		this.color = color;
-		this.isFire = isFire;
-	}
+    static {
+        EnumDragonEgg[] var0 = values();
+        int var1 = var0.length;
 
-	public static EnumDragonEgg byMetadata(int meta) {
-		EnumDragonEgg i = (EnumDragonEgg) META_LOOKUP.get(meta);
-		return i == null ? RED : i;
-	}
+        for (EnumDragonEgg var3 : var0) {
+            META_LOOKUP.put(var3.meta, var3);
+        }
+    }
 
-	static {
-		EnumDragonEgg[] var0 = values();
-		int var1 = var0.length;
+    public int meta;
+    public TextFormatting color;
+    public boolean isFire;
 
-		for (EnumDragonEgg var3 : var0) {
-			META_LOOKUP.put(var3.meta, var3);
-		}
-	}
+    private EnumDragonEgg(int meta, TextFormatting color, boolean isFire) {
+        this.meta = meta;
+        this.color = color;
+        this.isFire = isFire;
+    }
+
+    public static EnumDragonEgg byMetadata(int meta) {
+        EnumDragonEgg i = META_LOOKUP.get(meta);
+        return i == null ? RED : i;
+    }
 }

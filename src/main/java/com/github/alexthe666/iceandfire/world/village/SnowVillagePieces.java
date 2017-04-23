@@ -8,7 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -22,6 +22,7 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraft.world.storage.loot.LootTableList;
 
 import java.util.Iterator;
@@ -269,6 +270,11 @@ public class SnowVillagePieces {
         protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
             return 1;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            //
+        }
     }
 
     public static class House2 extends Village {
@@ -390,6 +396,11 @@ public class SnowVillagePieces {
 
         protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
             return 3;
+        }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
         }
     }
 
@@ -544,6 +555,11 @@ public class SnowVillagePieces {
             this.spawnVillagers(worldIn, structureBoundingBoxIn, 4, 1, 2, 2);
             return true;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class Path extends Road {
@@ -557,6 +573,18 @@ public class SnowVillagePieces {
             this.setCoordBaseMode(facing);
             this.boundingBox = p_i45562_4_;
             this.length = Math.max(p_i45562_4_.getXSize(), p_i45562_4_.getZSize());
+        }
+
+        public static StructureBoundingBox findPieceBox(Start start, List<StructureComponent> p_175848_1_, Random rand, int p_175848_3_, int p_175848_4_, int p_175848_5_, EnumFacing facing) {
+            for (int i = 7 * MathHelper.getInt(rand, 3, 5); i >= 7; i -= 7) {
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 3, 3, i, facing);
+
+                if (StructureComponent.findIntersecting(p_175848_1_, structureboundingbox) == null) {
+                    return structureboundingbox;
+                }
+            }
+
+            return null;
         }
 
         /**
@@ -636,18 +664,6 @@ public class SnowVillagePieces {
             }
         }
 
-        public static StructureBoundingBox findPieceBox(Start start, List<StructureComponent> p_175848_1_, Random rand, int p_175848_3_, int p_175848_4_, int p_175848_5_, EnumFacing facing) {
-            for (int i = 7 * MathHelper.getInt(rand, 3, 5); i >= 7; i -= 7) {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 3, 3, i, facing);
-
-                if (StructureComponent.findIntersecting(p_175848_1_, structureboundingbox) == null) {
-                    return structureboundingbox;
-                }
-            }
-
-            return null;
-        }
-
         /**
          * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
          * Mineshafts at the end, it adds Fences...
@@ -696,11 +712,16 @@ public class SnowVillagePieces {
 
             return true;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class PieceWeight {
-        public Class<? extends SnowVillagePieces.Village> villagePieceClass;
         public final int villagePieceWeight;
+        public Class<? extends SnowVillagePieces.Village> villagePieceClass;
         public int villagePiecesSpawned;
         public int villagePiecesLimit;
 
@@ -798,17 +819,22 @@ public class SnowVillagePieces {
             this.func_189926_a(worldIn, EnumFacing.SOUTH, 1, 3, -1, structureBoundingBoxIn);
             return true;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public abstract static class Village extends StructureComponent {
         protected int averageGroundLvl = -1;
+        protected int field_189928_h;
+        protected boolean field_189929_i;
+        protected Start startPiece;
         /**
          * The number of villagers that have been spawned in this component.
          */
         private int villagersSpawned;
-        protected int field_189928_h;
-        protected boolean field_189929_i;
-        protected Start startPiece;
 
         public Village() {
         }
@@ -821,6 +847,10 @@ public class SnowVillagePieces {
                 this.field_189929_i = start.field_189929_i;
                 startPiece = start;
             }
+        }
+
+        protected static boolean canVillageGoDeeper(StructureBoundingBox structurebb) {
+            return structurebb != null && structurebb.minY > 10;
         }
 
         /**
@@ -921,10 +951,6 @@ public class SnowVillagePieces {
             }
         }
 
-        protected static boolean canVillageGoDeeper(StructureBoundingBox structurebb) {
-            return structurebb != null && structurebb.minY > 10;
-        }
-
         /**
          * Spawns a number of villagers in this component. Parameters: world, component bounding box, x offset, y
          * offset, z offset, number of villagers
@@ -943,10 +969,10 @@ public class SnowVillagePieces {
                     ++this.villagersSpawned;
 
                     if (this.field_189929_i) {
-                        EntityZombie entityzombie = new EntityZombie(worldIn);
+                        EntityZombieVillager entityzombie = new EntityZombieVillager(worldIn);
                         entityzombie.setLocationAndAngles((double) j + 0.5D, (double) k, (double) l + 0.5D, 0.0F, 0.0F);
                         entityzombie.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityzombie)), (IEntityLivingData) null);
-                        entityzombie.setVillagerType(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
+                        entityzombie.setForgeProfession(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
                         entityzombie.enablePersistence();
                         worldIn.spawnEntity(entityzombie);
                     } else {
@@ -1045,7 +1071,7 @@ public class SnowVillagePieces {
 
         protected void func_189927_a(World p_189927_1_, StructureBoundingBox p_189927_2_, Random p_189927_3_, int p_189927_4_, int p_189927_5_, int p_189927_6_, EnumFacing p_189927_7_) {
             if (!this.field_189929_i) {
-                this.func_189915_a(p_189927_1_, p_189927_2_, p_189927_3_, p_189927_4_, p_189927_5_, p_189927_6_, EnumFacing.NORTH, this.func_189925_i());
+                this.generateDoor(p_189927_1_, p_189927_2_, p_189927_3_, p_189927_4_, p_189927_5_, p_189927_6_, EnumFacing.NORTH, this.func_189925_i());
             }
         }
 
@@ -1124,6 +1150,11 @@ public class SnowVillagePieces {
 
             return true;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
 
     public static class TorchNew extends Village {
@@ -1163,7 +1194,13 @@ public class SnowVillagePieces {
             this.func_189926_a(worldIn, EnumFacing.SOUTH, 1, 3, -1, structureBoundingBoxIn);
             return true;
         }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
+        }
     }
+
     public static class WoodHut extends Village {
         private boolean isTallHouse;
         private int tablePosition;
@@ -1177,6 +1214,11 @@ public class SnowVillagePieces {
             this.boundingBox = structurebb;
             this.isTallHouse = rand.nextBoolean();
             this.tablePosition = rand.nextInt(3);
+        }
+
+        public static WoodHut createPiece(Start start, List<StructureComponent> p_175853_1_, Random rand, int p_175853_3_, int p_175853_4_, int p_175853_5_, EnumFacing facing, int p_175853_7_) {
+            StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175853_3_, p_175853_4_, p_175853_5_, 0, 0, 0, 4, 6, 5, facing);
+            return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new WoodHut(start, p_175853_7_, rand, structureboundingbox, facing) : null;
         }
 
         /**
@@ -1195,11 +1237,6 @@ public class SnowVillagePieces {
             super.readStructureFromNBT(tagCompound);
             this.tablePosition = tagCompound.getInteger("T");
             this.isTallHouse = tagCompound.getBoolean("C");
-        }
-
-        public static WoodHut createPiece(Start start, List<StructureComponent> p_175853_1_, Random rand, int p_175853_3_, int p_175853_4_, int p_175853_5_, EnumFacing facing, int p_175853_7_) {
-            StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175853_3_, p_175853_4_, p_175853_5_, 0, 0, 0, 4, 6, 5, facing);
-            return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new WoodHut(start, p_175853_7_, rand, structureboundingbox, facing) : null;
         }
 
         /**
@@ -1277,6 +1314,11 @@ public class SnowVillagePieces {
 
             this.spawnVillagers(worldIn, structureBoundingBoxIn, 1, 1, 2, 1);
             return true;
+        }
+
+        @Override
+        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+            super.readStructureFromNBT(tagCompound);
         }
     }
 }

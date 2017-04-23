@@ -13,13 +13,12 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class DragonAIMate extends EntityAIBase
-{
+public class DragonAIMate extends EntityAIBase {
     private final EntityDragonBase dragon;
     World theWorld;
-    private EntityDragonBase targetMate;
     int spawnBabyDelay;
     double moveSpeed;
+    private EntityDragonBase targetMate;
 
     public DragonAIMate(EntityDragonBase dragon, double speedIn) {
         this.dragon = dragon;
@@ -28,14 +27,10 @@ public class DragonAIMate extends EntityAIBase
         this.setMutexBits(3);
     }
 
-    public boolean shouldExecute()
-    {
-        if (!this.dragon.isInLove())
-        {
+    public boolean shouldExecute() {
+        if (!this.dragon.isInLove()) {
             return false;
-        }
-        else
-        {
+        } else {
             this.targetMate = this.getNearbyMate();
             return this.targetMate != null;
         }
@@ -44,16 +39,14 @@ public class DragonAIMate extends EntityAIBase
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean continueExecuting()
-    {
+    public boolean continueExecuting() {
         return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
     }
 
     /**
      * Resets the task
      */
-    public void resetTask()
-    {
+    public void resetTask() {
         this.targetMate = null;
         this.spawnBabyDelay = 0;
     }
@@ -61,9 +54,8 @@ public class DragonAIMate extends EntityAIBase
     /**
      * Updates the task
      */
-    public void updateTask()
-    {
-        this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float)this.dragon.getVerticalFaceSpeed());
+    public void updateTask() {
+        this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
         this.dragon.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
         ++this.spawnBabyDelay;
         if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSqToEntity(this.targetMate) < 12.0D) {
@@ -75,16 +67,13 @@ public class DragonAIMate extends EntityAIBase
      * Loops through nearby animals and finds another animal of the same type that can be mated with. Returns the first
      * valid mate found.
      */
-    private EntityDragonBase getNearbyMate()
-    {
+    private EntityDragonBase getNearbyMate() {
         List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().expandXyz(8.0D));
         double d0 = Double.MAX_VALUE;
         EntityDragonBase EntityDragonBase = null;
 
-        for (EntityDragonBase EntityDragonBase1 : list)
-        {
-            if (this.dragon.canMateWith(EntityDragonBase1) && this.dragon.getDistanceSqToEntity(EntityDragonBase1) < d0)
-            {
+        for (EntityDragonBase EntityDragonBase1 : list) {
+            if (this.dragon.canMateWith(EntityDragonBase1) && this.dragon.getDistanceSqToEntity(EntityDragonBase1) < d0) {
                 EntityDragonBase = EntityDragonBase1;
                 d0 = this.dragon.getDistanceSqToEntity(EntityDragonBase1);
             }
@@ -100,17 +89,14 @@ public class DragonAIMate extends EntityAIBase
 
         EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
 
-        if (egg != null)
-        {
+        if (egg != null) {
             EntityPlayer entityplayer = this.dragon.getPlayerInLove();
 
-            if (entityplayer == null && this.targetMate.getPlayerInLove() != null)
-            {
+            if (entityplayer == null && this.targetMate.getPlayerInLove() != null) {
                 entityplayer = this.targetMate.getPlayerInLove();
             }
 
-            if (entityplayer != null)
-            {
+            if (entityplayer != null) {
                 entityplayer.addStat(StatList.ANIMALS_BRED);
                 entityplayer.addStat(ModAchievements.dragonBreed);
             }
@@ -123,19 +109,17 @@ public class DragonAIMate extends EntityAIBase
             this.theWorld.spawnEntity(egg);
             Random random = this.dragon.getRNG();
 
-            for (int i = 0; i < 17; ++i)
-            {
+            for (int i = 0; i < 17; ++i) {
                 double d0 = random.nextGaussian() * 0.02D;
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
-                double d3 = random.nextDouble() * (double)this.dragon.width * 2.0D - (double)this.dragon.width;
-                double d4 = 0.5D + random.nextDouble() * (double)this.dragon.height;
-                double d5 = random.nextDouble() * (double)this.dragon.width * 2.0D - (double)this.dragon.width;
+                double d3 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
+                double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
+                double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
                 this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2, new int[0]);
             }
 
-            if (this.theWorld.getGameRules().getBoolean("doMobLoot"))
-            {
+            if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
                 this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.posX, this.dragon.posY, this.dragon.posZ, random.nextInt(15) + 10));
             }
         }

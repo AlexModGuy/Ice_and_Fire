@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -26,7 +25,7 @@ public class ModAchievements {
     public static Achievement fireSword;
     public static Achievement iceSword;
 
-    public static void init(){
+    public static void init() {
         manuscript = new Achievement("achievement.manuscript", "manuscript", 0, 0, new ItemStack(ModItems.manuscript), null).registerStat();
         bestiary = new Achievement("achievement.bestiary", "bestiary", 0, -3, new ItemStack(ModItems.bestiary), manuscript).registerStat();
         silver = new Achievement("achievement.silver", "silver", -2, 0, new ItemStack(ModBlocks.silverOre), null).registerStat();

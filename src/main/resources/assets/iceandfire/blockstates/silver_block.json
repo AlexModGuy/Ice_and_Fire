@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "iceandfire:silver_block" }
+  "variants": {
+    "normal": {
+      "model": "iceandfire:silver_block"
     }
+  }
 }

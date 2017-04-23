@@ -21,24 +21,13 @@ import java.util.Random;
 
 public class MapGenSnowVillage extends WorldGenerator {
     public static List<Biome> VILLAGE_SPAWN_BIOMES = Arrays.<Biome>asList(new Biome[]{Biomes.ICE_MOUNTAINS, Biomes.ICE_PLAINS, Biomes.MUTATED_ICE_FLATS, IceAndFire.GLACIER, Biomes.COLD_TAIGA_HILLS, Biomes.FROZEN_OCEAN, Biomes.COLD_TAIGA});
+    private final int minTownSeparation;
     private int size;
     private int distance;
-    private final int minTownSeparation;
 
     public MapGenSnowVillage() {
         this.distance = 9;
         this.minTownSeparation = 8;
-    }
-
-    @Override
-    public boolean generate(World world, Random rand, BlockPos position) {
-        this.distance = 9;
-        boolean canSpawn = canSpawnStructureAtCoords(world, position.getX() >> 4, position.getZ() >> 4);
-        if(new Random().nextInt(IceAndFire.CONFIG.generateSnowVillageChance + 1) == 0){
-            int new_size = 32;
-            getStructureStart(world, position.getX() >> 4, position.getZ() >> 4, rand).generateStructure(world, rand, new StructureBoundingBox(position.getX() - new_size, position.getZ() - new_size, position.getX() + new_size, position.getZ() + new_size));
-        }
-        return canSpawn;
     }
 
     public MapGenSnowVillage(Map<String, String> map) {
@@ -50,6 +39,17 @@ public class MapGenSnowVillage extends WorldGenerator {
                 this.distance = MathHelper.getInt((String) entry.getValue(), this.distance, 9);
             }
         }
+    }
+
+    @Override
+    public boolean generate(World world, Random rand, BlockPos position) {
+        this.distance = 9;
+        boolean canSpawn = canSpawnStructureAtCoords(world, position.getX() >> 4, position.getZ() >> 4);
+        if (new Random().nextInt(IceAndFire.CONFIG.generateSnowVillageChance + 1) == 0) {
+            int new_size = 32;
+            getStructureStart(world, position.getX() >> 4, position.getZ() >> 4, rand).generateStructure(world, rand, new StructureBoundingBox(position.getX() - new_size, position.getZ() - new_size, position.getX() + new_size, position.getZ() + new_size));
+        }
+        return canSpawn;
     }
 
     public String getStructureName() {

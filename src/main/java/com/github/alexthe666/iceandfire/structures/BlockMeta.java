@@ -4,19 +4,19 @@ import net.minecraft.block.Block;
 
 public class BlockMeta {
 
-	Block block;
-	int meta;
+    Block block;
+    int meta;
 
-	public BlockMeta(Block block, int meta) {
-		this.block = block;
-		this.meta = meta;
-	}
+    public BlockMeta(Block block, int meta) {
+        this.block = block;
+        this.meta = meta;
+    }
 
-	public Block getBlock() {
-		return block;
-	}
+    public Block getBlock() {
+        return block;
+    }
 
-	public int getMeta() {
-		return meta;
-	}
+    public int getMeta() {
+        return meta;
+    }
 }

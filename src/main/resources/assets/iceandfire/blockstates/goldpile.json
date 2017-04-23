@@ -1,12 +1,28 @@
 {
-    "variants": {
-        "layers=1":  { "model": "iceandfire:goldpile_height2" },
-        "layers=2":  { "model": "iceandfire:goldpile_height4" },
-        "layers=3":  { "model": "iceandfire:goldpile_height6" },
-        "layers=4":  { "model": "iceandfire:goldpile_height8" },
-        "layers=5":  { "model": "iceandfire:goldpile_height10" },
-        "layers=6":  { "model": "iceandfire:goldpile_height12" },
-        "layers=7":  { "model": "iceandfire:goldpile_height14" },
-        "layers=8":  { "model": "iceandfire:goldpile_height16" }
+  "variants": {
+    "layers=1": {
+      "model": "iceandfire:goldpile_height2"
+    },
+    "layers=2": {
+      "model": "iceandfire:goldpile_height4"
+    },
+    "layers=3": {
+      "model": "iceandfire:goldpile_height6"
+    },
+    "layers=4": {
+      "model": "iceandfire:goldpile_height8"
+    },
+    "layers=5": {
+      "model": "iceandfire:goldpile_height10"
+    },
+    "layers=6": {
+      "model": "iceandfire:goldpile_height12"
+    },
+    "layers=7": {
+      "model": "iceandfire:goldpile_height14"
+    },
+    "layers=8": {
+      "model": "iceandfire:goldpile_height16"
     }
+  }
 }

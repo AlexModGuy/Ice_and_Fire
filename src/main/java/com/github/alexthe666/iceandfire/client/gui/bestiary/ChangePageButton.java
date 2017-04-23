@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 public class ChangePageButton extends GuiButton {
     private final boolean right;
-    private int page;
     public int lastpage = 1;
+    private int page;
 
     public ChangePageButton(int id, int x, int y, boolean right, int bookpage) {
         super(id, x, y, 23, 13, "");

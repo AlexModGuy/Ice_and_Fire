@@ -6,11 +6,10 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ItemDragonFlesh extends ItemFood{
+public class ItemDragonFlesh extends ItemFood {
 
     boolean isFire;
 
@@ -18,15 +17,16 @@ public class ItemDragonFlesh extends ItemFood{
         super(8, 0.8F, true);
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName(isFire ? "iceandfire.fire_dragon_flesh" : "iceandfire.ice_dragon_flesh");
-        GameRegistry.registerItem(this, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        this.setRegistryName(IceAndFire.MODID, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        GameRegistry.register(this);
         this.isFire = isFire;
     }
 
     protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
         if (!worldIn.isRemote) {
-            if(isFire) {
+            if (isFire) {
                 player.setFire(5);
-            }else{
+            } else {
                 player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
             }
         }

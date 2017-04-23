@@ -20,19 +20,16 @@ public class ParticleDragonIce extends ParticleFlame {
         this.setParticleTextureIndex(0);
     }
 
-    public int getBrightnessForRender(float partialTicks)
-    {
+    public int getBrightnessForRender(float partialTicks) {
         return 15728880;
     }
 
-    public void setParticleTextureIndex(int particleTextureIndex)
-    {
+    public void setParticleTextureIndex(int particleTextureIndex) {
         this.particleTextureIndexX = particleTextureIndex % 8;
         this.particleTextureIndexY = particleTextureIndex / 8;
     }
 
-    public float getBrightness(float partialTicks)
-    {
+    public float getBrightness(float partialTicks) {
         return 0;
     }
 
@@ -59,18 +56,18 @@ public class ParticleDragonIce extends ParticleFlame {
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double)(-rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(rotationYZ * f4 - rotationXZ * f4))};
+        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double) (-rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (rotationYZ * f4 - rotationXZ * f4))};
 
         if (this.particleAngle != 0.0F) {
             float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
             float f9 = MathHelper.cos(f8 * 0.5F);
-            float f10 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.xCoord;
-            float f11 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.yCoord;
-            float f12 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.zCoord;
-            Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
+            float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.xCoord;
+            float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.yCoord;
+            float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.zCoord;
+            Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
 
-            for (int l = 0; l < 4; ++l){
-                avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double)(f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double)(2.0F * f9)));
+            for (int l = 0; l < 4; ++l) {
+                avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
             }
         }
 

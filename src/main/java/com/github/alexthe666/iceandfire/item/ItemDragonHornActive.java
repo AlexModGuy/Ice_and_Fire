@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -32,7 +33,8 @@ public class ItemDragonHornActive extends Item {
     public ItemDragonHornActive(String name) {
         this.maxStackSize = 1;
         this.setUnlocalizedName("iceandfire." + name);
-        GameRegistry.registerItem(this, name);
+        this.setRegistryName(IceAndFire.MODID, name);
+        GameRegistry.register(this);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -41,7 +43,7 @@ public class ItemDragonHornActive extends Item {
                     return 0.0F;
                 } else {
                     ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+                    return !itemstack.isEmpty() && itemstack.getItem() instanceof ItemDragonHornActive ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
                 }
             }
         });
@@ -72,32 +74,32 @@ public class ItemDragonHornActive extends Item {
 
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer)entityLiving;
+            EntityPlayer entityplayer = (EntityPlayer) entityLiving;
             boolean flag = entityplayer.capabilities.isCreativeMode;
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            if (i < 20){
+            if (i < 20) {
                 return;
             }
             double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-            double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double)entityplayer.getEyeHeight();
+            double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight();
             double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
             float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
             float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
             Vec3d vec3d = new Vec3d(d0, d1, d2);
-            float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-            float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
+            float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
+            float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
             float f5 = -MathHelper.cos(-f1 * 0.017453292F);
             float f6 = MathHelper.sin(-f1 * 0.017453292F);
             float f7 = f4 * f5;
             float f8 = f3 * f5;
-            Vec3d vec3d1 = vec3d.addVector((double)f7 * 5.0D, (double)f6 * 5.0D, (double)f8 * 5.0D);
+            Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
             RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
             if (raytraceresult == null) {
                 return;
             }
             if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
                 return;
-            }else {
+            } else {
                 BlockPos pos = raytraceresult.getBlockPos();
                 worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
                 if (this == ModItems.dragon_horn_fire) {
@@ -138,23 +140,23 @@ public class ItemDragonHornActive extends Item {
 
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer entityplayer, EnumHand hand) {
         double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-        double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double)entityplayer.getEyeHeight();
+        double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight();
         double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
         float f = 1.0F;
         float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
         float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
         Vec3d vec3d = new Vec3d(d0, d1, d2);
-        float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
+        float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
+        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
         float f5 = -MathHelper.cos(-f1 * 0.017453292F);
         float f6 = MathHelper.sin(-f1 * 0.017453292F);
         float f7 = f4 * f5;
         float f8 = f3 * f5;
         double d3 = 5.0D;
         entityplayer.setActiveHand(hand);
-        Vec3d vec3d1 = vec3d.addVector((double)f7 * 5.0D, (double)f6 * 5.0D, (double)f8 * 5.0D);
+        Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
         RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
-        return new ActionResult(EnumActionResult.PASS, itemStackIn);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override
@@ -182,7 +184,7 @@ public class ItemDragonHornActive extends Item {
                     stage1 = 1;
                 }
             }
-            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front")+ stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
+            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front") + stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
             list.add("" + stage);
         }
     }

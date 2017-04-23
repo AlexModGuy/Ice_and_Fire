@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.collect.Maps;
+import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -83,9 +84,13 @@ public class ModVillagers {
         professions.put(id, prof);
     }
 
-    /** Sell items for sapphires */
+    /**
+     * Sell items for sapphires
+     */
     public static class SapphireForItems implements EntityVillager.ITradeList {
-        /** The item that is being sold for emeralds */
+        /**
+         * The item that is being sold for emeralds
+         */
         public Item buyingItem;
         public EntityVillager.PriceInfo price;
 
@@ -94,7 +99,8 @@ public class ModVillagers {
             this.price = priceIn;
         }
 
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+        @Override
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
             int i = 1;
             if (this.price != null) {
                 i = this.price.getPrice(random);
@@ -103,11 +109,16 @@ public class ModVillagers {
         }
     }
 
-    /** Buy items for sapphires */
+    /**
+     * Buy items for sapphires
+     */
     public static class ListItemForSapphires implements EntityVillager.ITradeList {
-        /** The item that is being bought for emeralds */
+        /**
+         * The item that is being bought for emeralds
+         */
         public ItemStack itemToBuy;
         public EntityVillager.PriceInfo priceInfo;
+
         public ListItemForSapphires(Item par1Item, EntityVillager.PriceInfo priceInfo) {
             this.itemToBuy = new ItemStack(par1Item);
             this.priceInfo = priceInfo;
@@ -118,7 +129,8 @@ public class ModVillagers {
             this.priceInfo = priceInfo;
         }
 
-        public void modifyMerchantRecipeList(MerchantRecipeList recipeList, Random random) {
+        @Override
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
             int i = 1;
 
             if (this.priceInfo != null) {
@@ -130,8 +142,7 @@ public class ModVillagers {
             if (i < 0) {
                 itemstack = new ItemStack(ModItems.sapphireGem);
                 itemstack1 = new ItemStack(this.itemToBuy.getItem(), -i, this.itemToBuy.getMetadata());
-            }
-            else {
+            } else {
                 itemstack = new ItemStack(ModItems.sapphireGem, i, 0);
                 itemstack1 = new ItemStack(this.itemToBuy.getItem(), 1, this.itemToBuy.getMetadata());
             }
