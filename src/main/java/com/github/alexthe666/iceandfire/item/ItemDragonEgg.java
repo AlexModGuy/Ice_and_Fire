@@ -44,8 +44,8 @@ public class ItemDragonEgg extends Item {
     }
 
 
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (side != EnumFacing.UP) {
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (facing != EnumFacing.UP) {
             return EnumActionResult.PASS;
         } else {
             EntityDragonEgg egg = new EntityDragonEgg(worldIn);
@@ -54,10 +54,12 @@ public class ItemDragonEgg extends Item {
             if (!worldIn.isRemote) {
                 worldIn.spawnEntity(egg);
             }
-            if (!player.capabilities.isCreativeMode) {
-                stack.getCount();
+            ItemStack itemstack = player.getHeldItem(hand);
 
-                if (stack.getCount() <= 0) {
+            if (!player.capabilities.isCreativeMode) {
+                itemstack.getCount();
+
+                if (itemstack.getCount() <= 0) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                 }
             }
