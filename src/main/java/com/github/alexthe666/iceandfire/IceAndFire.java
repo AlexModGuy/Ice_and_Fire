@@ -121,7 +121,7 @@ public class IceAndFire {
         GameRegistry.register(GLACIER);
         BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
         BiomeManager.addSpawnBiome(GLACIER);
-        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, 10));
+        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));
         PROXY.render();
         GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
