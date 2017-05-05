@@ -32,4 +32,6 @@ public class IceAndFireConfig {
 	public int oreToStoneRatioForDragonCaves = 5;
 	@ConfigEntry(category = "mobs", comment = "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default")
 	public int dragonGriefing = 0;
+	@ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
+	public int glacierSpawnChance = 10;
 }
