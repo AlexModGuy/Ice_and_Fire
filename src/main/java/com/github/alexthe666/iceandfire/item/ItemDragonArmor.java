@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,6 +24,9 @@ public class ItemDragonArmor extends Item {
         this.setUnlocalizedName("iceandfire." + name);
         this.setCreativeTab(IceAndFire.TAB);
         this.maxStackSize = 1;
+        this.setRegistryName(IceAndFire.MODID, name);
+        GameRegistry.register(this);
+
     }
 
     @Override

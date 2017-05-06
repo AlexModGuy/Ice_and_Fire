@@ -143,16 +143,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
             for (int j = 0; j < i; ++j) {
                 ItemStack itemstack = animalchest.getStackInSlot(j);
-
                 if (!itemstack.isEmpty()) {
                     this.dragonInv.setInventorySlotContents(j, itemstack.copy());
-                    //this.updateDragonSlots();
                 }
             }
         }
 
         this.dragonInv.addInventoryChangeListener(this);
-
+        this.updateDragonSlots();
         this.itemHandler = new net.minecraftforge.items.wrapper.InvWrapper(this.dragonInv);
         if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(this.dragonInv.getStackInSlot(0))));
@@ -163,12 +161,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void updateDragonSlots() {
-        if (!this.world.isRemote) {
             this.setArmorInSlot(0, getIntFromArmor(this.dragonInv.getStackInSlot(0)));
             this.setArmorInSlot(1, getIntFromArmor(this.dragonInv.getStackInSlot(1)));
             this.setArmorInSlot(2, getIntFromArmor(this.dragonInv.getStackInSlot(2)));
             this.setArmorInSlot(3, getIntFromArmor(this.dragonInv.getStackInSlot(3)));
-        }
     }
 
     public void openGUI(EntityPlayer playerEntity) {
@@ -1525,6 +1521,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
             }
         }
+
     }
 
     public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
@@ -1617,7 +1614,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void updateCheckPlayer() {
-        EntityPlayer player = world.getClosestPlayerToEntity(this, this.getRenderSize() / 2);
+        double checklength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
+        EntityPlayer player = world.getClosestPlayerToEntity(this, checklength);
         if (!this.isTamed() && this.isSleeping()) {
             if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
                 this.setSleeping(false);

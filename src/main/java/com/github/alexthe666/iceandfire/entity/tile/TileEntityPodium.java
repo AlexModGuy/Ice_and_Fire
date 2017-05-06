@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,13 +12,14 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
-    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY};
+    private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 
     @Override
     public void update() {
@@ -26,28 +28,28 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public int getSizeInventory() {
-        return this.stacks.length;
+        return this.stacks.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return this.stacks[index];
+        return this.stacks.get(index);
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (!this.stacks[index].isEmpty()) {
+        if (!this.stacks.get(index).isEmpty()) {
             ItemStack itemstack;
 
-            if (this.stacks[index].getCount() <= count) {
-                itemstack = this.stacks[index];
-                this.stacks[index] = ItemStack.EMPTY;
+            if (this.stacks.get(index).getCount() <= count) {
+                itemstack = this.stacks.get(index);
+                this.stacks.set(index, ItemStack.EMPTY);
                 return itemstack;
             } else {
-                itemstack = this.stacks[index].splitStack(count);
+                itemstack = this.stacks.get(index).splitStack(count);
 
-                if (this.stacks[index].isEmpty()) {
-                    this.stacks[index] = ItemStack.EMPTY;
+                if (this.stacks.get(index).isEmpty()) {
+                    this.stacks.set(index, ItemStack.EMPTY);
                 }
 
                 return itemstack;
@@ -58,9 +60,9 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     }
 
     public ItemStack getStackInSlotOnClosing(int index) {
-        if (!this.stacks[index].isEmpty()) {
-            ItemStack itemstack = this.stacks[index];
-            this.stacks[index] = ItemStack.EMPTY;
+        if (!this.stacks.get(index).isEmpty()) {
+            ItemStack itemstack = this.stacks.get(index);
+            this.stacks.set(index, itemstack);
             return itemstack;
         } else {
             return ItemStack.EMPTY;
@@ -69,8 +71,8 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
-        this.stacks[index] = stack;
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, this.stacks.get(index));
+        this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
@@ -81,31 +83,12 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         NBTTagList nbttaglist = compound.getTagList("Items", 10);
-        this.stacks = new ItemStack[this.getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-            byte b0 = nbttagcompound1.getByte("Slot");
-
-            if (b0 >= 0 && b0 < this.stacks.length) {
-                this.stacks[b0] = new ItemStack(nbttagcompound1);
-            }
-        }
+        this.stacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.stacks.length; ++i) {
-            if (!this.stacks[i].isEmpty()) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.stacks[i].writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
-            }
-        }
-        compound.setTag("Items", nbttaglist);
+        ItemStackHelper.saveAllItems(compound, this.stacks);
         return super.writeToNBT(compound);
     }
 
@@ -148,9 +131,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public void clear() {
-        for (int i = 0; i < this.stacks.length; ++i) {
-            this.stacks[i] = ItemStack.EMPTY;
-        }
+        this.stacks.clear();
     }
 
     @Override

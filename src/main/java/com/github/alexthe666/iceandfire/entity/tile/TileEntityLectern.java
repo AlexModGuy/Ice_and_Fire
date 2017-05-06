@@ -8,15 +8,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -35,7 +36,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public float pageFlipPrev;
     public float pageHelp1;
     public float pageHelp2;
-    private ItemStack[] stacks = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+    private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private int furnaceBurnTime;
     private int currentItemBurnTime;
     private int cookTime;
@@ -70,22 +71,22 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         }
 
         if (!this.world.isRemote) {
-            if (!this.isBurning() && (this.stacks[1].isEmpty() || this.stacks[0].isEmpty())) {
+            if (!this.isBurning() && (this.stacks.get(1).isEmpty() || this.stacks.get(0).isEmpty())) {
                 if (!this.isBurning() && this.cookTime > 0) {
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.totalCookTime);
                 }
             } else {
                 if (!this.isBurning() && this.canSmelt()) {
-                    this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.stacks[1]);
+                    this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.stacks.get(1));
 
                     if (this.isBurning()) {
                         flag1 = true;
 
-                        if (!this.stacks[1].isEmpty()) {
-                            this.stacks[1].shrink(1);
+                        if (!this.stacks.get(1).isEmpty()) {
+                            this.stacks.get(1).shrink(1);
 
-                            if (this.stacks[1].isEmpty()) {
-                                this.stacks[1] = stacks[1].getItem().getContainerItem(stacks[1]);
+                            if (this.stacks.get(1).isEmpty()) {
+                                this.stacks.set(1, stacks.get(1).getItem().getContainerItem(stacks.get(1)));
                             }
                         }
                     }
@@ -127,19 +128,19 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public int getSizeInventory() {
-        return this.stacks.length;
+        return this.stacks.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return this.stacks[index];
+        return this.stacks.get(index);
     }
 
     private boolean canSmelt() {
-        if (this.stacks[0].isEmpty()) {
+        if (this.stacks.get(0).isEmpty()) {
             return false;
         } else {
-            ItemStack itemstack = this.stacks[0].copy();
+            ItemStack itemstack = this.stacks.get(0).copy();
 
             if (itemstack.isEmpty()) {
                 return false;
@@ -153,27 +154,27 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
                     return false;
                 }
             }
-            if (this.stacks[2].isEmpty())
+            if (this.stacks.get(2).isEmpty())
                 return true;
-            int result = stacks[2].getCount() + itemstack.getCount();
-            return result <= getInventoryStackLimit() && result <= this.stacks[2].getMaxStackSize();
+            int result = stacks.get(2).getCount() + itemstack.getCount();
+            return result <= getInventoryStackLimit() && result <= this.stacks.get(2).getMaxStackSize();
         }
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (!this.stacks[index].isEmpty()) {
+        if (!this.stacks.get(index).isEmpty()) {
             ItemStack itemstack;
 
-            if (this.stacks[index].getCount() <= count) {
-                itemstack = this.stacks[index];
-                this.stacks[index] = ItemStack.EMPTY;
+            if (this.stacks.get(index).getCount() <= count) {
+                itemstack = this.stacks.get(index);
+                this.stacks.set(index, ItemStack.EMPTY);
                 return itemstack;
             } else {
-                itemstack = this.stacks[index].splitStack(count);
+                itemstack = this.stacks.get(index).splitStack(count);
 
-                if (this.stacks[index].getCount() == 0) {
-                    this.stacks[index] = ItemStack.EMPTY;
+                if (this.stacks.get(index).getCount() == 0) {
+                    this.stacks.set(index, ItemStack.EMPTY);
                 }
 
                 return itemstack;
@@ -184,9 +185,9 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     public ItemStack getStackInSlotOnClosing(int index) {
-        if (!this.stacks[index].isEmpty()) {
-            ItemStack itemstack = this.stacks[index];
-            this.stacks[index] = ItemStack.EMPTY;
+        if (!this.stacks.get(index).isEmpty()) {
+            ItemStack itemstack = this.stacks.get(index);
+            this.stacks.set(index, ItemStack.EMPTY);
             return itemstack;
         } else {
             return ItemStack.EMPTY;
@@ -195,8 +196,8 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.stacks[index]);
-        this.stacks[index] = stack;
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, this.stacks.get(index));
+        this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
@@ -211,36 +212,16 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        NBTTagList nbttaglist = compound.getTagList("Items", 10);
-        this.stacks = new ItemStack[this.getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-            byte b0 = nbttagcompound1.getByte("Slot");
-
-            if (b0 >= 0 && b0 < this.stacks.length) {
-                this.stacks[b0] = new ItemStack(nbttagcompound1);
-            }
-            this.furnaceBurnTime = compound.getShort("BurnTime");
-            this.cookTime = compound.getShort("CookTime");
-            this.totalCookTime = compound.getShort("CookTimeTotal");
-            this.currentItemBurnTime = getItemBurnTime(this.stacks[1]);
-        }
+        this.stacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        this.furnaceBurnTime = compound.getShort("BurnTime");
+        this.cookTime = compound.getShort("CookTime");
+        this.totalCookTime = compound.getShort("CookTimeTotal");
+        this.currentItemBurnTime = getItemBurnTime((ItemStack)this.stacks.get(1));
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.stacks.length; ++i) {
-            if (!this.stacks[i].isEmpty()) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.stacks[i].writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
-            }
-        }
-        compound.setTag("Items", nbttaglist);
+        ItemStackHelper.saveAllItems(compound, this.stacks);
         compound.setShort("BurnTime", (short) this.furnaceBurnTime);
         compound.setShort("CookTime", (short) this.cookTime);
         compound.setShort("CookTimeTotal", (short) this.totalCookTime);
@@ -272,9 +253,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public void clear() {
-        for (int i = 0; i < this.stacks.length; ++i) {
-            this.stacks[i] = ItemStack.EMPTY;
-        }
+        this.stacks.clear();
     }
 
     @Override
@@ -298,24 +277,23 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     public void smeltItem() {
         if (this.canSmelt()) {
-            ItemStack itemstack = this.stacks[0].copy();
-            if (this.stacks[0].getItem() == ModItems.bestiary) {
+            ItemStack itemstack = this.stacks.get(0).copy();
+            if (this.stacks.get(0).getItem() == ModItems.bestiary) {
                 EnumBestiaryPages.addRandomPage(itemstack);
             }
-            this.stacks[0].shrink(1);
+            this.stacks.get(0).shrink(1);
 
-            if (this.stacks[0].isEmpty()) {
-                this.stacks[0] = ItemStack.EMPTY;
+            if (this.stacks.get(0).isEmpty()) {
+                this.stacks.set(0, ItemStack.EMPTY);
             }
 
-            if (this.stacks[2].isEmpty()) {
-                this.stacks[2] = itemstack.copy();
-            } else if (this.stacks[2].getItem() == itemstack.getItem()) {
-                this.stacks[2].grow(itemstack.getCount());
+            if (this.stacks.get(2).isEmpty()) {
+                this.stacks.set(2, itemstack);
+            } else if (this.stacks.get(2).getItem() == itemstack.getItem()) {
+                this.stacks.get(2).grow(itemstack.getCount());
             }
 
-
-        }
+            }
     }
 
     @Override

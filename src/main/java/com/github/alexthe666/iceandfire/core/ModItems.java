@@ -130,7 +130,7 @@ public class ModItems {
         dragon_skull = new ItemDragonSkull();
         dragon_armor_iron = new ItemDragonArmor(0, "dragonarmor_iron");
         dragon_armor_gold = new ItemDragonArmor(1, "dragonarmor_gold");
-        dragon_armor_diamond = new ItemDragonArmor(0, "dragonarmor_diamond");
+        dragon_armor_diamond = new ItemDragonArmor(2, "dragonarmor_diamond");
         dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
         fire_dragon_flesh = new ItemDragonFlesh(true);
         ice_dragon_flesh = new ItemDragonFlesh(false);
