@@ -28,7 +28,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,13 +49,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IInventoryChangedListener {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity {
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -114,7 +114,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private boolean isModelDead;
     private int animationTick;
     private Animation currentAnimation;
-    private net.minecraftforge.items.IItemHandler itemHandler = null;
+    private ItemStackHandler itemHandler = null;
 
     public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -138,7 +138,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.dragonInv = new ContainerHorseChest("dragonInv", 4);
         this.dragonInv.setCustomName(this.getName());
         if (animalchest != null) {
-            animalchest.removeInventoryChangeListener(this);
             int i = Math.min(animalchest.getSizeInventory(), this.dragonInv.getSizeInventory());
 
             for (int j = 0; j < i; ++j) {
@@ -148,10 +147,30 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
-
-        this.dragonInv.addInventoryChangeListener(this);
         this.updateDragonSlots();
-        this.itemHandler = new net.minecraftforge.items.wrapper.InvWrapper(this.dragonInv);
+        this.itemHandler = new ItemStackHandler(4) {
+            public void onContentsChanged() {
+                int dragonArmorHead = EntityDragonBase.this.getArmorInSlot(0);
+                int dragonArmorNeck = EntityDragonBase.this.getArmorInSlot(1);
+                int dragonArmorBody = EntityDragonBase.this.getArmorInSlot(2);
+                int dragonArmorTail = EntityDragonBase.this.getArmorInSlot(3);
+                EntityDragonBase.this.updateDragonSlots();
+                if (EntityDragonBase.this.ticksExisted > 20) {
+                    if (dragonArmorHead != EntityDragonBase.this.getIntFromArmor(EntityDragonBase.this.dragonInv.getStackInSlot(0))) {
+                        EntityDragonBase.this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+                    }
+                    if (dragonArmorNeck != EntityDragonBase.this.getIntFromArmor(EntityDragonBase.this.dragonInv.getStackInSlot(1))) {
+                        EntityDragonBase.this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+                    }
+                    if (dragonArmorBody != EntityDragonBase.this.getIntFromArmor(EntityDragonBase.this.dragonInv.getStackInSlot(2))) {
+                        EntityDragonBase.this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+                    }
+                    if (dragonArmorTail != EntityDragonBase.this.getIntFromArmor(EntityDragonBase.this.dragonInv.getStackInSlot(3))) {
+                        EntityDragonBase.this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+                    }
+                }
+            }
+        };
         if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(this.dragonInv.getStackInSlot(0))));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(this.dragonInv.getStackInSlot(1))));
@@ -1500,7 +1519,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         return f * f + f1 * f1 + f2 * f2;
     }
 
-    @Override
     public void onInventoryChanged(IInventory invBasic) {
         int dragonArmorHead = this.getArmorInSlot(0);
         int dragonArmorNeck = this.getArmorInSlot(1);
