@@ -893,7 +893,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 animationCycle = 0;
             }
             if (animationCycle == 12) {
-                this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, 10 * this.getSoundVolume(), 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());
+                this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());
             }
             if (animationCycle > 12 && animationCycle < 15) {
                 for (int i = 0; i < this.getRenderSize(); i++) {

@@ -22,8 +22,6 @@ public class ContainerDragon extends Container {
         this.addSlotToContainer(new Slot(dragon.dragonInv, 0, 8, 18) {
             public void onSlotChanged() {
                 EntityDragonBase drg =  ContainerDragon.this.dragon;
-                System.out.println(drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
-
                 drg.setArmorInSlot(0, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
                 this.inventory.markDirty();
             }
