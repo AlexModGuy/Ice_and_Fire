@@ -141,14 +141,18 @@ public class StructureGenerator implements IWorldGenerator {
     }
 
     private boolean isDimensionBlacklisted(int id, boolean dragons) {
+        boolean useBlackOrWhiteLists = IceAndFire.CONFIG.useBlackList;
         int[] blacklistedArray = dragons ? IceAndFire.CONFIG.dragonBlacklistedDimensions : IceAndFire.CONFIG.snowVillageBlacklistedDimensions;
+        int[] whitelistedArray = dragons ? IceAndFire.CONFIG.dragonWhitelistedDimensions : IceAndFire.CONFIG.snowVillageWhitelistedDimensions;
+        int[] array = useBlackOrWhiteLists ? blacklistedArray : whitelistedArray;
         List<Integer> dimList = new ArrayList<Integer>();
-        for (int dimension : blacklistedArray) {
+        for (int dimension : array) {
             dimList.add(dimension);
         }
+
         if (dimList.contains(id)) {
-            return true;
+            return useBlackOrWhiteLists;
         }
-        return false;
+        return !useBlackOrWhiteLists;
     }
 }

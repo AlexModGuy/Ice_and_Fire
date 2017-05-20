@@ -28,6 +28,14 @@ public class IceAndFireConfig {
     public int[] dragonBlacklistedDimensions = new int[]{1, -1};
     @ConfigEntry(category = "generation", comment = "Snow Villages cannot spawn in these dimensions' IDs")
     public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
+    @ConfigEntry(category = "generation", comment = "true to use Blacklist configs, false to use Whitelist configs")
+    public boolean useBlackList = true;
+
+    @ConfigEntry(category = "generation", comment = "Dragons can only spawn in these dimensions' IDs")
+    public int[] dragonWhitelistedDimensions = new int[]{0};
+    @ConfigEntry(category = "generation", comment = "Snow Villages can only spawn in these dimensions' IDs")
+    public int[] snowVillageWhitelistedDimensions = new int[]{0};
+
     @ConfigEntry(category = "generation", comment = "Ratio of Stone(this number) to Ores in Dragon Caves")
     public int oreToStoneRatioForDragonCaves = 5;
     @ConfigEntry(category = "mobs", comment = "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default")
