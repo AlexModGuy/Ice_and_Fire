@@ -20,24 +20,46 @@ public class ContainerDragon extends Container {
         dragonInv.openInventory(player);
         int i = (b0 - 4) * 18;
         this.addSlotToContainer(new Slot(dragon.dragonInv, 0, 8, 18) {
+            public void onSlotChanged() {
+                EntityDragonBase drg =  ContainerDragon.this.dragon;
+                System.out.println(drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
+
+                drg.setArmorInSlot(0, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
+                this.inventory.markDirty();
+            }
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 0;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 1, 8, 36) {
+            public void onSlotChanged() {
+                EntityDragonBase drg =  ContainerDragon.this.dragon;
+                drg.setArmorInSlot(1, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(1)));
+                this.inventory.markDirty();
+            }
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 1;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 2, 153, 18) {
+            public void onSlotChanged() {
+                EntityDragonBase drg =  ContainerDragon.this.dragon;
+                drg.setArmorInSlot(2, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(2)));
+                this.inventory.markDirty();
+            }
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 2;
             }
         });
         this.addSlotToContainer(new Slot(dragon.dragonInv, 3, 153, 36) {
+            public void onSlotChanged() {
+                EntityDragonBase drg =  ContainerDragon.this.dragon;
+                drg.setArmorInSlot(3, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(3)));
+                this.inventory.markDirty();
+            }
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 3;

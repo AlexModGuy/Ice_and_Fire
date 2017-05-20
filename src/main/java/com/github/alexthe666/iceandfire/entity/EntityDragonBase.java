@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.message.MessageDaytime;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.google.common.base.Predicate;
@@ -147,7 +146,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
-        this.updateDragonSlots();
+        //this.updateDragonSlots();
         this.itemHandler = new ItemStackHandler(4) {
             public void onContentsChanged() {
                 int dragonArmorHead = EntityDragonBase.this.getArmorInSlot(0);
@@ -234,13 +233,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
             return 1;
         }
-        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
             return 2;
         }
-        if (stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
             return 3;
         }
         return 0;
@@ -647,6 +646,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.dataManager.set(TAIL_ARMOR, armorType);
                 break;
         }
+        if (world.isRemote) {
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), i, armorType));
+        }
     }
 
     public boolean canMove() {
@@ -834,16 +836,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isDaytime() {
-        if (!this.firstUpdate && this.world != null) {
+       /* if (!this.firstUpdate && this.world != null) {
             if (world.isRemote) {
                 return isDaytime;
             } else {
                 IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.world.isDaytime()));
                 return this.world.isDaytime();
             }
-        } else {
-            return true;
-        }
+        } else {*/
+            return this.world.isDaytime();
+
     }
 
     @Override
@@ -1524,7 +1526,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         int dragonArmorNeck = this.getArmorInSlot(1);
         int dragonArmorBody = this.getArmorInSlot(2);
         int dragonArmorTail = this.getArmorInSlot(3);
-        this.updateDragonSlots();
+        //this.updateDragonSlots();
         if (this.ticksExisted > 20) {
             if (dragonArmorHead != this.getIntFromArmor(this.dragonInv.getStackInSlot(0))) {
                 this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
