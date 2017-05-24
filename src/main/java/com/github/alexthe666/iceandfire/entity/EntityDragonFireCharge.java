@@ -11,7 +11,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
 public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile {
@@ -59,6 +58,8 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
+        boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
+
         if (!this.world.isRemote) {
             if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
                 return;
@@ -68,10 +69,10 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                     return;
                 }
                 if (this.shootingEntity != null) {
-                    FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true);
+                    FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), flag);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
-                    FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, true);
+                    FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, flag);
                     explosion2.doExplosionA();
                     explosion2.doExplosionB(true);
                 }
@@ -89,21 +90,16 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                 }
                 movingObject.entityHit.setFire(5);
                 if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-                    ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
+                    ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
                 }
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-                FireExplosion explosion = new FireExplosion(world, null, this.posX, this.posY, this.posZ, 2, true);
+                FireExplosion explosion = new FireExplosion(world, null, this.posX, this.posY, this.posZ, 2, flag);
                 if (shootingEntity != null) {
-                    explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2, true);
+                    explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2, flag);
                 }
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);
-                this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, true);
-                this.setDead();
-            }
-
-            if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
-                boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
+                this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, flag);
                 this.setDead();
             }
         }

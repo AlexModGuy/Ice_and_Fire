@@ -63,6 +63,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
+        boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
         if (!this.world.isRemote) {
             if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
@@ -73,7 +74,7 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
                     return;
                 }
                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-                    FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, true);
+                    FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
                 }
@@ -91,13 +92,12 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
                 movingObject.entityHit.setFire(3);
                 if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-                    ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
+                    ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
                 }
                 this.setDead();
             }
 
             if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
-                boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
                 this.setDead();
             }
         }

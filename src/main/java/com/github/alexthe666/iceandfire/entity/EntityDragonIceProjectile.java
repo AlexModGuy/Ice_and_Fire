@@ -10,7 +10,6 @@ import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
 public class EntityDragonIceProjectile extends EntityFireball implements IDragonProjectile {
@@ -60,6 +59,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
+        boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
         if (!this.world.isRemote) {
             if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
@@ -70,7 +70,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
                     return;
                 }
                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-                    IceExplosion explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, true);
+                    IceExplosion explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
                 }
@@ -82,7 +82,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
                 }
                 if (this.shootingEntity != null) {
                     if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-                        ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKillPlayer, 1);
+                        ((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
                     }
                     if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
                         ((EntityDragonBase) this.shootingEntity).attackDecision = true;
@@ -90,11 +90,6 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
                 }
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
                 movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 1);
-                this.setDead();
-            }
-
-            if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
-                boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
                 this.setDead();
             }
         }
