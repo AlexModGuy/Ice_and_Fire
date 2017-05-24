@@ -6,7 +6,6 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -53,12 +52,7 @@ public class EntitySnowVillager extends EntityVillager {
 
     public void setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof) {
         if (ModVillagers.INSTANCE.professions.containsValue(prof)) {
-            try {
-                this.dataManager.set((DataParameter<String>) ReflectionHelper.findField(EntityVillager.class, new String[]{"PROFESSION_STR", "PROFESSION_STR"}).get(this), prof.getRegistryName().toString());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            this.prof = prof;
+            this.setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.getId(prof));
         } else {
             ModVillagers.INSTANCE.setRandomProfession(this, this.world.rand);
         }
