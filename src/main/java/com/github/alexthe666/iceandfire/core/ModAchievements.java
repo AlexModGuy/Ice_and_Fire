@@ -14,7 +14,7 @@ public class ModAchievements {
     public static Achievement silverTool;
     public static Achievement sapphire;
     public static Achievement dragonEncounter;
-    public static Achievement dragonKillPlayer;
+    public static Achievement dragonSlayer;
     public static Achievement dragonKill;
     public static Achievement dragonHarvest;
     public static Achievement dragonHatch;
@@ -32,9 +32,9 @@ public class ModAchievements {
         silverTool = new Achievement("achievement.silverTool", "silverTool", -2, -3, new ItemStack(ModItems.silver_pickaxe), silver).registerStat();
         sapphire = new Achievement("achievement.sapphire", "sapphire", 4, 0, new ItemStack(ModBlocks.sapphireOre), null).registerStat();
         dragonEncounter = new Achievement("achievement.dragonEncounter", "dragonEncounter", 0, -5, new ItemStack(ModItems.dragon_skull), null).registerStat();
-        dragonKillPlayer = new Achievement("achievement.dragonKillPlayer", "dragonKillPlayer", 2, -5, new ItemStack(ModItems.dragonbone), dragonEncounter).registerStat();
+        dragonSlayer = new Achievement("achievement.dragonSlayer", "dragonSlayer", 2, -5, new ItemStack(ModItems.dragonbone), dragonEncounter).registerStat();
         dragonKill = new Achievement("achievement.dragonKill", "dragonKill", -2, -5, new ItemStack(Items.BONE), dragonEncounter).setSpecial().registerStat();
-        dragonHarvest = new Achievement("achievement.dragonHarvest", "dragonHarvest", 2, -2, new ItemStack(ModItems.fire_dragon_heart), dragonKillPlayer).setSpecial().registerStat();
+        dragonHarvest = new Achievement("achievement.dragonHarvest", "dragonHarvest", 2, -2, new ItemStack(ModItems.fire_dragon_heart), dragonSlayer).setSpecial().registerStat();
         dragonHatch = new Achievement("achievement.dragonHatch", "dragonHatch", 4, -2, new ItemStack(ModItems.dragonegg_red), dragonHarvest).registerStat();
         dragonRide = new Achievement("achievement.dragonRide", "dragonRide", 7, -2, new ItemStack(Items.SADDLE), dragonHatch).registerStat();
         dragonBreed = new Achievement("achievement.dragonBreed", "dragonBreed", 4, -5, new ItemStack(ModItems.fire_stew), dragonHatch).registerStat();
@@ -43,6 +43,6 @@ public class ModAchievements {
         fireSword = new Achievement("achievement.fireSword", "fireSword", 0, 5, new ItemStack(ModItems.dragonbone_sword_fire), boneTool).registerStat();
         iceSword = new Achievement("achievement.iceSword", "iceSword", 4, 5, new ItemStack(ModItems.dragonbone_sword_ice), boneTool).registerStat();
 
-        AchievementPage.registerAchievementPage(new AchievementPage("Ice And Fire", manuscript, bestiary, silver, silverTool, sapphire, dragonEncounter, dragonKillPlayer, dragonKill, dragonHarvest, dragonHatch, dragonRide, dragonBreed, boneTool, dragonArmor, fireSword, iceSword));
+        AchievementPage.registerAchievementPage(new AchievementPage("Ice And Fire", manuscript, bestiary, silver, silverTool, sapphire, dragonEncounter, dragonSlayer, dragonKill, dragonHarvest, dragonHatch, dragonRide, dragonBreed, boneTool, dragonArmor, fireSword, iceSword));
     }
 }
