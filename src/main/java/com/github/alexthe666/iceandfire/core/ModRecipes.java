@@ -69,7 +69,8 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_shovel, 1, 0), new Object[]{"X", "Y", "Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_hoe, 1, 0), new Object[]{"XX", " Y", " Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_bow, 1, 0), new Object[]{" ZY", "X Y", " ZY", Character.valueOf('X'), "boneWither", Character.valueOf('Y'), Items.STRING, Character.valueOf('Z'), ModItems.dragonbone}));
-        GameRegistry.addRecipe(new ItemStack(ModItems.dragonbone_arrow, 5, 0), new Object[]{"X", "Y", "Z", Character.valueOf('X'), ModItems.wither_shard, Character.valueOf('Y'), ModItems.dragonbone, Character.valueOf('Z'), Items.FEATHER});
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_flute, 1, 0), new Object[]{"X  ", " X ", "  Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "ingotIron"}));
+        GameRegistry.addRecipe(new ItemStack(ModItems.dragonbone_arrow, 5, 0), new Object[]{"X", "Y", "Z", Character.valueOf('X'), ModItems.wither_shard, Character.valueOf('Y'), ModItems.dragonbone});
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 0), new Object[]{" XX", "XXX", Character.valueOf('X'), "blockIron"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 1), new Object[]{"XXX", " XX", Character.valueOf('X'), "blockIron"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_iron, 1, 2), new Object[]{"XXX", "XXX", "X X", Character.valueOf('X'), "blockIron"}));

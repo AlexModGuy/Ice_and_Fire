@@ -5,3 +5,11 @@ diamond. Dragon armor is made
 in the same shape of normal
 armor, except it uses blocks
 instead of ingots.
+
+
+
+One can also skillfully craft
+a Dragon Bone Flute out of iron
+and Dragon Bone. This instrument
+can calm a tame flying dragon and
+bring it towards the ground.

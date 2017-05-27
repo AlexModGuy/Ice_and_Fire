@@ -30,6 +30,7 @@ public class ModSounds {
     public static SoundEvent icedragon_adult_hurt;
     public static SoundEvent icedragon_adult_death;
     public static SoundEvent icedragon_adult_roar;
+    public static SoundEvent dragonflute;
 
     public static void init() {
         dragon_hatch = registerSound("dragonegg.hatch");
@@ -57,6 +58,9 @@ public class ModSounds {
         icedragon_adult_hurt = registerSound("icedragon.adult.hurt");
         icedragon_adult_death = registerSound("icedragon.adult.death");
         icedragon_adult_roar = registerSound("icedragon.adult.roar");
+        dragonflute = registerSound("dragonflute");
+
+
     }
 
     private static SoundEvent registerSound(String sound) {

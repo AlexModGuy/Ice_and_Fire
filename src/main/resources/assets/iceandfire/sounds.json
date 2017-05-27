@@ -168,5 +168,11 @@
     "sounds": [
       "iceandfire:egg_hatch"
     ]
+  },
+  "dragonflute": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dragon_flute"
+    ]
   }
 }

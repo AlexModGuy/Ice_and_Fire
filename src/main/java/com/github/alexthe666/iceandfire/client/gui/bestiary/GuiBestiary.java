@@ -325,6 +325,18 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 1), j += 16, 60, 1.5F);
                     drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 2), j += 16, 60, 1.5F);
                     drawItemStack(new ItemStack(ModItems.dragon_armor_iron, 1, 3), j += 16, 60, 1.5F);
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 160, 12, 1.5F);
+                    drawItemStack(new ItemStack(ModItems.dragonbone), 180, 31, 1.5F);
+                    drawItemStack(new ItemStack(Items.IRON_INGOT), 199, 50, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.dragon_flute), 151, 18, 2F);
                 }
                 writeFromTxt();
                 break;

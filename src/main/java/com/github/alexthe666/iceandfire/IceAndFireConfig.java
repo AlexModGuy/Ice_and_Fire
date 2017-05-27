@@ -42,6 +42,8 @@ public class IceAndFireConfig {
     public int dragonGriefing = 0;
     @ConfigEntry(category = "mobs", comment = "Dragon Flap Noise Distance - Larger number, further away you can hear it")
     public int dragonFlapNoiseDistance = 4;
+    @ConfigEntry(category = "mobs", comment = "Dragon Flute Distance - how many chunks away is the dragon flute effective?")
+    public int dragonFluteDistance = 4;
     @ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
     public int glacierSpawnChance = 10;
 
