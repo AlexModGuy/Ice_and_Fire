@@ -138,7 +138,8 @@ public class ItemDragonHornActive extends Item {
         return 72000;
     }
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer entityplayer, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer entityplayer, EnumHand hand){
+        ItemStack itemStackIn = entityplayer.getHeldItem(hand);
         double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
         double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight();
         double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
@@ -162,8 +163,8 @@ public class ItemDragonHornActive extends Item {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
         if (stack.getTagCompound() != null) {
-            String fire = new TextComponentTranslation("entity.iceandfire.firedragon.name", new Object[0]).getUnformattedText();
-            String ice = new TextComponentTranslation("entity.iceandfire.icedragon.name", new Object[0]).getUnformattedText();
+            String fire = new TextComponentTranslation("entity.firedragon.name", new Object[0]).getUnformattedText();
+            String ice = new TextComponentTranslation("entity.icedragon.name", new Object[0]).getUnformattedText();
             list.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
             String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
             list.add("" + name);
