@@ -29,7 +29,8 @@ public class WorldGenFireDragonCave extends WorldGenerator {
         }
 
         if (chance < 60) {
-            world.setBlockState(pos, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            boolean generateGold = IceAndFire.CONFIG.dragonDenGoldAmount > 1 ?  new Random().nextInt(IceAndFire.CONFIG.dragonDenGoldAmount) == 0 : true;
+            world.setBlockState(pos, generateGold ? ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
         } else if (chance > 60 && chance < 62) {
             world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
             if (world.getBlockState(pos).getBlock() instanceof BlockChest) {

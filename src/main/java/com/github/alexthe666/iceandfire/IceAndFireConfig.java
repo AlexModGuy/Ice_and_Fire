@@ -20,6 +20,8 @@ public class IceAndFireConfig {
     public boolean generateDragonRoosts = true;
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
     public int generateDragonRoostChance = 360;
+    @ConfigEntry(category = "generation", comment = "1 out of this number chance per block that gold will generate in dragon lairs.")
+    public int dragonDenGoldAmount = 1;
     @ConfigEntry(category = "generation")
     public boolean generateSnowVillages = true;
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
