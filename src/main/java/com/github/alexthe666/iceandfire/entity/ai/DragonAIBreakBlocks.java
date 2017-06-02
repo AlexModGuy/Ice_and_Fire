@@ -18,7 +18,7 @@ public class DragonAIBreakBlocks extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        return dragon.getDragonStage() > 2 && !dragon.isModelDead();
+        return dragon.getDragonStage() > 2 && !dragon.isModelDead() && dragon.world.getGameRules().getBoolean("mobGriefing");
     }
 
     public void updateTask() {
