@@ -48,6 +48,10 @@ public class IceAndFireConfig {
     public int dragonFluteDistance = 4;
     @ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
     public int glacierSpawnChance = 10;
+    @ConfigEntry(category = "mobs", comment = "Max dragon health. Health is scaled to this")
+    public int dragonHealth = 500;
+    @ConfigEntry(category = "mobs", comment = "Max dragon attack damage. Attack Damage is scaled to this")
+    public int dragonAttackDamage = 17;
 
     @ConfigEntry(category = "compatability", comment = "Triggers option below")
     public boolean useAetherCompat = false;

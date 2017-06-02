@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -34,7 +35,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public static float[] growth_stage_5 = new float[]{20F, 30F};
 
     public EntityFireDragon(World worldIn) {
-        super(worldIn, EnumDiet.CARNIVORE, 1, 18, 20, 500, 0.2F, 0.5F);
+        super(worldIn, EnumDiet.CARNIVORE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
         this.setSize(0.78F, 1.2F);
         this.isImmuneToFire = true;
         this.ignoreFrustumCheck = true;

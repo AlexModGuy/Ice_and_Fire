@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -45,7 +46,7 @@ public class EntityIceDragon extends EntityDragonBase {
     public BlockPos waterTarget;
 
     public EntityIceDragon(World worldIn) {
-        super(worldIn, EnumDiet.PISCCARNIVORE, 1, 18, 20, 500, 0.2F, 0.5F);
+        super(worldIn, EnumDiet.PISCCARNIVORE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
         this.setSize(0.78F, 1.2F);
         this.ignoreFrustumCheck = true;
         ANIMATION_SPEAK = Animation.create(45);
