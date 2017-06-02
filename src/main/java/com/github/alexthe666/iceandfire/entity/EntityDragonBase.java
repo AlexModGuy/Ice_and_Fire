@@ -661,7 +661,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage) {
             player.addStat(ModAchievements.dragonHarvest, 1);
-            if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() > lastDeathStage / 2) {
+            if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
