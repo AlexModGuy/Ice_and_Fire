@@ -57,8 +57,7 @@ public class ItemDragonEgg extends Item {
             ItemStack itemstack = player.getHeldItem(hand);
 
             if (!player.capabilities.isCreativeMode) {
-                itemstack.getCount();
-
+                itemstack.shrink(1);
                 if (itemstack.getCount() <= 0) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                 }
