@@ -52,6 +52,8 @@ public class IceAndFireConfig {
     public int dragonHealth = 500;
     @ConfigEntry(category = "mobs", comment = "Max dragon attack damage. Attack Damage is scaled to this")
     public int dragonAttackDamage = 17;
+    @ConfigEntry(category = "mobs", comment = "Can dragons suffocate in blocks?")
+    public boolean dragonSuffocation = false;
 
     @ConfigEntry(category = "compatability", comment = "Triggers option below")
     public boolean useAetherCompat = false;
