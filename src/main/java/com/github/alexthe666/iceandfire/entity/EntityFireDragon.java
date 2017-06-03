@@ -68,7 +68,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 return entity instanceof EntityLivingBase;
             }
         }));
-        this.targetTasks.addTask(5, new DragonAITargetItems<>(this, false));
+        this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
     }
 
     @Override
