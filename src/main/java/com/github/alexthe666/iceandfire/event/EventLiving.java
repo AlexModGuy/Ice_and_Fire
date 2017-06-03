@@ -1,10 +1,14 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
+import net.minecraft.block.BlockChest;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,10 +19,14 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 public class EventLiving {
     @SubscribeEvent
@@ -27,6 +35,54 @@ public class EventLiving {
             event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
         }
     }
+
+    @SubscribeEvent
+    public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getEntityPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
+            float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
+            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
+            if (!list.isEmpty()) {
+                Iterator<Entity> itr = list.iterator();
+                while (itr.hasNext()){
+                    Entity entity = itr.next();
+                    if(entity instanceof EntityDragonBase ){
+                        EntityDragonBase dragon = (EntityDragonBase)entity;
+                        if(!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getEntityPlayer()) && !event.getEntityPlayer().capabilities.isCreativeMode) {
+                            dragon.setSleeping(false);
+                            dragon.setSitting(false);
+                            dragon.setAttackTarget(event.getEntityPlayer());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onBreakBlock(BlockEvent.BreakEvent event) {
+        if (event.getPlayer() != null && (event.getState().getBlock() == ModBlocks.goldPile || event.getState().getBlock() == ModBlocks.silverPile)) {
+            float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getEntityBoundingBox().expand(dist, dist, dist));
+            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getPlayer()));
+            if (!list.isEmpty()) {
+                Iterator<Entity> itr = list.iterator();
+                while (itr.hasNext()){
+                    Entity entity = itr.next();
+                    if(entity instanceof EntityDragonBase ){
+                       EntityDragonBase dragon = (EntityDragonBase)entity;
+                        if(!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().capabilities.isCreativeMode) {
+                            dragon.setSleeping(false);
+                            dragon.setSitting(false);
+                            dragon.setAttackTarget(event.getPlayer());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public void onChestGenerated(LootTableLoadEvent event) {
