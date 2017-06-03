@@ -1035,8 +1035,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
             this.setFlying(false);
             this.setHovering(false);
-        }
-        if (!world.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        }//TODO
+        if (!world.isRemote && this.getRNG().nextInt(120) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1476,15 +1476,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public void flyAround() {
         if (airTarget != null) {
-            if (!isTargetInAir() || getDistanceSquared(new Vec3d(airTarget.getX(), airTarget.getY(), airTarget.getZ())) < 4 || flyTicks > 6000 || !this.isFlying()) {
+            if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
                 airTarget = null;
             }
             flyTowardsTarget();
         }
     }
 
+    public boolean isTargetBlocked(Vec3d target){
+        if(target != null) {
+            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
+            if (rayTrace != null && rayTrace.hitVec != null) {
+                BlockPos pos = new BlockPos(rayTrace.hitVec);
+                if (!world.isAirBlock(pos)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - posX;
             double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;

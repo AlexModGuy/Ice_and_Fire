@@ -32,12 +32,12 @@ public class DragonAIBreakBlocks extends EntityAIBase {
                             case 2:
                                 break;
                             case 1:
-                                if (state.getBlockHardness(dragon.world, pos) < 1.5F) {
+                                if (state.getBlockHardness(dragon.world, pos) <= 1.5F) {
                                     dragon.world.setBlockToAir(pos);
                                 }
                                 break;
                             case 0:
-                                if (dragon.getDragonStage() > 3) {
+                                if (dragon.getDragonStage() <= 3) {
                                     if (state.getBlockHardness(dragon.world, pos) < 1.5F) {
                                         dragon.world.setBlockToAir(pos);
                                     }

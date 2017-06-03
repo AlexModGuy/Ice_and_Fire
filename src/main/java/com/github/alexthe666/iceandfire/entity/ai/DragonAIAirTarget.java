@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -40,6 +41,7 @@ public class DragonAIAirTarget extends EntityAIBase {
                 return false;
             } else {
                 Vec3d vec = this.findAirTarget();
+
                 if (vec == null) {
                     return false;
                 } else {
@@ -55,7 +57,17 @@ public class DragonAIAirTarget extends EntityAIBase {
         return dragon.airTarget != null;
     }
 
-    public Vec3d findAirTarget() {
+    public Vec3d findAirTarget(){
+        Vec3d vec = getNearbyAirTarget();
+        if(IceAndFire.CONFIG.dragonAdvancedAI) {
+            do {
+                vec = getNearbyAirTarget();
+            } while (dragon.isTargetBlocked(vec));
+        }
+        return vec;
+    }
+
+    public Vec3d getNearbyAirTarget() {
         Random random = this.dragon.getRNG();
 
         if (dragon.getAttackTarget() == null) {

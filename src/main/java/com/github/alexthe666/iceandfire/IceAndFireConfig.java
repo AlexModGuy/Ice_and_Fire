@@ -47,13 +47,15 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "mobs", comment = "Dragon Flute Distance - how many chunks away is the dragon flute effective?")
     public int dragonFluteDistance = 4;
     @ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
-    public int glacierSpawnChance = 10;
+    public int glacierSpawnChance = 4;
     @ConfigEntry(category = "mobs", comment = "Max dragon health. Health is scaled to this")
     public int dragonHealth = 500;
     @ConfigEntry(category = "mobs", comment = "Max dragon attack damage. Attack Damage is scaled to this")
     public int dragonAttackDamage = 17;
     @ConfigEntry(category = "mobs", comment = "Can dragons suffocate in blocks?")
     public boolean dragonSuffocation = false;
+    @ConfigEntry(category = "mobs", comment = "Advanced dragon AI - dragon flight improved but FPS might fall.")
+    public boolean dragonAdvancedAI = true;
     @ConfigEntry(category = "mobs", comment = "How far away dragons will detect gold blocks being destroyed or chests being opened.")
     public int dragonGoldSearchLength = 17;
 
