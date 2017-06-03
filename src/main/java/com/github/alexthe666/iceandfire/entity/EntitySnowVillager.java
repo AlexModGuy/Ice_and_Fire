@@ -36,7 +36,7 @@ public class EntitySnowVillager extends EntityVillager {
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.setProfession(ModVillagers.INSTANCE.shaman);
+        this.prof = ModVillagers.INSTANCE.professions.get(this.getRNG().nextInt(3));
         return livingdata;
     }
 
