@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
+import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
@@ -32,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientProxy extends CommonProxy {
 
@@ -206,6 +208,15 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void openBestiaryGui(ItemStack book) {
         Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary(book));
+    }
+
+    @Override
+    public <T extends AbstractMessage<T>> void handleMessage(final T message, final MessageContext messageContext) {
+        if (messageContext.side.isServer()) {
+            super.handleMessage(message, messageContext);
+        } else {
+            net.ilexiconn.llibrary.client.ClientProxy.MINECRAFT.addScheduledTask(() -> message.onClientReceived(net.ilexiconn.llibrary.client.ClientProxy.MINECRAFT, message, net.ilexiconn.llibrary.client.ClientProxy.MINECRAFT.player, messageContext));
+        }
     }
 
     public Object getArmorModel(int armorId) {
