@@ -463,7 +463,7 @@ public class GuiBestiary extends GuiScreen {
         this.itemRender.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = fontRenderer;
+        if (font == null) font = fontRendererObj;
         this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, null);
         this.zLevel = 0.0F;

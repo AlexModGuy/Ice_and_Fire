@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -8,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,12 +15,6 @@ public class MessageDaytime extends AbstractMessage<MessageDaytime> {
 
     public int dragonId;
     public boolean isDay;
-
-    @Override
-    public IMessage onMessage(MessageDaytime message, MessageContext messageContext) {
-        IceAndFire.PROXY.handleMessage(message, messageContext);
-        return null;
-    }
 
     public MessageDaytime(int dragonId, boolean isDay) {
         this.dragonId = dragonId;

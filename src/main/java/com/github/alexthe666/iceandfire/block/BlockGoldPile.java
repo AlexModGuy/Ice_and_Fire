@@ -49,6 +49,7 @@ public class BlockGoldPile extends Block {
         return SNOW_AABB[state.getValue(LAYERS)];
     }
 
+    @Override
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
         return worldIn.getBlockState(pos).getValue(LAYERS) < 5;
     }

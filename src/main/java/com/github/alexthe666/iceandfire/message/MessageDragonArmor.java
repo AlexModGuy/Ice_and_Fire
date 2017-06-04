@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -8,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,12 +16,6 @@ public class MessageDragonArmor extends AbstractMessage<MessageDragonArmor> {
     public int dragonId;
     public int armor_index;
     public int armor_type;
-
-    @Override
-    public IMessage onMessage(MessageDragonArmor message, MessageContext messageContext) {
-        IceAndFire.PROXY.handleMessage(message, messageContext);
-        return null;
-    }
 
     public MessageDragonArmor(int dragonId, int armor_index, int armor_type) {
         this.dragonId = dragonId;
