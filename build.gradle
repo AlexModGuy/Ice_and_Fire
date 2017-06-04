@@ -11,19 +11,16 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0.1"
+version = "1.1.1"
 group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "iceandfire"
 
-sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.6"
-}
-
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 
 minecraft {
-    version = "1.10.2-12.18.3.2185"
+    version = "1.11.2-13.20.0.2282"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -31,7 +28,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-mappings = "stable_29"
+mappings = "snapshot_20170502"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -44,8 +41,10 @@ repositories {
 }
 
 dependencies {
-    compile "net.ilexiconn:llibrary:1.7.4-1.10.2:dev"
+    compile "net.ilexiconn:llibrary:1.7.4-1.11.2:dev"
 }
+
+jar {     manifest {         attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"         attributes "FMLCorePluginContainsFMLMod": "true"     } }
 
 processResources
 {
@@ -64,12 +63,5 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
-    }
-}
-
-jar {
-    manifest {
-        attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"
-        attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
