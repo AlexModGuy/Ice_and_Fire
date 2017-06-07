@@ -13,7 +13,7 @@ public class IceAndFireTransformer implements IClassTransformer {
         {
             boolean obf;
             ClassNode classNode = new ClassNode();
-            if ((obf = "aay".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
+            if ((obf = "aax".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
                 ClassReader classReader = new ClassReader(classBytes);
                 classReader.accept(classNode, 0);
                 String updateRiddenName = obf ? "aw" : "updateRidden";

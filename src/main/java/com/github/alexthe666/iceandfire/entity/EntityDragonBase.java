@@ -851,6 +851,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {
             this.setFlying(false);
             this.setFlying(true);
@@ -883,9 +884,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (world.isRemote) {
-            this.updateClientControls();
-        }
+
         if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
             if (animationCycle < 15) {
                 animationCycle++;
@@ -1253,6 +1252,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (world.isRemote) {//TODO
+            this.updateClientControls();
+        }
         if (this.isModelDead()) {
             return;
         }
