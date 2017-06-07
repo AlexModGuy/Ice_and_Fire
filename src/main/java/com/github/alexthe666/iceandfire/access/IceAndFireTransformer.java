@@ -14,6 +14,7 @@ public class IceAndFireTransformer implements IClassTransformer {
             boolean obf;
             ClassNode classNode = new ClassNode();
             if ((obf = "aax".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
+                System.out.println("[Ice And Fire] patching net.minecraft.entity.player.EntityPlayer");
                 ClassReader classReader = new ClassReader(classBytes);
                 classReader.accept(classNode, 0);
                 String updateRiddenName = obf ? "aw" : "updateRidden";
@@ -21,6 +22,8 @@ public class IceAndFireTransformer implements IClassTransformer {
                 for (int i = 0; i < classNode.methods.size(); i++) {
                     MethodNode method = classNode.methods.get(i);
                     if (updateRiddenName.equals(method.name) && updateRiddenDesc.equals(method.desc)) {
+                        System.out.println("[Ice And Fire] patching net.minecraft.entity.player.EntityPlayer.updateRidden");
+
                         InsnList insnList = method.instructions;
                         for (int j = 0; j < insnList.size(); j++) {
                             {
@@ -28,6 +31,7 @@ public class IceAndFireTransformer implements IClassTransformer {
                                 if (insnNote.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                                     MethodInsnNode method_0 = (MethodInsnNode) insnNote;
                                     if (method_0.name.equals(obf ? "p" : "dismountRidingEntity")) {
+                                        System.out.println("[Ice And Fire] patching net.minecraft.entity.player.EntityPlayer.dismountRidingEntity");
                                         MethodInsnNode method_1 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/alexthe666/iceandfire/access/IceAndFireHooks", "dismount", obf ? "(Lzs;)V" : "(Lnet/minecraft/entity/player/EntityPlayer;)V", false);
                                         insnList.insertBefore(method_0, method_1);
                                         insnList.remove(method_0);
