@@ -6,13 +6,16 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 
 import java.util.Map;
 
+@IFMLLoadingPlugin.Name("iceandfire")
 @MCVersion("1.11.2")
-@TransformerExclusions({"com.github.alexthe666.iceandfire.access."})
+@TransformerExclusions({ "com.github.alexthe666.iceandfire.access", "net.ilexiconn.llibrary.server.asm" })
+@IFMLLoadingPlugin.SortingIndex(1002)
 public class IceAndFireForgeLoading implements IFMLLoadingPlugin {
+    public static boolean development;
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{"com.github.alexthe666.iceandfire.access.IceAndFireTransformer"};
+        return new String[] { IceAndFireRuntimePatcher.class.getCanonicalName(), IceAndFireTransformer.class.getCanonicalName() };
     }
 
     @Override
@@ -27,12 +30,11 @@ public class IceAndFireForgeLoading implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
+        IceAndFireForgeLoading.development = !(Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override
     public String getAccessTransformerClass() {
         return null;
     }
-
 }
