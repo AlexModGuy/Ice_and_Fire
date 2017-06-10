@@ -11,6 +11,7 @@ public class IceAndFireRuntimePatcher extends RuntimePatcher {
             this.patchClass(EntityPlayer.class)
                     .patchMethod("updateRidden", void.class)
                     .apply(RuntimePatcher.Patch.REPLACE_NODE, data -> {
+
                         if (data.node.getOpcode() == INVOKEVIRTUAL) {
                             MethodInsnNode methodNode = (MethodInsnNode) data.node;
                             if (methodNode.name.equals(IceAndFireForgeLoading.development ? "dismountRidingEntity" : "p") && methodNode.desc.equals("()V")) {
@@ -18,7 +19,7 @@ public class IceAndFireRuntimePatcher extends RuntimePatcher {
                             }
                         }
                         return false;
-                    }, method -> method.method(INVOKESTATIC, IceAndFireHooks.class, "dismount", EntityPlayer.class, void.class));
+                    }, method -> method.var(ALOAD, 1).method(INVOKESTATIC, IceAndFireHooks.class, "dismount", EntityPlayer.class, void.class));
             }
         }
 
