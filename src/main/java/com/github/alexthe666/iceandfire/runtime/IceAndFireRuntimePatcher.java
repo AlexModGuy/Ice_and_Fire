@@ -1,5 +1,7 @@
-package com.github.alexthe666.iceandfire.access;
+package com.github.alexthe666.iceandfire.runtime;
 
+import com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading;
+import com.github.alexthe666.iceandfire.access.IceAndFireHooks;
 import net.ilexiconn.llibrary.server.asm.RuntimePatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import org.objectweb.asm.tree.*;

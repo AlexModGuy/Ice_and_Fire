@@ -15,7 +15,7 @@ public class IceAndFireForgeLoading implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] { "com.github.alexthe666.iceandfire.access.IceAndFireRuntimePatcher" };
+        return new String[] { "com.github.alexthe666.iceandfire.runtime.IceAndFireRuntimePatcher" };
     }
 
     @Override
