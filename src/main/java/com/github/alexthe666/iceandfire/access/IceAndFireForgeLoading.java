@@ -12,7 +12,7 @@ public class IceAndFireForgeLoading implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{IceAndFireTransformer.class.getCanonicalName()};
+        return new String[]{"com.github.alexthe666.iceandfire.access.IceAndFireTransformer"};
     }
 
     @Override
