@@ -1,71 +1,100 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            name = "gradle"
+            url "https://plugins.gradle.org/m2/"
+        }		
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.7'
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: "checkstyle"
 
+checkstyle {
+    toolVersion = "6.11.2"
+    configFile = new File(rootDir, "checkstyle/checkstyle.xml")
+}
 
-version = "1.1.1"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "${mc_version}-${if_version}"
+group = "com.iceandfire" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "iceandfire"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+class StructExtApi {
+    String name
+    String api
+    String exclusion
+    String root = api
+}
 
 minecraft {
-    version = "1.11.2-13.20.0.2282"
+    version = mc_forge_version
+    mappings = mcp_mappings
     runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-mappings = "snapshot_20161220"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "ilexiconn"
-        url = "http://maven.mcmoddev.com"
-    }
-}
-
-dependencies {
-    compile "net.ilexiconn:llibrary:1.7.4-1.11.2:dev"
-}
-
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
-    // copy everything else, thats not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
-jar {
-     manifest {
-	attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"         	attributes "FMLCorePluginContainsFMLMod": "true"
-     }
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    maven {
+        name = "ilexiconn"
+        url = "https://maven.mcmoddev.com"
+	}
+		
+}
+
+dependencies {
+    compile "net.ilexiconn:llibrary:${llibrary_version}:dev"
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xlint:all", "-Xlint:deprecation", "-Xlint:rawtypes", "-Xlint:unchecked"]
+    options.deprecation = true
+    options.encoding = "UTF-8"
+}
+
+runClient {
+    if(project.hasProperty("mc_username") && project.hasProperty("mc_password") ) {
+        args "--username=${project.mc_username}"
+        args "--password=${project.mc_password}"
+    }
+}
+
+build.dependsOn sourceJar
+
+idea {
+    module {
+        inheritOutputDirs = true
+    }
 }
