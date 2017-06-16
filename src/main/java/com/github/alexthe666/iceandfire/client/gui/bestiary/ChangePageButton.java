@@ -19,7 +19,7 @@ public class ChangePageButton extends GuiButton {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if (this.enabled) {
-            boolean flag = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             mc.renderEngine.bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
             int i = 0;
@@ -32,7 +32,7 @@ public class ChangePageButton extends GuiButton {
                 j += 13;
             }
 
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, i, j, width, height);
+            this.drawTexturedModalRect(this.x, this.y, i, j, width, height);
         }
     }
 }

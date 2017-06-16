@@ -55,7 +55,7 @@ public class BlockSilverPile extends Block {
     }
 
     @Override
-    public boolean isFullyOpaque(IBlockState state) {
+    public boolean isTopSolid(IBlockState state) {
         return state.getValue(LAYERS) == 7;
     }
 

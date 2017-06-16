@@ -106,13 +106,13 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
-        if (event.pickedUp.getEntityItem().getItem() == ModItems.manuscript) {
+        if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {
             event.player.addStat(ModAchievements.manuscript, 1);
         }
-        if (event.pickedUp.getEntityItem().getItem() == Item.getItemFromBlock((ModBlocks.silverOre))) {
+        if (event.pickedUp.getItem().getItem() == Item.getItemFromBlock((ModBlocks.silverOre))) {
             event.player.addStat(ModAchievements.silver, 1);
         }
-        if (event.pickedUp.getEntityItem().getItem() == Item.getItemFromBlock((ModBlocks.sapphireOre))) {
+        if (event.pickedUp.getItem().getItem() == Item.getItemFromBlock((ModBlocks.sapphireOre))) {
             event.player.addStat(ModAchievements.sapphire, 1);
         }
     }

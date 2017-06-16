@@ -104,7 +104,7 @@ public class EntitySnowVillager extends EntityVillager {
 
     }
     public void onDeath(DamageSource cause) {
-        if (cause.getEntity() != null && cause.getEntity() instanceof EntityZombie && (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD)) {
+        if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityZombie && (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD)) {
             return;
         } else {
             super.onDeath(cause);

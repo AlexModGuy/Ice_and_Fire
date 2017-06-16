@@ -42,7 +42,7 @@ public class EntityDragonSkull extends EntityAnimal {
 
     @Override
     public boolean isEntityInvulnerable(DamageSource i) {
-        return i.getEntity() != null;
+        return i.getTrueSource() != null;
     }
 
     @Override

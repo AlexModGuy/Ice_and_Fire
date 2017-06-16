@@ -61,7 +61,7 @@ public class BlockGoldPile extends Block {
      * @param state The block state to check.
      */
     @Override
-    public boolean isFullyOpaque(IBlockState state) {
+    public boolean isTopSolid(IBlockState state) {
         return state.getValue(LAYERS) == 7;
     }
 

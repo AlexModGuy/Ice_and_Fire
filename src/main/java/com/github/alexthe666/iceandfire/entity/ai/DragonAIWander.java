@@ -42,9 +42,9 @@ public class DragonAIWander extends EntityAIBase {
         if (vec3d == null) {
             return false;
         } else {
-            this.xPosition = vec3d.xCoord;
-            this.yPosition = vec3d.yCoord;
-            this.zPosition = vec3d.zCoord;
+            this.xPosition = vec3d.x;
+            this.yPosition = vec3d.y;
+            this.zPosition = vec3d.z;
             this.mustUpdate = false;
 
             return true;
@@ -52,7 +52,7 @@ public class DragonAIWander extends EntityAIBase {
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return !this.dragon.getNavigator().noPath();
     }
 

@@ -37,7 +37,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
         this.targetEntitySelector = new Predicate<EntityItem>() {
             @Override
             public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getEntityItem().isEmpty() && item.getEntityItem().getItem() != null && FoodMappings.INSTANCE.getItemFoodAmount(item.getEntityItem().getItem(), ((EntityDragonBase) DragonAITargetItems.this.taskOwner).diet) > 0;
+                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodMappings.INSTANCE.getItemFoodAmount(item.getItem().getItem(), ((EntityDragonBase) DragonAITargetItems.this.taskOwner).diet) > 0;
             }
         };
     }
@@ -84,24 +84,24 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
             this.resetTask();
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
-            this.targetEntity.getEntityItem().shrink(1);
+            this.targetEntity.getItem().shrink(1);
             this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            int hunger = FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
+            int hunger = FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
             ((EntityDragonBase) this.taskOwner).setHunger(Math.min(100, ((EntityDragonBase) this.taskOwner).getHunger() + hunger));
-            ((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getEntityItem());
-            this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getEntityItem().getItem(), ((EntityDragonBase) this.taskOwner).diet) / 10)));
+            ((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getItem());
+            this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getItem().getItem(), ((EntityDragonBase) this.taskOwner).diet) / 10)));
             if (EntityDragonBase.ANIMATION_EAT != null) {
                 ((EntityDragonBase) this.taskOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
             }
             for (int i = 0; i < 4; i++) {
-                ((EntityDragonBase) this.taskOwner).spawnItemCrackParticles(this.targetEntity.getEntityItem().getItem());
+                ((EntityDragonBase) this.taskOwner).spawnItemCrackParticles(this.targetEntity.getItem().getItem());
             }
             resetTask();
         }
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return !this.taskOwner.getNavigator().noPath();
     }
 

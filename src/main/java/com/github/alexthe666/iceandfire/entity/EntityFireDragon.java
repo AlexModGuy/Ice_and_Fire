@@ -202,7 +202,7 @@ public class EntityFireDragon extends EntityDragonBase {
             if ((!attackDecision || this.isFlying())) {
                 shootFireAtMob(this.getAttackTarget());
             } else {
-                if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersectsWith(this.getAttackTarget().getEntityBoundingBox())) {
+                if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                     attackEntityAsMob(this.getAttackTarget());
                 }
 
@@ -222,9 +222,9 @@ public class EntityFireDragon extends EntityDragonBase {
                 float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
                 float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
                 world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
-                double d2 = controller.getLookVec().xCoord;
-                double d3 = controller.getLookVec().yCoord;
-                double d4 = controller.getLookVec().zCoord;
+                double d2 = controller.getLookVec().x;
+                double d3 = controller.getLookVec().y;
+                double d4 = controller.getLookVec().z;
                 EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setSizes(size, size);
@@ -241,9 +241,9 @@ public class EntityFireDragon extends EntityDragonBase {
                     float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
                     float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
                     float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-                    double d2 = controller.getLookVec().xCoord;
-                    double d3 = controller.getLookVec().yCoord;
-                    double d4 = controller.getLookVec().zCoord;
+                    double d2 = controller.getLookVec().x;
+                    double d3 = controller.getLookVec().y;
+                    double d4 = controller.getLookVec().z;
                     EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
                     world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;

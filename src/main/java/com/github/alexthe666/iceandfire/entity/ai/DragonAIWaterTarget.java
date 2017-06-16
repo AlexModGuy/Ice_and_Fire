@@ -28,13 +28,13 @@ public class DragonAIWaterTarget extends EntityAIBase {
         }
         if (this.dragon.getRNG().nextFloat() < 0.5F) {
             Path path = this.dragon.getNavigator().getPath();
-            if (!this.dragon.getNavigator().noPath() && !this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(path.getFinalPathPoint().xCoord, path.getFinalPathPoint().yCoord, path.getFinalPathPoint().zCoord))) {
+            if (!this.dragon.getNavigator().noPath() && !this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.dragon.getNavigator().clearPathEntity();
             }
             if (this.dragon.getNavigator().noPath()) {
                 Vec3d vec3 = this.findWaterTarget();
                 if (vec3 != null) {
-                    dragon.waterTarget = new BlockPos(vec3.xCoord, vec3.yCoord, vec3.zCoord);
+                    dragon.waterTarget = new BlockPos(vec3.x, vec3.y, vec3.z);
                     return true;
                 }
             }
@@ -43,7 +43,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return false;
     }
 

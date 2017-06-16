@@ -23,7 +23,7 @@ public class DragonAILookIdle extends EntityAIBase {
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return this.idleTime >= 0;
     }
 

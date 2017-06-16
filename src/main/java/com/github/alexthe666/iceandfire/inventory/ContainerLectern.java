@@ -48,19 +48,19 @@ public class ContainerLectern extends Container {
 
         for (IContainerListener icrafting : this.listeners) {
             if (this.field_178152_f != this.tileFurnace.getField(2)) {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
+                icrafting.sendWindowProperty(this, 2, this.tileFurnace.getField(2));
             }
 
             if (this.field_178154_h != this.tileFurnace.getField(0)) {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.getField(0));
+                icrafting.sendWindowProperty(this, 0, this.tileFurnace.getField(0));
             }
 
             if (this.field_178155_i != this.tileFurnace.getField(1)) {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.getField(1));
+                icrafting.sendWindowProperty(this, 1, this.tileFurnace.getField(1));
             }
 
             if (this.field_178153_g != this.tileFurnace.getField(3)) {
-                icrafting.sendProgressBarUpdate(this, 3, this.tileFurnace.getField(3));
+                icrafting.sendWindowProperty(this, 3, this.tileFurnace.getField(3));
             }
         }
 

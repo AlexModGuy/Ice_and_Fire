@@ -73,7 +73,7 @@ public class EntityDragonEgg extends EntityLiving {
 
     @Override
     public boolean isEntityInvulnerable(DamageSource i) {
-        return i.getEntity() != null;
+        return i.getTrueSource() != null;
     }
 
     public int getDragonAge() {

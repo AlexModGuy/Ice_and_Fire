@@ -1227,7 +1227,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead()) {
             return false;
         }
-        if (this.isBeingRidden() && dmg.getEntity() != null && this.getControllingPassenger() != null && dmg.getEntity() == this.getControllingPassenger()) {
+        if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
             return false;
         }
 
@@ -1533,9 +1533,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public float getDistanceSquared(Vec3d vec3d) {
-        float f = (float) (this.posX - vec3d.xCoord);
-        float f1 = (float) (this.posY - vec3d.yCoord);
-        float f2 = (float) (this.posZ - vec3d.zCoord);
+        float f = (float) (this.posX - vec3d.x);
+        float f1 = (float) (this.posY - vec3d.y);
+        float f2 = (float) (this.posZ - vec3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 
@@ -1672,7 +1672,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isDirectPathBetweenPoints(Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec1, new Vec3d(vec2.xCoord, vec2.yCoord + (double) this.height * 0.5D, vec2.zCoord), false, true, false);
+        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) this.height * 0.5D, vec2.z), false, true, false);
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
@@ -1683,9 +1683,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void onDeath(DamageSource cause) {
-        if (cause.getEntity() != null) {
-            if (cause.getEntity() instanceof EntityPlayer) {
-                ((EntityPlayer) cause.getEntity()).addStat(ModAchievements.dragonSlayer, 1);
+        if (cause.getTrueSource() != null) {
+            if (cause.getTrueSource() instanceof EntityPlayer) {
+                ((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.dragonSlayer, 1);
             }
         }
         super.onDeath(cause);

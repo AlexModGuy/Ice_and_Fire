@@ -61,7 +61,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
         if (entitylivingbase != null && entitylivingbase.isDead) {
             this.resetTask();
@@ -107,7 +107,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
                 this.delayCounter += failedPathFindingPenalty;
                 if (this.dragon.getNavigator().getPath() != null) {
                     net.minecraft.pathfinding.PathPoint finalPathPoint = this.dragon.getNavigator().getPath().getFinalPathPoint();
-                    if (finalPathPoint != null && entity.getDistanceSq(finalPathPoint.xCoord, finalPathPoint.yCoord, finalPathPoint.zCoord) < 1)
+                    if (finalPathPoint != null && entity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                         failedPathFindingPenalty = 0;
                     else
                         failedPathFindingPenalty += 10;

@@ -45,7 +45,7 @@ public class DragonAIAirTarget extends EntityAIBase {
                 if (vec == null) {
                     return false;
                 } else {
-                    dragon.airTarget = new BlockPos(vec.xCoord, vec.yCoord, vec.zCoord);
+                    dragon.airTarget = new BlockPos(vec.x, vec.y, vec.z);
                     return true;
                 }
             }
