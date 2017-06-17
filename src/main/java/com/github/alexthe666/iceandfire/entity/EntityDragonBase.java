@@ -726,7 +726,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.setHunger(this.getHunger() + 20);
                             this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getMaxHealth() / 3)));
                             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                            this.spawnItemCrackParticles(stack.getItem());
+                                                                                                                                                     this.spawnItemCrackParticles(stack.getItem());
                             this.spawnItemCrackParticles(Items.BONE);
                             this.spawnItemCrackParticles(Items.DYE);
                             this.eatFoodBonus(stack);
@@ -755,7 +755,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         }
                     }
                 } else {
-                    if (player.isSneaking()) {
+                    if (!player.isSneaking()) {
                         if (this.getDragonStage() > 2) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
@@ -769,7 +769,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         }
 
                         return true;
-                    } else if (stack.isEmpty() && !player.isSneaking()) {
+                    } else if (stack.isEmpty() && player.isSneaking()) {
                         this.openGUI(player);
                         return true;
                     }
@@ -1265,7 +1265,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (this.isFlying() || this.isHovering()) {
                 this.motionY += 0.4D;
             }
-        } else if (this.down()) {
+        } else if (this.dismount()) {
             if (this.isFlying() || this.isHovering()) {
                 this.motionY -= 0.4D;
                 if (this.onGround) {
@@ -1274,7 +1274,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
             }
         }
-        if (!this.down() && (this.isFlying() || this.isHovering())) {
+        if (!this.dismount() && (this.isFlying() || this.isHovering())) {
             this.motionY += 0.01D;
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
@@ -1299,7 +1299,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
 
         }
-        if (this.dismount() && this.getControllingPassenger() != null) {
+        if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();
         }
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
@@ -1598,7 +1598,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             down(mc.gameSettings.keyBindSneak.isKeyDown());
             attack(ModKeys.dragon_fireAttack.isKeyDown());
             strike(ModKeys.dragon_strike.isKeyDown());
-            dismount(ModKeys.dragon_dismount.isKeyDown());
+            dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
@@ -1606,7 +1606,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
             byte previousState = getControlState();
-            dismount(ModKeys.dragon_dismount.isKeyDown());
+            dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));

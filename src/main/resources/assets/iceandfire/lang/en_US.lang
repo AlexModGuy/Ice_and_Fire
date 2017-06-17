@@ -205,7 +205,7 @@ death.attack.dragon_ice.player_1=was turned to ice by a dragon
 death.attack.dragon_ice.player_2=was put into suspended animation by a dragon
 key.dragon_strike=Dragon Strike
 key.dragon_fireAttack=Dragon Breath
-key.dragon_dismount=Dragon Dismount
+key.dragon_down=Dragon Down/Baby Dragon Off
 
 achievement.manuscript=In Tatters!
 achievement.manuscript.desc=Acquire a manuscript.
