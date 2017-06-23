@@ -45,6 +45,8 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_meal, 1, 0), new Object[]{"XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "listAllmeatraw"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_meal, 1, 0), new Object[]{"XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "foodMeat"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_meal, 1, 0), new Object[]{"XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "listAllmeatcooked"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_meal, 1, 0), new Object[]{"XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "listAllfishraw"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_meal, 1, 0), new Object[]{"XYX", "YXY", "XYX", Character.valueOf('X'), Items.BONE, Character.valueOf('Y'), "listAllfishcooked"}));
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.bestiary, 1, 0), ModItems.manuscript, ModItems.manuscript, ModItems.manuscript);
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.silverNugget, 9, 0), ModItems.silverIngot);
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.wither_shard, 3, 0), ModItems.witherbone);
