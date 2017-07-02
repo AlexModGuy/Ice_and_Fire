@@ -45,10 +45,7 @@ import java.util.Random;
 
 @Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME)
 public class IceAndFire {
-    /*
-    -Dfml.coreMods.load=com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading
-    This is here because Intellij keeps deleting the VM arguments...
-     */
+
     public static final String MODID = "iceandfire";
     public static final String VERSION = "1.1.1";
     public static final String LLIBRARY_VERSION = "1.7.4";

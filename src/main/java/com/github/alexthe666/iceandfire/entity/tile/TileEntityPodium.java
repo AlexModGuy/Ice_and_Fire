@@ -88,8 +88,9 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
-        return super.writeToNBT(compound);
+        return compound;
     }
 
     @Override

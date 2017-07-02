@@ -221,11 +221,13 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        ItemStackHelper.saveAllItems(compound, this.stacks);
+        super.writeToNBT(compound);
         compound.setShort("BurnTime", (short) this.furnaceBurnTime);
         compound.setShort("CookTime", (short) this.cookTime);
         compound.setShort("CookTimeTotal", (short) this.totalCookTime);
-        return super.writeToNBT(compound);
+        ItemStackHelper.saveAllItems(compound, this.stacks);
+
+        return compound;
     }
 
     @Override
@@ -376,7 +378,13 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
+        for (ItemStack itemstack : this.stacks)
+        {
+            if (!itemstack.isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

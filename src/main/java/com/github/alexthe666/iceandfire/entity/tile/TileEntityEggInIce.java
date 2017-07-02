@@ -12,6 +12,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
+import java.util.Random;
+
 public class TileEntityEggInIce extends TileEntity implements ITickable {
     public EnumDragonEgg type;
     public int age;
@@ -71,6 +73,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
             EntityIceDragon dragon = new EntityIceDragon(world);
             dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             dragon.setVariant(type.ordinal() - 4);
+            dragon.setGender(new Random().nextBoolean());
             dragon.setTamed(true);
             if (player != null) {
                 dragon.setOwnerId(player.getUniqueID());

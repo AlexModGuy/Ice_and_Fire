@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    compile "net.ilexiconn:llibrary:1.7.6-1.11.2:dev"
+    deobfCompile "net.ilexiconn:llibrary:1.7.6-1.11.2"
 }
 
 processResources
@@ -62,10 +62,4 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
-
-jar {
-     manifest {
-	attributes "FMLCorePlugin": "com.github.alexthe666.iceandfire.access.IceAndFireForgeLoading"         	attributes "FMLCorePluginContainsFMLMod": "true"
-     }
 }
