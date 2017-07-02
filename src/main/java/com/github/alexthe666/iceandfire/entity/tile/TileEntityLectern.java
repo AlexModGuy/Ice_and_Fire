@@ -128,7 +128,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public int getSizeInventory() {
-        return this.stacks.size();
+        return 3;
     }
 
     @Override
@@ -213,6 +213,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.stacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.stacks);
         this.furnaceBurnTime = compound.getShort("BurnTime");
         this.cookTime = compound.getShort("CookTime");
         this.totalCookTime = compound.getShort("CookTimeTotal");
