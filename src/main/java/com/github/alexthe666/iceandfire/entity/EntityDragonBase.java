@@ -1188,7 +1188,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isTeen() {
-        return getDragonStage() < 4 && getDragonStage() > 1;
+        return getDragonStage() < 4 && getDragonStage() > 2;
     }
 
     public boolean isAdult() {

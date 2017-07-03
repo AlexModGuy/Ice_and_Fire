@@ -53,7 +53,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                 world.setBlockState(pos, Blocks.GOLD_ORE.getDefaultState(), 3);
             }
             if (chance > 40 && chance < 50) {
-                world.setBlockState(pos, ModBlocks.silverOre.getDefaultState(), 3);
+                world.setBlockState(pos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : ModBlocks.frozenStone.getDefaultState(), 3);
             }
             if (chance > 50 && chance < 60) {
                 world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -68,7 +68,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                 world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
             }
             if (chance > 90 && chance < 1000) {
-                world.setBlockState(pos, ModBlocks.sapphireOre.getDefaultState(), 3);
+                world.setBlockState(pos, IceAndFire.CONFIG.generateSapphireOre ? ModBlocks.sapphireOre.getDefaultState() : ModBlocks.frozenStone.getDefaultState(), 3);
             }
         } else {
             int chance = new Random().nextInt(2);
