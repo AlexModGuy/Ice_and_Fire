@@ -71,15 +71,13 @@ public class DragonAIAirTarget extends EntityAIBase {
                     return pos;
                 }
             }
-            return dragon.getPosition();
         } else {
             BlockPos pos = new BlockPos((int) dragon.getAttackTarget().posX, (int) dragon.getAttackTarget().posY, (int) dragon.getAttackTarget().posZ);
             if (dragon.world.getBlockState(pos).getMaterial() == Material.AIR) {
                 return pos;
             }
         }
-
-        return null;
+        return dragon.getPosition();
     }
 
 }

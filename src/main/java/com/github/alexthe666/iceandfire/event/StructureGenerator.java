@@ -141,7 +141,7 @@ public class StructureGenerator implements IWorldGenerator {
     }
 
     private boolean isDimensionBlacklisted(int id, boolean dragons) {
-        boolean useBlackOrWhiteLists = IceAndFire.CONFIG.useBlackList;
+        boolean useBlackOrWhiteLists = IceAndFire.CONFIG.useDimensionBlackList;
         int[] blacklistedArray = dragons ? IceAndFire.CONFIG.dragonBlacklistedDimensions : IceAndFire.CONFIG.snowVillageBlacklistedDimensions;
         int[] whitelistedArray = dragons ? IceAndFire.CONFIG.dragonWhitelistedDimensions : IceAndFire.CONFIG.snowVillageWhitelistedDimensions;
         int[] array = useBlackOrWhiteLists ? blacklistedArray : whitelistedArray;

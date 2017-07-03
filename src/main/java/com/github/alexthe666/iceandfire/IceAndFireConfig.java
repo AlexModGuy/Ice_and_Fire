@@ -31,7 +31,7 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "generation", comment = "Snow Villages cannot spawn in these dimensions' IDs")
     public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
     @ConfigEntry(category = "generation", comment = "true to use Blacklist configs, false to use Whitelist configs")
-    public boolean useBlackList = true;
+    public boolean useDimensionBlackList = true;
 
     @ConfigEntry(category = "generation", comment = "Dragons can only spawn in these dimensions' IDs")
     public int[] dragonWhitelistedDimensions = new int[]{0};

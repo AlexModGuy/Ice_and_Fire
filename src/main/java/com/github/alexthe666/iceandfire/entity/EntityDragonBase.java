@@ -54,7 +54,7 @@ import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity {
 
-    private static final int FLIGHT_CHANCE_PER_TICK = 100;//1250;
+    private static final int FLIGHT_CHANCE_PER_TICK = 1250;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -701,7 +701,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else if (!this.isModelDead()) {
             if (this.isOwner(player)) {
                 if (!stack.isEmpty()) {
-                    if (this.isBreedingItem(stack) && this.isAdult() && !this.isInLove()) {
+                    if (this.isBreedingItem(stack) && this.isAdult()) {
                         this.consumeItemFromStack(player, stack);
                         this.setInLove(player);
                         return true;
@@ -725,7 +725,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.setHunger(this.getHunger() + 20);
                             this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getMaxHealth() / 3)));
                             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                                                                                                                                                     this.spawnItemCrackParticles(stack.getItem());
+                            this.spawnItemCrackParticles(stack.getItem());
                             this.spawnItemCrackParticles(Items.BONE);
                             this.spawnItemCrackParticles(Items.DYE);
                             this.eatFoodBonus(stack);
@@ -884,11 +884,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
 
-        if (world.isRemote && (this.isFlying() || this.isHovering()) && !this.isModelDead()) {
+        if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
                 if (animationCycle < 15) {
                     animationCycle++;
                 } else {
-                    animationCycle = 15;
+                    animationCycle = 0;
                 }
             if (animationCycle == 12) {
                 this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());

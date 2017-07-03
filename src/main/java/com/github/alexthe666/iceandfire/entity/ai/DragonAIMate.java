@@ -58,7 +58,7 @@ public class DragonAIMate extends EntityAIBase {
         this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
         this.dragon.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
         ++this.spawnBabyDelay;
-        if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSqToEntity(this.targetMate) < 12.0D) {
+        if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSqToEntity(this.targetMate) < 18) {
             this.spawnBaby();
         }
     }
@@ -68,18 +68,17 @@ public class DragonAIMate extends EntityAIBase {
      * valid mate found.
      */
     private EntityDragonBase getNearbyMate() {
-        List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().expand(8.0D, 8.0D, 8.0D));
+        List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().expand(18.0D, 18.0D, 18.0D));
         double d0 = Double.MAX_VALUE;
-        EntityDragonBase EntityDragonBase = null;
-
-        for (EntityDragonBase EntityDragonBase1 : list) {
-            if (this.dragon.canMateWith(EntityDragonBase1) && this.dragon.getDistanceSqToEntity(EntityDragonBase1) < d0) {
-                EntityDragonBase = EntityDragonBase1;
-                d0 = this.dragon.getDistanceSqToEntity(EntityDragonBase1);
+        EntityDragonBase mate = null;
+        for (EntityDragonBase partner : list) {
+            if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSqToEntity(partner) < d0) {
+                mate = partner;
+                break;
             }
         }
 
-        return EntityDragonBase;
+        return mate;
     }
 
     /**
