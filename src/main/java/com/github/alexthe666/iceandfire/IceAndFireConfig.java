@@ -52,8 +52,8 @@ public class IceAndFireConfig {
     public int dragonHealth = 500;
     @ConfigEntry(category = "mobs", comment = "Max dragon attack damage. Attack Damage is scaled to this")
     public int dragonAttackDamage = 17;
-    @ConfigEntry(category = "mobs", comment = "Advanced dragon AI - dragon flight improved but FPS might fall.")
-    public boolean dragonAdvancedAI = true;
+    @ConfigEntry(category = "mobs", comment = "How high dragons can fly, in Y height.")
+    public int maxDragonFlight = 128;
     @ConfigEntry(category = "mobs", comment = "How far away dragons will detect gold blocks being destroyed or chests being opened.")
     public int dragonGoldSearchLength = 17;
 

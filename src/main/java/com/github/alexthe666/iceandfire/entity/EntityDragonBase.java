@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.google.common.base.Predicate;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -26,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +33,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -56,6 +53,8 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity {
+
+    private static final int FLIGHT_CHANCE_PER_TICK = 100;//1250;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -885,12 +884,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
 
-        if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
-            if (animationCycle < 15) {
-                animationCycle++;
-            } else {
-                animationCycle = 0;
-            }
+        if (world.isRemote && (this.isFlying() || this.isHovering()) && !this.isModelDead()) {
+                if (animationCycle < 15) {
+                    animationCycle++;
+                } else {
+                    animationCycle = 15;
+                }
             if (animationCycle == 12) {
                 this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());
             }
@@ -915,14 +914,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     }
                 }
             }
+            if (this.isModelDead() && animationCycle != 0) {
+                animationCycle = 0;
+            }
         }
         if (this.isModelDead() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (this.isModelDead() && animationCycle != 0) {
-            animationCycle = 0;
-        }
+
         boolean sleeping = isSleeping() && !isHovering() && !isFlying();
         if (sleeping && sleepProgress < 20.0F) {
             sleepProgress += 0.5F;
@@ -1035,7 +1035,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (!world.isRemote && this.getRNG().nextInt(1250) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        if (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1147,13 +1147,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             bob = (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
         }
         return bob * this.getRenderSize() / 3;
-    }
-
-    private float walk(float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
-        float movementScale = this.getRenderSize() / 3;
-        speed = -speed;
-        float rotation = (MathHelper.cos(f * (speed * movementScale) + offset) * (degree * movementScale) * f1) + (weight * f1);
-        return invert ? -rotation : rotation;
     }
 
     private void updatePreyInMouth(Entity prey) {
@@ -1537,28 +1530,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         return f * f + f1 * f1 + f2 * f2;
     }
 
-    public void onInventoryChanged(IInventory invBasic) {
-        int dragonArmorHead = this.getArmorInSlot(0);
-        int dragonArmorNeck = this.getArmorInSlot(1);
-        int dragonArmorBody = this.getArmorInSlot(2);
-        int dragonArmorTail = this.getArmorInSlot(3);
-        //this.updateDragonSlots();
-        if (this.ticksExisted > 20) {
-            if (dragonArmorHead != this.getIntFromArmor(this.dragonInv.getStackInSlot(0))) {
-                this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
-            }
-            if (dragonArmorNeck != this.getIntFromArmor(this.dragonInv.getStackInSlot(1))) {
-                this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
-            }
-            if (dragonArmorBody != this.getIntFromArmor(this.dragonInv.getStackInSlot(2))) {
-                this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
-            }
-            if (dragonArmorTail != this.getIntFromArmor(this.dragonInv.getStackInSlot(3))) {
-                this.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
-            }
-        }
-
-    }
 
     public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
         int j = inventorySlot - 500 + 2;
@@ -1694,31 +1665,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     this.entityDropItem(itemstack, 0.0F);
                 }
             }
-        }
-    }
-
-    static class DragonRiderSelector implements Predicate<Entity> {
-        private final EntityDragonBase parentEntity;
-
-        public DragonRiderSelector(EntityDragonBase dragon) {
-            this.parentEntity = dragon;
-        }
-
-        public boolean apply(@Nullable Entity prey) {
-            return prey instanceof EntityLivingBase && !sharesOwner((EntityLivingBase) prey) && !parentEntity.isOwner((EntityLivingBase) prey) && EntitySelectors.NOT_SPECTATING.apply(prey);
-        }
-
-        public boolean sharesOwner(EntityLivingBase prey) {
-            if (prey != null && prey instanceof EntityLivingBase) {
-                if (prey instanceof EntityTameable && parentEntity.getOwner() != null && ((EntityTameable) prey).getOwner() != null) {
-                    EntityLivingBase dragonOwner = parentEntity.getOwner();
-                    EntityLivingBase dogOwner = ((EntityTameable) prey).getOwner();
-                    if (dragonOwner != dogOwner) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }
 

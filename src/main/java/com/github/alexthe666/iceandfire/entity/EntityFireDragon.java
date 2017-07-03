@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -343,8 +342,5 @@ public class EntityFireDragon extends EntityDragonBase {
         return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
     }
 
-    @Override
-    public void onInventoryChanged(IInventory invBasic) {
 
-    }
 }
