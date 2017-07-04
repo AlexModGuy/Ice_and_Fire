@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +8,8 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
-public class DragonAIAttackMelee extends EntityAIBase {
-    protected EntityDragonBase dragon;
+public class HippogryphAIAttackMelee extends EntityAIBase {
+    protected EntityHippogryph hippogryph;
     private int attackTick;
     private double speedTowardsTarget;
     private boolean longMemory;
@@ -21,8 +21,8 @@ public class DragonAIAttackMelee extends EntityAIBase {
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
 
-    public DragonAIAttackMelee(EntityDragonBase dragon, double speedIn, boolean useLongMemory) {
-        this.dragon = dragon;
+    public HippogryphAIAttackMelee(EntityHippogryph hippo, double speedIn, boolean useLongMemory) {
+        this.hippogryph = hippo;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
         this.setMutexBits(3);
@@ -30,11 +30,11 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-        if (!dragon.canMove()) {
+        EntityLivingBase entitylivingbase = this.hippogryph.getAttackTarget();
+        if (!hippogryph.canMove()) {
             return false;
         }
-        if (!dragon.isSleeping()) {
+        if (!hippogryph.isSitting()) {
             return false;
         }
         if (entitylivingbase == null) {
@@ -44,65 +44,65 @@ public class DragonAIAttackMelee extends EntityAIBase {
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(entitylivingbase);
-                    this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
+                    this.entityPathEntity = this.hippogryph.getNavigator().getPathToEntityLiving(entitylivingbase);
+                    this.delayCounter = 4 + this.hippogryph.getRNG().nextInt(7);
                     return this.entityPathEntity != null;
                 } else {
                     return true;
                 }
             }
-            this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(entitylivingbase);
+            this.entityPathEntity = this.hippogryph.getNavigator().getPathToEntityLiving(entitylivingbase);
             return this.entityPathEntity != null;
         }
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
+        EntityLivingBase entitylivingbase = this.hippogryph.getAttackTarget();
         if (entitylivingbase != null && entitylivingbase.isDead) {
             this.resetTask();
             return false;
         }
-        return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (!this.longMemory ? !this.dragon.getNavigator().noPath() : (!this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative())));
+        return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (!this.longMemory ? !this.hippogryph.getNavigator().noPath() : (!this.hippogryph.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative())));
     }
 
     @Override
     public void startExecuting() {
-        this.dragon.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
+        this.hippogryph.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.delayCounter = 0;
     }
 
     @Override
     public void resetTask() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
+        EntityLivingBase entitylivingbase = this.hippogryph.getAttackTarget();
 
         if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
-            this.dragon.setAttackTarget((EntityLivingBase) null);
+            this.hippogryph.setAttackTarget((EntityLivingBase) null);
         }
 
-        this.dragon.getNavigator().clearPathEntity();
+        this.hippogryph.getNavigator().clearPathEntity();
     }
 
     @Override
     public void updateTask() {
-        EntityLivingBase entity = this.dragon.getAttackTarget();
-        if (!dragon.isPassenger(entity)) {
-            this.dragon.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
+        EntityLivingBase entity = this.hippogryph.getAttackTarget();
+        if (!hippogryph.isPassenger(entity)) {
+            this.hippogryph.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
         }
-        double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+        double d0 = this.hippogryph.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
         double d1 = this.getAttackReachSqr(entity);
         --this.delayCounter;
 
-        if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
+        if ((this.longMemory || this.hippogryph.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.hippogryph.getRNG().nextFloat() < 0.05F)) {
             this.targetX = entity.posX;
             this.targetY = entity.getEntityBoundingBox().minY;
             this.targetZ = entity.posZ;
-            this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
+            this.delayCounter = 4 + this.hippogryph.getRNG().nextInt(7);
 
             if (this.canPenalize) {
                 this.delayCounter += failedPathFindingPenalty;
-                if (this.dragon.getNavigator().getPath() != null) {
-                    net.minecraft.pathfinding.PathPoint finalPathPoint = this.dragon.getNavigator().getPath().getFinalPathPoint();
+                if (this.hippogryph.getNavigator().getPath() != null) {
+                    net.minecraft.pathfinding.PathPoint finalPathPoint = this.hippogryph.getNavigator().getPath().getFinalPathPoint();
                     if (finalPathPoint != null && entity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                         failedPathFindingPenalty = 0;
                     else
@@ -117,12 +117,8 @@ public class DragonAIAttackMelee extends EntityAIBase {
             } else if (d0 > 256.0D) {
                 this.delayCounter += 5;
             }
-            if (!dragon.isBreathingFire()) {
-                if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
-                    this.delayCounter += 15;
-                }
-            } else {
-                this.dragon.getNavigator().clearPathEntity();
+            if (!this.hippogryph.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.hippogryph.canMove()) {
+                this.delayCounter += 15;
             }
         }
 
@@ -130,12 +126,12 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
         if (d0 <= d1 && this.attackTick <= 0) {
             this.attackTick = 20;
-            this.dragon.swingArm(EnumHand.MAIN_HAND);
-            this.dragon.attackEntityAsMob(entity);
+            this.hippogryph.swingArm(EnumHand.MAIN_HAND);
+            this.hippogryph.attackEntityAsMob(entity);
         }
     }
 
     protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-        return this.dragon.width * 2.0F * this.dragon.width * 2.0F + attackTarget.width;
+        return this.hippogryph.width * 2.0F * this.hippogryph.width * 2.0F + attackTarget.width;
     }
 }

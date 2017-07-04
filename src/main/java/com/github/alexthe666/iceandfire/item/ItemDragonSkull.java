@@ -55,10 +55,10 @@ public class ItemDragonSkull extends Item {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
-        String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
+        String iceorfire = stack.getMetadata() == 0 ? "hippogryph.fire" : "hippogryph.ice";
         list.add(StatCollector.translateToLocal(iceorfire));
         if (stack.getTagCompound() != null) {
-            list.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
+            list.add(StatCollector.translateToLocal("hippogryph.stage") + stack.getTagCompound().getInteger("Stage"));
         }
     }
 

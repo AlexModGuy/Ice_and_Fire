@@ -40,6 +40,6 @@ public class ItemScaleArmor extends ItemArmor {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
-        tooltip.add(eggType.color + StatCollector.translateToLocal("dragon." + eggType.toString().toLowerCase()));
+        tooltip.add(eggType.color + StatCollector.translateToLocal("hippogryph." + eggType.toString().toLowerCase()));
     }
 }

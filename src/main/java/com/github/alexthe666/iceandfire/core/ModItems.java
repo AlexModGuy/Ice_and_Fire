@@ -74,6 +74,11 @@ public class ModItems {
     public static Item dragon_horn_ice;
     public static Item dragon_flute;
 
+    public static Item hippogryph_egg;
+    public static Item iron_hippogryph_armor;
+    public static Item gold_hippogryph_armor;
+    public static Item diamond_hippogryph_armor;
+
     public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
     public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 36, new int[]{4, 7, 9, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
     public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
@@ -144,5 +149,11 @@ public class ModItems {
         dragon_horn_fire = new ItemDragonHornActive("dragon_horn_fire");
         dragon_horn_ice = new ItemDragonHornActive("dragon_horn_ice");
         dragon_flute = new ItemDragonFlute();
+        hippogryph_egg = new ItemHippogryphEgg();
+
+        iron_hippogryph_armor = new ItemGeneric("iron_hippogryph_armor", "iceandfire.iron_hippogryph_armor");
+        gold_hippogryph_armor = new ItemGeneric("gold_hippogryph_armor", "iceandfire.gold_hippogryph_armor");
+        diamond_hippogryph_armor = new ItemGeneric("diamond_hippogryph_armor", "iceandfire.diamond_hippogryph_armor");
+
     }
 }

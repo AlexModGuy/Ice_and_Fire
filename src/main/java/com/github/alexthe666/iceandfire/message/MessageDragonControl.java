@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
@@ -50,6 +51,11 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
             EntityDragonBase dragon = (EntityDragonBase) entity;
             if (dragon.isOwner(player)) {
                 dragon.setControlState(message.controlState);
+            }
+        }else  if (entity instanceof EntityHippogryph) {
+            EntityHippogryph hippo = (EntityHippogryph) entity;
+            if (hippo.isOwner(player)) {
+                hippo.setControlState(message.controlState);
             }
         }
     }

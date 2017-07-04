@@ -133,7 +133,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     private void initDragonInv() {
         ContainerHorseChest animalchest = this.dragonInv;
-        this.dragonInv = new ContainerHorseChest("dragonInv", 4);
+        this.dragonInv = new ContainerHorseChest("hippogryphInventory", 4);
         this.dragonInv.setCustomName(this.getName());
         if (animalchest != null) {
             int i = Math.min(animalchest.getSizeInventory(), this.dragonInv.getSizeInventory());
@@ -738,7 +738,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
                             this.setSitting(!this.isSitting());
                             if (world.isRemote) {
-                                player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+                                player.sendMessage(new TextComponentTranslation("hippogryph.command." + (this.isSitting() ? "sit" : "stand")));
                             }
                             return true;
                         }
