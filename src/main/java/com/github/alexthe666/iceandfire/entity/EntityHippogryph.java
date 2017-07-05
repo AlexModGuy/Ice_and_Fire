@@ -513,7 +513,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
                     motionZ *= 1.06;
                 }
                 jumpMovementFactor = 0.05F;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 5);
+                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
             }
         }
         super.moveEntityWithHeading(strafe, forward);
@@ -662,7 +662,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         if (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSitting(false);
-            this.setSitting(false);
             this.hoverTicks = 0;
             this.flyTicks = 0;
         }
@@ -768,9 +767,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             double targetX = airTarget.getX() + 0.5D - posX;
             double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;
-            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * 5;
-            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * 5;
-            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * 5;
+            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * 2;
+            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * 2;
+            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * 2;
             float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
             float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
             moveForward = 0.5F;

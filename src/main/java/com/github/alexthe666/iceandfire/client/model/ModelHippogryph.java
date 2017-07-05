@@ -311,6 +311,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.Body.addChild(this.WingL);
         this.WingR3.addChild(this.FingerR2);
         animator = ModelAnimator.create();
+        this.Beak2.setScale(0.99F, 0.99F, 0.99F);
         this.updateDefaultPose();
     }
 
@@ -329,12 +330,134 @@ public class ModelHippogryph extends ModelDragonBase {
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         EntityHippogryph hippo = (EntityHippogryph) entity;
-        float speed_walk = 0.2F;
+        this.progressRotation(HindThighR, hippo.flyProgress, 0.7853981633974483F, 0.0F, 0.0F);
+        this.progressRotation(FrontLegL, hippo.flyProgress, -1.4102260356114182F, 0.0F, 0.0F);
+        this.progressRotation(HindLegL, hippo.flyProgress, -0.17453292519943295F, 0.0F, 0.0F);
+        this.progressRotation(FingerR2, hippo.flyProgress, 0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(Crest, hippo.flyProgress, -1.6845917940249266F, 0.0F, 0.0F);
+        this.progressRotation(FrontThighL, hippo.flyProgress, 0.6981317007977318F, 0.0F, 0.0F);
+        this.progressRotation(Tail3, hippo.flyProgress, 0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(FingerR3, hippo.flyProgress, 0.6829473363053812F, 0.0F, 0.0F);
+        this.progressRotation(WingL2, hippo.flyProgress, -0.22759093446006054F, 0.0F, 0.08726646259971647F);
+        this.progressRotation(WingR, hippo.flyProgress, 0.0F, 0.0F, 1.5707963267948966F);
+        this.progressRotation(WingL3, hippo.flyProgress, 0.31869712141416456F, 0.0F, 0.0F);
+        this.progressRotation(Quill_R, hippo.flyProgress, -1.1838568316277536F, -0.17453292519943295F, 0.0F);
+        this.progressRotation(FrontLegR, hippo.flyProgress, -1.3962634015954636F, 0.0F, 0.0F);
+        this.progressRotation(Tail1, hippo.flyProgress, -0.7740535232594852F, 0.0F, 0.0F);
+        this.progressRotation(FrontFootL, hippo.flyProgress, 2.408554367752175F, 0.0F, 0.0F);
+        this.progressRotation(WingL, hippo.flyProgress, 0.0F, 0.0F, -1.5707963267948966F);
+        this.progressRotation(FingerR4, hippo.flyProgress, 0.8651597102135892F, 0.0F, 0.0F);
+        this.progressRotation(ReinR, hippo.flyProgress, -0.04363323129985824F, 0.0F, 0.0F);
+        this.progressRotation(NoseBand, hippo.flyProgress, 0.22689280275926282F, 0.0F, 0.0F);
+        this.progressRotation(Tail2, hippo.flyProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(WingR2, hippo.flyProgress, -0.22759093446006054F, 0.0F, -0.08726646259971647F);
+        this.progressRotation(WingR3, hippo.flyProgress, 0.31869712141416456F, 0.0F, 0.0F);
+        this.progressRotation(HindThighL, hippo.flyProgress, 0.7853981633974483F, 0.0F, 0.0F);
+        this.progressRotation(Neck, hippo.flyProgress, 1.2747884856566583F, 0.0F, 0.0F);
+        this.progressRotation(ReinL, hippo.flyProgress, -0.04363323129985824F, 0.0F, 0.0F);
+        this.progressRotation(FingerR1, hippo.flyProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(HindLegR, hippo.flyProgress, -0.17453292519943295F, 0.0F, 0.0F);
+        this.progressRotation(ChestL, hippo.flyProgress, 0.0F, 1.5707963267948966F, 0.0F);
+        this.progressRotation(Head, hippo.flyProgress, -0.4553564018453205F, 0.0F, 0.0F);
+        this.progressRotation(FrontFootR, hippo.flyProgress, 2.408554367752175F, 0.0F, 0.0F);
+        this.progressRotation(FingerL3, hippo.flyProgress, 0.6829473363053812F, 0.0F, 0.0F);
+        this.progressRotation(FingerL4, hippo.flyProgress, 0.8651597102135892F, 0.0F, 0.0F);
+        this.progressRotation(ChestR, hippo.flyProgress, 0.0F, 1.5707963267948966F, 0.0F);
+        this.progressRotation(FrontThighR, hippo.flyProgress, 0.6981317007977318F, 0.0F, 0.0F);
+        this.progressRotation(Quill_L, hippo.flyProgress, -1.1838568316277536F, 0.17453292519943295F, 0.0F);
+        this.progressRotation(Neck2, hippo.flyProgress, -0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(FingerL1, hippo.flyProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(FingerL2, hippo.flyProgress, 0.40980330836826856F, 0.0F, 0.0F);
+
+        this.progressRotation(HindThighR, hippo.hoverProgress, 0.7853981633974483F, 0.0F, 0.0F);
+        this.progressRotation(FrontLegL, hippo.hoverProgress, -1.4102260356114182F, 0.0F, 0.0F);
+        this.progressRotation(HindLegL, hippo.hoverProgress, -0.17453292519943295F, 0.0F, 0.0F);
+        this.progressRotation(FingerR2, hippo.hoverProgress, 0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(Crest, hippo.hoverProgress, -1.6845917940249266F, 0.0F, 0.0F);
+        this.progressRotation(FrontThighL, hippo.hoverProgress, 0.6981317007977318F, 0.0F, 0.0F);
+        this.progressRotation(Tail3, hippo.hoverProgress, 0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(FingerR3, hippo.hoverProgress, 0.6829473363053812F, 0.0F, 0.0F);
+        this.progressRotation(WingL2, hippo.hoverProgress, -0.22759093446006054F, 0.0F, 0.08726646259971647F);
+        this.progressRotation(WingR, hippo.hoverProgress, 0.0F, 0.0F, 1.5707963267948966F);
+        this.progressRotation(WingL3, hippo.hoverProgress, 0.31869712141416456F, 0.0F, 0.0F);
+        this.progressRotation(Quill_R, hippo.hoverProgress, -1.1838568316277536F, -0.17453292519943295F, 0.0F);
+        this.progressRotation(FrontLegR, hippo.hoverProgress, -1.3962634015954636F, 0.0F, 0.0F);
+        this.progressRotation(Tail1, hippo.hoverProgress, -0.7740535232594852F, 0.0F, 0.0F);
+        this.progressRotation(FrontFootL, hippo.hoverProgress, 2.408554367752175F, 0.0F, 0.0F);
+        this.progressRotation(WingL, hippo.hoverProgress, 0.0F, 0.0F, -1.5707963267948966F);
+        this.progressRotation(FingerR4, hippo.hoverProgress, 0.8651597102135892F, 0.0F, 0.0F);
+        this.progressRotation(ReinR, hippo.hoverProgress, -0.04363323129985824F, 0.0F, 0.0F);
+        this.progressRotation(NoseBand, hippo.hoverProgress, 0.22689280275926282F, 0.0F, 0.0F);
+        this.progressRotation(Tail2, hippo.hoverProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(WingR2, hippo.hoverProgress, -0.22759093446006054F, 0.0F, -0.08726646259971647F);
+        this.progressRotation(WingR3, hippo.hoverProgress, 0.31869712141416456F, 0.0F, 0.0F);
+        this.progressRotation(HindThighL, hippo.hoverProgress, 0.7853981633974483F, 0.0F, 0.0F);
+        this.progressRotation(Neck, hippo.hoverProgress, 1.5481070465189704F, 0.0F, 0.0F);
+        this.progressRotation(ReinL, hippo.hoverProgress, -0.04363323129985824F, 0.0F, 0.0F);
+        this.progressRotation(FingerR1, hippo.hoverProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(HindLegR, hippo.hoverProgress, -0.17453292519943295F, 0.0F, 0.0F);
+        this.progressRotation(ChestL, hippo.hoverProgress, 0.0F, 1.5707963267948966F, 0.0F);
+        this.progressRotation(Head, hippo.hoverProgress, -0.4553564018453205F, 0.0F, 0.0F);
+        this.progressRotation(FrontFootR, hippo.hoverProgress, 2.408554367752175F, 0.0F, 0.0F);
+        this.progressRotation(FingerL3, hippo.hoverProgress, 0.6829473363053812F, 0.0F, 0.0F);
+        this.progressRotation(FingerL4, hippo.hoverProgress, 0.8651597102135892F, 0.0F, 0.0F);
+        this.progressRotation(ChestR, hippo.hoverProgress, 0.0F, 1.5707963267948966F, 0.0F);
+        this.progressRotation(FrontThighR, hippo.hoverProgress, 0.6981317007977318F, 0.0F, 0.0F);
+        this.progressRotation(Quill_L, hippo.hoverProgress, -1.1838568316277536F, 0.17453292519943295F, 0.0F);
+        this.progressRotation(Neck2, hippo.hoverProgress, -0.24088609097414795F, 0.0F, 0.0F);
+        this.progressRotation(FingerL1, hippo.hoverProgress, 0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(FingerL2, hippo.hoverProgress, 0.40980330836826856F, 0.0F, 0.0F);
+        this.progressRotation(Body, hippo.hoverProgress, -0.5067516521823614F, 0.0F, 0.0F);
+
+        float speed_walk = 0.4F;
         float speed_idle = 0.05F;
         float speed_fly = 0.35F;
         float degree_walk = 0.5F;
         float degree_idle = 0.5F;
         float degree_fly = 0.5F;
+        this.bob(Body, speed_idle, degree_idle, false, entity.ticksExisted, 1);
+        this.bob(FrontThighR, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
+        this.bob(FrontThighL, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
+        this.bob(HindThighR, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
+        this.bob(HindThighL, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
+        AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck, Neck2, Head};
+        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
 
+        if(hippo.isFlying() || hippo.isHovering()){
+            this.flap(WingL, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
+            this.flap(WingR, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
+            this.flap(WingL2, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
+            this.flap(WingR2, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
+        }else{
+            this.bob(Body, speed_walk, degree_walk, false, f, f1);
+            this.bob(FrontThighR, -speed_walk, degree_walk, false, f, f1);
+            this.bob(FrontThighL, -speed_walk, degree_walk, false, f, f1);
+            this.bob(HindThighR, -speed_walk, degree_walk, false, f, f1);
+            this.bob(HindThighL, -speed_walk, degree_walk, false, f, f1);
+            this.chainWave(NECK, speed_walk * 2.5F, degree_walk * 0.15F, -2, f, f1);
+            this.walk(FrontThighR, speed_walk, degree_walk * -0.75F, true, 0, 0F, f, f1);
+            this.walk(FrontThighL, speed_walk, degree_walk * -0.75F, false, 0, 0F, f, f1);
+            this.walk(FrontLegR, speed_walk, degree_walk * 0.5F, false, 0, 0F, f, f1);
+            this.walk(FrontLegL, speed_walk, degree_walk * 0.5F, true, 0, 0F, f, f1);
+            this.walk(FrontFootR, -speed_walk, degree_walk, false, 2.75F, 0F, f, f1);
+            this.walk(FrontFootL, -speed_walk, degree_walk, true, 2.75F, 0F, f, f1);
+            this.walk(HindThighR, speed_walk, degree_walk * -0.75F, false, 0, 0F, f, f1);
+            this.walk(HindThighL, speed_walk, degree_walk * -0.75F, true, 0, 0F, f, f1);
+            this.walk(HindLegR, speed_walk, degree_walk * 0.5F, true, 0, 0F, f, f1);
+            this.walk(HindLegL, speed_walk, degree_walk * 0.5F, false, 0, 0F, f, f1);
+            this.walk(HindFootR, -speed_walk, degree_walk, true, 2.75F, 0F, f, f1);
+            this.walk(HindFootL, -speed_walk, degree_walk, false, 2.75F, 0F, f, f1);
+        }
+
+        float f12 = -1.1344640137963142F + f1;
+        if (f12 > 0.0F) {
+            f12 = 0.0F;
+        }
+
+        if(f12 < Math.toRadians(-80)){
+            f12 = (float)Math.toRadians(-80);
+        }
+        this.Tail1.rotateAngleX = f12;
+        f12 = 0.0F;
     }
 }

@@ -25,7 +25,7 @@ public class DragonUtils {
     }
 
     public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo){
-        float radius = 0.75F * (0.7F * 2) * -3 - hippo.getRNG().nextInt(2 * 6);
+        float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(8 * 6);
         float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
