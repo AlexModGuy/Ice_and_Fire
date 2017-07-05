@@ -13,6 +13,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityHippogryphEgg extends EntityEgg {
+
+    public EntityHippogryphEgg(World world) {
+        super(world);
+    }
+
     public EntityHippogryphEgg(World world, EntityPlayer player) {
         super(world, player);
     }

@@ -27,7 +27,7 @@ public class ModEntities {
         registerUnspawnable(EntityDragonIceCharge.class, "dragonicecharge", 9);
         registerSpawnable(EntitySnowVillager.class, "snowvillager", 10, 0X3C2A23, 0X70B1CF);
         registerUnspawnable(EntityHippogryphEgg.class, "hippogryphegg", 11);
-        registerUnspawnable(EntityHippogryph.class, "hippogryphegg", 12);
+        registerSpawnable(EntityHippogryph.class, "hippogryph", 12, 0XD8D8D8, 0XD1B55D);
 
     }
 }
