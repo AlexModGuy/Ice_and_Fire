@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -81,9 +82,16 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
             this.resetTask();
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
+            EntityHippogryph hippo = (EntityHippogryph)this.taskOwner;
             this.targetEntity.getItem().shrink(1);
             this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            ((EntityHippogryph)this.taskOwner).setAnimation(EntityHippogryph.ANIMATION_EAT);
+            hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
+            if(!hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
+                EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
+                hippo.setTamed(true);
+                hippo.setOwnerId(owner.getUniqueID());
+                hippo.setSitting(true);
+            }
             resetTask();
         }
     }

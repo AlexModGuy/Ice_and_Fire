@@ -20,6 +20,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,7 @@ import java.util.List;
 
 public class EntityHippogryph extends EntityTameable implements IAnimatedEntity {
 
-    private static final int FLIGHT_CHANCE_PER_TICK = 600;
+    private static final int FLIGHT_CHANCE_PER_TICK = 1200;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippogryph.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.<Boolean>createKey(EntityHippogryph.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> ARMOR = EntityDataManager.<Integer>createKey(EntityHippogryph.class, DataSerializers.VARINT);
@@ -76,6 +77,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
 
     public EntityHippogryph(World worldIn) {
         super(worldIn);
+        ANIMATION_EAT = Animation.create(25);
+        ANIMATION_SPEAK = Animation.create(15);
+        ANIMATION_SCRATCH = Animation.create(25);
+        ANIMATION_BITE = Animation.create(25);
         initHippogryphInv();
         if (FMLCommonHandler.instance().getSide().isClient()) {
             roll_buffer = new RollBuffer();
@@ -87,7 +92,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, new HippogryphAIAttackMelee(this, 1.5D, true));
+        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, true));
         this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
@@ -328,7 +333,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         return isSitting;
     }
 
-    public void setSleeping(boolean sitting) {
+    public void setSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
@@ -521,15 +526,38 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-        if (flag && this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
-            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
-        }
-        if (flag) {
-            this.applyEnchantments(this, entityIn);
-        }
+        System.out.println("help");
 
-        return flag;
+        if(this.getAnimation() != this.ANIMATION_SCRATCH && this.getAnimation() != this.ANIMATION_BITE){
+            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
+        }else if(this.getAnimationTick() >= 5){
+            if(this.getAnimation() == this.ANIMATION_SCRATCH){
+                entityIn.isAirBorne = true;
+                float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
+                entityIn.motionX /= 2.0D;
+                entityIn.motionZ /= 2.0D;
+                entityIn.motionX -= 0.5 / (double)f * 4;
+                entityIn.motionZ -= 0.5 / (double)f * 4;
+
+                if (entityIn.onGround)
+                {
+                    entityIn.motionY /= 2.0D;
+                    entityIn.motionY += 4;
+
+                    if (entityIn.motionY > 0.4000000059604645D)
+                    {
+                        entityIn.motionY = 0.4000000059604645D;
+                    }
+                }
+            }
+            boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+            if (flag) {
+                this.applyEnchantments(this, entityIn);
+            }
+
+            return flag;
+        }
+        return false;
     }
 
     public EntityItem createEgg(EntityHippogryph partner) {
@@ -547,8 +575,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(!this.onGround  && this.airTarget != null){
+            this.setFlying(true);
+        }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSitting()) {
-            this.setFlying(false);
             this.setFlying(true);
             this.setSitting(false);
         }
@@ -592,11 +622,14 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         } else if (!hovering && hoverProgress > 0.0F) {
             hoverProgress -= 0.5F;
         }
-        boolean flying = this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
+        boolean flying = this.isFlying();
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 0.5F;
+        }
+        if((flying || hovering) && ticksExisted % 20 == 0){
+            this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IceAndFire.CONFIG.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
         }
         if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
@@ -733,7 +766,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             this.setHovering(true);
         }
         if (world.isRemote) {
-            roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
+            roll_buffer.calculateChainFlapBuffer(35, 8, 6, this);
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
