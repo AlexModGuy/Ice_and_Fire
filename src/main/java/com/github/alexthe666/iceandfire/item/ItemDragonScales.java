@@ -27,7 +27,7 @@ public class ItemDragonScales extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
-        tooltip.add(type.color + StatCollector.translateToLocal("hippogryph." + type.toString().toLowerCase()));
+        tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
     }
 
 }

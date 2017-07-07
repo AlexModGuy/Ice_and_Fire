@@ -166,9 +166,9 @@ public class ItemDragonHornActive extends Item {
             String fire = new TextComponentTranslation("entity.firedragon.name", new Object[0]).getUnformattedText();
             String ice = new TextComponentTranslation("entity.icedragon.name", new Object[0]).getUnformattedText();
             list.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
-            String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("hippogryph.unnamed") : StatCollector.translateToLocal("hippogryph.name") + stack.getTagCompound().getString("CustomName");
+            String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
             list.add("" + name);
-            String gender = StatCollector.translateToLocal("hippogryph.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "hippogryph.gender.male" : "hippogryph.gender.female"));
+            String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
             list.add("" + gender);
             int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
             int stage1 = 0;
@@ -185,7 +185,7 @@ public class ItemDragonHornActive extends Item {
                     stage1 = 1;
                 }
             }
-            String stage = StatCollector.translateToLocal("hippogryph.stage") + stage1 + " " + StatCollector.translateToLocal("hippogryph.days.front") + stagenumber + " " + StatCollector.translateToLocal("hippogryph.days.back");
+            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front") + stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
             list.add("" + stage);
         }
     }

@@ -157,7 +157,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
 
     }
 
-    private int getIntFromArmor(ItemStack stack) {
+    public int getIntFromArmor(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.iron_hippogryph_armor) {
             return 1;
         }

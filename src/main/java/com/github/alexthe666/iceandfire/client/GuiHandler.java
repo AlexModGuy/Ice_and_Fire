@@ -1,13 +1,16 @@
 package com.github.alexthe666.iceandfire.client;
 
 import com.github.alexthe666.iceandfire.client.gui.GuiDragon;
+import com.github.alexthe666.iceandfire.client.gui.GuiHippogryph;
 import com.github.alexthe666.iceandfire.client.gui.GuiLectern;
 import com.github.alexthe666.iceandfire.client.gui.GuiPodium;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
+import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 import net.minecraft.entity.Entity;
@@ -51,6 +54,14 @@ public class GuiHandler implements IGuiHandler {
                     }
                 }
                 break;
+
+            case 4:
+                if (entity != null) {
+                    if (entity instanceof EntityHippogryph) {
+                        return new ContainerHippogryph((EntityHippogryph) entity, player);
+                    }
+                }
+                break;
         }
         return null;
 
@@ -90,6 +101,15 @@ public class GuiHandler implements IGuiHandler {
                 break;
             case 3:
                 return new GuiBestiary(player.getActiveItemStack());
+
+            case 4:
+                if (entity != null) {
+
+                    if (entity instanceof EntityHippogryph) {
+                        return new GuiHippogryph(player.inventory, (EntityHippogryph) entity);
+                    }
+                }
+                break;
         }
         return entity;
     }

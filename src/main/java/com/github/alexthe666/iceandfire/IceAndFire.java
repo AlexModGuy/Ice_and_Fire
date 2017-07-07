@@ -77,10 +77,10 @@ public class IceAndFire {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         TAB = new CreativeTab(MODID);
-        dragon = new DamageSource("hippogryph") {
+        dragon = new DamageSource("dragon") {
             @Override
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
-                String s = "death.attack.hippogryph";
+                String s = "death.attack.dragon";
                 String s1 = s + ".player_" + new Random().nextInt(2);
                 return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
             }

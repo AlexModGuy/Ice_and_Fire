@@ -45,16 +45,16 @@ public class ItemDragonArmor extends Item {
         String words;
         switch (stack.getMetadata()) {
             default:
-                words = "hippogryph.armor_head";
+                words = "dragon.armor_head";
                 break;
             case 1:
-                words = "hippogryph.armor_neck";
+                words = "dragon.armor_neck";
                 break;
             case 2:
-                words = "hippogryph.armor_body";
+                words = "dragon.armor_body";
                 break;
             case 3:
-                words = "hippogryph.armor_tail";
+                words = "dragon.armor_tail";
                 break;
         }
         tooltip.add(StatCollector.translateToLocal(words));

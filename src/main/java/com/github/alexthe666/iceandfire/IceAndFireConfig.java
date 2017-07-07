@@ -10,7 +10,7 @@ public class IceAndFireConfig {
     public boolean generateSilverOre = true;
     @ConfigEntry(category = "generation")
     public boolean generateSapphireOre = true;
-    @ConfigEntry(category = "generation", comment = "Generate hippogryph skeletons in hot biomes?")
+    @ConfigEntry(category = "generation", comment = "Generate dragon skeletons in hot biomes?")
     public boolean generateDragonSkeletons = true;
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
     public int generateDragonSkeletonChance = 150;
@@ -22,7 +22,7 @@ public class IceAndFireConfig {
     public boolean generateDragonRoosts = true;
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
     public int generateDragonRoostChance = 360;
-    @ConfigEntry(category = "generation", comment = "1 out of this number chance per block that gold will generate in hippogryph lairs.")
+    @ConfigEntry(category = "generation", comment = "1 out of this number chance per block that gold will generate in dragon lairs.")
     public int dragonDenGoldAmount = 1;
     @ConfigEntry(category = "generation")
     public boolean generateSnowVillages = true;
@@ -47,11 +47,11 @@ public class IceAndFireConfig {
     public int dragonGriefing = 0;
     @ConfigEntry(category = "dragons", comment = "Dragon Flap Noise Distance - Larger number, further away you can hear it")
     public int dragonFlapNoiseDistance = 4;
-    @ConfigEntry(category = "dragons", comment = "Dragon Flute Distance - how many chunks away is the hippogryph flute effective?")
+    @ConfigEntry(category = "dragons", comment = "Dragon Flute Distance - how many chunks away is the dragon flute effective?")
     public int dragonFluteDistance = 4;
-    @ConfigEntry(category = "dragons", comment = "Max hippogryph health. Health is scaled to this")
+    @ConfigEntry(category = "dragons", comment = "Max dragon health. Health is scaled to this")
     public int dragonHealth = 500;
-    @ConfigEntry(category = "dragons", comment = "Max hippogryph attack damage. Attack Damage is scaled to this")
+    @ConfigEntry(category = "dragons", comment = "Max dragon attack damage. Attack Damage is scaled to this")
     public int dragonAttackDamage = 17;
     @ConfigEntry(category = "dragons", comment = "How high dragons can fly, in Y height.")
     public int maxDragonFlight = 128;
