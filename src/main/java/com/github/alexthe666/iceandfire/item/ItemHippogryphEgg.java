@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,8 +18,8 @@ public class ItemHippogryphEgg extends Item {
 
     public ItemHippogryphEgg() {
         this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.hypogriff_egg");
-        this.setRegistryName(IceAndFire.MODID, "hypogriff_egg");
+        this.setUnlocalizedName("iceandfire.hippogryph_egg");
+        this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
         GameRegistry.register(this);
     }
 

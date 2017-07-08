@@ -158,7 +158,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.HindFootR.setRotationPoint(0.0F, 5.0F, 0.0F);
         this.HindFootR.addBox(-1.5F, 0.0F, -2.0F, 4, 3, 4, 0.0F);
         this.Body = new AdvancedModelRenderer(this, 0, 34);
-        this.Body.setRotationPoint(0.0F, 12.0F, 9.0F);
+        this.Body.setRotationPoint(0.0F, 12.0F, 4.0F);
         this.Body.addBox(-5.0F, -8.0F, -19.0F, 10, 10, 24, 0.0F);
         this.BeakTip = new AdvancedModelRenderer(this, 14, 81);
         this.BeakTip.setRotationPoint(0.0F, 0.6F, -2.7F);
@@ -490,7 +490,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.progressRotation(WingR, hippo.sitProgress, -0.22689280275926282F, -0.13962634015954636F, 0.45378560551852565F);
         this.progressRotation(Quill_R, hippo.sitProgress, -1.1838568316277536F, -0.17453292519943295F, 0.0F);
 
-
+        this.progressPosition(Body, hippo.flyProgress, 0.0F, 12.0F, 4.0F);
         this.progressRotation(HindThighR, hippo.flyProgress, 0.7853981633974483F, 0.0F, 0.0F);
         this.progressRotation(FrontLegL, hippo.flyProgress, -1.4102260356114182F, 0.0F, 0.0F);
         this.progressRotation(HindLegL, hippo.flyProgress, -0.17453292519943295F, 0.0F, 0.0F);
@@ -530,6 +530,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.progressRotation(FingerL1, hippo.flyProgress, 0.136659280431156F, 0.0F, 0.0F);
         this.progressRotation(FingerL2, hippo.flyProgress, 0.40980330836826856F, 0.0F, 0.0F);
 
+        this.progressPosition(Body, hippo.hoverProgress, 0.0F, 8.0F, 0.0F);
         this.progressRotation(HindThighR, hippo.hoverProgress, 0.7853981633974483F, 0.0F, 0.0F);
         this.progressRotation(FrontLegL, hippo.hoverProgress, -1.4102260356114182F, 0.0F, 0.0F);
         this.progressRotation(HindLegL, hippo.hoverProgress, -0.17453292519943295F, 0.0F, 0.0F);
@@ -596,7 +597,7 @@ public class ModelHippogryph extends ModelDragonBase {
             this.bob(FrontThighL, -speed_walk, degree_walk, false, f, f1);
             this.bob(HindThighR, -speed_walk, degree_walk, false, f, f1);
             this.bob(HindThighL, -speed_walk, degree_walk, false, f, f1);
-            this.chainWave(NECK, speed_walk * 1.5F, degree_walk * 0.15F, -2, f, f1);
+            this.chainWave(NECK, speed_walk, degree_walk * 0.15F, -2, f, f1);
             this.walk(FrontThighR, speed_walk, degree_walk * -0.75F, true, 0, 0F, f, f1);
             this.walk(FrontThighL, speed_walk, degree_walk * -0.75F, false, 0, 0F, f, f1);
             this.walk(FrontLegR, speed_walk, degree_walk * 0.5F, false, 0, 0F, f, f1);

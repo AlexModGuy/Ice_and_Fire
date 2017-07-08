@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire;
+package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.client.model.ModelBase;

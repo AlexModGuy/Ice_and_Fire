@@ -51,7 +51,7 @@ public class ItemDragonFlute extends Item {
                 }
             }
         }
-        worldIn.playSound(player, player.getPosition(), ModSounds.dragonflute, SoundCategory.NEUTRAL, 3, 0.75F);
+        worldIn.playSound(player, player.getPosition(), ModSounds.dragonflute, SoundCategory.NEUTRAL, 1, 1.75F);
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }

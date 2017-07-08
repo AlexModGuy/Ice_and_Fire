@@ -34,7 +34,6 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.setMutexBits(1);
         this.targetEntitySelector = new Predicate<EntityItem>() {
             @Override
             public boolean apply(@Nullable EntityItem item) {
@@ -48,20 +47,14 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
         if (!((EntityHippogryph) this.taskOwner).canMove()) {
             return false;
         }
+        List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
-        if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(10) != 0) {
+        if (list.isEmpty()) {
             return false;
         } else {
-
-            List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
-
-            if (list.isEmpty()) {
-                return false;
-            } else {
-                Collections.sort(list, this.theNearestAttackableTargetSorter);
-                this.targetEntity = list.get(0);
-                return true;
-            }
+            Collections.sort(list, this.theNearestAttackableTargetSorter);
+            this.targetEntity = list.get(0);
+            return true;
         }
     }
 
@@ -86,7 +79,12 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
             this.targetEntity.getItem().shrink(1);
             this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
-            if(!hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
+
+            if(this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() == Items.RABBIT || this.targetEntity.getItem().getItem() == Items.COOKED_RABBIT || this.targetEntity.getItem().getItem() == Items.RABBIT_FOOT){
+                hippo.heal(5);
+            }
+
+            if(this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() == Items.RABBIT_FOOT && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
                 EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                 hippo.setTamed(true);
                 hippo.setOwnerId(owner.getUniqueID());

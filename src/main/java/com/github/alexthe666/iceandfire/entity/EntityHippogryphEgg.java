@@ -37,23 +37,13 @@ public class EntityHippogryphEgg extends EntityEgg {
         }
 
         if (!this.world.isRemote) {
-            if (this.rand.nextInt(8) == 0) {
-                int i = 1;
-
-                if (this.rand.nextInt(32) == 0) {
-                    i = 4;
-                }
-
-                for (int j = 0; j < i; ++j) {
-                    EntityChicken entitychicken = new EntityChicken(this.world);
-                    entitychicken.setGrowingAge(-24000);
-                    entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                    this.world.spawnEntity(entitychicken);
-                }
-            }
-
-            this.world.setEntityState(this, (byte)3);
-            this.setDead();
+            EntityChicken entitychicken = new EntityChicken(this.world);
+            entitychicken.setGrowingAge(-24000);
+            entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            this.world.spawnEntity(entitychicken);
         }
+
+        this.world.setEntityState(this, (byte)3);
+        this.setDead();
     }
 }
