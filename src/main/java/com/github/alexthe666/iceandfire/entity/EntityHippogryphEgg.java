@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
@@ -18,8 +19,11 @@ public class EntityHippogryphEgg extends EntityEgg {
         super(world);
     }
 
-    public EntityHippogryphEgg(World world, EntityPlayer player) {
+    private ItemStack itemstack;
+
+    public EntityHippogryphEgg(World world, EntityPlayer player, ItemStack itemstack) {
         super(world, player);
+        this.itemstack = itemstack;
     }
 
     @SideOnly(Side.CLIENT)
@@ -37,10 +41,14 @@ public class EntityHippogryphEgg extends EntityEgg {
         }
 
         if (!this.world.isRemote) {
-            EntityChicken entitychicken = new EntityChicken(this.world);
-            entitychicken.setGrowingAge(-24000);
-            entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-            this.world.spawnEntity(entitychicken);
+            EntityHippogryph hippogryph = new EntityHippogryph(this.world);
+            hippogryph.setGrowingAge(-24000);
+            hippogryph.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            if(itemstack != null){
+                NBTTagCompound nbt = itemstack.getTagCompound();
+                hippogryph.setVariant(nbt.getInteger("Type"));
+            }
+            this.world.spawnEntity(hippogryph);
         }
 
         this.world.setEntityState(this, (byte)3);

@@ -37,7 +37,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
         this.targetEntitySelector = new Predicate<EntityItem>() {
             @Override
             public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && (item.getItem().getItem() == Items.COOKED_RABBIT || item.getItem().getItem() == Items.RABBIT || item.getItem().getItem() == Items.RABBIT_FOOT);
+                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Items.RABBIT_FOOT;
             }
         };
     }
@@ -79,12 +79,9 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
             this.targetEntity.getItem().shrink(1);
             this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
-
-            if(this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() == Items.RABBIT || this.targetEntity.getItem().getItem() == Items.COOKED_RABBIT || this.targetEntity.getItem().getItem() == Items.RABBIT_FOOT){
-                hippo.heal(5);
-            }
-
-            if(this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() == Items.RABBIT_FOOT && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
+            System.out.println(this.targetEntity.getThrower() + " vs " + this.targetEntity.getOwner());
+            System.out.println(this.targetEntity.getItem());
+            if(hippo.getRNG().nextInt(3) == 0 && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
                 EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                 hippo.setTamed(true);
                 hippo.setOwnerId(owner.getUniqueID());

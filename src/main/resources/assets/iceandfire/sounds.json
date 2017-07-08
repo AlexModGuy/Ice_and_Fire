@@ -1,4 +1,30 @@
 {
+  "hippogryph.idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippogryph_idle_0",
+      "iceandfire:hippogryph_idle_1",
+      "iceandfire:hippogryph_idle_2",
+      "iceandfire:hippogryph_idle_3",
+      "iceandfire:hippogryph_idle_4",
+      "iceandfire:hippogryph_idle_5"
+    ]
+  },
+  "hippogryph.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippogryph_hurt_0",
+      "iceandfire:hippogryph_hurt_1",
+      "iceandfire:hippogryph_hurt_2"
+    ]
+  },
+  "hippogryph.death": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippogryph_die_0",
+      "iceandfire:hippogryph_die_1"
+    ]
+  },
   "firedragon.child.idle": {
     "category": "neutral",
     "sounds": [

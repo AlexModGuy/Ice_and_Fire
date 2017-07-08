@@ -16,10 +16,12 @@ public class ContainerHippogryph extends Container
 {
     private final IInventory hippogryphInventory;
     private final EntityHippogryph hippogryph;
+    private final EntityPlayer player;
 
     public ContainerHippogryph(final EntityHippogryph hippogryph, EntityPlayer player) {
         this.hippogryphInventory = hippogryph.hippogryphInventory;
         this.hippogryph = hippogryph;
+        this.player = player;
         int i = 3;
         hippogryphInventory.openInventory(player);
         int j = -18;
@@ -37,7 +39,9 @@ public class ContainerHippogryph extends Container
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
             }
-
+            public void onSlotChanged() {
+                ContainerHippogryph.this.hippogryph.refreshInventory();
+            }
             @SideOnly(Side.CLIENT)
             public boolean isEnabled() {
                 return true;
@@ -59,11 +63,14 @@ public class ContainerHippogryph extends Container
             }
         });
 
-        if (hippogryph.isChested()) {
-            for (int k = 0; k < 3; ++k) {
-                for (int l = 0; l < 5; ++l) {
-                    this.addSlotToContainer(new Slot(hippogryphInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18));
-                }
+        for (int k = 0; k < 3; ++k) {
+            for (int l = 0; l < 5; ++l) {
+                this.addSlotToContainer(new Slot(hippogryphInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
+                    @SideOnly(Side.CLIENT)
+                    public boolean isEnabled() {
+                        return ContainerHippogryph.this.hippogryph.isChested();
+                    }
+                });
             }
         }
 

@@ -2,8 +2,13 @@ package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+
+import java.util.List;
 
 public class ModEntities {
 
@@ -29,5 +34,18 @@ public class ModEntities {
         registerUnspawnable(EntityHippogryphEgg.class, "hippogryphegg", 11);
         registerSpawnable(EntityHippogryph.class, "hippogryph", 12, 0XD8D8D8, 0XD1B55D);
 
+        if(IceAndFire.CONFIG.spawnHippogryphs) {
+            for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
+                if (!type.developer) {
+                    for (int i = 0; i < type.spawnBiomes.length; i++) {
+                        Biome biome = Biome.getBiome(type.spawnBiomes[i]);
+                        if (biome != null) {
+                            List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
+                            spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, 100, 1, 2));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

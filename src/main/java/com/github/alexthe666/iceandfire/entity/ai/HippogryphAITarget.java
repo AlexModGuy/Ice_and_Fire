@@ -11,7 +11,7 @@ public class HippogryphAITarget<T extends EntityLivingBase> extends EntityAINear
     private EntityHippogryph hippogryph;
 
     public HippogryphAITarget(EntityHippogryph entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
-        super(entityIn, classTarget, 0, checkSight, false, targetSelector);
+        super(entityIn, classTarget, 20, checkSight, false, targetSelector);
         this.hippogryph = entityIn;
     }
 

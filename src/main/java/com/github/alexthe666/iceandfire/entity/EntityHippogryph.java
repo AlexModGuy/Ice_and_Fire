@@ -3,10 +3,8 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAIAirTarget;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAIWander;
+import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
@@ -35,15 +33,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,8 +50,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class EntityHippogryph extends EntityTameable implements IAnimatedEntity {
+public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippogryph.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.<Boolean>createKey(EntityHippogryph.class, DataSerializers.BOOLEAN);
@@ -82,6 +81,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     private int flyTicks;
     private int hoverTicks;
     public BlockPos airTarget;
+    private boolean hasChestVarChanged = false;
+    public int airBorneCounter;
 
     public EntityHippogryph(World worldIn) {
         super(worldIn);
@@ -94,6 +95,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             roll_buffer = new RollBuffer();
         }
         this.setSize(1.7F, 1.6F);
+        this.stepHeight = 1;
     }
 
     @Override
@@ -101,7 +103,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, true));
-        this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
+        this.tasks.addTask(4, new HippogryphAIMate(this, 1.0D));
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
         this.tasks.addTask(6, new HippogryphAIAirTarget(this));
@@ -196,11 +198,59 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         return 0;
     }
 
+    public boolean isBlinking() {
+        return this.ticksExisted % 50 > 43;
+    }
+
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
+        String s = TextFormatting.getTextWithoutFormattingCodes(player.getName());
+        boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
         if(this.isTamed() && this.isOwner(player)){
+            if(itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getGrowingAge() == 0 && !isInLove()){
+                this.setSitting(false);
+                this.setInLove(player);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                if(!player.isCreative()) {
+                    itemstack.shrink(1);
+                }
+                return true;
+            }
             if(itemstack != null && itemstack.getItem() == Items.STICK){
                 this.setSitting(!this.isSitting());
+                return true;
+            }
+            if(itemstack != null && itemstack.getItem() == Items.SPECKLED_MELON && this.getEnumVariant() != EnumHippogryphTypes.DODO){
+                this.setEnumVariant(EnumHippogryphTypes.DODO);
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                for(int i = 0; i < 20; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
+                return true;
+            }
+            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 1 && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev){
+                this.setEnumVariant(EnumHippogryphTypes.ALEX);
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                for(int i = 0; i < 20; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
+                return true;
+            }
+            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 7&& this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev){
+                this.setEnumVariant(EnumHippogryphTypes.RAPTOR);
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                for(int i = 0; i < 20; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
                 return true;
             }
             if(itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood)itemstack.getItem()).isWolfsFavoriteMeat()){
@@ -209,25 +259,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
                 for(int i = 0; i < 3; i++) {
                     this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
                 }
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
                 return true;
             }
             if(player.isSneaking()){
-                if(itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.isChested()){
-                    if(!player.isCreative() && this.hippogryphInventory.getStackInSlot(1).getItem() == null){
-                        this.replaceItemInInventory(1, itemstack);
-                        itemstack.shrink(1);
-                    }
-                    this.setChested(true);
-                    return true;
-                }
-                if(itemstack != null && this.getIntFromArmor(itemstack) != 0 && this.getArmor() == 0){
-                    if(!player.isCreative() && this.hippogryphInventory.getStackInSlot(2).getItem() == null){
-                        this.replaceItemInInventory(2, itemstack);
-                        itemstack.shrink(1);
-                    }
-                    this.setArmor(this.getIntFromArmor(itemstack));
-                    return true;
-                }
                 this.openGUI(player);
                 return true;
             }else if(this.isSaddled()){
@@ -390,6 +427,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
 
     public void setChested(boolean chested) {
         this.dataManager.set(CHESTED, chested);
+        this.hasChestVarChanged = true;
     }
 
     public boolean isSitting() {
@@ -469,7 +507,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.setEnumVariant(EnumHippogryphTypes.getRandomType());
+        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.getPosition())));
         return livingdata;
     }
 
@@ -521,6 +559,21 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             this.setAnimation(ANIMATION_SPEAK);
         }
         super.playHurtSound(source);
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.hippogryph_idle;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound() {
+        return ModSounds.hippogryph_hurt;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.hippogryph_die;
     }
 
     @Override
@@ -643,6 +696,23 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
+        if(!this.onGround){
+            airBorneCounter++;
+        }else{
+            airBorneCounter = 0;
+        }
+        if(hasChestVarChanged && hippogryphInventory != null && !this.isChested()){
+            for(int i = 3; i < 18; i++){
+                if(!hippogryphInventory.getStackInSlot(i).isEmpty()){
+                    if(!world.isRemote){
+                        this.entityDropItem(hippogryphInventory.getStackInSlot(i), 1);
+                    }
+                    hippogryphInventory.removeStackFromSlot(i);
+                }
+            }
+            hasChestVarChanged = false;
+        }
         if(!this.onGround  && this.airTarget != null){
             this.setFlying(true);
         }
@@ -661,7 +731,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
 
         }
         if (this.getControllingPassenger() != null) {
-            if (motionY > 0.5) {
+            if (motionY > 0.5 && (this.isFlying() || this.isHovering())) {
                 this.motionY = 0.5;
             }
             if (motionY < -0.5) {
@@ -693,7 +763,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         } else if (!hovering && hoverProgress > 0.0F) {
             hoverProgress -= 0.5F;
         }
-        boolean flying = this.isFlying();
+        boolean flying = this.isFlying() || !this.isHovering() && airBorneCounter > 50;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
@@ -785,8 +855,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             this.updateClientControls();
         }
         if (this.up()) {
-            if(this.onGround){
-                this.jump();
+            if(this.airBorneCounter == 0){
+                this.motionY += 1;
             }
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
@@ -848,7 +918,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
     }
 
     public void flyAround() {
-        if (airTarget != null) {
+        if (airTarget != null && this.isFlying()) {
             if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
                 airTarget = null;
             }
@@ -927,7 +997,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
         }
     }
 
-    private void refreshInventory() {
+    public void refreshInventory() {
         ItemStack saddle = this.hippogryphInventory.getStackInSlot(0);
         ItemStack chest = this.hippogryphInventory.getStackInSlot(1);
         this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
@@ -938,6 +1008,23 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity 
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(this.hippogryphInventory.getStackInSlot(2))));
         }
+    }
+
+    @Override
+    public void onHearFlute(EntityPlayer player) {
+        System.out.println("flute ");
+        if(this.isTamed() && this.isOwner(player)) {
+            if (this.isFlying() || this.isHovering()) {
+                this.airTarget = null;
+                this.setFlying(false);
+                this.setHovering(false);
+            }
+        }
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 
     public class HippogryphInventory extends ContainerHorseChest {

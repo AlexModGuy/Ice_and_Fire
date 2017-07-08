@@ -26,7 +26,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityHippogryph entity) {
-        return new ResourceLocation("iceandfire:textures/models/hippogryph/" + entity.getEnumVariant().name().toLowerCase() + ".png");
+        return new ResourceLocation("iceandfire:textures/models/hippogryph/" + entity.getEnumVariant().name().toLowerCase() + (entity.isBlinking() ? "_blink" : "") + ".png");
     }
 
     @SideOnly(Side.CLIENT)

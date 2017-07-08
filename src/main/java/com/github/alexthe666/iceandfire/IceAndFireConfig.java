@@ -58,22 +58,24 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "dragons", comment = "How far away dragons will detect gold blocks being destroyed or chests being opened.")
     public int dragonGoldSearchLength = 17;
 
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for black hippogryphs to spawn in.")
-    public Biome[] hippogryphBlackBiomes = new Biome[]{Biomes.DESERT_HILLS};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for brown hippogryphs to spawn in.")
-    public Biome[] hippogryphBrownBiomes = new Biome[]{Biomes.EXTREME_HILLS};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for chestnut hippogryphs to spawn in.")
-    public Biome[] hippogryphChestnutBiomes = new Biome[]{Biomes.BIRCH_FOREST_HILLS};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for creamy hippogryphs to spawn in.")
-    public Biome[] hippogryphCreamyBiomes = new Biome[]{Biomes.SAVANNA_PLATEAU};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for dark brown hippogryphs to spawn in.")
-    public Biome[] hippogryphDarkBrownBiomes = new Biome[]{Biomes.TAIGA_HILLS};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for gray hippogryphs to spawn in.")
-    public Biome[] hippogryphGrayBiomes = new Biome[]{Biomes.MUTATED_ROOFED_FOREST};
-    @ConfigEntry(category = "hippogryphs", comment = "List of biomes for white hippogryphs to spawn in.")
-    public Biome[] hippogryphWhiteBiomes = new Biome[]{Biomes.ICE_MOUNTAINS};
+    @ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
+    public boolean spawnHippogryphs = true;
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for black hippogryphs to spawn in.")
+    public int[] hippogryphBlackBiomes = new int[]{Biome.getIdForBiome(Biomes.DESERT_HILLS)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for brown hippogryphs to spawn in.")
+    public int[] hippogryphBrownBiomes = new int[]{Biome.getIdForBiome(Biomes.EXTREME_HILLS)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for chestnut hippogryphs to spawn in.")
+    public int[] hippogryphChestnutBiomes = new int[]{Biome.getIdForBiome(Biomes.BIRCH_FOREST_HILLS)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for creamy hippogryphs to spawn in.")
+    public int[] hippogryphCreamyBiomes = new int[]{Biome.getIdForBiome(Biomes.SAVANNA_PLATEAU)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for dark brown hippogryphs to spawn in.")
+    public int[] hippogryphDarkBrownBiomes = new int[]{Biome.getIdForBiome(Biomes.TAIGA_HILLS)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for gray hippogryphs to spawn in.")
+    public int[] hippogryphGrayBiomes = new int[]{Biome.getIdForBiome(Biomes.MUTATED_ROOFED_FOREST)};
+    @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for white hippogryphs to spawn in.")
+    public int[] hippogryphWhiteBiomes = new int[]{Biome.getIdForBiome(Biomes.ICE_MOUNTAINS)};
 
-    @ConfigEntry(category = "compatability", comment = "Triggers option below")
+    @ConfigEntry(category = "compatability", comment = "Triggers option above")
     public boolean useAetherCompat = false;
     @ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
     public int aetherDimensionID = 3;

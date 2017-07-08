@@ -52,7 +52,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1250;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -1243,7 +1243,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (world.isRemote) {//TODO
+        if (world.isRemote) {
             this.updateClientControls();
         }
         if (this.isModelDead()) {
@@ -1668,4 +1668,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
     }
 
+    @Override
+    public void onHearFlute(EntityPlayer player) {
+        if(this.isTamed() && this.isOwner(player)) {
+            if (this.isFlying() || this.isHovering()) {
+                this.setFlying(false);
+                this.setHovering(false);
+            }
+        }
+    }
 }

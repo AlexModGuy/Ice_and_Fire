@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.IDragonFlute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -32,24 +32,26 @@ public class ItemDragonFlute extends Item {
         float chunksize = 16 * IceAndFire.CONFIG.dragonFluteDistance;
         List<Entity> list = worldIn.<Entity>getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(chunksize, 256, chunksize));
         Collections.sort(list, new Sorter(player));
-        List<EntityDragonBase> dragons = new ArrayList<EntityDragonBase>();
+        List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();
         Iterator<Entity> itr_entities = list.iterator();
         while (itr_entities.hasNext()) {
             Entity entity = itr_entities.next();
-            if(entity instanceof EntityDragonBase){
-                dragons.add((EntityDragonBase)entity);
+            if(entity instanceof IDragonFlute){
+                dragons.add((IDragonFlute)entity);
             }
         }
 
-        Iterator<EntityDragonBase> itr_dragons = dragons.iterator();
+        Iterator<IDragonFlute> itr_dragons = dragons.iterator();
         while (itr_dragons.hasNext()) {
-            EntityDragonBase dragon = itr_dragons.next();
+            IDragonFlute dragon = itr_dragons.next();
+            dragon.onHearFlute(player);
+            /*
             if(dragon.isTamed() && dragon.isOwner(player)) {
                 if (dragon.isFlying() || dragon.isHovering()) {
                     dragon.setFlying(false);
                     dragon.setHovering(false);
                 }
-            }
+            }*/
         }
         worldIn.playSound(player, player.getPosition(), ModSounds.dragonflute, SoundCategory.NEUTRAL, 1, 1.75F);
 
