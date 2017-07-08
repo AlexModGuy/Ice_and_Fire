@@ -33,6 +33,7 @@ public class ContainerHippogryph extends Container
                 return true;
             }
         });
+        this.addSlotToContainer(new Slot(hippogryphInventory, 1, 8, 36) {
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
             }
@@ -42,6 +43,7 @@ public class ContainerHippogryph extends Container
                 return true;
             }
         });
+        this.addSlotToContainer(new Slot(hippogryphInventory, 2, 8, 52) {
 
             public boolean isItemValid(ItemStack stack) {
                 return hippogryph.getIntFromArmor(stack) != 0;
