@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -21,6 +22,10 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
         this.layerRenderers.add(new LayerHippogriffChest(this));
         this.layerRenderers.add(new LayerHippogriffArmor(this));
 
+    }
+
+    protected void preRenderCallback(EntityHippogryph entity, float partialTickTime) {
+        GL11.glScalef(1.2F, 1.2F, 1.2F);
     }
 
     @Nullable

@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -117,7 +118,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(5, new HippogryphAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase;
+                return entity instanceof EntityLivingBase && !(entity instanceof EntityHorse);
             }
         }));
 

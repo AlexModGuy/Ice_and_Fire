@@ -20,6 +20,7 @@ public class ModelHippogryph extends ModelDragonBase {
     public AdvancedModelRenderer Saddle;
     public AdvancedModelRenderer Neck2;
     public AdvancedModelRenderer Head;
+    public AdvancedModelRenderer HeadPivot;
     public AdvancedModelRenderer Jaw;
     public AdvancedModelRenderer Beak;
     public AdvancedModelRenderer Quill_R;
@@ -65,10 +66,12 @@ public class ModelHippogryph extends ModelDragonBase {
     public ModelHippogryph() {
         this.textureWidth = 128;
         this.textureHeight = 128;
+        this.HeadPivot = new AdvancedModelRenderer(this, 0, 0);
+        this.HeadPivot.setRotationPoint(0.0F, -4.6F, 2.2F);
+        this.HeadPivot.addBox(0, 0, 0, 0, 0, 0, 0.0F);
+        this.setRotateAngle(HeadPivot, -0.136659280431156F, 0.0F, 0.0F);
         this.Head = new AdvancedModelRenderer(this, 0, 68);
-        this.Head.setRotationPoint(0.0F, -4.6F, 2.2F);
         this.Head.addBox(-2.5F, -3.7F, -5.7F, 5, 6, 7, 0.0F);
-        this.setRotateAngle(Head, -0.136659280431156F, 0.0F, 0.0F);
         this.HindThighL = new AdvancedModelRenderer(this, 96, 29);
         this.HindThighL.mirror = true;
         this.HindThighL.setRotationPoint(4.0F, -2.0F, 2.0F);
@@ -84,7 +87,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.setRotateAngle(FingerR4, 0.12217304763960307F, 0.0F, 0.0F);
         this.Neck2 = new AdvancedModelRenderer(this, 1, 13);
         this.Neck2.setRotationPoint(0.0F, -8.7F, 0.0F);
-        this.Neck2.addBox(-2.02F, -7.0F, -1.9F, 4, 8, 7, 0.0F);
+        this.Neck2.addBox(-2.02F, -7.0F, -2F, 4, 8, 7, 0.0F);
         this.setRotateAngle(Neck2, -0.40980330836826856F, 0.0F, 0.0F);
         this.Crest = new AdvancedModelRenderer(this, 29, 76);
         this.Crest.setRotationPoint(0.0F, -3.3F, 1.1F);
@@ -132,7 +135,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.FingerL1.setRotationPoint(-0.1F, 11.1F, 0.1F);
         this.FingerL1.addBox(-0.3F, -0.1F, -5.0F, 1, 15, 4, 0.0F);
         this.Neck = new AdvancedModelRenderer(this, 1, 19);
-        this.Neck.setRotationPoint(0.0F, -2.1F, -16.2F);
+        this.Neck.setRotationPoint(0.0F, -2F, -16.2F);
         this.Neck.addBox(-2.0F, -8.8F, -2.0F, 4, 9, 7, 0.0F);
         this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
         this.FingerL2 = new AdvancedModelRenderer(this, 50, 80);
@@ -260,7 +263,8 @@ public class ModelHippogryph extends ModelDragonBase {
         this.FingerR2.setRotationPoint(0.1F, 11.1F, 0.1F);
         this.FingerR2.addBox(-0.2F, -0.1F, -2.9F, 1, 15, 4, 0.0F);
         this.setRotateAngle(FingerR2, 0.13962634015954636F, 0.0F, 0.0F);
-        this.Neck2.addChild(this.Head);
+        this.Neck2.addChild(this.HeadPivot);
+        this.HeadPivot.addChild(this.Head);
         this.Body.addChild(this.HindThighL);
         this.WingR2.addChild(this.WingR3);
         this.WingR3.addChild(this.FingerR4);
@@ -313,6 +317,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.WingR3.addChild(this.FingerR2);
         animator = ModelAnimator.create();
         this.Beak2.setScale(0.99F, 0.99F, 0.99F);
+        this.Neck2.setScale(0.99F, 0.99F, 0.99F);
         this.updateDefaultPose();
     }
 
@@ -339,7 +344,7 @@ public class ModelHippogryph extends ModelDragonBase {
         animator.update(entity);
         animator.setAnimation(EntityHippogryph.ANIMATION_SPEAK);
         animator.startKeyframe(10);
-        this.rotate(animator, Head, -10, 0, 0);
+        this.rotate(animator, HeadPivot, -10, 0, 0);
         this.rotate(animator, Jaw, 20, 0, 0);
         animator.endKeyframe();
         animator.resetKeyframe(5);
@@ -349,7 +354,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, Body, 10, 0, 0);
         this.rotate(animator, Neck, 45, 0, 0);
         this.rotate(animator, Neck2, 35, 0, 0);
-        this.rotate(animator, Head, -50, 0, 0);
+        this.rotate(animator, HeadPivot, -50, 0, 0);
         this.rotate(animator, HindThighR, -10, 0, 0);
         this.rotate(animator, HindThighL, -10, 0, 0);
         this.rotate(animator, FrontThighR, -10, 0, 0);
@@ -362,7 +367,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, Body, 10, 0, 0);
         this.rotate(animator, Neck, 45, 0, 0);
         this.rotate(animator, Neck2, 35, 0, 0);
-        this.rotate(animator, Head, -50, 0, 0);
+        this.rotate(animator, HeadPivot, -50, 0, 0);
         this.rotate(animator, HindThighR, -10, 0, 0);
         this.rotate(animator, HindThighL, -10, 0, 0);
         this.rotate(animator, FrontThighR, -10, 0, 0);
@@ -375,7 +380,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, Body, 10, 0, 0);
         this.rotate(animator, Neck, 45, 0, 0);
         this.rotate(animator, Neck2, 35, 0, 0);
-        this.rotate(animator, Head, -50, 0, 0);
+        this.rotate(animator, HeadPivot, -50, 0, 0);
         this.rotate(animator, HindThighR, -10, 0, 0);
         this.rotate(animator, HindThighL, -10, 0, 0);
         this.rotate(animator, FrontThighR, -10, 0, 0);
@@ -389,20 +394,20 @@ public class ModelHippogryph extends ModelDragonBase {
         animator.startKeyframe(10);
         this.rotate(animator, Neck, -15, 0, 0);
         this.rotate(animator, Neck2, -15, 0, 0);
-        this.rotate(animator, Head, 23, 0, 0);
-        animator.move(Head, 0, -3F, -0.5F);
+        this.rotate(animator, HeadPivot, 23, 0, 0);
+        animator.move(HeadPivot, 0, -3F, -0.5F);
         this.rotate(animator, Jaw, 20, 0, 0);
         animator.endKeyframe();
         animator.startKeyframe(5);
         this.rotate(animator, Neck, 35, 0, 0);
         this.rotate(animator, Neck2, 10, 0, 0);
-        this.rotate(animator, Head, -55, 0, 0);
+        this.rotate(animator, HeadPivot, -55, 0, 0);
         this.rotate(animator, Jaw, 45, 0, 0);
         animator.endKeyframe();
         animator.startKeyframe(5);
         this.rotate(animator, Neck, 35, 0, 0);
         this.rotate(animator, Neck2, 10, 0, 0);
-        this.rotate(animator, Head, -75, 0, 0);
+        this.rotate(animator, HeadPivot, -75, 0, 0);
         this.rotate(animator, Jaw, 5, 0, 0);
         animator.endKeyframe();
         animator.resetKeyframe(5);
@@ -413,7 +418,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, HindThighL, 35, 0, 0);
         this.rotate(animator, Neck, 10, 0, 0);
         this.rotate(animator, Neck2, 20, 0, 0);
-        this.rotate(animator, Head, 5, 0, 0);
+        this.rotate(animator, HeadPivot, 5, 0, 0);
         this.rotate(animator, FrontThighR, -50, 0, 0);
         this.rotate(animator, FrontThighL, 50, 0, 0);
         this.rotate(animator, FrontFootR, 110, 0, 0);
@@ -427,7 +432,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, HindThighL, 35, 0, 0);
         this.rotate(animator, Neck, 10, 0, 0);
         this.rotate(animator, Neck2, 20, 0, 0);
-        this.rotate(animator, Head, 5, 0, 0);
+        this.rotate(animator, HeadPivot, 5, 0, 0);
         this.rotate(animator, FrontThighR, 50, 0, 0);
         this.rotate(animator, FrontThighL, -50, 0, 0);
         this.rotate(animator, FrontFootR, 110, 0, 0);
@@ -441,7 +446,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, HindThighL, 35, 0, 0);
         this.rotate(animator, Neck, 10, 0, 0);
         this.rotate(animator, Neck2, 20, 0, 0);
-        this.rotate(animator, Head, 5, 0, 0);
+        this.rotate(animator, HeadPivot, 5, 0, 0);
         this.rotate(animator, FrontThighR, -50, 0, 0);
         this.rotate(animator, FrontThighL, 50, 0, 0);
         this.rotate(animator, FrontFootR, 110, 0, 0);
@@ -455,7 +460,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.rotate(animator, HindThighL, 35, 0, 0);
         this.rotate(animator, Neck, 10, 0, 0);
         this.rotate(animator, Neck2, 20, 0, 0);
-        this.rotate(animator, Head, 5, 0, 0);
+        this.rotate(animator, HeadPivot, 5, 0, 0);
         this.rotate(animator, FrontThighR, 50, 0, 0);
         this.rotate(animator, FrontThighL, -50, 0, 0);
         this.rotate(animator, FrontFootR, 110, 0, 0);
@@ -469,6 +474,7 @@ public class ModelHippogryph extends ModelDragonBase {
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         EntityHippogryph hippo = (EntityHippogryph) entity;
+
         if(this.isChild){
             this.progressPosition(Body, hippo.sitProgress, 0, 16, 0);
         }else{
@@ -485,7 +491,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.progressRotation(HindLegL, hippo.sitProgress, 1.5707963267948966F, 0.0F, 0.0F);
         this.progressRotation(ReinL, hippo.sitProgress, -0.04363323129985824F, 0.0F, 0.0F);
         this.progressRotation(Tail3, hippo.sitProgress, -0.3490658503988659F, 0.0F, 0.0F);
-        this.progressRotation(Head, hippo.sitProgress, -0.136659280431156F, 0.0F, 0.0F);
+        this.progressRotation(HeadPivot, hippo.sitProgress, -0.136659280431156F, 0.0F, 0.0F);
         this.progressRotation(ReinR, hippo.sitProgress, -0.04363323129985824F, 0.0F, 0.0F);
         this.progressRotation(FingerL3, hippo.sitProgress, 0.03490658503988659F, 0.0F, 0.0F);
         this.progressRotation(FingerR3, hippo.sitProgress, 0.03490658503988659F, 0.0F, 0.0F);
@@ -535,7 +541,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.progressRotation(FingerR1, hippo.flyProgress, 0.136659280431156F, 0.0F, 0.0F);
         this.progressRotation(HindLegR, hippo.flyProgress, -0.17453292519943295F, 0.0F, 0.0F);
         this.progressRotation(ChestL, hippo.flyProgress, 0.0F, 1.5707963267948966F, 0.0F);
-        this.progressRotation(Head, hippo.flyProgress, -0.4553564018453205F, 0.0F, 0.0F);
+        this.progressRotation(HeadPivot, hippo.flyProgress, -0.4553564018453205F, 0.0F, 0.0F);
         this.progressRotation(FrontFootR, hippo.flyProgress, 2.408554367752175F, 0.0F, 0.0F);
         this.progressRotation(FingerL3, hippo.flyProgress, 0.6829473363053812F, 0.0F, 0.0F);
         this.progressRotation(FingerL4, hippo.flyProgress, 0.8651597102135892F, 0.0F, 0.0F);
@@ -575,7 +581,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.progressRotation(FingerR1, hippo.hoverProgress, 0.136659280431156F, 0.0F, 0.0F);
         this.progressRotation(HindLegR, hippo.hoverProgress, -0.17453292519943295F, 0.0F, 0.0F);
         this.progressRotation(ChestL, hippo.hoverProgress, 0.0F, 1.5707963267948966F, 0.0F);
-        this.progressRotation(Head, hippo.hoverProgress, -0.4553564018453205F, 0.0F, 0.0F);
+        this.progressRotation(HeadPivot, hippo.hoverProgress, -0.4553564018453205F, 0.0F, 0.0F);
         this.progressRotation(FrontFootR, hippo.hoverProgress, 2.408554367752175F, 0.0F, 0.0F);
         this.progressRotation(FingerL3, hippo.hoverProgress, 0.6829473363053812F, 0.0F, 0.0F);
         this.progressRotation(FingerL4, hippo.hoverProgress, 0.8651597102135892F, 0.0F, 0.0F);
@@ -608,6 +614,7 @@ public class ModelHippogryph extends ModelDragonBase {
             this.flap(WingL2, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
             this.flap(WingR2, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
         }else{
+            this.faceTarget(f3, f4, 3, NECK);
             this.bob(Body, speed_walk, degree_walk, false, f, f1);
             this.bob(FrontThighR, -speed_walk, degree_walk, false, f, f1);
             this.bob(FrontThighL, -speed_walk, degree_walk, false, f, f1);

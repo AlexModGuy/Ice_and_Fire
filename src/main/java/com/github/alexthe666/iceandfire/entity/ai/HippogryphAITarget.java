@@ -17,6 +17,9 @@ public class HippogryphAITarget<T extends EntityLivingBase> extends EntityAINear
 
     @Override
     public boolean shouldExecute() {
+        if(this.taskOwner.getRNG().nextInt(20) != 0) {
+            return false;
+        }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.hippogryph.getClass())) {
             if (this.hippogryph.width >= this.targetEntity.width) {
                 if(this.targetEntity instanceof EntityPlayer && !hippogryph.isOwner(this.targetEntity)){
