@@ -18,7 +18,7 @@
       "iceandfire:hippogryph_hurt_2"
     ]
   },
-  "hippogryph.death": {
+  "hippogryph.die": {
     "category": "neutral",
     "sounds": [
       "iceandfire:hippogryph_die_0",

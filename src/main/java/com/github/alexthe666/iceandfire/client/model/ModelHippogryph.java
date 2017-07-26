@@ -87,7 +87,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.setRotateAngle(FingerR4, 0.12217304763960307F, 0.0F, 0.0F);
         this.Neck2 = new AdvancedModelRenderer(this, 1, 13);
         this.Neck2.setRotationPoint(0.0F, -8.7F, 0.0F);
-        this.Neck2.addBox(-2.02F, -7.0F, -2F, 4, 8, 7, 0.0F);
+        this.Neck2.addBox(-2.0F, -7.0F, -2F, 4, 8, 7, 0.0F);
         this.setRotateAngle(Neck2, -0.40980330836826856F, 0.0F, 0.0F);
         this.Crest = new AdvancedModelRenderer(this, 29, 76);
         this.Crest.setRotationPoint(0.0F, -3.3F, 1.1F);
@@ -174,7 +174,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.setRotateAngle(Quill_L, -1.1838568316277536F, 0.17453292519943295F, 0.0F);
         this.Beak2 = new AdvancedModelRenderer(this, 0, 84);
         this.Beak2.setRotationPoint(0.0F, 0.1F, 0.0F);
-        this.Beak2.addBox(-1.99F, -3.2F, -4.0F, 4, 4, 5, 0.0F);
+        this.Beak2.addBox(-2F, -3.2F, -4.0F, 4, 4, 5, 0.0F);
         this.FrontFootL = new AdvancedModelRenderer(this, 59, 51);
         this.FrontFootL.mirror = true;
         this.FrontFootL.setRotationPoint(0.0F, 5.4F, -0.5F);
@@ -317,7 +317,7 @@ public class ModelHippogryph extends ModelDragonBase {
         this.WingR3.addChild(this.FingerR2);
         animator = ModelAnimator.create();
         this.Beak2.setScale(0.99F, 0.99F, 0.99F);
-        this.Neck2.setScale(0.99F, 0.99F, 0.99F);
+        this.Neck2.setScale(1.01F, 1.01F, 1.01F);
         this.updateDefaultPose();
     }
 

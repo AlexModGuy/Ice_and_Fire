@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.block.*;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
 
@@ -61,6 +64,8 @@ public class ModBlocks {
         dragon_ice = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "iceandfire.dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
         dragon_ice_spikes = new BlockIceSpikes();
         eggInIce = new BlockEggInIce();
+        GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
+        GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
     }
 
 }

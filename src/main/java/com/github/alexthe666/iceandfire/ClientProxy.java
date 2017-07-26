@@ -7,15 +7,14 @@ import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
+import com.github.alexthe666.iceandfire.client.render.tile.RenderGorgonHead;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
+import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import net.minecraft.client.Minecraft;
@@ -30,6 +29,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -45,8 +45,13 @@ public class ClientProxy extends CommonProxy {
         ModKeys.init();
         MinecraftForge.EVENT_BUS.register(new RenderModCapes());
         MinecraftForge.EVENT_BUS.register(new EventNewMenu());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHead.class, new RenderGorgonHead(false));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHeadActive.class, new RenderGorgonHead(true));
+        ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 0, TileEntityDummyGorgonHead.class);
+        ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 1, TileEntityDummyGorgonHeadActive.class);
         renderItems();
         renderEntities();
+
     }
 
     private void renderEntities() {
@@ -62,6 +67,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySnowVillager.class, new RenderSnowVillager(Minecraft.getMinecraft().getRenderManager()));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippogryphEgg.class,  new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.hippogryph_egg, Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippogryph.class, new RenderHippogryph(Minecraft.getMinecraft().getRenderManager(), new ModelHippogryph()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityStoneStatue.class, new RenderStoneStatue(Minecraft.getMinecraft().getRenderManager()));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
@@ -183,7 +189,8 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(ModItems.iron_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:iron_hippogryph_armor", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.gold_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:gold_hippogryph_armor", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.diamond_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:diamond_hippogryph_armor", "inventory"));
-
+        renderItem.getItemModelMesher().register(ModItems.gorgon_head, 0, new ModelResourceLocation("iceandfire:gorgon_head", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.gorgon_head, 1, new ModelResourceLocation("iceandfire:gorgon_head", "inventory"));
     }
 
     @Override
