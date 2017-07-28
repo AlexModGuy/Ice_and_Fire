@@ -30,7 +30,7 @@ public class RenderStoneStatue extends Render<EntityStoneStatue> {
                 if(renderLiving.getMainModel() != null) {
                     GL11.glTranslated(x, y, z);
                     GL11.glRotatef(entity.rotationYaw, 0, 1, 0);
-                    renderLiving.getMainModel().swingProgress = entity.getSwingProgress(partialTicks);
+                    renderLiving.getMainModel().swingProgress = entity.getSwingProgress(1);
                     renderLiving.prepareScale((EntityLiving)entity.getModel(), 0);
                     renderLiving.getMainModel().render(entity.getModel(), 0, 0, 0, 0, 0, 0.0625F);
                 }

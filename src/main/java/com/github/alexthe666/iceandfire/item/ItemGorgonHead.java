@@ -73,9 +73,8 @@ public class ItemGorgonHead extends Item {
                     target = (EntityLiving)entity1;
                 }
             }
-            System.out.println(target);
 
-            if(result != null && target != null && target instanceof EntityLiving){
+            if(result != null && target != null && target instanceof EntityLiving && !(target instanceof EntityStoneStatue)){
                 Random rand = new Random();
                     EntityStoneStatue stoneStatue = new EntityStoneStatue(worldIn, target);
                     for(int i = 0; i < 8; i++){
