@@ -16,6 +16,7 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -44,6 +45,7 @@ public class ClientProxy extends CommonProxy {
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
         ModKeys.init();
         MinecraftForge.EVENT_BUS.register(new RenderModCapes());
+        MinecraftForge.EVENT_BUS.register(new EventClient());
         MinecraftForge.EVENT_BUS.register(new EventNewMenu());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHead.class, new RenderGorgonHead(false));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHeadActive.class, new RenderGorgonHead(true));
@@ -51,6 +53,7 @@ public class ClientProxy extends CommonProxy {
         ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 1, TileEntityDummyGorgonHeadActive.class);
         renderItems();
         renderEntities();
+        EventClient.initializeStoneLayer();
 
     }
 

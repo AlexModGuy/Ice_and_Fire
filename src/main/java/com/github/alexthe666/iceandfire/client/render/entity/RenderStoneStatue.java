@@ -33,6 +33,7 @@ public class RenderStoneStatue extends Render<EntityStoneStatue> {
                     renderLiving.getMainModel().swingProgress = entity.getSwingProgress(1);
                     renderLiving.prepareScale((EntityLiving)entity.getModel(), 0);
                     renderLiving.getMainModel().render(entity.getModel(), 0, 0, 0, 0, 0, 0.0625F);
+                    renderLiving.getMainModel().setRotationAngles(0, 0, 0, 0, 0, 0, entity.getModel());
                 }
                 GL11.glPopMatrix();
             }

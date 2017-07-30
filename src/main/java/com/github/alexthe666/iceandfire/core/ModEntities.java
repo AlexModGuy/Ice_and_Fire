@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.core;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -21,6 +22,7 @@ public class ModEntities {
     }
 
     public static void init() {
+        EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);
         registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);
         registerUnspawnable(EntityDragonArrow.class, "dragonarrow", 2);
         registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);

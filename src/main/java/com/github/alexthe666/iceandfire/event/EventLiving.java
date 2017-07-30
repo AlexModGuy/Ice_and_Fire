@@ -5,12 +5,16 @@ import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -19,6 +23,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +38,39 @@ public class EventLiving {
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
             event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
+        }
+
+        if(event.getEntityLiving() instanceof EntityLiving){
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+            if(properties != null && properties.isStone){
+                event.getEntityLiving().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), event.getEntityLiving().getRNG().nextInt(2));
+                event.setCanceled(true);
+            }
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+        if(event.getEntityLiving() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
+                EntityLiving living = ((EntityLiving) event.getEntityLiving());
+                living.motionX *= 0D;
+                living.motionZ *= 0D;
+                living.swingProgress = 0;
+                living.limbSwing = 0;
+                living.setInvisible(true);
+                if(!living.onGround){
+                    //living.motionY = -0.2D;
+                }
+                if(!living.isAIDisabled()){
+                    living.setNoAI(true);
+                }
+                if(living.getAttackTarget() != null){
+                    living.setAttackTarget(null);
+                }
+            }
         }
     }
 

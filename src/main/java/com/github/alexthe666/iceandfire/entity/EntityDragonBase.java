@@ -12,6 +12,7 @@ import fossilsarcheology.api.FoodMappings;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -246,7 +247,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean isAIDisabled() {
-        return this.isModelDead();
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        return this.isModelDead() || properties.isStone;
     }
 
     @Override

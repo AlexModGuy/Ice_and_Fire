@@ -2,8 +2,10 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -76,7 +78,6 @@ public class ItemGorgonHead extends Item {
 
             if(result != null && target != null && target instanceof EntityLiving && !(target instanceof EntityStoneStatue)){
                 Random rand = new Random();
-                    EntityStoneStatue stoneStatue = new EntityStoneStatue(worldIn, target);
                     for(int i = 0; i < 8; i++){
                         double d2 = rand.nextGaussian() * 0.02D;
                         double d0 = rand.nextGaussian() * 0.02D;
@@ -86,12 +87,8 @@ public class ItemGorgonHead extends Item {
                         }
                     }
                 worldIn.playSound(target.posX, target.posY, target.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.NEUTRAL, 1F, 1F, false);
-                stoneStatue.setPositionAndRotation(target.posX, target.posY, target.posZ, ((EntityLiving) target).rotationYaw, target.rotationPitch);
-                if(worldIn.isRemote){
-                    worldIn.spawnEntity(stoneStatue);
-                }
-                stoneStatue.setModel(target);
-                target.setDead();
+                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(target, StoneEntityProperties.class);
+                properties.isStone = true;
                 if(!(entityLiving instanceof EntityPlayer && ((EntityPlayer)entityLiving).isCreative())){
                     stack.shrink(1);
                 }
