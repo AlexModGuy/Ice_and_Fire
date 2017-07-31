@@ -7,20 +7,24 @@ import net.minecraft.nbt.NBTTagCompound;
 public class StoneEntityProperties extends EntityProperties {
 
     public boolean isStone;
+    public int breakLvl;
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
         compound.setBoolean("TurnedToStone", isStone);
+        compound.setInteger("StoneBreakLvl", breakLvl);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         this.isStone = compound.getBoolean("TurnedToStone");
+        this.breakLvl = compound.getInteger("StoneBreakLvl");
     }
 
     @Override
     public void init() {
         isStone = false;
+        breakLvl = 0;
     }
 
     @Override

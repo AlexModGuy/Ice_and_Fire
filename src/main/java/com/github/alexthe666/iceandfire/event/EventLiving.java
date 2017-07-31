@@ -9,13 +9,18 @@ import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -24,6 +29,7 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,11 +49,46 @@ public class EventLiving {
         if(event.getEntityLiving() instanceof EntityLiving){
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
             if(properties != null && properties.isStone){
-                event.getEntityLiving().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), event.getEntityLiving().getRNG().nextInt(2));
+                event.setCanceled(true);
+                if(event.getEntity() != null && event.getEntity() instanceof EntityLivingBase) {
+                    ItemStack stack = ((EntityLivingBase) event.getEntity()).getHeldItemMainhand();
+                    if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe){
+                        boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
+                        if(silkTouch){
+
+                        }else{
+                            event.getEntityLiving().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 1 + event.getEntityLiving().getRNG().nextInt(4));
+                        }
+                    }
+                }
                 event.setCanceled(true);
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public void onPlayerAttack(AttackEntityEvent event) {
+        if(event.getTarget() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving)event.getTarget(), StoneEntityProperties.class);
+            if(properties != null && properties.isStone) {
+                if(event.getEntityPlayer() != null) {
+                    ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+                    if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe){
+                        boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
+                        properties.breakLvl++;
+                        if(properties.breakLvl > 9){
+                            if(silkTouch){
+                                event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 1);
+                            }else{
+                                event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 1 + event.getEntityLiving().getRNG().nextInt(4));
+                            }
+                            event.getTarget().setDead();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -61,8 +102,11 @@ public class EventLiving {
                 living.swingProgress = 0;
                 living.limbSwing = 0;
                 living.setInvisible(true);
+                living.livingSoundTime = 0;
+                living.hurtTime = 0;
+                living.hurtResistantTime = living.maxHurtResistantTime - 1;
                 if(!living.onGround){
-                    //living.motionY = -0.2D;
+                    //
                 }
                 if(!living.isAIDisabled()){
                     living.setNoAI(true);
@@ -76,6 +120,12 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if(event.getEntityLiving() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
+                event.setCanceled(true);
+            }
+        }
         /*if(event.getTarget() instanceof EntityHippogryph){
             EntityHippogryph gryph = (EntityHippogryph)event.getTarget();
             ItemStack itemstack = event.getEntityPlayer().getHeldItem(event.getHand());
@@ -126,7 +176,7 @@ public class EventLiving {
                 Iterator<Entity> itr = list.iterator();
                 while (itr.hasNext()){
                     Entity entity = itr.next();
-                    if(entity instanceof EntityDragonBase ){
+                    if(entity instanceof EntityDragonBase){
                        EntityDragonBase dragon = (EntityDragonBase)entity;
                         if(!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().capabilities.isCreativeMode) {
                             dragon.setSleeping(false);

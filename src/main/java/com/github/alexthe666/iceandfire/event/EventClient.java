@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -18,6 +19,8 @@ public class EventClient {
             Render render = entry.getValue();
             if(render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())){
                 ((RenderLivingBase)render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
+                ((RenderLivingBase)render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
+
             }
         }
     }
