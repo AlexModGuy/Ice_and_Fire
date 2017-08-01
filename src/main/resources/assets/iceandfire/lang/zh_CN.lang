@@ -84,6 +84,10 @@ item.iceandfire.dragon_horn.name=龙之号角
 item.iceandfire.dragon_horn_fire.name=火龙号角
 item.iceandfire.dragon_horn_ice.name=冰龙号角
 item.iceandfire.dragon_flute.name=龙骨长笛
+item.iceandfire.hippogryph_egg.name=骏鹰蛋
+item.iceandfire.iron_hippogryph_armor.name=铁铸骏鹰甲
+item.iceandfire.gold_hippogryph_armor.name=黄金骏鹰甲
+item.iceandfire.diamond_hippogryph_armor.name=钻石骏鹰甲
 
 item.banner.firedragon.white=白色龙炎弹
 item.banner.firedragon.orange=橙色龙炎弹
