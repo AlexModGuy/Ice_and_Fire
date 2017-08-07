@@ -53,8 +53,10 @@ public class ClientProxy extends CommonProxy {
         ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 1, TileEntityDummyGorgonHeadActive.class);
         renderItems();
         renderEntities();
-        EventClient.initializeStoneLayer();
+    }
 
+    public void postRender(){
+        EventClient.initializeStoneLayer();
     }
 
     private void renderEntities() {
@@ -194,6 +196,8 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(ModItems.diamond_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:diamond_hippogryph_armor", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.gorgon_head, 0, new ModelResourceLocation("iceandfire:gorgon_head", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.gorgon_head, 1, new ModelResourceLocation("iceandfire:gorgon_head", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.stone_statue, 0, new ModelResourceLocation("iceandfire:stone_statue", "inventory"));
+
     }
 
     @Override

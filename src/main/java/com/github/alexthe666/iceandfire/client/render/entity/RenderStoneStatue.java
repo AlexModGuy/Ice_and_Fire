@@ -1,43 +1,52 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-public class RenderStoneStatue extends Render<EntityStoneStatue> {
+public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
-
+    private static final ModelStonePlayer MODEL = new ModelStonePlayer(0, false);
+    private static final ModelStonePlayer MODEL_SLIM = new ModelStonePlayer(0, true);
     public RenderStoneStatue(RenderManager renderManager) {
-        super(renderManager);
+        super(renderManager, MODEL, 0.5F);
     }
 
-    @Override
-    public void doRender(EntityStoneStatue entity, double x, double y, double z, float entityYaw, float partialTicks){
-        if(entity.getClass() != null) {
-            ModelBase model = null;
-            Render render = this.renderManager.getEntityClassRenderObject(entity.getModel().getClass());
-            if (render instanceof RenderLiving && entity.getModel() != null && entity.getModel() instanceof EntityLiving) {
-                RenderLiving renderLiving = (RenderLiving) render;
-                GL11.glPushMatrix();
-                this.bindTexture(new ResourceLocation(getStoneType(renderLiving.getMainModel(), 1)));
-                if(renderLiving.getMainModel() != null) {
-                    GL11.glTranslated(x, y, z);
-                    GL11.glRotatef(entity.rotationYaw, 0, 1, 0);
-                    renderLiving.getMainModel().swingProgress = entity.getSwingProgress(1);
-                    renderLiving.prepareScale((EntityLiving)entity.getModel(), 0);
-                    renderLiving.getMainModel().render(entity.getModel(), 0, 0, 0, 0, 0, 0.0625F);
-                    renderLiving.getMainModel().setRotationAngles(0, 0, 0, 0, 0, 0, entity.getModel());
-                }
-                GL11.glPopMatrix();
+    protected void renderModel(EntityStoneStatue entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor)
+    {
+        boolean flag = !entity.isInvisible() || this.renderOutlines;
+        boolean flag1 = !flag && !entity.isInvisibleToPlayer(Minecraft.getMinecraft().player);
+
+        if (flag || flag1)
+        {
+            if (!this.bindEntityTexture(entity))
+            {
+                return;
             }
-    }
+
+            if (flag1)
+            {
+                GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            }
+
+            if(entity.smallArms){
+                MODEL_SLIM.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+            }else{
+                MODEL.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+            }
+
+            if (flag1)
+            {
+                GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            }
+        }
     }
 
     public String getStoneType(ModelBase model, int size){
@@ -57,6 +66,6 @@ public class RenderStoneStatue extends Render<EntityStoneStatue> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityStoneStatue entity) {
-        return new ResourceLocation("textures/blocks/stone.png");
+        return new ResourceLocation(getStoneType(entity.smallArms ? MODEL : MODEL_SLIM, 1));
     }
 }

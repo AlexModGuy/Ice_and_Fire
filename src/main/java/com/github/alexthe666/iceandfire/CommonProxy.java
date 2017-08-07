@@ -13,6 +13,9 @@ public class CommonProxy {
     public void render() {
     }
 
+    public void postRender() {
+    }
+
     public void renderArmors(EnumDragonArmor armor) {
     }
 

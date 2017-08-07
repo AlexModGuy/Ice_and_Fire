@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -50,7 +51,7 @@ public class IceAndFire {
     public static final String NAME = "Ice And Fire";
     @Instance(value = MODID)
     public static IceAndFire INSTANCE;
-    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class})
+    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -103,14 +104,11 @@ public class IceAndFire {
         ModRecipes.init();
         ModVillagers.INSTANCE.init();
         ModEntities.init();
-        MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
         ModFoods.init();
         ModSounds.init();
         ModAchievements.init();
-        try {
-            MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
-        } catch (Exception e) {
-        }
+        MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
+        MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
         VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
         GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
         GameRegistry.register(GLACIER);
@@ -120,6 +118,10 @@ public class IceAndFire {
         PROXY.render();
         GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+    }
 
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        PROXY.postRender();
     }
 }
