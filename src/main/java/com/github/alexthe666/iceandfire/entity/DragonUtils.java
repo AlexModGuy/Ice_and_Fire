@@ -1,9 +1,15 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.math.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class DragonUtils {
 
@@ -22,6 +28,48 @@ public class DragonUtils {
             return newPos;
         }
         return null;
+    }
+
+    public static EntityLivingBase riderLookingAtEntity(EntityLivingBase rider, double dist){
+        Vec3d vec3d = rider.getPositionEyes(1.0F);
+        Vec3d vec3d1 = rider.getLook(1.0F);
+        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+        double d1 = dist;
+        Entity pointedEntity = null;
+        List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
+            public boolean apply(@Nullable Entity entity) {
+                return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase;
+            }
+        }));
+        double d2 = d1;
+        for (int j = 0; j < list.size(); ++j) {
+            Entity entity1 = (Entity)list.get(j);
+            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double)entity1.getCollisionBorderSize());
+            RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
+
+            if (axisalignedbb.contains(vec3d)) {
+                if (d2 >= 0.0D) {
+                    pointedEntity = entity1;
+                    d2 = 0.0D;
+                }
+            }
+            else if (raytraceresult != null) {
+                double d3 = vec3d.distanceTo(raytraceresult.hitVec);
+
+                if (d3 < d2 || d2 == 0.0D) {
+                    if (entity1.getLowestRidingEntity() == rider.getLowestRidingEntity() && !rider.canRiderInteract()) {
+                        if (d2 == 0.0D) {
+                            pointedEntity = entity1;
+                        }
+                    }
+                    else {
+                        pointedEntity = entity1;
+                        d2 = d3;
+                    }
+                }
+            }
+        }
+        return (EntityLivingBase)pointedEntity;
     }
 
     public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo){

@@ -117,12 +117,10 @@ public class ModelHorseStatue extends ModelBase {
         this.head.rotateAngleX = 0.5235988F;
         this.upperMouth = new ModelRenderer(this, 24, 18);
         this.upperMouth.addBox(-2.0F, -10.0F, -7.0F, 4, 3, 6);
-        this.upperMouth.setRotationPoint(0.0F, 3.95F, -10.0F);
-        this.upperMouth.rotateAngleX = 0.5235988F;
+        this.upperMouth.setRotationPoint(0.0F, 0.02F, 0.02F);
         this.lowerMouth = new ModelRenderer(this, 24, 27);
         this.lowerMouth.addBox(-2.0F, -7.0F, -6.5F, 4, 2, 5);
-        this.lowerMouth.setRotationPoint(0.0F, 4.0F, -10.0F);
-        this.lowerMouth.rotateAngleX = 0.5235988F;
+        this.lowerMouth.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.head.addChild(this.upperMouth);
         this.head.addChild(this.lowerMouth);
         this.horseLeftEar = new ModelRenderer(this, 0, 0);

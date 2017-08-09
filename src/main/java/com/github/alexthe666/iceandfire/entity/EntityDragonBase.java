@@ -18,7 +18,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -49,8 +48,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute {
@@ -1282,21 +1279,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.fireStopTicks = 10;
         }
         if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
-
-            Entity entity = null;
-            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.getRenderSize() / 2, this.getRenderSize() / 2, this.getRenderSize() / 2));
-            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
-            if (!list.isEmpty()) {
-                entity = list.get(0);
-                if (entity.getUniqueID().compareTo(this.getControllingPassenger().getUniqueID()) != 0) {
-                    if (this.getAnimation() != this.ANIMATION_BITE) {
-                        this.setAnimation(this.ANIMATION_BITE);
-                        entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.attackDecision = false;
-                    }
-                }
+            EntityLivingBase target = DragonUtils.riderLookingAtEntity((EntityPlayer)this.getControllingPassenger(), this.getDragonStage() + (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX));
+            if (this.getAnimation() != this.ANIMATION_BITE) {
+                this.setAnimation(this.ANIMATION_BITE);
             }
-
+            if(target != null){
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+            }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();

@@ -49,8 +49,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute {
 
@@ -148,7 +146,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
             this.rotationYaw = passenger.rotationYaw;
         }
         double ymod1 = this.hoverProgress * 0.02;
-        passenger.setPosition(this.posX, this.posY + 0.75 + ymod1, this.posZ);
+        passenger.setPosition(this.posX, this.posY + 1.05F + ymod1, this.posZ);
     }
 
     private void initHippogryphInv() {
@@ -884,19 +882,14 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
         }
 
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
-            Entity entity = null;
-            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(4, 2, 4));
-            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
+
+            EntityLivingBase target = DragonUtils.riderLookingAtEntity((EntityPlayer)this.getControllingPassenger(), 3);
             if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
                 this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
             }
-            if (!list.isEmpty()) {
-                entity = list.get(0);
-                if (!entity.getUniqueID().equals(this.getControllingPassenger().getUniqueID())) {
-                    entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                }
+            if(target != null){
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
-
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();
