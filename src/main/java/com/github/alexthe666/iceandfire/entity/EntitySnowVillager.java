@@ -1,14 +1,17 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModVillagers;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -38,6 +41,14 @@ public class EntitySnowVillager extends EntityVillager {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.prof = ModVillagers.INSTANCE.professions.get(this.getRNG().nextInt(3));
         return livingdata;
+    }
+
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        if(properties != null && properties.isStone){
+            return false;
+        }
+        return super.processInteract(player, hand);
     }
 
     public void setProfession(int professionId) {
