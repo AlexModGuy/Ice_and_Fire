@@ -1,9 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -112,11 +111,26 @@ public class ItemGorgonHead extends Item {
                         statue.setItemStackToSlot(slot, ((EntityZombie) pointedEntity).getItemStackFromSlot(slot));
                     }
                 }else{
+
                     StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, StoneEntityProperties.class);
                     if(properties != null){
                         properties.isStone = true;
                     }
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(pointedEntity.getEntityId(), true));
+                    if(pointedEntity instanceof EntityDragonBase){
+                        EntityDragonBase dragon = (EntityDragonBase)pointedEntity;
+                        dragon.setFlying(false);
+                        dragon.setHovering(false);
+                        dragon.airTarget = null;
+                    }
+                    if(pointedEntity instanceof EntityHippogryph){
+                        EntityHippogryph dragon = (EntityHippogryph)pointedEntity;
+                        dragon.setFlying(false);
+                        dragon.setHovering(false);
+                        dragon.airTarget = null;
+                    }
                 }
+
                 entity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 SoundEvent deathSound = null;
                 Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, (EntityLivingBase)pointedEntity, ObfuscationReflectionHelper.remapFieldNames(EntityLivingBase.class.getName(), new String[]{"getDeathSound", "func_184615_bR"}));

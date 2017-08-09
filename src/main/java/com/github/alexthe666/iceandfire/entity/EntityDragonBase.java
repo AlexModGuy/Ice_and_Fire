@@ -856,7 +856,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(properties != null && properties.isStone){
             this.setFlying(false);
             this.setHovering(false);
-            System.out.println(world.isRemote);
             return;
         }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {

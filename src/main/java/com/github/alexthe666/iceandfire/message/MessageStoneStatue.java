@@ -51,5 +51,10 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
+        Entity entity = player.world.getEntityByID(message.entityId);
+        if (entity instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+            properties.isStone = message.isStone;
+        }
     }
 }
