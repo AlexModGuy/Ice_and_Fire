@@ -16,7 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityDragonSkull extends EntityAnimal {
+public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues {
 
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);

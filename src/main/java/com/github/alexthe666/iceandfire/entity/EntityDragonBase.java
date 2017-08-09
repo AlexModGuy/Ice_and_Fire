@@ -852,7 +852,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        if(properties != null && properties.isStone){
+            this.setFlying(false);
+            this.setHovering(false);
+            System.out.println(world.isRemote);
+            return;
+        }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {
             this.setFlying(false);
             this.setFlying(true);
@@ -1037,7 +1043,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1098,7 +1104,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0;
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone;
     }
 
     public abstract String getVariantName(int variant);

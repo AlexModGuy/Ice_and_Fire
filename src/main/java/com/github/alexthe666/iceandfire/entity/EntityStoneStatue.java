@@ -2,8 +2,6 @@ package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,7 +9,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityStoneStatue extends EntityLiving {
+public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromStatues {
 
     private int crackAmount;
     public boolean smallArms;
@@ -51,17 +49,7 @@ public class EntityStoneStatue extends EntityLiving {
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK) {
-            return false;
-        }
-        this.crackAmount++;
-        if(crackAmount > 5){
-            for(int i = 0; i < 1 + this.getRNG().nextInt(5); i++){
-                this.dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 1);
-            }
-            this.setDead();
-        }
-        return false;
+        return source == DamageSource.OUT_OF_WORLD;
     }
 
     public int getCrackAmount() {

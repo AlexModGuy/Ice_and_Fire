@@ -339,6 +339,34 @@ public class ModelHippogryph extends ModelDragonBase {
         this.Body.render(f5);
     }
 
+    public void renderStatue(){
+        this.resetToDefaultPose();
+        if(this.isChild){
+            this.Body.setShouldScaleChildren(true);
+            this.Body.setScale(0.5F, 0.5F, 0.5F);
+            this.Head.setScale(1.5F, 1.5F, 1.5F);
+            this.Beak.setRotationPoint(0.0F, 1.0F, -8.1F);
+            this.Jaw.setRotationPoint(0.0F, 2.2F, -2.8F);
+            this.Body.setRotationPoint(0.0F, 17.0F, 4.0F);
+        }else{
+            this.Body.setScale(1, 1, 1);
+            this.Head.setScale(1, 1, 1);
+        }
+        this.Body.render(0.0625F);
+        this.NoseBand.isHidden = true;
+        this.ReinL.isHidden = true;
+        this.ReinR.isHidden = true;
+        this.ChestL.isHidden = true;
+        this.ChestR.isHidden = true;
+        this.Saddle.isHidden = true;
+        this.Saddleback.isHidden = true;
+        this.StirrupIronL.isHidden = true;
+        this.StirrupIronR.isHidden = true;
+        this.SaddleFront.isHidden = true;
+        this.StirrupL.isHidden = true;
+        this.StirrupR.isHidden = true;
+    }
+
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);

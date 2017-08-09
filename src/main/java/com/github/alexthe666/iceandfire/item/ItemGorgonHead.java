@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -11,22 +12,24 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class ItemGorgonHead extends Item {
@@ -64,7 +67,7 @@ public class ItemGorgonHead extends Item {
         Entity pointedEntity = null;
         List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity != null && entity.canBeCollidedWith();
+                return entity != null && entity.canBeCollidedWith() && !(entity instanceof IBlacklistedFromStatues) && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
             }
         }));
         double d2 = d1;
@@ -96,8 +99,8 @@ public class ItemGorgonHead extends Item {
             }
         }
         if(pointedEntity != null){
-            if(pointedEntity instanceof EntityLiving){
-                if(pointedEntity instanceof EntityZombie){
+            if(pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer){
+                if(pointedEntity instanceof EntityPlayer){
                     pointedEntity.setDead();
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
                     statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -114,7 +117,26 @@ public class ItemGorgonHead extends Item {
                         properties.isStone = true;
                     }
                 }
+                entity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                SoundEvent deathSound = null;
+                Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, (EntityLivingBase)pointedEntity, ObfuscationReflectionHelper.remapFieldNames(EntityLivingBase.class.getName(), new String[]{"getDeathSound", "func_184615_bR"}));
+                try {
+                    deathSound = (SoundEvent) deathSoundMethod.invoke((EntityLivingBase)pointedEntity, null);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                if(deathSound != null){
+                    entity.playSound(deathSound, 1, 1);
 
+                }
+                stack.setItemDamage(0);
+                if(!(entity instanceof EntityPlayer && ((EntityPlayer)entity).isCreative())){
+                    stack.shrink(1);
+                }
             }
         }
     }

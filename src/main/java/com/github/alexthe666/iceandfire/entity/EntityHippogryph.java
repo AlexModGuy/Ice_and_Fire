@@ -12,6 +12,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
@@ -697,7 +698,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        if(properties != null && properties.isStone){
+            this.setFlying(false);
+            this.setHovering(false);
+        }
         if(!this.onGround){
             airBorneCounter++;
         }else{
@@ -834,7 +839,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround) {
+        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSitting(false);
             this.hoverTicks = 0;

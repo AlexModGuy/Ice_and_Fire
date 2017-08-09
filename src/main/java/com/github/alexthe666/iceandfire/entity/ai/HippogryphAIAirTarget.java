@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
@@ -51,6 +53,22 @@ public class HippogryphAIAirTarget extends EntityAIBase {
     }
 
     public boolean continueExecuting() {
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(hippogryph, StoneEntityProperties.class);
+        if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
+            return false;
+        }
+        if (hippogryph.isSitting()) {
+            return false;
+        }
+        if (hippogryph.isChild()) {
+            return false;
+        }
+        if (hippogryph.isChild()) {
+            return false;
+        }
+        if (properties != null && properties.isStone) {
+            return false;
+        }
         return hippogryph.airTarget != null;
     }
 

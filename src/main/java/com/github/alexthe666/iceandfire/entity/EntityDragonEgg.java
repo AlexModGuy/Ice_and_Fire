@@ -22,7 +22,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityDragonEgg extends EntityLiving {
+public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues {
 
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);

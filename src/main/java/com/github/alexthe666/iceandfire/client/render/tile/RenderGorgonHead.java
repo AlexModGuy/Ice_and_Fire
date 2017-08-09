@@ -21,6 +21,7 @@ public class RenderGorgonHead extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float f, int f1) {
         ModelBase model = active ? ACTIVE_MODEL : INACTIVE_MODEL;
+
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y - 0.75F, (float) z + 0.5F);
         GL11.glPushMatrix();

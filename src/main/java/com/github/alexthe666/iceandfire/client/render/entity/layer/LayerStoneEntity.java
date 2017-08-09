@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
+import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.model.ModelBase;
@@ -8,11 +10,14 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class LayerStoneEntity implements LayerRenderer {
 
     private RenderLivingBase renderer;
+    private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
 
     public LayerStoneEntity(RenderLivingBase renderer) {
         this.renderer = renderer;
@@ -24,8 +29,16 @@ public class LayerStoneEntity implements LayerRenderer {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
             if(properties != null && properties.isStone){
                 GlStateManager.depthMask(true);
+                GL11.glEnable(GL11.GL_CULL_FACE);
                 this.renderer.bindTexture(new ResourceLocation(getStoneType(renderer.getMainModel(), 1)));
-                this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                if(this.renderer.getMainModel() instanceof ICustomStatueModel){
+                    ((ICustomStatueModel)this.renderer.getMainModel()).renderStatue();
+                }else if(entitylivingbaseIn instanceof AbstractHorse){
+                    HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                }else{
+                    this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                }
+                GL11.glDisable(GL11.GL_CULL_FACE);
             }
         }
     }

@@ -147,6 +147,8 @@ entity.hippogryph.white=White Hippogryph
 entity.hippogryph.raptor=Frosty Hippogryph
 entity.hippogryph.alex=Firey Hippogryph
 entity.hippogryph.dodo=Dodo Hippogryph
+entity.player.name=Player
+entity.stonestatue.name=Stone Statue
 
 dragon.red=Red
 dragon.green=Emerald

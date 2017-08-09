@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -38,7 +39,7 @@ public class ItemStoneStatue extends Item {
             boolean isPlayer = stack.getTagCompound().getBoolean("IAFStoneStatueEntityPlayer");
             int id = stack.getTagCompound().getInteger("IAFStoneStatueEntityID");
             if(EntityList.getKey(EntityList.getClassFromID(id)) != null){
-                String mobName = isPlayer ? "player" : net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName();
+                String mobName = isPlayer ? I18n.format("entity.player.name") : net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName();
                 list.add(mobName);
             }
         }
@@ -67,6 +68,16 @@ public class ItemStoneStatue extends Item {
                         worldIn.spawnEntity(statue);
                     }
                     statue.readEntityFromNBT(stack.getTagCompound());
+                    statue.setCrackAmount(0);
+                    float yaw = MathHelper.wrapDegrees(player.rotationYaw + 180F);
+                    statue.prevRotationYaw = yaw;
+                    statue.rotationYaw = yaw;
+                    statue.rotationYawHead = yaw;
+                    statue.renderYawOffset = yaw;
+                    statue.prevRenderYawOffset = yaw;
+                    if (!player.capabilities.isCreativeMode) {
+                        stack.shrink(1);
+                    }
                     return EnumActionResult.SUCCESS;
                 }else{
                     Class classFromEntity = EntityList.getClassFromID(stack.getTagCompound().getInteger("IAFStoneStatueEntityID"));

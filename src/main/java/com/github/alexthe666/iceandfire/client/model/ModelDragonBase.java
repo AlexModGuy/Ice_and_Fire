@@ -4,7 +4,7 @@ import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 
-public abstract class ModelDragonBase extends AdvancedModelBase {
+public abstract class ModelDragonBase extends AdvancedModelBase implements ICustomStatueModel {
 
     public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
@@ -27,5 +27,4 @@ public abstract class ModelDragonBase extends AdvancedModelBase {
         model.rotationPointY += progress * (y - model.defaultPositionY) / 20.0F;
         model.rotationPointZ += progress * (z - model.defaultPositionZ) / 20.0F;
     }
-
 }

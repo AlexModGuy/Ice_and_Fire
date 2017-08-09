@@ -1135,4 +1135,9 @@ public class ModelIceDragon extends ModelDragonBase {
         this.chainWave(NECK, speed_idle, degree_idle * -0.15F, -3, entity.ticksExisted, 1);
         this.walk(Neck1, speed_idle, degree_idle * 0.05F, false, 0, 0, entity.ticksExisted, 1);
     }
+
+    public void renderStatue(){
+        this.resetToDefaultPose();
+        this.BodyLower.render(0.0625F);
+    }
 }

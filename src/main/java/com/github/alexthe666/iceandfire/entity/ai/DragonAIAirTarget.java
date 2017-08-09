@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
@@ -54,6 +56,19 @@ public class DragonAIAirTarget extends EntityAIBase {
     }
 
     public boolean continueExecuting() {
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
+        if (!dragon.isFlying() && !dragon.isHovering()) {
+            return false;
+        }
+        if (dragon.isSleeping()) {
+            return false;
+        }
+        if (dragon.isChild()) {
+            return false;
+        }
+        if (properties != null && properties.isStone) {
+            return false;
+        }
         return dragon.airTarget != null;
     }
 

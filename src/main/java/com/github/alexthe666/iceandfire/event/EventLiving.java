@@ -71,15 +71,24 @@ public class EventLiving {
     @SubscribeEvent
     public void onPlayerAttack(AttackEntityEvent event) {
         if(event.getTarget() instanceof EntityLiving) {
-            boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
+            boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving)event.getTarget(), StoneEntityProperties.class);
             if(properties != null && properties.isStone || stonePlayer) {
                 if(event.getEntityPlayer() != null) {
                     ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
                     if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe){
                         boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
-                        properties.breakLvl++;
-                        if(properties.breakLvl > 9){
+                        boolean ready = false;
+                        if(properties != null && !stonePlayer){
+                            properties.breakLvl++;
+                            ready = properties.breakLvl > 9;
+                        }
+                        if(stonePlayer){
+                            EntityStoneStatue statue = (EntityStoneStatue)event.getTarget();
+                            statue.setCrackAmount(statue.getCrackAmount() + 1);
+                            ready = statue.getCrackAmount() > 9;
+                        }
+                        if(ready){
                             event.getTarget().setDead();
                             if(silkTouch){
                                 ItemStack statuette = new ItemStack(ModItems.stone_statue);
@@ -91,7 +100,9 @@ public class EventLiving {
                                     event.getTarget().entityDropItem(statuette, 1);
                                 }
                             }else{
-                                event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 1 + event.getEntityLiving().getRNG().nextInt(4));
+                                if(!((EntityLiving) event.getTarget()).world.isRemote){
+                                    event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
+                                }
                             }
                         }
                     }
@@ -115,6 +126,7 @@ public class EventLiving {
                 living.livingSoundTime = 0;
                 living.hurtTime = 0;
                 living.hurtResistantTime = living.maxHurtResistantTime - 1;
+                living.extinguish();
                 if(!living.isAIDisabled()){
                     living.setNoAI(true);
                 }
@@ -124,6 +136,7 @@ public class EventLiving {
                 if(living instanceof EntityHorse){
                     EntityHorse horse = (EntityHorse)living;
                     horse.tailCounter = 0;
+                    horse.setEatingHaystack(false);
                 }
             }
         }
