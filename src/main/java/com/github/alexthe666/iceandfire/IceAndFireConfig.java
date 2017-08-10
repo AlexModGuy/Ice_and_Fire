@@ -57,6 +57,8 @@ public class IceAndFireConfig {
     public int maxDragonFlight = 128;
     @ConfigEntry(category = "dragons", comment = "How far away dragons will detect gold blocks being destroyed or chests being opened.")
     public int dragonGoldSearchLength = 17;
+    @ConfigEntry(category = "dragons", comment = "Modifier of how far 3rd person distance is whilst riding a dragon, scaled against size.")
+    public float dragonRiding3rdPersonDistanceModifier = 0.8F;
 
     @ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
     public boolean spawnHippogryphs = true;

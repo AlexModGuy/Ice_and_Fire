@@ -1,12 +1,16 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import net.ilexiconn.llibrary.client.event.PlayerViewDistanceEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -73,6 +77,16 @@ public class EventClient {
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public void on3rdPersonView(PlayerViewDistanceEvent event) {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player.isRiding() && player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityDragonBase){
+            EntityDragonBase dragon = (EntityDragonBase)player.getRidingEntity();
+            float newDistance = (IceAndFire.CONFIG.dragonRiding3rdPersonDistanceModifier * dragon.getRenderSize()) + 4;
+            event.setViewDistance(newDistance);
+        }
     }
 
     @SubscribeEvent
