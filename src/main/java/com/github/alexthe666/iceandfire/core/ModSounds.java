@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModSounds {
     public static SoundEvent dragon_hatch;
+    public static SoundEvent firedragon_breath;
+    public static SoundEvent icedragon_breath;
     public static SoundEvent firedragon_child_idle;
     public static SoundEvent firedragon_child_hurt;
     public static SoundEvent firedragon_child_death;
@@ -37,6 +39,8 @@ public class ModSounds {
 
     public static void init() {
         dragon_hatch = registerSound("dragonegg.hatch");
+        firedragon_breath = registerSound("firedragon.breath");
+        icedragon_breath = registerSound("icedragon.breath");
         firedragon_child_idle = registerSound("firedragon.child.idle");
         firedragon_child_hurt = registerSound("firedragon.child.hurt");
         firedragon_child_death = registerSound("firedragon.child.death");

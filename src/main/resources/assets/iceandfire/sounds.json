@@ -25,6 +25,18 @@
       "iceandfire:hippogryph_die_1"
     ]
   },
+  "firedragon.breath": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:firedragon_breath"
+    ]
+  },
+  "icedragon.breath": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:icedragon_breath"
+    ]
+  },
   "firedragon.child.idle": {
     "category": "neutral",
     "sounds": [

@@ -13,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -271,7 +270,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
                 float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
                 float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-                world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+                this.playSound(ModSounds.icedragon_breath, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
                 double d4 = controller.getLookVec().z;
@@ -295,7 +294,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     double d3 = controller.getLookVec().y;
                     double d4 = controller.getLookVec().z;
                     EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
-                    world.playEvent((EntityPlayer) null, 1016, new BlockPos(this), 0);
+                    this.playSound(ModSounds.icedragon_breath, 4, 1);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
                     if (!world.isRemote) {
@@ -352,7 +351,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     double d2 = entity.posX - headPosX;
                     double d3 = entity.posY - headPosY;
                     double d4 = entity.posZ - headPosZ;
-                    world.playEvent(null, 1016, new BlockPos(this), 0);
+                    this.playSound(ModSounds.icedragon_breath, 4, 1);
                     EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setSizes(size, size);
@@ -375,7 +374,7 @@ public class EntityIceDragon extends EntityDragonBase {
                         double d2 = entity.posX - headPosX;
                         double d3 = entity.posY - headPosY;
                         double d4 = entity.posZ - headPosZ;
-                        world.playEvent(null, 1016, new BlockPos(this), 0);
+                        this.playSound(ModSounds.icedragon_breath, 4, 1);
                         EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
                         float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                         entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
