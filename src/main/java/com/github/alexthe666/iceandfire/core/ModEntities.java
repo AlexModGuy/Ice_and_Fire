@@ -36,6 +36,7 @@ public class ModEntities {
         registerUnspawnable(EntityHippogryphEgg.class, "hippogryphegg", 11);
         registerSpawnable(EntityHippogryph.class, "hippogryph", 12, 0XD8D8D8, 0XD1B55D);
         registerUnspawnable(EntityStoneStatue.class, "stonestatue", 13);
+        registerSpawnable(EntityGorgon.class, "gorgon", 14, 0XD0D99F, 0X684530);
 
         if(IceAndFire.CONFIG.spawnHippogryphs) {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {

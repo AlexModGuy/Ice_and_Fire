@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -15,8 +15,8 @@ import javax.annotation.Nullable;
 
 public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
-    public RenderHippogryph(RenderManager renderManager, ModelBase model) {
-        super(renderManager, model, 0.8F);
+    public RenderHippogryph(RenderManager renderManager) {
+        super(renderManager, new ModelHippogryph(), 0.8F);
         this.layerRenderers.add(new LayerHippogriffSaddle(this));
         this.layerRenderers.add(new LayerHippogriffBridle(this));
         this.layerRenderers.add(new LayerHippogriffChest(this));

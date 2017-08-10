@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.client.model.ModelRenderer;
 
 public abstract class ModelDragonBase extends AdvancedModelBase implements ICustomStatueModel {
 
@@ -26,5 +27,11 @@ public abstract class ModelDragonBase extends AdvancedModelBase implements ICust
         model.rotationPointX += progress * (x - model.defaultPositionX) / 20.0F;
         model.rotationPointY += progress * (y - model.defaultPositionY) / 20.0F;
         model.rotationPointZ += progress * (z - model.defaultPositionZ) / 20.0F;
+    }
+
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
 }

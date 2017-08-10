@@ -59,6 +59,7 @@ public class IceAndFire {
     public static DamageSource dragon;
     public static DamageSource dragonFire;
     public static DamageSource dragonIce;
+    public static DamageSource gorgon;
     public static Biome GLACIER;
     public static Potion FROZEN_POTION;
 
@@ -95,6 +96,14 @@ public class IceAndFire {
             @Override
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.dragon_ice";
+                String s1 = s + ".player_" + new Random().nextInt(2);
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+            }
+        };
+        gorgon = new DamageSource("gorgon") {
+            @Override
+            public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+                String s = "death.attack.gorgon";
                 String s1 = s + ".player_" + new Random().nextInt(2);
                 return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
             }

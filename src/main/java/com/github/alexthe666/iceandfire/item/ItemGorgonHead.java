@@ -100,7 +100,7 @@ public class ItemGorgonHead extends Item {
         if(pointedEntity != null){
             if(pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer){
                 if(pointedEntity instanceof EntityPlayer){
-                    pointedEntity.setDead();
+                    pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
                     statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
                     statue.smallArms = true;

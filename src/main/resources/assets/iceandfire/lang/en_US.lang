@@ -151,6 +151,7 @@ entity.hippogryph.alex=Firey Hippogryph
 entity.hippogryph.dodo=Dodo Hippogryph
 entity.player.name=Player
 entity.stonestatue.name=Stone Statue
+entity.gorgon.name=Gorgon
 
 dragon.red=Red
 dragon.green=Emerald
@@ -222,6 +223,9 @@ death.attack.dragon_fire.player_2=was turned to ash by a dragon
 death.attack.dragon_ice.player_0=was frozen by a dragon
 death.attack.dragon_ice.player_1=was turned to ice by a dragon
 death.attack.dragon_ice.player_2=was put into suspended animation by a dragon
+death.attack.gorgon.player_0=was turned to stone by a gorgon
+death.attack.gorgon.player_1=was turned into gorgonzola by a gorgon
+death.attack.gorgon.player_2=was solidified by a gorgon
 key.dragon_strike=Dragon Strike
 key.dragon_fireAttack=Dragon Breath
 key.dragon_down=Dragon Down/Baby Dragon Off
