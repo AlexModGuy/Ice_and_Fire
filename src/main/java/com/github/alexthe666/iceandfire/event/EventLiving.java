@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-import net.ilexiconn.llibrary.server.capability.EntityDataHandler;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,7 +30,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -45,14 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class EventLiving {
-
-    @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if(event.getEntity() instanceof EntityLiving){
-            EntityDataHandler.INSTANCE.registerExtendedEntityData((EntityLiving)event.getEntity(), new StoneEntityProperties());
-        }
-    }
-
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityWitherSkeleton) {

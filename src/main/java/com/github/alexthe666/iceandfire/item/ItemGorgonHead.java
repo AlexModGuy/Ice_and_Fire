@@ -147,12 +147,12 @@ public class ItemGorgonHead extends Item {
                     entity.playSound(deathSound, 1, 1);
 
                 }
-                stack.setItemDamage(0);
                 if(!(entity instanceof EntityPlayer && ((EntityPlayer)entity).isCreative())){
                     stack.shrink(1);
                 }
             }
         }
+        stack.setItemDamage(0);
     }
 
     @Override

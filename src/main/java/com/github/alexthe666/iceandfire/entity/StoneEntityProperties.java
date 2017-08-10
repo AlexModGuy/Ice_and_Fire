@@ -4,10 +4,15 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class StoneEntityProperties extends EntityProperties {
+public class StoneEntityProperties extends EntityProperties<EntityLiving> {
 
     public boolean isStone;
     public int breakLvl;
+
+    @Override
+    public int getTrackingTime() {
+        return 20;
+    }
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
@@ -33,7 +38,7 @@ public class StoneEntityProperties extends EntityProperties {
     }
 
     @Override
-    public Class getEntityClass() {
+    public Class<EntityLiving> getEntityClass() {
         return EntityLiving.class;
     }
 }

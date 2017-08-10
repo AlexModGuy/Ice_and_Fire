@@ -27,6 +27,11 @@ public class LayerStoneEntityCrack implements LayerRenderer {
         if(entitylivingbaseIn instanceof EntityLiving) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
             if(properties != null && properties.isStone && properties.breakLvl > 0){
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                GlStateManager.doPolygonOffset(-3.0F, -3.0F);
+                GlStateManager.enablePolygonOffset();
+                GlStateManager.enableBlend();
+                GlStateManager.enableAlpha();
                 GlStateManager.depthMask(true);
                 this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
                 if(this.renderer.getMainModel() instanceof ICustomStatueModel){
@@ -36,6 +41,9 @@ public class LayerStoneEntityCrack implements LayerRenderer {
                 }else{
                     this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }
+                GlStateManager.doPolygonOffset(0.0F, 0.0F);
+                GlStateManager.disablePolygonOffset();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             }
         }
     }
