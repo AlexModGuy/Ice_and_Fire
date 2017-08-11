@@ -88,6 +88,7 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.iron_hippogryph_armor, 1, 3), new Object[]{"YXY", Character.valueOf('X'), Items.IRON_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.gold_hippogryph_armor, 1, 3), new Object[]{"YXY", Character.valueOf('X'), Items.GOLDEN_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.diamond_hippogryph_armor, 1, 3), new Object[]{"YXY", Character.valueOf('X'), Items.DIAMOND_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.blindfold, 1, 0), new Object[]{"YXY", Character.valueOf('X'), "leather" , Character.valueOf('Y'), "string"}));
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));

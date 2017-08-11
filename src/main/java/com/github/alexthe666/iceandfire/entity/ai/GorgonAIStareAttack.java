@@ -47,6 +47,11 @@ public class GorgonAIStareAttack extends EntityAIBase
         EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 
         if (entitylivingbase != null) {
+            if(entity.isStoneMob(entitylivingbase)){
+                entity.setAttackTarget(null);
+                resetTask();
+                return;
+            }
             this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double)entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
 
             double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);

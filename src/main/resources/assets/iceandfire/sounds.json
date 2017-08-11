@@ -1,4 +1,42 @@
 {
+  "gorgon.idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gorgon_idle_0",
+      "iceandfire:gorgon_idle_1"
+    ]
+  },
+  "gorgon.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gorgon_hurt_0",
+      "iceandfire:gorgon_hurt_1"
+    ]
+  },
+  "gorgon.die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gorgon_die"
+    ]
+  },
+  "gorgon.attack": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gorgon_attack"
+    ]
+  },
+  "gorgon.petrify": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gorgon_petrify"
+    ]
+  },
+  "gorgon.turn_stone": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:turn_stone"
+    ]
+  },
   "hippogryph.idle": {
     "category": "neutral",
     "sounds": [

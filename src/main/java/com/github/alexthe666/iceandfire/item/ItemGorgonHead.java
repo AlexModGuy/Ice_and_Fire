@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
@@ -11,7 +12,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -66,7 +67,8 @@ public class ItemGorgonHead extends Item {
         Entity pointedEntity = null;
         List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity != null && entity.canBeCollidedWith() && !(entity instanceof IBlacklistedFromStatues) && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
+                boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isPotionActive(MobEffects.BLINDNESS);
+                return entity != null && entity.canBeCollidedWith() && !blindness && !(entity instanceof IBlacklistedFromStatues) && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
             }
         }));
         double d2 = d1;
@@ -100,6 +102,7 @@ public class ItemGorgonHead extends Item {
         if(pointedEntity != null){
             if(pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer){
                 if(pointedEntity instanceof EntityPlayer){
+                    pointedEntity.playSound(ModSounds.gorgon_turn_stone, 1, 1);
                     pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
                     statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -131,7 +134,11 @@ public class ItemGorgonHead extends Item {
                     }
                 }
 
-                entity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                if(pointedEntity instanceof EntityGorgon){
+                    entity.playSound(ModSounds.gorgon_petrify, 1, 1);
+                }else{
+                    entity.playSound(ModSounds.gorgon_turn_stone, 1, 1);
+                }
                 SoundEvent deathSound = null;
                 Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, (EntityLivingBase)pointedEntity, ObfuscationReflectionHelper.remapFieldNames(EntityLivingBase.class.getName(), new String[]{"getDeathSound", "func_184615_bR"}));
                 try {

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
 import fossilsarcheology.api.FoodMappings;
@@ -70,6 +71,7 @@ public class ModFoods {
         FoodMappings.INSTANCE.addMeat(EntityPolarBear.class, 70);
         FoodMappings.INSTANCE.addMeat(EntityIceDragon.class, 100);
         FoodMappings.INSTANCE.addMeat(EntityFireDragon.class, 100);
+        FoodMappings.INSTANCE.addMeat(EntityHippogryph.class, 60);
 
     }
 }

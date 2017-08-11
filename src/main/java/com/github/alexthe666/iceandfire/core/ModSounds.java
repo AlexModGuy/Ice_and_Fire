@@ -36,6 +36,12 @@ public class ModSounds {
     public static SoundEvent hippogryph_idle;
     public static SoundEvent hippogryph_hurt;
     public static SoundEvent hippogryph_die;
+    public static SoundEvent gorgon_idle;
+    public static SoundEvent gorgon_hurt;
+    public static SoundEvent gorgon_die;
+    public static SoundEvent gorgon_attack;
+    public static SoundEvent gorgon_petrify;
+    public static SoundEvent gorgon_turn_stone;
 
     public static void init() {
         dragon_hatch = registerSound("dragonegg.hatch");
@@ -69,7 +75,12 @@ public class ModSounds {
         hippogryph_idle = registerSound("hippogryph.idle");
         hippogryph_hurt = registerSound("hippogryph.hurt");
         hippogryph_die = registerSound("hippogryph.die");
-
+        gorgon_idle = registerSound("gorgon.idle");
+        gorgon_hurt = registerSound("gorgon.hurt");
+        gorgon_die = registerSound("gorgon.die");
+        gorgon_attack = registerSound("gorgon.attack");
+        gorgon_petrify = registerSound("gorgon.petrify");
+        gorgon_turn_stone = registerSound("gorgon.turn_stone");
     }
 
     private static SoundEvent registerSound(String sound) {

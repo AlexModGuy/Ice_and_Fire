@@ -77,6 +77,11 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "hippogryphs", comment = "List of biome ids for white hippogryphs to spawn in.")
     public int[] hippogryphWhiteBiomes = new int[]{Biome.getIdForBiome(Biomes.ICE_MOUNTAINS)};
 
+    @ConfigEntry(category = "gorgons", comment = "Wether to spawn gorgon structures or not")
+    public boolean spawnGorgons = true;
+    @ConfigEntry(category = "gorgons", comment = "Maximum gorgon health")
+    public double gorgonMaxHealth = 50D;
+
     @ConfigEntry(category = "compatability", comment = "Triggers option above")
     public boolean useAetherCompat = false;
     @ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
