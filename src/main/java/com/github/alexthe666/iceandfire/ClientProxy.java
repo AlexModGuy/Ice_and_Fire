@@ -1,7 +1,11 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
-import com.github.alexthe666.iceandfire.client.model.*;
+import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
+import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
+import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
+import com.github.alexthe666.iceandfire.client.particle.ParticleBlood;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
@@ -221,6 +225,9 @@ public class ClientProxy extends CommonProxy {
         }
         if (name.equals("snowflake")) {
             particle = new ParticleSnowflake(world, x, y, z, motX, motY, motZ);
+        }
+        if (name.equals("blood")) {
+            particle = new ParticleBlood(world, x, y, z);
         }
         if (particle != null) {
             Minecraft.getMinecraft().effectRenderer.addEffect(particle);

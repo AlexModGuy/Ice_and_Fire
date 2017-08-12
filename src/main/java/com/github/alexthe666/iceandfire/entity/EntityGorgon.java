@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
@@ -15,6 +16,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -31,7 +33,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
     private Animation currentAnimation;
     private GorgonAIStareAttack aiStare;
     private EntityAIAttackMelee aiMelee;
-    public static final PotionEffect POTION_EFFECT = new PotionEffect(MobEffects.POISON, 100, 1, false, true);
 
     public EntityGorgon(World worldIn) {
         super(worldIn);
@@ -92,7 +93,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
                 this.setAnimation(ANIMATION_HIT);
             }
             if(entityIn instanceof EntityLivingBase){
-                ((EntityLivingBase)entityIn).addPotionEffect(POTION_EFFECT);
+                ((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 2, false, true));
             }
         }
         return super.attackEntityAsMob(entityIn);
@@ -113,14 +114,18 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
     }
 
     protected void onDeathUpdate(){
-        ++this.deathTime;
-        for (int k = 0; k < 10; ++k) {
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1, new int[0]);
+        if(deathTime == 20 && !world.isRemote){
+            this.entityDropItem(new ItemStack(ModItems.gorgon_head), 0);
         }
-        if (this.deathTime == 200) {
+        ++this.deathTime;
+        this.livingSoundTime = 20;
+        for (int k = 0; k < 5; ++k) {
+            double d2 = 0.4;
+            double d0 = 0.1;
+            double d1 = 0.1;
+            IceAndFire.PROXY.spawnParticle("blood", this.world, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY, this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1);
+        }
+        if (this.deathTime >= 200) {
             if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
                 int i = this.getExperiencePoints(this.attackingPlayer);
                 i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
@@ -130,7 +135,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
                     this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
                 }
             }
-
             this.setDead();
 
             for (int k = 0; k < 20; ++k) {

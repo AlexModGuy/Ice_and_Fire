@@ -32,7 +32,7 @@ public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
     }
 
     public ModelBase getMainModel() {
-        return MODEL_SLIM;
+        return MODEL;
     }
 
     @Override

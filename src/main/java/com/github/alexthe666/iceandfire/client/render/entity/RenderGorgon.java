@@ -26,7 +26,7 @@ public class RenderGorgon extends RenderLiving<EntityGorgon> {
     protected ResourceLocation getEntityTexture(EntityGorgon gorgon) {
         if(gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE){
             return AGRESSIVE_TEXTURE;
-        }else if(gorgon.isDead){
+        }else if(gorgon.deathTime > 0){
             return DEAD_TEXTURE;
         }else{
             return PASSIVE_TEXTURE;

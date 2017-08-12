@@ -8,15 +8,25 @@ import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -32,6 +42,7 @@ public class StructureGenerator implements IWorldGenerator {
     private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
     private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
     private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
+    private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
 
     public static BlockPos getHeight(World world, BlockPos pos) {
         for (int y = 0; y < 256; y++) {
@@ -48,6 +59,18 @@ public class StructureGenerator implements IWorldGenerator {
         int x = (chunkX * 16) + random.nextInt(16);
         int z = (chunkZ * 16) + random.nextInt(16);
         BlockPos height = getHeight(world, new BlockPos(x, 0, z));
+        if (IceAndFire.CONFIG.spawnGorgons) {
+            IBlockState blockState = world.getBlockState(height);
+            if(blockState.isFullBlock() && world.isAirBlock(height.up()) && random.nextInt(IceAndFire.CONFIG.generateGorgonsChance + 1) == 0){
+                Rotation rotation = Rotation.values()[random.nextInt(Rotation.values().length)];
+                Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
+                MinecraftServer server = world.getMinecraftServer();
+                TemplateManager templateManager = world.getSaveHandler().getStructureTemplateManager();
+                PlacementSettings settings = new PlacementSettings().setRotation(rotation).setMirror(mirror);
+                Template template = templateManager.getTemplate(server, GORGON_TEMPLE);
+                template.addBlocksToWorldChunk(world, height.add(template.getSize().getX()/2, -11, template.getSize().getZ()/2), settings);
+            }
+        }
         if (IceAndFire.CONFIG.generateDragonSkeletons) {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY) && random.nextInt(IceAndFire.CONFIG.generateDragonSkeletonChance + 1) == 0) {
                 EntityFireDragon firedragon = new EntityFireDragon(world);
@@ -154,6 +177,25 @@ public class StructureGenerator implements IWorldGenerator {
             return useBlackOrWhiteLists;
         }
         return !useBlackOrWhiteLists;
+    }
+
+    public void loadStructure(BlockPos pos, IBlockState blockstate, World world, String name, Rotation rotation) {
+        if (!world.isRemote) {
+            WorldServer worldserver = (WorldServer) world;
+            MinecraftServer minecraftserver = world.getMinecraftServer();
+            TemplateManager templatemanager = worldserver.getStructureTemplateManager();
+            ResourceLocation loc = new ResourceLocation("iceandfire:structures/gorgon_temple.nbt");
+
+            Template template = templatemanager.getTemplate(minecraftserver, loc);
+            if (template != null) {
+                world.notifyBlockUpdate(pos, blockstate, blockstate, 3);
+                PlacementSettings placementsettings = (new PlacementSettings()).setMirror(Mirror.NONE)
+                        .setRotation(Rotation.NONE).setIgnoreEntities(false).setChunk((ChunkPos) null)
+                        .setReplacedBlock((Block) null).setIgnoreStructureBlock(false);
+                template.addBlocksToWorld(world, pos, placementsettings);
+
+            }
+        }
     }
 
     private boolean isAether(World world){

@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemBlindfold extends ItemArmor {
 
-    public static final PotionEffect POTION_EFFECT = new PotionEffect(MobEffects.BLINDNESS, 20, 1, true, false);
     public ItemBlindfold() {
         super(ModItems.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
         this.setCreativeTab(IceAndFire.TAB);
@@ -23,7 +22,7 @@ public class ItemBlindfold extends ItemArmor {
     }
 
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack){
-        player.addPotionEffect(POTION_EFFECT);
+        player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20, 2, true, false));
     }
 
 }

@@ -345,6 +345,21 @@ public class ModelGorgon extends ModelDragonBase {
         this.chainFlap(SNAKER4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
         this.chainSwing(SNAKER4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
         this.faceTarget(f3, f4, 1, this.Head);
+
+        float deathProg = Math.min(40, (float)entity.deathTime) / 2;
+
+        this.progressRotation(Tail_1, deathProg, (float)Math.toRadians(5), (float)Math.toRadians(57), 0);
+        this.progressPosition(Tail_1, deathProg, -5, 22, -4);
+        this.progressRotation(Tail_2, deathProg, (float)Math.toRadians(18), (float)Math.toRadians(-54), 0);
+        this.progressRotation(Body, deathProg, (float)Math.toRadians(-9), (float)Math.toRadians(36), 0);
+        this.progressRotation(Right_Arm, deathProg, 0, 0, (float)Math.toRadians(20));
+        this.progressRotation(Left_Arm, deathProg, 0, 0, (float)Math.toRadians(-20));
+        if(deathProg > 0){
+            this.Neck.isHidden = true;
+        }else{
+            this.Neck.isHidden = false;
+
+        }
     }
 
     @Override
