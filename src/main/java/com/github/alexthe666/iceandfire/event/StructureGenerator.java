@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
@@ -18,9 +17,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -177,25 +174,6 @@ public class StructureGenerator implements IWorldGenerator {
             return useBlackOrWhiteLists;
         }
         return !useBlackOrWhiteLists;
-    }
-
-    public void loadStructure(BlockPos pos, IBlockState blockstate, World world, String name, Rotation rotation) {
-        if (!world.isRemote) {
-            WorldServer worldserver = (WorldServer) world;
-            MinecraftServer minecraftserver = world.getMinecraftServer();
-            TemplateManager templatemanager = worldserver.getStructureTemplateManager();
-            ResourceLocation loc = new ResourceLocation("iceandfire:structures/gorgon_temple.nbt");
-
-            Template template = templatemanager.getTemplate(minecraftserver, loc);
-            if (template != null) {
-                world.notifyBlockUpdate(pos, blockstate, blockstate, 3);
-                PlacementSettings placementsettings = (new PlacementSettings()).setMirror(Mirror.NONE)
-                        .setRotation(Rotation.NONE).setIgnoreEntities(false).setChunk((ChunkPos) null)
-                        .setReplacedBlock((Block) null).setIgnoreStructureBlock(false);
-                template.addBlocksToWorld(world, pos, placementsettings);
-
-            }
-        }
     }
 
     private boolean isAether(World world){

@@ -84,7 +84,7 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "gorgons", comment = "Maximum gorgon health")
     public double gorgonMaxHealth = 50D;
 
-    @ConfigEntry(category = "compatability", comment = "Triggers option above")
+    @ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
     public boolean useAetherCompat = false;
     @ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
     public int aetherDimensionID = 3;

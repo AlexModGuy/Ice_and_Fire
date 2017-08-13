@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelGorgon;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -15,6 +16,7 @@ public class RenderGorgon extends RenderLiving<EntityGorgon> {
 
     public RenderGorgon(RenderManager renderManager) {
         super(renderManager, new ModelGorgon(), 0.6F);
+        this.layerRenderers.add(new LayerGorgonEyes(this));
     }
 
     @Override

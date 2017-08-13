@@ -99,6 +99,11 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
         return super.attackEntityAsMob(entityIn);
     }
 
+    protected boolean canDespawn() {
+        return false;
+    }
+
+
     public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
         super.setAttackTarget(entitylivingbaseIn);
         if(entitylivingbaseIn != null){

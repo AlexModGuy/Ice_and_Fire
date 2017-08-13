@@ -153,6 +153,7 @@ entity.hippogryph.dodo=Dodo Hippogryph
 entity.player.name=Player
 entity.stonestatue.name=Stone Statue
 entity.gorgon.name=Gorgon
+entity.pixie.name=Pixie
 
 dragon.red=Red
 dragon.green=Emerald
