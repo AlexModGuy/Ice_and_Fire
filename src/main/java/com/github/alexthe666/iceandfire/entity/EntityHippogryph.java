@@ -1011,7 +1011,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
     @Override
     public void onHearFlute(EntityPlayer player) {
-        System.out.println("flute ");
         if(this.isTamed() && this.isOwner(player)) {
             if (this.isFlying() || this.isHovering()) {
                 this.airTarget = null;

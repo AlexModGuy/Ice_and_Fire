@@ -1,34 +1,43 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAITempt;
+import com.google.common.base.Predicate;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityPixie extends EntityAnimal {
+public class EntityPixie extends EntityTameable {
 
     private BlockPos housePos;
     private static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityPixie.class, DataSerializers.VARINT);
+    public NonNullList<ItemStack> heldItem = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
+    public boolean slowSpeed = false;
 
     public EntityPixie(World worldIn) {
         super(worldIn);
         this.moveHelper = new EntityPixie.AIMoveControl(this);
         this.setSize(0.4F, 0.8F);
         this.experienceValue = 3;
-        this.setNoGravity(true);
     }
 
     @Override
@@ -44,13 +53,52 @@ public class EntityPixie extends EntityAnimal {
         this.getDataManager().register(COLOR, 0);
     }
 
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+        if (!this.isInWater()) {
+            this.handleWaterMovement();
+        }
+
+        if (onGroundIn) {
+            if (this.fallDistance > 0.0F) {
+                state.getBlock().onFallenUpon(this.world, pos, this, this.fallDistance);
+            }
+
+            this.fallDistance = 0.0F;
+        }
+        else if (y < 0.0D) {
+            this.fallDistance = (float)((double)this.fallDistance - y);
+        }
+    }
+
+    public void fall(float distance, float damageMultiplier) {}
+
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIPanic(this, 1.4D));
+        this.tasks.addTask(2, new AIMoveRandom());
         this.tasks.addTask(3, new PixieAITempt(this, 1.0D));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
+        this.tasks.addTask(3, new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
+            @Override
+            public boolean apply(@Nullable EntityPlayer entity) {
+                return true;
+            }
+        }));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        this.setColor(this.rand.nextInt(5));
+        return livingdata;
+    }
+
+    public void onLivingUpdate(){
+        super.onLivingUpdate();
+        this.motionY += 0.08D;
+
     }
 
 
@@ -65,12 +113,15 @@ public class EntityPixie extends EntityAnimal {
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         this.setColor(compound.getInteger("Color"));
+        this.heldItem = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.heldItem);
         super.readEntityFromNBT(compound);
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         compound.setInteger("Color", this.getColor());
+        ItemStackHelper.saveAllItems(compound, this.heldItem);
         super.writeEntityToNBT(compound);
     }
 
@@ -96,9 +147,13 @@ public class EntityPixie extends EntityAnimal {
     class AIMoveControl extends EntityMoveHelper {
         public AIMoveControl(EntityPixie pixie) {
             super(pixie);
+            this.speed = 0.75F;
         }
 
         public void onUpdateMoveHelper() {
+            if(EntityPixie.this.slowSpeed){
+                this.speed = 0.4F;
+            }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntityPixie.this.posX;
                 double d1 = this.posY - EntityPixie.this.posY;
@@ -136,7 +191,7 @@ public class EntityPixie extends EntityAnimal {
         }
 
         public boolean shouldExecute() {
-            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(7) == 0;
+            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0;
         }
 
         public boolean shouldContinueExecuting() {

@@ -9,11 +9,11 @@ import net.minecraft.util.ResourceLocation;
 public class RenderPixie extends RenderLiving<EntityPixie> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_0.png");
-    public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/gorgon/pixie_1.png");
-    public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/gorgon/pixie_2.png");
-    public static final ResourceLocation TEXTURE_3 = new ResourceLocation("iceandfire:textures/models/gorgon/pixie_3.png");
-    public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/gorgon/pixie_4.png");
-    public static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/gorgon/pixie_5.png");
+    public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_1.png");
+    public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_2.png");
+    public static final ResourceLocation TEXTURE_3 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_3.png");
+    public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_4.png");
+    public static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_5.png");
 
     public RenderPixie(RenderManager renderManager) {
         super(renderManager, new ModelPixie(), 0.2F);

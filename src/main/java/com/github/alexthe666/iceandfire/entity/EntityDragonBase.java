@@ -35,7 +35,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -1142,6 +1141,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 double extraY_pre = 0.8F;
                 double extraY = ((extraY_pre - (hoverAddition) + (flyAddition)) * (this.getRenderSize() / 3)) - (0.35D * (1 - (this.getRenderSize() / 30))) + bob0 + bob1 + bob2;
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+
                 this.stepHeight = 1;
             }
         }

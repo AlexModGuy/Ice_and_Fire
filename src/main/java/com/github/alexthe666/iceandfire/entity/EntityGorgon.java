@@ -161,7 +161,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
             }
         }
 
-        if(this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget()) && isEntityLookingAt(this.getAttackTarget(), this)) {
+        if(this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
             if(!blindness) {
                 if (this.getAnimation() != ANIMATION_SCARE) {
@@ -229,13 +229,13 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
         return 10;
     }
 
-    private static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen){
+    public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree){
         Vec3d vec3d = looker.getLook(1.0F).normalize();
         Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double)seen.getEyeHeight() - (looker.posY + (double)looker.getEyeHeight()), seen.posZ - looker.posZ);
         double d0 = vec3d1.lengthVector();
         vec3d1 = vec3d1.normalize();
         double d1 = vec3d.dotProduct(vec3d1);
-        return d1 > 1.0D - 0.4D / d0 ? looker.canEntityBeSeen(seen) && !isStoneMob(seen) : false;
+        return d1 > 1.0D - degree / d0 ? looker.canEntityBeSeen(seen) && !isStoneMob(seen) : false;
     }
 
     public static boolean isStoneMob(EntityLivingBase mob){
