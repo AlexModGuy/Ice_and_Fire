@@ -58,7 +58,7 @@ public class StructureGenerator implements IWorldGenerator {
         BlockPos height = getHeight(world, new BlockPos(x, 0, z));
         if (IceAndFire.CONFIG.spawnGorgons) {
             IBlockState blockState = world.getBlockState(height);
-            if(blockState.isFullBlock() && world.isAirBlock(height.up()) && random.nextInt(IceAndFire.CONFIG.generateGorgonsChance + 1) == 0){
+            if(blockState.isFullBlock() && world.isAirBlock(height.up()) && random.nextInt(IceAndFire.CONFIG.generateGorgonsChance + 1) == 0 && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)){
                 Rotation rotation = Rotation.values()[random.nextInt(Rotation.values().length)];
                 Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
                 MinecraftServer server = world.getMinecraftServer();

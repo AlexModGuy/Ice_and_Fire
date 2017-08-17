@@ -10,10 +10,7 @@ import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderGorgonHead;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
+import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -83,6 +80,15 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPixieHouse.class, new RenderPixieHouse());
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 0, TileEntityPixieHouse.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 1, TileEntityPixieHouse.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 2, TileEntityPixieHouse.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 3, TileEntityPixieHouse.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 4, TileEntityPixieHouse.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 5, TileEntityPixieHouse.class);
+
+
     }
 
     public void renderItems() {
@@ -204,6 +210,13 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(ModItems.gorgon_head, 1, new ModelResourceLocation("iceandfire:gorgon_head", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.stone_statue, 0, new ModelResourceLocation("iceandfire:stone_statue", "inventory"));
         renderItem.getItemModelMesher().register(ModItems.blindfold, 0, new ModelResourceLocation("iceandfire:blindfold", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 0, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 1, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 2, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 3, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 4, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 5, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+
 
     }
 

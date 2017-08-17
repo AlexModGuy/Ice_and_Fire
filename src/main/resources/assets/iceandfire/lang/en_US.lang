@@ -32,6 +32,13 @@ tile.iceandfire.frozenGrassPath.name=Frozen Grass Path
 tile.iceandfire.dragon_ice.name=Dragon Ice
 tile.iceandfire.dragon_ice_spikes.name=Dragon Ice Spikes
 tile.iceandfire.egginice.name=Frozen Dragon Egg
+tile.iceandfire.pixie_house.name=Pixie Hovel
+tile.iceandfire.pixie_house.type0=Mushroom
+tile.iceandfire.pixie_house.type1=Mushroom
+tile.iceandfire.pixie_house.type2=Birch
+tile.iceandfire.pixie_house.type3=Oak
+tile.iceandfire.pixie_house.type4=Dark Oak
+tile.iceandfire.pixie_house.type5=Spruce
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript

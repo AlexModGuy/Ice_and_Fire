@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "inventory": {
+      "model": "pixie_house"
+    },
+    "all": {
+      "model": "planks_oak"
+    }
+  }
+}

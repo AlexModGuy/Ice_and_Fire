@@ -36,6 +36,7 @@ public class ModBlocks {
     public static Block dragon_ice;
     public static Block dragon_ice_spikes;
     public static Block eggInIce;
+    public static Block pixieHouse;
 
     public static void init() {
         lectern = new BlockLectern();
@@ -64,6 +65,7 @@ public class ModBlocks {
         dragon_ice = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "iceandfire.dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
         dragon_ice_spikes = new BlockIceSpikes();
         eggInIce = new BlockEggInIce();
+        pixieHouse = new BlockPixieHouse();
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
     }
