@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelPixie extends ModelDragonBase {
@@ -97,8 +99,7 @@ public class ModelPixie extends ModelDragonBase {
         AdvancedModelRenderer[] RIGHT_WINGS = new AdvancedModelRenderer[]{ Right_Wing, Right_Wing2};
         this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
         this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
-        this.Right_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
-        this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+
         this.Left_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
         this.Right_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
 
@@ -109,9 +110,23 @@ public class ModelPixie extends ModelDragonBase {
         if(f12 > Math.toRadians(20)){
             f12 = (float)Math.toRadians(20);
         }
-        this.Body.rotateAngleX = f12;
-        this.Head.rotateAngleX -= f12;
-        this.faceTarget(f3, f4, 1, this.Head);
+        ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+        if (!itemstack.isEmpty()) {
+            this.Body.rotateAngleX = f12;
+            this.Head.rotateAngleX -= f12;
+            this.faceTarget(f3, f4, 1, this.Head);
+            this.Left_Arm.rotateAngleX += (float)Math.toRadians(-35);
+            this.Right_Arm.rotateAngleX += (float)Math.toRadians(-35);
+            this.Body.rotateAngleX += (float)Math.toRadians(10);
+            this.Left_Leg.rotateAngleX += (float)Math.toRadians(-10);
+            this.Right_Leg.rotateAngleX += (float)Math.toRadians(-10);
+            this.Head.rotateAngleX += (float)Math.toRadians(-10);
+        }else{
+            this.Right_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
+            this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+        }
+
+
     }
 
     @Override

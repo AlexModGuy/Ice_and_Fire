@@ -11,13 +11,12 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
@@ -30,8 +29,9 @@ public class EntityPixie extends EntityTameable {
 
     private BlockPos housePos;
     private static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityPixie.class, DataSerializers.VARINT);
-    public NonNullList<ItemStack> heldItem = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
     public boolean slowSpeed = false;
+    private PixieAIFlee aiFlee;
+    private PixieAITempt aiTempt;
 
     public EntityPixie(World worldIn) {
         super(worldIn);
@@ -70,21 +70,32 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
+    public void flipAI(boolean flee){
+        if(flee){
+            this.tasks.removeTask(aiTempt);
+            this.tasks.addTask(3, aiFlee);
+        }else{
+            this.tasks.removeTask(aiFlee);
+            this.tasks.addTask(3, aiTempt);
+        }
+    }
+
     public void fall(float distance, float damageMultiplier) {}
 
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIPanic(this, 1.4D));
-        this.tasks.addTask(2, new AIMoveRandom());
-        this.tasks.addTask(3, new PixieAITempt(this, 1.0D));
-        this.tasks.addTask(3, new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
+        this.tasks.addTask(3, aiTempt = new PixieAITempt(this, 1.0D));
+        this.tasks.addTask(3, aiFlee = new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
                 return true;
             }
         }));
+        this.tasks.addTask(4, new AIMoveRandom());
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
+        this.tasks.removeTask(aiFlee);
+
     }
 
     @Override
@@ -92,6 +103,7 @@ public class EntityPixie extends EntityTameable {
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setColor(this.rand.nextInt(5));
+        this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         return livingdata;
     }
 
@@ -113,15 +125,12 @@ public class EntityPixie extends EntityTameable {
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         this.setColor(compound.getInteger("Color"));
-        this.heldItem = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(compound, this.heldItem);
         super.readEntityFromNBT(compound);
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         compound.setInteger("Color", this.getColor());
-        ItemStackHelper.saveAllItems(compound, this.heldItem);
         super.writeEntityToNBT(compound);
     }
 
@@ -152,7 +161,7 @@ public class EntityPixie extends EntityTameable {
 
         public void onUpdateMoveHelper() {
             if(EntityPixie.this.slowSpeed){
-                this.speed = 0.4F;
+                this.speed = 1F;
             }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntityPixie.this.posX;

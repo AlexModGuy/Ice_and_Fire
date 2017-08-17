@@ -23,8 +23,6 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
     private static final DataParameter<Integer> DRAGON_STAGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
     public final float minSize = 0.3F;
     public final float maxSize = 8.58F;
-    private float field_98056_d = -1.0F;
-    private float field_98057_e;
 
     public EntityDragonSkull(World worldIn) {
         super(worldIn);
