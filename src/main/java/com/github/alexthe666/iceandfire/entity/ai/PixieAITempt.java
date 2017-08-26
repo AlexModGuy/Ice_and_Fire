@@ -34,6 +34,9 @@ public class PixieAITempt extends EntityAIBase
     }
 
     public boolean shouldExecute() {
+        if(temptedEntity.getRNG().nextInt(20) != 0){
+            return false;
+        }
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
             return false;

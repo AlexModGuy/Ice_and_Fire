@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAITempt;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -84,13 +87,14 @@ public class EntityPixie extends EntityTameable {
 
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(3, aiTempt = new PixieAITempt(this, 1.0D));
-        this.tasks.addTask(3, aiFlee = new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
+        this.tasks.addTask(2, aiTempt = new PixieAITempt(this, 1.0D));
+        this.tasks.addTask(2, aiFlee = new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
                 return true;
             }
         }));
+        this.tasks.addTask(3, new AIEnterHouse());
         this.tasks.addTask(4, new AIMoveRandom());
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
@@ -110,7 +114,18 @@ public class EntityPixie extends EntityTameable {
     public void onLivingUpdate(){
         super.onLivingUpdate();
         this.motionY += 0.08D;
-
+        if(housePos != null && this.getDistanceSqToCenter(housePos) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse){
+            if(((TileEntityPixieHouse)world.getTileEntity(housePos)).hasPixie){
+                this.housePos = null;
+            }else{
+                System.out.println(world.isRemote);
+                ((TileEntityPixieHouse)world.getTileEntity(housePos)).hasPixie = true;
+                ((TileEntityPixieHouse)world.getTileEntity(housePos)).pixieType = this.getColor();
+                ((TileEntityPixieHouse)world.getTileEntity(housePos)).pixieItems.set(0, this.getHeldItem(EnumHand.MAIN_HAND));
+                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(housePos.toLong(), true, this.getColor()));
+                this.setDead();
+            }
+        }
     }
 
 
@@ -150,6 +165,22 @@ public class EntityPixie extends EntityTameable {
             return world.getTopSolidOrLiquidBlock(new BlockPos(x, entity.posY, z)).up(rand.nextInt(3) + 1);
         }
         return new BlockPos(x, entity.posY, z);
+    }
+
+    public static BlockPos findAHouse(Entity entity, World world){
+        for(int xSearch = -10; xSearch < 10; xSearch++){
+            for(int ySearch = -10; ySearch < 10; ySearch++){
+                for(int zSearch = -10; zSearch < 10; zSearch++){
+                    if(world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) != null && world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse){
+                        TileEntityPixieHouse house = (TileEntityPixieHouse)world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch));
+                        if(!house.hasPixie){
+                            return entity.getPosition().add(xSearch, ySearch, zSearch);
+                        }
+                    }
+                }
+            }
+        }
+        return entity.getPosition();
     }
 
 
@@ -200,7 +231,7 @@ public class EntityPixie extends EntityTameable {
         }
 
         public boolean shouldExecute() {
-            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0;
+            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
         }
 
         public boolean shouldContinueExecuting() {
@@ -208,11 +239,8 @@ public class EntityPixie extends EntityTameable {
         }
 
         public void updateTask() {
-            BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.getPosition() : EntityPixie.this.getHousePos();
+            BlockPos blockpos = new BlockPos(EntityPixie.this);
 
-            if (blockpos == null) {
-                blockpos = new BlockPos(EntityPixie.this);
-            }
 
             for (int i = 0; i < 3; ++i) {
                 BlockPos blockpos1 = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
@@ -228,4 +256,36 @@ public class EntityPixie extends EntityTameable {
             }
         }
     }
-}
+
+    class AIEnterHouse extends EntityAIBase {
+        public AIEnterHouse() {
+            this.setMutexBits(1);
+        }
+
+        public boolean shouldExecute() {
+            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0;
+        }
+
+        public boolean shouldContinueExecuting() {
+            return false;
+        }
+
+        public void updateTask() {
+            BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.getPosition() : EntityPixie.this.getHousePos();
+
+            if (blockpos == null) {
+                blockpos = new BlockPos(EntityPixie.this);
+            }
+
+            for (int i = 0; i < 3; ++i) {
+                BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+                 EntityPixie.this.moveHelper.setMoveTo((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 0.25D);
+                EntityPixie.this.housePos = blockpos1;
+                if (EntityPixie.this.getAttackTarget() == null) {
+                    EntityPixie.this.getLookHelper().setLookPosition((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
+                }
+                }
+            }
+        }
+    }
+

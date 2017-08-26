@@ -44,6 +44,7 @@ public class BlockPixieHouse extends BlockContainer {
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.pixie_house");
         this.setRegistryName(IceAndFire.MODID, "pixie_house");
+        this.setTickRandomly(true);
         GameRegistry.register(this);
         GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
         GameRegistry.register(itemBlock = (new ItemBlockPixieHouse(this).setRegistryName(this.getRegistryName())));
@@ -62,11 +63,15 @@ public class BlockPixieHouse extends BlockContainer {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        Block block = iblockstate.getBlock();
         return iblockstate.isOpaqueCube();
     }
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+       dropPixie(worldIn, pos);
+       super.breakBlock(worldIn, pos, state);
+    }
+
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
     }
 
@@ -77,9 +82,16 @@ public class BlockPixieHouse extends BlockContainer {
     private boolean checkFall(World worldIn, BlockPos pos) {
         if (!this.canPlaceBlockAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
+            dropPixie(worldIn, pos);
             return false;
         } else {
             return true;
+        }
+    }
+
+    public void dropPixie(World world, BlockPos pos){
+        if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse)world.getTileEntity(pos)).hasPixie){
+            ((TileEntityPixieHouse)world.getTileEntity(pos)).releasePixie();
         }
     }
 
