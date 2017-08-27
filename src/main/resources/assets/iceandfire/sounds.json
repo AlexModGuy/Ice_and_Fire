@@ -1,4 +1,36 @@
 {
+  "pixie.idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:pixie_idle_0",
+      "iceandfire:pixie_idle_1",
+      "iceandfire:pixie_idle_2",
+      "iceandfire:pixie_idle_3",
+      "iceandfire:pixie_idle_4"
+    ]
+  },
+  "pixie.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:pixie_hurt_0",
+      "iceandfire:pixie_hurt_1",
+      "iceandfire:pixie_hurt_2",
+      "iceandfire:pixie_hurt_3"
+    ]
+  },
+  "pixie.die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:pixie_death_0"
+    ]
+  },
+  "pixie.taunt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:pixie_taunt_0",
+      "iceandfire:pixie_taunt_1"
+    ]
+  },
   "gorgon.idle": {
     "category": "neutral",
     "sounds": [

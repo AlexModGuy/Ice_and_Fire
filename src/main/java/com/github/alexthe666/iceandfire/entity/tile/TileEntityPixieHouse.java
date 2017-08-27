@@ -56,7 +56,6 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public void update() {
         ticksExisted++;
         if(!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0){
-            System.out.println("pixieReleased");
             releasePixie();
         }
     }
@@ -71,6 +70,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         }
         this.hasPixie = false;
         this.pixieType = 0;
+        pixie.ticksUntilHouseAI = 500;
         if(!world.isRemote){
             IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
         }

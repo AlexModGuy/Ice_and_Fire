@@ -6,9 +6,12 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.EnumSkyBlock;
 import org.lwjgl.opengl.GL11;
 
 public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieHouse> {
@@ -49,7 +52,7 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
         GL11.glRotatef(rotation, 0, 1F, 0);
         if(entity != null && entity.getWorld() != null && entity.hasPixie) {
             GL11.glPushMatrix();
-            GL11.glTranslatef(0F, 1F, 0F);
+            GL11.glTranslatef(0F, 0.95F, 0F);
             GL11.glScalef(0.55F, 0.55F, 0.55F);
             GL11.glPushMatrix();
             //GL11.glRotatef(MathHelper.clampAngle(entity.ticksExisted * 3), 0, 1, 0);
@@ -74,9 +77,25 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
                     break;
             }
             GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_CULL_FACE);
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.CONSTANT_ALPHA);
+            GlStateManager.disableLighting();
+            GlStateManager.depthMask(true);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+            GlStateManager.enableLighting();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableColorMaterial();
             MODEL_PIXIE.animateInHouse(entity);
-            GL11.glEnable(GL11.GL_CULL_FACE);
+            GlStateManager.disableColorMaterial();
+            int i = entity.getWorld().getCombinedLight(entity.getPos(), entity.getWorld().getLightFor(EnumSkyBlock.BLOCK, entity.getPos()));
+            int j = i % 65536;
+            int k = i / 65536;
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+            GlStateManager.depthMask(true);
+            GlStateManager.disableBlend();
+            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+            GlStateManager.enableTexture2D();
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
             GL11.glPopMatrix();
             GL11.glPopMatrix();
             GL11.glPopMatrix();

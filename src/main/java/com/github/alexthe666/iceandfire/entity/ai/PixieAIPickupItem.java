@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -16,38 +17,32 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarget {
+public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityItem> targetEntitySelector;
-    private final int targetChance;
     protected EntityItem targetEntity;
 
-    public HippogryphAITargetItems(EntityCreature creature, boolean checkSight) {
+    public PixieAIPickupItem(EntityCreature creature, boolean checkSight) {
         this(creature, checkSight, false);
     }
 
-    public HippogryphAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
+    public PixieAIPickupItem(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
     }
 
-    public HippogryphAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public PixieAIPickupItem(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
-        this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetEntitySelector = new Predicate<EntityItem>() {
             @Override
             public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Items.RABBIT_FOOT;
+                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Items.CAKE;
             }
         };
     }
 
     @Override
     public boolean shouldExecute() {
-
-        if (!((EntityHippogryph) this.taskOwner).canMove()) {
-            return false;
-        }
         List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
@@ -65,7 +60,10 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ, 1);
+        this.taskOwner.getMoveHelper().setMoveTo(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ, 0.25D);
+        if (this.taskOwner.getAttackTarget() == null) {
+            this.taskOwner.getLookHelper().setLookPosition(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ, 180.0F, 20.0F);
+        }
         super.startExecuting();
     }
 
@@ -76,17 +74,14 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
             this.resetTask();
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
-            EntityHippogryph hippo = (EntityHippogryph)this.taskOwner;
+            EntityPixie pixie = (EntityPixie)this.taskOwner;
             this.targetEntity.getItem().shrink(1);
-            this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
-            System.out.println(this.targetEntity.getThrower() + " vs " + this.targetEntity.getOwner());
-            System.out.println(this.targetEntity.getItem());
-            if(hippo.getRNG().nextInt(3) == 0 && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
+            pixie.playSound(ModSounds.pixie_taunt, 1F, 1F);
+            if(!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
                 EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
-                hippo.setTamed(true);
-                hippo.setOwnerId(owner.getUniqueID());
-                hippo.setSitting(true);
+                pixie.setTamed(true);
+                pixie.setOwnerId(owner.getUniqueID());
+                pixie.setSitting(true);
             }
             resetTask();
         }
@@ -94,7 +89,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return taskOwner.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
     }
 
     public static class Sorter implements Comparator<Entity> {

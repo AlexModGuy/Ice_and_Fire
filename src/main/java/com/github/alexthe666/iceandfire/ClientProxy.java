@@ -5,10 +5,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
 import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
 import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
-import com.github.alexthe666.iceandfire.client.particle.ParticleBlood;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
-import com.github.alexthe666.iceandfire.client.particle.ParticleSnowflake;
+import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -242,6 +239,9 @@ public class ClientProxy extends CommonProxy {
         }
         if (name.equals("blood")) {
             particle = new ParticleBlood(world, x, y, z);
+        }
+        if (name.equals("pixie")) {
+            particle = new ParticlePixieDust(world, x, y, z, (float)motX, (float)motY, (float)motZ);
         }
         if (particle != null) {
             Minecraft.getMinecraft().effectRenderer.addEffect(particle);

@@ -7,8 +7,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
@@ -39,7 +41,7 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
 
 
     public boolean shouldExecute() {
-        if (this.pixie.getHeldItem(EnumHand.MAIN_HAND) != null) {
+        if (this.pixie.getHeldItem(EnumHand.MAIN_HAND) == ItemStack.EMPTY) {
             return false;
         }
         if (this.pixie.isTamed()) {
@@ -59,15 +61,12 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
                 if (vec3d == null) {
                     return false;
                 }
-                else if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSqToEntity(this.pixie)) {
-                    return false;
-                }
                 else {
-                    vec3d = vec3d.addVector(0, 2, 0);
+                    vec3d = vec3d.addVector(0, 3, 0);
                     this.pixie.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1D);
                     this.pixie.getLookHelper().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
                     hidePlace = vec3d;
-
+                    pixie.slowSpeed = true;
                     return true;
                 }
             }
@@ -76,7 +75,7 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting(){
-        return this.pixie.getMoveHelper().action != EntityMoveHelper.Action.WAIT || hidePlace != null;
+        return hidePlace != null && this.pixie.getDistanceSqToCenter(new BlockPos(hidePlace)) < 2;
     }
 
     public void startExecuting() {
@@ -85,6 +84,8 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
     }
 
     public void resetTask() {
+        this.pixie.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         this.closestLivingEntity = null;
+        pixie.slowSpeed = false;
     }
 }

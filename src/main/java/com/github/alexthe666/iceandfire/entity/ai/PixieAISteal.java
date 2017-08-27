@@ -1,17 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.EnumHand;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PixieAITempt extends EntityAIBase
+public class PixieAISteal extends EntityAIBase
 {
     private final EntityPixie temptedEntity;
     private final double speed;
@@ -24,17 +24,14 @@ public class PixieAITempt extends EntityAIBase
     private int delayTemptCounter;
     private boolean isRunning;
 
-    public PixieAITempt(EntityPixie temptedEntityIn, double speedIn) {
+    public PixieAISteal(EntityPixie temptedEntityIn, double speedIn) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
         this.setMutexBits(3);
-        if (!(temptedEntityIn.getNavigator() instanceof PathNavigateGround)) {
-            throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
-        }
     }
 
     public boolean shouldExecute() {
-        if(temptedEntity.getRNG().nextInt(20) != 0){
+        if(temptedEntity.getRNG().nextInt(3) == 0){
             return false;
         }
         if (this.delayTemptCounter > 0) {
@@ -43,7 +40,7 @@ public class PixieAITempt extends EntityAIBase
         }
         else {
             this.temptingPlayer = this.temptedEntity.world.getClosestPlayerToEntity(this.temptedEntity, 10.0D);
-            return this.temptingPlayer == null ? false : this.temptedEntity.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty();
+            return this.temptingPlayer == null ? false : this.temptedEntity.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty() && !this.temptingPlayer.isCreative();
         }
     }
 
@@ -72,7 +69,6 @@ public class PixieAITempt extends EntityAIBase
             for(int i = 0; i < this.temptingPlayer.inventory.getSizeInventory(); i++){
                 if(this.temptingPlayer.inventory.getStackInSlot(i) != ItemStack.EMPTY){
                     slotlist.add(i);
-                    System.out.println(this.temptingPlayer.inventory.getStackInSlot(i));
                 }
             }
             int slot = slotlist.get(new Random().nextInt(slotlist.size()));
@@ -80,6 +76,7 @@ public class PixieAITempt extends EntityAIBase
             this.temptedEntity.setHeldItem(EnumHand.MAIN_HAND, randomItem);
             this.temptingPlayer.inventory.removeStackFromSlot(slot);
             this.temptedEntity.flipAI(true);
+            this.temptedEntity.playSound(ModSounds.pixie_taunt, 1F, 1F);
             this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         }
         else {

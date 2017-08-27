@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -20,6 +21,7 @@ public class RenderPixie extends RenderLiving<EntityPixie> {
     public RenderPixie(RenderManager renderManager) {
         super(renderManager, new ModelPixie(), 0.2F);
         this.layerRenderers.add(new LayerPixieItem(this));
+        this.layerRenderers.add(new LayerPixieGlow(this));
 
     }
 

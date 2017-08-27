@@ -111,10 +111,11 @@ public class ModelPixie extends ModelDragonBase {
         if(f12 > Math.toRadians(20)){
             f12 = (float)Math.toRadians(20);
         }
+        this.Body.rotateAngleX = f12;
+        this.Head.rotateAngleX -= f12;
         ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
-            this.Body.rotateAngleX = f12;
-            this.Head.rotateAngleX -= f12;
+
             this.faceTarget(f3, f4, 1, this.Head);
             this.Left_Arm.rotateAngleX += (float)Math.toRadians(-35);
             this.Right_Arm.rotateAngleX += (float)Math.toRadians(-35);
@@ -127,6 +128,23 @@ public class ModelPixie extends ModelDragonBase {
             this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
         }
 
+        if(entity.isSitting()){
+            this.Right_Arm.rotateAngleX += -((float)Math.PI / 5F);
+            this.Left_Arm.rotateAngleX += -((float)Math.PI / 5F);
+            this.Right_Leg.rotateAngleX = -1.4137167F;
+            this.Right_Leg.rotateAngleY = ((float)Math.PI / 10F);
+            this.Right_Leg.rotateAngleZ = 0.07853982F;
+            this.Left_Leg.rotateAngleX = -1.4137167F;
+            this.Left_Leg.rotateAngleY = -((float)Math.PI / 10F);
+            this.Left_Leg.rotateAngleZ = -0.07853982F;
+            this.Dress.rotateAngleX += (float)Math.toRadians(-50);
+            this.Dress.rotationPointZ += 0.25F;
+            this.Dress.rotationPointY += 0.35F;
+            this.Left_Wing.rotateAngleZ = (float)Math.toRadians(-28);
+            this.Right_Wing.rotateAngleZ = (float)Math.toRadians(28);
+            this.Left_Wing2.rotateAngleZ = (float)Math.toRadians(-8);
+            this.Right_Wing2.rotateAngleZ = (float)Math.toRadians(8);
+        }
 
     }
 
@@ -138,8 +156,8 @@ public class ModelPixie extends ModelDragonBase {
         float degree_idle = 0.5F;
         AdvancedModelRenderer[] LEFT_WINGS = new AdvancedModelRenderer[]{ Left_Wing, Left_Wing2};
         AdvancedModelRenderer[] RIGHT_WINGS = new AdvancedModelRenderer[]{ Right_Wing, Right_Wing2};
-        this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, house.ticksExisted, 1);
-        this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, house.ticksExisted, 1);
+       // this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, house.ticksExisted, 1);
+       // this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, house.ticksExisted, 1);
 
         //this.Left_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
         //this.Right_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
@@ -151,6 +169,22 @@ public class ModelPixie extends ModelDragonBase {
         if(f12 > Math.toRadians(20)){
             f12 = (float)Math.toRadians(20);
         }
+
+        this.Right_Arm.rotateAngleX += -((float)Math.PI / 5F);
+        this.Left_Arm.rotateAngleX += -((float)Math.PI / 5F);
+        this.Right_Leg.rotateAngleX = -1.4137167F;
+        this.Right_Leg.rotateAngleY = ((float)Math.PI / 10F);
+        this.Right_Leg.rotateAngleZ = 0.07853982F;
+        this.Left_Leg.rotateAngleX = -1.4137167F;
+        this.Left_Leg.rotateAngleY = -((float)Math.PI / 10F);
+        this.Left_Leg.rotateAngleZ = -0.07853982F;
+        this.Dress.rotateAngleX += (float)Math.toRadians(-50);
+        this.Dress.rotationPointZ += 0.25F;
+        this.Dress.rotationPointY += 0.35F;
+        this.Left_Wing.rotateAngleZ = (float)Math.toRadians(-28);
+        this.Right_Wing.rotateAngleZ = (float)Math.toRadians(28);
+        this.Left_Wing2.rotateAngleZ = (float)Math.toRadians(-8);
+        this.Right_Wing2.rotateAngleZ = (float)Math.toRadians(8);
         /*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
             this.Body.rotateAngleX = f12;

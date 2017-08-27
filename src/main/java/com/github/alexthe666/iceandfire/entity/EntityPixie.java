@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
-import com.github.alexthe666.iceandfire.entity.ai.PixieAITempt;
+import com.github.alexthe666.iceandfire.entity.ai.PixieAIPickupItem;
+import com.github.alexthe666.iceandfire.entity.ai.PixieAISteal;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.google.common.base.Predicate;
@@ -14,14 +16,19 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -34,13 +41,17 @@ public class EntityPixie extends EntityTameable {
     private static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityPixie.class, DataSerializers.VARINT);
     public boolean slowSpeed = false;
     private PixieAIFlee aiFlee;
-    private PixieAITempt aiTempt;
+    private PixieAISteal aiTempt;
+    public int ticksUntilHouseAI;
+    public int ticksUntilSteal;
+    public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
 
     public EntityPixie(World worldIn) {
         super(worldIn);
         this.moveHelper = new EntityPixie.AIMoveControl(this);
         this.setSize(0.4F, 0.8F);
         this.experienceValue = 3;
+        this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
     }
 
     @Override
@@ -48,6 +59,20 @@ public class EntityPixie extends EntityTameable {
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25);
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
+    }
+
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
+            this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    public void onDeath(DamageSource cause) {
+        super.onDeath(cause);
+        if(!this.world.isRemote && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
+            this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
+        }
     }
 
     @Override
@@ -73,6 +98,11 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+
+        return super.processInteract(player, hand);
+    }
+
     public void flipAI(boolean flee){
         if(flee){
             this.tasks.removeTask(aiTempt);
@@ -87,19 +117,20 @@ public class EntityPixie extends EntityTameable {
 
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, aiTempt = new PixieAITempt(this, 1.0D));
+        this.tasks.addTask(2, aiTempt = new PixieAISteal(this, 1.0D));
+
         this.tasks.addTask(2, aiFlee = new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
                 return true;
             }
         }));
-        this.tasks.addTask(3, new AIEnterHouse());
-        this.tasks.addTask(4, new AIMoveRandom());
+        this.tasks.addTask(2, new PixieAIPickupItem(this, false));
+        this.tasks.addTask(3, new AIMoveRandom());
+        this.tasks.addTask(4, new AIEnterHouse());
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.tasks.removeTask(aiFlee);
-
     }
 
     @Override
@@ -114,11 +145,17 @@ public class EntityPixie extends EntityTameable {
     public void onLivingUpdate(){
         super.onLivingUpdate();
         this.motionY += 0.08D;
+        IceAndFire.PROXY.spawnParticle("pixie", this.world, this.posX + (double)(this.rand.nextFloat() * this.width * 2F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2F) - (double)this.width , PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
+
+        if(ticksUntilHouseAI > 0){
+            ticksUntilHouseAI--;
+        }
         if(housePos != null && this.getDistanceSqToCenter(housePos) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse){
+
             if(((TileEntityPixieHouse)world.getTileEntity(housePos)).hasPixie){
                 this.housePos = null;
+                this.moveHelper.action = EntityMoveHelper.Action.WAIT;
             }else{
-                System.out.println(world.isRemote);
                 ((TileEntityPixieHouse)world.getTileEntity(housePos)).hasPixie = true;
                 ((TileEntityPixieHouse)world.getTileEntity(housePos)).pixieType = this.getColor();
                 ((TileEntityPixieHouse)world.getTileEntity(housePos)).pixieItems.set(0, this.getHeldItem(EnumHand.MAIN_HAND));
@@ -161,10 +198,13 @@ public class EntityPixie extends EntityTameable {
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand){
-        if(world.getTopSolidOrLiquidBlock(new BlockPos(x, entity.posY, z)) != null){
-            return world.getTopSolidOrLiquidBlock(new BlockPos(x, entity.posY, z)).up(rand.nextInt(3) + 1);
+        BlockPos pos = new BlockPos(x, entity.posY, z);
+        for(int yDown = 0; yDown < 3; yDown++){
+            if(!world.isAirBlock(pos.down(yDown))) {
+                return pos.up(yDown);
+            }
         }
-        return new BlockPos(x, entity.posY, z);
+        return pos;
     }
 
     public static BlockPos findAHouse(Entity entity, World world){
@@ -183,6 +223,23 @@ public class EntityPixie extends EntityTameable {
         return entity.getPosition();
     }
 
+    @Nullable
+    protected SoundEvent getAmbientSound()
+    {
+        return ModSounds.pixie_idle;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound()
+    {
+        return ModSounds.pixie_hurt;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound()
+    {
+        return ModSounds.pixie_die;
+    }
 
     class AIMoveControl extends EntityMoveHelper {
         public AIMoveControl(EntityPixie pixie) {
@@ -192,7 +249,7 @@ public class EntityPixie extends EntityTameable {
 
         public void onUpdateMoveHelper() {
             if(EntityPixie.this.slowSpeed){
-                this.speed = 1F;
+                this.speed = 2F;
             }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntityPixie.this.posX;
@@ -226,12 +283,19 @@ public class EntityPixie extends EntityTameable {
     }
 
     class AIMoveRandom extends EntityAIBase {
+        BlockPos target;
         public AIMoveRandom() {
             this.setMutexBits(1);
         }
 
         public boolean shouldExecute() {
-            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
+            target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+            return !EntityPixie.this.isSitting() && isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
+        }
+
+        protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
+            RayTraceResult raytraceresult = EntityPixie.this.world.rayTraceBlocks(new Vec3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vec3d(posVec32.getX() + 0.5D, posVec32.getY() + (double)EntityPixie.this.height * 0.5D, posVec32.getZ() + 0.5D), false, true, false);
+            return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
         public boolean shouldContinueExecuting() {
@@ -239,19 +303,14 @@ public class EntityPixie extends EntityTameable {
         }
 
         public void updateTask() {
-            BlockPos blockpos = new BlockPos(EntityPixie.this);
+            if(!isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target)){
+                target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+            }
+            if (EntityPixie.this.world.isAirBlock(target)) {
+                EntityPixie.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
+                if (EntityPixie.this.getAttackTarget() == null) {
+                    EntityPixie.this.getLookHelper().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
-
-            for (int i = 0; i < 3; ++i) {
-                BlockPos blockpos1 = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
-
-                if (EntityPixie.this.world.isAirBlock(blockpos1)) {
-                    EntityPixie.this.moveHelper.setMoveTo((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 0.25D);
-
-                    if (EntityPixie.this.getAttackTarget() == null) {
-                        EntityPixie.this.getLookHelper().setLookPosition((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
-
-                    }
                 }
             }
         }
@@ -263,7 +322,9 @@ public class EntityPixie extends EntityTameable {
         }
 
         public boolean shouldExecute() {
-            return !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0;
+            BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+
+            return !EntityPixie.this.isSitting() && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(20) == 0 && EntityPixie.this.ticksUntilHouseAI == 0 && !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
         }
 
         public boolean shouldContinueExecuting() {
@@ -288,4 +349,3 @@ public class EntityPixie extends EntityTameable {
             }
         }
     }
-
