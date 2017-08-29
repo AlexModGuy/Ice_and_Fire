@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,13 +23,21 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public int pixieType;
     public int ticksExisted;
     public NonNullList<ItemStack> pixieItems = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
+    private static final float PARTICLE_WIDTH = 0.3F;
+    private static final float PARTICLE_HEIGHT = 0.6F;
+    private Random rand;
+
+    public TileEntityPixieHouse(){
+        this.rand = new Random();
+    }
 
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
         compound.setInteger("HouseType", houseType);
         compound.setBoolean("HasPixie", hasPixie);
         compound.setInteger("PixieType", pixieType);
         ItemStackHelper.saveAllItems(compound, this.pixieItems);
-        return super.writeToNBT(compound);
+        return compound;
     }
 
     @Override
@@ -38,9 +47,16 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }
 
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
+        if(!world.isRemote){
+            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInteger("HouseType")));
+        }
     }
 
     public void readFromNBT(NBTTagCompound compound) {
@@ -57,6 +73,9 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         ticksExisted++;
         if(!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0){
             releasePixie();
+        }
+        if(this.hasPixie){
+            IceAndFire.PROXY.spawnParticle("pixie", this.world, this.pos.getX() + 0.5F + (double)(this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double)PARTICLE_WIDTH, this.pos.getY() + (double)(this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double)(this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double)PARTICLE_WIDTH , EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
     }
 

@@ -80,9 +80,16 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "gorgons", comment = "Wether to spawn gorgon structures or not")
     public boolean spawnGorgons = true;
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
-    public int generateGorgonsChance = 60;
+    public int spawnGorgonsChance = 60;
     @ConfigEntry(category = "gorgons", comment = "Maximum gorgon health")
     public double gorgonMaxHealth = 50D;
+
+    @ConfigEntry(category = "pixies", comment = "Wether to spawn pixie villages or not")
+    public boolean spawnPixies = true;
+    @ConfigEntry(category = "pixies", comment = "1 out of this number chance per chunk for generation")
+    public int spawnPixiesChance = 40;
+    @ConfigEntry(category = "pixies", comment = "The size of pixie villages.")
+    public int pixieVillageSize = 5;
 
     @ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
     public boolean useAetherCompat = false;
