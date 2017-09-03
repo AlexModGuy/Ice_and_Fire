@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 
 import java.util.ArrayList;
@@ -78,6 +79,10 @@ public class PixieAISteal extends EntityAIBase
             this.temptedEntity.flipAI(true);
             this.temptedEntity.playSound(ModSounds.pixie_taunt, 1F, 1F);
             this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
+            if(temptingPlayer != null){
+                this.temptingPlayer.addPotionEffect(new PotionEffect(this.temptedEntity.NEGATIVE_POTIONS[this.temptedEntity.getColor()], 100));
+            }
+
         }
         else {
             this.temptedEntity.getMoveHelper().setMoveTo(this.temptingPlayer.posX, this.temptingPlayer.posY + 1.5F, this.temptingPlayer.posZ, 1D);

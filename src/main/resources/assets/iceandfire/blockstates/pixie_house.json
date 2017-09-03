@@ -1,10 +1,8 @@
 {
   "variants": {
-    "inventory": {
-      "model": "pixie_house"
-    },
-    "all": {
-      "model": "planks_oak"
-    }
+    "facing=north": { "model": "iceandfire:pixie_house" },
+    "facing=south": { "model": "iceandfire:pixie_house", "y": 180 },
+    "facing=west":  { "model": "iceandfire:pixie_house", "y": 270 },
+    "facing=east":  { "model": "iceandfire:pixie_house", "y": 90 }
   }
 }

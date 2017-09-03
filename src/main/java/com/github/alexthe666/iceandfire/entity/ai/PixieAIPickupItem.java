@@ -39,6 +39,8 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
                 return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Items.CAKE;
             }
         };
+        this.setMutexBits(3);
+
     }
 
     @Override

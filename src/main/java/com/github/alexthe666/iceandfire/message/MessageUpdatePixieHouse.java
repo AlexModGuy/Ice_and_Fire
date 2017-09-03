@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -49,6 +50,11 @@ public class MessageUpdatePixieHouse extends AbstractMessage<MessageUpdatePixieH
             TileEntityPixieHouse house = (TileEntityPixieHouse)client.world.getTileEntity(pos);
             house.hasPixie = message.hasPixie;
             house.pixieType = message.pixieType;
+        }
+        else if(client.world.getTileEntity(pos) != null && client.world.getTileEntity(pos) instanceof TileEntityJar){
+            TileEntityJar jar = (TileEntityJar)client.world.getTileEntity(pos);
+            jar.hasPixie = message.hasPixie;
+            jar.pixieType = message.pixieType;
         }
     }
 

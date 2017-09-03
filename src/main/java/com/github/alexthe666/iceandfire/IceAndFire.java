@@ -50,7 +50,7 @@ public class IceAndFire {
     public static final String NAME = "Ice And Fire";
     @Instance(value = MODID)
     public static IceAndFire INSTANCE;
-    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class})
+    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;

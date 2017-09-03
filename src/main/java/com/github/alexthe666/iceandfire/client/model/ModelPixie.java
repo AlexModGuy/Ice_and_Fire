@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.entity.Entity;
@@ -98,8 +99,6 @@ public class ModelPixie extends ModelDragonBase {
         float degree_idle = 0.5F;
         AdvancedModelRenderer[] LEFT_WINGS = new AdvancedModelRenderer[]{ Left_Wing, Left_Wing2};
         AdvancedModelRenderer[] RIGHT_WINGS = new AdvancedModelRenderer[]{ Right_Wing, Right_Wing2};
-        this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
-        this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
 
         this.Left_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
         this.Right_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
@@ -144,6 +143,9 @@ public class ModelPixie extends ModelDragonBase {
             this.Right_Wing.rotateAngleZ = (float)Math.toRadians(28);
             this.Left_Wing2.rotateAngleZ = (float)Math.toRadians(-8);
             this.Right_Wing2.rotateAngleZ = (float)Math.toRadians(8);
+        }else{
+            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
+            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
         }
 
     }
@@ -185,6 +187,63 @@ public class ModelPixie extends ModelDragonBase {
         this.Right_Wing.rotateAngleZ = (float)Math.toRadians(28);
         this.Left_Wing2.rotateAngleZ = (float)Math.toRadians(-8);
         this.Right_Wing2.rotateAngleZ = (float)Math.toRadians(8);
+        /*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+        if (!itemstack.isEmpty()) {
+            this.Body.rotateAngleX = f12;
+            this.Head.rotateAngleX -= f12;
+            this.faceTarget(f3, f4, 1, this.Head);
+            this.Left_Arm.rotateAngleX += (float)Math.toRadians(-35);
+            this.Right_Arm.rotateAngleX += (float)Math.toRadians(-35);
+            this.Body.rotateAngleX += (float)Math.toRadians(10);
+            this.Left_Leg.rotateAngleX += (float)Math.toRadians(-10);
+            this.Right_Leg.rotateAngleX += (float)Math.toRadians(-10);
+            this.Head.rotateAngleX += (float)Math.toRadians(-10);
+        }else{
+            this.Right_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
+            this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+        }
+        */
+        this.Body.render(0.0625F);
+    }
+
+    public void animateInJar(boolean sitting, TileEntityJar jar, float headRot) {
+        this.resetToDefaultPose();
+        float speed_fly = 1.1F;
+        float speed_idle = 0.05F;
+        float degree_fly = 1F;
+        float degree_idle = 0.5F;
+        AdvancedModelRenderer[] LEFT_WINGS = new AdvancedModelRenderer[]{ Left_Wing, Left_Wing2};
+        AdvancedModelRenderer[] RIGHT_WINGS = new AdvancedModelRenderer[]{ Right_Wing, Right_Wing2};
+        //this.Left_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.0F * f1 * 0.5F / 1;
+        //this.Right_Leg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+
+        float f12 =  0;//f1;
+        if (f12 < 0.0F) {
+            f12 = 0.0F;
+        }
+        if(f12 > Math.toRadians(20)){
+            f12 = (float)Math.toRadians(20);
+        }
+        if(sitting) {
+            this.Right_Arm.rotateAngleX += -((float) Math.PI / 5F);
+            this.Left_Arm.rotateAngleX += -((float) Math.PI / 5F);
+            this.Right_Leg.rotateAngleX = -1.4137167F;
+            this.Right_Leg.rotateAngleY = ((float) Math.PI / 10F);
+            this.Right_Leg.rotateAngleZ = 0.07853982F;
+            this.Left_Leg.rotateAngleX = -1.4137167F;
+            this.Left_Leg.rotateAngleY = -((float) Math.PI / 10F);
+            this.Left_Leg.rotateAngleZ = -0.07853982F;
+            this.Dress.rotateAngleX += (float) Math.toRadians(-50);
+            this.Dress.rotationPointZ += 0.25F;
+            this.Dress.rotationPointY += 0.35F;
+            this.Left_Wing.rotateAngleZ = (float) Math.toRadians(-28);
+            this.Right_Wing.rotateAngleZ = (float) Math.toRadians(28);
+            this.Left_Wing2.rotateAngleZ = (float) Math.toRadians(-8);
+            this.Right_Wing2.rotateAngleZ = (float) Math.toRadians(8);
+        }else if(jar != null){
+            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, jar.ticksExisted, 1);
+            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, jar.ticksExisted, 1);
+        }
         /*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
             this.Body.rotateAngleX = f12;

@@ -1,4 +1,5 @@
 itemGroup.iceandfire=Ice And Fire
+iceandfire.empty =Empty
 
 tile.iceandfire.lectern.name=Lectern
 tile.iceandfire.podium.name=Podium
@@ -32,13 +33,18 @@ tile.iceandfire.frozenGrassPath.name=Frozen Grass Path
 tile.iceandfire.dragon_ice.name=Dragon Ice
 tile.iceandfire.dragon_ice_spikes.name=Dragon Ice Spikes
 tile.iceandfire.egginice.name=Frozen Dragon Egg
-tile.iceandfire.pixie_house.name=Pixie Hovel
-tile.iceandfire.pixie_house.type0=Mushroom
-tile.iceandfire.pixie_house.type1=Mushroom
-tile.iceandfire.pixie_house.type2=Birch
-tile.iceandfire.pixie_house.type3=Oak
-tile.iceandfire.pixie_house.type4=Dark Oak
-tile.iceandfire.pixie_house.type5=Spruce
+tile.iceandfire.pixie_house_0.name=Brown Mushroom Pixie Hovel
+tile.iceandfire.pixie_house_1.name=Red Mushroom Pixie Hovel
+tile.iceandfire.pixie_house_2.name=Birch Pixie Hovel
+tile.iceandfire.pixie_house_3.name=Oak Pixie Hovel
+tile.iceandfire.pixie_house_4.name=Dark Oak Pixie Hovel
+tile.iceandfire.pixie_house_5.name=Spruce Pixie Hovel
+tile.iceandfire.jar.name=Jar
+tile.iceandfire.jar_0.name=Pink Pixie Jar
+tile.iceandfire.jar_1.name=Purple Pixie Jar
+tile.iceandfire.jar_2.name=Blue Pixie Jar
+tile.iceandfire.jar_3.name=Green Pixie Jar
+tile.iceandfire.jar_4.name=Yellow Pixie Jar
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
@@ -98,6 +104,8 @@ item.iceandfire.diamond_hippogryph_armor.name=Diamond Hippogryph Armor
 item.iceandfire.gorgon_head.name=Gorgon Head
 item.iceandfire.stone_statue.name=Stone Statue
 item.iceandfire.blindfold.name=Blindfold
+item.iceandfire.pixie_dust.name=Pixie Dust
+item.iceandfire.ambrosia.name=Ambrosia
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -161,6 +169,11 @@ entity.player.name=Player
 entity.stonestatue.name=Stone Statue
 entity.gorgon.name=Gorgon
 entity.pixie.name=Pixie
+entity.pixie.type_0=Pink Pixie
+entity.pixie.type_1=Purple Pixie
+entity.pixie.type_2=Blue Pixie
+entity.pixie.type_3=Green Pixie
+entity.pixie.type_4=Yellow Pixie
 
 dragon.red=Red
 dragon.green=Emerald

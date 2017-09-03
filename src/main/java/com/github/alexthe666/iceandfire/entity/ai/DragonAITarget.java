@@ -26,7 +26,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 
                     return !dragon.isTamed();
                 }else {
-                    if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0 && dragon.canMove() && dragon.getHunger() < 90) {
+                    if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
                         return true;
                     }
                 }

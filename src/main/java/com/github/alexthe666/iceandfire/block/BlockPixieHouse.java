@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -10,10 +11,8 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -103,6 +103,20 @@ public class BlockPixieHouse extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
     }
 
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
+        Random rand = world instanceof World ? ((World)world).rand : RANDOM;
+        int count = quantityDropped(state, fortune, rand);
+        for(int i = 0; i < count; i++) {
+            int meta = 0;
+            if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse){
+                meta = ((TileEntityPixieHouse)world.getTileEntity(pos)).houseType;
+            }
+            ret.add(new ItemStack(ModBlocks.pixieHouse, 1, meta));
+        }
+        return ret;
+    }
+
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING).getHorizontalIndex();
@@ -137,12 +151,12 @@ public class BlockPixieHouse extends BlockContainer {
      class ItemBlockPixieHouse extends ItemBlock {
          public ItemBlockPixieHouse(Block block) {
              super(block);
+             this.maxStackSize = 1;
          }
 
-         @SideOnly(Side.CLIENT)
-         public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-             super.addInformation(stack, playerIn, tooltip, advanced);
-             tooltip.add(I18n.format("tile.iceandfire.pixie_house.type" + stack.getMetadata()));
+         public String getUnlocalizedName(ItemStack stack) {
+             int i = stack.getMetadata();
+             return "tile.iceandfire.pixie_house_" + i;
          }
 
          @SideOnly(Side.CLIENT)

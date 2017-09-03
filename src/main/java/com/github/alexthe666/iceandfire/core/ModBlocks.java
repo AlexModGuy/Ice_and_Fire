@@ -37,6 +37,7 @@ public class ModBlocks {
     public static Block dragon_ice_spikes;
     public static Block eggInIce;
     public static Block pixieHouse;
+    public static Block jar;
 
     public static void init() {
         lectern = new BlockLectern();
@@ -66,6 +67,7 @@ public class ModBlocks {
         dragon_ice_spikes = new BlockIceSpikes();
         eggInIce = new BlockEggInIce();
         pixieHouse = new BlockPixieHouse();
+        jar = new BlockJar();
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
     }

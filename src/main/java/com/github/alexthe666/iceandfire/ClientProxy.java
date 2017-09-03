@@ -78,13 +78,13 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPixieHouse.class, new RenderPixieHouse());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new RenderJar());
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 0, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 1, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 2, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 3, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 4, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 5, TileEntityPixieHouse.class);
-
 
     }
 
@@ -213,6 +213,15 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 3, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 4, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.pixieHouse), 5, new ModelResourceLocation("iceandfire:pixie_house", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.pixie_dust, 0, new ModelResourceLocation("iceandfire:pixie_dust", "inventory"));
+        renderItem.getItemModelMesher().register(ModItems.ambrosia, 0, new ModelResourceLocation("iceandfire:ambrosia", "inventory"));
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.jar), new ResourceLocation("iceandfire:jar"), new ResourceLocation("iceandfire:jar_0"), new ResourceLocation("iceandfire:jar_1"), new ResourceLocation("iceandfire:jar_2"), new ResourceLocation("iceandfire:jar_3"), new ResourceLocation("iceandfire:jar_4"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 0, new ModelResourceLocation("iceandfire:jar", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 1, new ModelResourceLocation("iceandfire:jar_0", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 2, new ModelResourceLocation("iceandfire:jar_1", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 3, new ModelResourceLocation("iceandfire:jar_2", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 4, new ModelResourceLocation("iceandfire:jar_3", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 5, new ModelResourceLocation("iceandfire:jar_4", "inventory"));
 
 
     }
