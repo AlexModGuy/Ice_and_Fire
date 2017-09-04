@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
@@ -86,6 +87,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
                 EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                 hippo.setTamed(true);
                 hippo.setOwnerId(owner.getUniqueID());
+                owner.addStat(ModAchievements.tameHippogryph);
                 hippo.setSitting(true);
             }
             resetTask();

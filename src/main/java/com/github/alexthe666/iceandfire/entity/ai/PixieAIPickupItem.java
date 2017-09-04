@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
@@ -82,6 +83,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
             if(!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null){
                 EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                 pixie.setTamed(true);
+                owner.addStat(ModAchievements.tamePixie);
                 pixie.setOwnerId(owner.getUniqueID());
                 pixie.setSitting(true);
             }

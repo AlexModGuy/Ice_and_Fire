@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -151,6 +153,12 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
         }
     }
 
+    public void onDeath(DamageSource cause){
+        if(cause.getTrueSource() instanceof EntityPlayer){
+            ((EntityPlayer)cause.getTrueSource()).addStat(ModAchievements.killGorgon);
+        }
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if(this.getAttackTarget() != null){
@@ -219,6 +227,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
+        EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
+        if(player != null){
+            player.addStat(ModAchievements.findGorgon);
+        }
     }
 
     public int getVerticalFaceSpeed() {

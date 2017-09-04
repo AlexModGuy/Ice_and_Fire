@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
@@ -89,6 +90,9 @@ public class EntityPixie extends EntityTameable {
         if(!this.world.isRemote && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
             this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
         }
+        if(cause.getTrueSource() instanceof EntityPlayer){
+            ((EntityPlayer)cause.getTrueSource()).addStat(ModAchievements.killPixie);
+        }
     }
 
     @Override
@@ -133,6 +137,7 @@ public class EntityPixie extends EntityTameable {
             if(!world.isRemote){
                 this.entityDropItem(stack, 0.0F);
             }
+            player.addStat(ModAchievements.jarPixie);
             this.setDead();
         }
         return super.processInteract(player, hand);
@@ -208,6 +213,10 @@ public class EntityPixie extends EntityTameable {
         }
         if(this.getOwner() != null && this.isOwnerClose() && this.ticksExisted % 80 == 0){
             this.getOwner().addPotionEffect(new PotionEffect(POSITIVE_POTIONS[this.getColor()], 100, 0, false, false));
+        }
+        EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
+        if(player != null){
+            player.addStat(ModAchievements.findPixie);
         }
     }
 
