@@ -1,0 +1,35 @@
+The pixies are magical and
+mysterious beings that dwell
+within dark or magical forest
+biomes.
+
+
+
+
+
+
+
+Pixies usually do not attack
+on sight, however they are
+very vain creatures and as
+such will try to steal items
+from people who are not
+staring directly at them.
+A pixie that has stolen an
+item should drop it if attacked.
+
+Most pixies live in small hovels,
+gathered in strange villages under
+heavy tree cover.
+
+
+
+
+
+
+Pixies naturally produce pixie
+dust. This dust can be harvested in
+large amounts by killing a pixie or
+by entrapping a pixie in a jar.
+Jarred pixies produce a single
+pixie dust every three days.

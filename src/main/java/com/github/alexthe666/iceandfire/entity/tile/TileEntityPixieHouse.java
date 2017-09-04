@@ -40,7 +40,9 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         compound.setBoolean("HasPixie", hasPixie);
         compound.setInteger("PixieType", pixieType);
         compound.setBoolean("TamedPixie", tamedPixie);
-        compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
+        if(pixieOwnerUUID != null) {
+            compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
+        }
         ItemStackHelper.saveAllItems(compound, this.pixieItems);
         return compound;
     }

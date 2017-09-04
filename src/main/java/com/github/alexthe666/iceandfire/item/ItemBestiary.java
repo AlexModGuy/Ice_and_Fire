@@ -44,7 +44,11 @@ public class ItemBestiary extends Item {
         subItems.add(new ItemStack(itemIn));
         ItemStack stack = new ItemStack(ModItems.bestiary);
         stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setIntArray("Pages", new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8});
+        int[] pages = new int[EnumBestiaryPages.values().length];
+        for(int i = 0; i < EnumBestiaryPages.values().length; i++){
+            pages[i] = i;
+        }
+        stack.getTagCompound().setIntArray("Pages", pages);
         subItems.add(stack);
 
     }

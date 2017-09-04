@@ -66,7 +66,7 @@ public class BlockLectern extends BlockContainer {
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos.down());
         Block block = iblockstate.getBlock();
-        return iblockstate.isOpaqueCube();
+        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
     }
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {

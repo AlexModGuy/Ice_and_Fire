@@ -62,7 +62,7 @@ public class BlockPixieHouse extends BlockContainer {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isOpaqueCube();
+        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
     }
 
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {

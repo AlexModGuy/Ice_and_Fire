@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,9 +36,12 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -128,6 +132,18 @@ public class EventLiving {
                     EntityHorse horse = (EntityHorse)living;
                     horse.tailCounter = 0;
                     horse.setEatingHaystack(false);
+                }
+                if(living instanceof EntityGuardian){
+                    Field clientSideSpikesAnimationField = ReflectionHelper.findField(EntityGuardian.class, ObfuscationReflectionHelper.remapFieldNames(EntityGuardian.class.getName(), new String[]{"field_175485_bl", "clientSideSpikesAnimation"}));
+                    Field clientSideTailAnimationOField = ReflectionHelper.findField(EntityGuardian.class, ObfuscationReflectionHelper.remapFieldNames(EntityGuardian.class.getName(), new String[]{"field_175486_bm", "clientSideSpikesAnimationO"}));
+                    try {
+                        Field modifier = Field.class.getDeclaredField("modifiers");
+                        modifier.setAccessible(true);
+                        clientSideSpikesAnimationField.set(living, 0F);
+                        clientSideTailAnimationOField.set(living, 0F);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

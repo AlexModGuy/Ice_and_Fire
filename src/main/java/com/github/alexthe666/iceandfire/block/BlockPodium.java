@@ -115,7 +115,7 @@ public class BlockPodium extends BlockContainer {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isOpaqueCube();
+        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
     }
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {

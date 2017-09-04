@@ -207,6 +207,28 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
         String s = TextFormatting.getTextWithoutFormattingCodes(player.getName());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
         if(this.isTamed() && this.isOwner(player)){
+            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 1 && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev){
+                this.setEnumVariant(EnumHippogryphTypes.ALEX);
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                for(int i = 0; i < 20; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
+                return true;
+            }
+            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 7&& this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev){
+                this.setEnumVariant(EnumHippogryphTypes.RAPTOR);
+                if(!player.isCreative()){
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                for(int i = 0; i < 20; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
+                return true;
+            }
             if(itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getGrowingAge() == 0 && !isInLove()){
                 this.setSitting(false);
                 this.setInLove(player);
@@ -228,28 +250,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for(int i = 0; i < 20; i++) {
                     this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
-                }
-                return true;
-            }
-            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 1 && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev){
-                this.setEnumVariant(EnumHippogryphTypes.ALEX);
-                if(!player.isCreative()){
-                    itemstack.shrink(1);
-                }
-                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-                for(int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
-                }
-                return true;
-            }
-            if(itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 7&& this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev){
-                this.setEnumVariant(EnumHippogryphTypes.RAPTOR);
-                if(!player.isCreative()){
-                    itemstack.shrink(1);
-                }
-                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-                for(int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
                 }
                 return true;
             }

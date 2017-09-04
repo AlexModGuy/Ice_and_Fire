@@ -43,14 +43,14 @@ public class GuiBestiary extends GuiScreen {
     protected ItemStack book;
     protected boolean index;
     protected FontRenderer font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
-
     public GuiBestiary(ItemStack book) {
         this.book = book;
+        int indexPageTotal = 0;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
             if (book.getTagCompound() != null) {
                 List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
-                indexPagesTotal = pages.size() % 10;
+                indexPagesTotal = 1 + (pages.size() / 10);
             }
         }
         index = true;
@@ -62,19 +62,16 @@ public class GuiBestiary extends GuiScreen {
         int centerY = (this.height - this.Y) / 2;
         this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages));
         this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages));
-
         if (!allPageTypes.isEmpty()) {
             for (int i = 0; i < allPageTypes.size(); i++) {
-                int xIndex = i % 2;
+                int xIndex = i % -2;
                 int yIndex = i % 10;
                 IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
                 this.indexButtons.add(button);
                 this.buttonList.add(button);
             }
         }
-
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -82,6 +79,13 @@ public class GuiBestiary extends GuiScreen {
             if (button.id >= 2) {
                 button.enabled = index;
                 button.visible = index;
+            }
+        }
+        for (int i = 0; i < this.indexButtons.size(); i++) {
+            if(i <= 9 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index){
+                this.indexButtons.get(i).visible = true;
+            }else{
+                this.indexButtons.get(i).visible = false;
             }
         }
         this.drawDefaultBackground();
@@ -416,6 +420,138 @@ public class GuiBestiary extends GuiScreen {
                 }
                 writeFromTxt();
                 break;
+            case HIPPOGRYPH:
+                if (bookPages == 0) {
+                    GL11.glPushMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.8F, 0.8F, 1F);
+                    drawImage(DRAWINGS_0, 29, 150, 303, 151, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 91, 150, 364, 151, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 151, 150, 425, 151, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 29, 190, 303, 187, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 91, 190, 364, 187, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 151, 190, 425, 187, 61, 36, 512F);
+                    drawImage(DRAWINGS_0, 90, 230, 425, 223, 61, 35, 512F);
+                    GL11.glPopMatrix();
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(Items.RABBIT_FOOT), 70, 20, 2.5F);
+                    GL11.glPopMatrix();
+                    GL11.glPopMatrix();
+                }
+
+                if (bookPages == 1) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(Items.STICK), 16, 24, 2.5F);
+                    GL11.glPopMatrix();
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(Items.FEATHER), 160, 31, 1.5F);
+                    int drawType = Minecraft.getMinecraft().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getMinecraft().player.ticksExisted % 60 > 20 ? 1 : 0;
+                    drawItemStack(new ItemStack(drawType == 0 ? Items.IRON_HORSE_ARMOR : drawType == 1 ? Items.GOLDEN_HORSE_ARMOR : Items.DIAMOND_HORSE_ARMOR), 180, 31, 1.5F);
+                    drawItemStack(new ItemStack(Items.FEATHER), 199, 31, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(drawType == 0 ? ModItems.iron_hippogryph_armor : drawType == 1 ? ModItems.gold_hippogryph_armor : ModItems.diamond_hippogryph_armor), 151, 18, 2F);
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(Items.RABBIT_STEW), 70, 23, 2.5F);
+                    GL11.glPopMatrix();
+
+                }
+                writeFromTxt();
+                break;
+            case GORGON:
+                if (bookPages == 0) {
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 10, 89, 473, 117, 19, 34, 512F);
+                    drawImage(DRAWINGS_0, 50, 78, 399, 106, 28, 45, 512F);
+                    drawImage(DRAWINGS_0, 100, 89, 455, 117, 18, 34, 512F);
+                    GL11.glPopMatrix();
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 70, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(Items.STRING), 160, 97, 1.5F);
+                    drawItemStack(new ItemStack(Items.LEATHER), 180, 97, 1.5F);
+                    drawItemStack(new ItemStack(Items.STRING), 199, 97, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.blindfold), 171, 65, 2F);
+
+                }
+                if (bookPages == 1) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.gorgon_head), 16, 12, 2.5F);
+                    GL11.glPopMatrix();
+
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.7F, 1.7F, 1F);
+                    drawImage(DRAWINGS_0, 37, 95, 473, 117, 19, 34, 512F);
+                    drawImage(DRAWINGS_0, 60, 95, 455, 117, 18, 34, 512F);
+                    GL11.glPopMatrix();
+
+                }
+                writeFromTxt();
+                break;
+            case PIXIE:
+                if (bookPages == 0) {
+                    GL11.glPushMatrix();
+                    drawImage(DRAWINGS_0, 20, 60, 371, 258, 47, 35, 512F);
+                    drawImage(DRAWINGS_0, 42, 95, 416, 258, 45, 35, 512F);
+                    drawImage(DRAWINGS_0, 67, 60, 462, 258, 47, 35, 512F);
+                    drawImage(DRAWINGS_0, 88, 95, 370, 293, 47, 35, 512F);
+                    drawImage(DRAWINGS_0, 110, 60, 416, 293, 47, 35, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.pixie_dust), 70, 10, 2.5F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    GL11.glTranslatef(20, 24, 0);
+                    GL11.glPushMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 160, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 199, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.PLANKS), 180, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 160, 131, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 199, 131, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 180, 150, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 160, 150, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.GLASS), 199, 150, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModBlocks.jar), 171, 85, 2F);
+                    GL11.glPopMatrix();
+                    GL11.glPopMatrix();
+
+                }
+                if (bookPages == 1) {
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawItemStack(new ItemStack(ModItems.ambrosia), 19, 22, 2.5F);
+                    GL11.glPopMatrix();
+                }
+                writeFromTxt();
+                break;
         }
     }
 
@@ -473,14 +609,14 @@ public class GuiBestiary extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == 0 && (this.index ? this.indexPagesTotal > 1 && this.indexPages > 0 : this.pageType != null && this.bookPages > 0)) {
+        if (button.id == 0 && (this.index ? this.indexPages > 0 : this.pageType != null && this.bookPages > 0)) {
             if (this.index) {
                 this.indexPages--;
             } else {
                 this.bookPages--;
             }
         }
-        if (button.id == 1 && (this.index ? this.indexPagesTotal > 1 && this.indexPages < this.indexPagesTotal : this.pageType != null && this.bookPages < this.pageType.pages)) {
+        if (button.id == 1 && (this.index ? this.indexPages + 1 < this.indexPagesTotal : this.pageType != null && this.bookPages < this.pageType.pages)) {
             if (this.index) {
                 this.indexPages++;
             } else {

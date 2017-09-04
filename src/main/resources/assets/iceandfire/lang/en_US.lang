@@ -215,6 +215,9 @@ bestiary.materials=Dragon Materials
 bestiary.alchemy=Blood Alchemy
 bestiary.villagers=Snow Villagers
 bestiary.tameddragons=Tamed Dragons
+bestiary.hippogryph=Hippogryphs
+bestiary.gorgon=Gorgons
+bestiary.pixie=Pixies
 
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead
