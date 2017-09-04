@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -111,6 +112,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private int animationTick;
     private Animation currentAnimation;
     private ItemStackHandler itemHandler = null;
+    public LegSolverQuadruped legSolver;
 
     public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -127,6 +129,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (FMLCommonHandler.instance().getSide().isClient()) {
             roll_buffer = new RollBuffer();
         }
+        legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
     }
 
     private void initDragonInv() {
@@ -887,7 +890,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
-
+        this.legSolver.update(this);
         if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
                 if (animationCycle < 15) {
                     animationCycle++;
@@ -1135,7 +1138,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                float bob0 = hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0;
+                float bob0 = this.isFlying() ? (hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0) : 0;
                 float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
                 float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
                 double extraY_pre = 0.8F;
@@ -1325,7 +1328,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void setScaleForAge(boolean par1) {
-        this.setScale(Math.min(this.getRenderSize() * 0.3F, 7F));
+        this.setScale(Math.min(this.getRenderSize() * 0.35F, 7F));
     }
 
     public float getRenderSize() {

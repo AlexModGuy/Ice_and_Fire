@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
 import java.util.Arrays;
@@ -1049,6 +1051,13 @@ public class ModelIceDragon extends ModelDragonBase {
         progressRotation(Spike9, dragon.swimProgress, (float) Math.toRadians(46.86D), 0, 0);
         if (dragon.isModelDead()) {
             return;
+        }
+        if(dragon.width >= 2){
+            LegArticulator.articulateQuadruped(dragon, dragon.legSolver, BodyLower, Neck1,
+                    ThighL, LegL, ThighR, LegR, ArmL1, ArmL2, ArmR1, ArmR2,
+                    0.25F, 0.1F, 0.15F, -0.10F,
+                    Minecraft.getMinecraft().getRenderPartialTicks()
+            );
         }
         if (dragon.isHovering() || dragon.isFlying()) {
             dragon.roll_buffer.applyChainFlapBuffer(new AdvancedModelRenderer[]{BodyLower});

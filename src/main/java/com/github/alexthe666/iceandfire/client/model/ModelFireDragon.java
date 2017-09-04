@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
 import java.util.Arrays;
@@ -977,7 +979,13 @@ public class ModelFireDragon extends ModelDragonBase {
         progressRotation(Spike11, dragon.ridingProgress, (float) Math.toRadians(46.86D), 0, 0);
         progressRotation(Spike4, dragon.ridingProgress, (float) Math.toRadians(46.86D), 0, 0);
         progressRotation(HornL, dragon.ridingProgress, (float) Math.toRadians(18.0D), (float) Math.toRadians(19.0D), (float) Math.toRadians(11.0D));
-
+        if(dragon.width >= 2){
+            LegArticulator.articulateQuadruped(dragon, dragon.legSolver, BodyLower, Neck1,
+                    ThighL, LegL, ThighR, LegR, ArmL1, ArmL2, ArmR1, ArmR2,
+                    0.25F, 0.1F, 0.15F, -0.10F,
+                    Minecraft.getMinecraft().getRenderPartialTicks()
+            );
+        }
         if (dragon.isModelDead()) {
             return;
         }

@@ -339,6 +339,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     private void shootIceAtMob(EntityLivingBase entity) {
+        this.faceEntity(entity, 360, 360);
         if (!this.attackDecision) {
             if (this.getRNG().nextInt(5) == 0) {
                 if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {

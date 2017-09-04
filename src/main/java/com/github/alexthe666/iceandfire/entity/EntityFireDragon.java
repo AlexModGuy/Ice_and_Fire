@@ -33,7 +33,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     public EntityFireDragon(World worldIn) {
         super(worldIn, EnumDiet.CARNIVORE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
-        this.setSize(0.78F, 1.2F);
+        this.setSize(1.3F, 1.2F);
         this.isImmuneToFire = true;
         this.ignoreFrustumCheck = true;
         ANIMATION_SPEAK = Animation.create(45);
@@ -256,6 +256,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     private void shootFireAtMob(EntityLivingBase entity) {
+        this.faceEntity(entity, 360, 360);
         if (!this.attackDecision) {
             if (this.getRNG().nextInt(5) == 0) {
                 if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
