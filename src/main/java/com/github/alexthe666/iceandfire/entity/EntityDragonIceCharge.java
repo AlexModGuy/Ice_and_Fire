@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 
 public class EntityDragonIceCharge extends EntityFireball implements IDragonProjectile {
 
+    public int ticksInAir;
+    
     public EntityDragonIceCharge(World worldIn) {
         super(worldIn);
 
