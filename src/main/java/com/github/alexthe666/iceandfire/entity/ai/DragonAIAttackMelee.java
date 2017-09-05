@@ -63,7 +63,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
             this.resetTask();
             return false;
         }
-        return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (!this.longMemory ? !this.dragon.getNavigator().noPath() : (!this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative())));
+        return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (!this.longMemory ? (!dragon.isFlying() && !dragon.isHovering() ? !this.dragon.getNavigator().noPath() : true) : (!this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative())));
     }
 
     @Override
@@ -132,6 +132,9 @@ public class DragonAIAttackMelee extends EntityAIBase {
             this.attackTick = 20;
             this.dragon.swingArm(EnumHand.MAIN_HAND);
             this.dragon.attackEntityAsMob(entity);
+            if(this.dragon.isFire){
+                System.out.println("fire dragon");
+            }
         }
     }
 

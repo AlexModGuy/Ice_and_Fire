@@ -969,7 +969,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead()) {
             return;
         }
-        if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
+        if (!this.world.isRemote && this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
             this.setHovering(false);
         }
@@ -1092,6 +1092,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
                 fireStopTicks--;
             }
+        }
+        if(this.isFlying() && this.getAttackTarget() != null && this.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(this.getAttackTarget().getEntityBoundingBox())){
+            this.attackEntityAsMob(this.getAttackTarget());
         }
     }
 
@@ -1419,7 +1422,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void playLivingSound() {
-        if (!this.isSleeping() && !this.isModelDead()) {
+        if (!this.isSleeping() && !this.isModelDead() && !this.world.isRemote) {
             if (this.getAnimation() == this.NO_ANIMATION) {
                 this.setAnimation(ANIMATION_SPEAK);
             }

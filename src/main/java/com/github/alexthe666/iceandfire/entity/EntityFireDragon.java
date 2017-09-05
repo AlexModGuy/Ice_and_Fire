@@ -48,7 +48,7 @@ public class EntityFireDragon extends EntityDragonBase {
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, true));
+        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, true));
         this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, ModItems.fire_stew, false));
         this.tasks.addTask(6, new DragonAIAirTarget(this));
@@ -256,7 +256,6 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     private void shootFireAtMob(EntityLivingBase entity) {
-        this.faceEntity(entity, 360, 360);
         if (!this.attackDecision) {
             if (this.getRNG().nextInt(5) == 0) {
                 if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
@@ -310,6 +309,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 }
             }
         }
+        this.faceEntity(entity, 360, 360);
     }
 
     @Override
