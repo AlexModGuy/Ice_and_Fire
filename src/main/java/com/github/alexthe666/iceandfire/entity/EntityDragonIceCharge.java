@@ -7,7 +7,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -48,11 +51,51 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
         return false;
     }
 
-    @Override
     public void onUpdate() {
-        super.onUpdate();
         for (int i = 0; i < 14; ++i) {
             IceAndFire.PROXY.spawnParticle("snowflake", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+        }
+        if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
+            super.onUpdate();
+
+            if (this.isFireballFiery()) {
+                this.setFire(1);
+            }
+
+            ++this.ticksInAir;
+            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, false, this.ticksInAir >= 25, this.shootingEntity);
+
+            if (raytraceresult != null) {
+                this.onImpact(raytraceresult);
+            }
+
+            this.posX += this.motionX;
+            this.posY += this.motionY;
+            this.posZ += this.motionZ;
+            ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+            float f = this.getMotionFactor();
+
+            if (this.isInWater()){
+                for (int i = 0; i < 4; ++i){
+                    float f1 = 0.25F;
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+                }
+
+                f = 0.8F;
+            }
+
+            this.motionX += this.accelerationX;
+            this.motionY += this.accelerationY;
+            this.motionZ += this.accelerationZ;
+            this.motionX *= (double)f;
+            this.motionY *= (double)f;
+            this.motionZ *= (double)f;
+            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.setPosition(this.posX, this.posY, this.posZ);
+        }
+        else
+        {
+            this.setDead();
         }
     }
 
