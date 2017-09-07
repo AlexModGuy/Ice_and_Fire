@@ -36,13 +36,6 @@ public class EntitySnowVillager extends EntityVillager {
         super(worldIn, profession);
     }
 
-    @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.prof = ModVillagers.INSTANCE.professions.get(this.getRNG().nextInt(3));
-        return livingdata;
-    }
-
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
         if(properties != null && properties.isStone){
@@ -166,6 +159,12 @@ public class EntitySnowVillager extends EntityVillager {
         }
 
     }
+
+    public IEntityLivingData finalizeMobSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data, boolean forgeCheck) {
+        this.prof = ModVillagers.INSTANCE.professions.get(this.getRNG().nextInt(3));
+        return data;
+    }
+
 
     private int intFromProfesion(String prof) {
         if (prof.contains("fisherman")) {
