@@ -549,6 +549,20 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawItemStack(new ItemStack(ModItems.ambrosia), 19, 22, 2.5F);
                     GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(1.5F, 1.5F, 1F);
+                    drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    GL11.glScalef(0.9F, 0.9F, 1F);
+                    drawItemStack(new ItemStack(ModItems.pixie_dust), 180, 131, 1.5F);
+                    drawItemStack(new ItemStack(Items.GOLDEN_CARROT), 160, 131, 1.5F);
+                    drawItemStack(new ItemStack(Items.SPECKLED_MELON), 199, 131, 1.5F);
+                    drawItemStack(new ItemStack(Items.BOWL), 180, 150, 1.5F);
+                    GL11.glPopMatrix();
+                    drawItemStack(new ItemStack(ModItems.ambrosia), 171, 85, 2F);
+                    GL11.glPopMatrix();
                 }
                 writeFromTxt();
                 break;

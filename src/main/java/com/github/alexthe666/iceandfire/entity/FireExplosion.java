@@ -219,6 +219,10 @@ public class FireExplosion extends Explosion {
                         worldObj.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
                     }
 
+                    if (state.getMaterial() == Material.WOOD) {
+                        worldObj.setBlockState(blockpos, ModBlocks.ash.getDefaultState());
+                    }
+
                     if (state.getMaterial() == Material.ROCK && (block != ModBlocks.charedCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
                         worldObj.setBlockState(blockpos, ModBlocks.charedStone.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK) {

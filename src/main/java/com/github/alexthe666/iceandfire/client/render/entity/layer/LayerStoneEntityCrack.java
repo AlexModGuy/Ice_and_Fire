@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
+import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -9,7 +10,9 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerStoneEntityCrack implements LayerRenderer {
@@ -17,6 +20,7 @@ public class LayerStoneEntityCrack implements LayerRenderer {
     private RenderLivingBase renderer;
     protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[] {new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
+    private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
 
     public LayerStoneEntityCrack(RenderLivingBase renderer) {
         this.renderer = renderer;
@@ -36,8 +40,10 @@ public class LayerStoneEntityCrack implements LayerRenderer {
                 this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
                 if(this.renderer.getMainModel() instanceof ICustomStatueModel){
                     ((ICustomStatueModel)this.renderer.getMainModel()).renderStatue();
-                }else if(entitylivingbaseIn instanceof AbstractHorse){
+                }else if(entitylivingbaseIn instanceof AbstractHorse && !(entitylivingbaseIn instanceof EntityLlama)){
                     HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                }else if(entitylivingbaseIn instanceof EntityGuardian){
+                    GUARDIAN_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }else{
                     this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }

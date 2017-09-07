@@ -54,8 +54,8 @@ public class EntityPixie extends EntityTameable {
     private PixieAISteal aiTempt;
     public int ticksUntilHouseAI;
     public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
-    public static final Potion[] POSITIVE_POTIONS = new Potion[]{MobEffects.STRENGTH, MobEffects.NIGHT_VISION, MobEffects.SPEED, MobEffects.LUCK, MobEffects.HASTE};
-    public static final Potion[] NEGATIVE_POTIONS = new Potion[]{MobEffects.WEAKNESS, MobEffects.BLINDNESS, MobEffects.SLOWNESS, MobEffects.UNLUCK, MobEffects.MINING_FATIGUE};
+    public static final Potion[] POSITIVE_POTIONS = new Potion[]{MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.SPEED, MobEffects.LUCK, MobEffects.HASTE};
+    public static final Potion[] NEGATIVE_POTIONS = new Potion[]{MobEffects.WEAKNESS, MobEffects.NAUSEA, MobEffects.SLOWNESS, MobEffects.UNLUCK, MobEffects.MINING_FATIGUE};
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "pixie"));
 
     public EntityPixie(World worldIn) {

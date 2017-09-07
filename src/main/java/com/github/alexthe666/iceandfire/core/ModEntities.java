@@ -46,7 +46,7 @@ public class ModEntities {
                         Biome biome = Biome.getBiome(type.spawnBiomes[i]);
                         if (biome != null) {
                             List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
-                            spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, 100, 1, 2));
+                            spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, 5, 1, 1));
                         }
                     }
                 }

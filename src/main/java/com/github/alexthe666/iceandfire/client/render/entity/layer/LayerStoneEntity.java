@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
+import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -10,7 +11,9 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -18,6 +21,7 @@ public class LayerStoneEntity implements LayerRenderer {
 
     private RenderLivingBase renderer;
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
+    private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
 
     public LayerStoneEntity(RenderLivingBase renderer) {
         this.renderer = renderer;
@@ -33,8 +37,10 @@ public class LayerStoneEntity implements LayerRenderer {
                 this.renderer.bindTexture(new ResourceLocation(getStoneType(renderer.getMainModel(), 1)));
                 if(this.renderer.getMainModel() instanceof ICustomStatueModel){
                     ((ICustomStatueModel)this.renderer.getMainModel()).renderStatue();
-                }else if(entitylivingbaseIn instanceof AbstractHorse){
+                }else if(entitylivingbaseIn instanceof AbstractHorse && !(entitylivingbaseIn instanceof EntityLlama)){
                     HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                }else if(entitylivingbaseIn instanceof EntityGuardian){
+                    GUARDIAN_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }else{
                     this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }

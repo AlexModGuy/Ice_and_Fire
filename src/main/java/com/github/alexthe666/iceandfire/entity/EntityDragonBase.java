@@ -191,6 +191,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
     }
 
+    public int getTalkInterval() {
+        return 60;
+    }
+
     protected void onDeathUpdate() {
         this.deathTime = 0;
         this.setModelDead(true);
