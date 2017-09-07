@@ -30,7 +30,6 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
         OreDictionary.registerOre("foodMeat", Items.RABBIT);
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
-        OreDictionary.registerOre("anyFeather", Items.FEATHER);
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_horn, 1, 0), new Object[]{"  Y", " YY", "XY ", Character.valueOf('Y'), ModItems.dragonbone, Character.valueOf('X'), "stickWood"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_stick, 1, 0), new Object[]{"X", "Y", Character.valueOf('X'), ModItems.dragon_skull, Character.valueOf('Y'), "stickWood"}));
@@ -85,9 +84,9 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_diamond, 1, 2), new Object[]{"XXX", "XXX", "X X", Character.valueOf('X'), "blockDiamond"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_diamond, 1, 3), new Object[]{"  X", "XX ", Character.valueOf('X'), "blockDiamond"}));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.iron_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.IRON_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.gold_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.GOLDEN_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.diamond_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.DIAMOND_HORSE_ARMOR, Character.valueOf('Y'), "anyFeather"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.iron_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.IRON_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.gold_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.GOLDEN_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.diamond_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.DIAMOND_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.blindfold, 1, 0), new Object[]{"YXY", Character.valueOf('X'), "leather" , Character.valueOf('Y'), "string"}));
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.ambrosia, 1, 0), new Object[]{ Items.BOWL, ModItems.pixie_dust, Items.GOLDEN_CARROT, Items.SPECKLED_MELON });
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.jar, 1, 0), new Object[]{"YXY", "Y Y", "YYY", Character.valueOf('X'), "plankWood" , Character.valueOf('Y'), "blockGlass"}));
