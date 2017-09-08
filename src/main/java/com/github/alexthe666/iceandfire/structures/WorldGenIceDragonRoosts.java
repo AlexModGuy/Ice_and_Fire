@@ -40,7 +40,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                     } else if (state.getBlock() == Blocks.GRASS_PATH) {
                         world.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
                     } else if (state.getMaterial() == Material.WOOD) {
-                        world.setBlockState(blockpos, ModBlocks.ash.getDefaultState());
+                        world.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
                     } else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS || state.getBlock() == Blocks.SNOW_LAYER) {
                         world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                     }

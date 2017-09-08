@@ -219,6 +219,10 @@ public class IceExplosion extends Explosion {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
                     }
 
+                    if (state.getMaterial() == Material.WOOD) {
+                        worldObj.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
+                    }
+
                     if (state.getMaterial() == Material.ROCK && (block != ModBlocks.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenStone.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK) {

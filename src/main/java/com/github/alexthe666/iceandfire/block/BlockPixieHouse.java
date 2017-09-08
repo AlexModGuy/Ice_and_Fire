@@ -22,13 +22,11 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import java.util.Random;
 
 public class BlockPixieHouse extends BlockContainer {
@@ -67,7 +65,16 @@ public class BlockPixieHouse extends BlockContainer {
 
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
        dropPixie(worldIn, pos);
+        int meta = 0;
+        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse){
+            meta = ((TileEntityPixieHouse)worldIn.getTileEntity(pos)).houseType;
+        }
+        spawnAsEntity(worldIn, pos, new ItemStack(ModBlocks.pixieHouse, 1, meta));
        super.breakBlock(worldIn, pos, state);
+    }
+
+    public int quantityDropped(Random random) {
+        return 0;
     }
 
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -101,20 +108,6 @@ public class BlockPixieHouse extends BlockContainer {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
-    }
-
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
-        Random rand = world instanceof World ? ((World)world).rand : RANDOM;
-        int count = quantityDropped(state, fortune, rand);
-        for(int i = 0; i < count; i++) {
-            int meta = 0;
-            if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse){
-                meta = ((TileEntityPixieHouse)world.getTileEntity(pos)).houseType;
-            }
-            ret.add(new ItemStack(ModBlocks.pixieHouse, 1, meta));
-        }
-        return ret;
     }
 
     @Override

@@ -222,7 +222,7 @@ public class ClientProxy extends CommonProxy {
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 3, new ModelResourceLocation("iceandfire:jar_2", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 4, new ModelResourceLocation("iceandfire:jar_3", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.jar), 5, new ModelResourceLocation("iceandfire:jar_4", "inventory"));
-
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.frozenSplinters), 0, new ModelResourceLocation("iceandfire:frozen_splinters", "inventory"));
 
     }
 

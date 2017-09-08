@@ -33,6 +33,7 @@ public class ModBlocks {
     public static Block frozenCobblestone;
     public static Block frozenGravel;
     public static Block frozenGrassPath;
+    public static Block frozenSplinters;
     public static Block dragon_ice;
     public static Block dragon_ice_spikes;
     public static Block eggInIce;
@@ -63,6 +64,7 @@ public class ModBlocks {
         frozenCobblestone = new BlockGeneric(Material.ROCK, "frozen_cobblestone", "iceandfire.frozenCobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.GLASS, true);
         frozenGravel = new BlockFallingGeneric(Material.GROUND, "frozen_gravel", "iceandfire.frozenGravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true);
         frozenGrassPath = new BlockCharedPath(false);
+        frozenSplinters = new BlockGeneric(Material.WOOD, "frozen_splinters", "iceandfire.frozenSplinters", "pickaxe", 0, 2.0F, 10.0F, SoundType.GLASS, true);
         dragon_ice = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "iceandfire.dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
         dragon_ice_spikes = new BlockIceSpikes();
         eggInIce = new BlockEggInIce();
