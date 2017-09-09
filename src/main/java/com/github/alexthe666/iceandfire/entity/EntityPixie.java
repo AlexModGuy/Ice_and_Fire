@@ -78,6 +78,7 @@ public class EntityPixie extends EntityTameable {
 
         if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone){
             this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
+            this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         }
         if(this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())){
             return false;
@@ -89,6 +90,7 @@ public class EntityPixie extends EntityTameable {
         super.onDeath(cause);
         if(!this.world.isRemote && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
             this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
+            this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         }
         if(cause.getTrueSource() instanceof EntityPlayer){
             ((EntityPlayer)cause.getTrueSource()).addStat(ModAchievements.killPixie);
