@@ -747,6 +747,7 @@ public class PixieVillagePieces {
 
                 this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY, 0);
             }
+            this.replaceAirAndLiquidDownwards(worldIn, Blocks.DIRT.getDefaultState(), 0, -1, 0, structureBoundingBoxIn);
 
             this.setBlockState(worldIn, ModBlocks.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
