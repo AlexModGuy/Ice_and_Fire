@@ -1170,7 +1170,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return;
         }
         if (this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null || this.getAnimation() == NO_ANIMATION) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) prey).getMaxHealth() * 2);
+            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 15 : ((EntityLivingBase) prey).getMaxHealth() * 2);
             this.attackDecision = !this.attackDecision;
             prey.dismountRidingEntity();
         }
