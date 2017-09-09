@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -118,6 +119,9 @@ public class EventLiving {
                 living.hurtTime = 0;
                 living.hurtResistantTime = living.maxHurtResistantTime - 1;
                 living.extinguish();
+                if(living instanceof EntityAnimal){
+                    ((EntityAnimal)living).resetInLove();
+                }
                 if(!living.isAIDisabled()){
                     living.setNoAI(true);
                 }
@@ -134,9 +138,21 @@ public class EventLiving {
     }
 
     @SubscribeEvent
+    public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
+        if(event.getEntityLiving() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         if(event.getEntityLiving() instanceof EntityLiving) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+            System.out.println(properties.isStone);
+
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }

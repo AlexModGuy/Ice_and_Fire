@@ -82,7 +82,7 @@ public class IceAndFireConfig {
     @ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
     public int spawnGorgonsChance = 60;
     @ConfigEntry(category = "gorgons", comment = "Maximum gorgon health")
-    public double gorgonMaxHealth = 50D;
+    public double gorgonMaxHealth = 100D;
 
     @ConfigEntry(category = "pixies", comment = "Wether to spawn pixie villages or not")
     public boolean spawnPixies = true;

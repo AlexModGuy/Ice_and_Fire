@@ -39,6 +39,7 @@ public class BlockSilverPile extends Block {
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire.silverpile");
         this.setHardness(0.3F);
+        this.setSoundType(ModBlocks.SOUND_TYPE_GOLD);
         setRegistryName(IceAndFire.MODID, "silverpile");
         GameRegistry.register(this);
         GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));

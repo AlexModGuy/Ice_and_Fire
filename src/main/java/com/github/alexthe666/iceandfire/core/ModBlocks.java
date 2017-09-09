@@ -39,6 +39,7 @@ public class ModBlocks {
     public static Block eggInIce;
     public static Block pixieHouse;
     public static Block jar;
+    public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, ModSounds.gold_pile_break, ModSounds.gold_pile_step, ModSounds.gold_pile_break, ModSounds.gold_pile_step, ModSounds.gold_pile_step);
 
     public static void init() {
         lectern = new BlockLectern();

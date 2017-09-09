@@ -64,7 +64,10 @@ public class StructureGenerator implements IWorldGenerator {
                 TemplateManager templateManager = world.getSaveHandler().getStructureTemplateManager();
                 PlacementSettings settings = new PlacementSettings().setRotation(rotation).setMirror(mirror);
                 Template template = templateManager.getTemplate(server, GORGON_TEMPLE);
-                template.addBlocksToWorldChunk(world, height.add(template.getSize().getX()/2, -9, template.getSize().getZ()/2), settings);
+                BlockPos center = height.add(template.getSize().getX()/2, -9, template.getSize().getZ()/2);
+                if(world.getBlockState(center).isOpaqueCube()){
+                    template.addBlocksToWorldChunk(world, center, settings);
+                }
             }
         }
         if (IceAndFire.CONFIG.spawnPixies) {

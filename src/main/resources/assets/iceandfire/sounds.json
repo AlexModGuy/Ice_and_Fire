@@ -1,4 +1,16 @@
 {
+  "gold_pile.step": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gold_pile_step"
+    ]
+  },
+  "gold_pile.break": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:gold_pile_break"
+    ]
+  },
   "pixie.idle": {
     "category": "neutral",
     "sounds": [

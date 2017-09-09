@@ -106,13 +106,13 @@ public class IceAndFire {
                 return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
             }
         };
+        ModSounds.init();
         ModBlocks.init();
         ModItems.init();
         ModRecipes.init();
         ModVillagers.INSTANCE.init();
         ModEntities.init();
         ModFoods.init();
-        ModSounds.init();
         ModAchievements.init();
         MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
         MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
