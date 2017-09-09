@@ -842,7 +842,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	public boolean isDaytime() {
 	   /* if (!this.firstUpdate && this.world != null) {
-            if (world.isRemote) {
+	        if (world.isRemote) {
                 return isDaytime;
             } else {
                 IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.world.isDaytime()));

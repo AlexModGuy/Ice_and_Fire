@@ -66,14 +66,17 @@ public class BlockGeneric extends Block {
 		return this == ModBlocks.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getBlockLayer();
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return this != ModBlocks.dragon_ice;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return this != ModBlocks.dragon_ice;
 	}
 
+	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));

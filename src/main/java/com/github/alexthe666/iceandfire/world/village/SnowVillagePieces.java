@@ -154,6 +154,7 @@ public class SnowVillagePieces {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static class House1 extends Village {
 		public House1() {
 		}
@@ -277,6 +278,7 @@ public class SnowVillagePieces {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static class House2 extends Village {
 		private boolean hasMadeChest;
 
@@ -777,6 +779,7 @@ public class SnowVillagePieces {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static class Torch extends Village {
 		public Torch() {
 		}
@@ -991,10 +994,12 @@ public class SnowVillagePieces {
 			return currentVillagerProfession;
 		}
 
+		@SuppressWarnings("deprecation")
 		protected net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession chooseForgeProfession(int count, net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof) {
 			return net.minecraftforge.fml.common.registry.VillagerRegistry.getById(chooseProfession(count, net.minecraftforge.fml.common.registry.VillagerRegistry.getId(prof)));
 		}
 
+		@SuppressWarnings("deprecation")
 		protected IBlockState getBiomeSpecificBlockState(IBlockState blockstateIn) {
 			net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID event = new net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID(startPiece == null ? null : startPiece.biome, blockstateIn);
 			net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.post(event);

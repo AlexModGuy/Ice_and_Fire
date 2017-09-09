@@ -10,6 +10,7 @@ public class WorldUtils {
 
 	public static Random rand = new Random();
 
+	@SuppressWarnings("deprecation")
 	public static void setBlock(World world, int x, int y, int z, Block block, int meta, int flags) {
 		BlockPos pos = new BlockPos(x, y, z);
 		world.setBlockState(pos, block.getStateFromMeta(meta), flags);

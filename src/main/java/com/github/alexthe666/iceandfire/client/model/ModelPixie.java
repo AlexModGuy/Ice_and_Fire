@@ -187,7 +187,7 @@ public class ModelPixie extends ModelDragonBase {
 		this.Right_Wing.rotateAngleZ = (float) Math.toRadians(28);
 		this.Left_Wing2.rotateAngleZ = (float) Math.toRadians(-8);
 		this.Right_Wing2.rotateAngleZ = (float) Math.toRadians(8);
-	    /*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+		/*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
             this.Body.rotateAngleX = f12;
             this.Head.rotateAngleX -= f12;

@@ -62,6 +62,7 @@ public class IceAndFire {
 	public static Biome GLACIER;
 	public static Potion FROZEN_POTION;
 
+	@SuppressWarnings("deprecation")
 	@Config
 	public static IceAndFireConfig CONFIG;
 

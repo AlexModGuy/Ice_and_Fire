@@ -110,6 +110,7 @@ public class EntitySnowVillager extends EntityVillager {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof) {
 		if (ModVillagers.INSTANCE.professions.containsValue(prof)) {
 			this.setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.getId(prof));

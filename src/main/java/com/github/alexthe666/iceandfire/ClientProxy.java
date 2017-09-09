@@ -38,6 +38,7 @@ public class ClientProxy extends CommonProxy {
 	private FontRenderer bestiaryFontRenderer;
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void render() {
 		this.bestiaryFontRenderer = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("iceandfire:textures/font/bestiary.png"), Minecraft.getMinecraft().renderEngine, false);
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
@@ -57,6 +58,7 @@ public class ClientProxy extends CommonProxy {
 		EventClient.initializeStoneLayer();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void renderEntities() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelFireDragon()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelIceDragon()));

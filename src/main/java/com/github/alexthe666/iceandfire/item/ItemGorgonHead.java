@@ -57,6 +57,7 @@ public class ItemGorgonHead extends Item {
 		return EnumAction.BOW;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
 		double dist = 32;

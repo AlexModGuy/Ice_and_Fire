@@ -46,6 +46,7 @@ public class BlockSilverPile extends Block {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return SNOW_AABB[state.getValue(LAYERS)];
 	}
@@ -56,11 +57,13 @@ public class BlockSilverPile extends Block {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isTopSolid(IBlockState state) {
 		return state.getValue(LAYERS) == 7;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		int i = blockState.getValue(LAYERS) - 1;
 		float f = 0.125F;
@@ -102,11 +105,13 @@ public class BlockSilverPile extends Block {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}
@@ -134,11 +139,13 @@ public class BlockSilverPile extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings("deprecation")
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(LAYERS, (meta & 7) + 1);
 	}

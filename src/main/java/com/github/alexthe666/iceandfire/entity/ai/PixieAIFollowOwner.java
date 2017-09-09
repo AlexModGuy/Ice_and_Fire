@@ -75,6 +75,7 @@ public class PixieAIFollowOwner extends EntityAIBase {
 		return iblockstate.getMaterial() == Material.AIR ? true : !iblockstate.isFullCube();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void updateTask() {
 		this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
 

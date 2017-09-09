@@ -46,6 +46,7 @@ public class BlockPodium extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
 	}
@@ -88,6 +89,7 @@ public class BlockPodium extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, BlockPodium.EnumType.byMetadata(meta));
 	}
@@ -103,11 +105,13 @@ public class BlockPodium extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}

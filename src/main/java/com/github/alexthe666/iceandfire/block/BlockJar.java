@@ -46,16 +46,19 @@ public class BlockJar extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState blockstate) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState blockstate) {
 		return false;
 	}
@@ -71,6 +74,7 @@ public class BlockJar extends BlockContainer {
 		super.breakBlock(worldIn, pos, state);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 	}
