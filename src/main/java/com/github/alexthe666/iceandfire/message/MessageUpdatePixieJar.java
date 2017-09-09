@@ -13,44 +13,44 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageUpdatePixieJar extends AbstractMessage<MessageUpdatePixieJar> {
 
-    public long blockPos;
-    public boolean isProducing;
+	public long blockPos;
+	public boolean isProducing;
 
-    public MessageUpdatePixieJar(long blockPos, boolean isProducing) {
-        this.blockPos = blockPos;
-        this.isProducing = isProducing;
+	public MessageUpdatePixieJar(long blockPos, boolean isProducing) {
+		this.blockPos = blockPos;
+		this.isProducing = isProducing;
 
-    }
+	}
 
-    public MessageUpdatePixieJar() {
-    }
+	public MessageUpdatePixieJar() {
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        blockPos = buf.readLong();
-        isProducing = buf.readBoolean();
-    }
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		blockPos = buf.readLong();
+		isProducing = buf.readBoolean();
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeLong(blockPos);
-        buf.writeBoolean(isProducing);
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeLong(blockPos);
+		buf.writeBoolean(isProducing);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
-        BlockPos pos = BlockPos.fromLong(message.blockPos);
-        if(client.world.getTileEntity(pos) != null){
-            if(client.world.getTileEntity(pos) instanceof TileEntityJar){
-                TileEntityJar jar = (TileEntityJar)client.world.getTileEntity(pos);
-                jar.hasProduced = message.isProducing;
-            }
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
+		BlockPos pos = BlockPos.fromLong(message.blockPos);
+		if (client.world.getTileEntity(pos) != null) {
+			if (client.world.getTileEntity(pos) instanceof TileEntityJar) {
+				TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
+				jar.hasProduced = message.isProducing;
+			}
+		}
+	}
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
+	@Override
+	public void onServerReceived(MinecraftServer server, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
 
-    }
+	}
 }

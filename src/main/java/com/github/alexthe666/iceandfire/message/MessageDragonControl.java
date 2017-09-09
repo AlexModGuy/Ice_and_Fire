@@ -14,51 +14,51 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageDragonControl extends AbstractMessage<MessageDragonControl> {
 
-    public int dragonId;
-    public byte controlState;
-    public int armor_type;
+	public int dragonId;
+	public byte controlState;
+	public int armor_type;
 
-    public MessageDragonControl(int dragonId, byte controlState) {
-        this.dragonId = dragonId;
-        this.controlState = controlState;
-    }
+	public MessageDragonControl(int dragonId, byte controlState) {
+		this.dragonId = dragonId;
+		this.controlState = controlState;
+	}
 
-    public MessageDragonControl() {
-    }
+	public MessageDragonControl() {
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        controlState = buf.readByte();
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		dragonId = buf.readInt();
+		controlState = buf.readByte();
 
-    }
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeByte(controlState);
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(dragonId);
+		buf.writeByte(controlState);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onClientReceived(Minecraft client, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
+	}
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            if (dragon.isOwner(player)) {
-                dragon.setControlState(message.controlState);
-            }
-        }else  if (entity instanceof EntityHippogryph) {
-            EntityHippogryph hippo = (EntityHippogryph) entity;
-            if (hippo.isOwner(player)) {
-                hippo.setControlState(message.controlState);
-            }
-        }
-    }
+	@Override
+	public void onServerReceived(MinecraftServer server, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
+		Entity entity = player.world.getEntityByID(message.dragonId);
+		if (entity instanceof EntityDragonBase) {
+			EntityDragonBase dragon = (EntityDragonBase) entity;
+			if (dragon.isOwner(player)) {
+				dragon.setControlState(message.controlState);
+			}
+		} else if (entity instanceof EntityHippogryph) {
+			EntityHippogryph hippo = (EntityHippogryph) entity;
+			if (hippo.isOwner(player)) {
+				hippo.setControlState(message.controlState);
+			}
+		}
+	}
 
 
 }

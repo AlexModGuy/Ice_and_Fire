@@ -13,23 +13,23 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.Random;
 
 public class BlockDragonOre extends Block {
-    public Item itemBlock;
+	public Item itemBlock;
 
-    public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
-        super(Material.ROCK);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setHarvestLevel("pickaxe", toollevel);
-        this.setResistance(resistance);
-        this.setHardness(hardness);
-        this.setUnlocalizedName(name);
-        setRegistryName(IceAndFire.MODID, gameName);
-        GameRegistry.register(this);
-        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
+	public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
+		super(Material.ROCK);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setHarvestLevel("pickaxe", toollevel);
+		this.setResistance(resistance);
+		this.setHardness(hardness);
+		this.setUnlocalizedName(name);
+		setRegistryName(IceAndFire.MODID, gameName);
+		GameRegistry.register(this);
+		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
-    }
+	}
 
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
-    }
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
+	}
 }

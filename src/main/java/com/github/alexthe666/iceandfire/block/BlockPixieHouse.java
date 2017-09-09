@@ -30,133 +30,134 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockPixieHouse extends BlockContainer {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public Item itemBlock;
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public Item itemBlock;
 
-    public BlockPixieHouse() {
-        super(Material.WOOD);
-        this.setHardness(2.0F);
-        this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        this.setSoundType(SoundType.WOOD);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.pixie_house");
-        this.setRegistryName(IceAndFire.MODID, "pixie_house");
-        GameRegistry.register(this);
-        GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
-        GameRegistry.register(itemBlock = (new ItemBlockPixieHouse(this).setRegistryName(this.getRegistryName())));
-    }
+	public BlockPixieHouse() {
+		super(Material.WOOD);
+		this.setHardness(2.0F);
+		this.setResistance(5.0F);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		this.setSoundType(SoundType.WOOD);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName("iceandfire.pixie_house");
+		this.setRegistryName(IceAndFire.MODID, "pixie_house");
+		GameRegistry.register(this);
+		GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
+		GameRegistry.register(itemBlock = (new ItemBlockPixieHouse(this).setRegistryName(this.getRegistryName())));
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState blockstate) {
-        return false;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState blockstate) {
+		return false;
+	}
 
-    @Override
-    public boolean isFullCube(IBlockState blockstate) {
-        return false;
-    }
+	@Override
+	public boolean isFullCube(IBlockState blockstate) {
+		return false;
+	}
 
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
-    }
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		IBlockState iblockstate = worldIn.getBlockState(pos.down());
+		return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
+	}
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-       dropPixie(worldIn, pos);
-        int meta = 0;
-        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse){
-            meta = ((TileEntityPixieHouse)worldIn.getTileEntity(pos)).houseType;
-        }
-        spawnAsEntity(worldIn, pos, new ItemStack(ModBlocks.pixieHouse, 1, meta));
-       super.breakBlock(worldIn, pos, state);
-    }
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		dropPixie(worldIn, pos);
+		int meta = 0;
+		if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse) {
+			meta = ((TileEntityPixieHouse) worldIn.getTileEntity(pos)).houseType;
+		}
+		spawnAsEntity(worldIn, pos, new ItemStack(ModBlocks.pixieHouse, 1, meta));
+		super.breakBlock(worldIn, pos, state);
+	}
 
-    public int quantityDropped(Random random) {
-        return 0;
-    }
+	public int quantityDropped(Random random) {
+		return 0;
+	}
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-    }
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        this.checkFall(worldIn, pos);
-    }
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		this.checkFall(worldIn, pos);
+	}
 
-    private boolean checkFall(World worldIn, BlockPos pos) {
-        if (!this.canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, true);
-            dropPixie(worldIn, pos);
-            return false;
-        } else {
-            return true;
-        }
-    }
+	private boolean checkFall(World worldIn, BlockPos pos) {
+		if (!this.canPlaceBlockAt(worldIn, pos)) {
+			worldIn.destroyBlock(pos, true);
+			dropPixie(worldIn, pos);
+			return false;
+		} else {
+			return true;
+		}
+	}
 
-    public void dropPixie(World world, BlockPos pos){
-        if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse)world.getTileEntity(pos)).hasPixie){
-            ((TileEntityPixieHouse)world.getTileEntity(pos)).releasePixie();
-        }
-    }
+	public void dropPixie(World world, BlockPos pos) {
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse) world.getTileEntity(pos)).hasPixie) {
+			((TileEntityPixieHouse) world.getTileEntity(pos)).releasePixie();
+		}
+	}
 
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex();
+	}
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{FACING});
-    }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{FACING});
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
 
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse){
-            ((TileEntityPixieHouse)world.getTileEntity(pos)).houseType = stack.getMetadata();
-        }
-    }
-        @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityPixieHouse();
-    }
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
+			((TileEntityPixieHouse) world.getTileEntity(pos)).houseType = stack.getMetadata();
+		}
+	}
 
-     class ItemBlockPixieHouse extends ItemBlock {
-         public ItemBlockPixieHouse(Block block) {
-             super(block);
-             this.maxStackSize = 1;
-         }
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileEntityPixieHouse();
+	}
 
-         public String getUnlocalizedName(ItemStack stack) {
-             int i = stack.getMetadata();
-             return "tile.iceandfire.pixie_house_" + i;
-         }
+	class ItemBlockPixieHouse extends ItemBlock {
+		public ItemBlockPixieHouse(Block block) {
+			super(block);
+			this.maxStackSize = 1;
+		}
 
-         @SideOnly(Side.CLIENT)
-         public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-             for(int i = 0; i < 6; i++){
-                 subItems.add(new ItemStack(itemIn, 1, i));
-             }
-         }
-     }
+		public String getUnlocalizedName(ItemStack stack) {
+			int i = stack.getMetadata();
+			return "tile.iceandfire.pixie_house_" + i;
+		}
+
+		@SideOnly(Side.CLIENT)
+		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+			for (int i = 0; i < 6; i++) {
+				subItems.add(new ItemStack(itemIn, 1, i));
+			}
+		}
+	}
 }

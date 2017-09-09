@@ -15,46 +15,46 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
 
-    public int entityId;
-    public boolean isStone;
+	public int entityId;
+	public boolean isStone;
 
-    public MessageStoneStatue(int entityId, boolean isStone) {
-        this.entityId = entityId;
-        this.isStone = isStone;
-    }
+	public MessageStoneStatue(int entityId, boolean isStone) {
+		this.entityId = entityId;
+		this.isStone = isStone;
+	}
 
-    public MessageStoneStatue() {
-    }
+	public MessageStoneStatue() {
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        entityId = buf.readInt();
-        isStone = buf.readBoolean();
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		entityId = buf.readInt();
+		isStone = buf.readBoolean();
 
-    }
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(entityId);
-        buf.writeBoolean(isStone);
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(entityId);
+		buf.writeBoolean(isStone);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onClientReceived(Minecraft client, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.entityId);
-        if (entity instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-            properties.isStone = message.isStone;
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onClientReceived(Minecraft client, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
+		Entity entity = player.world.getEntityByID(message.entityId);
+		if (entity instanceof EntityLiving) {
+			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+			properties.isStone = message.isStone;
+		}
+	}
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.entityId);
-        if (entity instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-            properties.isStone = message.isStone;
-        }
-    }
+	@Override
+	public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
+		Entity entity = player.world.getEntityByID(message.entityId);
+		if (entity instanceof EntityLiving) {
+			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+			properties.isStone = message.isStone;
+		}
+	}
 }

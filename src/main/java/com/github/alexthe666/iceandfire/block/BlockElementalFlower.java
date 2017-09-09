@@ -13,27 +13,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockElementalFlower extends BlockBush {
-    public Item itemBlock;
+	public Item itemBlock;
 
-    public BlockElementalFlower(boolean isFire) {
-        this.setTickRandomly(true);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
-        setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
-        GameRegistry.register(this);
-        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
-    }
+	public BlockElementalFlower(boolean isFire) {
+		this.setTickRandomly(true);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
+		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
+		GameRegistry.register(this);
+		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
+	}
 
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState soil = worldIn.getBlockState(pos.down());
-        if (this == ModBlocks.fire_lily) {
-            return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK);
-        } else {
-            return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE);
-        }
-    }
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		IBlockState soil = worldIn.getBlockState(pos.down());
+		if (this == ModBlocks.fire_lily) {
+			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK);
+		} else {
+			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE);
+		}
+	}
 
-    protected boolean canSustainBush(IBlockState state) {
-        return true;
-    }
+	protected boolean canSustainBush(IBlockState state) {
+		return true;
+	}
 }

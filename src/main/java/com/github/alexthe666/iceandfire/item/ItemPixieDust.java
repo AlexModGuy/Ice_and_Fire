@@ -11,16 +11,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemPixieDust extends ItemFood {
 
-    public ItemPixieDust() {
-        super(1, 0.3F, false);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.pixie_dust");
-        this.setRegistryName(IceAndFire.MODID, "pixie_dust");
-        GameRegistry.register(this);
-    }
+	public ItemPixieDust() {
+		super(1, 0.3F, false);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName("iceandfire.pixie_dust");
+		this.setRegistryName(IceAndFire.MODID, "pixie_dust");
+		GameRegistry.register(this);
+	}
 
-    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-        player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 1));
-        player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 1));
-    }
+	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+		player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 1));
+		player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 1));
+	}
 }

@@ -16,27 +16,27 @@ import java.util.List;
 
 public class ItemModPickaxe extends ItemPickaxe {
 
-    public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
-        super(toolmaterial);
-        this.setUnlocalizedName(name);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setRegistryName(IceAndFire.MODID, gameName);
-        GameRegistry.register(this);
-    }
+	public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
+		super(toolmaterial);
+		this.setUnlocalizedName(name);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setRegistryName(IceAndFire.MODID, gameName);
+		GameRegistry.register(this);
+	}
 
-    @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (this == ModItems.silver_pickaxe) {
-            if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.MAGIC, 2);
-            }
-        }
-        return super.hitEntity(stack, target, attacker);
-    }
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		if (this == ModItems.silver_pickaxe) {
+			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
+				target.attackEntityFrom(DamageSource.MAGIC, 2);
+			}
+		}
+		return super.hitEntity(stack, target, attacker);
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
-        if (this == ModItems.silver_pickaxe)
-            list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
-    }
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
+		if (this == ModItems.silver_pickaxe)
+			list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+	}
 }

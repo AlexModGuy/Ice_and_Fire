@@ -29,128 +29,129 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockJar extends BlockContainer {
-    public Item itemBlock;
-    private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
-    public BlockJar() {
-        super(Material.GLASS);
-        this.setHardness(1.0F);
-        this.setResistance(2.0F);
-        this.setSoundType(SoundType.GLASS);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.jar");
-        this.setRegistryName(IceAndFire.MODID, "jar");
-        GameRegistry.register(this);
-        GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
-        GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
-    }
+	private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
+	public Item itemBlock;
 
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return AABB;
-    }
+	public BlockJar() {
+		super(Material.GLASS);
+		this.setHardness(1.0F);
+		this.setResistance(2.0F);
+		this.setSoundType(SoundType.GLASS);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName("iceandfire.jar");
+		this.setRegistryName(IceAndFire.MODID, "jar");
+		GameRegistry.register(this);
+		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
+		GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState blockstate) {
-        return false;
-    }
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB;
+	}
 
-    @Override
-    public boolean isFullCube(IBlockState blockstate) {
-        return false;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState blockstate) {
+		return false;
+	}
 
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
-    }
+	@Override
+	public boolean isFullCube(IBlockState blockstate) {
+		return false;
+	}
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        dropPixie(worldIn, pos);
-        super.breakBlock(worldIn, pos, state);
-    }
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		IBlockState iblockstate = worldIn.getBlockState(pos.down());
+		return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
+	}
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-    }
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		dropPixie(worldIn, pos);
+		super.breakBlock(worldIn, pos, state);
+	}
 
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        this.checkFall(world, pos);
-    }
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
 
-    private boolean checkFall(World worldIn, BlockPos pos) {
-        if (!this.canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, true);
-            dropPixie(worldIn, pos);
-            return false;
-        } else {
-            return true;
-        }
-    }
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		this.checkFall(world, pos);
+	}
 
-    public void dropPixie(World world, BlockPos pos) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie) {
-            ((TileEntityJar) world.getTileEntity(pos)).releasePixie();
-        }
-    }
+	private boolean checkFall(World worldIn, BlockPos pos) {
+		if (!this.canPlaceBlockAt(worldIn, pos)) {
+			worldIn.destroyBlock(pos, true);
+			dropPixie(worldIn, pos);
+			return false;
+		} else {
+			return true;
+		}
+	}
 
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
-            ((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
-            EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ModItems.pixie_dust));
-            if(!world.isRemote){
-               world.spawnEntity(item);
-            }
-            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.pixie_hurt, SoundCategory.NEUTRAL, 1, 1, false);
+	public void dropPixie(World world, BlockPos pos) {
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie) {
+			((TileEntityJar) world.getTileEntity(pos)).releasePixie();
+		}
+	}
 
-        }
-        return false;
-    }
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
+			((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
+			EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ModItems.pixie_dust));
+			if (!world.isRemote) {
+				world.spawnEntity(item);
+			}
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.pixie_hurt, SoundCategory.NEUTRAL, 1, 1, false);
+
+		}
+		return false;
+	}
 
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
+	}
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar){
-            if(stack.getMetadata() > 0){
-                ((TileEntityJar)world.getTileEntity(pos)).hasPixie = true;
-                ((TileEntityJar)world.getTileEntity(pos)).pixieType = stack.getMetadata() - 1;
-            }else{
-                ((TileEntityJar)world.getTileEntity(pos)).hasPixie = false;
-            }
-        }
-    }
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar) {
+			if (stack.getMetadata() > 0) {
+				((TileEntityJar) world.getTileEntity(pos)).hasPixie = true;
+				((TileEntityJar) world.getTileEntity(pos)).pixieType = stack.getMetadata() - 1;
+			} else {
+				((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
+			}
+		}
+	}
 
-    @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityJar();
-    }
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileEntityJar();
+	}
 
-    class ItemBlockJar extends ItemBlock {
-        public ItemBlockJar(Block block) {
-            super(block);
-            this.maxStackSize = 1;
-        }
+	class ItemBlockJar extends ItemBlock {
+		public ItemBlockJar(Block block) {
+			super(block);
+			this.maxStackSize = 1;
+		}
 
-        public String getUnlocalizedName(ItemStack stack) {
-            int i = stack.getMetadata();
-            return stack.getMetadata() == 0 ? "tile.iceandfire.jar" : "tile.iceandfire.jar_" + (i - 1);
-        }
+		public String getUnlocalizedName(ItemStack stack) {
+			int i = stack.getMetadata();
+			return stack.getMetadata() == 0 ? "tile.iceandfire.jar" : "tile.iceandfire.jar_" + (i - 1);
+		}
 
-        @SideOnly(Side.CLIENT)
-        public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-            for(int i = 0; i < 6; i++){
-                subItems.add(new ItemStack(itemIn, 1, i));
-            }
-        }
-    }
+		@SideOnly(Side.CLIENT)
+		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+			for (int i = 0; i < 6; i++) {
+				subItems.add(new ItemStack(itemIn, 1, i));
+			}
+		}
+	}
 }

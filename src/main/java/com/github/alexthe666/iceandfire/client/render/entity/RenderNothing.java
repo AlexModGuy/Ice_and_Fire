@@ -7,18 +7,18 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderNothing extends Render {
 
-    public RenderNothing(RenderManager renderManager) {
-        super(renderManager);
-    }
+	public RenderNothing(RenderManager renderManager) {
+		super(renderManager);
+	}
 
-    @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
-        return null;
-    }
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
+	}
 
-    @Override
-    public void doRender(Entity entity, double x, double y, double z, float yee, float partialTicks) {
+	@Override
+	public void doRender(Entity entity, double x, double y, double z, float yee, float partialTicks) {
 
-    }
+	}
 
 }

@@ -24,69 +24,67 @@ import java.util.Random;
 
 public class ItemHippogryphEgg extends Item {
 
-    public ItemHippogryphEgg() {
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.hippogryph_egg");
-        this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
-        GameRegistry.register(this);
-    }
+	public ItemHippogryphEgg() {
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName("iceandfire.hippogryph_egg");
+		this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
+		GameRegistry.register(this);
+	}
 
-    @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
-    }
+	public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
+		EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
+		ItemStack stack = new ItemStack(ModItems.hippogryph_egg);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("Type", eggType.ordinal());
+		stack.setTagCompound(nbt);
+		return stack;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for(EnumHippogryphTypes type : EnumHippogryphTypes.values()){
-            if(!type.developer){
-                subItems.add(createEggStack(type, type));
-            }
-        }
-    }
+	@Override
+	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+		itemStack.setTagCompound(new NBTTagCompound());
+	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
+			if (!type.developer) {
+				subItems.add(createEggStack(type, type));
+			}
+		}
+	}
 
-    @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
-        }
-    }
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
+	}
 
-    public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2){
-        EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(ModItems.hippogryph_egg);
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("Type", eggType.ordinal());
-        stack.setTagCompound(nbt);
-        return stack;
-    }
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack itemstack = playerIn.getHeldItem(handIn);
 
+		if (!playerIn.capabilities.isCreativeMode) {
+			itemstack.shrink(1);
+		}
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
+		worldIn.playSound((EntityPlayer) null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-        if (!playerIn.capabilities.isCreativeMode) {
-            itemstack.shrink(1);
-        }
+		if (!worldIn.isRemote) {
+			EntityHippogryphEgg entityegg = new EntityHippogryphEgg(worldIn, playerIn, itemstack);
+			entityegg.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+			worldIn.spawnEntity(entityegg);
+		}
 
-        worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		playerIn.addStat(StatList.getObjectUseStats(this));
+		return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+	}
 
-        if (!worldIn.isRemote) {
-            EntityHippogryphEgg entityegg = new EntityHippogryphEgg(worldIn, playerIn, itemstack);
-            entityegg.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-            worldIn.spawnEntity(entityegg);
-        }
-
-        playerIn.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack);
-    }
-
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
-        if (stack.getTagCompound() != null) {
-            String type = EnumHippogryphTypes.values()[stack.getTagCompound().getInteger("Type")].name().toLowerCase();
-            list.add(StatCollector.translateToLocal("entity.hippogryph." + type));
-        }
-    }
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+		if (stack.getTagCompound() != null) {
+			String type = EnumHippogryphTypes.values()[stack.getTagCompound().getInteger("Type")].name().toLowerCase();
+			list.add(StatCollector.translateToLocal("entity.hippogryph." + type));
+		}
+	}
 }

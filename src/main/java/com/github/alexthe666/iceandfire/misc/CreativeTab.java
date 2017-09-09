@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeTab extends CreativeTabs {
 
-    public CreativeTab(String label) {
-        super(label);
-    }
+	public CreativeTab(String label) {
+		super(label);
+	}
 
-    @Override
-    public ItemStack getTabIconItem() {
-        return new ItemStack(ModItems.dragon_skull);
-    }
+	@Override
+	public ItemStack getTabIconItem() {
+		return new ItemStack(ModItems.dragon_skull);
+	}
 
 }

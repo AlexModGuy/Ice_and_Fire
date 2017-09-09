@@ -6,30 +6,30 @@ import net.minecraft.world.World;
 
 public class CommonProxy {
 
-    public void preRender() {
+	public void preRender() {
 
-    }
+	}
 
-    public void render() {
-    }
+	public void render() {
+	}
 
-    public void postRender() {
-    }
+	public void postRender() {
+	}
 
-    public void renderArmors(EnumDragonArmor armor) {
-    }
+	public void renderArmors(EnumDragonArmor armor) {
+	}
 
-    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-    }
+	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+	}
 
-    public void openBestiaryGui(ItemStack book) {
-    }
+	public void openBestiaryGui(ItemStack book) {
+	}
 
-    public Object getArmorModel(int armorId) {
-        return null;
-    }
+	public Object getArmorModel(int armorId) {
+		return null;
+	}
 
-    public Object getFontRenderer() {
-        return null;
-    }
+	public Object getFontRenderer() {
+		return null;
+	}
 }
