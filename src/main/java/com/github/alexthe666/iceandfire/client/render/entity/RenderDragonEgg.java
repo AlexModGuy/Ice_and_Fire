@@ -9,17 +9,17 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderDragonEgg extends RenderLiving {
 
-    public RenderDragonEgg(RenderManager renderManager) {
-        super(renderManager, new ModelDragonEgg(), 0.3F);
-    }
+	public RenderDragonEgg(RenderManager renderManager) {
+		super(renderManager, new ModelDragonEgg(), 0.3F);
+	}
 
-    @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
-        if (entity instanceof EntityDragonEgg) {
-            return new ResourceLocation(((EntityDragonEgg) entity).getTexture());
-        } else {
-            return new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
-        }
-    }
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		if (entity instanceof EntityDragonEgg) {
+			return new ResourceLocation(((EntityDragonEgg) entity).getTexture());
+		} else {
+			return new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
+		}
+	}
 
 }

@@ -10,29 +10,29 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderGorgon extends RenderLiving<EntityGorgon> {
 
-    public static final ResourceLocation PASSIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_passive.png");
-    public static final ResourceLocation AGRESSIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_active.png");
-    public static final ResourceLocation DEAD_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_decapitated.png");
+	public static final ResourceLocation PASSIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_passive.png");
+	public static final ResourceLocation AGRESSIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_active.png");
+	public static final ResourceLocation DEAD_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_decapitated.png");
 
-    public RenderGorgon(RenderManager renderManager) {
-        super(renderManager, new ModelGorgon(), 0.6F);
-        this.layerRenderers.add(new LayerGorgonEyes(this));
-    }
+	public RenderGorgon(RenderManager renderManager) {
+		super(renderManager, new ModelGorgon(), 0.6F);
+		this.layerRenderers.add(new LayerGorgonEyes(this));
+	}
 
-    @Override
-    public void preRenderCallback(EntityGorgon entitylivingbaseIn, float partialTickTime) {
-        GL11.glScalef(0.85F, 0.85F, 0.85F);
-    }
+	@Override
+	public void preRenderCallback(EntityGorgon entitylivingbaseIn, float partialTickTime) {
+		GL11.glScalef(0.85F, 0.85F, 0.85F);
+	}
 
-    @Override
-    protected ResourceLocation getEntityTexture(EntityGorgon gorgon) {
-        if(gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE){
-            return AGRESSIVE_TEXTURE;
-        }else if(gorgon.deathTime > 0){
-            return DEAD_TEXTURE;
-        }else{
-            return PASSIVE_TEXTURE;
-        }
-    }
+	@Override
+	protected ResourceLocation getEntityTexture(EntityGorgon gorgon) {
+		if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE) {
+			return AGRESSIVE_TEXTURE;
+		} else if (gorgon.deathTime > 0) {
+			return DEAD_TEXTURE;
+		} else {
+			return PASSIVE_TEXTURE;
+		}
+	}
 
 }

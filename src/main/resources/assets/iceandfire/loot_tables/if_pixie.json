@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "pixie",
+      "name": "if_pixie",
       "rolls": 1,
       "entries": [
         {

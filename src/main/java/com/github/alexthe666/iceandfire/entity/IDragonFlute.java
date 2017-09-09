@@ -4,5 +4,5 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IDragonFlute {
 
-    void onHearFlute(EntityPlayer player);
+	void onHearFlute(EntityPlayer player);
 }

@@ -13,16 +13,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemBlindfold extends ItemArmor {
 
-    public ItemBlindfold() {
-        super(ModItems.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.blindfold");
-        this.setRegistryName(IceAndFire.MODID, "blindfold");
-        GameRegistry.register(this);
-    }
+	public ItemBlindfold() {
+		super(ModItems.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.setUnlocalizedName("iceandfire.blindfold");
+		this.setRegistryName(IceAndFire.MODID, "blindfold");
+		GameRegistry.register(this);
+	}
 
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack){
-        player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20, 2, true, false));
-    }
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20, 2, true, false));
+	}
 
 }

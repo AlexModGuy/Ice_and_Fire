@@ -13,21 +13,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class ItemDragonScales extends Item {
-    EnumDragonEgg type;
+	EnumDragonEgg type;
 
-    public ItemDragonScales(String name, EnumDragonEgg type) {
-        this.setHasSubtypes(true);
-        this.setCreativeTab(IceAndFire.TAB);
-        this.type = type;
-        this.setUnlocalizedName("iceandfire.dragonscales");
-        this.setRegistryName(IceAndFire.MODID, name);
-        GameRegistry.register(this);
-    }
+	public ItemDragonScales(String name, EnumDragonEgg type) {
+		this.setHasSubtypes(true);
+		this.setCreativeTab(IceAndFire.TAB);
+		this.type = type;
+		this.setUnlocalizedName("iceandfire.dragonscales");
+		this.setRegistryName(IceAndFire.MODID, name);
+		GameRegistry.register(this);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
-        tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+		tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
+	}
 
 }
