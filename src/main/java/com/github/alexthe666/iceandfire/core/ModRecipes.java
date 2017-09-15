@@ -94,6 +94,12 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.jar, 1, 0), new Object[]{"YXY", "Y Y", "YYY", Character.valueOf('X'), "plankWood", Character.valueOf('Y'), "blockGlass"}));
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+		ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
+		ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
+		ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));
+		ModItems.boneTools.setRepairItem(new ItemStack(ModItems.witherbone));
+		ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
+		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {
