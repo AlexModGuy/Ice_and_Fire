@@ -84,7 +84,7 @@ public class BlockSilverPile extends Block {
 
 		if (!item.isEmpty()) {
 			if (item.getItem() != null) {
-				if (item.getItem() == ModItems.silverNugget || item.getItem() == Item.getItemFromBlock(ModBlocks.silverPile)) {
+				if (item.getItem() == Item.getItemFromBlock(ModBlocks.silverPile)) {
 					if (!item.isEmpty()) {
 						if (this.getMetaFromState(state) < 7) {
 							WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.silverPile, this.getMetaFromState(state) + 1, 3);
