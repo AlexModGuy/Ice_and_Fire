@@ -90,7 +90,7 @@ public class BlockGoldPile extends Block {
 
 		if (!item.isEmpty()) {
 			if (item.getItem() != null) {
-				if (item.getItem() == Items.GOLD_NUGGET || item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
+				if (item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
 					if (!item.isEmpty()) {
 						if (this.getMetaFromState(state) < 7) {
 							WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.goldPile, this.getMetaFromState(state) + 1, 3);

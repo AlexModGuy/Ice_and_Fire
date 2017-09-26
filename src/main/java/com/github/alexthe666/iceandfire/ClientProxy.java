@@ -264,16 +264,21 @@ public class ClientProxy extends CommonProxy {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary(book));
 	}
 
+	private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL = new ModelFireDragonArmor(0.5F);
+	private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelFireDragonArmor(0.2F);
+	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL = new ModelIceDragonArmor(0.5F);
+	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F);
+
 	public Object getArmorModel(int armorId) {
 		switch (armorId) {
 			case 0:
-				return new ModelFireDragonArmor(0.5F);
+				return FIRE_DRAGON_SCALE_ARMOR_MODEL;
 			case 1:
-				return new ModelFireDragonArmor(0.2F);
+				return FIRE_DRAGON_SCALE_ARMOR_MODEL_LEGS;
 			case 2:
-				return new ModelIceDragonArmor(0.5F);
+				return ICE_DRAGON_SCALE_ARMOR_MODEL;
 			case 3:
-				return new ModelIceDragonArmor(0.2F);
+				return ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS;
 		}
 		return null;
 	}
