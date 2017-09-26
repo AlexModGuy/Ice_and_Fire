@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -100,6 +101,7 @@ public class ModRecipes {
 		ModItems.boneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
+		EnumDragonArmor.armor_green.material.setRepairItem(new ItemStack(ModItems.dragonscales_green));
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {
