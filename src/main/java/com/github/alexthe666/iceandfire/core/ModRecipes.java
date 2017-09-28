@@ -40,8 +40,6 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 3), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 3), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 3)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 4), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 4), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 4)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 5), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 5), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 5)}));
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_fire, 1, 0), ModItems.dragonbone_sword, ModItems.fire_dragon_blood);
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_ice, 1, 0), ModItems.dragonbone_sword, ModItems.ice_dragon_blood);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.fire_stew, 1, 0), Items.BOWL, ModBlocks.fire_lily, Items.BLAZE_ROD);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.frost_stew, 1, 0), Items.BOWL, ModBlocks.frost_lily, Items.PRISMARINE_CRYSTALS);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_sword, 1, 0), new Object[]{"X", "X", "Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
