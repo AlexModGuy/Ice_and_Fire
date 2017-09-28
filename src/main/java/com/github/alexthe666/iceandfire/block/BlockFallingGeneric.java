@@ -28,6 +28,7 @@ public class BlockFallingGeneric extends BlockFalling {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
 		super(materialIn);
 		this.setUnlocalizedName(name);

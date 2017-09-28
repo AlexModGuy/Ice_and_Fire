@@ -31,6 +31,7 @@ import java.util.Random;
 public class BlockEggInIce extends BlockContainer {
 	public Item itemBlock;
 
+	@SuppressWarnings("deprecation")
 	public BlockEggInIce() {
 		super(Material.ICE);
 		this.slipperiness = 0.98F;

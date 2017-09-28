@@ -32,6 +32,7 @@ public class BlockGeneric extends Block {
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
+	@SuppressWarnings("deprecation")
 	public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
 		super(materialIn);
 		this.setUnlocalizedName(name);

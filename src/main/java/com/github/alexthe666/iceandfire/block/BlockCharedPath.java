@@ -24,6 +24,7 @@ public class BlockCharedPath extends BlockGrassPath {
 	public Item itemBlock;
 	boolean isFire;
 
+	@SuppressWarnings("deprecation")
 	public BlockCharedPath(boolean isFire) {
 		super();
 		this.isFire = isFire;
