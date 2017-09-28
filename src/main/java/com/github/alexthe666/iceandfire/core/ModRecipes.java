@@ -33,7 +33,6 @@ public class ModRecipes {
 		OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_horn, 1, 0), new Object[]{"  Y", " YY", "XY ", Character.valueOf('Y'), ModItems.dragonbone, Character.valueOf('X'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_stick, 1, 0), new Object[]{"X", "Y", Character.valueOf('X'), ModItems.dragon_skull, Character.valueOf('Y'), "stickWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.lectern, 1, 0), new Object[]{" X ", " Y ", " Y ", Character.valueOf('X'), Items.BOOK, Character.valueOf('Y'), "plankWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 0), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 0)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 1), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 1), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 1)}));
@@ -42,8 +41,6 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 4), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 4), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 4)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 5), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 5), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 5)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.sapphireBlock, 1, 0), new Object[]{"XXX", "XXX", "XXX", Character.valueOf('X'), ModItems.sapphireGem}));
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.bestiary, 1, 0), ModItems.manuscript, ModItems.manuscript, ModItems.manuscript);
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.wither_shard, 3, 0), ModItems.witherbone);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_fire, 1, 0), ModItems.dragonbone_sword, ModItems.fire_dragon_blood);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.dragonbone_sword_ice, 1, 0), ModItems.dragonbone_sword, ModItems.ice_dragon_blood);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.fire_stew, 1, 0), Items.BOWL, ModBlocks.fire_lily, Items.BLAZE_ROD);
@@ -69,14 +66,13 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_diamond, 1, 1), new Object[]{"XXX", " XX", Character.valueOf('X'), "blockDiamond"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_diamond, 1, 2), new Object[]{"XXX", "XXX", "X X", Character.valueOf('X'), "blockDiamond"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_armor_diamond, 1, 3), new Object[]{"  X", "XX ", Character.valueOf('X'), "blockDiamond"}));
-		GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.iron_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.IRON_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.gold_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.GOLDEN_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.diamond_hippogryph_armor, 1, 0), new Object[]{"YXY", Character.valueOf('X'), Items.DIAMOND_HORSE_ARMOR, Character.valueOf('Y'), "feather"}));
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.ambrosia, 1, 0), new Object[]{Items.BOWL, ModItems.pixie_dust, Items.GOLDEN_CARROT, Items.SPECKLED_MELON});
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.jar, 1, 0), new Object[]{"YXY", "Y Y", "YYY", Character.valueOf('X'), "plankWood", Character.valueOf('Y'), "blockGlass"}));
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+		GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
 		ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
 		ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
 		ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));

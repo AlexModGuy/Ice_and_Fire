@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:witherbone",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:wither_shard",
+    "data": 0,
+    "count": 3
+  }
+}
