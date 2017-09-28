@@ -618,11 +618,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) {
+	public void travel(float strafe, float forward, float vertical) {
 		if (!this.canMove() && !this.isBeingRidden()) {
 			strafe = 0;
 			forward = 0;
-			super.moveEntityWithHeading(strafe, forward);
+			super.travel(strafe, forward, vertical);
 			return;
 		}
 		if (this.isBeingRidden() && this.canBeSteered()) {
@@ -641,7 +641,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
 			}
 		}
-		super.moveEntityWithHeading(strafe, forward);
+		super.travel(strafe, forward, vertical);
 	}
 
 	@Override
