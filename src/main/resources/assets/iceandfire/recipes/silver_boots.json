@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "S S",
+    "S S",
+    "   "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSilver"
+    }
+  },
+  "result": {
+    "item": "iceandfire:silver_boots",
+    "data": 0
+  }
+}

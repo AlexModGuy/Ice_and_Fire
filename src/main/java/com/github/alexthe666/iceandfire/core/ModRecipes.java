@@ -56,16 +56,6 @@ public class ModRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.sapphireGem, 9, 0), ModBlocks.sapphireBlock);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.goldPile, 1, 0), new Object[]{"XX", Character.valueOf('X'), "nuggetGold"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.silverPile, 1, 0), new Object[]{"XX", Character.valueOf('X'), "nuggetSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silverIngot, 1, 0), new Object[]{"XXX", "XXX", "XXX", Character.valueOf('X'), "nuggetSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_helmet, 1, 0), new Object[]{"XXX", "X X", Character.valueOf('X'), "ingotSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_chestplate, 1, 0), new Object[]{"X X", "XXX", "XXX", Character.valueOf('X'), "ingotSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_leggings, 1, 0), new Object[]{"XXX", "X X", "X X", Character.valueOf('X'), "ingotSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_boots, 1, 0), new Object[]{"X X", "X X", Character.valueOf('X'), "ingotSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_sword, 1, 0), new Object[]{"X", "X", "Y", Character.valueOf('X'), "ingotSilver", Character.valueOf('Y'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_pickaxe, 1, 0), new Object[]{"XXX", " Y ", " Y ", Character.valueOf('X'), "ingotSilver", Character.valueOf('Y'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_axe, 1, 0), new Object[]{"XX", "XY", " Y", Character.valueOf('X'), "ingotSilver", Character.valueOf('Y'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_shovel, 1, 0), new Object[]{"X", "Y", "Y", Character.valueOf('X'), "ingotSilver", Character.valueOf('Y'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.silver_hoe, 1, 0), new Object[]{"XX", " Y", " Y", Character.valueOf('X'), "ingotSilver", Character.valueOf('Y'), "stickWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_sword, 1, 0), new Object[]{"X", "X", "Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_pickaxe, 1, 0), new Object[]{"XXX", " Y ", " Y ", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_axe, 1, 0), new Object[]{"XX", "XY", " Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
