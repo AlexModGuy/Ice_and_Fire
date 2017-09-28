@@ -75,7 +75,9 @@ public class IceAndFire {
 
 		ModEntities.init();
 		ModSounds.init();
-		ModVillagers.INSTANCE.init();
+		ModBlocks.init();
+		ModItems.init();
+		ModFoods.init();
 
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");
@@ -85,11 +87,9 @@ public class IceAndFire {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 
-		ModBlocks.init();
-		ModItems.init();
-		ModFoods.init();
 		ModRecipes.init();
 		ModAchievements.init();
+		ModVillagers.INSTANCE.init();
 
 		logger.info("The watcher waits on the northern wall");
 		logger.info("A daughter picks up a warrior's sword");
