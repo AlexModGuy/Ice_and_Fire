@@ -69,7 +69,7 @@ public class ItemDragonSkull extends Item {
 		} else {
 			ItemStack stack = player.getHeldItem(hand);
 			/*
-	         * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
+		     * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			 * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
 			 * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
 			 */

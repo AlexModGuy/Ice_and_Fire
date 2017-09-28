@@ -66,7 +66,7 @@ public class RenderModCapes {
 				}
 			}
 		}
-	    /*
+		/*
          * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
 		 * (hasRedCape(event.getEntityPlayer().getUniqueID())){
 		 * AbstractClientPlayer player =

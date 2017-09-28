@@ -11,6 +11,8 @@
   "credits": "gegy1000, Paul Fulham, Zyranna, 4f6f3b, and iLexiconn - Thanks for all the help! Credits to Elucent and Sunconure11 for the initial 1.11.2 port!",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": [ "llibrary", "forge" ],
+  "dependencies": [ "llibrary", "forge" ],
+  "useDependencyInformation": true
 }
 ]
