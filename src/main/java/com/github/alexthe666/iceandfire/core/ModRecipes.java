@@ -55,7 +55,6 @@ public class ModRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.silverIngot, 9, 0), ModBlocks.silverBlock);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.sapphireGem, 9, 0), ModBlocks.sapphireBlock);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.goldPile, 1, 0), new Object[]{"XX", Character.valueOf('X'), "nuggetGold"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.silverPile, 1, 0), new Object[]{"XX", Character.valueOf('X'), "nuggetSilver"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_sword, 1, 0), new Object[]{"X", "X", "Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_pickaxe, 1, 0), new Object[]{"XXX", " Y ", " Y ", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_axe, 1, 0), new Object[]{"XX", "XY", " Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
