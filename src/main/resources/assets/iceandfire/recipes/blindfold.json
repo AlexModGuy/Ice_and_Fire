@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "   ",
+    "SLS",
+    "   "
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather",
+      "data": 0
+    },
+    "S": {
+      "item": "minecraft:string",
+      "data": 0
+    }	
+  },
+  "result": {
+    "item": "iceandfire:blindfold",
+    "data": 0
+  }
+}
