@@ -46,7 +46,7 @@ public class ItemDragonFlute extends Item {
 			IDragonFlute dragon = itr_dragons.next();
 			dragon.onHearFlute(player);
 			/*
-            if(dragon.isTamed() && dragon.isOwner(player)) {
+	        if(dragon.isTamed() && dragon.isOwner(player)) {
                 if (dragon.isFlying() || dragon.isHovering()) {
                     dragon.setFlying(false);
                     dragon.setHovering(false);
