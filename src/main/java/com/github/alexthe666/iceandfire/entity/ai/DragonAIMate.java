@@ -89,10 +89,10 @@ public class DragonAIMate extends EntityAIBase {
 		EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
 
 		if (egg != null) {
-			EntityPlayer entityplayer = this.dragon.getPlayerInLove();
+			EntityPlayer entityplayer = this.dragon.getLoveCause();
 
-			if (entityplayer == null && this.targetMate.getPlayerInLove() != null) {
-				entityplayer = this.targetMate.getPlayerInLove();
+			if (entityplayer == null && this.targetMate.getLoveCause() != null) {
+				entityplayer = this.targetMate.getLoveCause();
 			}
 
 			if (entityplayer != null) {
