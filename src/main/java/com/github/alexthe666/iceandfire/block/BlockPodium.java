@@ -79,12 +79,12 @@ public class BlockPodium extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
 		int i = aenumtype.length;
 
 		for (EnumType enumtype : aenumtype) {
-			list.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
+			items.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
 		}
 	}
 

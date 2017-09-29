@@ -31,7 +31,7 @@ public class ModRecipes {
 		OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
 		OreDictionary.registerOre("foodMeat", Items.RABBIT);
 		OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
-		
+
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
 		GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
