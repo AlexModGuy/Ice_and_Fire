@@ -417,7 +417,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return this.isTeen() ? ModSounds.icedragon_teen_hurt : this.isAdult() ? ModSounds.icedragon_adult_hurt : ModSounds.icedragon_child_hurt;
 	}
 

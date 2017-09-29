@@ -13,7 +13,7 @@
     "I": {
       "type": "forge:ore_dict",
       "ore": "ingotIron"
-    }	
+    }
   },
   "result": {
     "item": "iceandfire:dragon_flute",

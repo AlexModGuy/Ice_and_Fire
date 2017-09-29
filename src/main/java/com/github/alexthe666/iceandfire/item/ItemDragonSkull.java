@@ -54,7 +54,7 @@ public class ItemDragonSkull extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
 		list.add(StatCollector.translateToLocal(iceorfire));
 		if (stack.getTagCompound() != null) {
@@ -101,7 +101,7 @@ public class ItemDragonSkull extends Item {
 	}
 
 	/*
-     * @Override public ModelResourceLocation getModel(ItemStack stack,
+	 * @Override public ModelResourceLocation getModel(ItemStack stack,
 	 * EntityPlayer player, int useRemaining) { switch(stack.getMetadata()){
 	 * default: return new ModelResourceLocation("iceandfire:dragon_skull_fire",
 	 * "inventory"); case 1: return new

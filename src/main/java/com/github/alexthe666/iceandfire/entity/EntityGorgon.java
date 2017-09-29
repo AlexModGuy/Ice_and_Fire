@@ -302,7 +302,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	}
 
 	@Nullable
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return ModSounds.gorgon_hurt;
 	}
 

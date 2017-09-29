@@ -286,7 +286,7 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	@Nullable
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return ModSounds.pixie_hurt;
 	}
 
