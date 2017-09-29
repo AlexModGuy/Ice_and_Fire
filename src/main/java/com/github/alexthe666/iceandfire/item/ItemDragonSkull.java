@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonSkull extends Item {
@@ -38,9 +40,9 @@ public class ItemDragonSkull extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(itemIn, 1, 0));
-		subItems.add(new ItemStack(itemIn, 1, 1));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(this, 1, 0));
+		items.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override
@@ -56,9 +58,9 @@ public class ItemDragonSkull extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
-		list.add(StatCollector.translateToLocal(iceorfire));
+		tooltip.add(StatCollector.translateToLocal(iceorfire));
 		if (stack.getTagCompound() != null) {
-			list.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
+			tooltip.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
 		}
 	}
 
