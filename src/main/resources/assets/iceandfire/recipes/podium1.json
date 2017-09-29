@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "SPS",
+    " P ",
+    "SPS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:wooden_slab",
+      "data": 0
+    },
+    "P": {
+      "item": "minecraft:planks",
+      "data": 0
+    }	
+  },
+  "result": {
+    "item": "iceandfire:podium",
+    "data": 0
+  }
+}
