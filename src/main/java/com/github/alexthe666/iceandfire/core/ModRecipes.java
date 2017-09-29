@@ -33,7 +33,6 @@ public class ModRecipes {
 		OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_horn, 1, 0), new Object[]{"  Y", " YY", "XY ", Character.valueOf('Y'), ModItems.dragonbone, Character.valueOf('X'), "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.lectern, 1, 0), new Object[]{" X ", " Y ", " Y ", Character.valueOf('X'), Items.BOOK, Character.valueOf('Y'), "plankWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 0), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 0)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 1), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 1), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 1)}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 2), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 2), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 2)}));
@@ -47,7 +46,6 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_axe, 1, 0), new Object[]{"XX", "XY", " Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_shovel, 1, 0), new Object[]{"X", "Y", "Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragonbone_hoe, 1, 0), new Object[]{"XX", " Y", " Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "boneWither"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.dragon_flute, 1, 0), new Object[]{"X  ", " X ", "  Y", Character.valueOf('X'), ModItems.dragonbone, Character.valueOf('Y'), "ingotIron"}));
 		GameRegistry.addRecipe(new ItemStack(ModItems.dragonbone_arrow, 5, 0), new Object[]{"X", "Y", "Z", Character.valueOf('X'), ModItems.wither_shard, Character.valueOf('Y'), ModItems.dragonbone});
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
