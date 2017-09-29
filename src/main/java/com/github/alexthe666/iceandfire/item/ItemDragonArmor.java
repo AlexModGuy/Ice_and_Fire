@@ -2,15 +2,18 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonArmor extends Item {
@@ -31,17 +34,17 @@ public class ItemDragonArmor extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(itemIn, 1, 0));
-		subItems.add(new ItemStack(itemIn, 1, 1));
-		subItems.add(new ItemStack(itemIn, 1, 2));
-		subItems.add(new ItemStack(itemIn, 1, 3));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(itemIn, 1, 0));
+		items.add(new ItemStack(itemIn, 1, 1));
+		items.add(new ItemStack(itemIn, 1, 2));
+		items.add(new ItemStack(itemIn, 1, 3));
 
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String words;
 		switch (stack.getMetadata()) {
 			default:
