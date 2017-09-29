@@ -15,7 +15,7 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 	private static final ModelPixie MODEL_PIXIE = new ModelPixie();
 
 	@Override
-	public void renderTileEntityAt(TileEntityJar entity, double x, double y, double z, float f, int f1) {
+	public void render(TileEntityJar entity, double x, double y, double z, float f, int f1) {
 		int meta = 0;
 		boolean hasPixie = false;
 

@@ -47,10 +47,10 @@ public class ItemHippogryphEgg extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 			if (!type.developer) {
-				subItems.add(createEggStack(type, type));
+				items.add(createEggStack(type, type));
 			}
 		}
 	}

@@ -84,7 +84,7 @@ public class BlockPodium extends BlockContainer {
 		int i = aenumtype.length;
 
 		for (EnumType enumtype : aenumtype) {
-			items.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
+			items.add(new ItemStack(this, 1, enumtype.getMetadata()));
 		}
 	}
 

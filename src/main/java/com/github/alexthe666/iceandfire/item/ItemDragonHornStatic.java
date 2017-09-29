@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonHornStatic extends Item {
@@ -34,6 +36,6 @@ public class ItemDragonHornStatic extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 	}
 }

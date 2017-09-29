@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonHornActive extends Item {
@@ -161,15 +163,15 @@ public class ItemDragonHornActive extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
 			String fire = new TextComponentTranslation("entity.firedragon.name", new Object[0]).getUnformattedText();
 			String ice = new TextComponentTranslation("entity.icedragon.name", new Object[0]).getUnformattedText();
-			list.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
+			tooltip.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
 			String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
-			list.add("" + name);
+			tooltip.add("" + name);
 			String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
-			list.add("" + gender);
+			tooltip.add("" + gender);
 			int stagenumber = stack.getTagCompound().getInteger("AgeTicks") / 24000;
 			int stage1 = 0;
 			{
@@ -186,7 +188,7 @@ public class ItemDragonHornActive extends Item {
 				}
 			}
 			String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front") + stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
-			list.add("" + stage);
+			tooltip.add("" + stage);
 		}
 	}
 }

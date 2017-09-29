@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderEggInIce extends TileEntitySpecialRenderer {
 
 	@Override
-	public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float f, int f1) {
+	public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
 		ModelDragonEgg model = new ModelDragonEgg();
 		TileEntityEggInIce egg = (TileEntityEggInIce) entity;
 		if (egg.type != null) {
