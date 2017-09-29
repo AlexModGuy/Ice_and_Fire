@@ -13,7 +13,7 @@
     "P": {
       "type": "forge:ore_dict",
       "ore": "plankWood"
-    }	
+    }
   },
   "result": {
     "item": "iceandfire:jar",

@@ -50,6 +50,7 @@ public class IceAndFire {
 	public static final String VERSION = "1.3.0";
 	public static final String LLIBRARY_VERSION = "1.7.7";
 	public static final String NAME = "Ice And Fire";
+	public static final Logger logger = LogManager.getLogger(NAME);
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
 	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class})
@@ -63,8 +64,6 @@ public class IceAndFire {
 	public static DamageSource gorgon;
 	public static Biome GLACIER;
 	public static Potion FROZEN_POTION;
-	public static final Logger logger = LogManager.getLogger(NAME);
-
 	@SuppressWarnings("deprecation")
 	@Config
 	public static IceAndFireConfig CONFIG;

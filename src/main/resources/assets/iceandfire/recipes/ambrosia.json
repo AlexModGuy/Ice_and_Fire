@@ -12,11 +12,11 @@
     {
       "item": "minecraft:speckled_melon",
       "data": 0
-    },	
+    },
     {
       "item": "minecraft:bowl",
       "data": 0
-    }		
+    }
   ],
   "result": {
     "item": "iceandfire:ambrosia",

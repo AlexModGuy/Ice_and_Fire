@@ -67,7 +67,7 @@ public class RenderModCapes {
 			}
 		}
 		/*
-         * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
+	     * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
 		 * (hasRedCape(event.getEntityPlayer().getUniqueID())){
 		 * AbstractClientPlayer player =
 		 * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
