@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -100,6 +101,14 @@ public class ModRecipes {
 		ModItems.boneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
+		EnumDragonArmor.armor_green.material.setRepairItem(new ItemStack(ModItems.dragonscales_green));
+		EnumDragonArmor.armor_blue.material.setRepairItem(new ItemStack(ModItems.dragonscales_blue));
+		EnumDragonArmor.armor_bronze.material.setRepairItem(new ItemStack(ModItems.dragonscales_bronze));
+		EnumDragonArmor.armor_gray.material.setRepairItem(new ItemStack(ModItems.dragonscales_gray));
+		EnumDragonArmor.armor_red.material.setRepairItem(new ItemStack(ModItems.dragonscales_red));
+		EnumDragonArmor.armor_sapphire.material.setRepairItem(new ItemStack(ModItems.dragonscales_sapphire));
+		EnumDragonArmor.armor_silver.material.setRepairItem(new ItemStack(ModItems.dragonscales_silver));
+		EnumDragonArmor.armor_white.material.setRepairItem(new ItemStack(ModItems.dragonscales_white));
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {
