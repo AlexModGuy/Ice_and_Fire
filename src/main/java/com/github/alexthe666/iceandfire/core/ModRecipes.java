@@ -41,7 +41,6 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.podium, 1, 5), new Object[]{"XYX", " Y ", "XYX", Character.valueOf('X'), new ItemStack(Blocks.WOODEN_SLAB, 1, 5), Character.valueOf('Y'), new ItemStack(Blocks.PLANKS, 1, 5)}));
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.fire_stew, 1, 0), Items.BOWL, ModBlocks.fire_lily, Items.BLAZE_ROD);
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.frost_stew, 1, 0), Items.BOWL, ModBlocks.frost_lily, Items.PRISMARINE_CRYSTALS);
-		GameRegistry.addRecipe(new ItemStack(ModItems.dragonbone_arrow, 5, 0), new Object[]{"X", "Y", "Z", Character.valueOf('X'), ModItems.wither_shard, Character.valueOf('Y'), ModItems.dragonbone});
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
 		GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
