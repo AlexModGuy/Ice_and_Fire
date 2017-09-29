@@ -15,4 +15,9 @@ public class CreativeTab extends CreativeTabs {
 		return new ItemStack(ModItems.dragon_skull);
 	}
 
+	@Override
+	public boolean hasSearchBar() {
+		return true;
+	}
+
 }
