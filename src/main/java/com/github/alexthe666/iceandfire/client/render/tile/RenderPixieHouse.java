@@ -26,7 +26,7 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 	private static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_5.png");
 
 	@Override
-	public void render(TileEntityPixieHouse entity, double x, double y, double z, float f, int f1) {
+	public void render(TileEntityPixieHouse entity, double x, double y, double z, float f, int f1, float alpha) {
 		int rotation = 0;
 		int meta = 0;
 

@@ -101,7 +101,7 @@ public class ItemGorgonHead extends Item {
 		if (pointedEntity != null) {
 			if (pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer) {
 				if (pointedEntity instanceof EntityPlayer) {
-					pointedEntity.playSound(ModSounds.gorgon_turn_stone, 1, 1);
+					pointedEntity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 					pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 					EntityStoneStatue statue = new EntityStoneStatue(worldIn);
 					statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -134,9 +134,9 @@ public class ItemGorgonHead extends Item {
 				}
 
 				if (pointedEntity instanceof EntityGorgon) {
-					entity.playSound(ModSounds.gorgon_petrify, 1, 1);
+					entity.playSound(ModSounds.GORGON_PETRIFY, 1, 1);
 				} else {
-					entity.playSound(ModSounds.gorgon_turn_stone, 1, 1);
+					entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 				}
 				SoundEvent deathSound = null;
 				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, (EntityLivingBase) pointedEntity, ObfuscationReflectionHelper.remapFieldNames(EntityLivingBase.class.getName(), new String[]{"getDeathSound", "func_184615_bR"}));

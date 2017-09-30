@@ -73,7 +73,6 @@ public class IceAndFire {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 
 		ModEntities.init();
-		ModSounds.init();
 		ModBlocks.init();
 		ModItems.init();
 		ModFoods.init();

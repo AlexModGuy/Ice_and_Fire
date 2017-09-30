@@ -8,8 +8,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
+import static net.minecraftforge.common.ForgeVersion.MOD_ID;
 
-public class ModSounds {
+@SuppressWarnings("WeakerAccess")
+@GameRegistry.ObjectHolder(MODID)
+public final class ModSounds {
 
 	@GameRegistry.ObjectHolder("dragon_hatch")
 	public static final SoundEvent DRAGON_HATCH = createSoundEvent("dragon_hatch");
