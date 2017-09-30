@@ -67,7 +67,6 @@ public class IceAndFire {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 		ModEntities.init();
-		ModBlocks.init();
 		ModFoods.init();
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");

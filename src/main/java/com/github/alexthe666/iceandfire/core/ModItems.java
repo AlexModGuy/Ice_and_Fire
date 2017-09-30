@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModItems {
-    public static List<Item> ITEMS = new ArrayList<>();
 
     public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
     public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 36, new int[]{4, 7, 9, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);

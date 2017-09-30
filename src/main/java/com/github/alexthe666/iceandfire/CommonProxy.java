@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
@@ -42,6 +45,46 @@ public class CommonProxy {
 	}
 
 	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		try {
+			for (Field f : ModBlocks.class.getDeclaredFields()) {
+				Object obj = f.get(null);
+				if (obj instanceof Block) {
+					event.getRegistry().register((Block) obj);
+				} else if (obj instanceof Block[]) {
+					for (Block block : (Block[]) obj) {
+						event.getRegistry().register(block);
+					}
+				}
+			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SubscribeEvent
+	public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
+		try {
+			for (Field f : ModBlocks.class.getDeclaredFields()) {
+				Object obj = f.get(null);
+				if (obj instanceof Block) {
+					ItemBlock itemBlock = new ItemBlock((Block)obj);
+					itemBlock.setRegistryName(((Block)obj).getRegistryName());
+					event.getRegistry().register(itemBlock);
+				} else if (obj instanceof Block[]) {
+					for (Block block : (Block[]) obj) {
+						ItemBlock itemBlock = new ItemBlock(block);
+						itemBlock.setRegistryName(block.getRegistryName());
+						event.getRegistry().register(itemBlock);
+					}
+				}
+			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		try {
 			for (Field f : ModItems.class.getDeclaredFields()) {
@@ -49,11 +92,9 @@ public class CommonProxy {
 				if (obj instanceof Item) {
 					System.out.println(((Item) obj).getUnlocalizedName());
 					event.getRegistry().register((Item) obj);
-					ModItems.ITEMS.add((Item) obj);
 				} else if (obj instanceof Item[]) {
 					for (Item item : (Item[]) obj) {
 						event.getRegistry().register(item);
-						ModItems.ITEMS.add(item);
 					}
 				}
 			}
