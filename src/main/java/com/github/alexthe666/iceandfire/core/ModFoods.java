@@ -70,6 +70,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(EntityHorse.class, 55);
 		FoodMappings.INSTANCE.addMeat(EntityDonkey.class, 55);
 		FoodMappings.INSTANCE.addMeat(EntityMule.class, 55);
+		FoodMappings.INSTANCE.addMeat(EntityParrot.class, 1);
 		FoodMappings.INSTANCE.addMeat(EntityPig.class, 20);
 		FoodMappings.INSTANCE.addMeat(EntitySheep.class, 35);
 		FoodMappings.INSTANCE.addMeat(EntityRabbit.class, 20);
@@ -82,7 +83,6 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(EntityIceDragon.class, 100);
 		FoodMappings.INSTANCE.addMeat(EntityFireDragon.class, 100);
 		FoodMappings.INSTANCE.addMeat(EntityHippogryph.class, 60);
-		//TODO: parrots FoodMappings.INSTANCE.addMeat(EntityParrot.class, 1);
 
 	}
 }

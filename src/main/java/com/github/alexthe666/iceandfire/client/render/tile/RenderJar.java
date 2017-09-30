@@ -15,13 +15,13 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 	private static final ModelPixie MODEL_PIXIE = new ModelPixie();
 
 	@Override
-	public void renderTileEntityAt(TileEntityJar te, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntityJar entity, double x, double y, double z, float f, int f1, float alpha) {
 		int meta = 0;
 		boolean hasPixie = false;
 
-		if (te != null && te.getWorld() != null) {
-			meta = te.pixieType;
-			hasPixie = te.hasPixie;
+		if (entity != null && entity.getWorld() != null) {
+			meta = entity.pixieType;
+			hasPixie = entity.hasPixie;
 		} else if (ItemTESRContext.INSTANCE.getCurrentStack() != null) {
 			hasPixie = ItemTESRContext.INSTANCE.getCurrentStack().getItemDamage() != 0;
 			meta = ItemTESRContext.INSTANCE.getCurrentStack().getItemDamage() - 1;
@@ -51,15 +51,15 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 					this.bindTexture(RenderPixie.TEXTURE_5);
 					break;
 			}
-			if (te != null && te.getWorld() != null) {
+			if (entity != null && entity.getWorld() != null) {
 
-				if (te.hasProduced) {
+				if (entity.hasProduced) {
 					GL11.glTranslatef(0F, 0.90F, 0F);
 				} else {
 					GL11.glTranslatef(0F, 0.60F, 0F);
 				}
 				GL11.glScalef(0.50F, 0.50F, 0.50F);
-				GlStateManager.rotate(this.interpolateRotation(te.prevRotationYaw, te.rotationYaw, partialTicks), 0.0F, 1.0F, 0.0F);
+				GlStateManager.rotate(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, f), 0.0F, 1.0F, 0.0F);
 				GL11.glPushMatrix();
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				GlStateManager.enableBlend();
@@ -70,9 +70,9 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 				GlStateManager.enableLighting();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				GlStateManager.enableColorMaterial();
-				MODEL_PIXIE.animateInJar(te.hasProduced, te, 0);
+				MODEL_PIXIE.animateInJar(entity.hasProduced, entity, 0);
 				GlStateManager.disableColorMaterial();
-				int i = te.getWorld().getCombinedLight(te.getPos(), te.getWorld().getLightFor(EnumSkyBlock.BLOCK, te.getPos()));
+				int i = entity.getWorld().getCombinedLight(entity.getPos(), entity.getWorld().getLightFor(EnumSkyBlock.BLOCK, entity.getPos()));
 				int j = i % 65536;
 				int k = i / 65536;
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);

@@ -1596,11 +1596,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) {
+	public void travel(float strafe, float forward, float vertical) {
 		if (!this.canMove() && !this.isBeingRidden()) {
 			strafe = 0;
 			forward = 0;
-			super.moveEntityWithHeading(strafe, forward);
+			super.travel(strafe, forward, vertical);
 			return;
 		}
 		if (this.isBeingRidden() && this.canBeSteered()) {
@@ -1625,7 +1625,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (this.isInWater() && this.isTamed()) {
 			// this.motionY += 0.02;
 		}
-		super.moveEntityWithHeading(strafe, forward);
+		super.travel(strafe, forward, vertical);
 	}
 
 	public void updateCheckPlayer() {

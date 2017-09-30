@@ -15,8 +15,8 @@ public class RenderLectern extends TileEntitySpecialRenderer {
 	private ModelBook book = new ModelBook();
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage){
-		TileEntityLectern lectern = (TileEntityLectern) te;
+	public void render(TileEntity entity, double x, double y, double z, float f, int yee, float alpha) {
+		TileEntityLectern lectern = (TileEntityLectern) entity;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.07F, (float) z + 0.5F);
 		GlStateManager.scale(0.8F, 0.8F, 0.8F);
@@ -25,8 +25,8 @@ public class RenderLectern extends TileEntitySpecialRenderer {
 		GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
 
 		this.bindTexture(bookTex);
-		float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.25F;
-		float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.75F;
+		float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.25F;
+		float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.75F;
 		f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
 		f5 = (f5 - MathHelper.fastFloor(f5)) * 1.6F - 0.3F;
 

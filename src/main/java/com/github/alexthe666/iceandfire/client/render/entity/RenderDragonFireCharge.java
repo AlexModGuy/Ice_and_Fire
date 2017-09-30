@@ -34,7 +34,7 @@ public class RenderDragonFireCharge extends Render {
 		this.bindEntityTexture(entity);
 		GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate(-0.5F, 0F, 0.5F);
-		blockrendererdispatcher.renderBlockBrightness(isFire ? Blocks.MAGMA.getDefaultState() : Blocks.PACKED_ICE.getDefaultState(), entity.getBrightness(partialTicks));
+		blockrendererdispatcher.renderBlockBrightness(isFire ? Blocks.MAGMA.getDefaultState() : Blocks.PACKED_ICE.getDefaultState(), entity.getBrightness());
 		GlStateManager.translate(-1.0F, 0.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
