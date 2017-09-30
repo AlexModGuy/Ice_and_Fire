@@ -63,6 +63,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(EntityChicken.class, 5);
 		FoodMappings.INSTANCE.addMeat(EntityCow.class, 40);
 		FoodMappings.INSTANCE.addMeat(EntityHorse.class, 55);
+		FoodMappings.INSTANCE.addMeat(EntityParrot.class, 5);
 		FoodMappings.INSTANCE.addMeat(EntityPig.class, 20);
 		FoodMappings.INSTANCE.addMeat(EntitySheep.class, 35);
 		FoodMappings.INSTANCE.addMeat(EntityRabbit.class, 20);

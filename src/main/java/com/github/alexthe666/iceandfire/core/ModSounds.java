@@ -1,8 +1,14 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 public class ModSounds {
 	public static SoundEvent dragon_hatch;
@@ -98,5 +104,37 @@ public class ModSounds {
 	private static SoundEvent registerSound(String sound) {
 		return GameRegistry.register(new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound)));
 
+	}
+
+	@Mod.EventBusSubscriber(modid = MODID)
+	public static class RegistrationHandler {
+		@SubscribeEvent
+		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
+			event.getRegistry().registerAll(
+					pixie_taunt,
+					pixie_die,
+					pixie_hurt,
+					pixie_idle,
+					gold_pile_break,
+					gold_pile_step,
+					gorgon_turn_stone,
+					gorgon_petrify,
+					gorgon_attack,
+					gorgon_die,
+					gorgon_hurt,
+					gorgon_idle,
+					hippogryph_die,
+					hippogryph_hurt,
+					hippogryph_idle,
+					dragonflute,
+					icedragon_adult_roar,
+					icedragon_adult_death,
+					icedragon_adult_hurt,
+					icedragon_adult_idle,
+					icedragon_teen_roar,
+					icedragon_teen_death,
+					icedragon_teen_hurt
+			);
+		}
 	}
 }
