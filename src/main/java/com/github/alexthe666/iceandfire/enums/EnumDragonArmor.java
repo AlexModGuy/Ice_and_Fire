@@ -48,10 +48,6 @@ public enum EnumDragonArmor {
 			GameRegistry.register(EnumDragonArmor.values()[i].leggings);
 			EnumDragonArmor.values()[i].boots.setRegistryName(EnumDragonArmor.values()[i].name() + "_boots");
 			GameRegistry.register(EnumDragonArmor.values()[i].boots);
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].helmet, 1, 0), new Object[]{"XXX", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].chestplate, 1, 0), new Object[]{"X X", "XXX", "XXX", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].leggings, 1, 0), new Object[]{"XXX", "X X", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].boots, 1, 0), new Object[]{"X X", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
 			IceAndFire.PROXY.renderArmors(EnumDragonArmor.values()[i]);
 		}
 	}
