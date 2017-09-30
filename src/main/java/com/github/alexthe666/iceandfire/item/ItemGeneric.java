@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,7 +21,7 @@ public class ItemGeneric extends Item {
 			EntityPlayer player = (EntityPlayer) entityIn;
 
 			//if (this == ModItems.manuscript) {
-				//player.addStat(ModAchievements.manuscript, 1);
-			}
+			//player.addStat(ModAchievements.manuscript, 1);
 		}
 	}
+}

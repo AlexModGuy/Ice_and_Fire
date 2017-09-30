@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
-import static net.minecraftforge.common.ForgeVersion.MOD_ID;
 
 @SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(MODID)
