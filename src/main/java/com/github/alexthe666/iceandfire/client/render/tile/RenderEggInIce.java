@@ -11,9 +11,9 @@ import org.lwjgl.opengl.GL11;
 public class RenderEggInIce extends TileEntitySpecialRenderer {
 
 	@Override
-	public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage){
 		ModelDragonEgg model = new ModelDragonEgg();
-		TileEntityEggInIce egg = (TileEntityEggInIce) entity;
+		TileEntityEggInIce egg = (TileEntityEggInIce) te;
 		if (egg.type != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y - 0.75F, (float) z + 0.5F);

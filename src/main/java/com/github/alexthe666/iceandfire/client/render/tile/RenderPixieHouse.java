@@ -26,19 +26,19 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 	private static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_5.png");
 
 	@Override
-	public void render(TileEntityPixieHouse entity, double x, double y, double z, float f, int f1, float alpha) {
+	public void renderTileEntityAt(TileEntityPixieHouse te, double x, double y, double z, float partialTicks, int destroyStage){
 		int rotation = 0;
 		int meta = 0;
 
-		if (entity != null && entity.getWorld() != null) {
-			meta = entity.houseType;
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
+		if (te != null && te.getWorld() != null) {
+			meta = te.houseType;
+			if (te.getWorld().getBlockState(te.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
 				rotation = 180;
 			}
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
+			if (te.getWorld().getBlockState(te.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
 				rotation = -90;
 			}
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
+			if (te.getWorld().getBlockState(te.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
 				rotation = 90;
 			}
 
@@ -50,13 +50,13 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		GL11.glPushMatrix();
 		GL11.glRotatef(180, 1, 0, 0);
 		GL11.glRotatef(rotation, 0, 1F, 0);
-		if (entity != null && entity.getWorld() != null && entity.hasPixie) {
+		if (te != null && te.getWorld() != null && te.hasPixie) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0F, 0.95F, 0F);
 			GL11.glScalef(0.55F, 0.55F, 0.55F);
 			GL11.glPushMatrix();
 			//GL11.glRotatef(MathHelper.clampAngle(entity.ticksExisted * 3), 0, 1, 0);
-			switch (entity.pixieType) {
+			switch (te.pixieType) {
 				default:
 					this.bindTexture(RenderPixie.TEXTURE_0);
 					break;
@@ -85,9 +85,9 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 			GlStateManager.enableLighting();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableColorMaterial();
-			MODEL_PIXIE.animateInHouse(entity);
+			MODEL_PIXIE.animateInHouse(te);
 			GlStateManager.disableColorMaterial();
-			int i = entity.getWorld().getCombinedLight(entity.getPos(), entity.getWorld().getLightFor(EnumSkyBlock.BLOCK, entity.getPos()));
+			int i = te.getWorld().getCombinedLight(te.getPos(), te.getWorld().getLightFor(EnumSkyBlock.BLOCK, te.getPos()));
 			int j = i % 65536;
 			int k = i / 65536;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);

@@ -36,7 +36,7 @@ public class LayerGorgonEyes implements LayerRenderer<EntityGorgon> {
 				GlStateManager.enableLighting();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				this.render.getMainModel().render(gorgon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				this.render.setLightmap(gorgon);
+				this.render.setLightmap(gorgon, partialTicks);
 				GlStateManager.depthMask(true);
 				GlStateManager.disableBlend();
 			}

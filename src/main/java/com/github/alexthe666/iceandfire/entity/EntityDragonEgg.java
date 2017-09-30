@@ -130,7 +130,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource p_184601_1_) {
+	public SoundEvent getHurtSound() {
 		return null;
 	}
 

@@ -18,9 +18,9 @@ public class RenderPodium extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage){
 		ModelDragonEgg model = new ModelDragonEgg();
-		TileEntityPodium podium = (TileEntityPodium) entity;
+		TileEntityPodium podium = (TileEntityPodium) te;
 
 		if (!podium.getStackInSlot(0).isEmpty()) {
 			if (podium.getStackInSlot(0).getItem() != null) {

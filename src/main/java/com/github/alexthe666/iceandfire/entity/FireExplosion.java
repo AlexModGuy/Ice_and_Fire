@@ -123,13 +123,13 @@ public class FireExplosion extends Explosion {
 						double d7 = entity.posY + entity.getEyeHeight() - this.explosionY;
 						double d9 = entity.posZ - this.explosionZ;
 						double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
-
+						double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
+						double d10 = (1.0D - d12) * d14;
 						if (d13 != 0.0D) {
 							d5 = d5 / d13;
 							d7 = d7 / d13;
 							d9 = d9 / d13;
-							double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
-							double d10 = (1.0D - d12) * d14;
+
 							if (exploder instanceof EntityDragonBase) {
 								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 									return;
