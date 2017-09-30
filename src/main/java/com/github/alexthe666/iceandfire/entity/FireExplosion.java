@@ -136,13 +136,13 @@ public class FireExplosion extends Explosion {
 								}
 								if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
 									entity.attackEntityFrom(IceAndFire.dragonFire, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
-									if (entity.isDead && entity instanceof EntityPlayer) {
-										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+									//if (entity.isDead && entity instanceof EntityPlayer) {
+									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								} else {
 									entity.attackEntityFrom(IceAndFire.dragonFire, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-									if (entity.isDead && entity instanceof EntityPlayer) {
-										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+									//if (entity.isDead && entity instanceof EntityPlayer) {
+									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								}
 								if (entity.isDead) {
@@ -166,7 +166,6 @@ public class FireExplosion extends Explosion {
 				}
 			}
 		}
-	}
 
 	/**
 	 * Does the second part of the explosion (sound, particles, drop spawn)

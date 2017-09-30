@@ -86,7 +86,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 				EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
 				hippo.setTamed(true);
 				hippo.setOwnerId(owner.getUniqueID());
-				owner.addStat(ModAchievements.tameHippogryph);
+				//owner.addStat(ModAchievements.tameHippogryph);
 				hippo.setSitting(true);
 			}
 			resetTask();
