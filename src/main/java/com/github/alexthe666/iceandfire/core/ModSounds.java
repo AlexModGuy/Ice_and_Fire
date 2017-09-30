@@ -102,7 +102,7 @@ public class ModSounds {
 	}
 
 	private static SoundEvent registerSound(String sound) {
-		return GameRegistry.register(new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound)));
+		return new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound));
 
 	}
 
@@ -133,7 +133,26 @@ public class ModSounds {
 					icedragon_adult_idle,
 					icedragon_teen_roar,
 					icedragon_teen_death,
-					icedragon_teen_hurt
+					icedragon_teen_hurt,
+					dragon_hatch,
+					firedragon_breath,
+					icedragon_breath,
+					firedragon_child_idle,
+					firedragon_child_hurt,
+					firedragon_child_death,
+					firedragon_child_roar,
+					firedragon_teen_idle,
+					firedragon_teen_hurt,
+					firedragon_teen_death,
+					firedragon_teen_roar,
+					firedragon_adult_idle,
+					firedragon_adult_hurt,
+					firedragon_adult_death,
+					firedragon_adult_roar,
+					icedragon_child_idle,
+					icedragon_child_hurt,
+					icedragon_child_death,
+					icedragon_child_roar
 			);
 		}
 	}
