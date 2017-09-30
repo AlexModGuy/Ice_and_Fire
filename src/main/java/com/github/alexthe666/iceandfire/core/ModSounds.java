@@ -57,18 +57,42 @@ public class ModSounds {
 	@GameRegistry.ObjectHolder("firedragon_adult_hurt")
 	public static final SoundEvent FIREDRAGON_ADULT_HURT = createSoundEvent("firedragon_adult_hurt");
 
-	public static SoundEvent icedragon_child_idle;
-	public static SoundEvent icedragon_child_hurt;
-	public static SoundEvent icedragon_child_death;
-	public static SoundEvent icedragon_child_roar;
-	public static SoundEvent icedragon_teen_idle;
-	public static SoundEvent icedragon_teen_hurt;
-	public static SoundEvent icedragon_teen_death;
-	public static SoundEvent icedragon_teen_roar;
-	public static SoundEvent icedragon_adult_idle;
-	public static SoundEvent icedragon_adult_hurt;
-	public static SoundEvent icedragon_adult_death;
-	public static SoundEvent icedragon_adult_roar;
+	@GameRegistry.ObjectHolder("icedragon_child_idle")
+	public static final SoundEvent ICEDRAGON_CHILD_IDLE = createSoundEvent("icedragon_child_idle");
+
+	@GameRegistry.ObjectHolder("icedragon_child_hurt")
+	public static final SoundEvent ICEDRAGON_CHILD_HURT = createSoundEvent("icedragon_child_hurt");
+
+	@GameRegistry.ObjectHolder("icedragon_child_death")
+	public static final SoundEvent ICEDRAGON_CHILD_DEATH = createSoundEvent("icedragon_child_death");
+
+	@GameRegistry.ObjectHolder("icedragon_child_roar")
+	public static final SoundEvent ICEDRAGON_CHILD_ROAR = createSoundEvent("icedragon_child_roar");
+
+	@GameRegistry.ObjectHolder("icedragon_teen_roar")
+	public static final SoundEvent ICEDRAGON_TEEN_ROAR = createSoundEvent("icedragon_teen_roar");
+
+	@GameRegistry.ObjectHolder("icedragon_teen_idle")
+	public static final SoundEvent ICEDRAGON_TEEN_IDLE = createSoundEvent("icedragon_teen_idle");
+
+	@GameRegistry.ObjectHolder("icedragon_teen_death")
+	public static final SoundEvent ICEDRAGON_TEEN_DEATH = createSoundEvent("icedragon_teen_death");
+
+	@GameRegistry.ObjectHolder("icedragon_teen_hurt")
+	public static final SoundEvent ICEDRAGON_TEEN_HURT = createSoundEvent("icedragon_teen_hurt");
+
+	@GameRegistry.ObjectHolder("icedragon_adult_roar")
+	public static final SoundEvent ICEDRAGON_ADULT_ROAR = createSoundEvent("icedragon_adult_roar");
+
+	@GameRegistry.ObjectHolder("icedragon_adult_idle")
+	public static final SoundEvent ICEDRAGON_ADULT_IDLE = createSoundEvent("icedragon_adult_idle");
+
+	@GameRegistry.ObjectHolder("icedragon_adult_death")
+	public static final SoundEvent ICEDRAGON_ADULT_DEATH = createSoundEvent("icedragon_adult_death");
+
+	@GameRegistry.ObjectHolder("icedragon_adult_hurt")
+	public static final SoundEvent ICEDRAGON_ADULT_HURT = createSoundEvent("icedragon_adult_hurt");
+
 	public static SoundEvent dragonflute;
 	public static SoundEvent hippogryph_idle;
 	public static SoundEvent hippogryph_hurt;
@@ -92,18 +116,6 @@ public class ModSounds {
 	}
 
 	public static void init() {
-		icedragon_child_idle = registerSound("icedragon.child.idle");
-		icedragon_child_hurt = registerSound("icedragon.child.hurt");
-		icedragon_child_death = registerSound("icedragon.child.death");
-		icedragon_child_roar = registerSound("icedragon.child.roar");
-		icedragon_teen_idle = registerSound("icedragon.teen.idle");
-		icedragon_teen_hurt = registerSound("icedragon.teen.hurt");
-		icedragon_teen_death = registerSound("icedragon.teen.death");
-		icedragon_teen_roar = registerSound("icedragon.teen.roar");
-		icedragon_adult_idle = registerSound("icedragon.adult.idle");
-		icedragon_adult_hurt = registerSound("icedragon.adult.hurt");
-		icedragon_adult_death = registerSound("icedragon.adult.death");
-		icedragon_adult_roar = registerSound("icedragon.adult.roar");
 		dragonflute = registerSound("dragonflute");
 		hippogryph_idle = registerSound("hippogryph.idle");
 		hippogryph_hurt = registerSound("hippogryph.hurt");
@@ -145,7 +157,19 @@ public class ModSounds {
 					FIREDRAGON_ADULT_ROAR,
 					FIREDRAGON_ADULT_IDLE,
 					FIREDRAGON_ADULT_HURT,
-					FIREDRAGON_ADULT_DEATH
+					FIREDRAGON_ADULT_DEATH,
+					ICEDRAGON_CHILD_IDLE,
+					ICEDRAGON_CHILD_HURT,
+					ICEDRAGON_CHILD_DEATH,
+					ICEDRAGON_CHILD_ROAR,
+					ICEDRAGON_TEEN_ROAR,
+					ICEDRAGON_TEEN_IDLE,
+					ICEDRAGON_TEEN_HURT,
+					ICEDRAGON_TEEN_DEATH,
+					ICEDRAGON_ADULT_ROAR,
+					ICEDRAGON_ADULT_IDLE,
+					ICEDRAGON_ADULT_HURT,
+					ICEDRAGON_ADULT_DEATH
 			);
 		}
 	}
