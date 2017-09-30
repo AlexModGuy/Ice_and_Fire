@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -20,8 +19,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemStoneStatue extends Item {
@@ -30,16 +29,17 @@ public class ItemStoneStatue extends Item {
 		this.maxStackSize = 1;
 		this.setUnlocalizedName("iceandfire.stone_statue");
 		this.setRegistryName(IceAndFire.MODID, "stone_statue");
+		GameRegistry.register(this);
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
 		if (stack.getTagCompound() != null) {
 			boolean isPlayer = stack.getTagCompound().getBoolean("IAFStoneStatueEntityPlayer");
 			int id = stack.getTagCompound().getInteger("IAFStoneStatueEntityID");
 			if (EntityList.getKey(EntityList.getClassFromID(id)) != null) {
 				String mobName = isPlayer ? I18n.format("entity.player.name") : net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName();
-				tooltip.add(mobName);
+				list.add(mobName);
 			}
 		}
 	}

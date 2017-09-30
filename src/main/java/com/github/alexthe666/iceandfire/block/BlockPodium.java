@@ -40,6 +40,7 @@ public class BlockPodium extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.podium");
 		this.setRegistryName(IceAndFire.MODID, "podium");
+		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
 		GameRegistry.register(itemBlock = (new ItemBlockPodium(this).setRegistryName(this.getRegistryName())));
 	}
@@ -78,12 +79,12 @@ public class BlockPodium extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
 		int i = aenumtype.length;
 
 		for (EnumType enumtype : aenumtype) {
-			items.add(new ItemStack(this, 1, enumtype.getMetadata()));
+			list.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
 		}
 	}
 

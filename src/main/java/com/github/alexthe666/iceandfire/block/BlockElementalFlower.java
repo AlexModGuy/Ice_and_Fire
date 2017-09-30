@@ -20,6 +20,7 @@ public class BlockElementalFlower extends BlockBush {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
 		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
+		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

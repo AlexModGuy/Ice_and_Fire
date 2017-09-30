@@ -7,6 +7,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemPixieDust extends ItemFood {
 
@@ -15,6 +16,7 @@ public class ItemPixieDust extends ItemFood {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.pixie_dust");
 		this.setRegistryName(IceAndFire.MODID, "pixie_dust");
+		GameRegistry.register(this);
 	}
 
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {

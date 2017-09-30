@@ -3,16 +3,15 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemModSword extends ItemSword {
@@ -22,6 +21,7 @@ public class ItemModSword extends ItemSword {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
+		GameRegistry.register(this);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class ItemModSword extends ItemSword {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
 		if (this == ModItems.silver_sword)
-			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+			list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
 	}
 }

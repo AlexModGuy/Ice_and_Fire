@@ -218,7 +218,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+				this.playSound(ModSounds.firedragon_breath, 4, 1);
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
 				double d4 = controller.getLookVec().z;
@@ -242,7 +242,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d3 = controller.getLookVec().y;
 					double d4 = controller.getLookVec().z;
 					EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
-					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+					this.playSound(ModSounds.firedragon_breath, 4, 1);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 					if (!world.isRemote) {
@@ -268,7 +268,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
-					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+					this.playSound(ModSounds.firedragon_breath, 4, 1);
 					EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
@@ -291,7 +291,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
-						this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+						this.playSound(ModSounds.firedragon_breath, 4, 1);
 						EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -314,17 +314,17 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_IDLE : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_IDLE : ModSounds.FIREDRAGON_CHILD_IDLE;
+		return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_HURT : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_HURT : ModSounds.FIREDRAGON_CHILD_HURT;
+	protected SoundEvent getHurtSound() {
+		return this.isTeen() ? ModSounds.firedragon_teen_hurt : this.isAdult() ? ModSounds.firedragon_adult_hurt : ModSounds.firedragon_child_hurt;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_DEATH : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_DEATH : ModSounds.FIREDRAGON_CHILD_DEATH;
+		return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
 	}
 
 	@Override

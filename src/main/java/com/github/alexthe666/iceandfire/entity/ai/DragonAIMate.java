@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -88,15 +89,15 @@ public class DragonAIMate extends EntityAIBase {
 		EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
 
 		if (egg != null) {
-			EntityPlayer entityplayer = this.dragon.getLoveCause();
+			EntityPlayer entityplayer = this.dragon.getPlayerInLove();
 
-			if (entityplayer == null && this.targetMate.getLoveCause() != null) {
-				entityplayer = this.targetMate.getLoveCause();
+			if (entityplayer == null && this.targetMate.getPlayerInLove() != null) {
+				entityplayer = this.targetMate.getPlayerInLove();
 			}
 
 			if (entityplayer != null) {
 				entityplayer.addStat(StatList.ANIMALS_BRED);
-				//entityplayer.addStat(ModAchievements.dragonBreed);
+				entityplayer.addStat(ModAchievements.dragonBreed);
 			}
 
 			this.dragon.setGrowingAge(6000);

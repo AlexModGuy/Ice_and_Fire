@@ -14,6 +14,7 @@ import net.minecraft.item.*;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,6 +26,7 @@ public class ItemDragonBow extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragonbone_bow");
 		this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
+		GameRegistry.register(this);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
 			@SideOnly(Side.CLIENT)

@@ -1177,7 +1177,6 @@ public class SnowVillagePieces {
 			return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new TorchNew(start, p_175853_7_, rand, structureboundingbox, facing) : null;
 		}
 
-		@SuppressWarnings("deprecation")
 		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
 			if (this.averageGroundLvl < 0) {
 				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
