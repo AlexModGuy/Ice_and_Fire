@@ -42,11 +42,11 @@ public class BlockLectern extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.lectern");
 		this.setRegistryName(IceAndFire.MODID, "lectern");
+		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);

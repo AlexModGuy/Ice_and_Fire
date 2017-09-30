@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -137,29 +138,30 @@ public class FireExplosion extends Explosion {
 								if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
 									entity.attackEntityFrom(IceAndFire.dragonFire, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
 									if (entity.isDead && entity instanceof EntityPlayer) {
-										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								} else {
 									entity.attackEntityFrom(IceAndFire.dragonFire, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-									//if (entity.isDead && entity instanceof EntityPlayer) {
-									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+									if (entity.isDead && entity instanceof EntityPlayer) {
+										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+									}
+								}
+								if (entity.isDead) {
+									((EntityDragonBase) this.exploder).attackDecision = true;
 								}
 							}
-							if (entity.isDead) {
-								((EntityDragonBase) this.exploder).attackDecision = true;
+							double d11 = 1.0D;
+
+							if (entity instanceof EntityLivingBase) {
+								d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
 							}
-						}
-						double d11 = 1.0D;
+							entity.motionX += d5 * d11;
+							entity.motionY += d7 * d11;
+							entity.motionZ += d9 * d11;
 
-						if (entity instanceof EntityLivingBase) {
-							d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
-						}
-						entity.motionX += d5 * d11;
-						entity.motionY += d7 * d11;
-						entity.motionZ += d9 * d11;
-
-						if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
-							this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+							if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
+								this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+							}
 						}
 					}
 				}

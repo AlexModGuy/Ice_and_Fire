@@ -9,6 +9,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemBlindfold extends ItemArmor {
 
@@ -17,6 +18,7 @@ public class ItemBlindfold extends ItemArmor {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.blindfold");
 		this.setRegistryName(IceAndFire.MODID, "blindfold");
+		GameRegistry.register(this);
 	}
 
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {

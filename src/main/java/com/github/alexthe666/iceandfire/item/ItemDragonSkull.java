@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +15,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonSkull extends Item {
@@ -29,6 +28,7 @@ public class ItemDragonSkull extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragon_skull");
 		this.setRegistryName(IceAndFire.MODID, "dragon_skull");
+		GameRegistry.register(this);
 	}
 
 	@Override
@@ -38,9 +38,9 @@ public class ItemDragonSkull extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		items.add(new ItemStack(this, 1, 0));
-		items.add(new ItemStack(this, 1, 1));
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		subItems.add(new ItemStack(itemIn, 1, 0));
+		subItems.add(new ItemStack(itemIn, 1, 1));
 	}
 
 	@Override
@@ -54,11 +54,11 @@ public class ItemDragonSkull extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
 		String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
-		tooltip.add(StatCollector.translateToLocal(iceorfire));
+		list.add(StatCollector.translateToLocal(iceorfire));
 		if (stack.getTagCompound() != null) {
-			tooltip.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
+			list.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ItemDragonSkull extends Item {
 		} else {
 			ItemStack stack = player.getHeldItem(hand);
 			/*
-			 * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
+             * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			 * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
 			 * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
 			 */
@@ -101,7 +101,7 @@ public class ItemDragonSkull extends Item {
 	}
 
 	/*
-	 * @Override public ModelResourceLocation getModel(ItemStack stack,
+     * @Override public ModelResourceLocation getModel(ItemStack stack,
 	 * EntityPlayer player, int useRemaining) { switch(stack.getMetadata()){
 	 * default: return new ModelResourceLocation("iceandfire:dragon_skull_fire",
 	 * "inventory"); case 1: return new

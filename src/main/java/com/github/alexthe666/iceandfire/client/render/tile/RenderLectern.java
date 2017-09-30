@@ -15,7 +15,7 @@ public class RenderLectern extends TileEntitySpecialRenderer {
 	private ModelBook book = new ModelBook();
 
 	@Override
-	public void render(TileEntity entity, double x, double y, double z, float f, int yee, float alpha) {
+	public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float f, int yee) {
 		TileEntityLectern lectern = (TileEntityLectern) entity;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.07F, (float) z + 0.5F);

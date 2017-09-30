@@ -641,7 +641,7 @@ public enum FoodMappings {
 			for (ItemStack stack : stacks) {
 				if (!stack.isEmpty() && stack.getItem() != null) {
 					if (stack.getItem() instanceof ItemBlock) {
-						this.addToBlockMappings(((ItemBlock) stack.getItem()).getBlock(), food_value, diet, true);
+						this.addToBlockMappings(((ItemBlock) stack.getItem()).block, food_value, diet, true);
 					} else {
 						this.addToItemMappings(stack.getItem(), food_value, diet);
 					}

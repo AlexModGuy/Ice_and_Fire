@@ -40,6 +40,7 @@ public class BlockJar extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.jar");
 		this.setRegistryName(IceAndFire.MODID, "jar");
+		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
 		GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
 	}
@@ -105,7 +106,7 @@ public class BlockJar extends BlockContainer {
 			if (!world.isRemote) {
 				world.spawnEntity(item);
 			}
-			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.pixie_hurt, SoundCategory.NEUTRAL, 1, 1, false);
 
 		}
 		return false;

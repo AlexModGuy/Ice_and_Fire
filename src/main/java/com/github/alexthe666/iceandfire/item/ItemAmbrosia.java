@@ -9,6 +9,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemAmbrosia extends ItemFood {
 
@@ -18,6 +19,7 @@ public class ItemAmbrosia extends ItemFood {
 		this.setUnlocalizedName("iceandfire.ambrosia");
 		this.setRegistryName(IceAndFire.MODID, "ambrosia");
 		this.setMaxStackSize(1);
+		GameRegistry.register(this);
 	}
 
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {

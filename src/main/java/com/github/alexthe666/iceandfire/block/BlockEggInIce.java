@@ -31,7 +31,6 @@ import java.util.Random;
 public class BlockEggInIce extends BlockContainer {
 	public Item itemBlock;
 
-	@SuppressWarnings("deprecation")
 	public BlockEggInIce() {
 		super(Material.ICE);
 		this.slipperiness = 0.98F;
@@ -41,6 +40,7 @@ public class BlockEggInIce extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.egginice");
 		GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
 		setRegistryName(IceAndFire.MODID, "egginice");
+		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

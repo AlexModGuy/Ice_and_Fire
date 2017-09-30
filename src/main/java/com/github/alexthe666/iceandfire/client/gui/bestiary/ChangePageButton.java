@@ -17,7 +17,7 @@ public class ChangePageButton extends GuiButton {
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
+	public void drawButton(Minecraft mc, int mouseX, int mouseY) {
 		if (this.enabled) {
 			boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
