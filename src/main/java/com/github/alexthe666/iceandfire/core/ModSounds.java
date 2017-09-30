@@ -134,21 +134,15 @@ public class ModSounds {
 	@GameRegistry.ObjectHolder("pixie_taunt")
 	public static final SoundEvent PIXIE_TAUNT = createSoundEvent("pixie_taunt");
 
-	public static SoundEvent gold_pile_step;
-	public static SoundEvent gold_pile_break;
+	@GameRegistry.ObjectHolder("gold_pile_step")
+	public static final SoundEvent GOLD_PILE_STEP = createSoundEvent("gold_pile_step");
+
+	@GameRegistry.ObjectHolder("gold_pile_break")
+	public static final SoundEvent GOLD_PILE_BREAK = createSoundEvent("gold_pile_break");
 
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
-	}
-
-	public static void init() {
-		gold_pile_break = registerSound("gold_pile.break");
-		gold_pile_step = registerSound("gold_pile.step");
-	}
-
-	private static SoundEvent registerSound(String sound) {
-		return new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound));
 	}
 
 	@Mod.EventBusSubscriber(modid = MODID)
@@ -196,7 +190,9 @@ public class ModSounds {
 					PIXIE_DIE,
 					PIXIE_HURT,
 					PIXIE_IDLE,
-					PIXIE_TAUNT
+					PIXIE_TAUNT,
+					GOLD_PILE_STEP,
+					GOLD_PILE_BREAK
 			);
 		}
 	}
