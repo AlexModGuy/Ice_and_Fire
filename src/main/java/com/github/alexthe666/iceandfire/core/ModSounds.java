@@ -103,57 +103,5 @@ public class ModSounds {
 
 	private static SoundEvent registerSound(String sound) {
 		return new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound));
-
-	}
-
-	@Mod.EventBusSubscriber(modid = MODID)
-	public static class RegistrationHandler {
-		@SubscribeEvent
-		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-			event.getRegistry().registerAll(
-					pixie_taunt,
-					pixie_die,
-					pixie_hurt,
-					pixie_idle,
-					gold_pile_break,
-					gold_pile_step,
-					gorgon_turn_stone,
-					gorgon_petrify,
-					gorgon_attack,
-					gorgon_die,
-					gorgon_hurt,
-					gorgon_idle,
-					hippogryph_die,
-					hippogryph_hurt,
-					hippogryph_idle,
-					dragonflute,
-					icedragon_adult_roar,
-					icedragon_adult_death,
-					icedragon_adult_hurt,
-					icedragon_adult_idle,
-					icedragon_teen_roar,
-					icedragon_teen_death,
-					icedragon_teen_hurt,
-					dragon_hatch,
-					firedragon_breath,
-					icedragon_breath,
-					firedragon_child_idle,
-					firedragon_child_hurt,
-					firedragon_child_death,
-					firedragon_child_roar,
-					firedragon_teen_idle,
-					firedragon_teen_hurt,
-					firedragon_teen_death,
-					firedragon_teen_roar,
-					firedragon_adult_idle,
-					firedragon_adult_hurt,
-					firedragon_adult_death,
-					firedragon_adult_roar,
-					icedragon_child_idle,
-					icedragon_child_hurt,
-					icedragon_child_death,
-					icedragon_child_roar
-			);
-		}
 	}
 }
