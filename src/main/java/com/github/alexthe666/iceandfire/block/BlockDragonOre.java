@@ -23,7 +23,6 @@ public class BlockDragonOre extends Block {
 		this.setHardness(hardness);
 		this.setUnlocalizedName(name);
 		setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
 	}

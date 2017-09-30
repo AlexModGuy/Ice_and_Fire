@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:sapphire_block",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:sapphire_gem",
+    "data": 0,
+    "count": 9
+  }
+}

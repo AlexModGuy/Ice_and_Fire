@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "B  ",
+    " B ",
+    "  I"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonbone",
+      "data": 0
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragon_flute",
+    "data": 0
+  }
+}

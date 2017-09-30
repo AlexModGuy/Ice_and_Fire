@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
@@ -169,11 +168,11 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		}
 	}
 
-	public void onDeath(DamageSource cause) {
-		if (cause.getTrueSource() instanceof EntityPlayer) {
-			((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killGorgon);
-		}
-	}
+	//public void onDeath(DamageSource cause) {
+	//	if (cause.getTrueSource() instanceof EntityPlayer) {
+	//		((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killGorgon);
+	//	}
+	//}
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -189,7 +188,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			if (!blindness) {
 				if (this.getAnimation() != ANIMATION_SCARE) {
-					this.playSound(ModSounds.gorgon_attack, 1, 1);
+					this.playSound(ModSounds.GORGON_ATTACK, 1, 1);
 					this.setAnimation(ANIMATION_SCARE);
 				}
 				if (this.getAnimation() == ANIMATION_SCARE) {
@@ -218,7 +217,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 									} else {
 										IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(attackTarget.getEntityId(), true));
 									}
-									this.playSound(ModSounds.gorgon_turn_stone, 1, 1);
+									this.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 									this.setAttackTarget(null);
 								}
 
@@ -244,9 +243,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		}
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
-		if (player != null) {
-			player.addStat(ModAchievements.findGorgon);
-		}
+		//if (player != null) {
+		//	player.addStat(ModAchievements.findGorgon);
+		//}
 	}
 
 	public int getVerticalFaceSpeed() {
@@ -299,16 +298,16 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 
 	@Nullable
 	protected SoundEvent getAmbientSound() {
-		return ModSounds.gorgon_idle;
+		return ModSounds.GORGON_IDLE;
 	}
 
 	@Nullable
-	protected SoundEvent getHurtSound() {
-		return ModSounds.gorgon_hurt;
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return ModSounds.GORGON_HURT;
 	}
 
 	@Nullable
 	protected SoundEvent getDeathSound() {
-		return ModSounds.gorgon_die;
+		return ModSounds.GORGON_DIE;
 	}
 }

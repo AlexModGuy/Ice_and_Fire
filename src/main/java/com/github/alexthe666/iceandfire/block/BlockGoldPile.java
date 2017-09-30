@@ -41,7 +41,6 @@ public class BlockGoldPile extends Block {
 		this.setHardness(0.3F);
 		this.setSoundType(ModBlocks.SOUND_TYPE_GOLD);
 		setRegistryName(IceAndFire.MODID, "goldpile");
-		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

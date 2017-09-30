@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " DS",
+    "W S",
+    " DS"
+  ],
+  "key": {
+    "W": {
+      "item": "iceandfire:witherbone",
+      "data": 0
+    },
+    "D": {
+      "item": "iceandfire:dragonbone",
+      "data": 0
+    },
+    "S": {
+      "item": "minecraft:string",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonbone_bow",
+    "data": 0
+  }
+}

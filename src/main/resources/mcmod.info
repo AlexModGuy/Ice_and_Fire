@@ -3,14 +3,16 @@
   "modid": "iceandfire",
   "name": "Ice and Fire",
   "description": "Ice and Fire shines a whole new light on dragons.",
-  "version": "1.2.1",
-  "mcversion": "1.11.2",
+  "version": "1.3.0",
+  "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",
   "authorList": ["Alexthe666", "Raptorfarian"],
   "credits": "gegy1000, Paul Fulham, Zyranna, 4f6f3b, and iLexiconn - Thanks for all the help! Credits to Elucent and Sunconure11 for the initial 1.11.2 port!",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": [ "llibrary", "forge" ],
+  "dependencies": [ "llibrary", "forge" ],
+  "useDependencyInformation": true
 }
 ]

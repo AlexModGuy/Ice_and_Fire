@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:goldpile",
+    "data": 0,
+    "count": 1
+  }
+}

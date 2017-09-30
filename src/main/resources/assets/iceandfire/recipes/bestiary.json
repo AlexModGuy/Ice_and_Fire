@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:manuscript",
+      "data": 0
+    },
+    {
+      "item": "iceandfire:manuscript",
+      "data": 0
+    },
+    {
+      "item": "iceandfire:manuscript",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:bestiary",
+    "data": 0,
+    "count": 1
+  }
+}
