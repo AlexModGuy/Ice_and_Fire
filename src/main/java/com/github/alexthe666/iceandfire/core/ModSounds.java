@@ -18,7 +18,9 @@ public class ModSounds {
 	@GameRegistry.ObjectHolder("firedragon_breath")
 	public static final SoundEvent FIREDRAGON_BREATH = createSoundEvent("firedragon_breath");
 
-	public static SoundEvent icedragon_breath;
+	@GameRegistry.ObjectHolder("icedragon_breath")
+	public static final SoundEvent ICEDRAGON_BREATH = createSoundEvent("icedragon_breath");
+
 	public static SoundEvent firedragon_child_idle;
 	public static SoundEvent firedragon_child_hurt;
 	public static SoundEvent firedragon_child_death;
@@ -66,7 +68,6 @@ public class ModSounds {
 	}
 
 	public static void init() {
-		icedragon_breath = registerSound("icedragon.breath");
 		firedragon_child_idle = registerSound("firedragon.child.idle");
 		firedragon_child_hurt = registerSound("firedragon.child.hurt");
 		firedragon_child_death = registerSound("firedragon.child.death");
@@ -119,7 +120,8 @@ public class ModSounds {
 		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
 			event.getRegistry().registerAll(
 					DRAGON_HATCH,
-					FIREDRAGON_BREATH
+					FIREDRAGON_BREATH,
+					ICEDRAGON_BREATH
 			);
 		}
 	}
