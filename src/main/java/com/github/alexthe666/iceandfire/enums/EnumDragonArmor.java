@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public enum EnumDragonArmor {
 
