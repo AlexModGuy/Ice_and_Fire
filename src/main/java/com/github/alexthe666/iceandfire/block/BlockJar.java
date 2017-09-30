@@ -106,7 +106,7 @@ public class BlockJar extends BlockContainer {
 			if (!world.isRemote) {
 				world.spawnEntity(item);
 			}
-			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.pixie_hurt, SoundCategory.NEUTRAL, 1, 1, false);
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
 
 		}
 		return false;

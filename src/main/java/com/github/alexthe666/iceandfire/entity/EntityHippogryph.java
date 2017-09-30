@@ -562,17 +562,17 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	@Nullable
 	protected SoundEvent getAmbientSound() {
-		return ModSounds.hippogryph_idle;
+		return ModSounds.HIPPOGRYPH_IDLE;
 	}
 
 	@Nullable
 	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-		return ModSounds.hippogryph_hurt;
+		return ModSounds.HIPPOGRYPH_HURT;
 	}
 
 	@Nullable
 	protected SoundEvent getDeathSound() {
-		return ModSounds.hippogryph_die;
+		return ModSounds.HIPPOGRYPH_DIE;
 	}
 
 	@Override

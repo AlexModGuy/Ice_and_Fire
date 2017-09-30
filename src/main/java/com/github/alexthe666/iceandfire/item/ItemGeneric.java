@@ -21,9 +21,8 @@ public class ItemGeneric extends Item {
 		if (entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
 
-			if (this == ModItems.manuscript) {
-				player.addStat(ModAchievements.manuscript, 1);
+			//if (this == ModItems.manuscript) {
+				//player.addStat(ModAchievements.manuscript, 1);
 			}
 		}
 	}
-}
