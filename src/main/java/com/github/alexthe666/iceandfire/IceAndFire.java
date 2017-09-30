@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.GuiHandler;
-import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.core.ModEntities;
+import com.github.alexthe666.iceandfire.core.ModFoods;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
-import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
@@ -78,20 +80,13 @@ public class IceAndFire {
 	public void init(FMLInitializationEvent event) {
 
 		ModRecipes.init();
-		//ModAchievements.init();
 		ModVillagers.INSTANCE.init();
-
 		logger.info("The watcher waits on the northern wall");
 		logger.info("A daughter picks up a warrior's sword");
-
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
-		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
-		/*Biome.registerBiome(CONFIG.glacierBiomeID, "glacier", GLACIER);
-		BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
-		BiomeManager.addSpawnBiome(GLACIER);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));*/
+
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

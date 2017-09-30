@@ -151,9 +151,9 @@ public class BlockJar extends BlockContainer {
 		}
 
 		@SideOnly(Side.CLIENT)
-		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 			for (int i = 0; i < 6; i++) {
-				subItems.add(new ItemStack(itemIn, 1, i));
+				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}
