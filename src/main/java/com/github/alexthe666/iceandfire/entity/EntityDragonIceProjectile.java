@@ -80,9 +80,9 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 					return;
 				}
 				if (this.shootingEntity != null) {
-					if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-						((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
-					}
+					//if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
+					//	((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
+					//}
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					}

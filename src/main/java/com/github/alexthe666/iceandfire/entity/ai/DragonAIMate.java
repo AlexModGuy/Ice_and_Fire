@@ -96,7 +96,7 @@ public class DragonAIMate extends EntityAIBase {
 
 			if (entityplayer != null) {
 				entityplayer.addStat(StatList.ANIMALS_BRED);
-				entityplayer.addStat(ModAchievements.dragonBreed);
+				//entityplayer.addStat(ModAchievements.dragonBreed);
 			}
 
 			this.dragon.setGrowingAge(6000);

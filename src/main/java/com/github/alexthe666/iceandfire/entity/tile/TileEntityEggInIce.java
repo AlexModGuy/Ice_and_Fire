@@ -76,7 +76,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 			dragon.setTamed(true);
 			if (player != null) {
 				dragon.setOwnerId(player.getUniqueID());
-				player.addStat(ModAchievements.dragonHatch, 1);
+				//player.addStat(ModAchievements.dragonHatch, 1);
 			}
 			if (!world.isRemote) {
 				world.spawnEntity(dragon);

@@ -90,9 +90,9 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.setFire(3);
-				if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-					((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
-				}
+				//if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
+				//	((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
+				//}
 				this.setDead();
 			}
 
