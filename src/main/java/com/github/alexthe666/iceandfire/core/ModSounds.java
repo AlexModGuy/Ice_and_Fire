@@ -11,8 +11,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 public class ModSounds {
-	public static SoundEvent dragon_hatch;
-	public static SoundEvent firedragon_breath;
+
+	@GameRegistry.ObjectHolder("dragon_hatch")
+	public static final SoundEvent DRAGON_HATCH = createSoundEvent("dragon_hatch");
+
+	@GameRegistry.ObjectHolder("firedragon_breath")
+	public static final SoundEvent FIREDRAGON_BREATH = createSoundEvent("firedragon_breath");
+
 	public static SoundEvent icedragon_breath;
 	public static SoundEvent firedragon_child_idle;
 	public static SoundEvent firedragon_child_hurt;
@@ -55,9 +60,12 @@ public class ModSounds {
 	public static SoundEvent gold_pile_step;
 	public static SoundEvent gold_pile_break;
 
+	private static SoundEvent createSoundEvent(final String soundName) {
+		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
+		return new SoundEvent(soundID).setRegistryName(soundID);
+	}
+
 	public static void init() {
-		dragon_hatch = registerSound("dragonegg.hatch");
-		firedragon_breath = registerSound("firedragon.breath");
 		icedragon_breath = registerSound("icedragon.breath");
 		firedragon_child_idle = registerSound("firedragon.child.idle");
 		firedragon_child_hurt = registerSound("firedragon.child.hurt");
@@ -103,5 +111,16 @@ public class ModSounds {
 
 	private static SoundEvent registerSound(String sound) {
 		return new SoundEvent(new ResourceLocation("iceandfire", sound)).setRegistryName(new ResourceLocation("iceandfire", sound));
+	}
+
+	@Mod.EventBusSubscriber(modid = MODID)
+	public static class RegistrationHandler {
+		@SubscribeEvent
+		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
+			event.getRegistry().registerAll(
+					DRAGON_HATCH,
+					FIREDRAGON_BREATH
+			);
+		}
 	}
 }
