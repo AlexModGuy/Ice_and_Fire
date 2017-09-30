@@ -113,9 +113,15 @@ public class ModSounds {
 	@GameRegistry.ObjectHolder("gorgon_die")
 	public static final SoundEvent GORGON_DIE = createSoundEvent("gorgon_die");
 
-	public static SoundEvent gorgon_attack;
-	public static SoundEvent gorgon_petrify;
-	public static SoundEvent gorgon_turn_stone;
+	@GameRegistry.ObjectHolder("gorgon_attack")
+	public static final SoundEvent GORGON_ATTACK = createSoundEvent("gorgon_attack");
+
+	@GameRegistry.ObjectHolder("gorgon_petrify")
+	public static final SoundEvent GORGON_PETRIFY = createSoundEvent("gorgon_petrify");
+
+	@GameRegistry.ObjectHolder("gorgon_turn_stone")
+	public static final SoundEvent GORGON_TURN_STONE = createSoundEvent("gorgon_turn_stone");
+
 	public static SoundEvent pixie_idle;
 	public static SoundEvent pixie_hurt;
 	public static SoundEvent pixie_die;
@@ -129,9 +135,6 @@ public class ModSounds {
 	}
 
 	public static void init() {
-		gorgon_attack = registerSound("gorgon.attack");
-		gorgon_petrify = registerSound("gorgon.petrify");
-		gorgon_turn_stone = registerSound("gorgon.turn_stone");
 		pixie_idle = registerSound("pixie.idle");
 		pixie_hurt = registerSound("pixie.hurt");
 		pixie_die = registerSound("pixie.die");
@@ -182,7 +185,10 @@ public class ModSounds {
 					HIPPOGRYPH_HURT,
 					GORGON_DIE,
 					GORGON_IDLE,
-					GORGON_HURT
+					GORGON_HURT,
+					GORGON_ATTACK,
+					GORGON_TURN_STONE,
+					GORGON_PETRIFY
 			);
 		}
 	}
