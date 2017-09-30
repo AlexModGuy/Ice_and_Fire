@@ -27,9 +27,6 @@ public class CommonProxy {
 	public void postRender() {
 	}
 
-	public void renderArmors(EnumDragonArmor armor) {
-	}
-
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
 	}
 
@@ -90,7 +87,6 @@ public class CommonProxy {
 			for (Field f : ModItems.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof Item) {
-					System.out.println(((Item) obj).getUnlocalizedName());
 					event.getRegistry().register((Item) obj);
 				} else if (obj instanceof Item[]) {
 					for (Item item : (Item[]) obj) {
@@ -100,6 +96,12 @@ public class CommonProxy {
 			}
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
+		}
+		for (EnumDragonArmor armor : EnumDragonArmor.values()) {
+			event.getRegistry().register(armor.helmet);
+			event.getRegistry().register(armor.chestplate);
+			event.getRegistry().register(armor.leggings);
+			event.getRegistry().register(armor.boots);
 		}
 	}
 }
