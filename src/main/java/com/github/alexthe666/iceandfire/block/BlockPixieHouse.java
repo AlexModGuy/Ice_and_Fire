@@ -145,10 +145,11 @@ public class BlockPixieHouse extends BlockContainer {
 		return new TileEntityPixieHouse();
 	}
 
-	class ItemBlockPixieHouse extends ItemBlock {
+	public class ItemBlockPixieHouse extends ItemBlock {
 		public ItemBlockPixieHouse(Block block) {
 			super(block);
 			this.maxStackSize = 1;
+			this.setHasSubtypes(true);
 		}
 
 		public String getUnlocalizedName(ItemStack stack) {

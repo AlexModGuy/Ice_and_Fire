@@ -138,10 +138,11 @@ public class BlockJar extends BlockContainer {
 		return new TileEntityJar();
 	}
 
-	class ItemBlockJar extends ItemBlock {
+	public class ItemBlockJar extends ItemBlock {
 		public ItemBlockJar(Block block) {
 			super(block);
 			this.maxStackSize = 1;
+			this.setHasSubtypes(true);
 		}
 
 		public String getUnlocalizedName(ItemStack stack) {

@@ -18,7 +18,7 @@ public class EventNewMenu {
 	public void openMainMenu(GuiOpenEvent event) {
 		if (event.getGui() instanceof GuiMainMenu) {
 			GuiMainMenu mainMenu = (GuiMainMenu) event.getGui();
-			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), new String[]{"titlePanoramaPaths", "field_73978_o"}));
+			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), new String[]{"MINECRAFT_TITLE_TEXTURES", "field_73978_o"}));
 			try {
 				Field modifier = Field.class.getDeclaredField("modifiers");
 				modifier.setAccessible(true);
