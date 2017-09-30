@@ -146,7 +146,7 @@
             }
           ],
           "weight": 15
-        },		
+        },
         {
           "type": "item",
           "name": "iceandfire:silver_sword",
@@ -160,7 +160,7 @@
             }
           ],
           "weight": 5
-        },			
+        },
         {
           "type": "item",
           "name": "iceandfire:armor_silver_metal_helmet",
@@ -174,7 +174,7 @@
             }
           ],
           "weight": 5
-        },			
+        },
         {
           "type": "item",
           "name": "minecraft:experience_bottle",

@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -93,10 +92,18 @@ public class ModSounds {
 	@GameRegistry.ObjectHolder("icedragon_adult_hurt")
 	public static final SoundEvent ICEDRAGON_ADULT_HURT = createSoundEvent("icedragon_adult_hurt");
 
-	public static SoundEvent dragonflute;
-	public static SoundEvent hippogryph_idle;
-	public static SoundEvent hippogryph_hurt;
-	public static SoundEvent hippogryph_die;
+	@GameRegistry.ObjectHolder("dragonflute")
+	public static final SoundEvent DRAGONFLUTE = createSoundEvent("dragonflute");
+
+	@GameRegistry.ObjectHolder("hippogryph_idle")
+	public static final SoundEvent HIPPOGRYPH_IDLE = createSoundEvent("hippogryph_idle");
+
+	@GameRegistry.ObjectHolder("hippogryph_hurt")
+	public static final SoundEvent HIPPOGRYPH_HURT = createSoundEvent("hippogryph_hurt");
+
+	@GameRegistry.ObjectHolder("hippogryph_die")
+	public static final SoundEvent HIPPOGRYPH_DIE = createSoundEvent("hippogryph_die");
+
 	public static SoundEvent gorgon_idle;
 	public static SoundEvent gorgon_hurt;
 	public static SoundEvent gorgon_die;
@@ -116,10 +123,6 @@ public class ModSounds {
 	}
 
 	public static void init() {
-		dragonflute = registerSound("dragonflute");
-		hippogryph_idle = registerSound("hippogryph.idle");
-		hippogryph_hurt = registerSound("hippogryph.hurt");
-		hippogryph_die = registerSound("hippogryph.die");
 		gorgon_idle = registerSound("gorgon.idle");
 		gorgon_hurt = registerSound("gorgon.hurt");
 		gorgon_die = registerSound("gorgon.die");
@@ -169,7 +172,8 @@ public class ModSounds {
 					ICEDRAGON_ADULT_ROAR,
 					ICEDRAGON_ADULT_IDLE,
 					ICEDRAGON_ADULT_HURT,
-					ICEDRAGON_ADULT_DEATH
+					ICEDRAGON_ADULT_DEATH,
+					DRAGONFLUTE
 			);
 		}
 	}

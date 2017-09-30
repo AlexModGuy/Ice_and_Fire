@@ -87,7 +87,7 @@ public class IceAndFire {
 	public void init(FMLInitializationEvent event) {
 
 		ModRecipes.init();
-		ModAchievements.init();
+		//ModAchievements.init();
 		ModVillagers.INSTANCE.init();
 
 		logger.info("The watcher waits on the northern wall");
