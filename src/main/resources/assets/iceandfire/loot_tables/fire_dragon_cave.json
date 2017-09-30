@@ -19,7 +19,7 @@
               }
             }
           ],
-          "weight": 5
+          "weight": 2
         },
         {
           "type": "item",
@@ -33,7 +33,7 @@
               }
             }
           ],
-          "weight": 7
+          "weight": 3
         },
         {
           "type": "item",
@@ -103,7 +103,7 @@
               }
             }
           ],
-          "weight": 20
+          "weight": 7
         },
         {
           "type": "item",
@@ -117,7 +117,7 @@
               }
             }
           ],
-          "weight": 20
+          "weight": 12
         },
         {
           "type": "item",
@@ -135,6 +135,48 @@
         },
         {
           "type": "item",
+          "name": "minecraft:web",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ],
+          "weight": 15
+        },	
+        {
+          "type": "item",
+          "name": "minecraft:iron_sword",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 5
+        },		
+        {
+          "type": "item",
+          "name": "minecraft:iron_helmet",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 5
+        },			
+        {
+          "type": "item",
           "name": "minecraft:experience_bottle",
           "functions": [
             {
@@ -145,7 +187,7 @@
               }
             }
           ],
-          "weight": 5
+          "weight": 1
         }
       ]
     }

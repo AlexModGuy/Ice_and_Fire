@@ -30,6 +30,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Items.MELON_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.PUMPKIN_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.BEETROOT_SEEDS, 5);
+		FoodMappings.INSTANCE.addPlant(Items.CHORUS_FRUIT, 7);
 		FoodMappings.INSTANCE.addPlant(Blocks.CARROTS, 20);
 		FoodMappings.INSTANCE.addPlant(Blocks.LEAVES, 20);
 		FoodMappings.INSTANCE.addPlant(Blocks.LEAVES2, 20);
@@ -43,6 +44,8 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN, 30);
 		FoodMappings.INSTANCE.addPlant(Blocks.SAPLING, 15);
 		FoodMappings.INSTANCE.addPlant(Blocks.TALLGRASS, 5);
+		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_PLANT, 11);
+		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_FLOWER, 11);
 		FoodMappings.INSTANCE.addFish(Items.FISH, 30);
 		FoodMappings.INSTANCE.addFish(Items.COOKED_FISH, 45);
 		FoodMappings.INSTANCE.addMeat(Items.COOKED_BEEF, 60);
@@ -63,12 +66,17 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addMeat(EntityChicken.class, 5);
 		FoodMappings.INSTANCE.addMeat(EntityCow.class, 40);
 		FoodMappings.INSTANCE.addMeat(EntityHorse.class, 55);
-		FoodMappings.INSTANCE.addMeat(EntityParrot.class, 5);
+		FoodMappings.INSTANCE.addMeat(EntityDonkey.class, 55);
+		FoodMappings.INSTANCE.addMeat(EntityMule.class, 55);
+		FoodMappings.INSTANCE.addMeat(EntityParrot.class, 1);
 		FoodMappings.INSTANCE.addMeat(EntityPig.class, 20);
 		FoodMappings.INSTANCE.addMeat(EntitySheep.class, 35);
 		FoodMappings.INSTANCE.addMeat(EntityRabbit.class, 20);
+		FoodMappings.INSTANCE.addMeat(EntityOcelot.class, 25);
 		FoodMappings.INSTANCE.addMeat(EntitySquid.class, 30);
 		FoodMappings.INSTANCE.addMeat(EntityWolf.class, 30);
+		FoodMappings.INSTANCE.addMeat(EntityLlama.class, 40);
+		FoodMappings.INSTANCE.addMeat(EntityMooshroom.class, 40);
 		FoodMappings.INSTANCE.addMeat(EntityPolarBear.class, 70);
 		FoodMappings.INSTANCE.addMeat(EntityIceDragon.class, 100);
 		FoodMappings.INSTANCE.addMeat(EntityFireDragon.class, 100);

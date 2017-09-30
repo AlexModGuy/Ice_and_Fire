@@ -59,7 +59,7 @@ public class IceAndFireConfig {
 	public int glacierSpawnChance = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation", comment = "Ratio of Stone(this number) to Ores in Dragon Caves")
-	public int oreToStoneRatioForDragonCaves = 5;
+	public int oreToStoneRatioForDragonCaves = 45;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default")
