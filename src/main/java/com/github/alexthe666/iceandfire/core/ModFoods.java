@@ -25,6 +25,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Items.COOKIE, 10);
 		FoodMappings.INSTANCE.addPlant(Items.PUMPKIN_PIE, 25);
 		FoodMappings.INSTANCE.addPlant(Items.SUGAR, 7);
+		FoodMappings.INSTANCE.addPlant(Items.BEETROOT, 12);
 		FoodMappings.INSTANCE.addPlant(Items.BREAD, 25);
 		FoodMappings.INSTANCE.addPlant(Items.WHEAT_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.MELON_SEEDS, 5);
