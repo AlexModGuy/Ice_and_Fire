@@ -32,7 +32,7 @@ public class IceAndFireConfig {
 	public int generateDragonRoostChance = 360;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation", comment = "1 out of this number chance per block that gold will generate in dragon lairs.")
-	public int dragonDenGoldAmount = 1;
+	public int dragonDenGoldAmount = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation")
 	public boolean generateSnowVillages = true;
@@ -59,7 +59,7 @@ public class IceAndFireConfig {
 	public int glacierSpawnChance = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation", comment = "Ratio of Stone(this number) to Ores in Dragon Caves")
-	public int oreToStoneRatioForDragonCaves = 5;
+	public int oreToStoneRatioForDragonCaves = 45;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default")

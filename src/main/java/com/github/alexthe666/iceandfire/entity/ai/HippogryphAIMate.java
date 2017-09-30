@@ -81,10 +81,10 @@ public class HippogryphAIMate extends EntityAIBase {
 		EntityItem egg = new EntityItem(world, this.hippo.posX, this.hippo.posY, this.hippo.posZ, ItemHippogryphEgg.createEggStack(this.hippo.getEnumVariant(), this.targetMate.getEnumVariant()));
 
 		if (egg != null) {
-			EntityPlayer entityplayer = this.hippo.getPlayerInLove();
+			EntityPlayer entityplayer = this.hippo.getLoveCause();
 
-			if (entityplayer == null && this.targetMate.getPlayerInLove() != null) {
-				entityplayer = this.targetMate.getPlayerInLove();
+			if (entityplayer == null && this.targetMate.getLoveCause() != null) {
+				entityplayer = this.targetMate.getLoveCause();
 			}
 
 			if (entityplayer != null) {

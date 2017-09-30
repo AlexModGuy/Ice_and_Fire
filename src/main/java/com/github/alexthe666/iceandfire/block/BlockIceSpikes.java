@@ -32,7 +32,6 @@ public class BlockIceSpikes extends Block {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setSoundType(SoundType.GLASS);
 		this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
-		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

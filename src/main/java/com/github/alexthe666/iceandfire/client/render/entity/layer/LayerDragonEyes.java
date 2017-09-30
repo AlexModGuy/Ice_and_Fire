@@ -35,7 +35,7 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
 				GlStateManager.enableLighting();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				this.render.setLightmap(dragon, partialTicks);
+				this.render.setLightmap(dragon);
 				GlStateManager.depthMask(true);
 				GlStateManager.disableBlend();
 			}

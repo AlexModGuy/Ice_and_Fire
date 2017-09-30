@@ -3,15 +3,16 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemModPickaxe extends ItemPickaxe {
@@ -21,7 +22,6 @@ public class ItemModPickaxe extends ItemPickaxe {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class ItemModPickaxe extends ItemPickaxe {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean f) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (this == ModItems.silver_pickaxe)
-			list.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
 	}
 }
