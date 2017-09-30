@@ -141,6 +141,14 @@ public class BlockPixieHouse extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+		for (int i = 0; i < 6; i++) {
+			items.add(new ItemStack(this, 1, i));
+		}
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityPixieHouse();
 	}
@@ -155,13 +163,6 @@ public class BlockPixieHouse extends BlockContainer {
 		public String getUnlocalizedName(ItemStack stack) {
 			int i = stack.getMetadata();
 			return "tile.iceandfire.pixie_house_" + i;
-		}
-
-		@SideOnly(Side.CLIENT)
-		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			for (int i = 0; i < 6; i++) {
-				subItems.add(new ItemStack(this, 1, i));
-			}
 		}
 	}
 }

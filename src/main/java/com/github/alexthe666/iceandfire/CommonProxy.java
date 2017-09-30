@@ -126,11 +126,9 @@ public class CommonProxy {
 					ItemBlock itemBlock;
 					if(obj instanceof BlockJar){
 						itemBlock = ((BlockJar)obj).new ItemBlockJar((Block)obj);
-					}
-					if(obj instanceof BlockPixieHouse){
+					}else if(obj instanceof BlockPixieHouse){
 						itemBlock = ((BlockPixieHouse)obj).new ItemBlockPixieHouse((Block)obj);
-					}
-					if(obj instanceof BlockPodium){
+					}else if(obj instanceof BlockPodium){
 						itemBlock = new ItemBlockPodium((Block)obj);
 					}else{
 						itemBlock = new ItemBlock((Block)obj);
