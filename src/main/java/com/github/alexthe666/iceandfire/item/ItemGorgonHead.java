@@ -39,7 +39,6 @@ public class ItemGorgonHead extends Item {
 		this.setUnlocalizedName("iceandfire.gorgon_head");
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, "gorgon_head");
-		GameRegistry.register(this);
 	}
 
 	@Override

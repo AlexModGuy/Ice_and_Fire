@@ -38,7 +38,6 @@ public class BlockCharedPath extends BlockGrassPath {
 		}
 		this.setLightOpacity(0);
 		setRegistryName(IceAndFire.MODID, isFire ? "chared_grass_path" : "frozen_grass_path");
-		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

@@ -28,7 +28,6 @@ public class ItemHippogryphEgg extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.hippogryph_egg");
 		this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
-		GameRegistry.register(this);
 	}
 
 	public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {

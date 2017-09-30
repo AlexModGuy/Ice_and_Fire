@@ -31,7 +31,6 @@ public class ItemStoneStatue extends Item {
 		this.maxStackSize = 1;
 		this.setUnlocalizedName("iceandfire.stone_statue");
 		this.setRegistryName(IceAndFire.MODID, "stone_statue");
-		GameRegistry.register(this);
 	}
 
 	@Override

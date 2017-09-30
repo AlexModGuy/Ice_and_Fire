@@ -31,7 +31,6 @@ public class ItemBestiary extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.bestiary");
 		this.setRegistryName(IceAndFire.MODID, "bestiary");
-		GameRegistry.register(this);
 	}
 
 	@Override

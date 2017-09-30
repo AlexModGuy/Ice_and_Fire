@@ -41,7 +41,6 @@ public class BlockEggInIce extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.egginice");
 		GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
 		setRegistryName(IceAndFire.MODID, "egginice");
-		GameRegistry.register(this);
 		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 

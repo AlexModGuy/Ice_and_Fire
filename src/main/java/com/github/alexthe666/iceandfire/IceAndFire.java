@@ -96,7 +96,6 @@ public class IceAndFire {
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
 		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
-		GameRegistry.register(GLACIER);
 		BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
 		BiomeManager.addSpawnBiome(GLACIER);
 		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));

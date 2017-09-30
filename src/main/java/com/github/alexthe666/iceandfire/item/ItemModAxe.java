@@ -32,7 +32,6 @@ public class ItemModAxe extends ItemTool {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 	}
 
 	@Override

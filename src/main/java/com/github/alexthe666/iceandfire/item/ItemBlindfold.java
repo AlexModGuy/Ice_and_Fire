@@ -18,7 +18,6 @@ public class ItemBlindfold extends ItemArmor {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.blindfold");
 		this.setRegistryName(IceAndFire.MODID, "blindfold");
-		GameRegistry.register(this);
 	}
 
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {

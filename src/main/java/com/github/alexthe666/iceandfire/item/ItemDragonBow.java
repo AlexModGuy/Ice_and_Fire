@@ -26,7 +26,6 @@ public class ItemDragonBow extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragonbone_bow");
 		this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
-		GameRegistry.register(this);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
 			@SideOnly(Side.CLIENT)

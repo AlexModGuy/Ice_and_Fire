@@ -40,7 +40,6 @@ public class BlockPodium extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.podium");
 		this.setRegistryName(IceAndFire.MODID, "podium");
-		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
 		GameRegistry.register(itemBlock = (new ItemBlockPodium(this).setRegistryName(this.getRegistryName())));
 	}

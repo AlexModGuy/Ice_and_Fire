@@ -30,7 +30,6 @@ public class ItemDragonSkull extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragon_skull");
 		this.setRegistryName(IceAndFire.MODID, "dragon_skull");
-		GameRegistry.register(this);
 	}
 
 	@Override

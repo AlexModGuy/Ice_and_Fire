@@ -20,7 +20,6 @@ public class ItemDragonHornStatic extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragon_horn");
 		this.setRegistryName(IceAndFire.MODID, "dragon_horn");
-		GameRegistry.register(this);
 	}
 
 	@Override

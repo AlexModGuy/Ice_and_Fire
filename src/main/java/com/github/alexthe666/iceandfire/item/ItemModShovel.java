@@ -23,7 +23,6 @@ public class ItemModShovel extends ItemSpade {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 	}
 
 	@Override

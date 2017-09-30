@@ -27,7 +27,6 @@ public class ItemDragonArmor extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, name);
-		GameRegistry.register(this);
 
 	}
 

@@ -28,7 +28,6 @@ public class ItemAlchemySword extends ItemSword {
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 	}
 
 	@Override

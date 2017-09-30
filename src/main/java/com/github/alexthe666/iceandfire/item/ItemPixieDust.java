@@ -16,7 +16,6 @@ public class ItemPixieDust extends ItemFood {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.pixie_dust");
 		this.setRegistryName(IceAndFire.MODID, "pixie_dust");
-		GameRegistry.register(this);
 	}
 
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {

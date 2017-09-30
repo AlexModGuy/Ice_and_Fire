@@ -31,7 +31,6 @@ public class ItemDragonEgg extends Item {
 		this.setUnlocalizedName("iceandfire.dragonegg");
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, name);
-		GameRegistry.register(this);
 	}
 
 	@Override

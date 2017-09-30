@@ -23,7 +23,6 @@ public class ItemDragonFlute extends Item {
 		this.setUnlocalizedName("iceandfire.dragon_flute");
 		this.setRegistryName(IceAndFire.MODID, "dragon_flute");
 		this.setCreativeTab(IceAndFire.TAB);
-		GameRegistry.register(this);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
