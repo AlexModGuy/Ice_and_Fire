@@ -47,6 +47,7 @@ public class CommonProxy {
 			for (Field f : ModItems.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof Item) {
+					System.out.println(((Item) obj).getUnlocalizedName());
 					event.getRegistry().register((Item) obj);
 					ModItems.ITEMS.add((Item) obj);
 				} else if (obj instanceof Item[]) {

@@ -41,7 +41,6 @@ public class BlockJar extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.jar");
 		this.setRegistryName(IceAndFire.MODID, "jar");
 		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
-		GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override

@@ -43,7 +43,6 @@ public class BlockPixieHouse extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.pixie_house");
 		this.setRegistryName(IceAndFire.MODID, "pixie_house");
 		GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
-		GameRegistry.register(itemBlock = (new ItemBlockPixieHouse(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override

@@ -21,11 +21,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
-import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -71,12 +66,12 @@ public class IceAndFire {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
-		MinecraftForge.EVENT_BUS.register(PROXY);
 		ModEntities.init();
 		ModBlocks.init();
 		ModFoods.init();
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");
+		TAB = new CreativeTab(MODID);
 	}
 
 
@@ -94,15 +89,13 @@ public class IceAndFire {
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
 		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
-		GameRegistry.register(GLACIER);
+		/*Biome.registerBiome(CONFIG.glacierBiomeID, "glacier", GLACIER);
 		BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
 		BiomeManager.addSpawnBiome(GLACIER);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));
+		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));*/
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
-		TAB = new CreativeTab(MODID);
 		dragon = new DamageSource("dragon") {
 			@Override
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {

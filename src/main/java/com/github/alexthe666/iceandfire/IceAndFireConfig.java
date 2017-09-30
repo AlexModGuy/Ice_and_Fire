@@ -55,6 +55,9 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "generation", comment = "Snow Villages can only spawn in these dimensions' IDs")
 	public int[] snowVillageWhitelistedDimensions = new int[]{0};
 	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "generation", comment = "glacier biome id")
+	public int glacierBiomeID = 54;
+	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
 	public int glacierSpawnChance = 4;
 	@SuppressWarnings("deprecation")

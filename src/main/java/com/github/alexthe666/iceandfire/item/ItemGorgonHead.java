@@ -23,7 +23,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
@@ -137,7 +136,7 @@ public class ItemGorgonHead extends Item {
 					entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 				}
 				SoundEvent deathSound = null;
-				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, (EntityLivingBase) pointedEntity, ObfuscationReflectionHelper.remapFieldNames(EntityLivingBase.class.getName(), new String[]{"getDeathSound", "func_184615_bR"}));
+				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR", null);
 				try {
 					deathSound = (SoundEvent) deathSoundMethod.invoke((EntityLivingBase) pointedEntity, null);
 				} catch (IllegalAccessException e) {
