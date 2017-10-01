@@ -43,7 +43,6 @@ public class BlockLectern extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.lectern");
 		this.setRegistryName(IceAndFire.MODID, "lectern");
 		GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@SuppressWarnings("deprecation")

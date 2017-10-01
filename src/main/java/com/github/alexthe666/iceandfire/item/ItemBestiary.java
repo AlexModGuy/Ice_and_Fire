@@ -41,16 +41,17 @@ public class ItemBestiary extends Item {
 
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(itemIn));
-		ItemStack stack = new ItemStack(ModItems.bestiary);
-		stack.setTagCompound(new NBTTagCompound());
-		int[] pages = new int[EnumBestiaryPages.values().length];
-		for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
-			pages[i] = i;
+		if(tab == this.getCreativeTab()){
+			subItems.add(new ItemStack(itemIn));
+			ItemStack stack = new ItemStack(ModItems.bestiary);
+			stack.setTagCompound(new NBTTagCompound());
+			int[] pages = new int[EnumBestiaryPages.values().length];
+			for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
+				pages[i] = i;
+			}
+			stack.getTagCompound().setIntArray("Pages", pages);
+			subItems.add(stack);
 		}
-		stack.getTagCompound().setIntArray("Pages", pages);
-		subItems.add(stack);
-
 	}
 
 	@Override

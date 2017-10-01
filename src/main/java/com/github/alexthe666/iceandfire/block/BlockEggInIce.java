@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +40,6 @@ public class BlockEggInIce extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.egginice");
 		GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
 		setRegistryName(IceAndFire.MODID, "egginice");
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override

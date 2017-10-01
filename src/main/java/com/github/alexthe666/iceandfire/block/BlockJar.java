@@ -41,7 +41,6 @@ public class BlockJar extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.jar");
 		this.setRegistryName(IceAndFire.MODID, "jar");
 		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
-		GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override
@@ -139,10 +138,11 @@ public class BlockJar extends BlockContainer {
 		return new TileEntityJar();
 	}
 
-	class ItemBlockJar extends ItemBlock {
+	public class ItemBlockJar extends ItemBlock {
 		public ItemBlockJar(Block block) {
 			super(block);
 			this.maxStackSize = 1;
+			this.setHasSubtypes(true);
 		}
 
 		public String getUnlocalizedName(ItemStack stack) {
@@ -151,9 +151,9 @@ public class BlockJar extends BlockContainer {
 		}
 
 		@SideOnly(Side.CLIENT)
-		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 			for (int i = 0; i < 6; i++) {
-				subItems.add(new ItemStack(itemIn, 1, i));
+				subItems.add(new ItemStack(this, 1, i));
 			}
 		}
 	}

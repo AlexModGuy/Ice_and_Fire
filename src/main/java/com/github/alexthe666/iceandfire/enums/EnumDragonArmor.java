@@ -22,9 +22,13 @@ public enum EnumDragonArmor {
 	public ArmorMaterial material;
 	public int armorId;
 	public EnumDragonEgg eggType;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_helmet")
 	public Item helmet;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_chestplate")
 	public Item chestplate;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_leggings")
 	public Item leggings;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_boots")
 	public Item boots;
 
 	private EnumDragonArmor(ArmorMaterial material, int armorId, EnumDragonEgg eggType) {
@@ -47,7 +51,6 @@ public enum EnumDragonArmor {
 			//GameRegistry.register(EnumDragonArmor.values()[i].leggings);
 			EnumDragonArmor.values()[i].boots.setRegistryName(EnumDragonArmor.values()[i].name() + "_boots");
 			//GameRegistry.register(EnumDragonArmor.values()[i].boots);
-			IceAndFire.PROXY.renderArmors(EnumDragonArmor.values()[i]);
 		}
 	}
 

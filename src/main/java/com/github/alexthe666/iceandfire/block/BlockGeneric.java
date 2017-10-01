@@ -7,12 +7,10 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +26,6 @@ public class BlockGeneric extends Block {
 		this.setSoundType(sound);
 		this.setCreativeTab(IceAndFire.TAB);
 		setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -44,7 +41,6 @@ public class BlockGeneric extends Block {
 			this.slipperiness = 0.98F;
 		}
 		setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 	}
 
 	public BlockGeneric(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound) {
@@ -55,8 +51,6 @@ public class BlockGeneric extends Block {
 		this.setSoundType(sound);
 		this.setCreativeTab(IceAndFire.TAB);
 		setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
-
 	}
 
 	@SideOnly(Side.CLIENT)

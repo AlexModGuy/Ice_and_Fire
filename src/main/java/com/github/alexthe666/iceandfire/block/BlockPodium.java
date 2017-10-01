@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -41,7 +40,6 @@ public class BlockPodium extends BlockContainer {
 		this.setUnlocalizedName("iceandfire.podium");
 		this.setRegistryName(IceAndFire.MODID, "podium");
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
-		GameRegistry.register(itemBlock = (new ItemBlockPodium(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override

@@ -2,9 +2,6 @@ package com.github.alexthe666.iceandfire.core;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
@@ -145,57 +142,5 @@ public final class ModSounds {
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
-	}
-
-	@Mod.EventBusSubscriber(modid = MODID)
-	public static class RegistrationHandler {
-		@SubscribeEvent
-		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-			event.getRegistry().registerAll(
-					DRAGON_HATCH,
-					FIREDRAGON_BREATH,
-					ICEDRAGON_BREATH,
-					FIREDRAGON_CHILD_IDLE,
-					FIREDRAGON_CHILD_HURT,
-					FIREDRAGON_CHILD_DEATH,
-					FIREDRAGON_CHILD_ROAR,
-					FIREDRAGON_TEEN_ROAR,
-					FIREDRAGON_TEEN_IDLE,
-					FIREDRAGON_TEEN_HURT,
-					FIREDRAGON_TEEN_DEATH,
-					FIREDRAGON_ADULT_ROAR,
-					FIREDRAGON_ADULT_IDLE,
-					FIREDRAGON_ADULT_HURT,
-					FIREDRAGON_ADULT_DEATH,
-					ICEDRAGON_CHILD_IDLE,
-					ICEDRAGON_CHILD_HURT,
-					ICEDRAGON_CHILD_DEATH,
-					ICEDRAGON_CHILD_ROAR,
-					ICEDRAGON_TEEN_ROAR,
-					ICEDRAGON_TEEN_IDLE,
-					ICEDRAGON_TEEN_HURT,
-					ICEDRAGON_TEEN_DEATH,
-					ICEDRAGON_ADULT_ROAR,
-					ICEDRAGON_ADULT_IDLE,
-					ICEDRAGON_ADULT_HURT,
-					ICEDRAGON_ADULT_DEATH,
-					DRAGONFLUTE,
-					HIPPOGRYPH_DIE,
-					HIPPOGRYPH_IDLE,
-					HIPPOGRYPH_HURT,
-					GORGON_DIE,
-					GORGON_IDLE,
-					GORGON_HURT,
-					GORGON_ATTACK,
-					GORGON_TURN_STONE,
-					GORGON_PETRIFY,
-					PIXIE_DIE,
-					PIXIE_HURT,
-					PIXIE_IDLE,
-					PIXIE_TAUNT,
-					GOLD_PILE_STEP,
-					GOLD_PILE_BREAK
-			);
-		}
 	}
 }
