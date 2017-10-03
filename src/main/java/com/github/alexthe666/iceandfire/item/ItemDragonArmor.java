@@ -32,7 +32,7 @@ public class ItemDragonArmor extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTab()) {
+		if (tab == this.getCreativeTab()) {
 			items.add(new ItemStack(this, 1, 0));
 			items.add(new ItemStack(this, 1, 1));
 			items.add(new ItemStack(this, 1, 2));

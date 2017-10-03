@@ -75,29 +75,6 @@ public class CommonProxy {
 				ModSounds.GOLD_PILE_BREAK
 		);
 	}
-	public void preRender() {
-
-	}
-
-	public void render() {
-	}
-
-	public void postRender() {
-	}
-
-	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-	}
-
-	public void openBestiaryGui(ItemStack book) {
-	}
-
-	public Object getArmorModel(int armorId) {
-		return null;
-	}
-
-	public Object getFontRenderer() {
-		return null;
-	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -124,16 +101,16 @@ public class CommonProxy {
 				Object obj = f.get(null);
 				if (obj instanceof Block) {
 					ItemBlock itemBlock;
-					if(obj instanceof BlockJar){
-						itemBlock = ((BlockJar)obj).new ItemBlockJar((Block)obj);
-					}else if(obj instanceof BlockPixieHouse){
-						itemBlock = ((BlockPixieHouse)obj).new ItemBlockPixieHouse((Block)obj);
-					}else if(obj instanceof BlockPodium){
-						itemBlock = new ItemBlockPodium((Block)obj);
-					}else{
-						itemBlock = new ItemBlock((Block)obj);
+					if (obj instanceof BlockJar) {
+						itemBlock = ((BlockJar) obj).new ItemBlockJar((Block) obj);
+					} else if (obj instanceof BlockPixieHouse) {
+						itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
+					} else if (obj instanceof BlockPodium) {
+						itemBlock = new ItemBlockPodium((Block) obj);
+					} else {
+						itemBlock = new ItemBlock((Block) obj);
 					}
-					itemBlock.setRegistryName(((Block)obj).getRegistryName());
+					itemBlock.setRegistryName(((Block) obj).getRegistryName());
 					event.getRegistry().register(itemBlock);
 				} else if (obj instanceof Block[]) {
 					for (Block block : (Block[]) obj) {
@@ -179,6 +156,30 @@ public class CommonProxy {
 		BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
 		BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
 		BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+	}
+
+	public void preRender() {
+
+	}
+
+	public void render() {
+	}
+
+	public void postRender() {
+	}
+
+	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+	}
+
+	public void openBestiaryGui(ItemStack book) {
+	}
+
+	public Object getArmorModel(int armorId) {
+		return null;
+	}
+
+	public Object getFontRenderer() {
+		return null;
 	}
 
 }

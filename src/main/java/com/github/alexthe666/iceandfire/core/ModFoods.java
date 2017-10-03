@@ -26,6 +26,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Items.PUMPKIN_PIE, 25);
 		FoodMappings.INSTANCE.addPlant(Items.SUGAR, 7);
 		FoodMappings.INSTANCE.addPlant(Items.BEETROOT, 12);
+		FoodMappings.INSTANCE.addPlant(Items.POTATO, 12);
 		FoodMappings.INSTANCE.addPlant(Items.BREAD, 25);
 		FoodMappings.INSTANCE.addPlant(Items.WHEAT_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.MELON_SEEDS, 5);
@@ -45,6 +46,10 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN, 30);
 		FoodMappings.INSTANCE.addPlant(Blocks.SAPLING, 15);
 		FoodMappings.INSTANCE.addPlant(Blocks.TALLGRASS, 5);
+		FoodMappings.INSTANCE.addPlant(Blocks.VINE, 1);
+		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN_STEM, 5);
+		FoodMappings.INSTANCE.addPlant(Blocks.MELON_STEM, 5);
+		FoodMappings.INSTANCE.addPlant(Blocks.WHEAT, 7);
 		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_PLANT, 11);
 		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_FLOWER, 11);
 		FoodMappings.INSTANCE.addFish(Items.FISH, 30);
