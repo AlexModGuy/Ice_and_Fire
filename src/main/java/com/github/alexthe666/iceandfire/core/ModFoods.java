@@ -46,10 +46,11 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN, 30);
 		FoodMappings.INSTANCE.addPlant(Blocks.SAPLING, 15);
 		FoodMappings.INSTANCE.addPlant(Blocks.TALLGRASS, 5);
-		FoodMappings.INSTANCE.addPlant(Blocks.VINE, 1);
-		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN_STEM, 5);
-		FoodMappings.INSTANCE.addPlant(Blocks.MELON_STEM, 5);
-		FoodMappings.INSTANCE.addPlant(Blocks.WHEAT, 7);
+		FoodMappings.INSTANCE.addPlant(Blocks.VINE, 5);
+		FoodMappings.INSTANCE.addPlant(Blocks.PUMPKIN_STEM, 15);
+		FoodMappings.INSTANCE.addPlant(Blocks.MELON_STEM, 15);
+		FoodMappings.INSTANCE.addPlant(Blocks.WHEAT, 25);
+		FoodMappings.INSTANCE.addPlant(Blocks.BEETROOTS, 25);
 		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_PLANT, 11);
 		FoodMappings.INSTANCE.addPlant(Blocks.CHORUS_FLOWER, 11);
 		FoodMappings.INSTANCE.addFish(Items.FISH, 30);
