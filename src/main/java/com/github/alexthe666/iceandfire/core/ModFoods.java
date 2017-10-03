@@ -33,6 +33,7 @@ public class ModFoods {
 		FoodMappings.INSTANCE.addPlant(Items.PUMPKIN_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.BEETROOT_SEEDS, 5);
 		FoodMappings.INSTANCE.addPlant(Items.CHORUS_FRUIT, 7);
+		FoodMappings.INSTANCE.addPlant(Items.SPECKLED_MELON, 45);
 		FoodMappings.INSTANCE.addPlant(Items.GOLDEN_CARROT, 45);
 		FoodMappings.INSTANCE.addPlant(Items.GOLDEN_APPLE, 65);
 		FoodMappings.INSTANCE.addPlant(Blocks.CARROTS, 20);
