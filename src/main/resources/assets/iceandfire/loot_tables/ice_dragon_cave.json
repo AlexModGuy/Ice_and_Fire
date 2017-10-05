@@ -202,7 +202,7 @@
             }
           ],
           "weight": 5
-        },		
+        },
         {
           "type": "item",
           "name": "iceandfire:armor_silver_metal_boots",
@@ -216,7 +216,7 @@
             }
           ],
           "weight": 5
-        },		
+        },
         {
           "type": "item",
           "name": "minecraft:packed_ice",
@@ -230,7 +230,7 @@
             }
           ],
           "weight": 7
-        },		
+        },
         {
           "type": "item",
           "name": "minecraft:experience_bottle",
