@@ -72,13 +72,13 @@ public class EntityFireDragon extends EntityDragonBase {
 	public String getTexture() {
 		if (this.isModelDead()) {
 			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
-				return "iceandfire:textures/models/firedragon/skeleton";
+				return "iceandfire:textures/models/firedragon/fire_skeleton_" + this.getDragonStage();
 			} else {
-				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 			}
 		}
 		if (this.isSleeping() || this.isBlinking()) {
-			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 		} else {
 			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
 		}
