@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
-import net.minecraft.client.model.ModelBase;
 
 import java.io.IOException;
 
@@ -12,7 +11,7 @@ public enum EnumDragonAnimations {
     HOVERING_POSE("Hovering"),
     SITTING_POSE("Sitting"),
     SLEEPING_POSE("Sleeping"),
-    SWIM_POSE("Swim", true),
+    SWIM_POSE("Swim", 2),
     BITE1("Bite1"),
     BITE2("Bite2"),
     BLAST_BREATH("BlastBreath"),
@@ -38,36 +37,50 @@ public enum EnumDragonAnimations {
     WALK3("Walk3"),
     WALK4("Walk4");
 
-    public ModelBase firedragon_model;
-    public ModelBase icedragon_model;
+    public IceAndFireTabulaModel firedragon_model;
+    public IceAndFireTabulaModel icedragon_model;
+    private String fileSuffix;
+    private int dragonType;
     private EnumDragonAnimations(String fileSuffix){
-        try {
-            firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + fileSuffix));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + fileSuffix));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.fileSuffix = fileSuffix;
     }
 
-    private EnumDragonAnimations(String fileSuffix, boolean iceOrFire){
-        if(!iceOrFire){
-            try {
-                firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + fileSuffix));
-            } catch (IOException e) {
-                e.printStackTrace();
+    private EnumDragonAnimations(String fileSuffix, int iceOrFire){
+        this.fileSuffix = fileSuffix;
+        this.dragonType = iceOrFire;
+    }
+
+    public static void initializeDragonModels(){
+        for(EnumDragonAnimations animation : values()){
+            switch(animation.dragonType){
+                case 0:
+                    try {
+                        animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    /*try {
+                        animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                    break;
+                case 1:
+                    try {
+                        animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 2:
+                    /*try {
+                        animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                    break;
             }
-        }else{
-            try {
-                icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + fileSuffix));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
         }
-
-
     }
 }

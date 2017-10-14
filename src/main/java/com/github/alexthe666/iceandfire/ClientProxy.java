@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
+import com.github.alexthe666.iceandfire.client.model.FireDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
 import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
 import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
@@ -218,9 +220,10 @@ public class ClientProxy extends CommonProxy {
 
 	@SuppressWarnings("deprecation")
 	private void renderEntities() {
+		EnumDragonAnimations.initializeDragonModels();
 		ModelBase firedragon_model = null;
 		try {
-			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire"));
+			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire"), new FireDragonTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
