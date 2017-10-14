@@ -223,7 +223,7 @@ public class ClientProxy extends CommonProxy {
 		EnumDragonAnimations.initializeDragonModels();
 		ModelBase firedragon_model = null;
 		try {
-			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire"), new FireDragonTabulaModelAnimator());
+			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

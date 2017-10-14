@@ -5,20 +5,31 @@ import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModel
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
-import net.minecraft.util.math.MathHelper;
 
 public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityFireDragon> {
 
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
+        IceAndFireTabulaModel currentPose = EnumDragonAnimations.FLYING_POSE.firedragon_model;
+        IceAndFireTabulaModel animationPose = EnumDragonAnimations.ROAR2.firedragon_model;
+
+
         for(AdvancedModelRenderer cube : model.getCubes().values()){
-            transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), 1, 1);
+            if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
+                transitionTo(cube, currentPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+            }
+            if(!isPartEqual(cube, animationPose.getCube(cube.boxName))){
+                transitionTo(cube, animationPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+            }
         }
     }
 
+    private boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
+        return pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
+    }
+
     public void transitionTo(AdvancedModelRenderer from, AdvancedModelRenderer to, float timer, float maxTime) {
-        //transitionAngles(from, to, timer, maxTime);
-        from.rotateAngleX += MathHelper.wrapDegrees(((to.rotateAngleX - from.rotateAngleX) / maxTime)) * timer;
+        transitionAngles(from, to, timer, maxTime);
 
         from.rotationPointX += ((to.rotationPointX - from.rotationPointX) / maxTime) * timer;
         from.rotationPointY += ((to.rotationPointY - from.rotationPointY) / maxTime) * timer;
@@ -30,20 +41,22 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     }
 
     private void transitionAngles(AdvancedModelRenderer from, AdvancedModelRenderer to, float timer, float maxTime){
-        if(to.rotateAngleX - from.rotateAngleX < -180){
-            from.rotateAngleX += MathHelper.wrapDegrees(((to.rotateAngleX + from.rotateAngleX) / maxTime)) * timer;
-        }else{
-            from.rotateAngleX += MathHelper.wrapDegrees(((to.rotateAngleX - from.rotateAngleX) / maxTime)) * timer;
+        from.rotateAngleX += ((rotateAmount(from.rotateAngleX, to.rotateAngleX)) / maxTime) * timer;
+        from.rotateAngleY += ((rotateAmount(from.rotateAngleY, to.rotateAngleY)) / maxTime) * timer;
+        from.rotateAngleZ += ((rotateAmount(from.rotateAngleZ, to.rotateAngleZ)) / maxTime) * timer;
+    }
+
+    private float rotateAmount(float rotateAngleFrom, float rotateAngleTo){
+        double distance = Math.toDegrees(rotateAngleTo) - Math.toDegrees(rotateAngleFrom);
+        double reverseDistance = Math.toDegrees(rotateAngleFrom) - Math.toDegrees(rotateAngleTo);
+        float sub = rotateAngleTo - rotateAngleFrom;
+        float reverseSub = rotateAngleTo + rotateAngleFrom;
+        if(distance > 180){
+            return reverseSub;
         }
-        if(to.rotateAngleX - from.rotateAngleX < -180){
-            from.rotateAngleY += MathHelper.wrapDegrees(((to.rotateAngleY + from.rotateAngleY) / maxTime)) * timer;
-        }else{
-            from.rotateAngleY += MathHelper.wrapDegrees(((to.rotateAngleY - from.rotateAngleY) / maxTime)) * timer;
+        if(reverseDistance > 180){
+            return reverseSub;
         }
-        if(to.rotateAngleX - from.rotateAngleX < -180){
-            from.rotateAngleZ += MathHelper.wrapDegrees(((to.rotateAngleZ + from.rotateAngleZ) / maxTime)) * timer;
-        }else{
-            from.rotateAngleZ += MathHelper.wrapDegrees(((to.rotateAngleZ - from.rotateAngleZ) / maxTime)) * timer;
-        }
+        return sub;
     }
 }
