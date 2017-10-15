@@ -16,7 +16,8 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         IceAndFireTabulaModel currentPose = null;
         IceAndFireTabulaModel animationPose = null;
         IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-
+        float cos = calcCos(entity.ticksExisted, 0F, 1) * 20;
+        System.out.println(cos);
         for(AdvancedModelRenderer cube : model.getCubes().values()){
             if(currentPose != null){
                 if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
@@ -28,13 +29,17 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                     transitionTo(cube, animationPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
                 }
             }
-            transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 0, 20), 20);
-            transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 20, 40) - 20, 20);
-            transitionTo(cube, walkPoses[2].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 40, 60) - 40, 20);
-            transitionTo(cube, walkPoses[3].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 60, 80) - 60, 20);
+            transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
+            transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(cos, 10, 20) - 10, 10);
+            transitionTo(cube, walkPoses[2].getCube(cube.boxName), MathHelper.clamp(cos, 20, 30) - 20, 10);
+            transitionTo(cube, walkPoses[3].getCube(cube.boxName), MathHelper.clamp(cos, 30, 40) - 30, 10);
 
         }
 
+    }
+
+    private float calcCos(float ticksExisted, float xOffset, float yOffset){
+        return ((float)Math.cos(xOffset + Math.toRadians((ticksExisted * 5) % 360)) + yOffset);
     }
 
     private boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){

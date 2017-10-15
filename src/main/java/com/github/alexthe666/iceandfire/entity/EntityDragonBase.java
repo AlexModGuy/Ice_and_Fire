@@ -894,8 +894,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.updateCheckPlayer();
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.legSolver.update(this);
-		//TODO
-		if (true || (this.isFlying() || this.isHovering()) && !this.isModelDead()) {
+		if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
 			if (animationCycle < 15) {
 				animationCycle++;
 			} else {
