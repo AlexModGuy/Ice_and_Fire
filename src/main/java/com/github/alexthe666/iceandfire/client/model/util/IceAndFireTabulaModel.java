@@ -94,7 +94,6 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
 
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale, Entity entity) {
-        this.resetToDefaultPose();
         if (this.tabulaAnimator != null) {
             this.tabulaAnimator.setRotationAngles(this, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         }

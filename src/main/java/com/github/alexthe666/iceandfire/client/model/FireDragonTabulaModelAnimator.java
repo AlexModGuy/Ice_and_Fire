@@ -5,23 +5,36 @@ import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModel
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.util.math.MathHelper;
 
 public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityFireDragon> {
 
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        IceAndFireTabulaModel currentPose = EnumDragonAnimations.FLYING_POSE.firedragon_model;
-        IceAndFireTabulaModel animationPose = EnumDragonAnimations.ROAR2.firedragon_model;
+        model.resetToDefaultPose();
 
+        IceAndFireTabulaModel currentPose = null;
+        IceAndFireTabulaModel animationPose = null;
+        IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()){
-            if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
-                transitionTo(cube, currentPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+            if(currentPose != null){
+                if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
+                    transitionTo(cube, currentPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+                }
             }
-            if(!isPartEqual(cube, animationPose.getCube(cube.boxName))){
-                transitionTo(cube, animationPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+            if(animationPose != null) {
+                if (!isPartEqual(cube, animationPose.getCube(cube.boxName))) {
+                    transitionTo(cube, animationPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
+                }
             }
+            transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 0, 20), 20);
+            transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 20, 40) - 20, 20);
+            transitionTo(cube, walkPoses[2].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 40, 60) - 40, 20);
+            transitionTo(cube, walkPoses[3].getCube(cube.boxName), MathHelper.clamp(entity.ticksExisted % 80, 60, 80) - 60, 20);
+
         }
+
     }
 
     private boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){

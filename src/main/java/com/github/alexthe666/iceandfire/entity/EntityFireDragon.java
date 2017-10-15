@@ -195,8 +195,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if ((!attackDecision || this.isFlying())) {
+				if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
 			} else {
 				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
