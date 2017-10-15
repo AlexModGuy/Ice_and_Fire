@@ -12,6 +12,12 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
+        entity.walkCycle++;
+        if (entity.walkCycle < 30) {
+            entity.walkCycle++;
+        } else {
+            entity.walkCycle = 0;
+        }
 
         IceAndFireTabulaModel currentPose = null;
         IceAndFireTabulaModel animationPose = null;
@@ -23,6 +29,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         IceAndFireTabulaModel prevPosition = walkPoses[prevIndex];
         IceAndFireTabulaModel currentPosition = walkPoses[(entity.walkCycle / 10)];
         float delta = (entity.walkCycle / 10.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
+
         for(AdvancedModelRenderer cube : model.getCubes().values()){
             if(currentPose != null){
                 if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
@@ -41,7 +48,6 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             float x = currentPosition.getCube(cube.boxName).rotateAngleX;
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-
             this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
 
             /*
