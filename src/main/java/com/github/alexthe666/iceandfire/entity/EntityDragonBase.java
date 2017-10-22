@@ -1059,7 +1059,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		this.setAgeInTicks(this.getAgeInTicks() + 1);
 		if (this.getAgeInTicks() % 24000 == 0) {
 			this.updateAttributes();
-			this.setScale(this.getRenderSize());
+			this.growDragon(0);
 		}
 		if (this.getAgeInTicks() % 1200 == 0) {
 			if (this.getHunger() > 0) {

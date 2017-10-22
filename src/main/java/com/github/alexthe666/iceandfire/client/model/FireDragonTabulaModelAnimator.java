@@ -12,22 +12,16 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
-        entity.walkCycle++;
-        if (entity.walkCycle < 30) {
-            entity.walkCycle++;
-        } else {
-            entity.walkCycle = 0;
-        }
-
         IceAndFireTabulaModel currentPose = null;
         IceAndFireTabulaModel animationPose = null;
         IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-        int prevIndex = (entity.walkCycle / 10) - 1;
+        int currentIndex = (entity.walkCycle / 10);
+        int prevIndex = currentIndex - 1;
         if (prevIndex < 0) {
             prevIndex = 3;
         }
         IceAndFireTabulaModel prevPosition = walkPoses[prevIndex];
-        IceAndFireTabulaModel currentPosition = walkPoses[(entity.walkCycle / 10)];
+        IceAndFireTabulaModel currentPosition = walkPoses[currentIndex];
         float delta = (entity.walkCycle / 10.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
 
         for(AdvancedModelRenderer cube : model.getCubes().values()){
@@ -87,18 +81,14 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         from.rotateAngleY += ((distance(from.rotateAngleY, to.rotateAngleY)) / maxTime) * timer;
         from.rotateAngleZ += ((distance(from.rotateAngleZ, to.rotateAngleZ)) / maxTime) * timer;
     }
-
+    //-149 vs 159 = we want 90, but we get 308
+    //149 vs -149 = we want 62 but we get -298
+    //159 vs 149 = -10
     private float distance(float rotateAngleFrom, float rotateAngleTo) {
-        double distance = Math.toDegrees(rotateAngleTo) - Math.toDegrees(rotateAngleFrom);
-        double reverseDistance = Math.toDegrees(rotateAngleFrom) - Math.toDegrees(rotateAngleTo);
         float sub = rotateAngleTo - rotateAngleFrom;
-        float reverseSub = rotateAngleTo + rotateAngleFrom;
-        if(distance > 180){
-            return reverseSub;
-        }
-        if(reverseDistance > 180){
-            return reverseSub;
-        }
-        return sub;
+
+        float a = (float)Math.atan2(Math.sin(rotateAngleTo - rotateAngleFrom), Math.cos(rotateAngleTo - rotateAngleFrom));
+
+        return a;
     }
 }

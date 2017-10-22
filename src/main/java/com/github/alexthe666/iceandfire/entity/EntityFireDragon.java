@@ -196,7 +196,11 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-
+		if (this.walkCycle < 39) {
+			this.walkCycle++;
+		} else {
+			this.walkCycle = 0;
+		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 				if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
