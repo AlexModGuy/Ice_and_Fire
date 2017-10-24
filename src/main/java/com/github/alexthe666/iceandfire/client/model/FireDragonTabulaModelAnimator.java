@@ -15,15 +15,15 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         IceAndFireTabulaModel currentPose = null;
         IceAndFireTabulaModel animationPose = null;
         IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-        int currentIndex = (entity.walkCycle / 10);
+        float walkCycle = entity.walkCycle;
+        int currentIndex = ((int)walkCycle / 10);
         int prevIndex = currentIndex - 1;
         if (prevIndex < 0) {
             prevIndex = 3;
         }
         IceAndFireTabulaModel prevPosition = walkPoses[prevIndex];
         IceAndFireTabulaModel currentPosition = walkPoses[currentIndex];
-        float delta = (entity.walkCycle / 10.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
-
+        float delta = (walkCycle / 10F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
         for(AdvancedModelRenderer cube : model.getCubes().values()){
             if(currentPose != null){
                 if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
@@ -42,7 +42,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             float x = currentPosition.getCube(cube.boxName).rotateAngleX;
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-            this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+            this.setRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
 
             /*
             transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
@@ -54,10 +54,10 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
 
     }
 
-    public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
+    public void setRotateAngle(AdvancedModelRenderer model, float limbSwingAmount, float x, float y, float z) {
+        model.rotateAngleX += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationX, x);
+        model.rotateAngleY += Math.min(limbSwingAmount * 2, 1) *distance(model.defaultRotationY, y);
+        model.rotateAngleZ += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationZ, z);
     }
 
     private boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
