@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import fossilsarcheology.api.EnumDiet;
 import fossilsarcheology.api.FoodMappings;
+import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -79,6 +80,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public double minimumSpeed;
 	public double maximumSpeed;
 	public EnumDiet diet;
+	public float sitProgress;
 	public float sleepProgress;
 	public float hoverProgress;
 	public float flyProgress;
@@ -95,6 +97,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public BlockPos homeArea;
 	@SideOnly(Side.CLIENT)
 	public RollBuffer roll_buffer;
+	@SideOnly(Side.CLIENT)
+	public ChainBuffer turn_buffer;
+	@SideOnly(Side.CLIENT)
+	public ChainBuffer tail_buffer;
 	public int spacebarTicks;
 	public int spacebarTickCounter;
 	public float[][] growth_stages;
@@ -127,6 +133,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		initDragonInv();
 		if (FMLCommonHandler.instance().getSide().isClient()) {
 			roll_buffer = new RollBuffer();
+			turn_buffer = new ChainBuffer();
+			tail_buffer = new ChainBuffer();
 		}
 		legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
 	}
@@ -933,6 +941,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.setHovering(false);
 		}
 
+		boolean sitting = isSitting() && !isModelDead() && !isSleeping() && !isHovering() && !isFlying();
+		if (sitting && sitProgress < 20.0F) {
+			sitProgress += 0.5F;
+		} else if (!sitting && sitProgress > 0.0F) {
+			sitProgress -= 0.5F;
+		}
 		boolean sleeping = isSleeping() && !isHovering() && !isFlying();
 		if (sleeping && sleepProgress < 20.0F) {
 			sleepProgress += 0.5F;
@@ -1319,6 +1333,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		}
 		if (world.isRemote) {
 			roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
+			turn_buffer.calculateChainSwingBuffer(50, 0, 4, this);
+			tail_buffer.calculateChainSwingBuffer(90, 5, 5, this);
 
 		}
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
