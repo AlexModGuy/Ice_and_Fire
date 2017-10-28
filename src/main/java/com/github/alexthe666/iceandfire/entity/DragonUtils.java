@@ -14,7 +14,7 @@ import java.util.List;
 public class DragonUtils {
 
 	public static BlockPos getBlockInView(EntityDragonBase dragon) {
-		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * -3 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
+		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * - 7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
 		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));

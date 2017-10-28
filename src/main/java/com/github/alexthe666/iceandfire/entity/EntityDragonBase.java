@@ -98,7 +98,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@SideOnly(Side.CLIENT)
 	public RollBuffer roll_buffer;
 	@SideOnly(Side.CLIENT)
-	public ChainBuffer turn_buffer;
+	public ReversedBuffer turn_buffer;
 	@SideOnly(Side.CLIENT)
 	public ChainBuffer tail_buffer;
 	public int spacebarTicks;
@@ -133,7 +133,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		initDragonInv();
 		if (FMLCommonHandler.instance().getSide().isClient()) {
 			roll_buffer = new RollBuffer();
-			turn_buffer = new ChainBuffer();
+			turn_buffer = new ReversedBuffer();
 			tail_buffer = new ChainBuffer();
 		}
 		legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
@@ -1059,7 +1059,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			this.setFlying(false);
 			this.setHovering(false);
 		}
-		if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+		if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(300) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
 			this.setHovering(true);
 			this.setSleeping(false);
 			this.setSitting(false);
@@ -1334,7 +1334,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		if (world.isRemote) {
 			roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
 			turn_buffer.calculateChainSwingBuffer(50, 0, 4, this);
-			tail_buffer.calculateChainSwingBuffer(90, 5, 5, this);
+			tail_buffer.calculateChainSwingBuffer(90, 10, 2.5F, this);
 
 		}
 		if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
@@ -1505,9 +1505,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
 			if (rayTrace != null && rayTrace.hitVec != null) {
 				BlockPos pos = new BlockPos(rayTrace.hitVec);
+				System.out.println(rayTrace.typeOfHit);
 				if (!world.isAirBlock(pos)) {
 					return true;
 				}
+				return rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
 			}
 		}
 		return false;
@@ -1522,10 +1524,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed();
 			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed();
 			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
 			moveForward = 0.5F;
-			prevRotationYaw = rotationYaw;
-			rotationYaw += rotation;
+			double d0 = airTarget.getX() + 0.5D - this.posX;
+			double d2 = airTarget.getZ() + 0.5D - this.posZ;
+			double d1 = airTarget.getY() + 0.5D - this.posY;
+			double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+			float f = (float)(MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+			float f1 = (float)(-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+			this.rotationPitch = this.updateRotation(this.rotationPitch, f1, 30F);
+			this.rotationYaw = this.updateRotation(this.rotationYaw, f, 30F);
+
 			if (!this.isFlying()) {
 				this.setFlying(true);
 			}
@@ -1545,6 +1553,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	protected boolean isTargetInAir() {
 		return airTarget != null && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (world.getBlockState(airTarget).getMaterial() == Material.WATER || world.getBlockState(airTarget).getMaterial() == Material.AIR)));
+	}
+
+	private float updateRotation(float angle, float targetAngle, float maxIncrease) {
+		float f = MathHelper.wrapDegrees(targetAngle - angle);
+
+		if (f > maxIncrease) {
+			f = maxIncrease;
+		}
+
+		if (f < -maxIncrease) {
+			f = -maxIncrease;
+		}
+
+		return angle + f;
 	}
 
 	public float getDistanceSquared(Vec3d vec3d) {

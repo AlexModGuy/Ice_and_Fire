@@ -70,6 +70,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         }
         model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
         entity.turn_buffer.applyChainSwingBuffer(neckParts);
+
         entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
     }
 
