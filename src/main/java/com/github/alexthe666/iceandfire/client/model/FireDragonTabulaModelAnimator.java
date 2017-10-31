@@ -12,44 +12,55 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
-        entity.walkCycle++;
-        if (entity.walkCycle < 30) {
-            entity.walkCycle++;
-        } else {
-            entity.walkCycle = 0;
-        }
-
-        IceAndFireTabulaModel currentPose = null;
-        IceAndFireTabulaModel animationPose = null;
         IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-        int prevIndex = (entity.walkCycle / 10) - 1;
+        int currentIndex = (entity.walkCycle / 10);
+        int prevIndex = currentIndex - 1;
         if (prevIndex < 0) {
             prevIndex = 3;
         }
         IceAndFireTabulaModel prevPosition = walkPoses[prevIndex];
-        IceAndFireTabulaModel currentPosition = walkPoses[(entity.walkCycle / 10)];
+        IceAndFireTabulaModel currentPosition = walkPoses[currentIndex];
         float delta = (entity.walkCycle / 10.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
+        AdvancedModelRenderer[] neckParts = { model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
+        AdvancedModelRenderer[] tailParts = { model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
+        AdvancedModelRenderer[] tailPartsWBody = { model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()){
-            if(currentPose != null){
-                if(!isPartEqual(cube, currentPose.getCube(cube.boxName))){
-                    transitionTo(cube, currentPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
-                }
-            }
-            if(animationPose != null) {
-                if (!isPartEqual(cube, animationPose.getCube(cube.boxName))) {
-                    transitionTo(cube, animationPose.getCube(cube.boxName), entity.ticksExisted % 40, 40);
-                }
+            if(entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F){
+                float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
+                float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
+                float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
+                float x = currentPosition.getCube(cube.boxName).rotateAngleX;
+                float y = currentPosition.getCube(cube.boxName).rotateAngleY;
+                float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
+                this.setRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
             }
 
-            float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
-            float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
-            float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
-            float x = currentPosition.getCube(cube.boxName).rotateAngleX;
-            float y = currentPosition.getCube(cube.boxName).rotateAngleY;
-            float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-            this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
-
+            if(entity.sleepProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20);
+                }
+            }
+            if(entity.flyProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress, 20);
+                }
+            }
+            if(entity.hoverProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20);
+                }
+            }
+            if(entity.modelDeadProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20);
+                }
+            }
+            if(entity.sitProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20);
+                }
+            }
             /*
             transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
             transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(cos, 10, 20) - 10, 10);
@@ -57,13 +68,16 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             transitionTo(cube, walkPoses[3].getCube(cube.boxName), MathHelper.clamp(cos, 30, 40) - 30, 10);
             */
         }
+        model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+        entity.turn_buffer.applyChainSwingBuffer(neckParts);
 
+        entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
     }
 
-    public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
+    public void setRotateAngle(AdvancedModelRenderer model, float limbSwingAmount, float x, float y, float z) {
+        model.rotateAngleX += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationX, x);
+        model.rotateAngleY += Math.min(limbSwingAmount * 2, 1) *distance(model.defaultRotationY, y);
+        model.rotateAngleZ += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationZ, z);
     }
 
     private boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
@@ -89,16 +103,6 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     }
 
     private float distance(float rotateAngleFrom, float rotateAngleTo) {
-        double distance = Math.toDegrees(rotateAngleTo) - Math.toDegrees(rotateAngleFrom);
-        double reverseDistance = Math.toDegrees(rotateAngleFrom) - Math.toDegrees(rotateAngleTo);
-        float sub = rotateAngleTo - rotateAngleFrom;
-        float reverseSub = rotateAngleTo + rotateAngleFrom;
-        if(distance > 180){
-            return reverseSub;
-        }
-        if(reverseDistance > 180){
-            return reverseSub;
-        }
-        return sub;
+        return (float)Math.atan2(Math.sin(rotateAngleTo - rotateAngleFrom), Math.cos(rotateAngleTo - rotateAngleFrom));
     }
 }
