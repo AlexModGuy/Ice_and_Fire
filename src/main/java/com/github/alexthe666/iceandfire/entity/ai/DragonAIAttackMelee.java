@@ -132,9 +132,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 			this.attackTick = 20;
 			this.dragon.swingArm(EnumHand.MAIN_HAND);
 			this.dragon.attackEntityAsMob(entity);
-			if (this.dragon.isFire) {
-				System.out.println("fire dragon");
-			}
 		}
 	}
 

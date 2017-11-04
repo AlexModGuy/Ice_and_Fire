@@ -73,6 +73,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public static Animation ANIMATION_SPEAK;
 	public static Animation ANIMATION_BITE;
 	public static Animation ANIMATION_SHAKEPREY;
+	public static Animation ANIMATION_TACKLE = Animation.create(10);
 	public double minimumDamage;
 	public double maximumDamage;
 	public double minimumHealth;
@@ -89,6 +90,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public int flyTicks;
 	public float modelDeadProgress;
 	public float ridingProgress;
+	public float tackleProgress;
 	public ContainerHorseChest dragonInv;
 	public boolean isDaytime;
 	public boolean attackDecision;
@@ -863,6 +865,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
 		if (properties != null && properties.isStone) {
 			this.setFlying(false);
@@ -898,6 +901,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			if (motionY > 1) {
 				this.motionY = 0;
 			}
+		}
+		if(this.getAttackTarget() != null && this.attackDecision && this.isFlying()){
+			this.setAnimation(ANIMATION_TACKLE);
+			System.out.println("tackle triggered");
+		}
+		if(isTackling()){
+			System.out.println("tackling? world remote " + world.isRemote);
 		}
 		this.updateCheckPlayer();
 		AnimationHandler.INSTANCE.updateAnimations(this);
@@ -965,7 +975,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		} else if (!hovering && hoverProgress > 0.0F) {
 			hoverProgress -= 0.5F;
 		}
-		boolean flying = this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
+		boolean tackling = isTackling();
+		if (tackling && tackleProgress < 5F) {
+			tackleProgress += 0.5F;
+		} else if (!tackling && tackleProgress > 5F) {
+			tackleProgress -= 0.5F;
+		}
+		boolean flying = !tackling && this.isFlying() || !tackling && !this.onGround && !this.isHovering() && this.airTarget != null;
 		if (flying && flyProgress < 20.0F) {
 			flyProgress += 0.5F;
 		} else if (!flying && flyProgress > 0.0F) {
@@ -982,6 +998,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 			ridingProgress += 0.5F;
 		} else if (!riding && ridingProgress > 0.0F) {
 			ridingProgress -= 0.5F;
+		}
+		if(this.isTackling() && this.getAttackTarget() != null){
+			if(this.getEntityBoundingBox().grow(0.25).intersects(this.getAttackTarget().getEntityBoundingBox())){
+				this.setFlying(false);
+				this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+				this.setAnimation(NO_ANIMATION);
+				this.attackDecision = this.getRNG().nextBoolean();
+			}
 		}
 		if (this.isModelDead()) {
 			return;
@@ -1461,7 +1485,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT};
+		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_TACKLE};
 	}
 
 	@Override
@@ -1548,7 +1572,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	}
 
 	private double getFlySpeed() {
-		return 2 + (this.getAgeInDays() / 125) * 2;
+		return (2 + (this.getAgeInDays() / 125) * 2) * (this.isTackling() ? 2 : 1);
+	}
+
+	private boolean isTackling() {
+		return this.getAnimation() == ANIMATION_TACKLE;
 	}
 
 	protected boolean isTargetInAir() {

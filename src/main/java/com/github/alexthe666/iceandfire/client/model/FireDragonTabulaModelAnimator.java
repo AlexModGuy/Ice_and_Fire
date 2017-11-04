@@ -35,12 +35,12 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
                 this.setRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
             }
-
             if(entity.sleepProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))){
                     transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20);
                 }
             }
+
             if(entity.flyProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
                     transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress, 20);
@@ -61,6 +61,11 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                     transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20);
                 }
             }
+            if(entity.tackleProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5);
+                }
+            }
             /*
             transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
             transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(cos, 10, 20) - 10, 10);
@@ -70,7 +75,6 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         }
         model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
         entity.turn_buffer.applyChainSwingBuffer(neckParts);
-
         entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
     }
 

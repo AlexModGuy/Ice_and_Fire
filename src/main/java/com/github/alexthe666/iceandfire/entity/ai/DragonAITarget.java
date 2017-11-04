@@ -6,6 +6,7 @@ import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
 	private EntityDragonBase dragon;
@@ -33,5 +34,9 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 			}
 		}
 		return false;
+	}
+
+	protected AxisAlignedBB getTargetableArea(double targetDistance) {
+		return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
 	}
 }
