@@ -139,6 +139,9 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("gold_pile_break")
 	public static final SoundEvent GOLD_PILE_BREAK = createSoundEvent("gold_pile_break");
 
+	@GameRegistry.ObjectHolder("dragon_flight")
+	public static final SoundEvent DRAGON_FLIGHT = createSoundEvent("dragon_flight");
+
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);

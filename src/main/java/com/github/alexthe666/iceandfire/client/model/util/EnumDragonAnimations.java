@@ -36,6 +36,12 @@ public enum EnumDragonAnimations {
     WALK2("Walk2"),
     WALK3("Walk3"),
     WALK4("Walk4"),
+    FLIGHT1("Flight1"),
+    FLIGHT2("Flight2"),
+    FLIGHT3("Flight3"),
+    FLIGHT4("Flight4"),
+    FLIGHT5("Flight5"),
+    FLIGHT6("Flight6"),
     TACKLE("Tackle");
 
     public IceAndFireTabulaModel firedragon_model;

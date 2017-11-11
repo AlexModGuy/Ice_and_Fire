@@ -72,7 +72,8 @@ public class CommonProxy {
 				ModSounds.PIXIE_IDLE,
 				ModSounds.PIXIE_TAUNT,
 				ModSounds.GOLD_PILE_STEP,
-				ModSounds.GOLD_PILE_BREAK
+				ModSounds.GOLD_PILE_BREAK,
+				ModSounds.DRAGON_FLIGHT
 		);
 	}
 

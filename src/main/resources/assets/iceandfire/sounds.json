@@ -1,4 +1,12 @@
 {
+  "dragon_flight": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dragon_flight_0",
+      "iceandfire:dragon_flight_1",
+      "iceandfire:dragon_flight_2"
+    ]
+  },
   "gold_pile_step": {
     "category": "neutral",
     "sounds": [

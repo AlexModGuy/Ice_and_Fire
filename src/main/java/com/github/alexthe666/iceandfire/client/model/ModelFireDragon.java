@@ -1016,15 +1016,15 @@ public class ModelFireDragon extends ModelDragonBase {
 			Vec3[] POSITIONS6 = new Vec3[]{new Vec3(0, (float) Math.toRadians(16.0D), -((float) Math.toRadians(25.0D))), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(60.0D), (float) Math.toRadians(180.0D)), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(82.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(16.0D)), -((float) Math.toRadians(25.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), (float) Math.toRadians(82.0D), (float) Math.toRadians(180.0D)), new Vec3((float) Math.toRadians(3.0D), -((float) Math.toRadians(52.11D)), -((float) Math.toRadians(10.0D))), new Vec3(0, (float) Math.toRadians(25.0D), -((float) Math.toRadians(25.0D))), new Vec3(0, (float) Math.toRadians(160.0D), (float) Math.toRadians(15.0D)), new Vec3((float) Math.toRadians(193.0D), (float) Math.toRadians(180.0D), (float) Math.toRadians(180.0D)), new Vec3(0, -((float) Math.toRadians(20.57D)), 0), new Vec3(0, (float) Math.toRadians(20.0D), -((float) Math.toRadians(15.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(13.0D), (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3(0, (float) Math.toRadians(0.2D), 0), new Vec3((float) Math.toRadians(3.0D), (float) Math.toRadians(52.11D), -((float) Math.toRadians(10.0D))), new Vec3(0, 0, 0), new Vec3((float) Math.toRadians(180.0D), -((float) Math.toRadians(60.0D)), (float) Math.toRadians(180.0D)), new Vec3(0, (float) Math.toRadians(20.57D), 0), new Vec3(0, (float) Math.toRadians(180.0D), 0), new Vec3(0, 0, 0), new Vec3(0, -((float) Math.toRadians(25.0D)), -((float) Math.toRadians(25.0D)))};
 			Vec3[][] POSITIONS = new Vec3[][]{POSITIONS1, POSITIONS2, POSITIONS3, POSITIONS4, POSITIONS5, POSITIONS6};
 			AdvancedModelRenderer[][] PARTS = new AdvancedModelRenderer[][]{PARTS1, PARTS2, PARTS3, PARTS4, PARTS5, PARTS6};
-			int prevIndex = (dragon.animationCycle / 3) - 1;
+			int prevIndex = (dragon.flightCycle / 3) - 1;
 			if (prevIndex < 0) {
 				prevIndex = 5;
 			}
 			Vec3[] prevPosition = POSITIONS[prevIndex];
-			Vec3[] currentPosition = POSITIONS[dragon.animationCycle / 3];
+			Vec3[] currentPosition = POSITIONS[dragon.flightCycle / 3];
 			AdvancedModelRenderer[] prevSet = PARTS[prevIndex];
-			AdvancedModelRenderer[] currentSet = PARTS[dragon.animationCycle / 3];
-			float delta = (dragon.animationCycle / 3.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 3.0F);
+			AdvancedModelRenderer[] currentSet = PARTS[dragon.flightCycle / 3];
+			float delta = (dragon.flightCycle / 3.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 3.0F);
 			for (int index = 0; index < currentSet.length; index++) {
 				AdvancedModelRenderer box = currentSet[index];
 				if (box != this.ClawL && box != this.ClawR) {

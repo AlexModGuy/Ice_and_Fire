@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -94,7 +95,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 	public ContainerHorseChest dragonInv;
 	public boolean isDaytime;
 	public boolean attackDecision;
-	public int animationCycle;
+	public int flightCycle;
 	public BlockPos airTarget;
 	public BlockPos homeArea;
 	@SideOnly(Side.CLIENT)
@@ -913,15 +914,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 		AnimationHandler.INSTANCE.updateAnimations(this);
 		this.legSolver.update(this);
 		if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
-			if (animationCycle < 15) {
-				animationCycle++;
+			if (flightCycle < 58) {
+				flightCycle += 2;
 			} else {
-				animationCycle = 0;
+				flightCycle = 0;
 			}
-			if (animationCycle == 12) {
-				this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, 0.4F + this.rand.nextFloat() * 0.3F * this.getSoundPitch());
+			if (flightCycle == 2) {
+				this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
 			}
-			if (animationCycle > 12 && animationCycle < 15) {
+			if (flightCycle > 10 && flightCycle < 12) {
 				for (int i = 0; i < this.getRenderSize(); i++) {
 					for (int i1 = 0; i1 < 20; i1++) {
 						double motionX = getRNG().nextGaussian() * 0.07D;
@@ -942,8 +943,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 					}
 				}
 			}
-			if (this.isModelDead() && animationCycle != 0) {
-				animationCycle = 0;
+			if (this.isModelDead() && flightCycle != 0) {
+				flightCycle = 0;
 			}
 		}
 		if (this.isModelDead() && (this.isFlying() || this.isHovering())) {
