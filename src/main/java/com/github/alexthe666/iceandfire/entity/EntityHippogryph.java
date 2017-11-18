@@ -728,7 +728,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.setAttackTarget(null);
 		}
 		if (!this.canMove()) {
-			this.getNavigator().clearPathEntity();
+			this.getNavigator().clearPath();
 
 		}
 		if (this.getControllingPassenger() != null) {
@@ -802,7 +802,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 		if (this.isSitting()) {
-			this.getNavigator().clearPathEntity();
+			this.getNavigator().clearPath();
 		}
 		if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
 			this.airTarget = null;

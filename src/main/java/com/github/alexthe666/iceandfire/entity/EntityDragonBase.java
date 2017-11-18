@@ -895,7 +895,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setAttackTarget(null);
         }
         if (!this.canMove()) {
-            this.getNavigator().clearPathEntity();
+            this.getNavigator().clearPath();
 
         }
         if (this.getControllingPassenger() != null) {
@@ -1057,7 +1057,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         if (this.isSleeping()) {
-            this.getNavigator().clearPathEntity();
+            this.getNavigator().clearPath();
         }
         if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
             this.airTarget = null;
