@@ -79,7 +79,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
 			this.dragon.setAttackTarget((EntityLivingBase) null);
 		}
-
 		this.dragon.getNavigator().clearPathEntity();
 	}
 
@@ -92,7 +91,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
 		double d1 = this.getAttackReachSqr(entity);
 		--this.delayCounter;
-
 		if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
 			this.targetX = entity.posX;
 			this.targetY = entity.getEntityBoundingBox().minY;

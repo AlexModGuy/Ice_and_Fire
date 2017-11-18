@@ -14,7 +14,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         model.resetToDefaultPose();
         IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
         IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.firedragon_model, EnumDragonAnimations.FLIGHT2.firedragon_model, EnumDragonAnimations.FLIGHT3.firedragon_model, EnumDragonAnimations.FLIGHT4.firedragon_model, EnumDragonAnimations.FLIGHT5.firedragon_model, EnumDragonAnimations.FLIGHT6.firedragon_model};
-        boolean walking = !entity.isFlying() && !entity.isHovering() && entity.onGround;
+        boolean walking = !entity.isFlying() && (entity.hoverProgress <= 0 || entity.flyProgress <= 0) && entity.onGround;
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
         if (prevIndex < 0) {
@@ -39,6 +39,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
                 this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
             }
+
             if(entity.sleepProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))){
                     transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20);
@@ -48,11 +49,6 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             if(entity.flyProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
                     transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress, 20);
-                }
-            }
-            if(entity.hoverProgress > 0.0F){
-                if(!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20);
                 }
             }
             if(entity.modelDeadProgress > 0.0F){
@@ -70,14 +66,22 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                     transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5);
                 }
             }
+            if(entity.hoverProgress > 0.0F){
+                if(!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName))){
+                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20);
+                }
+            }
             if(!walking){
+                AdvancedModelRenderer flightPart = EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+                if(x != flightPart.rotateAngleX && y != flightPart.rotateAngleY && z != flightPart.rotateAngleZ){
+                    this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+                }
             }
             /*
             transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
@@ -109,9 +113,9 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
     }
 
     public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
+        model.rotateAngleX += distance(model.rotateAngleX, x);
+        model.rotateAngleY += distance(model.rotateAngleY, y);
+        model.rotateAngleZ += distance(model.rotateAngleZ, z);
     }
 
     public void addToRotateAngle(AdvancedModelRenderer model, float limbSwingAmount, float x, float y, float z) {
