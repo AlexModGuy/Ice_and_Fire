@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderEggInIce extends TileEntitySpecialRenderer {
 

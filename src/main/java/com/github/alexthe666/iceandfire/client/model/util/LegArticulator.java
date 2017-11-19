@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.util.math.MathHelper;
 /*

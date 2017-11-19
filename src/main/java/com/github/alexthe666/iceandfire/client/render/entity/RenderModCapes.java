@@ -1,6 +1,10 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
@@ -9,9 +13,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Map;
-import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
 public class RenderModCapes {

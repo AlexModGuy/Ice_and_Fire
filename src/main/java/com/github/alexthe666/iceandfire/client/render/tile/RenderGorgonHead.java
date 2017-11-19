@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.client.model.ModelGorgonHead;
 import com.github.alexthe666.iceandfire.client.model.ModelGorgonHeadActive;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderGorgonHead extends TileEntitySpecialRenderer {
 	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/head_active.png");

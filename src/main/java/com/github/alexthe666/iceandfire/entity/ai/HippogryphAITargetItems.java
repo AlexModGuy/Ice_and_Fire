@@ -1,7 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
@@ -10,11 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarget {
 	protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
@@ -75,7 +77,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 		if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
 			this.resetTask();
 		}
-		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
+		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
 			EntityHippogryph hippo = (EntityHippogryph) this.taskOwner;
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -106,8 +108,8 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 		}
 
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-			double d0 = this.theEntity.getDistanceSqToEntity(p_compare_1_);
-			double d1 = this.theEntity.getDistanceSqToEntity(p_compare_2_);
+			double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+			double d1 = this.theEntity.getDistanceSq(p_compare_2_);
 			return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
 		}
 	}

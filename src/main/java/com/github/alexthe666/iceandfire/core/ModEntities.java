@@ -1,15 +1,31 @@
 package com.github.alexthe666.iceandfire.core;
 
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
+import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
+import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
+import com.github.alexthe666.iceandfire.entity.EntityDragonIceCharge;
+import com.github.alexthe666.iceandfire.entity.EntityDragonIceProjectile;
+import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityGorgon;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
+import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-
-import java.util.List;
 
 public class ModEntities {
 

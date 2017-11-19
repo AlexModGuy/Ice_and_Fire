@@ -1,25 +1,39 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIAirTarget;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIBreakBlocks;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.google.common.base.Predicate;
+
 import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
+import net.minecraft.entity.ai.EntityAISit;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class EntityFireDragon extends EntityDragonBase {
 

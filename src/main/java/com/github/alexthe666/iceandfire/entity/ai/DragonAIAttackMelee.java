@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,7 +80,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
 			this.dragon.setAttackTarget((EntityLivingBase) null);
 		}
-		this.dragon.getNavigator().clearPathEntity();
+		this.dragon.getNavigator().clearPath();
 	}
 
 	@Override
@@ -120,7 +121,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 					this.delayCounter += 15;
 				}
 			} else {
-				this.dragon.getNavigator().clearPathEntity();
+				this.dragon.getNavigator().clearPath();
 			}
 		}
 

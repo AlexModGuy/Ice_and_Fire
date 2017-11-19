@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
+import java.lang.reflect.Field;
+
 import com.github.alexthe666.iceandfire.block.BlockJar;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
@@ -9,6 +11,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,8 +24,6 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.lang.reflect.Field;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {

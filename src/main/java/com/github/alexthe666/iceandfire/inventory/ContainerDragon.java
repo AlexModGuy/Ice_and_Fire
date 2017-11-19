@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -82,7 +83,7 @@ public class ContainerDragon extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.dragonInv.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistanceToEntity(playerIn) < 8.0F;
+		return this.dragonInv.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistanceSq(playerIn) < 8.0F;
 	}
 
 	@Override

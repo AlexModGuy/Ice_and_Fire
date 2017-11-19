@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class PixieAISteal extends EntityAIBase {
 	private final EntityPixie temptedEntity;
@@ -64,7 +65,7 @@ public class PixieAISteal extends EntityAIBase {
 	public void updateTask() {
 		this.temptedEntity.getLookHelper().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
 		ArrayList<Integer> slotlist = new ArrayList<Integer>();
-		if (this.temptedEntity.getDistanceSqToEntity(this.temptingPlayer) < 6.25D && !this.temptingPlayer.inventory.isEmpty()) {
+		if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D && !this.temptingPlayer.inventory.isEmpty()) {
 			for (int i = 0; i < this.temptingPlayer.inventory.getSizeInventory(); i++) {
 				if (this.temptingPlayer.inventory.getStackInSlot(i) != ItemStack.EMPTY) {
 					slotlist.add(i);

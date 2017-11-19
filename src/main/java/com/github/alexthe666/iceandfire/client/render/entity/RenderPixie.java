@@ -1,13 +1,15 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderPixie extends RenderLiving<EntityPixie> {
 

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -45,7 +46,7 @@ public class PixieAIFollowOwner extends EntityAIBase {
 			return false;
 		} else if (this.tameable.isSitting()) {
 			return false;
-		} else if (this.tameable.getDistanceSqToEntity(entitylivingbase) < (double) (this.minDist * this.minDist)) {
+		} else if (this.tameable.getDistanceSq(entitylivingbase) < (double) (this.minDist * this.minDist)) {
 			return false;
 		} else {
 			this.owner = entitylivingbase;
@@ -54,7 +55,7 @@ public class PixieAIFollowOwner extends EntityAIBase {
 	}
 
 	public boolean shouldContinueExecuting() {
-		return this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSqToEntity(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.isSitting();
+		return this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.isSitting();
 	}
 
 	public void startExecuting() {
@@ -86,7 +87,7 @@ public class PixieAIFollowOwner extends EntityAIBase {
 				this.tameable.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight(), this.owner.posZ, 0.25D);
 				this.tameable.slowSpeed = true;
 				if (!this.tameable.getLeashed()) {
-					if (this.tameable.getDistanceSqToEntity(this.owner) >= 50.0D) {
+					if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
 						int i = MathHelper.floor(this.owner.posX) - 2;
 						int j = MathHelper.floor(this.owner.posZ) - 2;
 						int k = MathHelper.floor(this.owner.getEntityBoundingBox().minY);

@@ -1,14 +1,16 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.client.model.ModelFireSkull;
 import com.github.alexthe666.iceandfire.client.model.ModelIceSkull;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderDragonSkull extends RenderLiving {
 

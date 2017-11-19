@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DragonAIWaterTarget extends EntityAIBase {
 	private EntityIceDragon dragon;
@@ -29,7 +30,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		if (this.dragon.getRNG().nextFloat() < 0.5F) {
 			Path path = this.dragon.getNavigator().getPath();
 			if (!this.dragon.getNavigator().noPath() && !this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
-				this.dragon.getNavigator().clearPathEntity();
+				this.dragon.getNavigator().clearPath();
 			}
 			if (this.dragon.getNavigator().noPath()) {
 				Vec3d vec3 = this.findWaterTarget();

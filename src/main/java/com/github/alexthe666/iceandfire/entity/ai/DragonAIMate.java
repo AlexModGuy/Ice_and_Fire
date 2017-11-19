@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
 
 public class DragonAIMate extends EntityAIBase {
 	private final EntityDragonBase dragon;
@@ -57,7 +58,7 @@ public class DragonAIMate extends EntityAIBase {
 		this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
 		this.dragon.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
 		++this.spawnBabyDelay;
-		if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSqToEntity(this.targetMate) < 18) {
+		if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSq(this.targetMate) < 18) {
 			this.spawnBaby();
 		}
 	}
@@ -71,7 +72,7 @@ public class DragonAIMate extends EntityAIBase {
 		double d0 = Double.MAX_VALUE;
 		EntityDragonBase mate = null;
 		for (EntityDragonBase partner : list) {
-			if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSqToEntity(partner) < d0) {
+			if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSq(partner) < d0) {
 				mate = partner;
 				break;
 			}

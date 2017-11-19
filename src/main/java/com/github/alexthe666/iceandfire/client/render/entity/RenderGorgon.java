@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.client.model.ModelGorgon;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
+
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderGorgon extends RenderLiving<EntityGorgon> {
 

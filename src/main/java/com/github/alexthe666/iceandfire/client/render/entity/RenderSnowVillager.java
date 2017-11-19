@@ -1,14 +1,16 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderVillager;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 
 public class RenderSnowVillager extends RenderVillager {
 

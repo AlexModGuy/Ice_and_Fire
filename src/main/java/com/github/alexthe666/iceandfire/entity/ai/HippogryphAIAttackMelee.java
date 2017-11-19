@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,7 +81,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
 			this.hippogryph.setAttackTarget((EntityLivingBase) null);
 		}
 
-		this.hippogryph.getNavigator().clearPathEntity();
+		this.hippogryph.getNavigator().clearPath();
 	}
 
 	@Override

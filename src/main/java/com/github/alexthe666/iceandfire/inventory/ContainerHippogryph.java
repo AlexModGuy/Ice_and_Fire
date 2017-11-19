@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -87,7 +88,7 @@ public class ContainerHippogryph extends Container {
 	}
 
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistanceToEntity(playerIn) < 8.0F;
+		return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistanceSq(playerIn) < 8.0F;
 	}
 
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
