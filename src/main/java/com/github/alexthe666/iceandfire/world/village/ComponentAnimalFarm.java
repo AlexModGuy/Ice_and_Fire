@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.world.village;
 
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.world.WorldGenAnimalFarm;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import java.util.List;
-import java.util.Random;
 
 public class ComponentAnimalFarm extends StructureVillagePieces.Village {
 	private int averageGroundLevel = -1;

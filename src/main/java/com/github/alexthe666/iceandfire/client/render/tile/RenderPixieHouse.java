@@ -1,10 +1,13 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import org.lwjgl.opengl.GL11;
+
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
+
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -12,7 +15,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
-import org.lwjgl.opengl.GL11;
 
 public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieHouse> {
 

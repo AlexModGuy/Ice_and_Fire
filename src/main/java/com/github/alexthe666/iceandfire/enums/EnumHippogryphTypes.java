@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.world.biome.Biome;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+
+import net.minecraft.world.biome.Biome;
 
 public enum EnumHippogryphTypes {
 	BLACK(IceAndFire.CONFIG.hippogryphBlackBiomes, false),

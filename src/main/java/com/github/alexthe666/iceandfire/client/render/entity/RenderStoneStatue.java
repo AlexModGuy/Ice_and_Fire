@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStonePlayerEntityCrack;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,8 +13,6 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
