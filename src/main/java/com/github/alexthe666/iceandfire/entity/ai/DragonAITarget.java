@@ -22,9 +22,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 			if (this.dragon.width >= this.targetEntity.width) {
 				if (this.targetEntity instanceof EntityPlayer && !dragon.isOwner(this.targetEntity)) {
 					if (dragon.isSleeping()) {
-						dragon.setSleeping(false);
 					}
-
 					return !dragon.isTamed();
 				} else {
 					if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {

@@ -75,7 +75,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
 			this.dragon.setAttackTarget((EntityLivingBase) null);
 		}
