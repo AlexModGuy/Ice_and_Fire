@@ -83,7 +83,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
 			this.resetTask();
 		}
-		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
+		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 			int hunger = FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
@@ -113,8 +113,8 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		}
 
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-			double d0 = this.theEntity.getDistanceSqToEntity(p_compare_1_);
-			double d1 = this.theEntity.getDistanceSqToEntity(p_compare_2_);
+			double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+			double d1 = this.theEntity.getDistanceSq(p_compare_2_);
 			return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
 		}
 	}

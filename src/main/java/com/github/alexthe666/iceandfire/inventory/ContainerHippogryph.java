@@ -87,7 +87,7 @@ public class ContainerHippogryph extends Container {
 	}
 
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistanceToEntity(playerIn) < 8.0F;
+		return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistance(playerIn) < 8.0F;
 	}
 
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {

@@ -152,7 +152,7 @@ public class BlockJar extends BlockContainer {
 
 		@SideOnly(Side.CLIENT)
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			if(tab == IceAndFire.TAB){
+			if (tab == IceAndFire.TAB) {
 				for (int i = 0; i < 6; i++) {
 					subItems.add(new ItemStack(this, 1, i));
 				}

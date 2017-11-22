@@ -75,7 +75,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
 		if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
 			this.resetTask();
 		}
-		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
+		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
 			EntityPixie pixie = (EntityPixie) this.taskOwner;
 			this.targetEntity.getItem().shrink(1);
 			pixie.playSound(ModSounds.PIXIE_TAUNT, 1F, 1F);
@@ -103,8 +103,8 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
 		}
 
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-			double d0 = this.theEntity.getDistanceSqToEntity(p_compare_1_);
-			double d1 = this.theEntity.getDistanceSqToEntity(p_compare_2_);
+			double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+			double d1 = this.theEntity.getDistanceSq(p_compare_2_);
 			return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
 		}
 	}
