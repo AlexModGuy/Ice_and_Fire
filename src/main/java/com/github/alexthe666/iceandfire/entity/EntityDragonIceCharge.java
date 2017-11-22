@@ -148,7 +148,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 		this.setDead();
 	}
 
-	public void setAim(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {
+	public void shoot(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {
 		float f = -MathHelper.sin(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
 		float f1 = -MathHelper.sin(yaw * 0.017453292F);
 		float f2 = MathHelper.cos(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);

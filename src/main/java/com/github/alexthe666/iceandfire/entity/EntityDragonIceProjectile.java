@@ -99,7 +99,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 		return false;
 	}
 
-	public void setAim(Entity fireball, Entity entity, float p_184547_2_, float p_184547_3_, float p_184547_4_, float p_184547_5_, float p_184547_6_) {
+	public void shoot(Entity fireball, Entity entity, float p_184547_2_, float p_184547_3_, float p_184547_4_, float p_184547_5_, float p_184547_6_) {
 		float f = -MathHelper.sin(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
 		float f1 = -MathHelper.sin(p_184547_2_ * 0.017453292F);
 		float f2 = MathHelper.cos(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);

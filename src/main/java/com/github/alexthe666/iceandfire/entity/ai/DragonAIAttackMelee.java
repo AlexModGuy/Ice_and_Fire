@@ -78,7 +78,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
 			this.dragon.setAttackTarget((EntityLivingBase) null);
 		}
-		this.dragon.getNavigator().clearPathEntity();
+		this.dragon.getNavigator().clearPath();
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 					this.delayCounter += 15;
 				}
 			} else {
-				this.dragon.getNavigator().clearPathEntity();
+				this.dragon.getNavigator().clearPath();
 			}
 		}
 

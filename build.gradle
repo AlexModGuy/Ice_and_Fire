@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "net.ilexiconn:llibrary:1.7.7-1.12.1"
+    deobfCompile "net.ilexiconn:llibrary:1.7.8-1.12.2"
 }
 
 processResources

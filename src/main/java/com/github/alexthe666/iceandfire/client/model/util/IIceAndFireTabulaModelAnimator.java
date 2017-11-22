@@ -11,5 +11,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @FunctionalInterface
 public interface IIceAndFireTabulaModelAnimator<T extends Entity> {
-    void setRotationAngles(IceAndFireTabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale);
+	void setRotationAngles(IceAndFireTabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale);
 }
