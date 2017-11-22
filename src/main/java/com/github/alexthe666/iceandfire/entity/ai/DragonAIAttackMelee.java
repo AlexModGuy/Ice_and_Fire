@@ -75,11 +75,9 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
 			this.dragon.setAttackTarget((EntityLivingBase) null);
 		}
-
 		this.dragon.getNavigator().clearPathEntity();
 	}
 
@@ -92,7 +90,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
 		double d1 = this.getAttackReachSqr(entity);
 		--this.delayCounter;
-
 		if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
 			this.targetX = entity.posX;
 			this.targetY = entity.getEntityBoundingBox().minY;
@@ -132,9 +129,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
 			this.attackTick = 20;
 			this.dragon.swingArm(EnumHand.MAIN_HAND);
 			this.dragon.attackEntityAsMob(entity);
-			if (this.dragon.isFire) {
-				System.out.println("fire dragon");
-			}
 		}
 	}
 

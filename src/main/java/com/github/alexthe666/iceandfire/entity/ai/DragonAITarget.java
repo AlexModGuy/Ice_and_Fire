@@ -6,6 +6,7 @@ import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
 	private EntityDragonBase dragon;
@@ -21,9 +22,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 			if (this.dragon.width >= this.targetEntity.width) {
 				if (this.targetEntity instanceof EntityPlayer && !dragon.isOwner(this.targetEntity)) {
 					if (dragon.isSleeping()) {
-						dragon.setSleeping(false);
 					}
-
 					return !dragon.isTamed();
 				} else {
 					if (!dragon.isOwner(this.targetEntity) && FoodMappings.INSTANCE.getEntityFoodAmount(this.targetEntity.getClass(), this.dragon.diet) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
@@ -33,5 +32,9 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 			}
 		}
 		return false;
+	}
+
+	protected AxisAlignedBB getTargetableArea(double targetDistance) {
+		return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
 	}
 }
