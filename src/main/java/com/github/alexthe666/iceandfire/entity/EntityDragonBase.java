@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -9,8 +10,6 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.sun.xml.internal.bind.v2.TODO;
-import fossilsarcheology.api.EnumDiet;
-import fossilsarcheology.api.FoodMappings;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -82,7 +81,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public double maximumHealth;
     public double minimumSpeed;
     public double maximumSpeed;
-    public EnumDiet diet;
     public float sitProgress;
     public float sleepProgress;
     public float hoverProgress;
@@ -124,9 +122,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private Animation currentAnimation;
     private ItemStackHandler itemHandler = null;
 
-    public EntityDragonBase(World world, EnumDiet diet, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
+    public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
-        this.diet = diet;
         this.minimumDamage = minimumDamage;
         this.maximumDamage = maximumDamage;
         this.minimumHealth = minimumHealth;
@@ -737,7 +734,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         return true;
                     }
                     if (stack.getItem() != null) {
-                        int itemFoodAmount = FoodMappings.INSTANCE.getItemFoodAmount(stack.getItem(), diet);
+                        int itemFoodAmount = FoodUtils.getFoodPoints(stack, true);
                         if (itemFoodAmount > 0) {
                             //this.growDragon(1);
                             this.setHunger(this.getHunger() + itemFoodAmount);
@@ -1576,7 +1573,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             moveForward = 0.5F;
             double d0 = airTarget.getX() + 0.5D - this.posX;
             double d2 = airTarget.getZ() + 0.5D - this.posZ;
-            double d1 = y + 0.5D - this.posY;
+              double d1 = y + 0.5D - this.posY;
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
