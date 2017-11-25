@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -77,7 +76,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 			dragon.setTamed(true);
 			if (player != null) {
 				dragon.setOwnerId(player.getUniqueID());
-				player.addStat(ModAchievements.dragonHatch, 1);
+				//player.addStat(ModAchievements.dragonHatch, 1);
 			}
 			if (!world.isRemote) {
 				world.spawnEntity(dragon);

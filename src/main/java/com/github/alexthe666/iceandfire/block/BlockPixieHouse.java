@@ -42,9 +42,7 @@ public class BlockPixieHouse extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.pixie_house");
 		this.setRegistryName(IceAndFire.MODID, "pixie_house");
-		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
-		GameRegistry.register(itemBlock = (new ItemBlockPixieHouse(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override
@@ -143,26 +141,28 @@ public class BlockPixieHouse extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+		for (int i = 0; i < 6; i++) {
+			items.add(new ItemStack(this, 1, i));
+		}
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityPixieHouse();
 	}
 
-	class ItemBlockPixieHouse extends ItemBlock {
+	public class ItemBlockPixieHouse extends ItemBlock {
 		public ItemBlockPixieHouse(Block block) {
 			super(block);
 			this.maxStackSize = 1;
+			this.setHasSubtypes(true);
 		}
 
 		public String getUnlocalizedName(ItemStack stack) {
 			int i = stack.getMetadata();
 			return "tile.iceandfire.pixie_house_" + i;
-		}
-
-		@SideOnly(Side.CLIENT)
-		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			for (int i = 0; i < 6; i++) {
-				subItems.add(new ItemStack(itemIn, 1, i));
-			}
 		}
 	}
 }

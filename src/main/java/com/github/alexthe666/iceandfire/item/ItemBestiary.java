@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +17,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBestiary extends Item {
@@ -29,7 +30,6 @@ public class ItemBestiary extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.bestiary");
 		this.setRegistryName(IceAndFire.MODID, "bestiary");
-		GameRegistry.register(this);
 	}
 
 	@Override
@@ -41,16 +41,17 @@ public class ItemBestiary extends Item {
 
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(itemIn));
-		ItemStack stack = new ItemStack(ModItems.bestiary);
-		stack.setTagCompound(new NBTTagCompound());
-		int[] pages = new int[EnumBestiaryPages.values().length];
-		for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
-			pages[i] = i;
+		if (tab == this.getCreativeTab()) {
+			subItems.add(new ItemStack(itemIn));
+			ItemStack stack = new ItemStack(ModItems.bestiary);
+			stack.setTagCompound(new NBTTagCompound());
+			int[] pages = new int[EnumBestiaryPages.values().length];
+			for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
+				pages[i] = i;
+			}
+			stack.getTagCompound().setIntArray("Pages", pages);
+			subItems.add(stack);
 		}
-		stack.getTagCompound().setIntArray("Pages", pages);
-		subItems.add(stack);
-
 	}
 
 	@Override
@@ -72,12 +73,12 @@ public class ItemBestiary extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
 		if (stack.getTagCompound() != null) {
-			list.add(StatCollector.translateToLocal("bestiary.contains"));
+			tooltip.add(StatCollector.translateToLocal("bestiary.contains"));
 			List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTagCompound().getIntArray("Pages")));
 			for (EnumBestiaryPages page : pages) {
-				list.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
+				tooltip.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
 			}
 
 		}

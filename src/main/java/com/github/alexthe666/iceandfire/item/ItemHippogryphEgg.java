@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +27,6 @@ public class ItemHippogryphEgg extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.hippogryph_egg");
 		this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
-		GameRegistry.register(this);
 	}
 
 	public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
@@ -47,10 +45,12 @@ public class ItemHippogryphEgg extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
-			if (!type.developer) {
-				subItems.add(createEggStack(type, type));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (tab == this.getCreativeTab()) {
+			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
+				if (!type.developer) {
+					items.add(createEggStack(type, type));
+				}
 			}
 		}
 	}

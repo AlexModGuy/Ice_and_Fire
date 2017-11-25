@@ -82,7 +82,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	@Override
-	public SoundEvent getHurtSound() {
+	public SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return null;
 	}
 

@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.GuiHandler;
-import com.github.alexthe666.iceandfire.core.*;
+import com.github.alexthe666.iceandfire.core.ModEntities;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
-import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
@@ -21,11 +22,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
-import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -38,6 +34,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
@@ -45,9 +43,10 @@ import java.util.Random;
 public class IceAndFire {
 
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "1.2.1";
+	public static final String VERSION = "1.3.0";
 	public static final String LLIBRARY_VERSION = "1.7.7";
 	public static final String NAME = "Ice And Fire";
+	public static final Logger logger = LogManager.getLogger(NAME);
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
 	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class})
@@ -61,7 +60,6 @@ public class IceAndFire {
 	public static DamageSource gorgon;
 	public static Biome GLACIER;
 	public static Potion FROZEN_POTION;
-
 	@SuppressWarnings("deprecation")
 	@Config
 	public static IceAndFireConfig CONFIG;
@@ -69,12 +67,27 @@ public class IceAndFire {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
+		ModEntities.init();
+		logger.info("A raven flies from the north to the sea");
+		logger.info("A dragon whispers her name in the east");
+		TAB = new CreativeTab(MODID);
 	}
 
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		TAB = new CreativeTab(MODID);
+
+		ModRecipes.init();
+		ModVillagers.INSTANCE.init();
+		logger.info("The watcher waits on the northern wall");
+		logger.info("A daughter picks up a warrior's sword");
+		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
+		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
+		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
+
+		PROXY.render();
+		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		dragon = new DamageSource("dragon") {
 			@Override
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
@@ -107,29 +120,18 @@ public class IceAndFire {
 				return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
 			}
 		};
-		ModSounds.init();
-		ModBlocks.init();
-		ModItems.init();
-		ModRecipes.init();
-		ModVillagers.INSTANCE.init();
-		ModEntities.init();
-		ModFoods.init();
-		ModAchievements.init();
-		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
-		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
-		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
-		GLACIER = new BiomeGlacier().setRegistryName(MODID, "Glacier");
-		GameRegistry.register(GLACIER);
-		BiomeDictionary.addTypes(GLACIER, Type.SNOWY, Type.COLD, Type.SPARSE, Type.DEAD, Type.WASTELAND);
-		BiomeManager.addSpawnBiome(GLACIER);
-		BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(GLACIER, CONFIG.glacierSpawnChance));
-		PROXY.render();
-		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		PROXY.postRender();
+
+		logger.info("A brother bound to a love he must hide");
+		logger.info("The younger's armor is worn in the mind");
+
+		logger.info("A cold iron throne holds a boy barely grown");
+		logger.info("And now it is known");
+		logger.info("A claim to the prize, a crown laced in lies");
+		logger.info("You win or you die");
 	}
 }

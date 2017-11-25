@@ -1,0 +1,46 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetSilver"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:silver_ingot",
+    "data": 0,
+    "count": 1
+  }
+}

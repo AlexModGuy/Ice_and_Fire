@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemSilverArmor extends ItemArmor {
 
@@ -12,6 +11,5 @@ public class ItemSilverArmor extends ItemArmor {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName(name);
 		this.setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
 	}
 }

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -40,9 +39,7 @@ public class BlockPodium extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.podium");
 		this.setRegistryName(IceAndFire.MODID, "podium");
-		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
-		GameRegistry.register(itemBlock = (new ItemBlockPodium(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override
@@ -79,12 +76,12 @@ public class BlockPodium extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
 		int i = aenumtype.length;
 
 		for (EnumType enumtype : aenumtype) {
-			list.add(new ItemStack(itemIn, 1, enumtype.getMetadata()));
+			items.add(new ItemStack(this, 1, enumtype.getMetadata()));
 		}
 	}
 

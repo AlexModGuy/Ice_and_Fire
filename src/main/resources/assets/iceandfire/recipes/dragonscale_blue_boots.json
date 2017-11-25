@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "S S",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragonscales_blue",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:armor_blue_boots",
+    "data": 0
+  }
+}

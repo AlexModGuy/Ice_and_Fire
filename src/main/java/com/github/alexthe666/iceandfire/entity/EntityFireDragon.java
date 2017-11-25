@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
-import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
@@ -30,9 +29,10 @@ public class EntityFireDragon extends EntityDragonBase {
 	public static float[] growth_stage_3 = new float[]{7F, 12.5F};
 	public static float[] growth_stage_4 = new float[]{12.5F, 20F};
 	public static float[] growth_stage_5 = new float[]{20F, 30F};
+	public int walkCycle;
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, EnumDiet.CARNIVORE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
+		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
 		this.setSize(0.78F, 1.2F);
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
@@ -72,13 +72,13 @@ public class EntityFireDragon extends EntityDragonBase {
 	public String getTexture() {
 		if (this.isModelDead()) {
 			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
-				return "iceandfire:textures/models/firedragon/skeleton";
+				return "iceandfire:textures/models/firedragon/fire_skeleton_" + this.getDragonStage();
 			} else {
-				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 			}
 		}
 		if (this.isSleeping() || this.isBlinking()) {
-			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 		} else {
 			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
 		}
@@ -195,8 +195,13 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (this.walkCycle < 39) {
+			this.walkCycle++;
+		} else {
+			this.walkCycle = 0;
+		}
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if ((!attackDecision || this.isFlying())) {
+				if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
 			} else {
 				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
@@ -218,7 +223,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				this.playSound(ModSounds.firedragon_breath, 4, 1);
+				this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
 				double d4 = controller.getLookVec().z;
@@ -242,7 +247,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d3 = controller.getLookVec().y;
 					double d4 = controller.getLookVec().z;
 					EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
-					this.playSound(ModSounds.firedragon_breath, 4, 1);
+					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 					if (!world.isRemote) {
@@ -268,7 +273,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
-					this.playSound(ModSounds.firedragon_breath, 4, 1);
+					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 					EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
@@ -291,7 +296,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
-						this.playSound(ModSounds.firedragon_breath, 4, 1);
+						this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 						EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -314,17 +319,17 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return this.isTeen() ? ModSounds.firedragon_teen_idle : this.isAdult() ? ModSounds.firedragon_adult_idle : ModSounds.firedragon_child_idle;
+		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_IDLE : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_IDLE : ModSounds.FIREDRAGON_CHILD_IDLE;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
-		return this.isTeen() ? ModSounds.firedragon_teen_hurt : this.isAdult() ? ModSounds.firedragon_adult_hurt : ModSounds.firedragon_child_hurt;
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_HURT : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_HURT : ModSounds.FIREDRAGON_CHILD_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return this.isTeen() ? ModSounds.firedragon_teen_death : this.isAdult() ? ModSounds.firedragon_adult_death : ModSounds.firedragon_child_death;
+		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_DEATH : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_DEATH : ModSounds.FIREDRAGON_CHILD_DEATH;
 	}
 
 	@Override

@@ -1,17 +1,25 @@
 {
-  "gold_pile.step": {
+  "dragon_flight": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dragon_flight_0",
+      "iceandfire:dragon_flight_1",
+      "iceandfire:dragon_flight_2"
+    ]
+  },
+  "gold_pile_step": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gold_pile_step"
     ]
   },
-  "gold_pile.break": {
+  "gold_pile_break": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gold_pile_break"
     ]
   },
-  "pixie.idle": {
+  "pixie_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:pixie_idle_0",
@@ -21,7 +29,7 @@
       "iceandfire:pixie_idle_4"
     ]
   },
-  "pixie.hurt": {
+  "pixie_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:pixie_hurt_0",
@@ -30,58 +38,58 @@
       "iceandfire:pixie_hurt_3"
     ]
   },
-  "pixie.die": {
+  "pixie_die": {
     "category": "neutral",
     "sounds": [
       "iceandfire:pixie_death_0"
     ]
   },
-  "pixie.taunt": {
+  "pixie_taunt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:pixie_taunt_0",
       "iceandfire:pixie_taunt_1"
     ]
   },
-  "gorgon.idle": {
+  "gorgon_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gorgon_idle_0",
       "iceandfire:gorgon_idle_1"
     ]
   },
-  "gorgon.hurt": {
+  "gorgon_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gorgon_hurt_0",
       "iceandfire:gorgon_hurt_1"
     ]
   },
-  "gorgon.die": {
+  "gorgon_die": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gorgon_die"
     ]
   },
-  "gorgon.attack": {
+  "gorgon_attack": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gorgon_attack"
     ]
   },
-  "gorgon.petrify": {
+  "gorgon_petrify": {
     "category": "neutral",
     "sounds": [
       "iceandfire:gorgon_petrify"
     ]
   },
-  "gorgon.turn_stone": {
+  "gorgon_turn_stone": {
     "category": "neutral",
     "sounds": [
       "iceandfire:turn_stone"
     ]
   },
-  "hippogryph.idle": {
+  "hippogryph_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:hippogryph_idle_0",
@@ -92,7 +100,7 @@
       "iceandfire:hippogryph_idle_5"
     ]
   },
-  "hippogryph.hurt": {
+  "hippogryph_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:hippogryph_hurt_0",
@@ -100,26 +108,26 @@
       "iceandfire:hippogryph_hurt_2"
     ]
   },
-  "hippogryph.die": {
+  "hippogryph_die": {
     "category": "neutral",
     "sounds": [
       "iceandfire:hippogryph_die_0",
       "iceandfire:hippogryph_die_1"
     ]
   },
-  "firedragon.breath": {
+  "firedragon_breath": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_breath"
     ]
   },
-  "icedragon.breath": {
+  "icedragon_breath": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_breath"
     ]
   },
-  "firedragon.child.idle": {
+  "firedragon_child_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_child_idle_0",
@@ -127,26 +135,26 @@
       "iceandfire:firedragon_child_idle_2"
     ]
   },
-  "firedragon.child.hurt": {
+  "firedragon_child_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_child_hurt_0",
       "iceandfire:firedragon_child_hurt_1"
     ]
   },
-  "firedragon.child.death": {
+  "firedragon_child_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_child_die_0"
     ]
   },
-  "firedragon.child.roar": {
+  "firedragon_child_roar": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_child_die_0"
     ]
   },
-  "firedragon.teen.idle": {
+  "firedragon_teen_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_teen_idle_0",
@@ -157,27 +165,27 @@
       "iceandfire:firedragon_teen_idle_5"
     ]
   },
-  "firedragon.teen.hurt": {
+  "firedragon_teen_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_teen_hurt_0",
       "iceandfire:firedragon_teen_hurt_1"
     ]
   },
-  "firedragon.teen.death": {
+  "firedragon_teen_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_teen_die_0"
     ]
   },
-  "firedragon.teen.roar": {
+  "firedragon_teen_roar": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_teen_roar_0",
       "iceandfire:firedragon_teen_roar_1"
     ]
   },
-  "firedragon.adult.idle": {
+  "firedragon_adult_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_adult_idle_0",
@@ -186,7 +194,7 @@
       "iceandfire:firedragon_adult_idle_3"
     ]
   },
-  "firedragon.adult.hurt": {
+  "firedragon_adult_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_adult_hurt_0",
@@ -194,7 +202,7 @@
       "iceandfire:firedragon_adult_hurt_2"
     ]
   },
-  "firedragon.adult.death": {
+  "firedragon_adult_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_adult_hurt_0",
@@ -202,14 +210,14 @@
       "iceandfire:firedragon_adult_hurt_2"
     ]
   },
-  "firedragon.adult.roar": {
+  "firedragon_adult_roar": {
     "category": "neutral",
     "sounds": [
       "iceandfire:firedragon_adult_roar_0",
       "iceandfire:firedragon_adult_roar_1"
     ]
   },
-  "icedragon.child.idle": {
+  "icedragon_child_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_child_idle_0",
@@ -217,7 +225,7 @@
       "iceandfire:icedragon_child_idle_2"
     ]
   },
-  "icedragon.child.hurt": {
+  "icedragon_child_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_child_hurt_0",
@@ -226,7 +234,7 @@
       "iceandfire:icedragon_child_hurt_3"
     ]
   },
-  "icedragon.child.death": {
+  "icedragon_child_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_child_hurt_0",
@@ -235,7 +243,7 @@
       "iceandfire:icedragon_child_hurt_3"
     ]
   },
-  "icedragon.teen.idle": {
+  "icedragon_teen_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_teen_idle_0",
@@ -245,7 +253,7 @@
       "iceandfire:icedragon_teen_idle_4"
     ]
   },
-  "icedragon.teen.hurt": {
+  "icedragon_teen_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_teen_hurt_0",
@@ -253,14 +261,14 @@
       "iceandfire:icedragon_teen_hurt_2"
     ]
   },
-  "icedragon.teen.death": {
+  "icedragon_teen_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_teen_die_0",
       "iceandfire:icedragon_teen_die_1"
     ]
   },
-  "icedragon.adult.idle": {
+  "icedragon_adult_idle": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_adult_idle_0",
@@ -268,7 +276,7 @@
       "iceandfire:icedragon_adult_idle_2"
     ]
   },
-  "icedragon.adult.hurt": {
+  "icedragon_adult_hurt": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_adult_hurt_0",
@@ -276,14 +284,14 @@
       "iceandfire:icedragon_adult_hurt_2"
     ]
   },
-  "icedragon.adult.death": {
+  "icedragon_adult_death": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_adult_die_0",
       "iceandfire:icedragon_adult_die_1"
     ]
   },
-  "dragonegg.hatch": {
+  "dragonegg_hatch": {
     "category": "neutral",
     "sounds": [
       "iceandfire:egg_hatch"

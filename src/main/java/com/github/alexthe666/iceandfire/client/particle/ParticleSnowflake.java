@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client.particle;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -35,7 +35,7 @@ public class ParticleSnowflake extends ParticleFlame {
 		return 0;
 	}
 
-	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		GL11.glPushMatrix();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		particleScale = 0.3F * (this.particleMaxAge - (this.particleAge));

@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
-import fossilsarcheology.api.EnumDiet;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
@@ -44,7 +43,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	public BlockPos waterTarget;
 
 	public EntityIceDragon(World worldIn) {
-		super(worldIn, EnumDiet.PISCCARNIVORE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
+		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
 		this.setSize(0.78F, 1.2F);
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(45);
@@ -270,7 +269,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
 				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
 				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				this.playSound(ModSounds.icedragon_breath, 4, 1);
+				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
 				double d4 = controller.getLookVec().z;
@@ -294,7 +293,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					double d3 = controller.getLookVec().y;
 					double d4 = controller.getLookVec().z;
 					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
-					this.playSound(ModSounds.icedragon_breath, 4, 1);
+					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
 					if (!world.isRemote) {
@@ -351,7 +350,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
-					this.playSound(ModSounds.icedragon_breath, 4, 1);
+					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 					EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
@@ -374,7 +373,7 @@ public class EntityIceDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
-						this.playSound(ModSounds.icedragon_breath, 4, 1);
+						this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 						EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -413,17 +412,17 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return this.isTeen() ? ModSounds.icedragon_teen_idle : this.isAdult() ? ModSounds.icedragon_adult_idle : ModSounds.icedragon_child_idle;
+		return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_IDLE : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_IDLE : ModSounds.ICEDRAGON_CHILD_IDLE;
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
-		return this.isTeen() ? ModSounds.icedragon_teen_hurt : this.isAdult() ? ModSounds.icedragon_adult_hurt : ModSounds.icedragon_child_hurt;
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_HURT : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_HURT : ModSounds.ICEDRAGON_CHILD_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return this.isTeen() ? ModSounds.icedragon_teen_death : this.isAdult() ? ModSounds.icedragon_adult_death : ModSounds.icedragon_child_death;
+		return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_DEATH : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_DEATH : ModSounds.ICEDRAGON_CHILD_DEATH;
 	}
 
 	@Override

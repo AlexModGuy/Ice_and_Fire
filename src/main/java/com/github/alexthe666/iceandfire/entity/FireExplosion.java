@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -124,13 +123,12 @@ public class FireExplosion extends Explosion {
 						double d7 = entity.posY + entity.getEyeHeight() - this.explosionY;
 						double d9 = entity.posZ - this.explosionZ;
 						double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
-
+						double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
+						double d10 = (1.0D - d12) * d14;
 						if (d13 != 0.0D) {
 							d5 = d5 / d13;
 							d7 = d7 / d13;
 							d9 = d9 / d13;
-							double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
-							double d10 = (1.0D - d12) * d14;
 							if (exploder instanceof EntityDragonBase) {
 								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 									return;
@@ -138,30 +136,29 @@ public class FireExplosion extends Explosion {
 								if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
 									entity.attackEntityFrom(IceAndFire.dragonFire, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
 									if (entity.isDead && entity instanceof EntityPlayer) {
-										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								} else {
 									entity.attackEntityFrom(IceAndFire.dragonFire, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-									if (entity.isDead && entity instanceof EntityPlayer) {
-										((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
-									}
-								}
-								if (entity.isDead) {
-									((EntityDragonBase) this.exploder).attackDecision = true;
+									//if (entity.isDead && entity instanceof EntityPlayer) {
+									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 								}
 							}
-							double d11 = 1.0D;
-
-							if (entity instanceof EntityLivingBase) {
-								d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+							if (entity.isDead) {
+								((EntityDragonBase) this.exploder).attackDecision = true;
 							}
-							entity.motionX += d5 * d11;
-							entity.motionY += d7 * d11;
-							entity.motionZ += d9 * d11;
+						}
+						double d11 = 1.0D;
 
-							if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
-								this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
-							}
+						if (entity instanceof EntityLivingBase) {
+							d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+						}
+						entity.motionX += d5 * d11;
+						entity.motionY += d7 * d11;
+						entity.motionZ += d9 * d11;
+
+						if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
+							this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
 						}
 					}
 				}

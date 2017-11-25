@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.core.ModAchievements;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
@@ -81,13 +80,11 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 			hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
-			System.out.println(this.targetEntity.getThrower() + " vs " + this.targetEntity.getOwner());
-			System.out.println(this.targetEntity.getItem());
 			if (hippo.getRNG().nextInt(3) == 0 && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
 				EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
 				hippo.setTamed(true);
 				hippo.setOwnerId(owner.getUniqueID());
-				owner.addStat(ModAchievements.tameHippogryph);
+				//owner.addStat(ModAchievements.tameHippogryph);
 				hippo.setSitting(true);
 			}
 			resetTask();

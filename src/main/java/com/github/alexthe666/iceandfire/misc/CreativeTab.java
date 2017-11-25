@@ -8,7 +8,6 @@ public class CreativeTab extends CreativeTabs {
 
 	public CreativeTab(String label) {
 		super(label);
-		setBackgroundImageName("item_search.png");
 	}
 
 	@Override
@@ -18,6 +17,6 @@ public class CreativeTab extends CreativeTabs {
 
 	@Override
 	public boolean hasSearchBar() {
-		return true;
+		return false;
 	}
 }

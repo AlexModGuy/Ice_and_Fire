@@ -6,8 +6,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,11 +21,10 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setSoundType(sound);
 		this.setCreativeTab(IceAndFire.TAB);
 		setRegistryName(IceAndFire.MODID, gameName);
-		GameRegistry.register(this);
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
@@ -40,9 +37,6 @@ public class BlockFallingGeneric extends BlockFalling {
 		if (slippery) {
 			this.slipperiness = 0.98F;
 		}
-		GameRegistry.register(this);
-		GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
-
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -10,8 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class DragonAIAirTarget extends EntityAIBase {
 	private EntityDragonBase dragon;
 	private World theWorld;
@@ -23,7 +21,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 
 	public boolean shouldExecute() {
 		if (dragon != null) {
-			if (!dragon.isFlying() && !dragon.isHovering()) {
+			if (!dragon.isFlying() && !dragon.isHovering() || dragon.onGround) {
 				return false;
 			}
 			if (dragon.isSleeping()) {
@@ -35,7 +33,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
 				return false;
 			}
-			if (dragon.airTarget != null && dragon.getDistanceSquared(new Vec3d(dragon.airTarget.getX(), dragon.posY, dragon.airTarget.getZ())) > 3) {
+			if (dragon.airTarget != null && (dragon.isTargetBlocked(new Vec3d(dragon.airTarget)))) {
 				dragon.airTarget = null;
 			}
 
@@ -77,22 +75,16 @@ public class DragonAIAirTarget extends EntityAIBase {
 	}
 
 	public BlockPos getNearbyAirTarget() {
-		Random random = this.dragon.getRNG();
-
 		if (dragon.getAttackTarget() == null) {
-			for (int i = 0; i < 10; i++) {
-				BlockPos pos = DragonUtils.getBlockInView(dragon);
-				if (pos != null && dragon.world.getBlockState(pos).getMaterial() == Material.AIR) {
-					return pos;
-				}
-			}
-		} else {
-			BlockPos pos = new BlockPos((int) dragon.getAttackTarget().posX, (int) dragon.getAttackTarget().posY, (int) dragon.getAttackTarget().posZ);
-			if (dragon.world.getBlockState(pos).getMaterial() == Material.AIR) {
+			BlockPos pos = DragonUtils.getBlockInView(dragon);
+			if (pos != null && dragon.world.getBlockState(pos).getMaterial() == Material.AIR) {
 				return pos;
 			}
+		} else {
+			return new BlockPos((int) dragon.getAttackTarget().posX, (int) dragon.getAttackTarget().posY, (int) dragon.getAttackTarget().posZ);
 		}
 		return dragon.getPosition();
 	}
+
 
 }

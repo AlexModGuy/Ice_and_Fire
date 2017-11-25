@@ -40,9 +40,7 @@ public class BlockJar extends BlockContainer {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.jar");
 		this.setRegistryName(IceAndFire.MODID, "jar");
-		GameRegistry.register(this);
 		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
-		GameRegistry.register(itemBlock = (new ItemBlockJar(this).setRegistryName(this.getRegistryName())));
 	}
 
 	@Override
@@ -106,7 +104,7 @@ public class BlockJar extends BlockContainer {
 			if (!world.isRemote) {
 				world.spawnEntity(item);
 			}
-			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.pixie_hurt, SoundCategory.NEUTRAL, 1, 1, false);
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
 
 		}
 		return false;
@@ -140,10 +138,11 @@ public class BlockJar extends BlockContainer {
 		return new TileEntityJar();
 	}
 
-	class ItemBlockJar extends ItemBlock {
+	public class ItemBlockJar extends ItemBlock {
 		public ItemBlockJar(Block block) {
 			super(block);
 			this.maxStackSize = 1;
+			this.setHasSubtypes(true);
 		}
 
 		public String getUnlocalizedName(ItemStack stack) {
@@ -152,9 +151,11 @@ public class BlockJar extends BlockContainer {
 		}
 
 		@SideOnly(Side.CLIENT)
-		public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			for (int i = 0; i < 6; i++) {
-				subItems.add(new ItemStack(itemIn, 1, i));
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+			if(tab == IceAndFire.TAB){
+				for (int i = 0; i < 6; i++) {
+					subItems.add(new ItemStack(this, 1, i));
+				}
 			}
 		}
 	}

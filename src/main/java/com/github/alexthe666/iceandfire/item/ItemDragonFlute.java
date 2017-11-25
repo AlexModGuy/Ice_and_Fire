@@ -12,7 +12,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.*;
 
@@ -23,7 +22,6 @@ public class ItemDragonFlute extends Item {
 		this.setUnlocalizedName("iceandfire.dragon_flute");
 		this.setRegistryName(IceAndFire.MODID, "dragon_flute");
 		this.setCreativeTab(IceAndFire.TAB);
-		GameRegistry.register(this);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
@@ -46,14 +44,14 @@ public class ItemDragonFlute extends Item {
 			IDragonFlute dragon = itr_dragons.next();
 			dragon.onHearFlute(player);
 			/*
-            if(dragon.isTamed() && dragon.isOwner(player)) {
+			if(dragon.isTamed() && dragon.isOwner(player)) {
                 if (dragon.isFlying() || dragon.isHovering()) {
                     dragon.setFlying(false);
                     dragon.setHovering(false);
                 }
             }*/
 		}
-		worldIn.playSound(player, player.getPosition(), ModSounds.dragonflute, SoundCategory.NEUTRAL, 1, 1.75F);
+		worldIn.playSound(player, player.getPosition(), ModSounds.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
 
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}

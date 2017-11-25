@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public enum EnumDragonArmor {
@@ -23,9 +22,13 @@ public enum EnumDragonArmor {
 	public ArmorMaterial material;
 	public int armorId;
 	public EnumDragonEgg eggType;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_helmet")
 	public Item helmet;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_chestplate")
 	public Item chestplate;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_leggings")
 	public Item leggings;
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_boots")
 	public Item boots;
 
 	private EnumDragonArmor(ArmorMaterial material, int armorId, EnumDragonEgg eggType) {
@@ -41,18 +44,13 @@ public enum EnumDragonArmor {
 			EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].material, 2, EntityEquipmentSlot.LEGS).setUnlocalizedName("iceandfire.dragonLeggings");
 			EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].material, 3, EntityEquipmentSlot.FEET).setUnlocalizedName("iceandfire.dragonBoots");
 			EnumDragonArmor.values()[i].helmet.setRegistryName(EnumDragonArmor.values()[i].name() + "_helmet");
-			GameRegistry.register(EnumDragonArmor.values()[i].helmet);
+			//GameRegistry.register(EnumDragonArmor.values()[i].helmet);
 			EnumDragonArmor.values()[i].chestplate.setRegistryName(EnumDragonArmor.values()[i].name() + "_chestplate");
-			GameRegistry.register(EnumDragonArmor.values()[i].chestplate);
+			//GameRegistry.register(EnumDragonArmor.values()[i].chestplate);
 			EnumDragonArmor.values()[i].leggings.setRegistryName(EnumDragonArmor.values()[i].name() + "_leggings");
-			GameRegistry.register(EnumDragonArmor.values()[i].leggings);
+			//GameRegistry.register(EnumDragonArmor.values()[i].leggings);
 			EnumDragonArmor.values()[i].boots.setRegistryName(EnumDragonArmor.values()[i].name() + "_boots");
-			GameRegistry.register(EnumDragonArmor.values()[i].boots);
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].helmet, 1, 0), new Object[]{"XXX", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].chestplate, 1, 0), new Object[]{"X X", "XXX", "XXX", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].leggings, 1, 0), new Object[]{"XXX", "X X", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			GameRegistry.addRecipe(new ItemStack(EnumDragonArmor.values()[i].boots, 1, 0), new Object[]{"X X", "X X", 'X', getScaleItem(EnumDragonArmor.values()[i])});
-			IceAndFire.PROXY.renderArmors(EnumDragonArmor.values()[i]);
+			//GameRegistry.register(EnumDragonArmor.values()[i].boots);
 		}
 	}
 

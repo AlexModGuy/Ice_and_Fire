@@ -50,7 +50,7 @@ public class LayerPixieGlow implements LayerRenderer<EntityPixie> {
 			GlStateManager.enableLighting();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			this.render.getMainModel().render(pixie, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			this.render.setLightmap(pixie, partialTicks);
+			this.render.setLightmap(pixie);
 			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
 		}

@@ -10,17 +10,19 @@ public class WorldUtils {
 
 	public static Random rand = new Random();
 
-	@SuppressWarnings("deprecation")
+	@Deprecated
 	public static void setBlock(World world, int x, int y, int z, Block block, int meta, int flags) {
 		BlockPos pos = new BlockPos(x, y, z);
 		world.setBlockState(pos, block.getStateFromMeta(meta), flags);
 	}
 
+	@Deprecated
 	public static Block getBlock(World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		return world.getBlockState(pos).getBlock();
 	}
 
+	@Deprecated
 	public static int getBlockMeta(World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		return world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
