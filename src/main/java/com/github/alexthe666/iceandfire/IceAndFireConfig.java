@@ -131,11 +131,11 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "pixies", comment = "The size of pixie villages.")
 	public int pixieVillageSize = 5;
 
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
-	public boolean useAetherCompat = false;
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
-	public int aetherDimensionID = 3;
+	//@SuppressWarnings("deprecation")
+	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
+	//public boolean useAetherCompat = false;
+	//@SuppressWarnings("deprecation")
+	//@ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
+	//public int aetherDimensionID = 3;
 
 }
