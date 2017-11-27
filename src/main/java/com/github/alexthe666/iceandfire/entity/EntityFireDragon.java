@@ -24,11 +24,11 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
-	public static float[] growth_stage_1 = new float[]{1F, 3F};
-	public static float[] growth_stage_2 = new float[]{3F, 7F};
-	public static float[] growth_stage_3 = new float[]{7F, 12.5F};
-	public static float[] growth_stage_4 = new float[]{12.5F, 20F};
-	public static float[] growth_stage_5 = new float[]{20F, 30F};
+	public static final float[] growth_stage_1 = new float[]{1F, 3F};
+	public static final float[] growth_stage_2 = new float[]{3F, 7F};
+	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
+	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
+	public static final float[] growth_stage_5 = new float[]{20F, 30F};
 	public int walkCycle;
 
 	public EntityFireDragon(World worldIn) {
@@ -36,11 +36,11 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.setSize(0.78F, 1.2F);
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
-		ANIMATION_SPEAK = Animation.create(45);
+		ANIMATION_SPEAK = Animation.create(20);
 		ANIMATION_BITE = Animation.create(35);
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
-		ANIMATION_FIRECHARGE = Animation.create(40);
+		ANIMATION_FIRECHARGE = Animation.create(25);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 

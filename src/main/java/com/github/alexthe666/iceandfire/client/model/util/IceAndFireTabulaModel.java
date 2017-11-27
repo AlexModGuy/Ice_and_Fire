@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
+import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tabula.container.TabulaCubeContainer;
 import net.ilexiconn.llibrary.client.model.tabula.container.TabulaCubeGroupContainer;
 import net.ilexiconn.llibrary.client.model.tabula.container.TabulaModelContainer;
@@ -24,6 +25,7 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
     protected Map<String, AdvancedModelRenderer> cubes = new HashMap<>();
     protected List<AdvancedModelRenderer> rootBoxes = new ArrayList<>();
     protected IIceAndFireTabulaModelAnimator tabulaAnimator;
+    public ModelAnimator llibAnimator;
     protected Map<String, AdvancedModelRenderer> identifierMap = new HashMap<>();
     protected double[] scale;
 
@@ -37,6 +39,7 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
         container.getCubeGroups().forEach(this::parseCubeGroup);
         this.updateDefaultPose();
         this.scale = container.getScale();
+        this.llibAnimator = ModelAnimator.create();
     }
 
     public IceAndFireTabulaModel(TabulaModelContainer container) {

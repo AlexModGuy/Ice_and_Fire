@@ -104,7 +104,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
     public int spacebarTicks;
-    public int spacebarTickCounter;
     public float[][] growth_stages;
     public boolean isFire = this instanceof EntityFireDragon;
     public LegSolverQuadruped legSolver;
