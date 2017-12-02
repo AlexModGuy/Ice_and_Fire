@@ -192,6 +192,24 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         moveToPose(model, EnumDragonAnimations.STREAM_CHARGE.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
+
+        model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_WINGBLAST);
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST1.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST2.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST2.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.resetKeyframe(10);
     }
 
     public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
@@ -238,9 +256,11 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
 
     public void moveToPose(IceAndFireTabulaModel model, IceAndFireTabulaModel modelTo){
         for (AdvancedModelRenderer cube : model.getCubes().values()) {
-            if (!isPartEqual(cube, EnumDragonAnimations.GRAB1.firedragon_model.getCube(cube.boxName))) {
-                this.rotate(model.llibAnimator, cube, modelTo.getCube(cube.boxName).rotateAngleX, modelTo.getCube(cube.boxName).rotateAngleY, modelTo.getCube(cube.boxName).rotateAngleZ);
-
+            if (!isPartEqual(EnumDragonAnimations.GROUND_POSE.firedragon_model.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
+                float toX = modelTo.getCube(cube.boxName).rotateAngleX;
+                float toY = modelTo.getCube(cube.boxName).rotateAngleY;
+                float toZ = modelTo.getCube(cube.boxName).rotateAngleZ;
+                model.llibAnimator.rotate(cube, distance(cube.rotateAngleX, toX), distance(cube.rotateAngleY, toY), distance(cube.rotateAngleZ, toZ));
             }
         }
     }

@@ -75,6 +75,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public static Animation ANIMATION_SPEAK;
     public static Animation ANIMATION_BITE;
     public static Animation ANIMATION_SHAKEPREY;
+    public static Animation ANIMATION_WINGBLAST;
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -861,21 +862,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isDaytime() {
-       /* if (!this.firstUpdate && this.world != null) {
-            if (world.isRemote) {
-                return isDaytime;
-            } else {
-                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDaytime(this.getEntityId(), this.world.isDaytime()));
-                return this.world.isDaytime();
-            }
-        } else {*/
         return this.world.isDaytime();
-
     }
 
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22)) {
+            this.spawnGroundEffects();
+        }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.attackDecision) {
             this.setTackling(true);
         }
@@ -1139,8 +1134,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
                 float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                double extraZ = (double) (radius * MathHelper.cos(angle));
                 double extraY = 0.8F;
+                double extraZ = (double) (radius * MathHelper.cos(angle));
 
                 IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
                 if (iblockstate.getMaterial() != Material.AIR) {
@@ -1153,6 +1148,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public void fall(float distance, float damageMultiplier) {
+
     }
 
     public boolean isActuallyBreathingFire() {

@@ -168,12 +168,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		}
 	}
 
-	//public void onDeath(DamageSource cause) {
-	//	if (cause.getTrueSource() instanceof EntityPlayer) {
-	//		((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killGorgon);
-	//	}
-	//}
-
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (this.getAttackTarget() != null) {

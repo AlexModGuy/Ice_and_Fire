@@ -41,6 +41,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(25);
+		ANIMATION_WINGBLAST = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -129,8 +130,8 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		switch (this.getRNG().nextInt(3)) {
-			case 0:
+		switch (this.getRNG().nextInt(4)) {
+		case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
@@ -170,6 +171,31 @@ public class EntityFireDragon extends EntityDragonBase {
 					this.attackDecision = false;
 					return flag2;
 				}
+				break;
+			case 3:
+				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
+					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
+						this.setAnimation(this.ANIMATION_WINGBLAST);
+						return false;
+					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 30) {
+						boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (entityIn instanceof EntityLivingBase) {
+							((EntityLivingBase) entityIn).knockBack(entityIn, 2, 1, 1);
+						}
+						this.attackDecision = false;
+						return flag2;
+					}
+				}else{
+					if (this.getAnimation() != this.ANIMATION_BITE) {
+						this.setAnimation(this.ANIMATION_BITE);
+						return false;
+					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						this.attackDecision = false;
+						return flag;
+					}
+				}
+
 				break;
 		}
 
@@ -334,7 +360,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE};
+		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST};
 	}
 
 	@Override
