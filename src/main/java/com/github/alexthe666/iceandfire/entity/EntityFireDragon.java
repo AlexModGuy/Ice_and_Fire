@@ -41,7 +41,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(25);
-		ANIMATION_WINGBLAST = Animation.create(40);
+		ANIMATION_WINGBLAST = Animation.create(50);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -130,7 +130,9 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		switch (this.getRNG().nextInt(4)) {
+		//switch (this.getRNG().nextInt(4)) {
+		switch (1) {
+
 		case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
@@ -146,6 +148,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
+
 						return false;
 					}
 				} else {
@@ -177,10 +180,10 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
 						this.setAnimation(this.ANIMATION_WINGBLAST);
 						return false;
-					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 30) {
+					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 40) {
 						boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 						if (entityIn instanceof EntityLivingBase) {
-							((EntityLivingBase) entityIn).knockBack(entityIn, 2, 1, 1);
+							((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
 						}
 						this.attackDecision = false;
 						return flag2;
@@ -226,7 +229,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		} else {
 			this.walkCycle = 0;
 		}
-		if (this.getAttackTarget() != null && !this.isSleeping()) {
+		if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());
 			} else {

@@ -678,7 +678,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0;
+        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
     @Override
@@ -868,7 +868,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22)) {
+        if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
         }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.attackDecision) {
@@ -1212,25 +1212,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void updatePreyInMouth(Entity prey) {
-        if (getControllingPassenger() != null && prey == getControllingPassenger()) {
-            return;
-        }
         if (this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null || this.getAnimation() == NO_ANIMATION) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 15 : ((EntityLivingBase) prey).getMaxHealth() * 2);
-            this.attackDecision = !this.attackDecision;
+            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 15F : prey instanceof EntityLivingBase ? (float) ((EntityLivingBase) prey).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
             prey.dismountRidingEntity();
         }
         renderYawOffset = rotationYaw;
-        this.rotationYaw = prey.rotationYaw;
-        prey.setPosition(this.posX, this.posY + this.getMountedYOffset() + prey.getYOffset(), this.posZ);
-        float modTick_0 = this.getAnimationTick() - 15;
-        float modTick_1 = this.getAnimationTick() > 15 ? 6 * MathHelper.sin((float) (Math.PI + (modTick_0 * 0.3F))) : 0;
-        float modTick_2 = this.getAnimationTick() > 20 ? 10 : this.getAnimationTick() - 10;
-        float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
-        float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.05F;
+        float modTick_0 = this.getAnimationTick() - 25;
+        float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)) : 0;
+        float modTick_2 = this.getAnimationTick() > 25 ? 10 : Math.max(0, this.getAnimationTick() - 15);
+        float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
+        float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 1.75F) * 0.015F;
         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
         double extraZ = (double) (radius * MathHelper.cos(angle));
-        double extraY = 0.1F * ((getRenderSize() / 3) + (modTick_2 * 0.15 * (getRenderSize() / 3)));
+        double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.1 * (getRenderSize() / 3)));
         prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
     }
 
@@ -1685,15 +1679,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void travel(float strafe, float forward, float vertical) {
-        if (!this.canMove() && !this.isBeingRidden()) {
+        if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden()) {
             strafe = 0;
             forward = 0;
+            vertical = 0;
             super.travel(strafe, forward, vertical);
             return;
         }
         if (this.isBeingRidden() && this.canBeSteered()) {
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null) {
+            if (controller != null && controller != this.getAttackTarget()) {
                 strafe = controller.moveStrafing * 0.5F;
                 forward = controller.moveForward;
                 if (forward <= 0.0F) {

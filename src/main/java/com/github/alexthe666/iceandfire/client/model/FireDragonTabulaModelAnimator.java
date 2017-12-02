@@ -209,6 +209,12 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         model.llibAnimator.startKeyframe(5);
         moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
         model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST2.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
+        model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
     }
 
