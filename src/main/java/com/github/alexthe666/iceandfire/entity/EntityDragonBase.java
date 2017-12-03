@@ -24,6 +24,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -1284,9 +1285,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isModelDead()) {
             return false;
         }
-        if(dmg.isProjectile()){
-            return true;
-        }
         if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
             return false;
         }
@@ -1295,7 +1293,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return false;
         }
 
-        if(!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(5) == 0){
+        if(!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0){
             this.roar();
         }
 
@@ -1315,6 +1313,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
+        this.setScaleForAge(true);
         if (world.isRemote) {
             this.updateClientControls();
         }
@@ -1798,5 +1797,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
 
+    }
+
+    public void processArrows(){
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox());
+        for(Entity entity : entities) {
+            if(entity instanceof EntityArrow){
+
+            }
+        }
     }
 }
