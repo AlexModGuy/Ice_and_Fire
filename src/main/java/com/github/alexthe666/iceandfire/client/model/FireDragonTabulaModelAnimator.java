@@ -192,7 +192,6 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         moveToPose(model, EnumDragonAnimations.STREAM_CHARGE.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
-
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_WINGBLAST);
         model.llibAnimator.startKeyframe(10);
         moveToPose(model, EnumDragonAnimations.WING_BLAST1.firedragon_model);
@@ -214,6 +213,17 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
         moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.resetKeyframe(10);
+        model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_ROAR);
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumDragonAnimations.ROAR1.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumDragonAnimations.ROAR2.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumDragonAnimations.ROAR3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
     }

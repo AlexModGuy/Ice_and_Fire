@@ -25,6 +25,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.item.Item;
@@ -34,9 +35,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -50,6 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute {
@@ -76,6 +80,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public static Animation ANIMATION_BITE;
     public static Animation ANIMATION_SHAKEPREY;
     public static Animation ANIMATION_WINGBLAST;
+    public static Animation ANIMATION_ROAR;
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -868,6 +873,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(!world.isRemote && this.getRNG().nextInt(500) == 0 && !this.isModelDead() && !this.isSleeping()){
+            this.roar();
+        }
         if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
         }
@@ -1285,6 +1293,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
         if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK) {
             return false;
+        }
+
+        if(!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(5) == 0){
+            this.roar();
         }
 
         float damageReductionHead = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
@@ -1761,5 +1773,30 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 this.setHovering(false);
             }
         }
+    }
+
+    public abstract SoundEvent getRoarSound();
+
+    public void roar(){
+        if(this.getAnimation() != ANIMATION_ROAR){
+            this.setAnimation(ANIMATION_ROAR);
+            this.playSound(this.getRoarSound(), this.getSoundVolume() + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
+        }
+        if(this.getDragonStage() > 3){
+            int size  = (this.getDragonStage() - 3) * 5;
+            List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
+            for(Entity entity : entities){
+                boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
+                if(entity instanceof EntityLivingBase && !isStrongerDragon){
+                    EntityLivingBase living = (EntityLivingBase)entity;
+                    if(this.isOwner(living)){
+                        living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 60 * size));
+                    }else{
+                        living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 60 * size));
+                    }
+                }
+            }
+        }
+
     }
 }

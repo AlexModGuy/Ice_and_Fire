@@ -42,6 +42,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		ANIMATION_TAILWHACK = Animation.create(40);
 		ANIMATION_FIRECHARGE = Animation.create(25);
 		ANIMATION_WINGBLAST = Animation.create(50);
+		ANIMATION_ROAR = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -49,7 +50,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
 		this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
 		this.tasks.addTask(5, new EntityAITempt(this, 1.0D, ModItems.fire_stew, false));
 		this.tasks.addTask(6, new DragonAIAirTarget(this));
@@ -130,9 +131,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		//switch (this.getRNG().nextInt(4)) {
-		switch (1) {
-
+		switch (this.getRNG().nextInt(4)) {
 		case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
@@ -362,8 +361,13 @@ public class EntityFireDragon extends EntityDragonBase {
 	}
 
 	@Override
+	public SoundEvent getRoarSound() {
+		return this.isTeen() ? ModSounds.FIREDRAGON_TEEN_ROAR : this.isAdult() ? ModSounds.FIREDRAGON_ADULT_ROAR : ModSounds.FIREDRAGON_CHILD_ROAR;
+	}
+
+	@Override
 	public Animation[] getAnimations() {
-		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST};
+		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR};
 	}
 
 	@Override
