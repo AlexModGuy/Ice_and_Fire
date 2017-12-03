@@ -429,7 +429,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 int j = nbttagcompound.getByte("Slot") & 255;
                 this.initDragonInv();
                 this.dragonInv.setInventorySlotContents(j, new ItemStack(nbttagcompound));
-                //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
+                this.setArmorInSlot(j, this.getIntFromArmor(new ItemStack(nbttagcompound)));
 
                 if (world.isRemote) {
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(new ItemStack(nbttagcompound))));
