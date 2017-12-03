@@ -194,11 +194,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
     }
 
-    private void updateDragonSlots() {
+    public void updateDragonSlots() {
         this.setArmorInSlot(0, getIntFromArmor(this.dragonInv.getStackInSlot(0)));
         this.setArmorInSlot(1, getIntFromArmor(this.dragonInv.getStackInSlot(1)));
         this.setArmorInSlot(2, getIntFromArmor(this.dragonInv.getStackInSlot(2)));
         this.setArmorInSlot(3, getIntFromArmor(this.dragonInv.getStackInSlot(3)));
+        if(world.isRemote){
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 0, this.getIntFromArmor(this.dragonInv.getStackInSlot(0))));
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 1, this.getIntFromArmor(this.dragonInv.getStackInSlot(1))));
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(this.dragonInv.getStackInSlot(2))));
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(this.dragonInv.getStackInSlot(3))));
+        }
     }
 
     public void openGUI(EntityPlayer playerEntity) {

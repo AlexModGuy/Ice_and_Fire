@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,9 +14,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
-	private final RenderDragonBase render;
+	private final RenderLiving render;
 
-	public LayerDragonEyes(RenderDragonBase renderIn) {
+	public LayerDragonEyes(RenderLiving renderIn) {
 		this.render = renderIn;
 	}
 
