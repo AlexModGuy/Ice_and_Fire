@@ -25,7 +25,7 @@ public enum EnumHippogryphTypes {
 	public BiomeDictionary.Type[] spawnBiomes;
 
 	private EnumHippogryphTypes(boolean developer, BiomeDictionary.Type... biomes) {
-		this.spawnBiomes = Arrays.copyOf(biomes, spawnBiomes.length);
+		this.spawnBiomes = biomes;
 		this.developer = developer;
 	}
 

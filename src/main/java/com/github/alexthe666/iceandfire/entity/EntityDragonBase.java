@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.sun.xml.internal.bind.v2.TODO;
+import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -835,7 +836,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected void despawnEntity() {
-        if(IceAndFire.CONFIG.canDragonsDespawn){
+        if(!IceAndFire.CONFIG.canDragonsDespawn){
             super.despawnEntity();
         }
     }
@@ -1191,7 +1192,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
                 float speed_walk = 0.2F;
                 float speed_idle = 0.05F;
-                float speed_fly = 0.35F;
+                float speed_fly = 0.2F;
                 float degree_walk = 0.5F;
                 float degree_idle = 0.5F;
                 float degree_fly = 0.5F;
@@ -1199,18 +1200,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float hoverAddition = hoverProgress * 0.02F;
-                float flyAddition = -flyProgress * 0.03F;
+                float hoverAddition = hoverProgress * -0.001F;
+                float flyAddition = flyProgress * -0.0001F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
-                float radius = 0.7F * ((0.3F - flyBody) * getRenderSize()) + ((this.getRenderSize() / 3) * flyAddition * 0.0065F);
+                float radius = 0.75F * ((0.3F - flyBody) * getRenderSize()) + ((this.getRenderSize() / 3) * flyAddition * 0.0065F);
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                float bob0 = this.isFlying() ? (hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0) : 0;
+                float bob0 = this.isFlying() || this.isHovering() ? (hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0) : 0;
                 float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
                 float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
+
                 double extraY_pre = 0.8F;
                 double extraY = ((extraY_pre - (hoverAddition) + (flyAddition)) * (this.getRenderSize() / 3)) - (0.35D * (1 - (this.getRenderSize() / 30))) + bob0 + bob1 + bob2;
+
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 
                 this.stepHeight = 1;
@@ -1394,6 +1397,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
         if (!world.isRemote && this.isSleeping() && (this.isFlying() || this.isHovering() || this.isInWater() || (this.world.canBlockSeeSky(new BlockPos(this)) && this.isDaytime() && !this.isTamed() || this.isDaytime() && this.isTamed()) || this.getAttackTarget() != null || !this.getPassengers().isEmpty())) {
             this.setSleeping(false);
+        }
+
+        if(this.isSitting() && this.getControllingPassenger() != null){
+            this.setSitting(false);
         }
     }
 
@@ -1706,6 +1713,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.isBeingRidden() && this.canBeSteered()) {
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
             if (controller != null && controller != this.getAttackTarget()) {
+                this.rotationYaw = controller.rotationYaw;
+                this.prevRotationYaw = this.rotationYaw;
+                this.rotationPitch = controller.rotationPitch * 0.5F;
+                this.setRotation(this.rotationYaw, this.rotationPitch);
+                this.renderYawOffset = this.rotationYaw;
+                this.rotationYawHead = this.renderYawOffset;
                 strafe = controller.moveStrafing * 0.5F;
                 forward = controller.moveForward;
                 if (forward <= 0.0F) {
@@ -1717,13 +1730,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 }
                 jumpMovementFactor = 0.05F;
                 this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
+                super.travel(strafe, vertical = 0, forward);
+                return;
             }
-            if (this.isInWater() && this.isInsideOfMaterial(Material.AIR) && motionY > 1) {
-                //this.motionY = 0;
-            }
-        }
-        if (this.isInWater() && this.isTamed()) {
-            // this.motionY += 0.02;
         }
         super.travel(strafe, forward, vertical);
     }

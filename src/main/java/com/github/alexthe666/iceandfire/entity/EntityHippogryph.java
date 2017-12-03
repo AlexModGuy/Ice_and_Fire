@@ -639,6 +639,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				jumpMovementFactor = 0.05F;
 				this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+				super.travel(strafe, vertical = 0, forward);
+				return;
 			}
 		}
 		super.travel(strafe, forward, vertical);

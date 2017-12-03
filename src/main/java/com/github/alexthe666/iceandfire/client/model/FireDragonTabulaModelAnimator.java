@@ -46,37 +46,37 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             }
             if(entity.modelDeadProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
                 }
             }
             if(entity.sleepProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20, false);
                 }
             }
             if(entity.hoverProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
                 }
             }
             if(entity.flyProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress, 20, false);
                 }
             }
             if(entity.sitProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
                 }
             }
             if(entity.tackleProgress > 0.0F){
                 if(!isPartEqual(EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5);
+                    transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }
             if(entity.fireBreathProgress > 0.0F){
                 if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 20);
+                    transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 20, false);
                 }
             }
             if(!walking){
@@ -104,30 +104,36 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         float degree_walk = 0.5F;
         float degree_idle = 0.5F;
         float degree_fly = 0.5F;
-        if(!walking){
-            model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, entity.ticksExisted, 1);
-            model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
-            model.chainWave(tailPartsWBody, speed_fly, degree_fly * -0.1F, 0, entity.ticksExisted, 1);
-            model.chainWave(neckParts, speed_fly, degree_fly * 0.2F, -4, entity.ticksExisted, 1);
-            model.chainWave(toesPartsL, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
-            model.chainWave(toesPartsR, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
-            model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
-            model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, entity.ticksExisted, 1);
+        if(!entity.isModelDead()) {
+            if (!walking) {
+                model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, entity.ticksExisted, 1);
+                model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
+                model.chainWave(tailPartsWBody, speed_fly, degree_fly * -0.1F, 0, entity.ticksExisted, 1);
+                model.chainWave(neckParts, speed_fly, degree_fly * 0.2F, -4, entity.ticksExisted, 1);
+                model.chainWave(toesPartsL, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
+                model.chainWave(toesPartsR, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
+                model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
+                model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, entity.ticksExisted, 1);
+            } else {
+                model.bob(model.getCube("BodyUpper"), speed_walk * 2, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
+                model.bob(model.getCube("ThighR"), speed_walk, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
+                model.bob(model.getCube("ThighL"), speed_walk, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
+                model.chainSwing(tailParts, speed_walk, degree_walk * 0.25F, -2, limbSwing, limbSwingAmount);
+                model.chainWave(tailParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
+                model.chainSwing(neckParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
+                model.chainWave(neckParts, speed_walk, degree_walk * 0.05F, -2, limbSwing, limbSwingAmount);
+                model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, entity.ticksExisted, 1);
+                model.chainWave(tailParts, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
+                model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, entity.ticksExisted, 1);
+                model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, entity.ticksExisted, 1);
+            }
+            model.bob(model.getCube("BodyUpper"), speed_idle, degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.bob(model.getCube("ThighR"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.bob(model.getCube("ArmR1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.bob(model.getCube("ArmL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
         }
-        else{
-            model.bob(model.getCube("BodyUpper"),  speed_walk * 2, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
-            model.bob(model.getCube("ThighR"), speed_walk, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
-            model.bob(model.getCube("ThighL"), speed_walk, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
-            model.chainSwing(tailParts, speed_walk, degree_walk * 0.25F, -2, limbSwing, limbSwingAmount);
-            model.chainWave(tailParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
-            model.chainSwing(neckParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
-            model.chainWave(neckParts, speed_walk, degree_walk * 0.05F, -2, limbSwing, limbSwingAmount);
-            model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, entity.ticksExisted, 1);
-            model.chainWave(tailParts, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
-            model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, entity.ticksExisted, 1);
-            model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, entity.ticksExisted, 1);
-        }
-        model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
         entity.turn_buffer.applyChainSwingBuffer(neckParts);
         entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
     }
@@ -244,9 +250,14 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         return pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
     }
 
-    public void transitionTo(AdvancedModelRenderer from, AdvancedModelRenderer to, float timer, float maxTime) {
-        transitionAngles(from, to, timer, maxTime);
-
+    public void transitionTo(AdvancedModelRenderer from, AdvancedModelRenderer to, float timer, float maxTime, boolean oldFashioned) {
+        if(oldFashioned){
+            from.rotateAngleX += ((to.rotateAngleX - from.rotateAngleX) / maxTime) * timer;
+            from.rotateAngleY += ((to.rotateAngleY - from.rotateAngleY) / maxTime) * timer;
+            from.rotateAngleZ += ((to.rotateAngleZ - from.rotateAngleZ) / maxTime) * timer;
+        }else{
+            transitionAngles(from, to, timer, maxTime);
+        }
         from.rotationPointX += ((to.rotationPointX - from.rotationPointX) / maxTime) * timer;
         from.rotationPointY += ((to.rotationPointY - from.rotationPointY) / maxTime) * timer;
         from.rotationPointZ += ((to.rotationPointZ - from.rotationPointZ) / maxTime) * timer;
