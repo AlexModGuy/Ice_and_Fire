@@ -1,12 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -18,7 +23,7 @@ public class DragonAIMate extends EntityAIBase {
 	int spawnBabyDelay;
 	double moveSpeed;
 	private EntityDragonBase targetMate;
-
+	private static final IBlockState NEST = ModBlocks.nest.getDefaultState();
 	public DragonAIMate(EntityDragonBase dragon, double speedIn) {
 		this.dragon = dragon;
 		this.theWorld = dragon.world;
@@ -99,11 +104,13 @@ public class DragonAIMate extends EntityAIBase {
 				//entityplayer.addStat(ModAchievements.dragonBreed);
 			}
 
-			this.dragon.setGrowingAge(6000);
-			this.targetMate.setGrowingAge(6000);
 			this.dragon.resetInLove();
 			this.targetMate.resetInLove();
-			egg.setLocationAndAngles(this.dragon.posX, this.dragon.posY, this.dragon.posZ, 0.0F, 0.0F);
+			int nestX = (int) (this.dragon.isMale() ? this.targetMate.posX : this.dragon.posX);
+			int nestY = (int) (this.dragon.isMale() ? this.targetMate.posY : this.dragon.posY) - 1;
+			int nestZ = (int) (this.dragon.isMale() ? this.targetMate.posZ : this.dragon.posZ);
+
+			egg.setLocationAndAngles(nestX - 0.5F, nestY + 1F, nestZ - 0.5F, 0.0F, 0.0F);
 			this.theWorld.spawnEntity(egg);
 			Random random = this.dragon.getRNG();
 
@@ -116,7 +123,20 @@ public class DragonAIMate extends EntityAIBase {
 				double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
 				this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2, new int[0]);
 			}
+			BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
+			BlockPos dirtPos = eggPos.add(1, 0, 1);
 
+			for(int x = 0; x < 3; x++){
+				for(int z = 0; z < 3; z++){
+					BlockPos add = eggPos.add(x, 0 ,z);
+					if(theWorld.getBlockState(add).getBlock().isReplaceable(theWorld, add) || theWorld.getBlockState(add).getMaterial() == Material.GROUND || theWorld.getBlockState(add).getBlockHardness(theWorld, add) < 5F || theWorld.getBlockState(add).getBlockHardness(theWorld, add) >= 0F){
+						theWorld.setBlockState(add, NEST);
+					}
+				}
+			}
+			if(theWorld.getBlockState(dirtPos).getBlock().isReplaceable(theWorld, dirtPos) || theWorld.getBlockState(dirtPos) == NEST){
+				theWorld.setBlockState(dirtPos, Blocks.GRASS_PATH.getDefaultState());
+			}
 			if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
 				this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.posX, this.dragon.posY, this.dragon.posZ, random.nextInt(15) + 10));
 			}

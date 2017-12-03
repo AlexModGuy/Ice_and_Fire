@@ -138,7 +138,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					this.attackDecision = false;
+					this.attackDecision = this.getRNG().nextBoolean();
 					return flag;
 				}
 				break;
@@ -148,7 +148,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
 
-						return false;
+						return this.getRNG().nextBoolean();
 					}
 				} else {
 					if (this.getAnimation() != this.ANIMATION_BITE) {
@@ -156,7 +156,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						this.attackDecision = false;
+						this.attackDecision = this.getRNG().nextBoolean();
 						return flag1;
 					}
 				}
@@ -170,7 +170,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (entityIn instanceof EntityLivingBase) {
 						((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
 					}
-					this.attackDecision = false;
+					this.attackDecision = this.getRNG().nextBoolean();
 					return flag2;
 				}
 				break;
@@ -184,7 +184,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						if (entityIn instanceof EntityLivingBase) {
 							((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
 						}
-						this.attackDecision = false;
+						this.attackDecision = this.getRNG().nextBoolean();
 						return flag2;
 					}
 				}else{
@@ -193,7 +193,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						this.attackDecision = false;
+						this.attackDecision = this.getRNG().nextBoolean();
 						return flag;
 					}
 				}
@@ -311,7 +311,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					}
 					if (entity.isDead || entity == null) {
 						this.setBreathingFire(false);
-						this.attackDecision = true;
+						this.attackDecision = this.getRNG().nextBoolean();
 					}
 				}
 			} else {
@@ -334,7 +334,7 @@ public class EntityFireDragon extends EntityDragonBase {
 						entitylargefireball.setSizes(size, size);
 						if (entity.isDead || entity == null) {
 							this.setBreathingFire(false);
-							this.attackDecision = true;
+							this.attackDecision = this.getRNG().nextBoolean();
 						}
 					}
 				} else {

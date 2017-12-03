@@ -735,7 +735,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         } else if (!this.isModelDead()) {
             if (this.isOwner(player)) {
                 if (!stack.isEmpty()) {
-                    if (this.isBreedingItem(stack) && this.isAdult()) {
+                    if (this.isBreedingItem(stack) ) {
+                        this.setGrowingAge(0);
                         this.consumeItemFromStack(player, stack);
                         this.setInLove(player);
                         return true;
@@ -891,7 +892,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setTackling(true);
         }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.isTackling() && this.getEntityBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(this.getAttackTarget().getEntityBoundingBox())) {
-            this.attackDecision = false;
+            this.attackDecision = true;
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), this.getDragonStage() * 3);
             this.spawnGroundEffects();
             this.setFlying(false);
@@ -1107,7 +1108,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2) {
-            this.attackDecision = true;
+            this.attackDecision = this.getRNG().nextBoolean();
             for (int i = 0; i < 5; i++) {
                 float radiusAdd = i * 0.15F;
                 float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
@@ -1129,7 +1130,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.fireTicks++;
             if (fireTicks > this.getDragonStage() * 12 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
-                this.attackDecision = true;
+                this.attackDecision = this.getRNG().nextBoolean();
                 fireTicks = 0;
             }
             if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
@@ -1528,7 +1529,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean canMateWith(EntityAnimal otherAnimal) {
-        if (otherAnimal instanceof EntityDragonBase && super.canMateWith(otherAnimal)) {
+        if (otherAnimal instanceof EntityDragonBase && otherAnimal != this && otherAnimal.getClass() == this.getClass()) {
             EntityDragonBase dragon = (EntityDragonBase) otherAnimal;
             if (this.isMale() && !dragon.isMale() || !this.isMale() && dragon.isMale()) {
                 return true;

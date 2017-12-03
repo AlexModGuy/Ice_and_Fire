@@ -21,6 +21,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues {
 
 	private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
@@ -103,7 +105,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 				world.setBlockToAir(pos);
 				EntityFireDragon dragon = new EntityFireDragon(world);
 				dragon.setVariant(getType().ordinal());
-				dragon.setGender(rand.nextBoolean());
+				dragon.setGender(new Random().nextBoolean());
 				dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 				if (!world.isRemote) {
 					world.spawnEntity(dragon);

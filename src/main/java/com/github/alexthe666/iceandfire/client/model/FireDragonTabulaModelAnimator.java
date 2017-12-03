@@ -104,7 +104,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
         float degree_walk = 0.5F;
         float degree_idle = 0.5F;
         float degree_fly = 0.5F;
-        if(!entity.isModelDead()) {
+        if(!entity.isAIDisabled()) {
             if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, entity.ticksExisted, 1);
                 model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
