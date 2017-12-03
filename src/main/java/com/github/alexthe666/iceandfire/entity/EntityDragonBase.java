@@ -834,6 +834,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     }
 
+    protected void despawnEntity() {
+        if(IceAndFire.CONFIG.canDragonsDespawn){
+            super.despawnEntity();
+        }
+    }
+
     public void growDragon(int ageInDays) {
         this.setAgeInDays(this.getAgeInDays() + ageInDays);
         this.setScaleForAge(false);

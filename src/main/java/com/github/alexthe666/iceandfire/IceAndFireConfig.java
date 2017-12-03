@@ -85,6 +85,9 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Modifier of how far 3rd person distance is whilst riding a dragon, scaled against size.")
 	public float dragonRiding3rdPersonDistanceModifier = 0.8F;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "dragons", comment = "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.")
+	public boolean canDragonsDespawn = true;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")

@@ -78,7 +78,7 @@ public class PixieAISteal extends EntityAIBase {
 			this.temptedEntity.playSound(ModSounds.PIXIE_TAUNT, 1F, 1F);
 			this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
 			if (temptingPlayer != null) {
-				this.temptingPlayer.addPotionEffect(new PotionEffect(this.temptedEntity.NEGATIVE_POTIONS[this.temptedEntity.getColor()], 100));
+				this.temptingPlayer.addPotionEffect(new PotionEffect(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
 			}
 
 		} else {

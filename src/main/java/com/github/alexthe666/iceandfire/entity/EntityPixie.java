@@ -47,8 +47,8 @@ import java.util.Random;
 public class EntityPixie extends EntityTameable {
 
 	public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
-	public static final Potion[] POSITIVE_POTIONS = new Potion[]{MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.SPEED, MobEffects.LUCK, MobEffects.HASTE};
-	public static final Potion[] NEGATIVE_POTIONS = new Potion[]{MobEffects.WEAKNESS, MobEffects.NAUSEA, MobEffects.SLOWNESS, MobEffects.UNLUCK, MobEffects.MINING_FATIGUE};
+	public Potion[] positivePotions = new Potion[]{MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.SPEED, MobEffects.LUCK, MobEffects.HASTE};
+	public Potion[] negativePotions = new Potion[]{MobEffects.WEAKNESS, MobEffects.NAUSEA, MobEffects.SLOWNESS, MobEffects.UNLUCK, MobEffects.MINING_FATIGUE};
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "if_pixie"));
 	private static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityPixie.class, DataSerializers.VARINT);
 	public boolean slowSpeed = false;
@@ -238,7 +238,7 @@ public class EntityPixie extends EntityTameable {
 			}
 		}
 		if (this.getOwner() != null && this.isOwnerClose() && this.ticksExisted % 80 == 0) {
-			this.getOwner().addPotionEffect(new PotionEffect(POSITIVE_POTIONS[this.getColor()], 100, 0, false, false));
+			this.getOwner().addPotionEffect(new PotionEffect(positivePotions[this.getColor()], 100, 0, false, false));
 		}
 		//EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
 		//if (player != null) {
