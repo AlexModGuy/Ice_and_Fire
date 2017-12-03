@@ -104,6 +104,8 @@ public class DragonAIMate extends EntityAIBase {
 				//entityplayer.addStat(ModAchievements.dragonBreed);
 			}
 
+			this.dragon.setGrowingAge(6000);
+			this.targetMate.setGrowingAge(6000);
 			this.dragon.resetInLove();
 			this.targetMate.resetInLove();
 			int nestX = (int) (this.dragon.isMale() ? this.targetMate.posX : this.dragon.posX);
