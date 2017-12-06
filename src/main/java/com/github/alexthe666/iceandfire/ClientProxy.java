@@ -228,7 +228,7 @@ public class ClientProxy extends CommonProxy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderFireDragon(Minecraft.getMinecraft().getRenderManager(), firedragon_model));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderFireDragon(Minecraft.getMinecraft().getRenderManager(), firedragon_model, true));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelIceDragon()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonEgg.class, new RenderDragonEgg(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonArrow.class, new RenderDragonArrow(Minecraft.getMinecraft().getRenderManager()));

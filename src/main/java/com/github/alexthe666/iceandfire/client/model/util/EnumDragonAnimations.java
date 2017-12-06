@@ -42,7 +42,8 @@ public enum EnumDragonAnimations {
     FLIGHT4("Flight4"),
     FLIGHT5("Flight5"),
     FLIGHT6("Flight6"),
-    TACKLE("Tackle");
+    TACKLE("Tackle"),
+    SIT_ON_PLAYER_POSE("SittingOnPlayer");
 
     public IceAndFireTabulaModel firedragon_model;
     public IceAndFireTabulaModel icedragon_model;

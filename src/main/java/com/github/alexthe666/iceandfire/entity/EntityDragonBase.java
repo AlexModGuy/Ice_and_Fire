@@ -274,7 +274,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean isAIDisabled() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.isModelDead() || properties.isStone;
+        return this.isModelDead() || properties == null || properties.isStone;
     }
 
     @Override
