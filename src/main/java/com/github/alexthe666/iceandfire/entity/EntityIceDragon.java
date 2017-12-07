@@ -32,11 +32,11 @@ public class EntityIceDragon extends EntityDragonBase {
 	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
 	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
-	public static float[] growth_stage_1 = new float[]{1F, 3F};
-	public static float[] growth_stage_2 = new float[]{3F, 7F};
-	public static float[] growth_stage_3 = new float[]{7F, 12.5F};
-	public static float[] growth_stage_4 = new float[]{12.5F, 20F};
-	public static float[] growth_stage_5 = new float[]{20F, 30F};
+	public static final float[] growth_stage_1 = new float[]{1F, 3F};
+	public static final float[] growth_stage_2 = new float[]{3F, 7F};
+	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
+	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
+	public static final float[] growth_stage_5 = new float[]{20F, 30F};
 	public boolean isSwimming;
 	public float swimProgress;
 	public int ticksSwiming;
@@ -46,11 +46,13 @@ public class EntityIceDragon extends EntityDragonBase {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
 		this.setSize(0.78F, 1.2F);
 		this.ignoreFrustumCheck = true;
-		ANIMATION_SPEAK = Animation.create(45);
+		ANIMATION_SPEAK = Animation.create(20);
 		ANIMATION_BITE = Animation.create(35);
 		ANIMATION_SHAKEPREY = Animation.create(65);
 		ANIMATION_TAILWHACK = Animation.create(40);
-		ANIMATION_FIRECHARGE = Animation.create(40);
+		ANIMATION_FIRECHARGE = Animation.create(25);
+		ANIMATION_WINGBLAST = Animation.create(50);
+		ANIMATION_ROAR = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 	}
 
@@ -168,14 +170,14 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		switch (this.getRNG().nextInt(3)) {
+		switch (this.getRNG().nextInt(4)) {
 			case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					this.attackDecision = false;
+					this.attackDecision = this.getRNG().nextBoolean();
 					return flag;
 				}
 				break;
@@ -184,7 +186,8 @@ public class EntityIceDragon extends EntityDragonBase {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
-						return false;
+
+						return this.getRNG().nextBoolean();
 					}
 				} else {
 					if (this.getAnimation() != this.ANIMATION_BITE) {
@@ -192,7 +195,7 @@ public class EntityIceDragon extends EntityDragonBase {
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						this.attackDecision = false;
+						this.attackDecision = this.getRNG().nextBoolean();
 						return flag1;
 					}
 				}
@@ -206,9 +209,34 @@ public class EntityIceDragon extends EntityDragonBase {
 					if (entityIn instanceof EntityLivingBase) {
 						((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
 					}
-					this.attackDecision = false;
+					this.attackDecision = this.getRNG().nextBoolean();
 					return flag2;
 				}
+				break;
+			case 3:
+				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
+					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
+						this.setAnimation(this.ANIMATION_WINGBLAST);
+						return false;
+					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 40) {
+						boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (entityIn instanceof EntityLivingBase) {
+							((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+						}
+						this.attackDecision = this.getRNG().nextBoolean();
+						return flag2;
+					}
+				}else{
+					if (this.getAnimation() != this.ANIMATION_BITE) {
+						this.setAnimation(this.ANIMATION_BITE);
+						return false;
+					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						this.attackDecision = this.getRNG().nextBoolean();
+						return flag;
+					}
+				}
+
 				break;
 		}
 
@@ -218,6 +246,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		attackDecision = true;
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 			if ((!attackDecision || this.isFlying())) {
 				shootIceAtMob(this.getAttackTarget());
@@ -432,7 +461,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityIceDragon.ANIMATION_TAILWHACK, EntityIceDragon.ANIMATION_FIRECHARGE};
+		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR};
 	}
 
 	@Override

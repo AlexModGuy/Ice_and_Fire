@@ -9,6 +9,7 @@ import net.ilexiconn.llibrary.client.util.ItemTESRContext;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
@@ -42,7 +43,7 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 				rotation = 90;
 			}
 
-		} else if (ItemTESRContext.INSTANCE.getCurrentStack() != null) {
+		} else if (ItemTESRContext.INSTANCE.getCurrentStack() != ItemStack.EMPTY) {
 			meta = ItemTESRContext.INSTANCE.getCurrentStack().getItemDamage();
 		}
 		GL11.glPushMatrix();

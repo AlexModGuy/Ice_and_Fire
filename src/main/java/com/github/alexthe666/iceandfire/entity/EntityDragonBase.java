@@ -128,6 +128,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private int animationTick;
     private Animation currentAnimation;
     private ItemStackHandler itemHandler = null;
+    public int walkCycle;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -888,6 +889,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if (this.walkCycle < 39) {
+            this.walkCycle++;
+        } else {
+            this.walkCycle = 0;
+        }
         if(!world.isRemote && this.getRNG().nextInt(500) == 0 && !this.isModelDead() && !this.isSleeping()){
             this.roar();
         }

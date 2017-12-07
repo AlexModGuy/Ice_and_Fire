@@ -29,7 +29,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
 	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
 	public static final float[] growth_stage_5 = new float[]{20F, 30F};
-	public int walkCycle;
 
 	public EntityFireDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
@@ -223,11 +222,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (this.walkCycle < 39) {
-			this.walkCycle++;
-		} else {
-			this.walkCycle = 0;
-		}
 		if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying())) {
 				shootFireAtMob(this.getAttackTarget());

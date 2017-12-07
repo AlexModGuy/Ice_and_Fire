@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
-import com.github.alexthe666.iceandfire.client.model.FireDragonTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
-import com.github.alexthe666.iceandfire.client.model.ModelIceDragon;
-import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
@@ -223,13 +220,16 @@ public class ClientProxy extends CommonProxy {
 	private void renderEntities() {
 		EnumDragonAnimations.initializeDragonModels();
 		ModelBase firedragon_model = null;
+		ModelBase icedragon_model = null;
+
 		try {
 			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
+			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderFireDragon(Minecraft.getMinecraft().getRenderManager(), firedragon_model, true));
-		RenderingRegistry.registerEntityRenderingHandler(EntityIceDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), new ModelIceDragon()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFireDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), firedragon_model, true));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIceDragon.class, new RenderDragonBase(Minecraft.getMinecraft().getRenderManager(), icedragon_model, false));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonEgg.class, new RenderDragonEgg(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonArrow.class, new RenderDragonArrow(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonSkull.class, new RenderDragonSkull(Minecraft.getMinecraft().getRenderManager()));
