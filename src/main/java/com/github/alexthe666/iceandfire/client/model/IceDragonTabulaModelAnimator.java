@@ -89,7 +89,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                 }
             }
             if(entity.tackleProgress > 0.0F){
-                if(!isPartEqual(EnumDragonAnimations.TACKLE.icedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.icedragon_model.getCube(cube.boxName))){
+                if(EnumDragonAnimations.TACKLE.icedragon_model.getCube(cube.boxName) != null && !isPartEqual(EnumDragonAnimations.TACKLE.icedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.icedragon_model.getCube(cube.boxName))){
                     transitionTo(cube, EnumDragonAnimations.TACKLE.icedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }

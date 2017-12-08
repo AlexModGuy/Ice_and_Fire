@@ -23,6 +23,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -265,9 +266,6 @@ public class ClientProxy extends CommonProxy {
 		}
 		if (name.equals("dragonice")) {
 			particle = new ParticleDragonIce(world, x, y, z, motX, motY, motZ);
-		}
-		if (name.equals("snowflake")) {
-			particle = new ParticleSnowflake(world, x, y, z, motX, motY, motZ);
 		}
 		if (name.equals("blood")) {
 			particle = new ParticleBlood(world, x, y, z);

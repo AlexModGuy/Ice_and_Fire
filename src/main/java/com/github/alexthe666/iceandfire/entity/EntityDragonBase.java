@@ -1129,7 +1129,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 if (this.isFire && world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
                 } else if (world.isRemote) {
-                    IceAndFire.PROXY.spawnParticle("snowflake", this.world, headPosX, headPosY, headPosZ, 0, 0, 0);
+                    IceAndFire.PROXY.spawnParticle("dragonice", this.world, headPosX, headPosY, headPosZ, 0, 0, 0);
                 }
             }
             if (this.isFire) {

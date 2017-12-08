@@ -90,13 +90,13 @@ public class EntityIceDragon extends EntityDragonBase {
 	public String getTexture() {
 		if (this.isModelDead()) {
 			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
-				return "iceandfire:textures/models/icedragon/skeleton";
+				return "iceandfire:textures/models/icedragon/ice_skeleton_" + this.getDragonStage();
 			} else {
-				return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+				return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 			}
 		}
 		if (this.isSleeping() || this.isBlinking()) {
-			return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleep";
+			return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
 		} else {
 			return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
 		}
@@ -246,7 +246,6 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		attackDecision = true;
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
 			if ((!attackDecision || this.isFlying())) {
 				shootIceAtMob(this.getAttackTarget());
@@ -461,7 +460,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public Animation[] getAnimations() {
-		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR};
+		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityIceDragon.ANIMATION_TAILWHACK, EntityIceDragon.ANIMATION_FIRECHARGE, EntityIceDragon.ANIMATION_WINGBLAST, EntityIceDragon.ANIMATION_ROAR};
 	}
 
 	@Override
