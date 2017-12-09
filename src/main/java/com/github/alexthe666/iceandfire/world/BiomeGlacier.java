@@ -46,7 +46,7 @@ public class BiomeGlacier extends BiomeSnow {
 						iblockstate1 = rand.nextInt(5) == 0 ? Blocks.ICE.getDefaultState() : this.fillerBlock;
 
 						if (j1 < i && (iblockstate == null || iblockstate.getMaterial() == Material.AIR)) {
-							if (this.getFloatTemperature(blockpos$mutableblockpos.setPos(x, j1, z)) < 0.15F) {
+							if (this.getTemperature(blockpos$mutableblockpos.setPos(x, j1, z)) < 0.15F) {
 								iblockstate = ICE;
 							} else {
 								iblockstate = WATER;

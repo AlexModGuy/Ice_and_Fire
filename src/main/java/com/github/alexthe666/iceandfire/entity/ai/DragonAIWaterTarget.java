@@ -29,7 +29,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		if (this.dragon.getRNG().nextFloat() < 0.5F) {
 			Path path = this.dragon.getNavigator().getPath();
 			if (!this.dragon.getNavigator().noPath() && !this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
-				this.dragon.getNavigator().clearPathEntity();
+				this.dragon.getNavigator().clearPath();
 			}
 			if (this.dragon.getNavigator().noPath()) {
 				Vec3d vec3 = this.findWaterTarget();
