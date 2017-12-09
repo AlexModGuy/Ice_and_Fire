@@ -42,6 +42,10 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
+                if(cube.boxName.equals("Neck3")){
+                    prevX = (float)Math.toRadians(6.04);
+                    x = (float)Math.toRadians(6.04);
+               }
                 this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
             }
             if (entity.modelDeadProgress > 0.0F) {
@@ -49,12 +53,15 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                     transitionTo(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
                 }
                 if(cube.boxName.equals("BodyUpper")){
-                    cube.rotationPointY += ((Math.toRadians(900) - cube.rotationPointY) / 20) * entity.modelDeadProgress;
+                    cube.rotationPointY += ((18 - cube.rotationPointY) / 20) * entity.modelDeadProgress;
                 }
             }
             if (entity.sleepProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.icedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.icedragon_model.getCube(cube.boxName), entity.sleepProgress, 20, false);
+                }
+                if(cube.boxName.equals("BodyUpper")){
+                    cube.rotationPointY += ((18 - cube.rotationPointY) / 20) * entity.sleepProgress;
                 }
             }
             if (entity.hoverProgress > 0.0F) {
@@ -77,13 +84,17 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                     if (!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.icedragon_model.getCube(cube.boxName))) {
                         transitionTo(cube, EnumDragonAnimations.SITTING_POSE.icedragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
                     }
+                    if(cube.boxName.equals("BodyUpper")){
+                        cube.rotationPointY += ((15 - cube.rotationPointY) / 20) * entity.sitProgress;
+                    }
                 }
             }
             if (entity.ridingProgress > 0.0F){
-                if (!isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName))) {
+                if (EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName) != null && !isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
                     if(cube.boxName.equals("BodyUpper")){
                         cube.rotationPointZ -= ((Math.toRadians(-15F) - cube.rotationPointZ) / 20) * entity.ridingProgress;
+                        cube.rotationPointY += ((15 - cube.rotationPointY) / 20) * entity.ridingProgress;
                     }
 
                 }
@@ -272,9 +283,6 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         }else{
             transitionAngles(from, to, timer, maxTime);
         }
-        from.rotationPointX += ((to.rotationPointX - from.rotationPointX) / maxTime) * timer;
-        from.rotationPointY += ((to.rotationPointY - from.rotationPointY) / maxTime) * timer;
-        from.rotationPointZ += ((to.rotationPointZ - from.rotationPointZ) / maxTime) * timer;
         from.offsetX += ((to.offsetX - from.offsetX) / maxTime) * timer;
         from.offsetY += ((to.offsetY - from.offsetY) / maxTime) * timer;
         from.offsetZ += ((to.offsetZ - from.offsetZ) / maxTime) * timer;
