@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
@@ -18,23 +21,30 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		this.setMutexBits(1);
 	}
 
-	@Override
 	public boolean shouldExecute() {
-		if (!this.dragon.isInsideWaterBlock()) {
-			return false;
-		}
-		if (this.dragon.getControllingPassenger() != null) {
-			return false;
-		}
-		if (this.dragon.getRNG().nextFloat() < 0.5F) {
-			Path path = this.dragon.getNavigator().getPath();
-			if (!this.dragon.getNavigator().noPath() && !this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
-				this.dragon.getNavigator().clearPathEntity();
+		if (dragon != null) {
+			if (dragon.isSleeping()) {
+				return false;
 			}
-			if (this.dragon.getNavigator().noPath()) {
-				Vec3d vec3 = this.findWaterTarget();
-				if (vec3 != null) {
-					dragon.waterTarget = new BlockPos(vec3.x, vec3.y, vec3.z);
+			if (!dragon.isInWater()) {
+				return false;
+			}
+			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+				return false;
+			}
+			if (dragon.waterTarget != null && (dragon.isTargetBlocked(new Vec3d(dragon.waterTarget)))) {
+				dragon.waterTarget = null;
+			}
+
+			if (dragon.waterTarget != null) {
+				return false;
+			} else {
+				Vec3d vec = this.findWaterTarget();
+
+				if (vec == null) {
+					return false;
+				} else {
+					dragon.waterTarget = new BlockPos(vec.x, vec.y, vec.z);
 					return true;
 				}
 			}
@@ -42,33 +52,34 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		return false;
 	}
 
-	@Override
-	public boolean shouldContinueExecuting() {
-		return false;
+	public boolean continueExecuting() {
+		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
+		if (!dragon.isInWater()) {
+			return false;
+		}
+		if (dragon.isSleeping()) {
+			return false;
+		}
+		if (properties != null && properties.isStone) {
+			return false;
+		}
+		return dragon.airTarget != null;
 	}
 
 	public Vec3d findWaterTarget() {
-		if (this.dragon.getAttackTarget() == null) {
-			List<Vec3d> water = new ArrayList<Vec3d>();
-			int radius = 5;
-			for (int x = (int) this.dragon.posX - radius; x < (int) this.dragon.posX + radius; x++) {
-				for (int y = (int) this.dragon.posY - radius; y < (int) this.dragon.posY + radius; y++) {
-					for (int z = (int) this.dragon.posZ - radius; z < (int) this.dragon.posZ + radius; z++) {
-						if (this.dragon.isDirectPathBetweenPoints(this.dragon.getPositionVector(), new Vec3d(x, y, z))) {
-							water.add(new Vec3d(x, y, z));
-						}
-					}
-				}
-			}
-			if (!water.isEmpty()) {
-				return water.get(this.dragon.getRNG().nextInt(water.size()));
+		return new Vec3d(getNearbyWaterTarget());
+	}
+
+	public BlockPos getNearbyWaterTarget() {
+		if (dragon.getAttackTarget() == null) {
+			BlockPos pos = DragonUtils.getWaterBlockInView(dragon);
+			if (pos != null && dragon.world.getBlockState(pos).getMaterial() == Material.WATER) {
+				return pos;
 			}
 		} else {
-			BlockPos blockpos1 = new BlockPos(this.dragon.getAttackTarget()).down();
-			if (this.dragon.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
-				return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
-			}
+			return new BlockPos((int) dragon.getAttackTarget().posX, (int) dragon.getAttackTarget().posY, (int) dragon.getAttackTarget().posZ);
 		}
-		return null;
+		return dragon.getPosition();
 	}
+
 }

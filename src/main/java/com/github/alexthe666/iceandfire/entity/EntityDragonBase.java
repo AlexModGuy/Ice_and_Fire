@@ -1575,11 +1575,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                System.out.println(rayTrace.typeOfHit);
-                if (!world.isAirBlock(pos)) {
+                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && !isFire) {
                     return true;
                 }
-                return rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
+                return rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.BLOCK ;
             }
         }
         return false;

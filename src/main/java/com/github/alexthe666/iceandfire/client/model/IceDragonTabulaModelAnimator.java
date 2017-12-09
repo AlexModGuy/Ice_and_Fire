@@ -35,7 +35,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         AdvancedModelRenderer[] toesPartsR = { model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
-            if (prevPosition.getCube(cube.boxName) != null && walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
+            if (entity.swimProgress <= 0F && prevPosition.getCube(cube.boxName) != null && walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
@@ -77,6 +77,9 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
             if (entity.swimProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumDragonAnimations.SWIM_POSE.icedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.SWIM_POSE.icedragon_model.getCube(cube.boxName), entity.swimProgress, 20, false);
+                }
+                if(cube.boxName.equals("BodyUpper")){
+                    cube.rotationPointY += ((18 - cube.rotationPointY) / 20) * entity.swimProgress;
                 }
             }
             if (entity.sitProgress > 0.0F) {
@@ -129,7 +132,17 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         float degree_idle = 0.5F;
         float degree_fly = 0.5F;
         if(!entity.isAIDisabled()) {
-            if (!walking) {
+            if (entity.swimProgress >= 0F) {
+                model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, limbSwing, limbSwingAmount);
+                model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, limbSwing, limbSwingAmount);
+                model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, limbSwing, limbSwingAmount);
+                model.flap(model.getCube("ArmR1"), -speed_fly, degree_fly * 0.6F, false, 0, 0, limbSwing, limbSwingAmount);
+                model.flap(model.getCube("ArmL1"), -speed_fly, degree_fly * 0.6F, true, 0, 0, limbSwing, limbSwingAmount);
+                model.chainWave(neckParts, speed_fly, degree_fly * 0.15F, -2, limbSwing, limbSwingAmount);
+                model.chainWave(tailPartsWBody, speed_fly, degree_fly * 0.3F, -2, limbSwing, limbSwingAmount);
+
+            }
+            else if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, entity.ticksExisted, 1);
                 model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
                 model.chainWave(tailPartsWBody, speed_fly, degree_fly * -0.1F, 0, entity.ticksExisted, 1);
@@ -256,7 +269,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         model.llibAnimator.startKeyframe(10);
         moveToPose(model, EnumDragonAnimations.ROAR3.icedragon_model);
         model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);/**/
+        model.llibAnimator.resetKeyframe(10);
     }
 
     public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
