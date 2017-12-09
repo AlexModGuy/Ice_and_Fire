@@ -80,7 +80,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
 			this.hippogryph.setAttackTarget((EntityLivingBase) null);
 		}
 
-		this.hippogryph.getNavigator().clearPathEntity();
+		this.hippogryph.getNavigator().clearPath();
 	}
 
 	@Override

@@ -277,7 +277,7 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public boolean isOwnerClose() {
-		return this.isTamed() && this.getOwner() != null && this.getDistanceSqToEntity(this.getOwner()) < 100;
+		return this.isTamed() && this.getOwner() != null && this.getDistanceSq(this.getOwner()) < 100;
 	}
 
 	@Nullable

@@ -26,7 +26,7 @@ public class ItemModAxe extends ItemTool {
 
 	public ItemModAxe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial, EFFECTIVE_ON);
-		this.damageVsEntity = toolmaterial == ModItems.boneTools ? 8 : 6;
+		this.attackDamage = toolmaterial == ModItems.boneTools ? 8 : 6;
 		this.attackSpeed = -3;
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(IceAndFire.TAB);
@@ -50,8 +50,8 @@ public class ItemModAxe extends ItemTool {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		Material material = state.getMaterial();
-		return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getStrVsBlock(stack, state) : this.efficiencyOnProperMaterial;
+		return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
 	}
 }

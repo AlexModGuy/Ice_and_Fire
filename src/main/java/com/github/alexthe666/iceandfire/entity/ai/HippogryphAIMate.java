@@ -57,7 +57,7 @@ public class HippogryphAIMate extends EntityAIBase {
 		this.hippo.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
 		++this.spawnBabyDelay;
 
-		if (this.spawnBabyDelay >= 60 && this.hippo.getDistanceSqToEntity(this.targetMate) < 9.0D) {
+		if (this.spawnBabyDelay >= 60 && this.hippo.getDistanceSq(this.targetMate) < 9.0D) {
 			this.spawnBaby();
 		}
 	}
@@ -68,9 +68,9 @@ public class HippogryphAIMate extends EntityAIBase {
 		EntityHippogryph entityanimal = null;
 
 		for (EntityHippogryph entityanimal1 : list) {
-			if (this.hippo.canMateWith(entityanimal1) && this.hippo.getDistanceSqToEntity(entityanimal1) < d0) {
+			if (this.hippo.canMateWith(entityanimal1) && this.hippo.getDistanceSq(entityanimal1) < d0) {
 				entityanimal = entityanimal1;
-				d0 = this.hippo.getDistanceSqToEntity(entityanimal1);
+				d0 = this.hippo.getDistanceSq(entityanimal1);
 			}
 		}
 
