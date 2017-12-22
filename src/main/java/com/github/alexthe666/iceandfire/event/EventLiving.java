@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
@@ -62,6 +63,23 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onPlayerAttack(AttackEntityEvent event) {
+		if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
+			float dist = IceAndFire.CONFIG.cyclopesSheepSearchLength;
+			List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
+			Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
+			if (!list.isEmpty()) {
+				Iterator<Entity> itr = list.iterator();
+				while (itr.hasNext()) {
+					Entity entity = itr.next();
+					if (entity instanceof EntityCyclops) {
+						EntityCyclops cyclops = (EntityCyclops) entity;
+						if (!cyclops.isBlinded() && !event.getEntityPlayer().capabilities.isCreativeMode) {
+							cyclops.setAttackTarget(event.getEntityPlayer());
+						}
+					}
+				}
+			}
+		}
 		if (event.getTarget() instanceof EntityLiving) {
 			boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving) event.getTarget(), StoneEntityProperties.class);

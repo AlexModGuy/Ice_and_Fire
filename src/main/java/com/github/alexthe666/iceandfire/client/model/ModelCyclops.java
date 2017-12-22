@@ -8,6 +8,8 @@ import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class ModelCyclops extends ModelDragonBase {
     public AdvancedModelRenderer body;
@@ -170,7 +172,7 @@ public class ModelCyclops extends ModelDragonBase {
         this.UpperBody.addChild(this.rightarm);
         animator = ModelAnimator.create();
         this.updateDefaultPose();
-    }
+}
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -181,9 +183,33 @@ public class ModelCyclops extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityCyclops) entity);
+               animator.update(entity);
+        animator.setAnimation(EntityCyclops.ANIMATION_STOMP);
+        animator.startKeyframe(7);
+        this.rotate(animator, rightleg, -62, 0, 0);
+        this.rotate(animator, rightleg2, 46, 0, 0);
+        animator.move(rightleg2, 0, 1.1F, -1.7F);
+        this.rotate(animator, leftleg, 10, 0, 0);
+        this.rotate(animator, leftleg2, 10, 0, 0);
+        animator.move(leftleg2, 0, 0, -0.3F);
+        this.rotate(animator, body, -15, 0, 0);
+        this.rotate(animator, UpperBody, 7, 0, 0);
+        animator.endKeyframe();
+        animator.setStaticKeyframe(5);
+        animator.startKeyframe(5);
+        this.rotate(animator, body, 5, 0, 0);
+        this.rotate(animator, UpperBody, 7.5F, 0, 0);
+        this.rotate(animator, rightleg, -46, 0, 0);
+        this.rotate(animator, rightleg2, 36, 0, 0);
+        this.rotate(animator, leftleg, 7, 0, 0);
+        this.rotate(animator, leftleg2, 2, 0, 0);
+        animator.move(rightleg2, 0, 1.1F, -0.9F);
+        animator.move(body, 0, 1, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(10);
         this.Loin.rotateAngleX = Math.min(0, Math.min(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX));
         this.LoinBack.rotateAngleX = this.Loin.rotateAngleX - Math.max(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX);
-        animator.update(entity);
+
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityCyclops entity) {
@@ -202,21 +228,35 @@ public class ModelCyclops extends ModelDragonBase {
         this.swing(this.body, speed_walk, degree_walk * -0.5F, false, 0, 0F, f, f1);
         this.swing(this.UpperBody, speed_walk, degree_walk * -0.25F, true, 0, 0F, f, f1);
         this.swing(this.Belly, speed_walk, degree_walk * -0.25F, false, 0, 0F, f, f1);
-        this.walk(this.UpperBody, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, entity.ticksExisted, 1);
+        this.walk(this.UpperBody, speed_idle, degree_idle * -0.1F, true, 0F, -0.1F, entity.ticksExisted, 1);
         this.flap(this.leftarm, speed_idle, degree_idle * -0.1F, true, 0, 0F, entity.ticksExisted, 1);
         this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, entity.ticksExisted, 1);
         this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, entity.ticksExisted, 1);
         this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, entity.ticksExisted, 1);
+        this.faceTarget(f3, f4, 1, this.Head);
+        this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, entity.ticksExisted, 1);
 
-        float f12 = f1 * 0.5F;
-        if (f12 < 0.0F) {
-            f12 = 0.0F;
-        }
+        if (entity != null)
+        {
+            Vec3d vec3d = entity.getPositionEyes(0.0F);
+            Vec3d vec3d1 = entity.getPositionEyes(0.0F);
+            double d0 = vec3d.y - vec3d1.y;
 
-        if (f12 > Math.toRadians(10)) {
-            f12 = (float) Math.toRadians(10);
+            if (d0 > 0.0D)
+            {
+                this.Eye.rotationPointY = -4.1F;
+            }
+            else
+            {
+                this.Eye.rotationPointY = -5.1F;
+            }
+
+            Vec3d vec3d2 = entity.getLook(0.0F);
+            vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
+            Vec3d vec3d3 = (new Vec3d(vec3d1.x - vec3d.x, 0.0D, vec3d1.z - vec3d.z)).normalize().rotateYaw(((float)Math.PI / 2F));
+            double d1 = vec3d2.dotProduct(vec3d3);
+            this.Eye.rotationPointX = MathHelper.sqrt((float)Math.abs(d1)) * 2.0F * (float)Math.signum(d1);
         }
-        this.body.rotateAngleX = f12;
     }
 
     @Override

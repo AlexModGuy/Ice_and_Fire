@@ -1,8 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.ChunkCache;
 
 import java.util.List;
 
@@ -47,9 +54,6 @@ public class EntitySheepAIFollowCyclops extends EntityAIBase {
             return false;
         } else {
             double d0 = this.childAnimal.getDistanceSqToEntity(this.cyclops);
-            if(d0 < 10){
-                return false;
-            }
             return d0 >= 9.0D && d0 <= 256.0D;
         }
     }
@@ -66,7 +70,21 @@ public class EntitySheepAIFollowCyclops extends EntityAIBase {
     public void updateTask() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;
-            this.childAnimal.getNavigator().tryMoveToEntityLiving(this.cyclops, this.moveSpeed);
+            Path path = getPathToEntityLiving(this.childAnimal, this.cyclops);
+            if(path != null){
+                this.childAnimal.getNavigator().setPath(path, this.moveSpeed);
+
+            }
         }
+    }
+
+    public Path getPathToEntityLiving(EntityAnimal entityIn, EntityCyclops cyclops) {
+        PathNavigate navi = entityIn.getNavigator();
+        Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.posX, cyclops.posY, cyclops.posZ));
+        if(vec3d != null){
+            BlockPos blockpos = new BlockPos(vec3d);
+            return navi.getPathToPos(blockpos);
+        }
+        return null;
     }
 }

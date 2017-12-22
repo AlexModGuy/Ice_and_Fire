@@ -134,6 +134,8 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "pixies", comment = "The size of pixie villages.")
 	public int pixieVillageSize = 5;
 
+	@ConfigEntry(category = "cyclopes", comment = "How far away cyclopes will detect sheep being hurt.")
+	public int cyclopesSheepSearchLength = 17;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;
