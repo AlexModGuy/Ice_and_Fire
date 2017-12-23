@@ -49,7 +49,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         eyeEntity = new EntityCyclopsEye(this.getEntity(), 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(10);
-        ANIMATION_KICK = Animation.create(10);
+        ANIMATION_KICK = Animation.create(20);
         ANIMATION_ROAR = Animation.create(10);
     }
 
@@ -126,9 +126,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
 
     public void onLivingUpdate(){
         super.onLivingUpdate();
-        if(this.getAnimation() != ANIMATION_STOMP){
-            this.setAnimation(ANIMATION_STOMP);
-        }
         if(this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14){
             for (int i1 = 0; i1 < 20; i1++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;

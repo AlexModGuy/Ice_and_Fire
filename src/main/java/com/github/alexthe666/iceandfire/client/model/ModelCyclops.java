@@ -207,6 +207,24 @@ public class ModelCyclops extends ModelDragonBase {
         animator.move(body, 0, 1, 0);
         animator.endKeyframe();
         animator.resetKeyframe(10);
+        animator.setAnimation(EntityCyclops.ANIMATION_KICK);
+        animator.startKeyframe(10);
+        this.rotate(animator, body, 3, 0, 0);
+        this.rotate(animator, leftleg, 13, 0, 0);
+        this.rotate(animator, leftleg2, 18, 0, 0);
+        animator.move(leftleg2, 0, 1, -0.9F);
+        this.rotate(animator, rightleg, -26, 0, 0);
+        this.rotate(animator, rightleg2, 23, 0, 0);
+        animator.move(leftleg2, 0, 1.2F, -1.1F);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, body, -2, 0, 0);
+        this.rotate(animator, rightleg, -55, 0, 0);
+        this.rotate(animator, rightleg2, 18, 0, 0);
+        animator.move(leftleg2, 0, 2, -0.5F);
+        this.rotate(animator, leftleg, 10, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
         this.Loin.rotateAngleX = Math.min(0, Math.min(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX));
         this.LoinBack.rotateAngleX = this.Loin.rotateAngleX - Math.max(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX);
 
