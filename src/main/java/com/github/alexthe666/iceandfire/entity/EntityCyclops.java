@@ -13,12 +13,11 @@ import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -48,7 +47,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         this.setSize(1.95F, 7.4F);
         eyeEntity = new EntityCyclopsEye(this.getEntity(), 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
         ANIMATION_STOMP = Animation.create(27);
-        ANIMATION_EATPLAYER = Animation.create(10);
+        ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
         ANIMATION_ROAR = Animation.create(10);
     }
@@ -62,9 +61,9 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, true, false, new Predicate<EntityVillager>() {
             @Override
-            public boolean apply(@Nullable EntityPlayer entity) {
+            public boolean apply(@Nullable EntityVillager entity) {
                 return true;
             }
         }));
@@ -80,6 +79,25 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         if (!EventLiving.isAnimaniaSheep(entityIn)) {
             entityIn.applyEntityCollision(this);
         }
+    }
+
+    public boolean attackEntityAsMob(Entity entityIn) {
+        int attackDescision = this.getRNG().nextInt(3);
+        if(attackDescision == 0){
+            this.setAnimation(ANIMATION_STOMP);
+            return true;
+        }else if(attackDescision == 1){
+            if(!entityIn.isPassenger(this)){
+                this.setAnimation(ANIMATION_EATPLAYER);
+                entityIn.startRiding(this, true);
+            }
+            return true;
+        }else if(attackDescision == 2){
+            this.setAnimation(ANIMATION_KICK);
+            return true;
+        }
+
+        return false;
     }
 
     protected void applyEntityAttributes() {
@@ -124,8 +142,67 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         return EnumCreatureAttribute.UNDEAD;
     }
 
+    public void updatePassenger(Entity passenger) {
+        super.updatePassenger(passenger);
+        if (this.isPassenger(passenger)) {
+            passenger.motionX = 0;
+            passenger.motionZ = 0;
+            this.setAnimation(ANIMATION_EATPLAYER);
+            double raiseUp = this.getAnimationTick() < 10 ? 0 : Math.min((this.getAnimationTick()  * 3 - 30) * 0.2, 5.2F);
+            float pullIn = this.getAnimationTick() < 15 ? 0 : Math.min((this.getAnimationTick() - 15) * 0.15F, 0.75F);
+            renderYawOffset = rotationYaw;
+            this.rotationYaw *= 0;
+            float radius = -2.75F + pullIn;
+            float angle = (0.01745329251F * this.renderYawOffset) + 3.15F;
+            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraY = raiseUp;
+            passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+            if(this.getAnimationTick() == 32){
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? 40F : passenger instanceof EntityLivingBase ? (float) ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+                passenger.dismountRidingEntity();
+            }
+        }
+    }
+
+    @Override
+    public void travel(float strafe, float forward, float vertical) {
+        if (this.getAnimation() == ANIMATION_EATPLAYER) {
+            strafe = 0;
+            forward = 0;
+            vertical = 0;
+            super.travel(strafe, forward, vertical);
+            return;
+        }
+        super.travel(strafe, forward, vertical);
+    }
+    public boolean canPassengerSteer(){
+        return false;
+    }
+
+    public boolean canBePushed() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldRiderSit() {
+        return false;
+    }
+
+
     public void onLivingUpdate(){
         super.onLivingUpdate();
+        if(this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSqToEntity(this.getAttackTarget()) < 6D && this.getAnimationTick() == 14){
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        }
+        if(this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSqToEntity(this.getAttackTarget()) < 6D && this.getAnimationTick() == 12){
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
+
+        }
+        if(this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())){
+            this.setAnimation(ANIMATION_EATPLAYER);
+        }
         if(this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14){
             for (int i1 = 0; i1 < 20; i1++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;

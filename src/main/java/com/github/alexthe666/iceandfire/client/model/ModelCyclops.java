@@ -225,6 +225,57 @@ public class ModelCyclops extends ModelDragonBase {
         this.rotate(animator, leftleg, 10, 0, 0);
         animator.endKeyframe();
         animator.resetKeyframe(5);
+        animator.setAnimation(EntityCyclops.ANIMATION_EATPLAYER);
+        animator.startKeyframe(10);
+        animator.move(body, 0, 7, 0);
+        this.rotate(animator, body, 25, 0, 0);
+        this.rotate(animator, leftleg, -7, 0, 0);
+        this.rotate(animator, rightleg, -85, 0, 0);
+        this.rotate(animator, rightleg2, 50, 0, 0);
+        this.rotate(animator, leftleg2, 52, 0, 0);
+        animator.move(leftleg2, 0, 1.1F, -2);
+        animator.move(rightleg2, 0, 1, -2);
+        this.rotate(animator, UpperBody, 40, 0, 0);
+        animator.move(UpperBody, 0, 1.7F, 0);
+        this.rotate(animator, rightarm, -80, 0, 0);
+        this.rotate(animator, leftarm, -80, 0, 0);
+        this.rotate(animator, rightarm2, 0, 0, -23);
+        this.rotate(animator, leftarm2, 0, 0, 23);
+        animator.endKeyframe();
+        animator.startKeyframe(15);
+        this.rotate(animator, rightarm, -40, -25, 40);
+        this.rotate(animator, rightarm2, -120, 0, 0);
+        this.rotate(animator, leftarm, -40, 25, -40);
+        this.rotate(animator, leftarm2, -120, 0, 0);
+        animator.move(rightarm2, 0, 1.2F, 1.4F);
+        animator.move(leftarm2, 0, 1.2F, 1.4F);
+        this.rotate(animator, Head, -25, 0, 0);
+        animator.move(Head, 0, -0.5F, 0);
+        this.rotate(animator, Jaw, 5, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, rightarm, -40, -25, 40);
+        this.rotate(animator, rightarm2, -120, 0, 0);
+        this.rotate(animator, leftarm, -40, 25, -40);
+        this.rotate(animator, leftarm2, -120, 0, 0);
+        animator.move(rightarm2, 0, 1.2F, 1.4F);
+        animator.move(leftarm2, 0, 1.2F, 1.4F);
+        this.rotate(animator, Head, -48, 0, 0);
+        animator.move(Head, 0, -0.8F, 0);
+        this.rotate(animator, Jaw, 57, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, rightarm, -40, -25, 40);
+        this.rotate(animator, rightarm2, -120, 0, 0);
+        this.rotate(animator, leftarm, -40, 25, -40);
+        this.rotate(animator, leftarm2, -120, 0, 0);
+        animator.move(rightarm2, 0, 1.2F, 1.4F);
+        animator.move(leftarm2, 0, 1.2F, 1.4F);
+        this.rotate(animator, Head, -25, 0, 0);
+        animator.move(Head, 0, -0.5F, 0);
+        this.rotate(animator, Jaw, 5, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
         this.Loin.rotateAngleX = Math.min(0, Math.min(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX));
         this.LoinBack.rotateAngleX = this.Loin.rotateAngleX - Math.max(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX);
 
@@ -251,7 +302,9 @@ public class ModelCyclops extends ModelDragonBase {
         this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, entity.ticksExisted, 1);
         this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, entity.ticksExisted, 1);
         this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, entity.ticksExisted, 1);
-        this.faceTarget(f3, f4, 1, this.Head);
+        if(entity.getAnimation() != entity.ANIMATION_EATPLAYER){
+            this.faceTarget(f3, f4, 1, this.Head);
+        }
         this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, entity.ticksExisted, 1);
 
         if (entity != null)
