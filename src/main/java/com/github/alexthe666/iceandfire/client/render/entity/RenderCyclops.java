@@ -16,7 +16,7 @@ public class RenderCyclops extends RenderLiving<EntityCyclops> {
 	public static final ResourceLocation BLINDED_TEXTURE = new ResourceLocation("iceandfire:textures/models/cyclops/cyclops_injured.png");
 
 	public RenderCyclops(RenderManager renderManager) {
-		super(renderManager, new ModelCyclops(), 0.6F);
+		super(renderManager, new ModelCyclops(), 1.6F);
 	}
 
 	@Override

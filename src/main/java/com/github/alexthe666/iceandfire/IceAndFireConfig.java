@@ -136,6 +136,12 @@ public class IceAndFireConfig {
 
 	@ConfigEntry(category = "cyclopes", comment = "How far away cyclopes will detect sheep being hurt.")
 	public int cyclopesSheepSearchLength = 17;
+	@ConfigEntry(category = "cyclopes", comment = "Maximum cyclops health")
+	public double cyclopsMaxHealth = 150;
+	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their kick and stomp attacks.")
+	public double cyclopsAttackStrength = 15;
+	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their bite attack.")
+	public double cyclopsBiteStrength = 40;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

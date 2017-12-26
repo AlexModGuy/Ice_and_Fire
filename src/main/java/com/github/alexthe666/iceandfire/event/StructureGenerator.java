@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.state.IBlockState;
@@ -41,6 +38,7 @@ public class StructureGenerator implements IWorldGenerator {
 	private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
 	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
 	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
+	private static final WorldGenCyclopsCave CYCLOPS_CAVE = new WorldGenCyclopsCave();
 	private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
 
 	public static BlockPos getHeight(World world, BlockPos pos) {
@@ -73,6 +71,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
+		if(random.nextInt(30) == 0){CYCLOPS_CAVE.generate(world, random, height);}
 		if (IceAndFire.CONFIG.spawnPixies) {
 			boolean isSpookyForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST) && (BiomeDictionary.hasType(world.getBiome(height), Type.SPOOKY) || BiomeDictionary.hasType(world.getBiome(height), Type.MAGICAL));
 			if (isSpookyForest && random.nextInt(IceAndFire.CONFIG.spawnPixiesChance + 1) == 0) {
