@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.minecraft.block.BlockBone;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntitySheep;
@@ -37,12 +39,16 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (3 + rand.nextInt(2));
-                if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() > position.getY() - 1) {
+                if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0 && isNotInDoorway) {
                         worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
                     }
                     if(blockpos.getY() == position.getY()){
                         worldIn.setBlockState(blockpos, Blocks.MOSSY_COBBLESTONE.getDefaultState(), 3);
+                    }
+                    if(blockpos.getY() <= position.getY() - 1 && worldIn.isAirBlock(blockpos)){
+                        worldIn.setBlockState(blockpos, Blocks.COBBLESTONE.getDefaultState(), 3);
+
                     }
                 }
             }
@@ -98,7 +104,10 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                 }
             }
         }
-        return false;
+        EntityCyclops cyclops = new EntityCyclops(worldIn);
+        cyclops.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+        worldIn.spawnEntity(cyclops);
+        return true;
     }
 
     private void genSheepPen(World worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {

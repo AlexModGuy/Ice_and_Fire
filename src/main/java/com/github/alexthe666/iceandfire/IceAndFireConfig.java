@@ -142,7 +142,11 @@ public class IceAndFireConfig {
 	public double cyclopsAttackStrength = 15;
 	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their bite attack.")
 	public double cyclopsBiteStrength = 40;
-	//@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "cyclopes", comment = "Wether to spawn cyclops caves or not")
+	public boolean generateCyclopsCaves;
+	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
+	public int spawnCyclopsChance = 80;
+    //@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;
 	//@SuppressWarnings("deprecation")

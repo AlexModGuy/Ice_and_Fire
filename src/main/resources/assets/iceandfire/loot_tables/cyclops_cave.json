@@ -3,8 +3,8 @@
     {
       "name": "cyclops_cave",
       "rolls": {
-        "min": 3,
-        "max": 7
+        "min": 1,
+        "max": 4
       },
       "entries": [
         {
@@ -118,61 +118,6 @@
             }
           ],
           "weight": 5
-        },
-        {
-          "type": "item",
-          "name": "minecraft:potion",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{Potion:\"minecraft:water\"}"
-            }
-          ],
-          "weight":20
-        },
-        {
-          "type": "item",
-          "name": "minecraft:potion",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{Potion:\"minecraft:luck\"}"
-            }
-          ],
-          "weight":10
-        },
-        {
-          "type": "item",
-          "name": "minecraft:potion",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{Potion:\"minecraft:healing\"}"
-            }
-          ],
-          "weight":10
-        },
-        {
-          "type": "item",
-          "name": "minecraft:potion",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{Potion:\"minecraft:swiftness\"}"
-            }
-          ],
-          "weight":10
-        },
-        {
-          "type": "item",
-          "name": "minecraft:potion",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{Potion:\"minecraft:strength\"}"
-            }
-          ],
-          "weight":10
         },
         {
           "type": "item",

@@ -71,7 +71,9 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if(random.nextInt(30) == 0){CYCLOPS_CAVE.generate(world, random, height);}
+		if(IceAndFire.CONFIG.generateCyclopsCaves && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0){
+			CYCLOPS_CAVE.generate(world, random, height);
+		}
 		if (IceAndFire.CONFIG.spawnPixies) {
 			boolean isSpookyForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST) && (BiomeDictionary.hasType(world.getBiome(height), Type.SPOOKY) || BiomeDictionary.hasType(world.getBiome(height), Type.MAGICAL));
 			if (isSpookyForest && random.nextInt(IceAndFire.CONFIG.spawnPixiesChance + 1) == 0) {
