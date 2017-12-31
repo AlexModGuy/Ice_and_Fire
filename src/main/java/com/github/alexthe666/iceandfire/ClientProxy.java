@@ -188,6 +188,11 @@ public class ClientProxy extends CommonProxy {
 		for (EnumDragonArmor armor : EnumDragonArmor.values()) {
 			renderArmors(armor);
 		}
+		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_helmet, 0, new ModelResourceLocation("iceandfire:sheep_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_chestplate, 0, new ModelResourceLocation("iceandfire:sheep_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_leggings, 0, new ModelResourceLocation("iceandfire:sheep_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_boots, 0, new ModelResourceLocation("iceandfire:sheep_boots", "inventory"));
+
 	}
 
 	public static void renderArmors(EnumDragonArmor armor) {

@@ -46,7 +46,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                     if(blockpos.getY() == position.getY()){
                         worldIn.setBlockState(blockpos, Blocks.MOSSY_COBBLESTONE.getDefaultState(), 3);
                     }
-                    if(blockpos.getY() <= position.getY() - 1 && worldIn.isAirBlock(blockpos)){
+                    if(blockpos.getY() <= position.getY() - 1 && !worldIn.isBlockFullCube(blockpos)){
                         worldIn.setBlockState(blockpos, Blocks.COBBLESTONE.getDefaultState(), 3);
 
                     }

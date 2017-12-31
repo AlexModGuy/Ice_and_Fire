@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "WWW",
+    "WLW",
+    "W W"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather_leggings",
+      "data": 0
+    },
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "woolBlock"
+    }
+  },
+  "result": {
+    "item": "iceandfire:sheep_leggings",
+    "data": 0
+  }
+}

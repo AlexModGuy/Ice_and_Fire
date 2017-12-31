@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.BannerPattern;
@@ -18,6 +19,7 @@ public class ModRecipes {
 		OreDictionary.registerOre("oreSapphire", ModBlocks.sapphireOre);
 		OreDictionary.registerOre("blockSilver", ModBlocks.silverBlock);
 		OreDictionary.registerOre("boneWither", ModItems.witherbone);
+		OreDictionary.registerOre("woolBlock", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("foodMeat", Items.CHICKEN);
 		OreDictionary.registerOre("foodMeat", Items.COOKED_CHICKEN);
 		OreDictionary.registerOre("foodMeat", Items.BEEF);
