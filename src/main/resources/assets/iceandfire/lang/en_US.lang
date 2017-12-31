@@ -46,6 +46,7 @@ tile.iceandfire.jar_1.name=Purple Pixie Jar
 tile.iceandfire.jar_2.name=Blue Pixie Jar
 tile.iceandfire.jar_3.name=Green Pixie Jar
 tile.iceandfire.jar_4.name=Yellow Pixie Jar
+tile.iceandfire.nest.name=Dragon Nest
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
@@ -107,6 +108,10 @@ item.iceandfire.stone_statue.name=Stone Statue
 item.iceandfire.blindfold.name=Blindfold
 item.iceandfire.pixie_dust.name=Pixie Dust
 item.iceandfire.ambrosia.name=Ambrosia
+item.iceandfire.sheep_helmet.name=Sheep Disguise Helmet
+item.iceandfire.sheep_chestplate.name=Sheep Disguise Chestplate
+item.iceandfire.sheep_leggings.name=Sheep Disguise Leggings
+item.iceandfire.sheep_boots.name=Sheep Disguise Boots
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -175,6 +180,7 @@ entity.if_pixie.type_1=Purple Pixie
 entity.if_pixie.type_2=Blue Pixie
 entity.if_pixie.type_3=Green Pixie
 entity.if_pixie.type_4=Yellow Pixie
+entity.cyclops.name=Cyclops
 
 dragon.red=Red
 dragon.green=Emerald
@@ -218,6 +224,7 @@ bestiary.tameddragons=Tamed Dragons
 bestiary.hippogryph=Hippogryphs
 bestiary.gorgon=Gorgons
 bestiary.pixie=Pixies
+bestiary.cyclops=Cyclopes
 
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead

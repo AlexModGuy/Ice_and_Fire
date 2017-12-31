@@ -3,9 +3,11 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -16,6 +18,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
@@ -28,6 +31,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -58,6 +62,23 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onPlayerAttack(AttackEntityEvent event) {
+		if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
+			float dist = IceAndFire.CONFIG.cyclopesSheepSearchLength;
+			List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
+			Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
+			if (!list.isEmpty()) {
+				Iterator<Entity> itr = list.iterator();
+				while (itr.hasNext()) {
+					Entity entity = itr.next();
+					if (entity instanceof EntityCyclops) {
+						EntityCyclops cyclops = (EntityCyclops) entity;
+						if (!cyclops.isBlinded() && !event.getEntityPlayer().capabilities.isCreativeMode) {
+							cyclops.setAttackTarget(event.getEntityPlayer());
+						}
+					}
+				}
+			}
+		}
 		if (event.getTarget() instanceof EntityLiving) {
 			boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving) event.getTarget(), StoneEntityProperties.class);
@@ -224,6 +245,18 @@ public class EventLiving {
 		}
 	}
 
+	@SubscribeEvent
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
+			EntityAnimal animal = (EntityAnimal)event.getEntity();
+			animal.tasks.addTask(4, new EntitySheepAIFollowCyclops(animal, 1.2D));
+		}
+	}
+
+	public static boolean isAnimaniaSheep(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("sheep") || entity instanceof EntitySheep;
+	}
 	//@SubscribeEvent
 	//public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
 	//	if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {

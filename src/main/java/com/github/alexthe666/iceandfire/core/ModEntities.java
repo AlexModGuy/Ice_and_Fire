@@ -7,6 +7,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.List;
@@ -38,13 +39,13 @@ public class ModEntities {
 		registerUnspawnable(EntityStoneStatue.class, "stonestatue", 13);
 		registerSpawnable(EntityGorgon.class, "gorgon", 14, 0XD0D99F, 0X684530);
 		registerSpawnable(EntityPixie.class, "if_pixie", 15, 0XFF7F89, 0XE2CCE2);
+		registerSpawnable(EntityCyclops.class, "cyclops", 17, 0XBBAA92, 0X594729);
 
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 				if (!type.developer) {
-					for (int i = 0; i < type.spawnBiomes.length; i++) {
-						Biome biome = Biome.getBiome(type.spawnBiomes[i]);
-						if (biome != null) {
+					for (Biome biome : Biome.REGISTRY) {
+						if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
 							List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
 							spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, 5, 1, 1));
 						}

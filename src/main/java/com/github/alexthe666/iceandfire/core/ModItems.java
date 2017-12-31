@@ -17,6 +17,7 @@ public class ModItems {
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 36, new int[]{4, 7, 9, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
 	public static ArmorMaterial blindfoldArmor = EnumHelper.addArmorMaterial("Blindfold", "iceandfire:blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+	public static ArmorMaterial sheep = EnumHelper.addArmorMaterial("Sheep", "iceandfire:sheep_disguise", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 	public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
@@ -33,13 +34,13 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_nugget")
 	public static Item silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_helmet")
-	public static Item silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
+	public static Item silver_helmet = new ItemModArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_chestplate")
-	public static Item silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
+	public static Item silver_chestplate = new ItemModArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_leggings")
-	public static Item silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
+	public static Item silver_leggings = new ItemModArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_boots")
-	public static Item silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
+	public static Item silver_boots = new ItemModArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_sword")
 	public static Item silver_sword = new ItemModSword(silverTools, "silver_sword", "iceandfire.silver_sword");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_shovel")
@@ -162,6 +163,16 @@ public class ModItems {
 	public static Item pixie_dust = new ItemPixieDust();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
 	public static Item ambrosia = new ItemAmbrosia();
+
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
+	public static Item sheep_helmet = new ItemModArmor(sheep, 0, EntityEquipmentSlot.HEAD, "sheep_helmet", "iceandfire.sheep_helmet");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_chestplate")
+	public static Item sheep_chestplate = new ItemModArmor(sheep, 1, EntityEquipmentSlot.CHEST, "sheep_chestplate", "iceandfire.sheep_chestplate");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_leggings")
+	public static Item sheep_leggings = new ItemModArmor(sheep, 2, EntityEquipmentSlot.LEGS, "sheep_leggings", "iceandfire.sheep_leggings");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_boots")
+	public static Item sheep_boots = new ItemModArmor(sheep, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
+
 
 	static {
 		EnumDragonArmor.initArmors();

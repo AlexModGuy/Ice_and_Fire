@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.api;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -13,7 +14,7 @@ public class FoodUtils {
 
     public static int getFoodPoints(Entity entity){
         int foodPoints = Math.round(entity.width * entity.height * 10);
-        if(entity instanceof EntityAnimal){
+        if(entity instanceof EntityAgeable){
             return foodPoints;
         }
         return 0;

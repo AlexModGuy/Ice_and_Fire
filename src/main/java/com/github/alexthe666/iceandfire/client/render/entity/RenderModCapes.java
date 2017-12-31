@@ -23,10 +23,11 @@ public class RenderModCapes {
 	public ResourceLocation betaElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_beta.png");
 	public UUID[] redcapes = new UUID[]{
 	/* zeklo */UUID.fromString("59efccaf-902d-45da-928a-5a549b9fd5e0"),
-	                /* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c"),
+	/* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c")
 	};
 	public UUID[] bluecapes = new UUID[]{
-	/* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),};
+	/* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),
+	/*Zyranna*/		UUID.fromString("5d43896a-06a0-49fb-95c5-38485c63667f")};
 	public UUID[] betatesters = new UUID[]{
 	};
 

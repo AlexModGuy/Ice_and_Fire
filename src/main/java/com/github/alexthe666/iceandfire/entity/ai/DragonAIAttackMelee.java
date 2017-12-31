@@ -87,6 +87,10 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (!dragon.isPassenger(entity)) {
 			this.dragon.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
 		}
+		if(dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY){
+			this.resetTask();
+			return;
+		}
 		double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
 		double d1 = this.getAttackReachSqr(entity);
 		--this.delayCounter;

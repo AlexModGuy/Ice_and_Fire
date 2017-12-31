@@ -37,11 +37,14 @@ public class RenderDragonSkull extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if (entity instanceof EntityDragonSkull && ((EntityDragonSkull) entity).getType() == 0) {
-			return new ResourceLocation("iceandfire:textures/models/firedragon/skeleton.png");
-		} else {
-			return new ResourceLocation("iceandfire:textures/models/icedragon/skeleton.png");
+		if (entity instanceof EntityDragonSkull) {
+			if(((EntityDragonSkull) entity).getType() == 0){
+				return new ResourceLocation("iceandfire:textures/models/firedragon/fire_skeleton_" + ((EntityDragonSkull) entity).getStage() + ".png");
+			}else{
+				return new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_" + ((EntityDragonSkull) entity).getStage() + ".png");
+			}
 		}
+		return null;
 	}
 
 }

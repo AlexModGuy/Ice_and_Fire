@@ -19,7 +19,8 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
-			if (this.dragon.width >= this.targetEntity.width) {
+			float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
+			if (dragonSize >= this.targetEntity.width) {
 				if (this.targetEntity instanceof EntityPlayer && !dragon.isOwner(this.targetEntity)) {
 					return !dragon.isTamed();
 				} else {

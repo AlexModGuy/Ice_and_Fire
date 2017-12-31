@@ -85,6 +85,12 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Modifier of how far 3rd person distance is whilst riding a dragon, scaled against size.")
 	public float dragonRiding3rdPersonDistanceModifier = 0.8F;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "dragons", comment = "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.")
+	public boolean canDragonsDespawn = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "dragons", comment = "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.")
+	public int dragonTargetSearchLength = 64;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
@@ -131,11 +137,23 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "pixies", comment = "The size of pixie villages.")
 	public int pixieVillageSize = 5;
 
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
-	public boolean useAetherCompat = false;
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
-	public int aetherDimensionID = 3;
+	@ConfigEntry(category = "cyclopes", comment = "How far away cyclopes will detect sheep being hurt.")
+	public int cyclopesSheepSearchLength = 17;
+	@ConfigEntry(category = "cyclopes", comment = "Maximum cyclops health")
+	public double cyclopsMaxHealth = 150;
+	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their kick and stomp attacks.")
+	public double cyclopsAttackStrength = 15;
+	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their bite attack.")
+	public double cyclopsBiteStrength = 40;
+	@ConfigEntry(category = "cyclopes", comment = "Wether to spawn cyclops caves or not")
+	public boolean generateCyclopsCaves;
+	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
+	public int spawnCyclopsChance = 80;
+    //@SuppressWarnings("deprecation")
+	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
+	//public boolean useAetherCompat = false;
+	//@SuppressWarnings("deprecation")
+	//@ConfigEntry(category = "compatability", comment = "Aether Dimension ID - Ice Dragons and Fire Dragons will spawn here if option is used")
+	//public int aetherDimensionID = 3;
 
 }

@@ -16,7 +16,7 @@ public class DragonAILookIdle extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.dragon.canMove()) {
+		if (!this.dragon.canMove() || dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
 			return false;
 		}
 		return this.dragon.getRNG().nextFloat() < 0.02F;

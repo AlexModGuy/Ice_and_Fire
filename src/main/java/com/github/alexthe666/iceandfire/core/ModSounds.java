@@ -142,6 +142,21 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("dragon_flight")
 	public static final SoundEvent DRAGON_FLIGHT = createSoundEvent("dragon_flight");
 
+	@GameRegistry.ObjectHolder("cyclops_idle")
+	public static final SoundEvent CYCLOPS_IDLE = createSoundEvent("cyclops_idle");
+
+	@GameRegistry.ObjectHolder("cyclops_hurt")
+	public static final SoundEvent CYCLOPS_HURT = createSoundEvent("cyclops_hurt");
+
+	@GameRegistry.ObjectHolder("cyclops_die")
+	public static final SoundEvent CYCLOPS_DIE = createSoundEvent("cyclops_die");
+
+	@GameRegistry.ObjectHolder("cyclops_bite")
+	public static final SoundEvent CYCLOPS_BITE = createSoundEvent("cyclops_bite");
+
+	@GameRegistry.ObjectHolder("cyclops_blinded")
+	public static final SoundEvent CYCLOPS_BLINDED = createSoundEvent("cyclops_blinded");
+
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
