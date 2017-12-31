@@ -37,7 +37,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultipartEntity {
+public class EntityCyclops extends EntityMob implements IAnimatedEntity {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -53,7 +53,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
         super(worldIn);
         this.setSize(1.95F, 7.4F);
         this.stepHeight = 2;
-        eyeEntity = new EntityCyclopsEye(this.getEntity(), 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
+        eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
@@ -246,7 +246,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        onUpdateParts();
+        eyeEntity.onUpdate();
     }
     @Override
     public int getAnimationTick() {
@@ -272,10 +272,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IMultip
     public Animation[] getAnimations() {
         return new Animation[]{NO_ANIMATION, ANIMATION_STOMP, ANIMATION_EATPLAYER, ANIMATION_KICK, ANIMATION_ROAR};
     }
-
-    public Entity[] getParts() {
-        return new Entity[]{eyeEntity};
-    };
 
     public boolean isBlinking() {
         return this.ticksExisted % 50 > 40 && !this.isBlinded();

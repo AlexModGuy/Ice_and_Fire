@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.sun.xml.internal.bind.v2.TODO;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -129,6 +128,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private Animation currentAnimation;
     private ItemStackHandler itemHandler = null;
     public int walkCycle;
+    private int tacklingTicks;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -484,7 +484,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
 
     }
 
@@ -889,6 +889,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
+        if(this.isTackling() && !this.isFlying() && this.onGround){
+            tacklingTicks++;
+            if(tacklingTicks == 40){
+                tacklingTicks = 0;
+                this.setTackling(false);
+                this.setFlying(false);
+            }
+        }
         if (this.walkCycle < 39) {
             this.walkCycle++;
         } else {
@@ -986,7 +995,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             sleepProgress -= 0.5F;
         }
         boolean fireBreathing = isBreathingFire();
-        if (fireBreathing && fireBreathProgress < 20.0F) {
+        if (fireBreathing && fireBreathProgress < 5.0F) {
             fireBreathProgress += 0.5F;
         } else if (!fireBreathing && fireBreathProgress > 0.0F) {
             fireBreathProgress -= 0.5F;
@@ -1196,6 +1205,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public abstract String getTextureOverlay();
 
     public void updatePassenger(Entity passenger) {
+        super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
             if (this.getControllingPassenger() == null || this.getControllingPassenger() != passenger) {
                 updatePreyInMouth(passenger);
@@ -1243,6 +1253,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void updatePreyInMouth(Entity prey) {
+        this.setAnimation(ANIMATION_SHAKEPREY);
         if (this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null || this.getAnimation() == NO_ANIMATION) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 15F : prey instanceof EntityLivingBase ? (float) ((EntityLivingBase) prey).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
             prey.dismountRidingEntity();
@@ -1298,6 +1309,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.updateAttributes();
         double healthStep = (maximumHealth - minimumHealth) / (125);
         this.heal((Math.round(minimumHealth + (healthStep * age))));
+        this.attackDecision = true;
         this.setHunger(50);
         return livingdata;
     }

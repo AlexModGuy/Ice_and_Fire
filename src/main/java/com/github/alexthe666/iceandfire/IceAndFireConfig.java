@@ -88,6 +88,9 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.")
 	public boolean canDragonsDespawn = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "dragons", comment = "How many blocks away can dragons spot potential prey. Not that increasing this could cause lag.")
+	public int dragonTargetSearchLength = 64;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")

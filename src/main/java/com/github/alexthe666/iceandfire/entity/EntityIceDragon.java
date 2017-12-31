@@ -26,6 +26,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 
@@ -170,7 +171,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		switch (this.getRNG().nextInt(4)) {
+		switch (new Random().nextInt(4)) {
 			case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
@@ -182,12 +183,12 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 				break;
 			case 1:
-				if (entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
+				if (new Random().nextInt(2) == 0  && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
-
-						return this.getRNG().nextBoolean();
+						this.attackDecision = this.getRNG().nextBoolean();
+						return true;
 					}
 				} else {
 					if (this.getAnimation() != this.ANIMATION_BITE) {
@@ -237,6 +238,16 @@ public class EntityIceDragon extends EntityDragonBase {
 					}
 				}
 
+				break;
+			default:
+				if (this.getAnimation() != this.ANIMATION_BITE) {
+					this.setAnimation(this.ANIMATION_BITE);
+					return false;
+				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					this.attackDecision = this.getRNG().nextBoolean();
+					return flag;
+				}
 				break;
 		}
 
