@@ -882,7 +882,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 		if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
-			EntityLivingBase target = DragonUtils.riderLookingAtEntity((EntityPlayer) this.getControllingPassenger(), 3);
+			EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
 			if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
 				this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
 			}

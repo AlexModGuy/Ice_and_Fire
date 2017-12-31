@@ -49,7 +49,7 @@ public class DragonUtils {
 		return null;
 	}
 
-	public static EntityLivingBase riderLookingAtEntity(EntityLivingBase rider, double dist) {
+	public static EntityLivingBase riderLookingAtEntity(EntityLivingBase dragon, EntityLivingBase rider, double dist) {
 		Vec3d vec3d = rider.getPositionEyes(1.0F);
 		Vec3d vec3d1 = rider.getLook(1.0F);
 		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
@@ -57,7 +57,7 @@ public class DragonUtils {
 		Entity pointedEntity = null;
 		List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
-				return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase;
+				return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase && entity != dragon;
 			}
 		}));
 		double d2 = d1;

@@ -1379,7 +1379,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.fireStopTicks = 10;
         }
         if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
-            EntityLivingBase target = DragonUtils.riderLookingAtEntity((EntityPlayer) this.getControllingPassenger(), this.getDragonStage() + (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX));
+            EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), this.getDragonStage() + (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX));
             if (this.getAnimation() != this.ANIMATION_BITE) {
                 this.setAnimation(this.ANIMATION_BITE);
             }
