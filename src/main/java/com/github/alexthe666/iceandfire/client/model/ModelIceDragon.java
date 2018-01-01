@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import java.util.Arrays;
+
 import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-
-import java.util.Arrays;
 
 public class ModelIceDragon extends ModelDragonBase {
 	public AdvancedModelRenderer BodyUpper;

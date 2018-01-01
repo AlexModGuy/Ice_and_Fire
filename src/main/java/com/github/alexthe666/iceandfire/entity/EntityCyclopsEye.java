@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 
 public class EntityCyclopsEye extends PartEntity {
 

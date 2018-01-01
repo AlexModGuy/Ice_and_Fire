@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.entity.Entity;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -9,9 +11,6 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCache;
-
-import java.util.List;
 
 public class EntitySheepAIFollowCyclops extends EntityAIBase {
     EntityAnimal childAnimal;

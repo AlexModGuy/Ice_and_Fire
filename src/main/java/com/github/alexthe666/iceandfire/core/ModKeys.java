@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.core;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
 
 public class ModKeys {
 	public static KeyBinding dragon_fireAttack;
