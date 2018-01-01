@@ -108,6 +108,10 @@ item.iceandfire.stone_statue.name=石像
 item.iceandfire.blindfold.name=眼罩
 item.iceandfire.pixie_dust.name=精灵尘
 item.iceandfire.ambrosia.name=神肴
+item.iceandfire.sheep_helmet.name=拟羊头盔
+item.iceandfire.sheep_chestplate.name=拟羊胸甲
+item.iceandfire.sheep_leggings.name=拟羊护腿
+item.iceandfire.sheep_boots.name=拟羊靴子
 
 item.banner.firedragon.white=白色龙炎弹
 item.banner.firedragon.orange=橙色龙炎弹
@@ -176,6 +180,7 @@ entity.if_pixie.type_1=紫色小精灵
 entity.if_pixie.type_2=蓝色小精灵
 entity.if_pixie.type_3=绿色小精灵
 entity.if_pixie.type_4=黄色小精灵
+entity.cyclops.name=独眼巨人
 
 dragon.red=赤红
 dragon.green=翡绿
