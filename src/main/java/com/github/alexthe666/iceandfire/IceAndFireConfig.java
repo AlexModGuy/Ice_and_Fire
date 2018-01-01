@@ -125,7 +125,7 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their bite attack.")
 	public double cyclopsBiteStrength = 40;
 	@ConfigEntry(category = "cyclopes", comment = "Wether to spawn cyclops caves or not")
-	public boolean generateCyclopsCaves;
+	public boolean generateCyclopsCaves = true;
 	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
 	public int spawnCyclopsChance = 80;
     //@SuppressWarnings("deprecation")
