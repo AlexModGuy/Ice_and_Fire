@@ -256,7 +256,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 5 + this.world.rand.nextInt(this.getDragonStage() / 2);
+        return 5 + this.getDragonStage() * 25;
     }
 
     public int getIntFromArmor(ItemStack stack) {
