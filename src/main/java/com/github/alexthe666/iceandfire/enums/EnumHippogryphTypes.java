@@ -29,13 +29,17 @@ public enum EnumHippogryphTypes {
 		this.developer = developer;
 	}
 
+	public static EnumHippogryphTypes[] getWildTypes() {
+		return new EnumHippogryphTypes[]{BLACK, BROWN, GRAY, CHESTNUT, CREAMY, DARK_BROWN, WHITE};
+	}
+
 	public static EnumHippogryphTypes getRandomType() {
-		return EnumHippogryphTypes.values()[new Random().nextInt(EnumHippogryphTypes.values().length - 3)];
+		return getWildTypes()[new Random().nextInt(getWildTypes().length - 1)];
 	}
 
 	public static EnumHippogryphTypes getBiomeType(Biome biome) {
 		List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-		for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
+		for (EnumHippogryphTypes type : getWildTypes()) {
 			for(BiomeDictionary.Type biomeTypes : type.spawnBiomes) {
 				if(BiomeDictionary.hasType(biome, biomeTypes)){
 					types.add(type);

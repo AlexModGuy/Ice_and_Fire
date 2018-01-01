@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -81,10 +83,12 @@ public class ItemHippogryphEgg extends Item {
 		return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 	}
 
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean f) {
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
 			String type = EnumHippogryphTypes.values()[stack.getTagCompound().getInteger("Type")].name().toLowerCase();
-			list.add(StatCollector.translateToLocal("entity.hippogryph." + type));
+			tooltip.add(StatCollector.translateToLocal("entity.hippogryph." + type));
 		}
 	}
 }
