@@ -203,7 +203,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
 
     public void onLivingUpdate(){
         super.onLivingUpdate();
-        if(this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSqToEntity(this.getAttackTarget()) > 6){
+        if(this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6){
             this.setAttackTarget(null);
         }
         if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5){
@@ -212,10 +212,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         if(this.getAnimation() == ANIMATION_EATPLAYER && this.getAnimationTick() == 25){
             this.playSound(ModSounds.CYCLOPS_BITE, 1, 1);
         }
-        if(this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSqToEntity(this.getAttackTarget()) < 6D && this.getAnimationTick() == 14){
+        if(this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 6D && this.getAnimationTick() == 14){
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         }
-        if(this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSqToEntity(this.getAttackTarget()) < 6D && this.getAnimationTick() == 12){
+        if(this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 6D && this.getAnimationTick() == 12){
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
 
