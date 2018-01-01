@@ -72,7 +72,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
-		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				return entity instanceof EntityLivingBase;
@@ -259,7 +259,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 		super.onLivingUpdate();
 		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if ((!attackDecision || this.isFlying())) {
+			if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
 				shootIceAtMob(this.getAttackTarget());
 			} else {
 				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
