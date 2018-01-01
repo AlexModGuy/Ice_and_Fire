@@ -24,6 +24,7 @@ public class ContainerDragon extends Container {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
 				drg.setArmorInSlot(0, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
 				this.inventory.markDirty();
+				drg.updateDragonSlots();
 			}
 
 			@Override
@@ -36,6 +37,7 @@ public class ContainerDragon extends Container {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
 				drg.setArmorInSlot(1, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(1)));
 				this.inventory.markDirty();
+				drg.updateDragonSlots();
 			}
 
 			@Override
@@ -48,6 +50,7 @@ public class ContainerDragon extends Container {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
 				drg.setArmorInSlot(2, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(2)));
 				this.inventory.markDirty();
+				drg.updateDragonSlots();
 			}
 
 			@Override
@@ -60,6 +63,7 @@ public class ContainerDragon extends Container {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
 				drg.setArmorInSlot(3, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(3)));
 				this.inventory.markDirty();
+				drg.updateDragonSlots();
 			}
 
 			@Override

@@ -24,7 +24,8 @@ public enum EnumBestiaryPages {
 	VILLAGERS(0),
 	HIPPOGRYPH(1),
 	GORGON(1),
-	PIXIE(1);
+	PIXIE(1),
+	CYCLOPS(2);
 
 	public int pages;
 
@@ -95,10 +96,7 @@ public enum EnumBestiaryPages {
 	}
 
 	public static List<EnumBestiaryPages> possiblePages(ItemStack book) {
-
 		if (book.getItem() instanceof ItemBestiary) {
-
-			Random rand = new Random();
 			NBTTagCompound tag = book.getTagCompound();
 			List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
 			for (EnumBestiaryPages page : EnumBestiaryPages.values()) {

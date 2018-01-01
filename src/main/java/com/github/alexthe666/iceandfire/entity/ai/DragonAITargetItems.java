@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
-import fossilsarcheology.api.FoodMappings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
@@ -37,7 +37,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodMappings.INSTANCE.getItemFoodAmount(item.getItem().getItem(), ((EntityDragonBase) DragonAITargetItems.this.taskOwner).diet) > 0;
+				return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodUtils.getFoodPoints(item.getItem(), true) > 0;
 			}
 		};
 	}
@@ -86,10 +86,10 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSqToEntity(this.targetEntity) < 1) {
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-			int hunger = FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getItem().getItem(), ((EntityDragonBase) this.taskOwner).diet);
+			int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true);
 			((EntityDragonBase) this.taskOwner).setHunger(Math.min(100, ((EntityDragonBase) this.taskOwner).getHunger() + hunger));
 			((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getItem());
-			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodMappings.INSTANCE.getItemFoodAmount(this.targetEntity.getItem().getItem(), ((EntityDragonBase) this.taskOwner).diet) / 10)));
+			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true))));
 			if (EntityDragonBase.ANIMATION_EAT != null) {
 				((EntityDragonBase) this.taskOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
 			}

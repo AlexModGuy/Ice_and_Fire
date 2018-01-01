@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "W W",
+    "WLW",
+    "WWW"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather_chestplate",
+      "data": 0
+    },
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "woolBlock"
+    }
+  },
+  "result": {
+    "item": "iceandfire:sheep_chestplate",
+    "data": 0
+  }
+}

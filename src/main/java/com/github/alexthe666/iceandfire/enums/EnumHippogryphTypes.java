@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,22 +10,22 @@ import java.util.List;
 import java.util.Random;
 
 public enum EnumHippogryphTypes {
-	BLACK(IceAndFire.CONFIG.hippogryphBlackBiomes, false),
-	BROWN(IceAndFire.CONFIG.hippogryphBrownBiomes, false),
-	CHESTNUT(IceAndFire.CONFIG.hippogryphChestnutBiomes, false),
-	CREAMY(IceAndFire.CONFIG.hippogryphCreamyBiomes, false),
-	DARK_BROWN(IceAndFire.CONFIG.hippogryphDarkBrownBiomes, false),
-	GRAY(IceAndFire.CONFIG.hippogryphGrayBiomes, false),
-	WHITE(IceAndFire.CONFIG.hippogryphWhiteBiomes, false),
-	RAPTOR(new int[0], true),
-	ALEX(new int[0], true),
-	DODO(new int[0], true);
+	BLACK(false, BiomeDictionary.Type.DRY, BiomeDictionary.Type.HOT, BiomeDictionary.Type.SANDY),
+	BROWN(false, BiomeDictionary.Type.MOUNTAIN),
+	GRAY(false, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DENSE, BiomeDictionary.Type.FOREST),
+	CHESTNUT(false, BiomeDictionary.Type.FOREST),
+	CREAMY(false, BiomeDictionary.Type.SAVANNA),
+	DARK_BROWN(false, BiomeDictionary.Type.CONIFEROUS),
+	WHITE(false, BiomeDictionary.Type.SNOWY),
+	RAPTOR(true),
+	ALEX(true),
+	DODO(true);
 
 	public boolean developer;
-	public int[] spawnBiomes;
+	public BiomeDictionary.Type[] spawnBiomes;
 
-	private EnumHippogryphTypes(int[] spawnBiomes, boolean developer) {
-		this.spawnBiomes = Arrays.copyOf(spawnBiomes, spawnBiomes.length);
+	private EnumHippogryphTypes(boolean developer, BiomeDictionary.Type... biomes) {
+		this.spawnBiomes = biomes;
 		this.developer = developer;
 	}
 
@@ -35,8 +36,8 @@ public enum EnumHippogryphTypes {
 	public static EnumHippogryphTypes getBiomeType(Biome biome) {
 		List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
 		for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
-			for (int i = 0; i < type.spawnBiomes.length; i++) {
-				if (type.spawnBiomes[i] == Biome.getIdForBiome(biome)) {
+			for(BiomeDictionary.Type biomeTypes : type.spawnBiomes) {
+				if(BiomeDictionary.hasType(biome, biomeTypes)){
 					types.add(type);
 				}
 			}
@@ -44,6 +45,9 @@ public enum EnumHippogryphTypes {
 		if (types.isEmpty()) {
 			return getRandomType();
 		} else {
+			if(types.contains(GRAY) && types.contains(CHESTNUT)){
+				return GRAY;
+			}
 			return types.get(new Random().nextInt(types.size()));
 		}
 

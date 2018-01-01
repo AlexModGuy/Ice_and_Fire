@@ -93,7 +93,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
 						worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
 					}
 				}
@@ -106,7 +106,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
 						worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
@@ -118,7 +118,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			int l = i2 + rand.nextInt(2);
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f) && worldIn.getBlockState(blockpos).getMaterial() == Material.ROCK) {
+				if (blockpos.distanceSq(position) <= (double) (f * f) && worldIn.getBlockState(blockpos).getMaterial() == Material.ROCK && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
 					this.setOres(worldIn, blockpos);
 				}
 			}

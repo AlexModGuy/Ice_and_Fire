@@ -246,7 +246,7 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_0, 50, 112, 214, 310, 87, 62, 512F);
 					drawImage(DRAWINGS_0, 250, 12, 214, 372, 87, 63, 512F);
 					drawImage(DRAWINGS_0, 250, 72, 214, 432, 87, 64, 512F);
-					drawImage(DRAWINGS_0, 250, 132, 300, 248, 86, 62, 512F);
+					drawImage(DRAWINGS_0, 250, 132, 300, 248, 71, 62, 512F);
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
@@ -566,6 +566,98 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
+				break;
+			case CYCLOPS:
+				if (bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1.5F);
+					drawImage(DRAWINGS_0, 185, 8, 399, 328, 24, 63, 512F);
+					GL11.glPopMatrix();
+				}
+				if (bookPages == 1) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1.5F);
+					drawImage(DRAWINGS_0, 50, 35, 423, 328, 24, 63, 512F);
+					//drawImage(DRAWINGS_0, 68, 60, 447, 328, 24, 63, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 144, 50, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.LEATHER_HELMET), 180, 76, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 160, 76, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 199, 76, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 160, 57, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 180, 57, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 199, 57, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sheep_helmet), 165, 45, 2F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 144, 95, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.LEATHER_CHESTPLATE), 180, 126, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 160, 126, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 199, 126, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 160, 107, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 199, 107, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 160, 145, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 180, 145, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 199, 145, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sheep_chestplate), 165, 95, 2F);
+					GL11.glPopMatrix();
+				}
+				if (bookPages == 2) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1.5F);
+					drawImage(DRAWINGS_0, 185, 30, 447, 328, 24, 63, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 13, 24, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.LEATHER_LEGGINGS), 34, 46, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 14, 46, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 53, 46, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 14, 27, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 34, 27, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 53, 27, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 14, 65, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 53, 65, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sheep_leggings), 64, 27, 2F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 13, 84, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.LEATHER_BOOTS), 34, 94, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 14, 113, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 53, 113, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 14, 94, 1.5F);
+					drawItemStack(new ItemStack(Blocks.WOOL), 53, 94, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sheep_boots), 64, 73, 2F);
+					GL11.glPopMatrix();
+				}
+					writeFromTxt();
 				break;
 		}
 	}

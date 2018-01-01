@@ -1,4 +1,44 @@
 {
+  "cyclops_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cyclops_idle"
+    ]
+  },
+  "cyclops_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cyclops_hurt_0",
+      "iceandfire:cyclops_hurt_1"
+    ]
+  },
+  "cyclops_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cyclops_hurt_0",
+      "iceandfire:cyclops_hurt_1"
+    ]
+  },
+  "cyclops_bite": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cyclops_bite"
+    ]
+  },
+  "cyclops_blinded": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cyclops_blinded"
+    ]
+  },
+  "dragon_flight": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dragon_flight_0",
+      "iceandfire:dragon_flight_1",
+      "iceandfire:dragon_flight_2"
+    ]
+  },
   "gold_pile_step": {
     "category": "neutral",
     "sounds": [

@@ -65,6 +65,9 @@ public class ModBlocks {
 	public static Block dragon_ice = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "iceandfire.dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_ice_spikes")
 	public static Block dragon_ice_spikes = new BlockIceSpikes();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":nest")
+	public static Block nest = new BlockGeneric(Material.GRASS, "nest", "iceandfire.nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
+
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")

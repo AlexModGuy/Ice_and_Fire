@@ -12,14 +12,13 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
-	public RenderDragonBase(RenderManager renderManager, ModelBase model) {
+	public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {
 		super(renderManager, model, 0.8F);
 		this.addLayer(new LayerDragonEyes(this));
-		this.layerRenderers.add(new LayerDragonArmor(this, 0, model instanceof ModelFireDragon ? model instanceof ModelFireDragon ? "firedragon" : "icedragon" : "icedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 1, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 2, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
-		this.layerRenderers.add(new LayerDragonArmor(this, 3, model instanceof ModelFireDragon ? "firedragon" : "icedragon"));
-
+		this.layerRenderers.add(new LayerDragonArmor(this, 0, fire ? "firedragon" : "icedragon" ));
+		this.layerRenderers.add(new LayerDragonArmor(this, 1, fire ? "firedragon" : "icedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 2, fire ? "firedragon" : "icedragon"));
+		this.layerRenderers.add(new LayerDragonArmor(this, 3, fire ? "firedragon" : "icedragon"));
 	}
 
 	@Override

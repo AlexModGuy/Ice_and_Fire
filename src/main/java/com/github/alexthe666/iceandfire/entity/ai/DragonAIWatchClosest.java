@@ -13,7 +13,7 @@ public class DragonAIWatchClosest extends EntityAIWatchClosest {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity instanceof EntityDragonBase && !((EntityDragonBase) this.entity).canMove()) {
+		if (this.entity instanceof EntityDragonBase && !((EntityDragonBase) this.entity).canMove() || ((EntityDragonBase) this.entity).getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
 			return false;
 		}
 		return super.shouldExecute();

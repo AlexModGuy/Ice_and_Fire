@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "WWW",
+    "WLW"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather_helmet",
+      "data": 0
+    },
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "woolBlock"
+    }
+  },
+  "result": {
+    "item": "iceandfire:sheep_helmet",
+    "data": 0
+  }
+}

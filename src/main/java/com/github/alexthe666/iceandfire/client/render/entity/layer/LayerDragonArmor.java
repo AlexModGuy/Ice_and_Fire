@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -11,13 +10,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LayerDragonArmor implements LayerRenderer {
-	private final RenderDragonBase renderer;
-	private final ModelFireDragon fireModel = new ModelFireDragon();
+	private final RenderLiving renderer;
 
 	private int slot;
 	private String dragonType;
 
-	public LayerDragonArmor(RenderDragonBase renderer, int slot, String dragonType) {
+	public LayerDragonArmor(RenderLiving renderer, int slot, String dragonType) {
 		this.renderer = renderer;
 		this.slot = slot;
 		this.dragonType = dragonType;

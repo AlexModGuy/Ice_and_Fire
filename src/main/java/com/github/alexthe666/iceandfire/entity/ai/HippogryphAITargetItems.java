@@ -80,8 +80,6 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 			hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
-			System.out.println(this.targetEntity.getThrower() + " vs " + this.targetEntity.getOwner());
-			System.out.println(this.targetEntity.getItem());
 			if (hippo.getRNG().nextInt(3) == 0 && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
 				EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
 				hippo.setTamed(true);

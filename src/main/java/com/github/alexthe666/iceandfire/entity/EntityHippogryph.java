@@ -267,7 +267,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			if (player.isSneaking()) {
 				this.openGUI(player);
 				return true;
-			} else if (this.isSaddled()) {
+			} else if (this.isSaddled() && !this.isChild()) {
 				player.startRiding(this, true);
 				this.setSitting(false);
 				return true;
@@ -639,6 +639,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				jumpMovementFactor = 0.05F;
 				this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+				super.travel(strafe, vertical = 0, forward);
+				return;
 			}
 		}
 		super.travel(strafe, forward, vertical);
@@ -880,7 +882,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 		if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
-			EntityLivingBase target = DragonUtils.riderLookingAtEntity((EntityPlayer) this.getControllingPassenger(), 3);
+			EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
 			if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
 				this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
 			}

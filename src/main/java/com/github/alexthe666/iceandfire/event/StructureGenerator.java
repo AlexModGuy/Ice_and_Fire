@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.state.IBlockState;
@@ -41,6 +38,7 @@ public class StructureGenerator implements IWorldGenerator {
 	private static final WorldGenFireDragonRoosts FIRE_DRAGON_ROOST = new WorldGenFireDragonRoosts();
 	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
 	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
+	private static final WorldGenCyclopsCave CYCLOPS_CAVE = new WorldGenCyclopsCave();
 	private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
 
 	public static BlockPos getHeight(World world, BlockPos pos) {
@@ -73,6 +71,9 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
+		if(IceAndFire.CONFIG.generateCyclopsCaves && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0){
+			CYCLOPS_CAVE.generate(world, random, height);
+		}
 		if (IceAndFire.CONFIG.spawnPixies) {
 			boolean isSpookyForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST) && (BiomeDictionary.hasType(world.getBiome(height), Type.SPOOKY) || BiomeDictionary.hasType(world.getBiome(height), Type.MAGICAL));
 			if (isSpookyForest && random.nextInt(IceAndFire.CONFIG.spawnPixiesChance + 1) == 0) {
@@ -80,14 +81,14 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 		}
 		if (IceAndFire.CONFIG.generateDragonRoosts && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
-			boolean isHills = BiomeDictionary.hasType(world.getBiome(height), Type.HILLS) || BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN);
-			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER) || isHills || isAether(world)) {
+			boolean isHills = BiomeDictionary.hasType(world.getBiome(height), Type.HILLS) || BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY);
+			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER) || isHills) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
-			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) || isAether(world)) {
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 					ICE_DRAGON_ROOST.generate(world, random, surface);
@@ -187,12 +188,12 @@ public class StructureGenerator implements IWorldGenerator {
 		return !useBlackOrWhiteLists;
 	}
 
-	private boolean isAether(World world) {
-		if (IceAndFire.CONFIG.useAetherCompat) {
-			if (world.provider.getDimension() == IceAndFire.CONFIG.aetherDimensionID) {
-				return true;
-			}
-		}
-		return false;
-	}
+	//private boolean isAether(World world) {
+	//	if (IceAndFire.CONFIG.useAetherCompat) {
+	//		if (world.provider.getDimension() == IceAndFire.CONFIG.aetherDimensionID) {
+	//			return true;
+	//		}
+	//	}
+	//	return false;
+	//}
 }

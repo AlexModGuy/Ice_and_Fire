@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModEntities;
-import com.github.alexthe666.iceandfire.core.ModFoods;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
@@ -69,7 +68,6 @@ public class IceAndFire {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 		ModEntities.init();
-		ModFoods.init();
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");
 		TAB = new CreativeTab(MODID);
