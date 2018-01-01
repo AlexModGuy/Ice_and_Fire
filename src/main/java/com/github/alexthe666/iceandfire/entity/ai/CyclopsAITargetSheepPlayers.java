@@ -114,8 +114,8 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
         }
 
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.entity.getDistanceSqToEntity(p_compare_1_);
-            double d1 = this.entity.getDistanceSqToEntity(p_compare_2_);
+            double d0 = this.entity.getDistanceSq(p_compare_1_);
+            double d1 = this.entity.getDistanceSq(p_compare_2_);
 
             if (d0 < d1) {
                 return -1;
