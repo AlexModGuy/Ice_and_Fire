@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
@@ -87,7 +86,7 @@ public class IceAndFire {
 
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new com.github.alexthe666.iceandfire.client.GuiHandler());
 		dragon = new DamageSource("dragon") {
 			@Override
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
