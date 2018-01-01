@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import java.util.List;
-
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.model.ModelRenderer;
+
+import java.util.List;
 
 public class ModelUtils {
 	public static void renderAll(List<ModelRenderer> boxList) {

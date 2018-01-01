@@ -1,8 +1,5 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import java.util.List;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -10,13 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.google.common.collect.Lists;
-
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.init.Biomes;
@@ -33,6 +24,9 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+
+import java.util.List;
+import java.util.Random;
 
 public class PixieVillagePieces {
 

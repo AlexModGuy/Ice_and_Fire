@@ -1,14 +1,8 @@
 package com.github.alexthe666.iceandfire.world;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.*;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +11,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.Random;
 
 public class WorldGenAnimalFarm extends WorldGenerator {
 	@Override

@@ -1,15 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
@@ -18,6 +11,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
 	protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;

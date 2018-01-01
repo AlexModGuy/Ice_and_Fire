@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

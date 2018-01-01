@@ -13,7 +13,6 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

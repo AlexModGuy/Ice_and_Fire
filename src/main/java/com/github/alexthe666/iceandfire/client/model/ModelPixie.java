@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;

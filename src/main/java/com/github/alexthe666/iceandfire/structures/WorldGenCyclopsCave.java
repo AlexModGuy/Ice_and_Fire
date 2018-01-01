@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.minecraft.block.BlockBone;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntitySheep;
@@ -19,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
+
+import java.util.Random;
 
 public class WorldGenCyclopsCave extends WorldGenerator {
 

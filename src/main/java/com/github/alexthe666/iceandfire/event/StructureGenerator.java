@@ -1,20 +1,11 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.structures.WorldGenCyclopsCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
@@ -34,6 +25,10 @@ import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class StructureGenerator implements IWorldGenerator {
 

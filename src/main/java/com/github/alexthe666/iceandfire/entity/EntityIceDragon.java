@@ -1,35 +1,17 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAirTarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIBreakBlocks;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWaterTarget;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
-
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAISit;
-import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,6 +24,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 

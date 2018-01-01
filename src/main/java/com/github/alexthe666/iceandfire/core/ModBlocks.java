@@ -1,22 +1,9 @@
 package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.BlockCharedPath;
-import com.github.alexthe666.iceandfire.block.BlockDragonOre;
-import com.github.alexthe666.iceandfire.block.BlockEggInIce;
-import com.github.alexthe666.iceandfire.block.BlockElementalFlower;
-import com.github.alexthe666.iceandfire.block.BlockFallingGeneric;
-import com.github.alexthe666.iceandfire.block.BlockGeneric;
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import com.github.alexthe666.iceandfire.block.BlockIceSpikes;
-import com.github.alexthe666.iceandfire.block.BlockJar;
-import com.github.alexthe666.iceandfire.block.BlockLectern;
-import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
-import com.github.alexthe666.iceandfire.block.BlockPodium;
-import com.github.alexthe666.iceandfire.block.BlockSilverPile;
+import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

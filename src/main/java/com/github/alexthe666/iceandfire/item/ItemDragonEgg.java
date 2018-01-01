@@ -1,14 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,6 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemDragonEgg extends Item {
 	public EnumDragonEgg type;

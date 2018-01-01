@@ -1,22 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class DragonUtils {
 

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;

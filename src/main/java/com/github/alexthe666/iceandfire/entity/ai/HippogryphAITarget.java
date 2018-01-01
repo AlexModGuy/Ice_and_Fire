@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.EntityAnimal;

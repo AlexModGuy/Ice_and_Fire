@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;

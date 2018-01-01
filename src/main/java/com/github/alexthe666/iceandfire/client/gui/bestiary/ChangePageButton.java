@@ -1,10 +1,9 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ChangePageButton extends GuiButton {
 	private final boolean right;

@@ -1,12 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.core.ModVillagers;
-
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
@@ -24,6 +18,10 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class EntitySnowVillager extends EntityVillager {
 

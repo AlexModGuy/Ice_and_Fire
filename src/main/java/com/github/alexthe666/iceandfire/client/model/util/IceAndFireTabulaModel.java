@@ -1,10 +1,5 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tabula.container.TabulaCubeContainer;
 import net.ilexiconn.llibrary.client.model.tabula.container.TabulaCubeGroupContainer;
@@ -15,6 +10,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author gegy1000

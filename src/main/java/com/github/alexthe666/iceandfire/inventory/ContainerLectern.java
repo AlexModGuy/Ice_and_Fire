@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

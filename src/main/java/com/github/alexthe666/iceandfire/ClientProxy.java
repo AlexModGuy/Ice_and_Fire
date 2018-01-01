@@ -1,67 +1,21 @@
 package com.github.alexthe666.iceandfire;
 
-import java.io.IOException;
-
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
-import com.github.alexthe666.iceandfire.client.model.FireDragonTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.IceDragonTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragonArmor;
-import com.github.alexthe666.iceandfire.client.model.ModelIceDragonArmor;
+import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
-import com.github.alexthe666.iceandfire.client.particle.ParticleBlood;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFire;
-import com.github.alexthe666.iceandfire.client.particle.ParticleDragonIce;
-import com.github.alexthe666.iceandfire.client.particle.ParticlePixieDust;
+import com.github.alexthe666.iceandfire.client.particle.*;
+import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCyclops;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonFireCharge;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonSkull;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderGorgon;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHippogryph;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderModCapes;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderNothing;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderSnowVillager;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderStoneStatue;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderEggInIce;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderGorgonHead;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderJar;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderLectern;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderPixieHouse;
-import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
+import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFireCharge;
-import com.github.alexthe666.iceandfire.entity.EntityDragonIceCharge;
-import com.github.alexthe666.iceandfire.entity.EntityDragonIceProjectile;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.github.alexthe666.iceandfire.entity.EntitySnowVillager;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
+import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
-
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -83,6 +37,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.io.IOException;
 
 @Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy {

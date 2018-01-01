@@ -1,12 +1,6 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -16,6 +10,11 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class MapGenPixieVillage extends WorldGenerator {
 	private final int minTownSeparation;

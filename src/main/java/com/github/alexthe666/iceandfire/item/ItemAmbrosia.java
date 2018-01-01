@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -17,6 +12,9 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class PixieAIFlee<T extends Entity> extends EntityAIBase {
 	private final Predicate<Entity> canBeSeenSelector;

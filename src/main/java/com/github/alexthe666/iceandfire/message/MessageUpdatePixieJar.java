@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
-
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;

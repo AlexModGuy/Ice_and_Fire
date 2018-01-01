@@ -1,13 +1,13 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromStatues {
 

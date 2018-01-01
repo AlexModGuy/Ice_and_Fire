@@ -1,12 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.List;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -17,6 +13,9 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class DragonAIMate extends EntityAIBase {
 	private final EntityDragonBase dragon;

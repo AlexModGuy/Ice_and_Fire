@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire;
 
 import net.ilexiconn.llibrary.server.config.ConfigEntry;
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
 
 public class IceAndFireConfig {
 

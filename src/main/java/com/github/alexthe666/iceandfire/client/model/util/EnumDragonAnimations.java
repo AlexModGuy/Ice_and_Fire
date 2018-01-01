@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.client.model.util;
 
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 
+import java.io.IOException;
+
 public enum EnumDragonAnimations {
     T_POSE(""),
     FLYING_POSE("Flying"),

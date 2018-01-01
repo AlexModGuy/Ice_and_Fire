@@ -1,11 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
-import java.util.Map;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.collect.Maps;
-
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -17,6 +13,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+
+import java.util.Map;
+import java.util.Random;
 
 public class ModVillagers {
 

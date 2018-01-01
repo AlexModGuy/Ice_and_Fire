@@ -1,14 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
-
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,6 +20,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemStoneStatue extends Item {
 

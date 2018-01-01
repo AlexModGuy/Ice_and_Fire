@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenIceDragonRoosts extends WorldGenerator {
 

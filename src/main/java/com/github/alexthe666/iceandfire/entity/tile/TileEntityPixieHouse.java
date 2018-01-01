@@ -1,13 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.Random;
-import java.util.UUID;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
-
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+
+import java.util.Random;
+import java.util.UUID;
 
 public class TileEntityPixieHouse extends TileEntity implements ITickable {
 

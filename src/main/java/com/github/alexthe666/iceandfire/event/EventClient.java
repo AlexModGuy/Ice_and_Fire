@@ -1,13 +1,9 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import net.ilexiconn.llibrary.client.event.PlayerViewDistanceEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -21,6 +17,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 public class EventClient {
 

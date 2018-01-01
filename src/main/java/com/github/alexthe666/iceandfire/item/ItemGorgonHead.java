@@ -1,23 +1,11 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -30,16 +18,17 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class ItemGorgonHead extends Item {
 

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.util.EnumHand;

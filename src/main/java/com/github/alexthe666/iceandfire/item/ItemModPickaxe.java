@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -16,6 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemModPickaxe extends ItemPickaxe {
 

@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +10,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+
+import java.util.Random;
 
 public class TileEntityEggInIce extends TileEntity implements ITickable {
 	public EnumDragonEgg type;

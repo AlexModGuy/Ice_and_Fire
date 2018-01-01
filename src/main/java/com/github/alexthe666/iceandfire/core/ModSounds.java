@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.core;
 
-import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(MODID)
