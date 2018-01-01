@@ -1708,7 +1708,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
             }
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
@@ -1716,7 +1716,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
             }
         }
     }

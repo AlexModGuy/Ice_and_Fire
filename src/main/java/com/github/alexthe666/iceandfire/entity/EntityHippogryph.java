@@ -604,7 +604,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			dismount(ModKeys.dragon_down.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
 			}
 		}
 		if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
@@ -612,7 +612,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			dismount(ModKeys.dragon_down.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
 			}
 		}
 	}

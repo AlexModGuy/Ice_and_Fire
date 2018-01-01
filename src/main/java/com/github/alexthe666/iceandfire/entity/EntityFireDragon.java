@@ -15,8 +15,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -233,18 +236,21 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
+		if(!world.isRemote){
+			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying())) {
-				shootFireAtMob(this.getAttackTarget());
-			} else {
-				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
-					attackEntityAsMob(this.getAttackTarget());
-				}
+					shootFireAtMob(this.getAttackTarget());
+				} else {
+					if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+						attackEntityAsMob(this.getAttackTarget());
+					}
 
+				}
+			} else {
+				this.setBreathingFire(false);
 			}
-		} else {
-			this.setBreathingFire(false);
 		}
+
 	}
 
 	public void riderShootFire(Entity controller) {
