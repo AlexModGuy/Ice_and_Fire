@@ -32,7 +32,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
     protected T targetEntity;
 
     public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight) {
-        this(creature, classTarget, checkSight, false);
+        this(creature, classTarget, checkSight, true);
     }
 
     public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {

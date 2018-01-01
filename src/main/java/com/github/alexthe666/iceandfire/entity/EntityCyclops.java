@@ -18,14 +18,13 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -53,6 +52,9 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         super(worldIn);
         this.setSize(1.95F, 7.4F);
         this.stepHeight = 2;
+        this.setPathPriority(PathNodeType.WATER, -1.0F);
+        this.setPathPriority(PathNodeType.FENCE, 0.0F);
+
         eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
@@ -62,7 +64,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIRestrictSun(this));
         this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
         this.tasks.addTask(3, new CyclopsAIAttackMelee(this, 1.0D, false));
@@ -70,13 +71,13 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, false, new Predicate<EntityLivingBase>() {
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+                return !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
-        this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return true;

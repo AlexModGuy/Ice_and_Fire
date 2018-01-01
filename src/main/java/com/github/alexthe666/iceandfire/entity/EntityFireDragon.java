@@ -13,6 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -38,6 +39,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	public EntityFireDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
 		this.setSize(0.78F, 1.2F);
+		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
+		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
+
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
@@ -237,7 +241,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		System.out.println(this.getAttackTarget());
 		if(!world.isRemote){
 			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
