@@ -67,8 +67,8 @@ public class IceAndFire {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
 		ModEntities.init();
-		logger.info("A raven flies from the north to the sea");
-		logger.info("A dragon whispers her name in the east");
+		logger.info("[ICE AND FIRE] A raven flies from the north to the sea");
+		logger.info("[ICE AND FIRE] A dragon whispers her name in the east");
 		TAB = new CreativeTab(MODID);
 	}
 
@@ -78,8 +78,8 @@ public class IceAndFire {
 
 		ModRecipes.init();
 		ModVillagers.INSTANCE.init();
-		logger.info("The watcher waits on the northern wall");
-		logger.info("A daughter picks up a warrior's sword");
+		logger.info("[ICE AND FIRE] The watcher waits on the northern wall");
+		logger.info("[ICE AND FIRE] A daughter picks up a warrior's sword");
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
@@ -125,12 +125,12 @@ public class IceAndFire {
 	public void postInit(FMLPostInitializationEvent event) {
 		PROXY.postRender();
 
-		logger.info("A brother bound to a love he must hide");
-		logger.info("The younger's armor is worn in the mind");
+		logger.info("[ICE AND FIRE] A brother bound to a love he must hide");
+		logger.info("[ICE AND FIRE] The younger's armor is worn in the mind");
 
-		logger.info("A cold iron throne holds a boy barely grown");
-		logger.info("And now it is known");
-		logger.info("A claim to the prize, a crown laced in lies");
-		logger.info("You win or you die");
+		logger.info("[ICE AND FIRE] A cold iron throne holds a boy barely grown");
+		logger.info("[ICE AND FIRE] And now it is known");
+		logger.info("[ICE AND FIRE] A claim to the prize, a crown laced in lies");
+		logger.info("[ICE AND FIRE] You win or you die");
 	}
 }
