@@ -256,7 +256,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 5 + this.world.rand.nextInt(this.getDragonStage() / 2);
+        return 5 + this.getDragonStage() * 25;
     }
 
     public int getIntFromArmor(ItemStack stack) {
@@ -701,14 +701,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage) {
             //player.addStat(ModAchievements.dragonHarvest, 1);
-            if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2) {
+            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, 1));
                 return true;
-            } else {
+            } else if(!world.isRemote && stack.isEmpty()){
                 if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = new ItemStack(ModItems.dragon_skull, 1, this.isFire ? 0 : 1);
                     skull.setTagCompound(new NBTTagCompound());
@@ -785,7 +785,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             return true;
                         }
 
-                        if (stack.getItem() == ModItems.dragon_horn) {
+                        if (stack.getItem() == ModItems.dragon_horn && !world.isRemote) {
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
                             ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
                             stack1.setTagCompound(new NBTTagCompound());
@@ -937,7 +937,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setAttackTarget(null);
         }
         if (!this.canMove()) {
-            this.getNavigator().clearPathEntity();
+            this.getNavigator().clearPath();
 
         }
         if (this.getControllingPassenger() != null) {
@@ -1074,7 +1074,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
         if (this.isSleeping()) {
-            this.getNavigator().clearPathEntity();
+            this.getNavigator().clearPath();
         }
         if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
             this.airTarget = null;
@@ -1708,7 +1708,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
             }
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
@@ -1716,7 +1716,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             dismount(ModKeys.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
             }
         }
     }

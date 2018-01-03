@@ -1,10 +1,5 @@
 package com.github.alexthe666.iceandfire.client;
 
-import com.github.alexthe666.iceandfire.client.gui.GuiDragon;
-import com.github.alexthe666.iceandfire.client.gui.GuiHippogryph;
-import com.github.alexthe666.iceandfire.client.gui.GuiLectern;
-import com.github.alexthe666.iceandfire.client.gui.GuiPodium;
-import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
@@ -19,6 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -67,6 +64,7 @@ public class GuiHandler implements IGuiHandler {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		Entity entity = world.getEntityByID(x);
@@ -77,7 +75,7 @@ public class GuiHandler implements IGuiHandler {
 				if (entity != null) {
 
 					if (entity instanceof EntityDragonBase) {
-						return new GuiDragon(player.inventory, (EntityDragonBase) entity);
+						return new com.github.alexthe666.iceandfire.client.gui.GuiDragon(player.inventory, (EntityDragonBase) entity);
 					}
 				}
 				break;
@@ -86,7 +84,7 @@ public class GuiHandler implements IGuiHandler {
 				if (tile != null) {
 
 					if (tile instanceof TileEntityPodium) {
-						return new GuiPodium(player.inventory, (TileEntityPodium) tile);
+						return new com.github.alexthe666.iceandfire.client.gui.GuiPodium(player.inventory, (TileEntityPodium) tile);
 					}
 				}
 				break;
@@ -95,18 +93,18 @@ public class GuiHandler implements IGuiHandler {
 				if (tile != null) {
 
 					if (tile instanceof TileEntityLectern) {
-						return new GuiLectern(player.inventory, (TileEntityLectern) tile);
+						return new com.github.alexthe666.iceandfire.client.gui.GuiLectern(player.inventory, (TileEntityLectern) tile);
 					}
 				}
 				break;
 			case 3:
-				return new GuiBestiary(player.getActiveItemStack());
+				return new com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary(player.getActiveItemStack());
 
 			case 4:
 				if (entity != null) {
 
 					if (entity instanceof EntityHippogryph) {
-						return new GuiHippogryph(player.inventory, (EntityHippogryph) entity);
+						return new com.github.alexthe666.iceandfire.client.gui.GuiHippogryph(player.inventory, (EntityHippogryph) entity);
 					}
 				}
 				break;

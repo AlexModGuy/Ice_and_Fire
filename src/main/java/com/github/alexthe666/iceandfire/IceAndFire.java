@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.client.GuiHandler;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
@@ -43,7 +42,7 @@ import java.util.Random;
 public class IceAndFire {
 
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "1.3.0";
+	public static final String VERSION = "1.3.1";
 	public static final String LLIBRARY_VERSION = "1.7.7";
 	public static final String NAME = "Ice And Fire";
 	public static final Logger logger = LogManager.getLogger(NAME);
@@ -87,7 +86,7 @@ public class IceAndFire {
 
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new com.github.alexthe666.iceandfire.client.GuiHandler());
 		dragon = new DamageSource("dragon") {
 			@Override
 			public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {

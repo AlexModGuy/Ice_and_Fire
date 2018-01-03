@@ -20,7 +20,6 @@ import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -37,6 +36,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
@@ -50,6 +51,7 @@ public class ClientProxy extends CommonProxy {
 	private FontRenderer bestiaryFontRenderer;
 
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public static void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.lectern), 0, new ModelResourceLocation("iceandfire:lectern", "inventory"));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.podium), new ResourceLocation("iceandfire:podium_oak"), new ResourceLocation("iceandfire:podium_spruce"), new ResourceLocation("iceandfire:podium_birch"), new ResourceLocation("iceandfire:podium_jungle"), new ResourceLocation("iceandfire:podium_acacia"), new ResourceLocation("iceandfire:podium_dark_oak"));
@@ -195,6 +197,7 @@ public class ClientProxy extends CommonProxy {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void renderArmors(EnumDragonArmor armor) {
 		ModelLoader.setCustomModelResourceLocation(armor.helmet, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_helmet", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(armor.chestplate, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_chestplate", "inventory"));
@@ -202,6 +205,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(armor.boots, 0, new ModelResourceLocation("iceandfire:" + armor.name() + "_boots", "inventory"));
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	@SuppressWarnings("deprecation")
 	public void render() {
@@ -218,11 +222,13 @@ public class ClientProxy extends CommonProxy {
 		renderEntities();
 	}
 
+
 	public void postRender() {
 		EventClient.initializeStoneLayer();
 	}
 
 	@SuppressWarnings("deprecation")
+	@SideOnly(Side.CLIENT)
 	private void renderEntities() {
 		EnumDragonAnimations.initializeDragonModels();
 		ModelBase firedragon_model = null;
@@ -265,8 +271,9 @@ public class ClientProxy extends CommonProxy {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-		Particle particle = null;
+		net.minecraft.client.particle.Particle particle = null;
 		if (name.equals("dragonfire")) {
 			particle = new ParticleDragonFire(world, x, y, z, motX, motY, motZ);
 		}
@@ -284,11 +291,13 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void openBestiaryGui(ItemStack book) {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBestiary(book));
 	}
 
+	@SideOnly(Side.CLIENT)
 	public Object getArmorModel(int armorId) {
 		switch (armorId) {
 			case 0:

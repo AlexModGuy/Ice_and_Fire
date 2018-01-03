@@ -13,10 +13,15 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -34,6 +39,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	public EntityFireDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
 		this.setSize(0.78F, 1.2F);
+		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
+		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
+
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
@@ -61,7 +69,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
-		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				return entity instanceof EntityLivingBase;
@@ -233,18 +241,21 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
-				if ((!attackDecision || this.isFlying())) {
-				shootFireAtMob(this.getAttackTarget());
-			} else {
-				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
-					attackEntityAsMob(this.getAttackTarget());
-				}
+		if(!world.isRemote){
+			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
+				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
+					shootFireAtMob(this.getAttackTarget());
+				} else {
+					if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+						attackEntityAsMob(this.getAttackTarget());
+					}
 
+				}
+			} else {
+				this.setBreathingFire(false);
 			}
-		} else {
-			this.setBreathingFire(false);
 		}
+
 	}
 
 	public void riderShootFire(Entity controller) {

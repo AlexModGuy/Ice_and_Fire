@@ -17,10 +17,16 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 	public int dragonId;
 	public byte controlState;
 	public int armor_type;
+	private double posX;
+	private double posY;
+	private double posZ;
 
-	public MessageDragonControl(int dragonId, byte controlState) {
+	public MessageDragonControl(int dragonId, byte controlState, double posX, double posY, double posZ) {
 		this.dragonId = dragonId;
 		this.controlState = controlState;
+		this.posX = posX;
+		this.posY = posY;
+		this.posZ = posZ;
 	}
 
 	public MessageDragonControl() {
@@ -30,6 +36,9 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 	public void fromBytes(ByteBuf buf) {
 		dragonId = buf.readInt();
 		controlState = buf.readByte();
+		posX = buf.readDouble();
+		posY = buf.readDouble();
+		posZ = buf.readDouble();
 
 	}
 
@@ -37,6 +46,10 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(dragonId);
 		buf.writeByte(controlState);
+		buf.writeDouble(posX);
+		buf.writeDouble(posY);
+		buf.writeDouble(posZ);
+
 	}
 
 	@Override
@@ -52,11 +65,13 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 			if (dragon.isOwner(player)) {
 				dragon.setControlState(message.controlState);
 			}
+			dragon.setPosition(message.posX, message.posY, message.posZ);
 		} else if (entity instanceof EntityHippogryph) {
 			EntityHippogryph hippo = (EntityHippogryph) entity;
 			if (hippo.isOwner(player)) {
 				hippo.setControlState(message.controlState);
 			}
+			hippo.setPosition(message.posX, message.posY, message.posZ);
 		}
 	}
 

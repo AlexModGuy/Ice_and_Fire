@@ -604,7 +604,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			dismount(ModKeys.dragon_down.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
 			}
 		}
 		if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
@@ -612,7 +612,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			dismount(ModKeys.dragon_down.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
-				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState));
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
 			}
 		}
 	}
@@ -730,7 +730,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.setAttackTarget(null);
 		}
 		if (!this.canMove()) {
-			this.getNavigator().clearPathEntity();
+			this.getNavigator().clearPath();
 
 		}
 		if (this.getControllingPassenger() != null) {
@@ -804,7 +804,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 		if (this.isSitting()) {
-			this.getNavigator().clearPathEntity();
+			this.getNavigator().clearPath();
 		}
 		if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
 			this.airTarget = null;

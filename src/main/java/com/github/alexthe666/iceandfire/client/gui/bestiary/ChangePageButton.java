@@ -3,8 +3,11 @@ package com.github.alexthe666.iceandfire.client.gui.bestiary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class ChangePageButton extends GuiButton {
 	private final boolean right;
 	public int lastpage = 1;

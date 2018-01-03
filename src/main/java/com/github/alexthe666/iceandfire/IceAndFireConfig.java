@@ -95,27 +95,6 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
 	public boolean spawnHippogryphs = true;
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for black hippogryphs to spawn in.")
-	public int[] hippogryphBlackBiomes = new int[]{Biome.getIdForBiome(Biomes.DESERT_HILLS)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for brown hippogryphs to spawn in.")
-	public int[] hippogryphBrownBiomes = new int[]{Biome.getIdForBiome(Biomes.EXTREME_HILLS)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for chestnut hippogryphs to spawn in.")
-	public int[] hippogryphChestnutBiomes = new int[]{Biome.getIdForBiome(Biomes.BIRCH_FOREST_HILLS)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for creamy hippogryphs to spawn in.")
-	public int[] hippogryphCreamyBiomes = new int[]{Biome.getIdForBiome(Biomes.SAVANNA_PLATEAU)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for dark brown hippogryphs to spawn in.")
-	public int[] hippogryphDarkBrownBiomes = new int[]{Biome.getIdForBiome(Biomes.TAIGA_HILLS)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for gray hippogryphs to spawn in.")
-	public int[] hippogryphGrayBiomes = new int[]{Biome.getIdForBiome(Biomes.MUTATED_ROOFED_FOREST)};
-	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "hippogryphs", comment = "List of biome ids for white hippogryphs to spawn in.")
-	public int[] hippogryphWhiteBiomes = new int[]{Biome.getIdForBiome(Biomes.ICE_MOUNTAINS)};
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "gorgons", comment = "Wether to spawn gorgon structures or not")
@@ -146,7 +125,7 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "cyclopes", comment = "How much damage cyclopes cause with their bite attack.")
 	public double cyclopsBiteStrength = 40;
 	@ConfigEntry(category = "cyclopes", comment = "Wether to spawn cyclops caves or not")
-	public boolean generateCyclopsCaves;
+	public boolean generateCyclopsCaves = true;
 	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
 	public int spawnCyclopsChance = 80;
     //@SuppressWarnings("deprecation")
