@@ -11,7 +11,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,6 +31,14 @@ public class ItemScaleArmor extends ItemArmor {
 		this.armor_type = armorType;
 		this.eggType = eggType;
 		this.setCreativeTab(IceAndFire.TAB);
+	}
+
+	@SubscribeEvent
+	public void onEntityDamage(LivingHurtEvent event, DamageSource source) {
+		Entity attacker = source.getImmediateSource();
+		if (attacker != null) {
+			event.setAmount(event.getAmount() * 0.8F);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
