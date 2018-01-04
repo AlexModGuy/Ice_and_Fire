@@ -215,7 +215,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getTalkInterval() {
-        return 60;
+        return 90;
     }
 
     protected void onDeathUpdate() {

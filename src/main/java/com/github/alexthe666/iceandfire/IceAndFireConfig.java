@@ -128,7 +128,12 @@ public class IceAndFireConfig {
 	public boolean generateCyclopsCaves = true;
 	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
 	public int spawnCyclopsChance = 80;
-    //@SuppressWarnings("deprecation")
+
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "sirens", comment = "Maximum siren health")
+	public double sirenMaxHealth = 100D;
+
+	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;
 	//@SuppressWarnings("deprecation")
