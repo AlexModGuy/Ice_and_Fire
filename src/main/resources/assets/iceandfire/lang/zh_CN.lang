@@ -189,7 +189,8 @@ dragon.gray=暗灰
 dragon.blue=冰蓝
 dragon.sapphire=宝蓝
 dragon.silver=纹银
-dragon.stage=状态 
+dragon.white=暗白
+dragon.stage=状态
 dragon.fire=烈火
 dragon.ice=寒冰
 dragon.name=名字: 
@@ -224,6 +225,7 @@ bestiary.tameddragons=驯龙术
 bestiary.hippogryph=骏鹰
 bestiary.gorgon=蛇发女妖
 bestiary.pixie=小精灵
+bestiary.cyclops=独眼巨人
 
 lectern.nopages=无法添加新的信息.
 silvertools.hurt=+2 亡灵克制
