@@ -618,37 +618,36 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	@Override
-	public void travel(float strafe, float forward, float vertical) {
-		if (!this.canMove() && !this.isBeingRidden()) {
-			strafe = 0;
-			forward = 0;
-			super.travel(strafe, forward, vertical);
-			return;
-		}
-		if (this.isBeingRidden() && this.canBeSteered()) {
-			EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-			if (controller != null) {
-				strafe = controller.moveStrafing * 0.5F;
-				forward = controller.moveForward;
-				if (forward <= 0.0F) {
-					forward *= 0.25F;
-				}
-				if (this.isFlying() || this.isHovering()) {
-					motionX *= 1.06;
-					motionZ *= 1.06;
-				}
-				jumpMovementFactor = 0.05F;
-				this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
-				super.travel(strafe, vertical = 0, forward);
+		public void travel(float strafe, float forward, float vertical) {
+			if (!this.canMove() && !this.isBeingRidden()) {
+				strafe = 0;
+				forward = 0;
+				super.travel(strafe, forward, vertical);
 				return;
 			}
-		}
+			if (this.isBeingRidden() && this.canBeSteered()) {
+				EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
+				if (controller != null) {
+					strafe = controller.moveStrafing * 0.5F;
+					forward = controller.moveForward;
+					if (forward <= 0.0F) {
+						forward *= 0.25F;
+					}
+					if (this.isFlying() || this.isHovering()) {
+						motionX *= 1.06;
+						motionZ *= 1.06;
+					}
+					jumpMovementFactor = 0.05F;
+					this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+					super.travel(strafe, vertical = 0, forward);
+					return;
+				}
+			}
 		super.travel(strafe, forward, vertical);
 	}
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		System.out.println("help");
 
 		if (this.getAnimation() != this.ANIMATION_SCRATCH && this.getAnimation() != this.ANIMATION_BITE) {
 			this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);

@@ -24,7 +24,7 @@ public class RenderSiren extends RenderLiving<EntitySiren> {
 
 	@Override
 	public void preRenderCallback(EntitySiren entitylivingbaseIn, float partialTickTime) {
-		GL11.glScalef(2.25F, 2.25F, 2.25F);
+		GL11.glTranslatef(0, 0, -0.5F);
 
 	}
 

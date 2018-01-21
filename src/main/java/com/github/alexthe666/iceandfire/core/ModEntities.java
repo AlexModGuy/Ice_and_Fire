@@ -24,6 +24,7 @@ public class ModEntities {
 
 	public static void init() {
 		EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);
+		EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
 		registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);
 		registerUnspawnable(EntityDragonArrow.class, "dragonarrow", 2);
 		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);

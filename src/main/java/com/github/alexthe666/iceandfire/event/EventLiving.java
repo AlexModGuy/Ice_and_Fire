@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
@@ -14,17 +11,22 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -43,6 +45,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class EventLiving {
 	@SubscribeEvent
@@ -120,8 +123,56 @@ public class EventLiving {
 		}
 	}
 
+	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
+		if(sirenProps != null && sirenProps.isCharmed){
+			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
+
+				if (rand.nextInt(7) == 0) {
+					for(int i = 0; i < 5; i++){
+						event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+					}
+				}
+				EntityLivingBase entity = event.getEntityLiving();
+				EntitySiren effectiveSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+				entity.motionX += (Math.signum(effectiveSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
+				entity.motionY += (Math.signum(effectiveSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
+				entity.motionZ += (Math.signum(effectiveSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
+				float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
+				//entity.moveForward = 0.5F;
+				double d0 = effectiveSiren.posX - entity.posX;
+				double d2 = effectiveSiren.posZ - entity.posZ;
+				double d1 = effectiveSiren.posY - 1 - entity.posY;
+				if(entity.onGround && entity.collidedHorizontally){
+					entity.motionY =  0.42F;
+
+					if (entity.isPotionActive(MobEffects.JUMP_BOOST))
+					{
+						entity.motionY += (double)((float)(entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+					}
+
+					if (entity.isSprinting())
+					{
+						float f = entity.rotationYaw * 0.017453292F;
+						entity.motionX -= (double)(MathHelper.sin(f) * 0.2F);
+						entity.motionZ += (double)(MathHelper.cos(f) * 0.2F);
+					}
+
+					entity.isAirBorne = true;
+					net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+				}
+				double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+				float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+				entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
+				entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+				if(effectiveSiren.isDead || entity.getDistance(effectiveSiren) > 33 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()){
+					sirenProps.isCharmed = false;
+				}
+			}
+		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
@@ -155,7 +206,17 @@ public class EventLiving {
 		}
 	}
 
-	@SubscribeEvent
+	private static float updateRotation(float angle, float targetAngle, float maxIncrease) {
+		float f = MathHelper.wrapDegrees(targetAngle - angle);
+		if (f > maxIncrease) {
+			f = maxIncrease;
+		}
+		if (f < -maxIncrease) {
+			f = -maxIncrease;
+		}
+		return angle + f;
+	}
+		@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);

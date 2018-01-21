@@ -287,6 +287,12 @@ public class ClientProxy extends CommonProxy {
 		if (name.equals("if_pixie")) {
 			particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
 		}
+		if (name.equals("siren_appearance")) {
+			particle = new ParticleSirenAppearance(world, x, y, z);
+		}
+		if (name.equals("siren_music")) {
+			particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
+		}
 		if (particle != null) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
