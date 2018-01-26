@@ -92,7 +92,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof IBlacklistedFromStatues) || (properties == null || properties != null && !properties.isStone);
+				return entity instanceof EntityLiving && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
