@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDragonBow extends ItemBow {
+public class ItemDragonBow extends Item {
 
 	public ItemDragonBow() {
 		this.maxStackSize = 1;
