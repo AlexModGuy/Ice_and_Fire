@@ -112,6 +112,7 @@ item.iceandfire.sheep_helmet.name=Sheep Disguise Helmet
 item.iceandfire.sheep_chestplate.name=Sheep Disguise Chestplate
 item.iceandfire.sheep_leggings.name=Sheep Disguise Leggings
 item.iceandfire.sheep_boots.name=Sheep Disguise Boots
+item.iceandfire.shiny_scales.name=Shiny Scales
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -181,7 +182,7 @@ entity.if_pixie.type_2=Blue Pixie
 entity.if_pixie.type_3=Green Pixie
 entity.if_pixie.type_4=Yellow Pixie
 entity.cyclops.name=Cyclops
-
+entity.siren.name=Siren
 dragon.red=Red
 dragon.green=Emerald
 dragon.bronze=Bronze

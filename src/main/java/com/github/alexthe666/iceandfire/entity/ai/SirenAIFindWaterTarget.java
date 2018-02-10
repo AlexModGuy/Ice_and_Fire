@@ -25,7 +25,7 @@ public class SirenAIFindWaterTarget extends EntityAIBase {
         }
         if (this.mob.getRNG().nextFloat() < 0.5F) {
             Path path = this.mob.getNavigator().getPath();
-            if (path != null && path.getTarget() != null && this.mob.world.getBlockState(new BlockPos(path.getTarget().x, path.getTarget().y, path.getTarget().z)).getMaterial() != Material.WATER || !this.mob.getNavigator().noPath() && !this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
+            if (path != null && path.getTarget() != null || !this.mob.getNavigator().noPath() && !this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }
             if (this.mob.getNavigator().noPath()) {
@@ -45,25 +45,34 @@ public class SirenAIFindWaterTarget extends EntityAIBase {
     }
 
     public Vec3d findWaterTarget() {
-        if (this.mob.getAttackTarget() == null) {
+        if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
             List<Vec3d> water = new ArrayList<>();
+            List<Vec3d> singTargets = new ArrayList<>();
             for (int x = (int) this.mob.posX - 5; x < (int) this.mob.posX + 5; x++) {
                 for (int y = (int)this.mob.posY - 5; y < (int) this.mob.posY + 5; y++) {
                     for (int z = (int) this.mob.posZ - 5; z < (int) this.mob.posZ + 5; z++) {
-                        if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y, z))) {
-                            water.add(new Vec3d(x, y, z));
+                        if(mob.wantsToSing()){
+                            if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid() && this.mob.world.isAirBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y + 1, z))) {
+                                singTargets.add(new Vec3d(x, y + 1, z));
+                            }
                         }
+                        if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y, z))) {
+                                water.add(new Vec3d(x, y, z));
+                        }
+
                     }
                 }
+            }
+            if(!singTargets.isEmpty()){
+                return singTargets.get(this.mob.getRNG().nextInt(singTargets.size()));
+
             }
             if (!water.isEmpty()) {
                 return water.get(this.mob.getRNG().nextInt(water.size()));
             }
         } else {
             BlockPos blockpos1 = new BlockPos(this.mob.getAttackTarget());
-            if (this.mob.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
-                return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
-            }
+            return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
         }
         return null;
     }

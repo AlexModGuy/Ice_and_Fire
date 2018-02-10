@@ -139,6 +139,24 @@ public class ModelSiren extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntitySiren) entity);
         animator.update(entity);
+        animator.setAnimation(EntitySiren.ANIMATION_BITE);
+        animator.startKeyframe(5);
+        this.rotate(animator, Mouth, -28, 0, 0);
+        this.rotate(animator, Jaw, 7, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.endKeyframe();
+        animator.setAnimation(EntitySiren.ANIMATION_PULL);
+        animator.startKeyframe(5);
+        this.rotate(animator, Left_Arm, -103, 5, 0);
+        this.rotate(animator, Right_Arm, -103, -5, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, Left_Arm, 103, 5, 0);
+        this.rotate(animator, Right_Arm, 103, -5, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.endKeyframe();
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntitySiren entity) {
@@ -156,11 +174,11 @@ public class ModelSiren extends ModelDragonBase {
         this.walk(Right_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, entity.ticksExisted, 1);
         this.walk(Left_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, entity.ticksExisted, 1);
         this.walk(Body, speed_idle * 1F, degree_idle * 0.2F, false, 0, -0.1F, entity.ticksExisted, 1);
+        this.progressRotation(Body, entity.swimProgress, (float)Math.toRadians(-2F), 0.0F, 0.0F);
+        this.progressRotation(Head, entity.swimProgress, (float)Math.toRadians(-70), 0.0F, 0.0F);
+        this.progressRotation(Left_Arm, entity.swimProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
+        this.progressRotation(Right_Arm, entity.swimProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
         if(entity.isSwimming()) {
-            this.progressRotation(Body, entity.swimProgress, (float)Math.toRadians(-2F), 0.0F, 0.0F);
-            this.progressRotation(Head, entity.swimProgress, (float)Math.toRadians(-70), 0.0F, 0.0F);
-            this.progressRotation(Left_Arm, entity.swimProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
-            this.progressRotation(Right_Arm, entity.swimProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
             this.flap(Right_Arm, speed_walk * 1F, degree_walk * 1.2F, false, 0, 1.2F,  f, f1);
             this.flap(Left_Arm, speed_walk * 1F, degree_walk * 1.2F, true, 0, 1.2F,  f, f1);
             this.chainWave(TAIL_NO_BASE, speed_walk, degree_walk * 0.4F, 0,  f, f1);
@@ -224,6 +242,7 @@ public class ModelSiren extends ModelDragonBase {
                     break;
             }
         }
+        entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
 
     }
 

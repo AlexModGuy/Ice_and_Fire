@@ -39,16 +39,11 @@ public class StructureGenerator implements IWorldGenerator {
 	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
 	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
 	private static final WorldGenCyclopsCave CYCLOPS_CAVE = new WorldGenCyclopsCave();
+	private static final WorldGenSirenIsland SIREN_ISLAND = new WorldGenSirenIsland();
 	private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
 
 	public static BlockPos getHeight(World world, BlockPos pos) {
-		for (int y = 0; y < 256; y++) {
-			BlockPos pos1 = pos.up(y);
-			if (world.getBlockState(pos1.up()).getBlock() == Blocks.AIR && world.getBlockState(pos1.down()).getBlock() != Blocks.AIR) {
-				return pos1;
-			}
-		}
-		return pos;
+		return world.getHeight(pos);
 	}
 
 	@Override
@@ -70,6 +65,9 @@ public class StructureGenerator implements IWorldGenerator {
 					template.addBlocksToWorldChunk(world, center, settings);
 				}
 			}
+		}
+		if(IceAndFire.CONFIG.generateSirenIslands && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.generateSirenChance + 1) == 0){
+			SIREN_ISLAND.generate(world, random, height);
 		}
 		if(IceAndFire.CONFIG.generateCyclopsCaves && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0 && world.getBlockState(height).isOpaqueCube()){
 			CYCLOPS_CAVE.generate(world, random, height);

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.Random;
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -27,7 +28,7 @@ public class SirenAIGetInWater extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (creature.isInWater()) {
+        if (creature.isInWater() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
             Vec3d vec3d = this.findPossibleShelter();

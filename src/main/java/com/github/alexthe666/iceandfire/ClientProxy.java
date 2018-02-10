@@ -194,6 +194,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_chestplate, 0, new ModelResourceLocation("iceandfire:sheep_chestplate", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_leggings, 0, new ModelResourceLocation("iceandfire:sheep_leggings", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_boots, 0, new ModelResourceLocation("iceandfire:sheep_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.shiny_scales, 0, new ModelResourceLocation("iceandfire:shiny_scales", "inventory"));
 
 	}
 

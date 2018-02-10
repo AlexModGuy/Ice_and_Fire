@@ -172,6 +172,8 @@ public class ModItems {
 	public static Item sheep_leggings = new ItemModArmor(sheep, 2, EntityEquipmentSlot.LEGS, "sheep_leggings", "iceandfire.sheep_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_boots")
 	public static Item sheep_boots = new ItemModArmor(sheep, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":shiny_scales")
+	public static Item shiny_scales = new ItemGeneric("shiny_scales", "iceandfire.shiny_scales");
 
 
 	static {

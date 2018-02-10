@@ -29,10 +29,6 @@ public class PixieAIFollowOwner extends EntityAIBase {
 		this.minDist = minDistIn;
 		this.maxDist = maxDistIn;
 		this.setMutexBits(3);
-
-		if (!(tameableIn.getNavigator() instanceof PathNavigateAmphibious)) {
-			throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
-		}
 	}
 
 	public boolean shouldExecute() {

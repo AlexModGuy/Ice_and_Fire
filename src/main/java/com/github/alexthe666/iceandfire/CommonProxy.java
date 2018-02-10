@@ -8,11 +8,14 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
+import com.github.alexthe666.iceandfire.recipe.RecipeShinyScales;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -94,6 +97,14 @@ public class CommonProxy {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+		IRecipe recipe = new RecipeShinyScales();
+		recipe.setRegistryName(new ResourceLocation("iceandfire:shiny_scales_recipe"));
+		event.getRegistry().register(recipe);
+	}
+
 
 	@SubscribeEvent
 	public static void registerItemBlocks(RegistryEvent.Register<Item> event) {

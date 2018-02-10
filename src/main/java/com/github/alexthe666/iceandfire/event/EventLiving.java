@@ -129,7 +129,6 @@ public class EventLiving {
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 		if(sirenProps != null && sirenProps.isCharmed){
 			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
-
 				if (rand.nextInt(7) == 0) {
 					for(int i = 0; i < 5; i++){
 						event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
@@ -141,10 +140,14 @@ public class EventLiving {
 				entity.motionY += (Math.signum(effectiveSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
 				entity.motionZ += (Math.signum(effectiveSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
 				float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
+				entity.stepHeight = 1;
 				//entity.moveForward = 0.5F;
 				double d0 = effectiveSiren.posX - entity.posX;
 				double d2 = effectiveSiren.posZ - entity.posZ;
 				double d1 = effectiveSiren.posY - 1 - entity.posY;
+				if(entity.isRiding()){
+					entity.dismountRidingEntity();
+				}
 				if(entity.onGround && entity.collidedHorizontally){
 					entity.motionY =  0.42F;
 
@@ -168,10 +171,20 @@ public class EventLiving {
 				float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
 				entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
 				entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+				if(entity.getDistance(effectiveSiren) < 5D){
+					sirenProps.isCharmed = false;
+					effectiveSiren.setSinging(false);
+					effectiveSiren.setAttackTarget((EntityLivingBase) entity);
+					effectiveSiren.setAggressive(true);
+					effectiveSiren.triggerOtherSirens((EntityLivingBase) entity);
+				}
 				if(effectiveSiren.isDead || entity.getDistance(effectiveSiren) > 33 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()){
 					sirenProps.isCharmed = false;
 				}
 			}
+		}else if(sirenProps != null && !sirenProps.isCharmed){
+			event.getEntityLiving().stepHeight = 0.6F;
+
 		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
@@ -206,7 +219,7 @@ public class EventLiving {
 		}
 	}
 
-	private static float updateRotation(float angle, float targetAngle, float maxIncrease) {
+	public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
 		float f = MathHelper.wrapDegrees(targetAngle - angle);
 		if (f > maxIncrease) {
 			f = maxIncrease;
