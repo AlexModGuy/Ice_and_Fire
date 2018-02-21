@@ -21,6 +21,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_STAGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> DRAGON_DIRECTION = EntityDataManager.<Float>createKey(EntityDragonSkull.class, DataSerializers.FLOAT);
+
 	public final float minSize = 0.3F;
 	public final float maxSize = 8.58F;
 
@@ -54,7 +56,15 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		this.getDataManager().register(DRAGON_TYPE, 0);
 		this.getDataManager().register(DRAGON_AGE, 0);
 		this.getDataManager().register(DRAGON_STAGE, 0);
+		this.getDataManager().register(DRAGON_DIRECTION, 0.0f);
+	}
 
+	public float getYaw() {
+		return this.getDataManager().get(DRAGON_DIRECTION);
+	}
+
+	public void setYaw(float var1) {
+		this.getDataManager().set(DRAGON_DIRECTION, var1);
 	}
 
 	public int getType() {
@@ -106,7 +116,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (player.isSneaking()) {
-			this.rotationYaw = player.rotationYaw;
+			this.setYaw(player.rotationYaw);
 		}
 		return super.processInteract(player, hand);
 	}
@@ -116,6 +126,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		this.setType(compound.getInteger("Type"));
 		this.setStage(compound.getInteger("Stage"));
 		this.setDragonAge(compound.getInteger("DragonAge"));
+		this.setYaw(compound.getFloat("DragonYaw"));
 		super.readEntityFromNBT(compound);
 	}
 
@@ -124,6 +135,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		compound.setInteger("Type", this.getType());
 		compound.setInteger("Stage", this.getStage());
 		compound.setInteger("DragonAge", this.getDragonAge());
+		compound.setFloat("DragonYaw", this.getYaw());
 		super.writeEntityToNBT(compound);
 	}
 

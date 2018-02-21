@@ -21,7 +21,7 @@ public class RenderDragonSkull extends RenderLiving {
 		if (par1EntityLivingBase instanceof EntityDragonSkull) {
 			GL11.glScalef(((EntityDragonSkull) par1EntityLivingBase).getDragonSize(), 1, ((EntityDragonSkull) par1EntityLivingBase).getDragonSize());
 			GL11.glScalef(1, -((EntityDragonSkull) par1EntityLivingBase).getDragonSize(), 1);
-			GL11.glRotatef(par1EntityLivingBase.rotationYaw, 0, 1, 0);
+			GL11.glRotatef(((EntityDragonSkull) par1EntityLivingBase).getYaw(), 0, 1, 0);
 			super.preRenderCallback(par1EntityLivingBase, par2);
 		}
 

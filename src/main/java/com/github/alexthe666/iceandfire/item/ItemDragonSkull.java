@@ -82,7 +82,7 @@ public class ItemDragonSkull extends Item {
 				skull.setStage(stack.getTagCompound().getInteger("Stage"));
 				skull.setDragonAge(stack.getTagCompound().getInteger("DragonAge"));
 				skull.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0);
-				skull.rotationYaw = player.rotationYaw;
+				skull.setYaw(player.rotationYaw);
 
 				if (!worldIn.isRemote) {
 					worldIn.spawnEntity(skull);
