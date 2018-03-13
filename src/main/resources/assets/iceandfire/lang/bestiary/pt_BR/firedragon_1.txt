@@ -1,7 +1,7 @@
-Simply creating fire is not the
-only way Fire Dragons dispatch
-their prey. The also have many
-different attacks.
+Lançar fogo não é simplesmente 
+a única coisa que Dragões de Fogo
+fazem para acabar com suas presas. Eles também
+possuem ataques diferentes.
 
 
 
@@ -9,14 +9,14 @@ different attacks.
 
 
 
-The dragon's fire blast attack
-fires a steady stream of flames
-from the beast's mouth. Younger
-dragons are less effective at
-this attack, while larger ones
-can scorch nearby terrain,
-inflicting massive amounts of
-damage.
+O ataque de explosão de fogo
+dispara um fluxo de chamas
+da boca da besta. Dragões mais
+jovens não são eficazes nesse 
+tipo ataque, enquanto isso os maiores
+podem incendiar terrenos inteiros,
+infligindo quantidades massivas de
+dano.
 
 
 
@@ -24,17 +24,17 @@ damage.
 
 
 
-The fire blast isn't the only
-elemental attack. The dragon
-can also build up a blast of
-flames into a solidified block.
-This explosive fireball is then
-thrown towards the dragon's
-prey. Only older dragons are
-capable of this attack.
+A explosão de fogo não é o único
+ataque elemental. O dragão
+também pode criar uma explosão de
+chamas em blocos solidificados.
+Esta bola de fogo explosiva é jogada
+na direção da presa do
+dragão. Somente dragões experientes
+são capazes de fazer este ataque.
 
 
 
 
-One of the most common fire
-dragon attack is the dragon's bite.
+Um dos ataques mais comuns dos dragões
+de fogo é a mordida do dragão.
