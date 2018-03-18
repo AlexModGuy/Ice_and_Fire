@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -68,6 +69,12 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 			dragon.setPosition(message.posX, message.posY, message.posZ);
 		} else if (entity instanceof EntityHippogryph) {
 			EntityHippogryph hippo = (EntityHippogryph) entity;
+			if (hippo.isOwner(player)) {
+				hippo.setControlState(message.controlState);
+			}
+			hippo.setPosition(message.posX, message.posY, message.posZ);
+		} else if (entity instanceof EntityHippocampus) {
+			EntityHippocampus hippo = (EntityHippocampus) entity;
 			if (hippo.isOwner(player)) {
 				hippo.setControlState(message.controlState);
 			}

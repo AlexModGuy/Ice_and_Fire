@@ -23,13 +23,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,12 +59,14 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     private int ticksAgressive;
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
+
     public EntitySiren(World worldIn) {
         super(worldIn);
         this.setSize(1.6F, 0.9F);
         this.switchNavigator(true);
         this.tasks.addTask(0, new SirenAIFindWaterTarget(this));
-        this.tasks.addTask(1, new SirenAIGetInWater(this, 1.0D));
+        this.tasks.addTask(1, new AquaticAIGetInWater(this, 1.0D));
         this.tasks.addTask(2, new SirenAIWander(this, 1));
         this.tasks.addTask(3, new EntityAILookIdle(this));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
@@ -84,6 +87,11 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             tail_buffer = new ChainBuffer();
         }
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 
     public float getBlockPathWeight(BlockPos pos) {
@@ -202,6 +210,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
         if(this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()){
             this.setAttackTarget(null);
+            this.setAggressive(false);
         }
         if(this.getAttackTarget() != null && !this.isAgressive()){
             this.setAggressive(true);

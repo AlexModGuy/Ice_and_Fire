@@ -7,12 +7,13 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class SirenAIGetInWater extends EntityAIBase {
+public class AquaticAIGetInWater extends EntityAIBase {
     private final EntityCreature creature;
     private double shelterX;
     private double shelterY;
@@ -20,7 +21,7 @@ public class SirenAIGetInWater extends EntityAIBase {
     private final double movementSpeed;
     private final World world;
 
-    public SirenAIGetInWater(EntityCreature theCreatureIn, double movementSpeedIn) {
+    public AquaticAIGetInWater(EntityCreature theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.world = theCreatureIn.world;
@@ -28,7 +29,7 @@ public class SirenAIGetInWater extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (creature.isInWater() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
+        if (creature.isBeingRidden()  || creature instanceof EntityTameable && ((EntityTameable) creature).isSitting() || creature.isInWater() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
             Vec3d vec3d = this.findPossibleShelter();

@@ -42,6 +42,7 @@ public class ModEntities {
 		registerSpawnable(EntityPixie.class, "if_pixie", 15, 0XFF7F89, 0XE2CCE2);
 		registerSpawnable(EntityCyclops.class, "cyclops", 17, 0XBBAA92, 0X594729);
 		registerSpawnable(EntitySiren.class, "siren", 18, 0X8EE6CA, 0XF2DFC8);
+		registerSpawnable(EntityHippocampus.class, "hippocampus", 19, 0X4491C7, 0X4FC56B);
 
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {

@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -12,24 +14,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiHippogryph extends GuiContainer {
+public class GuiHippocampus extends GuiContainer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
 	private final IInventory playerInventory;
 	private final IInventory hippogryphInv;
-	private final EntityHippogryph hippogryph;
+	private final EntityHippocampus hippogryph;
 	private float mousePosx;
 	private float mousePosY;
 
-	public GuiHippogryph(IInventory playerInv, EntityHippogryph hippogryph) {
-		super(new ContainerHippogryph(hippogryph, Minecraft.getMinecraft().player));
+	public GuiHippocampus(IInventory playerInv, EntityHippocampus hippogryph) {
+		super(new ContainerHippocampus(hippogryph, Minecraft.getMinecraft().player));
 		this.playerInventory = playerInv;
-		this.hippogryphInv = hippogryph.hippogryphInventory;
+		this.hippogryphInv = hippogryph.hippocampusInventory;
 		this.hippogryph = hippogryph;
 		this.allowUserInput = false;
 	}
 
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		this.fontRenderer.drawString(this.hippogryphInv.getDisplayName().getUnformattedText(), 8, 6, 4210752);
 		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 	}
@@ -52,5 +53,6 @@ public class GuiHippogryph extends GuiContainer {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+
 	}
 }

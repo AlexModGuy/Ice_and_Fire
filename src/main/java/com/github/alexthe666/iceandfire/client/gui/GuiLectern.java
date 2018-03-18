@@ -63,4 +63,11 @@ public class GuiLectern extends GuiContainer {
 		return k != 0 && j != 0 ? j * p_175381_1_ / k : 0;
 	}
 
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 }
