@@ -18,6 +18,9 @@ public class ModItems {
 	public static ArmorMaterial dragon = EnumHelper.addArmorMaterial("DragonScales", "iceandfire:armor_dragon_scales", 36, new int[]{4, 7, 9, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
 	public static ArmorMaterial blindfoldArmor = EnumHelper.addArmorMaterial("Blindfold", "iceandfire:blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ArmorMaterial sheep = EnumHelper.addArmorMaterial("Sheep", "iceandfire:sheep_disguise", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+	public static ArmorMaterial yellow_deathworm = EnumHelper.addArmorMaterial("Yellow Deathworm", "iceandfire:yellow_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+	public static ArmorMaterial white_deathworm = EnumHelper.addArmorMaterial("White Deathworm", "iceandfire:white_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+	public static ArmorMaterial red_deathworm = EnumHelper.addArmorMaterial("Red Deathworm", "iceandfire:red_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
 	public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 	public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
@@ -174,7 +177,32 @@ public class ModItems {
 	public static Item sheep_boots = new ItemModArmor(sheep, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":shiny_scales")
 	public static Item shiny_scales = new ItemGeneric("shiny_scales", "iceandfire.shiny_scales");
-
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_chitin")
+	public static Item deathworm_chitin = new ItemDeathWormChitin();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_helmet")
+	public static Item deathworm_yellow_helmet = new ItemDeathwormArmor(yellow_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_yellow_helmet", "iceandfire.deathworm_yellow_helmet");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_chestplate")
+	public static Item deathworm_yellow_chestplate = new ItemDeathwormArmor(yellow_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_yellow_chestplate", "iceandfire.deathworm_yellow_chestplate");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_leggings")
+	public static Item deathworm_yellow_leggings = new ItemDeathwormArmor(yellow_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_yellow_leggings", "iceandfire.deathworm_yellow_leggings");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_boots")
+	public static Item deathworm_yellow_boots = new ItemDeathwormArmor(yellow_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_yellow_boots", "iceandfire.deathworm_yellow_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_helmet")
+	public static Item deathworm_white_helmet = new ItemDeathwormArmor(white_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_white_helmet", "iceandfire.deathworm_white_helmet");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_chestplate")
+	public static Item deathworm_white_chestplate = new ItemDeathwormArmor(white_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_white_chestplate", "iceandfire.deathworm_white_chestplate");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_leggings")
+	public static Item deathworm_white_leggings = new ItemDeathwormArmor(white_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_white_leggings", "iceandfire.deathworm_white_leggings");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_boots")
+	public static Item deathworm_white_boots = new ItemDeathwormArmor(white_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_white_boots", "iceandfire.deathworm_white_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_helmet")
+	public static Item deathworm_red_helmet = new ItemDeathwormArmor(red_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_red_helmet", "iceandfire.deathworm_red_helmet");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_chestplate")
+	public static Item deathworm_red_chestplate = new ItemDeathwormArmor(red_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_red_chestplate", "iceandfire.deathworm_red_chestplate");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_leggings")
+	public static Item deathworm_red_leggings = new ItemDeathwormArmor(red_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_red_leggings", "iceandfire.deathworm_red_leggings");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_boots")
+	public static Item deathworm_red_boots = new ItemDeathwormArmor(red_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
 
 	static {
 		EnumDragonArmor.initArmors();

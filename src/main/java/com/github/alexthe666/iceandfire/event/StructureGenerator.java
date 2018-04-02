@@ -3,9 +3,11 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
@@ -105,6 +107,19 @@ public class StructureGenerator implements IWorldGenerator {
 				firedragon.rotationYaw = random.nextInt(360);
 				if (!world.isRemote) {
 					world.spawnEntity(firedragon);
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(30) == 0) {
+			for(int i = 0; i < random.nextInt(5); i++){
+				BlockPos pos = new BlockPos(x + random.nextInt(10) - 5, 20 + random.nextInt(40), z + random.nextInt(10) - 5);
+				if(world.getBlockState(pos).getMaterial() == Material.WATER){
+					EntityHippocampus campus = new EntityHippocampus(world);
+					campus.setVariant(random.nextInt(5));
+					campus.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
+					if(campus.isNotColliding()){
+						world.spawnEntity(campus);
+					}
 				}
 			}
 		}

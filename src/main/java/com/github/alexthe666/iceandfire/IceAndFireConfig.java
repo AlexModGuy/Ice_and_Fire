@@ -136,7 +136,15 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "sirens", comment = "Wether to spawn siren islands caves or not")
 	public boolean generateSirenIslands = true;
 	@ConfigEntry(category = "generation", comment = "1 out of this number chance per chunk for generation")
-	public int generateSirenChance = 80;
+	public int generateSirenChance = 300;
+
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "hippocampi", comment = "True if hippocampi are allowed to spawn.")
+	public boolean spawnHippocampus = true;
+
+	@ConfigEntry(category = "death worms", comment = "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag.")
+	public int deathWormTargetSearchLength = 64;
+
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

@@ -48,7 +48,7 @@ public class IceAndFire {
 	public static final Logger logger = LogManager.getLogger(NAME);
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
-	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class})
+	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageDeathWormHitbox.class})
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy PROXY;

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -46,6 +47,7 @@ public class ModelHippocampus extends ModelDragonBase {
     private ModelAnimator animator;
 
     public ModelHippocampus() {
+        this.animator = ModelAnimator.create();
         this.textureWidth = 128;
         this.textureHeight = 128;
         this.Body = new AdvancedModelRenderer(this, 0, 34);
@@ -246,32 +248,41 @@ public class ModelHippocampus extends ModelDragonBase {
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
+        animator.update(entity);
+        animator.setAnimation(EntityHippogryph.ANIMATION_SPEAK);
+        animator.startKeyframe(10);
+        this.rotate(animator, Head, -10, 0, 0);
+        this.rotate(animator, BottomJaw, 20, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         EntityHippocampus hippo = (EntityHippocampus)entity;
-        float speed_walk = 0.4F;
+        float speed_walk = 0.9F;
         float speed_idle = 0.05F;
         float speed_swim = 0.35F;
-        float degree_walk = 0.5F;
+        float degree_walk = 1.5F;
         float degree_idle = 0.5F;
         float degree_swim = 0.75F;
         this.progressRotation(Body, hippo.onLandProgress, (float)Math.toRadians(-5F), 0.0F, 0.0F);
-        this.progressRotation(FrontThighL, Math.max(0, hippo.sitProgress - hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(-65F));
-        this.progressRotation(FrontThighR, Math.max(0, hippo.sitProgress - hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(65F));
+        this.progressRotation(FrontThighL, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(-65F));
+        this.progressRotation(FrontThighR, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(65F));
         this.progressPosition(Body, hippo.onLandProgress, 0.0F, 20.0F, 0.0F);
 
         this.progressRotation(Body, hippo.sitProgress, (float)Math.toRadians(-5F), 0.0F, 0.0F);
         this.progressRotation(Tail_1, hippo.sitProgress, (float)Math.toRadians(55F), 0.0F, 0.0F);
         this.progressRotation(Tail_2, hippo.sitProgress, (float)Math.toRadians(-26F), 0.0F, 0.0F);
         this.progressRotation(Tail_3, hippo.sitProgress, (float)Math.toRadians(-33F), 0.0F, 0.0F);
-        this.progressRotation(FlukeR, Math.max(0, hippo.sitProgress - hippo.onLandProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(5F), (float)Math.toRadians(30F));
-        this.progressRotation(FlukeL, Math.max(0, hippo.sitProgress - hippo.onLandProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(-5F), (float)Math.toRadians(-30F));
+        this.progressRotation(FlukeR, Math.max(0, hippo.sitProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(5F), (float)Math.toRadians(30F));
+        this.progressRotation(FlukeL, Math.max(0, hippo.sitProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(-5F), (float)Math.toRadians(-30F));
         this.progressRotation(Body, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(-5F), (float)Math.toRadians(-5F), (float)Math.toRadians(85F));
         this.progressPosition(Body, hippo.sitProgress * hippo.onLandProgress * 0.05F, 0.0F, 10, 0.0F);
-        this.progressRotation(FrontThighL, Math.max(0, hippo.sitProgress - hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(15F));
-        this.progressRotation(FrontThighR, Math.max(0, hippo.sitProgress - hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(-15F));
+        if(hippo.onGround && !hippo.isInWater()){
+            this.progressRotation(FrontThighL, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float)Math.toRadians(60F));
+            this.progressRotation(FrontThighR, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float)Math.toRadians(-60F));
+        }
         this.progressRotation(Tail_2, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(-7F), (float)Math.toRadians(-25F), (float)Math.toRadians(1));
         this.progressRotation(Tail_3, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(20), (float)Math.toRadians(-36), (float)Math.toRadians(36));
 
@@ -285,17 +296,17 @@ public class ModelHippocampus extends ModelDragonBase {
             this.chainWave(NECK, speed_swim, degree_swim * 0.15F, -2, f, f1);
             this.chainWave(TAIL_W_BODY, speed_swim, degree_swim * 0.15F, -3, f, f1);
             this.walk(Tail_3, speed_swim, degree_swim * -0.5F, false, 0, 0, f, f1);
-            this.chainWave(LEG_L, speed_walk, degree_walk * 0.75F, 1, f, f1);
-            this.chainWave(LEG_R, speed_walk, degree_walk * 0.75F, 1, f, f1);
+            this.chainWave(LEG_L, speed_swim, degree_swim * 0.75F, 1, f, f1);
+            this.chainWave(LEG_R, speed_swim, degree_swim * 0.75F, 1, f, f1);
             this.walk(Tail_1, speed_idle, degree_idle * 0.15F, false, 0, 0F, entity.ticksExisted, 1);
             this.walk(Tail_2, speed_idle, degree_idle * 0.25F, false, 0, 0F, entity.ticksExisted, 1);
 
         }else{
-            this.chainWave(LEG_L, speed_swim, degree_swim * 0.5F, 1, f, f1);
-            this.chainWave(LEG_R, speed_swim, degree_swim * 0.5F, 1, f, f1);
-            this.walk(Body, speed_swim, degree_swim * 0.05F, false, 0, 0.1F, f, f1);
-            this.walk(Tail_1, speed_swim, degree_swim * 0.05F, false, 1, 0.1F, f, f1);
-            this.walk(Tail_2, speed_swim, degree_swim * 0.05F, false, 2, 0.1F, f, f1);
+            this.chainWave(LEG_L, speed_walk, degree_walk * 0.5F, 1, f, f1);
+            this.chainWave(LEG_R, speed_walk, degree_walk * 0.5F, 1, f, f1);
+            this.walk(Body, speed_walk, degree_walk * 0.05F, false, 0, 0.1F, f, f1);
+            this.walk(Tail_1, speed_walk, degree_walk * 0.05F, false, 1, 0.1F, f, f1);
+            this.walk(Tail_2, speed_walk, degree_walk * 0.05F, false, 2, 0.1F, f, f1);
             this.walk(FrontThighL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
             this.walk(FrontThighR, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
             this.walk(FrontLegL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);

@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
@@ -20,12 +18,12 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -33,12 +31,15 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,10 +64,14 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     private boolean hasChestVarChanged = false;
     public float sitProgress;
     public int airBorneCounter;
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippocampus"));
+    public static Animation ANIMATION_SPEAK;
 
     public EntityHippocampus(World worldIn) {
         super(worldIn);
         this.stepHeight = 1;
+        this.spawnableBlock = Blocks.WATER;
+        ANIMATION_SPEAK = Animation.create(15);
         this.setSize(1.95F, 0.95F);
         this.switchNavigator(true);
         this.tasks.addTask(0, new AquaticAIFindWaterTarget(this, 10, true));
@@ -76,6 +81,14 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             tail_buffer = new ChainBuffer();
         }
         initHippocampusInv();
+    }
+
+    public boolean isNotColliding() {
+        return this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+    }
+
+    public boolean isPushedByWater() {
+        return false;
     }
 
     private void switchNavigator(boolean onLand){
@@ -200,6 +213,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        AnimationHandler.INSTANCE.updateAnimations(this);
+        if(getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase && this.ticksExisted % 20 == 0){
+            ((EntityLivingBase)getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
+        }
         if (!this.onGround) {
             airBorneCounter++;
         } else {
@@ -212,9 +229,9 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             tail_buffer.calculateChainSwingBuffer(40, 10, 1F, this);
         }
         if (this.up()) {
-            if (!this.isInWater() && this.airBorneCounter == 0) {
-                this.motionY += 1;
-            }else{
+            if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
+                this.motionY = 1D;
+            }else if(this.isInWater()){
                 this.motionY += 0.4D;
             }
         }
@@ -227,7 +244,6 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         if(!this.isInWater() && !this.isLandNavigator){
             switchNavigator(true);
         }
-        AnimationHandler.INSTANCE.updateAnimations(this);
         boolean inWater = !this.isInWater();
         if (inWater && onLandProgress < 20.0F) {
             onLandProgress += 1F;
@@ -258,6 +274,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public boolean isBlinking() {
         return this.ticksExisted % 50 > 43;
+    }
+
+    public boolean getCanSpawnHere() {
+        return this.posY > 30 && this.posY < (double)this.world.getSeaLevel();
     }
 
     @Override
@@ -406,7 +426,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[0];
+        return new Animation[]{IAnimatedEntity.NO_ANIMATION, ANIMATION_SPEAK};
     }
 
     @Nullable
@@ -440,6 +460,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 if (forward <= 0.0F) {
                     forward *= 0.25F;
                 }
+                this.fallDistance = 0;
                 if (this.isInWater()) {
                     this.moveRelative(strafe, vertical, forward,1F);
                     f4 = 0.8F;
@@ -459,6 +480,9 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     this.motionZ *= (double) f4;
                     motionY += 0.01185D;
                 }else{
+                    forward = controller.moveForward * 0.25F;
+                    strafe = controller.moveStrafing * 0.125F;
+
                     this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
                     super.travel(strafe, vertical, forward);
                     return;
@@ -515,6 +539,20 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
         this.limbSwing += this.limbSwingAmount;
 
+    }
+
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
     }
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
@@ -666,4 +704,8 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         }
     }
 
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
+    }
 }

@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -26,6 +27,8 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -39,6 +42,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -48,6 +52,18 @@ import java.util.List;
 import java.util.Random;
 
 public class EventLiving {
+
+	/*@SubscribeEvent
+	public void onGetCollisionBoxes(GetCollisionBoxesEvent event) {
+		if(event.getEntity() instanceof EntityDeathWorm && !event.getCollisionBoxesList().isEmpty()){
+			for(AxisAlignedBB bb : event.getCollisionBoxesList()){
+				BlockPos pos = new BlockPos(bb.minX, bb.minY, bb.minZ);
+				if(event.getEntity().world.getBlockState(pos).getMaterial() == Material.SAND){
+					event.getCollisionBoxesList().remove(bb);
+				}
+			}
+		}
+	}*/
 	@SubscribeEvent
 	public void onEntityDrop(LivingDropsEvent event) {
 		if (event.getEntityLiving() instanceof EntityWitherSkeleton) {

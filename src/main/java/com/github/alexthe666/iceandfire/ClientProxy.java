@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCyclops;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
@@ -48,6 +49,9 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelFireDragonArmor(0.2F);
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL = new ModelIceDragonArmor(0.5F);
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F);
+	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL = new ModelDeathWormArmor(0.5F);
+	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL_LEGS = new ModelDeathWormArmor(0.2F);
+
 	private FontRenderer bestiaryFontRenderer;
 
 	@SubscribeEvent
@@ -187,6 +191,12 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.jar), 5, new ModelResourceLocation("iceandfire:jar_4", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.frozenSplinters), 0, new ModelResourceLocation("iceandfire:frozen_splinters", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.nest), 0, new ModelResourceLocation("iceandfire:nest", "inventory"));
+
+		ModelBakery.registerItemVariants(ModItems.deathworm_chitin, new ResourceLocation("iceandfire:deathworm_chitin_yellow"), new ResourceLocation("iceandfire:deathworm_chitin_white"), new ResourceLocation("iceandfire:deathworm_chitin_red"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 0, new ModelResourceLocation("iceandfire:deathworm_chitin_yellow", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 1, new ModelResourceLocation("iceandfire:deathworm_chitin_white", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 2, new ModelResourceLocation("iceandfire:deathworm_chitin_red", "inventory"));
+
 		for (EnumDragonArmor armor : EnumDragonArmor.values()) {
 			renderArmors(armor);
 		}
@@ -195,6 +205,18 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_leggings, 0, new ModelResourceLocation("iceandfire:sheep_leggings", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_boots, 0, new ModelResourceLocation("iceandfire:sheep_boots", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.shiny_scales, 0, new ModelResourceLocation("iceandfire:shiny_scales", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_boots, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_white_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_white_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_white_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_boots, 0, new ModelResourceLocation("iceandfire:deathworm_white_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_red_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_red_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_red_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_boots, 0, new ModelResourceLocation("iceandfire:deathworm_red_boots", "inventory"));
 
 	}
 
@@ -259,6 +281,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCyclops.class, new RenderCyclops(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiren.class, new RenderSiren(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityHippocampus.class, new RenderHippocampus(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDeathWorm.class, new RenderDeathWorm(Minecraft.getMinecraft().getRenderManager()));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
@@ -317,6 +340,10 @@ public class ClientProxy extends CommonProxy {
 				return ICE_DRAGON_SCALE_ARMOR_MODEL;
 			case 3:
 				return ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS;
+			case 4:
+				return DEATHWORM_ARMOR_MODEL;
+			case 5:
+				return DEATHWORM_ARMOR_MODEL_LEGS;
 		}
 		return null;
 	}
