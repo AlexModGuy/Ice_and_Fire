@@ -51,6 +51,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarplugs;
+
 public class EventLiving {
 
 	/*@SubscribeEvent
@@ -144,6 +146,9 @@ public class EventLiving {
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 		if(sirenProps != null && sirenProps.isCharmed){
+			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
+				sirenProps.isCharmed = false;
+			}
 			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
 				if (rand.nextInt(7) == 0) {
 					for(int i = 0; i < 5; i++){

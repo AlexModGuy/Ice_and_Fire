@@ -43,6 +43,10 @@ public class ModRecipes {
 		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.dragon.setRepairItem(new ItemStack(ModItems.dragonbone));
 		ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
+		ModItems.earplugsArmor.setRepairItem(new ItemStack(Blocks.WOODEN_BUTTON));
+		ModItems.yellow_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 0));
+		ModItems.white_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 1));
+		ModItems.red_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 2));
 
 	}
 

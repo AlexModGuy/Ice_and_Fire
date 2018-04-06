@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,6 +35,7 @@ public class GuiBestiary extends GuiScreen {
 	protected static final int Y = 245;
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
 	private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
+	private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
 	public List<EnumBestiaryPages> allPageTypes = new ArrayList<EnumBestiaryPages>();
 	public EnumBestiaryPages pageType;
 	public List<IndexPageButton> indexButtons = new ArrayList<IndexPageButton>();
@@ -658,6 +660,43 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Blocks.WOOL), 53, 94, 1.5F);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.sheep_boots), 64, 73, 2F);
+					GL11.glPopMatrix();
+				}
+					writeFromTxt();
+				break;
+			case SIREN:
+				if (bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.25F, 1.25F, 1.25F);
+					drawImage(DRAWINGS_1, 190, 25, 0, 0, 25, 42, 512F);
+					drawImage(DRAWINGS_1, 220, 15, 25, 0, 25, 42, 512F);
+					drawImage(DRAWINGS_1, 255, 25, 50, 0, 25, 42, 512F);
+
+					drawImage(DRAWINGS_1, 190, 135, 0, 42, 26, 28, 512F);
+					drawImage(DRAWINGS_1, 220, 125, 26, 42, 26, 28, 512F);
+					drawImage(DRAWINGS_1, 255, 135, 52, 42, 26, 28, 512F);
+					GL11.glPopMatrix();
+				}
+				if (bookPages == 1) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.earplugs), 18, 40, 2.5F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					GL11.glTranslatef(20, 24, 0);
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 160, 131, 1.5F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 199, 131, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.earplugs), 171, 85, 2F);
+					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 				}
 					writeFromTxt();

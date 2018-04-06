@@ -95,6 +95,9 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
 	public boolean spawnHippogryphs = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "hippogryphs", comment = "Hippogryph spawn weight. Lower = lower chance to spawn.")
+	public int hippogryphSpawnRate = 5;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "gorgons", comment = "Wether to spawn gorgon structures or not")
@@ -144,6 +147,18 @@ public class IceAndFireConfig {
 
 	@ConfigEntry(category = "death worms", comment = "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag.")
 	public int deathWormTargetSearchLength = 64;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "sirens", comment = "Maximum deathworm health, for small worms. Scaled to size")
+	public double deathWormMaxHealth = 30D;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "sirens", comment = "Deathworm attack strength, for small worms. Scaled to size")
+	public double deathWormAttackStrength = 6D;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "death worms", comment = "True if death worms are allowed to spawn.")
+	public boolean spawnDeathWorm = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "hippogryphs", comment = "Death worm spawn weight. Lower = lower chance to spawn.")
+	public int deathWormSpawnRate = 15;
 
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")

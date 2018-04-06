@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
@@ -18,6 +19,8 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -268,7 +271,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 if(this.isSinging()){
                     this.setAggressive(false);
                     if(!this.wantsToSing() && !this.isInWater()) {
-                        if (properties != null && !properties.isCharmed) {
+                        if (properties != null && !properties.isCharmed && !isWearingEarplugs((EntityLivingBase)entity)) {
                             properties.isCharmed = true;
                         }
                         if (getDistance(entity) < 5D) {
@@ -290,6 +293,11 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
     }
 
+    public static boolean isWearingEarplugs(EntityLivingBase entity){
+        ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        System.out.println(helmet.getItem() == ModItems.earplugs);
+        return helmet.getItem() == ModItems.earplugs;
+    }
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if(source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase){
             this.triggerOtherSirens((EntityLivingBase)source.getTrueSource());
