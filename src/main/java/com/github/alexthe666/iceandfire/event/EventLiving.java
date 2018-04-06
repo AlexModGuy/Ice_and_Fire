@@ -344,7 +344,7 @@ public class EventLiving {
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
-			animal.tasks.addTask(4, new EntitySheepAIFollowCyclops(animal, 1.2D));
+			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
 		}
 	}
 
