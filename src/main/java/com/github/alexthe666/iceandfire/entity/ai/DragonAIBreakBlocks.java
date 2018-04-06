@@ -18,37 +18,39 @@ public class DragonAIBreakBlocks extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return dragon.getDragonStage() > 2 && !dragon.isModelDead() && dragon.world.getGameRules().getBoolean("mobGriefing");
+		return dragon.getDragonStage() > 2 && !dragon.isModelDead() && dragon.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2;
 	}
 
 	public void updateTask() {
-		for (int a = (int) Math.round(dragon.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(dragon.getEntityBoundingBox().maxX) + 1; a++) {
-			for (int b = (int) Math.round(dragon.getEntityBoundingBox().minY) + (dragon.isFlying() || dragon.isHovering() ? 0 : 1); (b <= (int) Math.round(dragon.getEntityBoundingBox().maxY) + 5) && (b <= 127); b++) {
-				for (int c = (int) Math.round(dragon.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(dragon.getEntityBoundingBox().maxZ) + 1; c++) {
-					BlockPos pos = new BlockPos(a, b, c);
-					IBlockState state = dragon.world.getBlockState(pos);
-					if (state.getBlockHardness(dragon.world, pos) > -1 && state.getBlockHardness(dragon.world, pos) < 5 && !dragon.world.isAirBlock(pos) && state.getMaterial() != Material.PLANTS && !(state.getBlock() instanceof BlockFluidBase || state.getBlock() instanceof BlockLiquid)) {
-						switch (IceAndFire.CONFIG.dragonGriefing) {
-							case 2:
-								break;
-							case 1:
-								if (state.getBlockHardness(dragon.world, pos) <= 1.5F) {
-									dragon.world.setBlockToAir(pos);
-								}
-								break;
-							case 0:
-								if (dragon.getDragonStage() <= 3) {
-									if (state.getBlockHardness(dragon.world, pos) < 1.5F) {
+		if (shouldExecute()) {
+			for (int a = (int) Math.round(dragon.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(dragon.getEntityBoundingBox().maxX) + 1; a++) {
+				for (int b = (int) Math.round(dragon.getEntityBoundingBox().minY) + (dragon.isFlying() || dragon.isHovering() ? 0 : 1); (b <= (int) Math.round(dragon.getEntityBoundingBox().maxY) + 5) && (b <= 127); b++) {
+					for (int c = (int) Math.round(dragon.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(dragon.getEntityBoundingBox().maxZ) + 1; c++) {
+						BlockPos pos = new BlockPos(a, b, c);
+						IBlockState state = dragon.world.getBlockState(pos);
+						if (state.getBlockHardness(dragon.world, pos) > -1 && state.getBlockHardness(dragon.world, pos) < 5 && !dragon.world.isAirBlock(pos) && state.getMaterial() != Material.PLANTS && !(state.getBlock() instanceof BlockFluidBase || state.getBlock() instanceof BlockLiquid)) {
+							switch (IceAndFire.CONFIG.dragonGriefing) {
+								case 2:
+									break;
+								case 1:
+									if (state.getBlockHardness(dragon.world, pos) <= 1.5F) {
 										dragon.world.setBlockToAir(pos);
 									}
-								} else {
-									if (state.getBlockHardness(dragon.world, pos) <= 5F) {
-										dragon.world.setBlockToAir(pos);
+									break;
+								case 0:
+									if (dragon.getDragonStage() <= 3) {
+										if (state.getBlockHardness(dragon.world, pos) < 1.5F) {
+											dragon.world.setBlockToAir(pos);
+										}
+									} else {
+										if (state.getBlockHardness(dragon.world, pos) <= 5F) {
+											dragon.world.setBlockToAir(pos);
+										}
 									}
-								}
-								break;
+									break;
+							}
+							return;
 						}
-						return;
 					}
 				}
 			}
