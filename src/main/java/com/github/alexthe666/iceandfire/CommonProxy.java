@@ -189,8 +189,11 @@ public class CommonProxy {
 		IceAndFire.GLACIER = new BiomeGlacier().setRegistryName(IceAndFire.MODID, "Glacier");
 		event.getRegistry().register(IceAndFire.GLACIER);
 		BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-		BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
-		BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+		if(IceAndFire.CONFIG.spawnGlaciers){
+			BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
+			BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+
+		}
 	}
 
 	public void preRender() {
