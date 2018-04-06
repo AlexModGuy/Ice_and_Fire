@@ -1323,6 +1323,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return false;
         }
 
+        if (dmg.damageType.contains("arrow") && this.isRiding()) {
+            return false;
+        }
+
         if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK) {
             return false;
         }
