@@ -107,7 +107,7 @@ public class ItemGorgonHead extends Item {
 						worldIn.spawnEntity(statue);
 					}
 					for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-						statue.setItemStackToSlot(slot, ((EntityZombie) pointedEntity).getItemStackFromSlot(slot));
+						statue.setItemStackToSlot(slot, ((EntityLivingBase) pointedEntity).getItemStackFromSlot(slot));
 					}
 				} else {
 
