@@ -22,7 +22,7 @@ public class FoodUtils {
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly){
         if(item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem() instanceof ItemFood){
-            int food = (int)(((ItemFood)item.getItem()).getHealAmount(ItemStack.EMPTY) * 5);
+            int food = (int)(((ItemFood)item.getItem()).getHealAmount(item) * 5);
             if(!meatOnly){
                 return food;
             }else if(((ItemFood)item.getItem()).isWolfsFavoriteMeat()){
