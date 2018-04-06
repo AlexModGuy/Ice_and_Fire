@@ -15,8 +15,10 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -682,24 +684,93 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glScalef(1.5F, 1.5F, 1F);
 					drawItemStack(new ItemStack(ModItems.earplugs), 18, 40, 2.5F);
 					GL11.glPopMatrix();
+
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
-					GL11.glTranslatef(20, 24, 0);
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
-					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 160, 131, 1.5F);
-					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 199, 131, 1.5F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 180, 20, 1.5F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 215, 20, 1.5F);
 					GL11.glPopMatrix();
-					drawItemStack(new ItemStack(ModItems.earplugs), 171, 85, 2F);
+					drawItemStack(new ItemStack(ModItems.earplugs), 170, 10, 2F);
+					GL11.glPopMatrix();
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 123, 75, 1.5F);
+					GL11.glPopMatrix();
+				}
+				if (bookPages == 2) {
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
+					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
+					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
 					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 				}
 					writeFromTxt();
+				break;
+			case HIPPOCAMPUS:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 210, 25, 0, 70, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 265, 25, 57, 70, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 320, 25, 0, 119, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 210, 80, 57, 119, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 265, 80, 0, 168, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 320, 80, 57, 168, 57, 49, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(Blocks.SPONGE), 37, 33, 1.5F);
+					drawItemStack(new ItemStack(Items.PRISMARINE_CRYSTALS), 37, 73, 1.5F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(Items.STICK), 35, 25, 1.5F);
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 35, 75, 1.5F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
+					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
+					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
+					GL11.glPopMatrix();
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
 				break;
 		}
 	}
