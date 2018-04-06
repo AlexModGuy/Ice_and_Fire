@@ -50,8 +50,8 @@ public class StructureGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		int x = (chunkX * 16) + random.nextInt(16);
-		int z = (chunkZ * 16) + random.nextInt(16);
+		int x = (chunkX * 16) + 8;
+		int z = (chunkZ * 16) + 8;
 		BlockPos height = getHeight(world, new BlockPos(x, 0, z));
 		if (IceAndFire.CONFIG.spawnGorgons) {
 			IBlockState blockState = world.getBlockState(height);
