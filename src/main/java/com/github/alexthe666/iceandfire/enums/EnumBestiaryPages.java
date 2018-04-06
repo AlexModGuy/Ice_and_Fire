@@ -28,7 +28,7 @@ public enum EnumBestiaryPages {
 	CYCLOPS(2),
 	SIREN(2),
 	HIPPOCAMPUS(2),
-	DEATHWORM(1);
+	DEATHWORM(3);
 
 	public int pages;
 

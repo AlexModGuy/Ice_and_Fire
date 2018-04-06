@@ -772,6 +772,47 @@ public class GuiBestiary extends GuiScreen {
 				}
 				writeFromTxt();
 				break;
+			case DEATHWORM:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 230, 25, 0, 217, 133, 16, 512F);
+					drawImage(DRAWINGS_1, 230, 50, 0, 233, 133, 16, 512F);
+					drawImage(DRAWINGS_1, 230, 75, 0, 249, 133, 16, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 25, 95, 0, 265, 148, 44, 512F);
+					drawImage(DRAWINGS_1, 250, 5, 0, 309, 81, 162, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					int drawType = Minecraft.getMinecraft().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getMinecraft().player.ticksExisted % 60 > 20 ? 1 : 0;
+					GL11.glPushMatrix();
+					GL11.glScalef(2.5F, 2.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.deathworm_chitin, 1, drawType), 17, 30, 1.5F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_helmet : drawType == 1 ? ModItems.deathworm_white_helmet : ModItems.deathworm_yellow_helmet), 92, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_chestplate : drawType == 1 ? ModItems.deathworm_white_chestplate : ModItems.deathworm_yellow_chestplate), 112, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_leggings : drawType == 1 ? ModItems.deathworm_white_leggings : ModItems.deathworm_yellow_leggings), 132, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_boots : drawType == 1 ? ModItems.deathworm_white_boots : ModItems.deathworm_yellow_boots), 152, 8, 1.5F);
+					drawItemStack(new ItemStack(ModItems.deathworm_egg), 125, 42, 1.5F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 3){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.deathworm_egg, 1, 1), 125, 4, 1.5F);
+					drawItemStack(new ItemStack(Items.FISHING_ROD), 115, 55, 1.5F);
+					drawItemStack(new ItemStack(Items.FISHING_ROD), 135, 55, 1.5F);
+
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
 		}
 	}
 
