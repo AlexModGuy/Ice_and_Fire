@@ -7,6 +7,10 @@ import net.minecraft.world.biome.Biome;
 public class IceAndFireConfig {
 
 	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "clientside", comment = "Wether to display the dragon on the main menu or not")
+	public boolean customMainMenu = true;
+
+	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation")
 	public boolean generateSilverOre = true;
 	@SuppressWarnings("deprecation")
