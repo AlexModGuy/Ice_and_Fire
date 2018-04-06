@@ -1,0 +1,15 @@
+Quando o leitoril for colocado,
+você poderá interagir com ele
+clicando com o botão direito. O interior
+terá três slots, o lado esquerdo
+deverá conter um bestiário, a parte de baixo
+manuscritos, e os mais à direita
+irá gerar um bestiário com novas informações. Para
+cada manuscrito, um novo
+índice será adicionado ao bestiário. 
+Essas nova páginas revelam
+informações sobre criaturas
+místicas, diferentes tipos
+de povos, guias informativos
+sobre a confecção de itens, e o
+ básico da alquimia.
