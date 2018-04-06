@@ -128,6 +128,8 @@ item.iceandfire.deathworm_red_helmet.name=Red Death Worm Chitin Helmet
 item.iceandfire.deathworm_red_chestplate.name=Red Death Worm Chitin Chestplate
 item.iceandfire.deathworm_red_leggings.name=Red Death Worm Chitin Leggings
 item.iceandfire.deathworm_red_boots.name=Red Death Worm Chitin Boots
+item.iceandfire.deathworm_egg.name=Death Worm Egg
+item.iceandfire.deathworm_egg_giant.name=Giant Death Worm Egg
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -244,6 +246,9 @@ bestiary.hippogryph=Hippogryphs
 bestiary.gorgon=Gorgons
 bestiary.pixie=Pixies
 bestiary.cyclops=Cyclopes
+bestiary.siren=Sirens
+bestiary.hippocampus=Hippocampi
+bestiary.deathworm=Death Worms
 
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead

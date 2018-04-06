@@ -42,6 +42,7 @@ public class ModRecipes {
 		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.dragon.setRepairItem(new ItemStack(ModItems.dragonbone));
 		ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
+
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {

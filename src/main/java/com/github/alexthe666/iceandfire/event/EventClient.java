@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;

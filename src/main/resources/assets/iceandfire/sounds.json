@@ -1,4 +1,135 @@
 {
+  "naga_attack": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:naga_idle"
+    ]
+  },
+  "naga_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:naga_idle"
+    ]
+  },
+  "naga_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:naga_hurt_0",
+      "iceandfire:naga_hurt_1"
+    ]
+  },
+  "naga_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:naga_die"
+    ]
+  },
+  "mermaid_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:mermaid_idle_0",
+      "iceandfire:mermaid_idle_1",
+      "iceandfire:mermaid_idle_2",
+      "iceandfire:mermaid_idle_3",
+      "iceandfire:mermaid_idle_4"
+    ]
+  },
+  "mermaid_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:mermaid_hurt_0",
+      "iceandfire:mermaid_hurt_1"
+    ]
+  },
+  "mermaid_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:mermaid_die"
+    ]
+  },
+  "siren_song": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:siren_song"
+    ]
+  },
+  "deathworm_giant_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_giant_idle_0",
+      "iceandfire:deathworm_giant_idle_1"
+    ]
+  },
+  "deathworm_giant_attack": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_giant_attack_0",
+      "iceandfire:deathworm_giant_attack_1"
+    ]
+  },
+  "deathworm_giant_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_giant_hurt_0",
+      "iceandfire:deathworm_giant_hurt_1"
+    ]
+  },
+  "deathworm_giant_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_giant_die"
+    ]
+  },
+  "deathworm_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_idle_0",
+      "iceandfire:deathworm_idle_1"
+    ]
+  },
+  "deathworm_attack": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_attack_0",
+      "iceandfire:deathworm_attack_1"
+    ]
+  },
+  "deathworm_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_hurt_0",
+      "iceandfire:deathworm_hurt_1"
+    ]
+  },
+  "deathworm_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:deathworm_die"
+    ]
+  },
+  "hippocampus_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippocampus_idle_0",
+      "iceandfire:hippocampus_idle_1",
+      "iceandfire:hippocampus_idle_2",
+      "iceandfire:hippocampus_idle_3"
+    ]
+  },
+  "hippocampus_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippocampus_hurt_0",
+      "iceandfire:hippocampus_hurt_1",
+      "iceandfire:hippocampus_hurt_2"
+    ]
+  },
+  "hippocampus_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hippocampus_die"
+    ]
+  },
   "cyclops_idle": {
     "category": "neutral",
     "sounds": [

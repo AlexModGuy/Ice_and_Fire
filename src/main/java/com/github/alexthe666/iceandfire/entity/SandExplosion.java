@@ -133,7 +133,7 @@ public class SandExplosion extends Explosion {
                             }
                         }
                     }
-                    double d11 = 1.0D;
+                    double d11 = 0.5D;
 
                     if (entity instanceof EntityLivingBase) {
                         d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
@@ -156,7 +156,7 @@ public class SandExplosion extends Explosion {
             IBlockState state = this.worldObj.getBlockState(blockpos);
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
-            if (spawnParticles) {
+            if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
                 double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
                 double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();
                 double d2 = blockpos.getZ() + this.worldObj.rand.nextFloat();
@@ -172,9 +172,9 @@ public class SandExplosion extends Explosion {
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                this.worldObj.spawnParticle(EnumParticleTypes.FALLING_DUST, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.FALLING_DUST, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.FALLING_DUST, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
             }
             if (!worldObj.isRemote) {
                 EntityFallingBlock entity = new EntityFallingBlock(worldObj, blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, state);
@@ -182,7 +182,7 @@ public class SandExplosion extends Explosion {
                 double d5 = entity.posX - this.explosionX;
                 double d7 = entity.posY - this.explosionY;
                 double d9 = entity.posZ - this.explosionZ;
-                double d11 = 2.0D;
+                double d11 = 1.0D;
                 entity.motionX += d5 * d11;
                 entity.motionY += 0.7F;
                 entity.motionZ += d9 * d11;

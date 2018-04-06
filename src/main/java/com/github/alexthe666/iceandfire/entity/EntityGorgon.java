@@ -10,6 +10,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -92,7 +93,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
+				return entity instanceof EntityLiving && !(entity instanceof PartEntity) && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
 			}
 		}));
 		this.tasks.removeTask(aiMelee);

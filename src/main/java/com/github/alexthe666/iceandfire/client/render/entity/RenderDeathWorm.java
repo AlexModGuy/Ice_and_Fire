@@ -22,13 +22,13 @@ public class RenderDeathWorm extends RenderLiving<EntityDeathWorm> {
 
     @Override
     protected void preRenderCallback(EntityDeathWorm entity, float f) {
-        this.shadowSize = entity.getScale() / 3;
-        GL11.glScalef(entity.getScale(), entity.getScale(), entity.getScale());
+        this.shadowSize = entity.getScaleForAge() / 3;
+        GL11.glScalef(entity.getScaleForAge(), entity.getScaleForAge(), entity.getScaleForAge());
     }
 
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityDeathWorm entity) {
-        return entity.getVariant() == 2 ? TEXTURE_RED : entity.getVariant() == 1 ? TEXTURE_WHITE : TEXTURE_YELLOW;
+        return entity.getVariant() == 2 ? TEXTURE_WHITE : entity.getVariant() == 1 ? TEXTURE_RED : TEXTURE_YELLOW;
     }
 }

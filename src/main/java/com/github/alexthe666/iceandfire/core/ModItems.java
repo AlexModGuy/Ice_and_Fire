@@ -203,6 +203,8 @@ public class ModItems {
 	public static Item deathworm_red_leggings = new ItemDeathwormArmor(red_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_red_leggings", "iceandfire.deathworm_red_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_boots")
 	public static Item deathworm_red_boots = new ItemDeathwormArmor(red_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_egg")
+	public static Item deathworm_egg = new ItemDeathwormEgg();
 
 	static {
 		EnumDragonArmor.initArmors();
