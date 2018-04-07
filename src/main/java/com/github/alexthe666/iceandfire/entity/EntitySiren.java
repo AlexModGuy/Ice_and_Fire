@@ -264,6 +264,9 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         if(this.isSinging() && !this.isInWater() && this.ticksExisted % 200 == 0){
             this.playSound(ModSounds.SIREN_SONG, 2, 1);
         }
+        if(!EntityGorgon.isStoneMob(this) && this.isSinging()){
+            this.setSinging(false);
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
