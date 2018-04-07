@@ -1820,6 +1820,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public abstract SoundEvent getRoarSound();
 
     public void roar(){
+        if(EntityGorgon.isStoneMob(this)){
+            return;
+        }
         if(this.getAnimation() != ANIMATION_ROAR){
             this.setAnimation(ANIMATION_ROAR);
             this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
