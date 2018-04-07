@@ -212,6 +212,11 @@ public class EventLiving {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
 			if (properties != null && properties.isStone || stonePlayer) {
 				EntityLiving living = ((EntityLiving) event.getEntityLiving());
+				if(!living.getPassengers().isEmpty()){
+					for(Entity e : living.getPassengers()){
+						e.dismountRidingEntity();
+					}
+				}
 				living.motionX *= 0D;
 				living.motionZ *= 0D;
 				living.motionY -= 0.1D;
