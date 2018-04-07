@@ -15,31 +15,46 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class BlockDragonOre extends Block {
-	public Item itemBlock;
+    public Item itemBlock;
 
-	public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
-		super(Material.ROCK);
-		this.setCreativeTab(IceAndFire.TAB);
-		this.setHarvestLevel("pickaxe", toollevel);
-		this.setResistance(resistance);
-		this.setHardness(hardness);
-		this.setUnlocalizedName(name);
-		setRegistryName(IceAndFire.MODID, gameName);
+    public BlockDragonOre(int toollevel, float hardness, float resistance, String name, String gameName) {
+        super(Material.ROCK);
+        this.setCreativeTab(IceAndFire.TAB);
+        this.setHarvestLevel("pickaxe", toollevel);
+        this.setResistance(resistance);
+        this.setHardness(hardness);
+        this.setUnlocalizedName(name);
+        setRegistryName(IceAndFire.MODID, gameName);
 
-	}
+    }
 
-	@Override
-	public int getExpDrop(IBlockState state, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
-		Random rand = world instanceof World ? ((World)world).rand : new Random();
-		if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this)) {
-			if (this == ModBlocks.sapphireOre) {
-				return MathHelper.getInt(rand, 3, 7);
-			}
-		}
-		return 0;
-	}
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
-	}
+    public int quantityDroppedWithBonus(int fortune, Random random) {
+        if (fortune > 0 && Item.getItemFromBlock(this) != this.getItemDropped((IBlockState) this.getBlockState().getValidStates().iterator().next(), random, fortune)) {
+            int i = random.nextInt(fortune + 2) - 1;
+
+            if (i < 0) {
+                i = 0;
+            }
+
+            return this.quantityDropped(random) * (i + 1);
+        } else {
+            return this.quantityDropped(random);
+        }
+    }
+
+    @Override
+    public int getExpDrop(IBlockState state, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
+        Random rand = world instanceof World ? ((World) world).rand : new Random();
+        if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this)) {
+            if (this == ModBlocks.sapphireOre) {
+                return MathHelper.getInt(rand, 3, 7);
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
+    }
 }
