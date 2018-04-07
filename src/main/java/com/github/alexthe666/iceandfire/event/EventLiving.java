@@ -25,6 +25,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -106,7 +107,7 @@ public class EventLiving {
 			if (properties != null && properties.isStone || stonePlayer) {
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-					if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe) {
+					if (stack.getItem() != null && (stack.getItem() instanceof ItemPickaxe || stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()))) {
 						boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
 						boolean ready = false;
 						if (properties != null && !stonePlayer) {
