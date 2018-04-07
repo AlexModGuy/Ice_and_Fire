@@ -176,4 +176,9 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 	@Override
 	protected void collideWithEntity(Entity entity) {
 	}
+
+	@Override
+	public boolean canBeTurnedToStone() {
+		return false;
+	}
 }

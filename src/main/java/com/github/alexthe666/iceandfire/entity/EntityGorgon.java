@@ -93,7 +93,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof PartEntity) && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
+				return entity instanceof EntityLiving && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
@@ -202,7 +202,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
-							if (this.getAttackTarget() instanceof EntityLiving) {
+							if (this.getAttackTarget() instanceof EntityLiving || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
 								if (properties != null || !properties.isStone) {
