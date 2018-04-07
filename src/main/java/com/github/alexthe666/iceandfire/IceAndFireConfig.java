@@ -164,7 +164,7 @@ public class IceAndFireConfig {
 	public boolean spawnDeathWorm = true;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "Death worm spawn weight. Lower = lower chance to spawn.")
-	public int deathWormSpawnRate = 15;
+	public int deathWormSpawnRate = 7;
 
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")

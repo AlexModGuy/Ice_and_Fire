@@ -87,7 +87,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
      * Gets the safe pathing Y position for the entity depending on if it can path swim or not
      */
     private int getPathablePosY() {
-        if (this.worm.isInSand()) {
+        if (this.worm.isInSand() ) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
             IBlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
             int j = 0;

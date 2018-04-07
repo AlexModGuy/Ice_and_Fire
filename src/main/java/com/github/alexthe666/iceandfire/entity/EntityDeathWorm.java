@@ -699,7 +699,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
     }
 
-    private boolean isSandBelow() {
+    public boolean isSandBelow() {
         int i = MathHelper.floor(this.posX);
         int j = MathHelper.floor(this.posY - 1);
         int k = MathHelper.floor(this.posZ);
@@ -709,7 +709,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public boolean isInSand() {
-        return this.getControllingPassenger() == null && this.world.isMaterialInBB(this.getEntityBoundingBox().grow(0.10000000149011612D, 0.4000000059604645D, 0.10000000149011612D), Material.SAND);
+        return this.getControllingPassenger() == null && this.world.isMaterialInBB(this.getEntityBoundingBox().grow(0.25D, 0.25D, 0.25D), Material.SAND);
     }
 
     @Override
