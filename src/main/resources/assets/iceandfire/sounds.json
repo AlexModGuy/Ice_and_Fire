@@ -278,6 +278,12 @@
       "iceandfire:hippogryph_die_1"
     ]
   },
+  "dragon_hatch": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:egg_hatch"
+    ]
+  },
   "firedragon_breath": {
     "category": "neutral",
     "sounds": [
@@ -380,6 +386,26 @@
       "iceandfire:firedragon_adult_roar_1"
     ]
   },
+  "icedragon_adult_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:icedragon_adult_roar_0",
+      "iceandfire:icedragon_adult_roar_1"
+    ]
+  },
+  "icedragon_teen_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:icedragon_teen_roar_0",
+      "iceandfire:icedragon_teen_roar_1"
+    ]
+  },
+  "icedragon_child_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:icedragon_child_die_0"
+    ]
+  },
   "icedragon_child_idle": {
     "category": "neutral",
     "sounds": [
@@ -412,8 +438,7 @@
       "iceandfire:icedragon_teen_idle_0",
       "iceandfire:icedragon_teen_idle_1",
       "iceandfire:icedragon_teen_idle_2",
-      "iceandfire:icedragon_teen_idle_3",
-      "iceandfire:icedragon_teen_idle_4"
+      "iceandfire:icedragon_teen_idle_3"
     ]
   },
   "icedragon_teen_hurt": {
