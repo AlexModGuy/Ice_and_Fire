@@ -1842,6 +1842,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     }
 
+    public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
+        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) entity.height * 0.5D, vec2.z), false, true, false);
+        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
+    }
+
     public void processArrows(){
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox());
         for(Entity entity : entities) {
