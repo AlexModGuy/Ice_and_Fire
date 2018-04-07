@@ -149,11 +149,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     protected boolean canDespawn() {
         return false;
     }
-
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEAD;
-    }
-
+    
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
