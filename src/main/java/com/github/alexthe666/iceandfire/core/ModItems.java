@@ -152,11 +152,11 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_egg")
 	public static Item hippogryph_egg = new ItemHippogryphEgg();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":iron_hippogryph_armor")
-	public static Item iron_hippogryph_armor = new ItemGeneric("iron_hippogryph_armor", "iceandfire.iron_hippogryph_armor");
+	public static Item iron_hippogryph_armor = new ItemGeneric("iron_hippogryph_armor", "iceandfire.iron_hippogryph_armor").setMaxStackSize(1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":gold_hippogryph_armor")
-	public static Item gold_hippogryph_armor = new ItemGeneric("gold_hippogryph_armor", "iceandfire.gold_hippogryph_armor");
+	public static Item gold_hippogryph_armor = new ItemGeneric("gold_hippogryph_armor", "iceandfire.gold_hippogryph_armor").setMaxStackSize(1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":diamond_hippogryph_armor")
-	public static Item diamond_hippogryph_armor = new ItemGeneric("diamond_hippogryph_armor", "iceandfire.diamond_hippogryph_armor");
+	public static Item diamond_hippogryph_armor = new ItemGeneric("diamond_hippogryph_armor", "iceandfire.diamond_hippogryph_armor").setMaxStackSize(1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":gorgon_head")
 	public static Item gorgon_head = new ItemGorgonHead();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stone_statue")

@@ -75,7 +75,7 @@ public class IceAndFireConfig {
 	public int dragonFlapNoiseDistance = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Dragon Flute Distance - how many chunks away is the dragon flute effective?")
-	public int dragonFluteDistance = 4;
+	public int dragonFluteDistance = 8;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Max dragon health. Health is scaled to this")
 	public int dragonHealth = 500;
