@@ -145,8 +145,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     private boolean isPathOnHighGround(){
-        if(this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getTarget() != null) {
-            BlockPos target = new BlockPos(this.navigator.getPath().getTarget().x, this.navigator.getPath().getTarget().y, this.navigator.getPath().getTarget().z);
+        if(this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
+            BlockPos target = new BlockPos(this.navigator.getPath().getFinalPathPoint().x, this.navigator.getPath().getFinalPathPoint().y, this.navigator.getPath().getFinalPathPoint().z);
             BlockPos siren = new BlockPos(this);
             if (world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY()) {
                 return true;
