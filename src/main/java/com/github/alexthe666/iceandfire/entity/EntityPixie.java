@@ -160,6 +160,9 @@ public class EntityPixie extends EntityTameable {
 			}
 			ItemStack stack = new ItemStack(ModBlocks.jar, 1, this.getColor() + 1);
 			if (!world.isRemote) {
+				if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
+					this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);
+				}
 				this.entityDropItem(stack, 0.0F);
 			}
 			//player.addStat(ModAchievements.jarPixie);
