@@ -91,12 +91,15 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 }
             }
         }));
+        initSegments(1);
     }
 
     public void onUpdateParts() {
         for (Entity entity : segments) {
-            if (entity != null)
+            if (entity != null){
                 entity.onUpdate();
+
+            }
         }
     }
 
@@ -111,6 +114,8 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         for (int i = 0; i < segments.length; i++) {
             segments[i] = new EntityDeathWormPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
         }
+        System.out.println(this.world.isRemote);
+
     }
 
     private void clearSegments(){
