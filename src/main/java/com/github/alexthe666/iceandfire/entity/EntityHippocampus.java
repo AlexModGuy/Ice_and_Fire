@@ -593,6 +593,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 this.setSitting(!this.isSitting());
                 return true;
             }
+        if(itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
@@ -601,6 +602,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 this.setSitting(false);
                 return true;
             }
+        }
         return super.processInteract(player, hand);
     }
 
