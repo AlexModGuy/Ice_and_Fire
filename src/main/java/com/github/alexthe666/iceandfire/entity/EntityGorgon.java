@@ -171,6 +171,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		//Temp fix for messed up structure spawn
+		if(this.getHealth() == 50 && this.ticksExisted == 1){
+			this.heal((float)IceAndFire.CONFIG.gorgonMaxHealth);
+		}
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
