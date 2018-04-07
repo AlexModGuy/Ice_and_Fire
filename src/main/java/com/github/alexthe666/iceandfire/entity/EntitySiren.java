@@ -95,6 +95,10 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
     }
 
+    protected boolean canDespawn() {
+        return false;
+    }
+
     @Nullable
     protected ResourceLocation getLootTable() {
         return LOOT;
