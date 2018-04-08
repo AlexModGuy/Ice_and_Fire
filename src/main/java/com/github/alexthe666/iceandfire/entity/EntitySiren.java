@@ -302,7 +302,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     public static boolean isWearingEarplugs(EntityLivingBase entity){
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        System.out.println(helmet.getItem() == ModItems.earplugs);
         return helmet.getItem() == ModItems.earplugs;
     }
     public boolean attackEntityFrom(DamageSource source, float amount) {
