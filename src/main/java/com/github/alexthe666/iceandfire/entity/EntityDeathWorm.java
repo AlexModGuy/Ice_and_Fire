@@ -325,15 +325,6 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
             player.startRiding(this);
             return true;
         }
-        if (itemstack.getItem() == Items.DIAMOND) {
-            if (this.getScale() < 4) {
-                this.setDeathWormScale(4);
-                return true;
-            } else {
-                this.setDeathWormScale(1);
-                return true;
-            }
-        }
         return super.processInteract(player, hand);
     }
 
