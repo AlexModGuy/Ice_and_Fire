@@ -28,7 +28,7 @@ public class ItemDeathwormArmor extends ItemArmor {
 
 	@SideOnly(Side.CLIENT)
 	public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
-		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 4 : 5);
+		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 5 : 4);
 	}
 
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {

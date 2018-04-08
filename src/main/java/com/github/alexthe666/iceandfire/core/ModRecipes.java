@@ -34,6 +34,7 @@ public class ModRecipes {
 		addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
 		addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
 		GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
+		GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);		
 		ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
 		ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
 		ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));
@@ -42,6 +43,11 @@ public class ModRecipes {
 		ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
 		ModItems.dragon.setRepairItem(new ItemStack(ModItems.dragonbone));
 		ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
+		ModItems.earplugsArmor.setRepairItem(new ItemStack(Blocks.WOODEN_BUTTON));
+		ModItems.yellow_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 0));
+		ModItems.white_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 1));
+		ModItems.red_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 2));
+
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {

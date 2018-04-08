@@ -44,6 +44,7 @@ public class ModEntities {
 		registerSpawnable(EntitySiren.class, "siren", 18, 0X8EE6CA, 0XF2DFC8);
 		registerSpawnable(EntityHippocampus.class, "hippocampus", 19, 0X4491C7, 0X4FC56B);
 		registerSpawnable(EntityDeathWorm.class, "deathworm", 20, 0XD1CDA3, 0X423A3A);
+		registerUnspawnable(EntityDeathWormEgg.class, "deathwormegg", 21);
 
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
@@ -51,9 +52,17 @@ public class ModEntities {
 					for (Biome biome : Biome.REGISTRY) {
 						if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
 							List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
-							spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, 5, 1, 1));
+							spawnList.add(new Biome.SpawnListEntry(EntityHippogryph.class, IceAndFire.CONFIG.hippogryphSpawnRate, 1, 1));
 						}
 					}
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnDeathWorm) {
+			for (Biome biome : Biome.REGISTRY) {
+				if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH)) {
+					List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
+					spawnList.add(new Biome.SpawnListEntry(EntityDeathWorm.class, IceAndFire.CONFIG.deathWormSpawnRate, 1, 3));
 				}
 			}
 		}

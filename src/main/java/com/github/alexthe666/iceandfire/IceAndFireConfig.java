@@ -7,6 +7,10 @@ import net.minecraft.world.biome.Biome;
 public class IceAndFireConfig {
 
 	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "clientside", comment = "Wether to display the dragon on the main menu or not")
+	public boolean customMainMenu = true;
+
+	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation")
 	public boolean generateSilverOre = true;
 	@SuppressWarnings("deprecation")
@@ -55,7 +59,9 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "generation", comment = "Snow Villages can only spawn in these dimensions' IDs")
 	public int[] snowVillageWhitelistedDimensions = new int[]{0};
 	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "generation", comment = "glacier biome spawn chance - higher the number, higher the rarity")
+	@ConfigEntry(category = "generation", comment = "true if glacier biomes can spawn")
+	public boolean spawnGlaciers = true;
+	@ConfigEntry(category = "generation", comment = "glacier biome spawn weight - lower = rarer")
 	public int glacierSpawnChance = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "generation", comment = "Ratio of Stone(this number) to Ores in Dragon Caves")
@@ -69,7 +75,7 @@ public class IceAndFireConfig {
 	public int dragonFlapNoiseDistance = 4;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Dragon Flute Distance - how many chunks away is the dragon flute effective?")
-	public int dragonFluteDistance = 4;
+	public int dragonFluteDistance = 8;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "dragons", comment = "Max dragon health. Health is scaled to this")
 	public int dragonHealth = 500;
@@ -95,6 +101,9 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippogryphs", comment = "True if hippogryphs are allowed to spawn.")
 	public boolean spawnHippogryphs = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "hippogryphs", comment = "Hippogryph spawn weight. Lower = lower chance to spawn.")
+	public int hippogryphSpawnRate = 5;
 
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "gorgons", comment = "Wether to spawn gorgon structures or not")
@@ -144,6 +153,18 @@ public class IceAndFireConfig {
 
 	@ConfigEntry(category = "death worms", comment = "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag.")
 	public int deathWormTargetSearchLength = 64;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "sirens", comment = "Maximum deathworm health, for small worms. Scaled to size")
+	public double deathWormMaxHealth = 30D;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "sirens", comment = "Deathworm attack strength, for small worms. Scaled to size")
+	public double deathWormAttackStrength = 6D;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "death worms", comment = "True if death worms are allowed to spawn.")
+	public boolean spawnDeathWorm = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "death worms", comment = "Death worm spawn weight. Lower = lower chance to spawn.")
+	public int deathWormSpawnRate = 5;
 
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")

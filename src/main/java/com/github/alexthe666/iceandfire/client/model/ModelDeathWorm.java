@@ -285,6 +285,8 @@ public class ModelDeathWorm extends ModelDragonBase {
     }
     @Override
     public void renderStatue() {
+        this.resetToDefaultPose();
+        this.Body.render(0.0625F);
 
     }
 }

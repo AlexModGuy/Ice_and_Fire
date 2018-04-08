@@ -169,4 +169,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		return null;
 	}
 
+	@Override
+	public boolean canBeTurnedToStone() {
+		return false;
+	}
 }

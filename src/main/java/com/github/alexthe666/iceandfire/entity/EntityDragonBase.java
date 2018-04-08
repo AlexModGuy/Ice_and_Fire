@@ -909,7 +909,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
         }
-        if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.attackDecision) {
+        if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.attackDecision && this.isDirectPathBetweenPoints(this.getPositionVector(), this.getAttackTarget().getPositionVector())) {
             this.setTackling(true);
         }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.isTackling() && this.getEntityBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(this.getAttackTarget().getEntityBoundingBox())) {
@@ -1320,6 +1320,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             return false;
         }
         if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
+            return false;
+        }
+
+        if (dmg.damageType.contains("arrow") && this.isRiding()) {
             return false;
         }
 
@@ -1816,9 +1820,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public abstract SoundEvent getRoarSound();
 
     public void roar(){
+        if(EntityGorgon.isStoneMob(this)){
+            return;
+        }
         if(this.getAnimation() != ANIMATION_ROAR){
             this.setAnimation(ANIMATION_ROAR);
-            this.playSound(this.getRoarSound(), this.getSoundVolume() + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
+            this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
         }
         if(this.getDragonStage() > 3){
             int size  = (this.getDragonStage() - 3) * 5;
@@ -1836,6 +1843,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             }
         }
 
+    }
+
+    public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
+        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) entity.height * 0.5D, vec2.z), false, true, false);
+        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
     public void processArrows(){

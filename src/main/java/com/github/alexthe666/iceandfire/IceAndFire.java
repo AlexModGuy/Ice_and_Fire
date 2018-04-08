@@ -42,13 +42,13 @@ import java.util.Random;
 public class IceAndFire {
 
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "1.3.1";
-	public static final String LLIBRARY_VERSION = "1.7.7";
+	public static final String VERSION = "1.4.0";
+	public static final String LLIBRARY_VERSION = "1.7.9";
 	public static final String NAME = "Ice And Fire";
 	public static final Logger logger = LogManager.getLogger(NAME);
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
-	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageDeathWormHitbox.class})
+	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class, MessageDeathWormHitbox.class, MessageDeathWormInteract.class})
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy PROXY;

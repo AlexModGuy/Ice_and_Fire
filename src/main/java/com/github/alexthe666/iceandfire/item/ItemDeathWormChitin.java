@@ -15,7 +15,7 @@ public class ItemDeathWormChitin extends Item {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setUnlocalizedName("deathworm_chitin");
-        this.setRegistryName(IceAndFire.MODID, "iceandfire.deathworm_chitin");
+        this.setRegistryName(IceAndFire.MODID, "deathworm_chitin");
     }
 
     public String getUnlocalizedName(ItemStack stack) {

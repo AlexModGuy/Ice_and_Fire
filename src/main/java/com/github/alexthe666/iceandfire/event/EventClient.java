@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
@@ -66,11 +67,14 @@ public class EventClient {
 			if (entityRenders != null) {
 				for (Map.Entry<Class<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
 					if (entry.getValue() != null) {
+						try{
 						Render render = entry.getValue().createRenderFor(Minecraft.getMinecraft().getRenderManager());
-						if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
+						if (render != null && render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
 							((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
 							((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
-
+						}
+						}catch(NullPointerException exp){
+							System.out.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
 						}
 					}
 

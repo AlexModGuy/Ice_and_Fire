@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
@@ -13,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,10 +34,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -74,9 +73,12 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         ANIMATION_SPEAK = Animation.create(15);
         this.setSize(1.95F, 0.95F);
         this.switchNavigator(true);
-        this.tasks.addTask(0, new AquaticAIFindWaterTarget(this, 10, true));
-        this.tasks.addTask(1, new AquaticAIGetInWater(this, 1.0D));
-        this.tasks.addTask(2, new HippocampusAIWander(this, 1));
+        this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
+        this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
+        this.tasks.addTask(1, new AquaticAIFindWaterTarget(this, 10, true));
+        this.tasks.addTask(2, new AquaticAIGetInWater(this, 1.0D));
+        this.tasks.addTask(3, new HippocampusAIWander(this, 1));
+        this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
         if (FMLCommonHandler.instance().getSide().isClient()) {
             tail_buffer = new ChainBuffer();
         }
@@ -180,8 +182,6 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public void setControlState(byte state) {
         dataManager.set(CONTROL_STATE, state);
     }
-
-
 
     @Override
     protected void applyEntityAttributes() {
@@ -432,6 +432,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
+        if(ageable instanceof EntityHippocampus){
+            EntityHippocampus hippo = new EntityHippocampus(this.world);
+            hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
+            return hippo;
+        }
         return null;
     }
 
@@ -575,10 +580,20 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 return true;
 
             }
+             if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+                this.setSitting(false);
+                this.setInLove(player);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                if (!player.isCreative()) {
+                    itemstack.shrink(1);
+                }
+                return true;
+            }
             if (itemstack != null && itemstack.getItem() == Items.STICK) {
                 this.setSitting(!this.isSitting());
                 return true;
             }
+        if(itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
@@ -587,6 +602,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 this.setSitting(false);
                 return true;
             }
+        }
         return super.processInteract(player, hand);
     }
 
@@ -643,6 +659,21 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(this.hippocampusInventory.getStackInSlot(2))));
         }
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.HIPPOCAMPUS_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return ModSounds.HIPPOCAMPUS_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.HIPPOCAMPUS_DIE;
     }
 
     class SwimmingMoveHelper extends EntityMoveHelper {

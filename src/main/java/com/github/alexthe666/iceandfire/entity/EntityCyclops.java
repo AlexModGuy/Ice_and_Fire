@@ -36,7 +36,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends EntityMob implements IAnimatedEntity {
+public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -148,10 +148,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
 
     protected boolean canDespawn() {
         return false;
-    }
-
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEAD;
     }
 
     public void updatePassenger(Entity passenger) {
@@ -307,5 +303,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     @Nullable
     protected SoundEvent getDeathSound() {
         return ModSounds.CYCLOPS_DIE;
+    }
+
+    @Override
+    public boolean canBeTurnedToStone() {
+        return !this.isBlinded();
     }
 }

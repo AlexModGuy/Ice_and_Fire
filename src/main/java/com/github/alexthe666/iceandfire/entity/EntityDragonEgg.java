@@ -100,7 +100,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 				this.setDead();
 			}
 		}
-		if (this.getDragonAge() > 20 * 60) {
+		if (this.getDragonAge() > 1200) {
 			if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire && world.getClosestPlayerToEntity(this, 5) != null) {
 				world.setBlockToAir(pos);
 				EntityFireDragon dragon = new EntityFireDragon(world);
@@ -113,10 +113,11 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 				dragon.setTamed(true);
 				dragon.setOwnerId(world.getClosestPlayerToEntity(this, 5).getUniqueID());
 				//world.getClosestPlayerToEntity(this, 5).addStat(ModAchievements.dragonHatch, 1);
+				this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
+				this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
+				this.setDead();
 			}
-			this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
-			this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
-			this.setDead();
+
 		}
 	}
 
@@ -174,5 +175,10 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 
 	@Override
 	protected void collideWithEntity(Entity entity) {
+	}
+
+	@Override
+	public boolean canBeTurnedToStone() {
+		return false;
 	}
 }

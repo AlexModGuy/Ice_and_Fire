@@ -34,7 +34,7 @@ public class DeathWormAIFindSandTarget extends EntityAIBase {
         }
         if (this.mob.getRNG().nextFloat() < 0.5F) {
             Path path = this.mob.getNavigator().getPath();
-            if (path != null && path.getTarget() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
+            if (path != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }
             if (this.mob.getNavigator().noPath()) {
@@ -56,16 +56,30 @@ public class DeathWormAIFindSandTarget extends EntityAIBase {
     public BlockPos findSandTarget() {
         if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
             List<BlockPos> sand = new ArrayList<>();
-            for (int x = (int) this.mob.posX - range; x < (int) this.mob.posX + range; x++) {
-                for (int y = (int)this.mob.posY - range; y < (int) this.mob.posY + range; y++) {
-                    for (int z = (int) this.mob.posZ - range; z < (int) this.mob.posZ + range; z++) {
-                        if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.SAND && isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(x, y, z))) {
-                            sand.add(new BlockPos(x, y, z));
+            if(this.mob.isTamed() && this.mob.getWormHome() != null){
+                range = 25;
+                for (int x = (int) this.mob.getWormHome().getX() - range; x < (int) this.mob.getWormHome().getX() + range; x++) {
+                    for (int y = (int)this.mob.getWormHome().getY() - range; y < (int) this.mob.getWormHome().getY() + range; y++) {
+                        for (int z = (int) this.mob.getWormHome().getZ() - range; z < (int) this.mob.getWormHome().getZ() + range; z++) {
+                            if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.SAND && isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(x, y, z))) {
+                                sand.add(new BlockPos(x, y, z));
+                            }
                         }
+                    }
+                }
+            }else{
+                for (int x = (int) this.mob.posX - range; x < (int) this.mob.posX + range; x++) {
+                    for (int y = (int)this.mob.posY - range; y < (int) this.mob.posY + range; y++) {
+                        for (int z = (int) this.mob.posZ - range; z < (int) this.mob.posZ + range; z++) {
+                            if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.SAND && isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(x, y, z))) {
+                                sand.add(new BlockPos(x, y, z));
+                            }
 
+                        }
                     }
                 }
             }
+
             if (!sand.isEmpty()) {
                 return sand.get(this.mob.getRNG().nextInt(sand.size()));
             }

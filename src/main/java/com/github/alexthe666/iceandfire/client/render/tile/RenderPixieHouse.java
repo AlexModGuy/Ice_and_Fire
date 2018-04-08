@@ -31,7 +31,7 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		int rotation = 0;
 		int meta = 0;
 
-		if (entity != null && entity.getWorld() != null) {
+		if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
 			meta = entity.houseType;
 			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
 				rotation = 180;

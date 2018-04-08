@@ -104,6 +104,7 @@ public class EntityPixie extends EntityTameable {
 		if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
 			this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+			return true;
 		}
 		if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())) {
 			return false;
@@ -112,11 +113,11 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY) {
+		if (!this.world.isRemote && !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
 			this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 		}
+		super.onDeath(cause);
 		//if (cause.getTrueSource() instanceof EntityPlayer) {
 		//	((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killPixie);
 		//}
@@ -160,6 +161,9 @@ public class EntityPixie extends EntityTameable {
 			}
 			ItemStack stack = new ItemStack(ModBlocks.jar, 1, this.getColor() + 1);
 			if (!world.isRemote) {
+				if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
+					this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);
+				}
 				this.entityDropItem(stack, 0.0F);
 			}
 			//player.addStat(ModAchievements.jarPixie);

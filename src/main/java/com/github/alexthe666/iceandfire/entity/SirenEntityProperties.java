@@ -16,6 +16,7 @@ import java.util.List;
 public class SirenEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	public boolean isCharmed;
+
 	@Override
 	public int getTrackingTime() {
 		return 20;

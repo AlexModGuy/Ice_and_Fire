@@ -264,13 +264,15 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				return true;
 			}
-			if (player.isSneaking()) {
-				this.openGUI(player);
-				return true;
-			} else if (this.isSaddled() && !this.isChild()) {
-				player.startRiding(this, true);
-				this.setSitting(false);
-				return true;
+			if(itemstack.isEmpty()) {
+				if (player.isSneaking()) {
+					this.openGUI(player);
+					return true;
+				} else if (this.isSaddled() && !this.isChild()) {
+					player.startRiding(this, true);
+					this.setSitting(false);
+					return true;
+				}
 			}
 		}
 		return super.processInteract(player, hand);

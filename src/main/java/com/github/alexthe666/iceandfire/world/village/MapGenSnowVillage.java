@@ -73,15 +73,7 @@ public class MapGenSnowVillage extends WorldGenerator {
 		l = l * this.distance;
 		k = k + random.nextInt(this.distance - 8);
 		l = l + random.nextInt(this.distance - 8);
-
-		if (i == k && j == l) {
-			boolean flag = world.getBiomeProvider().areBiomesViable(i * 16 + 8, j * 16 + 8, 0, VILLAGE_SPAWN_BIOMES);
-			if (flag) {
-				return true;
-			}
-		}
-
-		return false;
+		return true;
 	}
 
 	protected StructureStart getStructureStart(World world, int chunkX, int chunkZ, Random random) {

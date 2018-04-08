@@ -74,9 +74,32 @@ public class CommonProxy {
 				ModSounds.PIXIE_HURT,
 				ModSounds.PIXIE_IDLE,
 				ModSounds.PIXIE_TAUNT,
+				ModSounds.CYCLOPS_BITE,
+				ModSounds.CYCLOPS_BLINDED,
+				ModSounds.CYCLOPS_HURT,
+				ModSounds.CYCLOPS_IDLE,
 				ModSounds.GOLD_PILE_STEP,
 				ModSounds.GOLD_PILE_BREAK,
-				ModSounds.DRAGON_FLIGHT
+				ModSounds.DRAGON_FLIGHT,
+				ModSounds.HIPPOCAMPUS_IDLE,
+				ModSounds.HIPPOCAMPUS_HURT,
+				ModSounds.HIPPOCAMPUS_DIE,
+				ModSounds.DEATHWORM_IDLE,
+				ModSounds.DEATHWORM_ATTACK,
+				ModSounds.DEATHWORM_HURT,
+				ModSounds.DEATHWORM_DIE,
+				ModSounds.DEATHWORM_GIANT_IDLE,
+				ModSounds.DEATHWORM_GIANT_ATTACK,
+				ModSounds.DEATHWORM_GIANT_HURT,
+				ModSounds.DEATHWORM_GIANT_DIE,
+				ModSounds.NAGA_IDLE,
+				ModSounds.NAGA_ATTACK,
+				ModSounds.NAGA_HURT,
+				ModSounds.NAGA_DIE,
+				ModSounds.MERMAID_IDLE,
+				ModSounds.MERMAID_HURT,
+				ModSounds.MERMAID_DIE,
+				ModSounds.SIREN_SONG
 		);
 	}
 
@@ -166,8 +189,11 @@ public class CommonProxy {
 		IceAndFire.GLACIER = new BiomeGlacier().setRegistryName(IceAndFire.MODID, "Glacier");
 		event.getRegistry().register(IceAndFire.GLACIER);
 		BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-		BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
-		BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+		if(IceAndFire.CONFIG.spawnGlaciers){
+			BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
+			BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+
+		}
 	}
 
 	public void preRender() {

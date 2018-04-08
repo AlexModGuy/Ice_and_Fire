@@ -25,6 +25,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -50,6 +51,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarplugs;
 
 public class EventLiving {
 
@@ -104,7 +107,7 @@ public class EventLiving {
 			if (properties != null && properties.isStone || stonePlayer) {
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-					if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe) {
+					if (stack.getItem() != null && (stack.getItem() instanceof ItemPickaxe || stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()))) {
 						boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
 						boolean ready = false;
 						if (properties != null && !stonePlayer) {
@@ -144,6 +147,9 @@ public class EventLiving {
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 		if(sirenProps != null && sirenProps.isCharmed){
+			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
+				sirenProps.isCharmed = false;
+			}
 			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
 				if (rand.nextInt(7) == 0) {
 					for(int i = 0; i < 5; i++){
@@ -207,6 +213,11 @@ public class EventLiving {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
 			if (properties != null && properties.isStone || stonePlayer) {
 				EntityLiving living = ((EntityLiving) event.getEntityLiving());
+				if(!living.getPassengers().isEmpty()){
+					for(Entity e : living.getPassengers()){
+						e.dismountRidingEntity();
+					}
+				}
 				living.motionX *= 0D;
 				living.motionZ *= 0D;
 				living.motionY -= 0.1D;
@@ -339,7 +350,7 @@ public class EventLiving {
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
-			animal.tasks.addTask(4, new EntitySheepAIFollowCyclops(animal, 1.2D));
+			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
 		}
 	}
 

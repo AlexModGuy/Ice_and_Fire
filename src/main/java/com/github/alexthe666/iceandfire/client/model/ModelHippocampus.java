@@ -220,7 +220,10 @@ public class ModelHippocampus extends ModelDragonBase {
             this.Body.setShouldScaleChildren(true);
             this.Body.setScale(0.5F, 0.5F, 0.5F);
             this.Head.setScale(1.5F, 1.5F, 1.5F);
-            this.Body.setRotationPoint(0.0F, 17.0F, 4.0F);
+            this.TopJaw.setRotationPoint(0.0F, -0.1F, -7.6F);
+            this.Body.setRotationPoint(0.0F, 12.5F, 4.0F);
+            this.BottomJaw.setRotationPoint(0.0F, 0.3F, -7.5F);
+
         } else {
             this.Body.setScale(1, 1, 1);
             this.Head.setScale(1, 1, 1);
@@ -249,7 +252,7 @@ public class ModelHippocampus extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityHippogryph.ANIMATION_SPEAK);
+        animator.setAnimation(EntityHippocampus.ANIMATION_SPEAK);
         animator.startKeyframe(10);
         this.rotate(animator, Head, -10, 0, 0);
         this.rotate(animator, BottomJaw, 20, 0, 0);

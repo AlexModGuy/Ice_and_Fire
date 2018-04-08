@@ -16,12 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -60,7 +57,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
 		this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
-		this.tasks.addTask(5, new EntityAITempt(this, 1.0D, ModItems.fire_stew, false));
+		this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
 		this.tasks.addTask(6, new DragonAIAirTarget(this));
 		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
@@ -151,7 +148,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				}
 				break;
 			case 1:
-				if (new Random().nextInt(2) == 0 && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
+				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);

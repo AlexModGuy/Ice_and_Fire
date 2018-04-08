@@ -10,6 +10,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -92,7 +93,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
+				return entity instanceof EntityLiving && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
@@ -170,6 +171,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		//Temp fix for messed up structure spawn
+		if(this.getHealth() == 50 && this.ticksExisted == 1){
+			this.heal((float)IceAndFire.CONFIG.gorgonMaxHealth);
+		}
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
@@ -201,7 +206,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
-							if (this.getAttackTarget() instanceof EntityLiving) {
+							if (this.getAttackTarget() instanceof EntityLiving || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
 								if (properties != null || !properties.isStone) {
