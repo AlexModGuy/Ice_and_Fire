@@ -1,6 +1,7 @@
-para o olho da criatura
-as flechas podem potencialmente 
-cegar o monstro.
+Com um arco e flecha aponte para o
+olho da criatura as flechas 
+podem potencialmente cegar 
+o monstro.
 
 
 
@@ -11,17 +12,13 @@ cegar o monstro.
 
 
 
-Ciclopes cegos tem
-uma percepÁ„o extremamente
-reduzida do ambiente. Isso torna
-mais f·cil chegar perto
-do ciclope sem
-ser detectado.
+Ciclopes cegos tem uma percep√ß√£o 
+extremamente reduzida do ambiente. 
+Isso torna mais f√°cil chegar perto
+do ciclope sem ser detectado.
 
 
-Outra maneira de evitar
-o olhar dos ciclopes
-È se disfarÁando
-como uma ovelha. Isso pode ser
-feito criando uma
-armadura de disfarÁe de ovelha.
+Outra maneira de evitar o olhar dos 
+ciclopes √© se disfar√ßando como uma 
+ovelha. Isso pode ser feito criando 
+uma armadura de disfar√ße de ovelha.
