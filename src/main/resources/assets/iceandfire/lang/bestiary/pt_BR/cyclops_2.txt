@@ -19,9 +19,9 @@
 
 
 Usando o conjunto completo da
-armadura de disfarçe de ovelha, e usar um movimento
-furtivo o tornará praticamente invisível
-ao ciclope.
+armadura de disfarçe de ovelha, e usar 
+um movimento furtivo o tornará 
+praticamente invisível ao ciclope.
 
 
 
@@ -32,9 +32,9 @@ ao ciclope.
 
 
 
-Todas essas precauções
-devem ser tomadas
-quando se lida com uma
+Todas essas precauções devem ser 
+tomadas quando se lida com uma
 criatura tão poderosa, a 
 mordida do Ciclope é forte
 o suficiente para te decapitar!
+
