@@ -1,8 +1,14 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-    }
+        maven { 
+            url = "http://files.minecraftforge.net/maven" 
+        }
+		maven {
+			name = "CurseForge"
+			url = "https://minecraft.curseforge.com/api/maven/"		
+		}
+	}
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
@@ -42,6 +48,7 @@ repositories {
 
 dependencies {
     deobfCompile "net.ilexiconn:llibrary:1.7.9-1.12.2"
+    compile "thaumcraft:Thaumcraft:1.12.2:6.1.BETA10"
 }
 
 processResources
