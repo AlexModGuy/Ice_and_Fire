@@ -334,5 +334,5 @@ achievement.tamePixie.desc=Befriend a pixie.
 achievement.jarPixie=That's Unethical!
 achievement.jarPixie.desc=Put a pixie in a jar.
 
-tc.aspect.mythus=Mythological Creature, Legendary Being, Cryptid
-tc.aspect.draco=Dragon
+tc.aspect.mythus=Mythological Creature, Legendary Being, Cryptid, Fearsome Critter
+tc.aspect.draco=Dragon, Drake, Wyvern, Lung
