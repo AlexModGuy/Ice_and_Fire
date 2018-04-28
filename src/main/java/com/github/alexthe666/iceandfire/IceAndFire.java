@@ -78,6 +78,7 @@ public class IceAndFire {
 
 		ModRecipes.init();
 		ModVillagers.INSTANCE.init();
+		IceAndFireAspectRegistry.register();
 		logger.info("The watcher waits on the northern wall");
 		logger.info("A daughter picks up a warrior's sword");
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");

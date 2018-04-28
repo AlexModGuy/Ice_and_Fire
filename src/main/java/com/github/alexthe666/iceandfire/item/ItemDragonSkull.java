@@ -26,6 +26,7 @@ public class ItemDragonSkull extends Item {
 
 	public ItemDragonSkull() {
 		this.maxStackSize = 1;
+		this.setHasSubtypes(true);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.dragon_skull");
 		this.setRegistryName(IceAndFire.MODID, "dragon_skull");
