@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -133,7 +135,19 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 4), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 5), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
 
-        
+        ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(IceAndFireAspectRegistry.DRAGON, 10).add(Aspect.MAGIC, 2));
+        ThaumcraftApi.registerEntityTag("dragonskull", new AspectList().add(Aspect.DEATH, 5).add(Aspect.DESIRE, 5).add(IceAndFireAspectRegistry.DRAGON, 10).add(Aspect.MAGIC, 2));
+        ThaumcraftApi.registerEntityTag("firedragon", new AspectList().add(Aspect.FIRE, 25).add(Aspect.BEAST, 15).add(Aspect.FLIGHT, 25).add(Aspect.MIND, 5).add(IceAndFireAspectRegistry.DRAGON, 50).add(Aspect.MAGIC, 10));
+        ThaumcraftApi.registerEntityTag("icedragon", new AspectList().add(Aspect.COLD, 25).add(Aspect.BEAST, 15).add(Aspect.FLIGHT, 25).add(Aspect.MIND, 5).add(IceAndFireAspectRegistry.DRAGON, 50).add(Aspect.MAGIC, 10));
+        ThaumcraftApi.registerEntityTag("snowvillager", new AspectList().add(Aspect.COLD, 20).add(Aspect.MAN, 10).add(Aspect.MIND, 7));
+        ThaumcraftApi.registerEntityTag("hippogryph", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 15).add(Aspect.BEAST, 10).add(Aspect.AIR, 7));
+        ThaumcraftApi.registerEntityTag("stonestatue", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 5).add(Aspect.EARTH, 10).add(Aspect.MAGIC, 5).add(Aspect.DEATH, 5).add(Aspect.ELDRITCH, 5));
+        ThaumcraftApi.registerEntityTag("gorgon", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 50).add(Aspect.DEATH, 20).add(Aspect.MAN, 10).add(Aspect.BEAST, 10).add(Aspect.UNDEAD, 10).add(Aspect.DESIRE, 15).add(Aspect.EARTH, 5).add(Aspect.SENSES, 10));
+        ThaumcraftApi.registerEntityTag("if_pixie", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 30).add(Aspect.FLIGHT, 5).add(Aspect.MAN, 10).add(Aspect.AIR, 10).add(Aspect.MAGIC, 30).add(Aspect.DESIRE, 5).add(Aspect.EXCHANGE, 5));
+        ThaumcraftApi.registerEntityTag("cyclops", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 50).add(Aspect.MAN, 10).add(Aspect.MIND, 2).add(Aspect.ELDRITCH, 5).add(Aspect.LIFE, 5).add(Aspect.EARTH, 10).add(Aspect.DEATH, 2).add(Aspect.SENSES, 10));
+        ThaumcraftApi.registerEntityTag("siren", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 50).add(Aspect.MAN, 10).add(Aspect.WATER, 20).add(Aspect.DESIRE, 150).add(Aspect.DEATH, 5).add(Aspect.SENSES, 40));
+        ThaumcraftApi.registerEntityTag("hippocampus", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.WATER, 15).add(Aspect.DESIRE, 5).add(Aspect.BEAST, 5));
+        ThaumcraftApi.registerEntityTag("deathworm", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.DEATH, 15).add(Aspect.MOTION, 5).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(Aspect.ELDRITCH, 15));
 
     }
 }
