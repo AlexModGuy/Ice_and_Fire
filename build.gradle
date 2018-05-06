@@ -1,7 +1,14 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { 
+ 	    name = "forge"
+            url = "http://files.minecraftforge.net/maven" 
+        }
+	maven {
+	     name = "CurseForge"
+	     url = "https://minecraft.curseforge.com/api/maven/"		
+	}
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -20,7 +27,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 
 minecraft {
-    version = "1.12.2-14.23.1.2582"
+    version = "1.12.2-14.23.3.2655"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -37,6 +44,9 @@ repositories {
     maven {
         name = "ilexiconn"
         url = "http://maven.mcmoddev.com"
+    }
+    maven {
+        url = "https://minecraft.curseforge.com/api/maven/"
     }
 }
 
