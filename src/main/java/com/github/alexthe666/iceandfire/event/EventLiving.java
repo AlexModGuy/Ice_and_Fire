@@ -56,6 +56,7 @@ import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarpl
 
 public class EventLiving {
 
+	private boolean stepHeightSwitched = false;
 	/*@SubscribeEvent
 	public void onGetCollisionBoxes(GetCollisionBoxesEvent event) {
 		if(event.getEntity() instanceof EntityDeathWorm && !event.getCollisionBoxesList().isEmpty()){
@@ -147,6 +148,7 @@ public class EventLiving {
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 		if(sirenProps != null && sirenProps.isCharmed){
+			stepHeightSwitched = false;
 			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
 				sirenProps.isCharmed = false;
 			}
@@ -204,9 +206,9 @@ public class EventLiving {
 					sirenProps.isCharmed = false;
 				}
 			}
-		}else if(sirenProps != null && !sirenProps.isCharmed){
+		}else if(sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched){
 			event.getEntityLiving().stepHeight = 0.6F;
-
+			stepHeightSwitched = true;
 		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
