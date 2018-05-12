@@ -166,6 +166,8 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "death worms", comment = "Death worm spawn weight. Lower = lower chance to spawn.")
 	public int deathWormSpawnRate = 5;
 
+	@ConfigEntry(category = "cockatrices", comment = "How far away cockatrices will detect chickens being hurt.")
+	public int cockatriceChickenSearchLength = 40;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.*;
 
 import javax.annotation.Nullable;
@@ -104,5 +105,22 @@ public class DragonUtils {
 			return newPos;
 		}
 		return null;
+	}
+
+	public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, EntityLivingBase target) {
+		float radius = 10 + cockatrice.getRNG().nextInt(10);
+		float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
+		float angle = (0.01745329251F * target.rotationYawHead);
+		System.out.println(target.renderYawOffset + " vs " + target.rotationYaw + " vs " + target.rotationYawHead);
+		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+		double extraZ = (double) (radius * MathHelper.cos(angle));
+		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);
+		BlockPos ground = target.world.getHeight(radialPos);
+		cockatrice.world.spawnParticle(EnumParticleTypes.HEART, ground.getX(), ground.getY() + 1, ground.getZ(), 0, 0, 0, new int[0]);
+
+		if (!cockatrice.isTargetBlocked(new Vec3d(ground)) && cockatrice.getDistanceSqToCenter(ground) > 30) {
+			return ground;
+		}
+		return target.getPosition();
 	}
 }

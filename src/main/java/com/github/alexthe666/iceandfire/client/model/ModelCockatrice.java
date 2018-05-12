@@ -217,7 +217,6 @@ public class ModelCockatrice extends ModelDragonBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-
         this.lowerBody.render(f5);
         this.leftThigh.render(f5);
         this.rightThigh.render(f5);
@@ -227,10 +226,136 @@ public class ModelCockatrice extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityCockatrice) entity);
         animator.update(entity);
+        animator.setAnimation(EntityCockatrice.ANIMATION_JUMPAT);
+        animator.startKeyframe(10);
+        this.rotate(animator, lowerBody, 18, 0, 0);
+        this.rotate(animator, upperBody, 5, 0, 0);
+        this.rotate(animator, neck, -23, 0, 0);
+        this.rotate(animator, neck2, 18, 0, 0);
+        this.rotate(animator, head, -27, 0, 0);
+        this.rotate(animator, leftUpperArm, 0, 30, -50);
+        this.rotate(animator, RightUpperArm, 0, -30, 50);
+        animator.move(lowerBody, 0, 1.7F, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        jumpPos();
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        jumpPos();
+        this.rotate(animator, leftUpperArm, 0, 30, -75);
+        this.rotate(animator, RightUpperArm, 0, -30, 75);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        jumpPos();
+        this.rotate(animator, leftUpperArm, 0, 30, -19);
+        this.rotate(animator, RightUpperArm, 0, -30, 19);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        jumpPos();
+        this.rotate(animator, leftUpperArm, 0, 30, -75);
+        this.rotate(animator, RightUpperArm, 0, -30, 75);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        jumpPos();
+        this.rotate(animator, leftUpperArm, 0, 30, -19);
+        this.rotate(animator, RightUpperArm, 0, -30, 19);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        jumpPos();
+        this.rotate(animator, leftUpperArm, 0, 30, -75);
+        this.rotate(animator, RightUpperArm, 0, -30, 75);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityCockatrice.ANIMATION_WATTLESHAKE);
+        animator.startKeyframe(3);
+        this.rotate(animator, neck, 0, 0, -23);
+        this.rotate(animator, neck2, 0, 0, -13);
+        this.rotate(animator, head, 5, 0, -15);
+        this.rotate(animator, Comb1, 0, 0, -23);
+        this.rotate(animator, Comb2, 0, 0, -27);
+        this.rotate(animator, Wattle, 0, 0, -23);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        this.rotate(animator, neck, 0, 0, -23);
+        this.rotate(animator, neck2, 0, 0, -13);
+        this.rotate(animator, head, 5, 0, -15);
+        this.rotate(animator, Comb1, 0, 0, -33);
+        this.rotate(animator, Comb2, 0, 0, -37);
+        this.rotate(animator, Wattle, 0, 0, -33);
+        animator.endKeyframe();
+        animator.startKeyframe(3);
+        this.rotate(animator, neck, 0, 0, 23);
+        this.rotate(animator, neck2, 0, 0, 13);
+        this.rotate(animator, head, 5, 0, 15);
+        this.rotate(animator, Comb1, 0, 0, 23);
+        this.rotate(animator, Comb2, 0, 0, 27);
+        this.rotate(animator, Wattle, 0, 0, 23);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        this.rotate(animator, neck, 0, 0, 23);
+        this.rotate(animator, neck2, 0, 0, 13);
+        this.rotate(animator, head, 5, 0, 15);
+        this.rotate(animator, Comb1, 0, 0, 33);
+        this.rotate(animator, Comb2, 0, 0, 37);
+        this.rotate(animator, Wattle, 0, 0, 33);
+        animator.endKeyframe();
+        animator.startKeyframe(3);
+        this.rotate(animator, neck, 0, 0, -23);
+        this.rotate(animator, neck2, 0, 0, -13);
+        this.rotate(animator, head, 5, 0, -15);
+        this.rotate(animator, Comb1, 0, 0, -23);
+        this.rotate(animator, Comb2, 0, 0, -27);
+        this.rotate(animator, Wattle, 0, 0, -23);
+        animator.endKeyframe();
+        animator.startKeyframe(2);
+        this.rotate(animator, neck, 0, 0, -23);
+        this.rotate(animator, neck2, 0, 0, -13);
+        this.rotate(animator, head, 5, 0, -15);
+        this.rotate(animator, Comb1, 0, 0, -33);
+        this.rotate(animator, Comb2, 0, 0, -37);
+        this.rotate(animator, Wattle, 0, 0, -33);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityCockatrice.ANIMATION_BITE);
+        animator.startKeyframe(5);
+        this.rotate(animator, neck, -47, 0, 0);
+        this.rotate(animator, neck2, 17, 0, 0);
+        this.rotate(animator, head, 46, 0, 0);
+        this.rotate(animator, lowerJaw, 10, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, neck, 26, 0, 0);
+        this.rotate(animator, neck2, -18, 0, 0);
+        this.rotate(animator, head, 2, 0, 0);
+        this.rotate(animator, lowerJaw, 33, 0, 0);
+        this.rotate(animator, upperJaw, -20, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityCockatrice.ANIMATION_SPEAK);
+        animator.startKeyframe(5);
+        this.rotate(animator, lowerJaw, 25, 0, 0);
+        animator.resetKeyframe(5);
+
     }
 
+    private void jumpPos(){
+        this.rotate(animator, lowerBody, -29, 0, 0);
+        this.rotate(animator, upperBody, 10, 0, 0);
+        this.rotate(animator, neck, 7, 0, 0);
+        this.rotate(animator, neck2, 32, 0, 0);
+        this.rotate(animator, head, 36, 0, 0);
+        this.rotate(animator, lowerJaw, 28, 0, 0);
+        this.rotate(animator, tail1, -18, 0, 0);
+        animator.move(lowerBody, 0, -1.9F, 2.5F);
+        this.rotate(animator, rightThigh, -74, 0, 10);
+        this.rotate(animator, rightLeg, 0, 39, 0);
+        this.rotate(animator, rightFoot, 50, -10, 0);
+        this.rotate(animator, leftThigh, -74, 0, -10);
+        this.rotate(animator, leftLeg, 0, -39, 0);
+        this.rotate(animator, leftFoot, 50, 10, 0);
+    }
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityCockatrice entity) {
-        float speed_walk = 0.3F;
+        float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 0.5F;
         float degree_idle = 0.5F;
@@ -261,6 +386,9 @@ public class ModelCockatrice extends ModelDragonBase {
         this.walk(rightLeg, speed_walk, degree_walk, false, 1, 0.1F, f, f1);
         this.walk(leftFoot, speed_walk, degree_walk * -1.75F, true, 1, -0.1F, f, f1);
         this.walk(rightFoot, speed_walk, degree_walk * -1.75F, false, 1, -0.1F, f, f1);
+        this.progressRotation(neck, entity.stareProgress, (float)Math.toRadians(10), 0.0F, 0.0F);
+        this.progressRotation(neck2, entity.stareProgress, (float)Math.toRadians(-18), 0.0F, 0.0F);
+        this.progressRotation(head, entity.stareProgress, (float)Math.toRadians(18), 0.0F, 0.0F);
 
     }
 

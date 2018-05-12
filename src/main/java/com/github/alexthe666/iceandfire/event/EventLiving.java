@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +39,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -77,6 +79,38 @@ public class EventLiving {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
 			if (properties != null && properties.isStone) {
 				event.setCanceled(true);
+			}
+		}
+
+	}
+
+	@SubscribeEvent
+	public void onLivingAttacked(LivingAttackEvent event) {
+		if(event.getSource().getTrueSource() != null){
+			Entity attacker = event.getSource().getTrueSource();
+			if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
+				float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+				List<Entity> list = event.getEntityLiving().world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, event.getEntityLiving().posX + 1.0D, event.getEntityLiving().posY + 1.0D, event.getEntityLiving().posZ + 1.0D)).grow(d0, 10.0D, d0));
+				System.out.println(list);
+				Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+				if (!list.isEmpty()) {
+					Iterator<Entity> itr = list.iterator();
+					while (itr.hasNext()) {
+						Entity entity = itr.next();
+						if (entity instanceof EntityCockatrice) {
+							EntityCockatrice cockatrice = (EntityCockatrice) entity;
+							if(attacker instanceof EntityPlayer){
+								EntityPlayer player = (EntityPlayer)attacker;
+								if(!player.isCreative() && !cockatrice.isOwner(player)){
+									cockatrice.setAttackTarget(player);
+								}
+							}
+							else {
+								cockatrice.setAttackTarget((EntityLivingBase)attacker);
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -358,6 +392,17 @@ public class EventLiving {
 		String className = entity.getClass().getName();
 		return className.contains("sheep") || entity instanceof EntitySheep;
 	}
+
+	public static boolean isAnimaniaChicken(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("chicken") || entity instanceof EntityChicken;
+	}
+
+	public static boolean isAnimaniaFerret(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("ferret");
+	}
+
 	//@SubscribeEvent
 	//public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
 	//	if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {
