@@ -46,6 +46,7 @@ public class ModEntities {
 		registerSpawnable(EntityDeathWorm.class, "deathworm", 20, 0XD1CDA3, 0X423A3A);
 		registerUnspawnable(EntityDeathWormEgg.class, "deathwormegg", 21);
 		registerSpawnable(EntityCockatrice.class, "cockatrice", 22, 0X8F5005, 0X4F5A23);
+		registerUnspawnable(EntityCockatriceEgg.class, "cockatriceegg", 23);
 
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {

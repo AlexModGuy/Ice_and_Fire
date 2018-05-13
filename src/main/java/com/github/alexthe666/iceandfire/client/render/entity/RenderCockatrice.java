@@ -23,6 +23,8 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
     public static final ResourceLocation TEXTURE_ROOSTER = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0.png");
     public static final ResourceLocation TEXTURE_HEN = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1.png");
     private static final ResourceLocation TEXTURE_BEAM = new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png");
+    public static final ResourceLocation TEXTURE_ROOSTER_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0_chick.png");
+    public static final ResourceLocation TEXTURE_HEN_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1_chick.png");
 
     public RenderCockatrice(RenderManager renderManager) {
         super(renderManager, new ModelCockatrice(), 0.6F);
@@ -139,14 +141,19 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
     }
 
     @Override
-    public void preRenderCallback(EntityCockatrice entitylivingbaseIn, float partialTickTime) {
-
-
+    public void preRenderCallback(EntityCockatrice cockatrice, float partialTickTime) {
+        if(cockatrice.isChild()) {
+            GL11.glScalef(0.5F, 0.5F, 0.5F);
+        }
     }
 
     @Override
     protected ResourceLocation getEntityTexture(EntityCockatrice cockatrice) {
-        return cockatrice.isHen() ? TEXTURE_HEN : TEXTURE_ROOSTER;
+        if(cockatrice.isChild()){
+            return cockatrice.isHen() ? TEXTURE_HEN_CHICK : TEXTURE_ROOSTER_CHICK;
+        }else{
+            return cockatrice.isHen() ? TEXTURE_HEN : TEXTURE_ROOSTER;
+        }
     }
 
 }

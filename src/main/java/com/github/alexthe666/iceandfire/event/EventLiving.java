@@ -42,6 +42,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -89,31 +90,43 @@ public class EventLiving {
 		if(event.getSource().getTrueSource() != null){
 			Entity attacker = event.getSource().getTrueSource();
 			if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
-				float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
-				List<Entity> list = event.getEntityLiving().world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, event.getEntityLiving().posX + 1.0D, event.getEntityLiving().posY + 1.0D, event.getEntityLiving().posZ + 1.0D)).grow(d0, 10.0D, d0));
-				System.out.println(list);
-				Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
-				if (!list.isEmpty()) {
-					Iterator<Entity> itr = list.iterator();
-					while (itr.hasNext()) {
-						Entity entity = itr.next();
-						if (entity instanceof EntityCockatrice) {
-							EntityCockatrice cockatrice = (EntityCockatrice) entity;
-							if(attacker instanceof EntityPlayer){
-								EntityPlayer player = (EntityPlayer)attacker;
-								if(!player.isCreative() && !cockatrice.isOwner(player)){
-									cockatrice.setAttackTarget(player);
-								}
-							}
-							else {
-								cockatrice.setAttackTarget((EntityLivingBase)attacker);
-							}
+				signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
+		if(event.getTarget() != null){
+			EntityLivingBase attacker = event.getEntityLiving();
+			if (isAnimaniaChicken(event.getTarget())) {
+				signalChickenAlarm(event.getTarget(), attacker);
+			}
+		}
+	}
+
+	private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker){
+		float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+		List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
+		Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+		if (!list.isEmpty()) {
+			Iterator<Entity> itr = list.iterator();
+			while (itr.hasNext()) {
+				Entity entity = itr.next();
+				if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
+					EntityCockatrice cockatrice = (EntityCockatrice) entity;
+					if(attacker instanceof EntityPlayer){
+						EntityPlayer player = (EntityPlayer)attacker;
+						if(!player.isCreative() && !cockatrice.isOwner(player)){
+							cockatrice.setAttackTarget(player);
 						}
+					}
+					else {
+						cockatrice.setAttackTarget((EntityLivingBase)attacker);
 					}
 				}
 			}
 		}
-
 	}
 
 	@SubscribeEvent

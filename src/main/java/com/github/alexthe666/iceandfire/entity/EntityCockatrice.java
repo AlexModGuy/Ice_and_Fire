@@ -11,20 +11,27 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,6 +46,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     private static final DataParameter<Integer> TARGET_ENTITY = EntityDataManager.<Integer>createKey(EntityCockatrice.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TAMING_PLAYER = EntityDataManager.<Integer>createKey(EntityCockatrice.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TAMING_LEVEL = EntityDataManager.<Integer>createKey(EntityCockatrice.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> COMMAND = EntityDataManager.<Integer>createKey(EntityCockatrice.class, DataSerializers.VARINT);
     private boolean isSitting;
     public float sitProgress;
     private boolean isStaring;
@@ -55,8 +63,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     private EntityLivingBase targetedEntity;
     private int clientSideAttackTime;
     public static final float VIEW_RADIUS = 0.6F;
-    private int[] tamingID;
-    private int[] tamingLevel;
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "cockatrice"));
 
     public EntityCockatrice(World worldIn) {
         super(worldIn);
@@ -68,10 +75,15 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
         this.tasks.addTask(3, aiMelee = new EntityAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(4, new CockatriceAIWander(this, 1.0D));
-        this.tasks.addTask(5, new CockatriceAIAggroLook(this));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-        this.tasks.addTask(7, new EntityAILookIdle(this));
+        this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F) {
+            public boolean shouldExecute() {
+                return super.shouldExecute() && EntityCockatrice.this.getCommand() == 2;
+            }
+        });
+        this.tasks.addTask(5, new CockatriceAIWander(this, 1.0D));
+        this.tasks.addTask(6, new CockatriceAIAggroLook(this));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
@@ -83,6 +95,23 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }));
         this.targetTasks.addTask(5, new CockatriceAITargetItems(this, false));
         this.tasks.removeTask(aiMelee);
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
+    }
+
+    public boolean isOnSameTeam(Entity entityIn) {
+        return EventLiving.isAnimaniaChicken(entityIn) || super.isOnSameTeam(entityIn);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float damage) {
+        if (source.getTrueSource() != null && EventLiving.isAnimaniaFerret(source.getTrueSource())) {
+            damage *= 5;
+        }
+        return super.attackEntityFrom(source, damage);
     }
 
     private boolean canUseStareOn(Entity entity) {
@@ -151,6 +180,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.dataManager.register(TARGET_ENTITY, Integer.valueOf(0));
         this.dataManager.register(TAMING_PLAYER, Integer.valueOf(0));
         this.dataManager.register(TAMING_LEVEL, Integer.valueOf(0));
+        this.dataManager.register(COMMAND, Integer.valueOf(0));
     }
 
     public void setTargetedEntity(int entityId) {
@@ -224,6 +254,10 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         super.writeEntityToNBT(tag);
         tag.setBoolean("Hen", this.isHen());
         tag.setBoolean("Staring", this.isStaring());
+        tag.setInteger("TamingLevel", this.getTamingLevel());
+        tag.setInteger("TamingPlayer", this.dataManager.get(TAMING_PLAYER).intValue());
+        tag.setInteger("Command", this.getCommand());
+
     }
 
     @Override
@@ -231,6 +265,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         super.readEntityFromNBT(tag);
         this.setHen(tag.getBoolean("Hen"));
         this.setStaring(tag.getBoolean("Staring"));
+        this.setTamingLevel(tag.getInteger("TamingLevel"));
+        this.setTamingPlayer(tag.getInteger("TamingPlayer"));
+        this.setCommand(tag.getInteger("Command"));
     }
 
     public boolean isSitting() {
@@ -281,6 +318,20 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         return this.dataManager.get(TAMING_LEVEL);
     }
 
+    public void setCommand(int command) {
+        this.dataManager.set(COMMAND, command);
+
+        if (command == 1) {
+            this.setSitting(true);
+        } else {
+            this.setSitting(false);
+        }
+    }
+
+    public int getCommand() {
+        return this.dataManager.get(COMMAND);
+    }
+
     public boolean isStaring() {
         if (world.isRemote) {
             return this.isStaring = this.dataManager.get(STARING);
@@ -297,6 +348,24 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     public void forcePreyToLook(EntityLiving mob) {
         mob.getLookHelper().setLookPosition(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
+    }
+
+    @Override
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItem() == Items.BONE) {
+            this.setCommand(this.getCommand() + 1);
+            if (this.getCommand() > 2) {
+                this.setCommand(0);
+            }
+            System.out.println(this.getCommand());
+            if (world.isRemote) {
+                player.sendMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()));
+            }
+            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+            return true;
+        }
+        return super.processInteract(player, hand);
     }
 
     @Override
@@ -339,6 +408,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         boolean sitting = isSitting();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
+            System.out.println(world.isRemote);
         } else if (!sitting && sitProgress > 0.0F) {
             sitProgress -= 0.5F;
         }
@@ -376,10 +446,10 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                         this.setTamingPlayer(this.getAttackTarget().getEntityId());
                         this.setTamingLevel(this.getTamingLevel() + 1);
                         if (this.getTamingLevel() % 100 == 0) {
-                            this.world.setEntityState(this, (byte)46);
+                            this.world.setEntityState(this, (byte) 46);
                         }
                         if (this.getTamingLevel() >= 1000) {
-                            this.world.setEntityState(this, (byte)45);
+                            this.world.setEntityState(this, (byte) 45);
                             if (this.getTamingPlayer() != null && this.getTamingPlayer() instanceof EntityPlayer)
                                 this.setTamedBy((EntityPlayer) this.getTamingPlayer());
                             this.setAttackTarget(null);
