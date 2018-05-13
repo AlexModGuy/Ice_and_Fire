@@ -90,7 +90,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(4, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return (entity instanceof EntityMob || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
+                return (entity instanceof EntityMob && EntityCockatrice.this.isTamed() || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
             }
         }));
         this.targetTasks.addTask(5, new CockatriceAITargetItems(this, false));
