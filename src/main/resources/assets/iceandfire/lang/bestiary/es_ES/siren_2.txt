@@ -1,0 +1,7 @@
+Estas escamas brillantes se pueden utilizar
+para crear pociones misteriosas que
+conceden respiración acuática.
+
+Cuanto más escamas uses en
+proceso, mayor será la
+duración del efecto de la poción.
