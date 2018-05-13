@@ -64,13 +64,14 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 resetTask();
                 return;
             }
-            if(!isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)){
-                System.out.println("blind");
+            if(!isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS) || (entitylivingbase.prevPosX != entity.posX || entitylivingbase.prevPosY != entity.posY || entitylivingbase.prevPosZ != entity.posZ)){
                 this.entity.getNavigator().clearPath();
                 this.prevYaw = entitylivingbase.rotationYaw;
-                target = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, entitylivingbase);
+                BlockPos pos = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, entitylivingbase);
+                if(target == null || pos.distanceSq(target) > 4){
+                    target = pos;
+                }
             }
-            this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double) entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
             this.entity.setTargetedEntity(entitylivingbase.getEntityId());
 
             double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
@@ -87,10 +88,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 --this.seeTime;
             }
             if(target != null){
-                if(this.entity.getDistance(target.getX(), target.getY(), target.getZ()) < 2){
-                    this.target = null;
-                    this.entity.getNavigator().clearPath();
-                }else{
+                if(this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)){
                     this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), moveSpeedAmp);
                 }
 

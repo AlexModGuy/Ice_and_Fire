@@ -111,7 +111,6 @@ public class DragonUtils {
 		float radius = 10 + cockatrice.getRNG().nextInt(10);
 		float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * target.rotationYawHead);
-		System.out.println(target.renderYawOffset + " vs " + target.rotationYaw + " vs " + target.rotationYawHead);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
 		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);

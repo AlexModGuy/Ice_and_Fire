@@ -65,7 +65,6 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             this.bindTexture(TEXTURE_BEAM);
             GlStateManager.glTexParameteri(3553, 10242, 10497);
             GlStateManager.glTexParameteri(3553, 10243, 10497);
-            GlStateManager.disableLighting();
             GlStateManager.disableCull();
             GlStateManager.disableBlend();
             GlStateManager.depthMask(true);
@@ -134,6 +133,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             bufferbuilder.pos(d10, d0, d11).tex(1.0D, d24).color(j, k, l, 255).endVertex();
             bufferbuilder.pos(d8, d0, d9).tex(0.5D, d24).color(j, k, l, 255).endVertex();
             tessellator.draw();
+            GlStateManager.disableBlend();
             GlStateManager.popMatrix();
         }
     }
