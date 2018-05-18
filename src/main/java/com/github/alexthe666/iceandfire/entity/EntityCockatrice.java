@@ -352,8 +352,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == Items.BONE) {
+        if (this.isTamed() && this.isOwner(player)) {
             this.setCommand(this.getCommand() + 1);
             if (this.getCommand() > 2) {
                 this.setCommand(0);
