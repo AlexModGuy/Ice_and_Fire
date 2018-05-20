@@ -170,6 +170,9 @@ public class IceAndFireConfig {
 	public int cockatriceChickenSearchLength = 40;
 	@ConfigEntry(category = "cockatrices", comment = "1 out of this number chance per tick for a chicken to lay a cockatrice egg.")
 	public int cockatriceEggChance = 4320000;
+
+	@ConfigEntry(category = "stymphalian birds", comment = "How many blocks away can stymphalian birds spot potential prey. Note that increasing this could cause lag.")
+	public int stymphalianBirdTargetSearchLength = 64;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

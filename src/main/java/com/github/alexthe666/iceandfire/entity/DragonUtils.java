@@ -91,7 +91,7 @@ public class DragonUtils {
 	}
 
 	public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo) {
-		float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(8 * 6);
+		float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(48);
 		float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
@@ -107,6 +107,23 @@ public class DragonUtils {
 		return null;
 	}
 
+	public static BlockPos getBlockInViewStymphalian(EntityStymphalianBird bird) {
+		float radius = 0.75F * (0.7F * 6) * -3 - bird.getRNG().nextInt(24);
+		float neg = bird.getRNG().nextBoolean() ? 1 : -1;
+		float angle = (0.01745329251F * bird.renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
+		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+		double extraZ = (double) (radius * MathHelper.cos(angle));
+		BlockPos radialPos = new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ);
+		BlockPos ground = bird.world.getHeight(radialPos);
+		int distFromGround = (int) bird.posY - ground.getY();
+		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, bird.posY + bird.getRNG().nextInt(16) - 8) : (int) bird.posY + bird.getRNG().nextInt(16) + 1);
+		BlockPos pos = bird.doesWantToLand() ? ground : newPos;
+		if (!bird.isTargetBlocked(new Vec3d(newPos)) && bird.getDistanceSqToCenter(newPos) > 6) {
+			return newPos;
+		}
+		return null;
+	}
+
 	public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, EntityLivingBase target) {
 		float radius = 10 + cockatrice.getRNG().nextInt(10);
 		float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
@@ -115,8 +132,6 @@ public class DragonUtils {
 		double extraZ = (double) (radius * MathHelper.cos(angle));
 		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);
 		BlockPos ground = target.world.getHeight(radialPos);
-		cockatrice.world.spawnParticle(EnumParticleTypes.HEART, ground.getX(), ground.getY() + 1, ground.getZ(), 0, 0, 0, new int[0]);
-
 		if (!cockatrice.isTargetBlocked(new Vec3d(ground)) && cockatrice.getDistanceSqToCenter(ground) > 30) {
 			return ground;
 		}
