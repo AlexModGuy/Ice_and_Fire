@@ -5,9 +5,7 @@ import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderCyclops;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -219,6 +217,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_red_chestplate", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_red_leggings", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_boots, 0, new ModelResourceLocation("iceandfire:deathworm_red_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.rotten_egg, 0, new ModelResourceLocation("iceandfire:rotten_egg", "inventory"));
 
 	}
 
@@ -286,6 +285,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityDeathWorm.class, new RenderDeathWorm(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDeathWormEgg.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.deathworm_egg, Minecraft.getMinecraft().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCockatrice.class, new RenderCockatrice(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCockatriceEgg.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.rotten_egg, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianBird.class, new RenderStymphalianBird(Minecraft.getMinecraft().getRenderManager()));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());

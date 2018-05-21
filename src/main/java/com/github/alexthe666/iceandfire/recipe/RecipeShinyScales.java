@@ -18,6 +18,9 @@ public class RecipeShinyScales extends IForgeRegistryEntry.Impl<IRecipe> impleme
         int scaleCount = 0;
         boolean water = false;
         for(int i = 0; i < 9; i++){
+            if(inv.getStackInSlot(i).getItem() != ModItems.shiny_scales && inv.getStackInSlot(i).getItem() != Items.POTIONITEM){
+               return false;
+            }
             if(inv.getStackInSlot(i).getItem() == ModItems.shiny_scales){
                 scaleCount++;
             }
