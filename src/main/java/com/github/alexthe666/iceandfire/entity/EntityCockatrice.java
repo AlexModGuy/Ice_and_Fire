@@ -115,7 +115,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     private boolean canUseStareOn(Entity entity) {
-        if (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone()) {
+        if (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone() || EventLiving.isAnimaniaFerret(entity)) {
             return false;
         }
         return true;
@@ -357,7 +357,6 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             if (this.getCommand() > 2) {
                 this.setCommand(0);
             }
-            System.out.println(this.getCommand());
             if (world.isRemote) {
                 player.sendMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()));
             }

@@ -317,6 +317,59 @@ public class ModelStymphalianBird extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityStymphalianBird) entity);
+        animator.update(entity);
+        animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK);
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, -47, 0, 0);
+        this.rotate(animator, NeckPivot, 17, 0, 0);
+        this.rotate(animator, HeadPivot, 46, 0, 0);
+        this.rotate(animator, Jaw, 10, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, 26, 0, 0);
+        this.rotate(animator, NeckPivot, -18, 0, 0);
+        this.rotate(animator, HeadPivot, 2, 0, 0);
+        this.rotate(animator, Jaw, 33, 0, 0);
+        this.rotate(animator, HeadFront, -20, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
+        animator.startKeyframe(5);
+        this.rotate(animator, Jaw, 25, 0, 0);
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
+        animator.startKeyframe(20);
+        shootPosture();
+        animator.endKeyframe();
+        animator.resetKeyframe(10);
+    }
+
+    private void shootPosture(){
+        this.rotate(animator, Body, -52, 0, 0);
+        this.rotate(animator, Neck1, 33, 0, 0);
+        this.rotate(animator, NeckPivot, -7, 0, 0);
+        this.rotate(animator, HeadPivot, 70, 0, 0);
+        this.rotate(animator, HeadFront, -15, 0, 0);
+        this.rotate(animator, Jaw, 36, 0, 0);
+        this.rotate(animator, Crest1, 40, 0, 0);
+        this.rotate(animator, Crest2, -26, 0, 0);
+        this.rotate(animator, Crest3, -33, 0, 0);
+        this.rotate(animator, BackLegR1, -25, 0, 15);
+        this.rotate(animator, BackLegL1, -25, 0, -15);
+        this.rotate(animator, WingL, 5, -10, -60);
+        this.rotate(animator, WingL2, -20, 0, 50);
+        this.rotate(animator, WingL3, 30, 0, 20);
+        this.rotate(animator, WingR, 5, 10, 60);
+        this.rotate(animator, WingR2, -20, 0, -50);
+        this.rotate(animator, WingR3, 30, 0, -20);
+
+        this.rotate(animator, ToeR1, -23, 180, 0);
+        this.rotate(animator, ToeR2, -75, -45, 0);
+        this.rotate(animator, ToeR3, -75, 0, 0);
+
+        this.rotate(animator, ToeL1, -23, 180, 0);
+        this.rotate(animator, ToeL2, -75, 45, 0);
+        this.rotate(animator, ToeL3, -75, 0, 0);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityStymphalianBird entity) {
@@ -333,6 +386,13 @@ public class ModelStymphalianBird extends ModelDragonBase {
         this.faceTarget(f3, f4, 2, HeadBase);
         this.faceTarget(f3, f4, 2, Neck2);
         if(entity.flyProgress > 0F) {
+            progressRotation(WingR, entity.flyProgress, 0.08726646259971647F, 0.0F, 1.3962634015954636F);
+            progressRotation(WingR2, entity.flyProgress, -0.3490658503988659F, 0.0F, 0.17453292519943295F);
+            progressRotation(WingR3, entity.flyProgress, 0.5235987755982988F, 0.0F, 0.0F);
+            progressRotation(WingL, entity.flyProgress, 0.08726646259971647F, 0.0F, -1.3962634015954636F);
+            progressRotation(WingL2, entity.flyProgress, -0.3490658503988659F, 0.0F, -0.17453292519943295F);
+            progressRotation(WingL3, entity.flyProgress, 0.5235987755982988F, 0.0F, 0.0F);
+
             progressRotation(TailL1, entity.flyProgress, 1.5707963267948966F, -0.03490658503988659F, 0.0F);
             progressRotation(ToeR1, entity.flyProgress, -0.40980330836826856F, 3.141592653589793F, 0.0F);
             progressRotation(TailR1, entity.flyProgress, 1.5707963267948966F, 0.03490658503988659F, 0.0F);
@@ -347,7 +407,6 @@ public class ModelStymphalianBird extends ModelDragonBase {
             progressRotation(FingerR4, entity.flyProgress, 0.40142572795869574F, 0.0F, 0.0F);
             progressRotation(FingerL2, entity.flyProgress, 0.15707963267948966F, 0.0F, 0.0F);
             progressRotation(ToeL2, entity.flyProgress, -0.22759093446006054F, 0.6108652381980153F, 0.0F);
-            progressRotation(WingR, entity.flyProgress, 0.08726646259971647F, 0.0F, 1.3962634015954636F);
             progressRotation(Crest2, entity.flyProgress, -0.22759093446006054F, 0.0F, 0.0F);
             progressRotation(FingerL3, entity.flyProgress, 0.2617993877991494F, 0.0F, 0.0F);
             progressRotation(BackLegR2, entity.flyProgress, -0.18203784098300857F, 0.0F, 0.0F);
@@ -356,32 +415,29 @@ public class ModelStymphalianBird extends ModelDragonBase {
             progressRotation(BackLegL2, entity.flyProgress, -0.18203784098300857F, 0.0F, 0.0F);
             progressRotation(ToeL1, entity.flyProgress, -0.40980330836826856F, 3.141592653589793F, 0.0F);
             progressRotation(TailL2, entity.flyProgress, 1.5707963267948966F, -0.3490658503988659F, -0.12217304763960307F);
-            progressRotation(WingR2, entity.flyProgress, -0.3490658503988659F, 0.0F, 0.17453292519943295F);
             progressRotation(Lowerbodytilt, entity.flyProgress, 1.730144887501979F, 0.0F, 0.0F);
             progressRotation(FingerR3, entity.flyProgress, 0.2617993877991494F, 0.0F, 0.0F);
             progressRotation(LowerBody, entity.flyProgress, -0.091106186954104F, 0.0F, 0.0F);
             progressRotation(FingerL1, entity.flyProgress, 0.03490658503988659F, 0.0F, 0.0F);
             progressRotation(FingerL4, entity.flyProgress, 0.40142572795869574F, 0.0F, 0.0F);
-            progressRotation(WingL, entity.flyProgress, 0.08726646259971647F, 0.0F, -1.3962634015954636F);
             progressRotation(BackLegR1, entity.flyProgress, 1.6390387005478748F, 0.0F, 0.08726646259971647F);
             progressRotation(HeadPivot, entity.flyProgress, 0.5918411493512771F, 0.0F, 0.0F);
             progressRotation(Crest1, entity.flyProgress, 0.18203784098300857F, 0.0F, 0.0F);
-            progressRotation(WingL3, entity.flyProgress, 0.5235987755982988F, 0.0F, 0.0F);
-            progressRotation(WingR3, entity.flyProgress, 0.5235987755982988F, 0.0F, 0.0F);
             progressRotation(ToeL3, entity.flyProgress, -0.22759093446006054F, 0.0F, 0.0F);
             progressRotation(Neck1, entity.flyProgress, 0.18203784098300857F, 0.0F, 0.0F);
             progressRotation(BackLegL1, entity.flyProgress, 1.6390387005478748F, 0.0F, -0.08726646259971647F);
             progressRotation(NeckPivot, entity.flyProgress, -0.31869712141416456F, 0.0F, 0.0F);
-            progressRotation(WingL2, entity.flyProgress, -0.3490658503988659F, 0.0F, -0.17453292519943295F);
             progressRotation(ToeL4, entity.flyProgress, -0.22759093446006054F, -0.6108652381980153F, 0.0F);
-            this.chainFlap(WING_LEFT, speed_fly, -degree_fly * 0.5F, 0, entity.ticksExisted, 1);
-            this.chainFlap(WING_RIGHT, speed_fly, degree_fly * 0.5F, 0, entity.ticksExisted, 1);
-            this.chainWave(NECK, speed_fly, degree_fly * 0.15F, 4, entity.ticksExisted, 1);
-            this.bob(Body, speed_fly * 0.5F, degree_fly * 2.5F, true, entity.ticksExisted, 1);
-            this.walk(BackLegL1, speed_fly, degree_fly * 0.15F, true, 1, 0.2F, entity.ticksExisted, 1);
-            this.walk(BackLegR1, speed_fly, degree_fly * 0.15F, false, 1, -0.2F, entity.ticksExisted, 1);
 
+            this.chainFlap(WING_LEFT, speed_fly + (entity.getAnimation() ==  EntityStymphalianBird.ANIMATION_SHOOT_ARROWS ? 0.25F : 0), -degree_fly * 0.5F, 0, entity.ticksExisted, 1);
+            this.chainFlap(WING_RIGHT, speed_fly  + (entity.getAnimation() ==  EntityStymphalianBird.ANIMATION_SHOOT_ARROWS ? 0.25F : 0), degree_fly * 0.5F, 0, entity.ticksExisted, 1);
 
+           if(entity.getAnimation() != EntityStymphalianBird.ANIMATION_SHOOT_ARROWS){
+               this.chainWave(NECK, speed_fly, degree_fly * 0.15F, 4, entity.ticksExisted, 1);
+               this.bob(Body, speed_fly * 0.5F, degree_fly * 2.5F, true, entity.ticksExisted, 1);
+               this.walk(BackLegL1, speed_fly, degree_fly * 0.15F, true, 1, 0.2F, entity.ticksExisted, 1);
+               this.walk(BackLegR1, speed_fly, degree_fly * 0.15F, false, 1, -0.2F, entity.ticksExisted, 1);
+           }
         }else{
             this.chainWave(NECK, speed_idle, degree_idle * 0.15F, 4, entity.ticksExisted, 1);
             this.chainWave(FEATHERS, speed_idle, degree_idle * -0.1F, 0, entity.ticksExisted, 1);
@@ -391,7 +447,6 @@ public class ModelStymphalianBird extends ModelDragonBase {
             this.walk(BackLegR1, speed_idle, degree_idle * -0.05F, true, 1, 0F, entity.ticksExisted, 1);
             this.walk(BackLegL1, speed_idle, degree_idle * -0.1F, false, 0, 0.1F, entity.ticksExisted, 1);
             this.walk(BackLegL1, speed_idle, degree_idle * -0.05F, true, 1, 0F, entity.ticksExisted, 1);
-
             this.chainWave(NECK, speed_walk, degree_walk * 0.5F, -3, f, f1);
             this.chainWave(FEATHERS, speed_walk, degree_walk * -0.1F, 0, f, f1);
             this.walk(LowerBody, speed_walk, degree_walk * 0.1F, false, 0, 0F, f, f1);
