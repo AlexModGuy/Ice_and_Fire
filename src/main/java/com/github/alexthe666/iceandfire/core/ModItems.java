@@ -211,6 +211,8 @@ public class ModItems {
 	public static Item rotten_egg = new ItemRottenEgg();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_feather")
 	public static Item stymphalian_bird_feather = new ItemGeneric("stymphalian_bird_feather", "iceandfire.stymphalian_bird_feather");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_arrow")
+	public static Item stymphalian_arrow = new ItemStymphalianArrow();
 
 	static {
 		EnumDragonArmor.initArmors();

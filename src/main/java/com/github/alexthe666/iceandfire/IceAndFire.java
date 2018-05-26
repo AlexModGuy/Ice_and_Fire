@@ -125,6 +125,7 @@ public class IceAndFire {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		PROXY.postRender();
+		ModRecipes.postInit();
 
 		logger.info("A brother bound to a love he must hide");
 		logger.info("The younger's armor is worn in the mind");

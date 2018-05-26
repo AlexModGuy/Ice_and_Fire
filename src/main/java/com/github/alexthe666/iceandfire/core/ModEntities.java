@@ -49,6 +49,7 @@ public class ModEntities {
 		registerUnspawnable(EntityCockatriceEgg.class, "cockatriceegg", 23);
 		registerSpawnable(EntityStymphalianBird.class, "stymphalianbird", 24, 0X744F37, 0X9E6C4B);
 		registerUnspawnable(EntityStymphalianFeather.class, "stymphalianfeather", 25);
+		registerUnspawnable(EntityStymphalianArrow.class, "stymphalianarrow", 26);
 
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {

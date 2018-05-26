@@ -38,6 +38,11 @@ public class EntityStymphalianFeather extends EntityArrow{
             return;
         }else{
             super.onHit(raytraceResultIn);
+            if(raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof  EntityLivingBase){
+                EntityLivingBase entitylivingbase = (EntityLivingBase)raytraceResultIn.entityHit;
+                entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() - 1);
+            }
+
         }
     }
 

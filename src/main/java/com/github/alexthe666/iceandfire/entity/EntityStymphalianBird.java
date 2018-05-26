@@ -45,7 +45,7 @@ import java.util.List;
 
 public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity {
 
-    private static final int FLIGHT_CHANCE_PER_TICK = 600;
+    private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;
     private Animation currentAnimation;
     private static final DataParameter<Integer> VICTOR_ENTITY = EntityDataManager.<Integer>createKey(EntityStymphalianBird.class, DataSerializers.VARINT);
@@ -254,9 +254,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS && !this.isFlying() && !world.isRemote){
-            this.setFlying(true);
-        }
         if(this.flock == null){
             StymphalianBirdFlock otherFlock = StymphalianBirdFlock.getNearbyFlock(this);
             if(otherFlock == null){
@@ -347,7 +344,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             this.setFlying(false);
             this.airTarget = null;
         }
-        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRNG().nextInt(40) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && this.onGround) {
+        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && this.onGround) {
             this.setFlying(true);
             this.launchTicks = 0;
             this.flyTicks = 0;
@@ -371,7 +368,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         } else {
             airBorneCounter = 0;
         }
-
+        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS && !this.isFlying() && !world.isRemote){
+            this.setFlying(true);
+            aiFlightLaunch = true;
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
@@ -397,9 +397,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             double targetX = airTarget.getX() + 0.5D - posX;
             double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;
-            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed();
-            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed();
-            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed();
+            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed(false);
+            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed(true);
+            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed(false);
             float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
             float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
             moveForward = 0.5F;
@@ -416,13 +416,13 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         }
     }
 
-    private float getFlySpeed(){
+    private float getFlySpeed(boolean y){
         float speed = 2;
         if(this.flock != null && !this.flock.isLeader(this) && this.getDistanceSq(this.flock.getLeader()) > 10){
             speed = 4;
         }
-        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS){
-            speed *= 0.15;
+        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS && !y){
+            speed *= 0.05;
         }
         return speed;
     }
@@ -455,7 +455,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 return this.flock.getLeader().doesWantToLand();
             }
         }
-        return this.flyTicks > 200 || flyTicks > 40 && this.flyProgress == 0;
+        return this.flyTicks > 500 || flyTicks > 40 && this.flyProgress == 0;
     }
 
     @Override

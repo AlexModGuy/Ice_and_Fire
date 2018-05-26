@@ -133,6 +133,8 @@ item.iceandfire.deathworm_egg.name=Death Worm Egg
 item.iceandfire.deathworm_egg_giant.name=Giant Death Worm Egg
 item.iceandfire.rotten_egg.name=Rotten Egg
 item.iceandfire.stymphalian_bird_feather.name=Stymphalian Bird Feather
+item.iceandfire.stymphalian_arrow.name=Stymphalian Arrow
+item.iceandfire.stymphalian_arrow.desc=The metallic fletching enables the arrow to soar like a bird.
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -210,6 +212,7 @@ entity.cockatrice.name=Cockatrice
 entity.cockatriceegg.name=Cockatrice Egg
 entity.stymphalianbird.name=Stymphalian Bird
 entity.stymphalianfeather.name=Stymphalian Bird Feather
+entity.stymphalianarrow.name=Stymphalian Arrow
 
 dragon.red=Red
 dragon.green=Emerald
