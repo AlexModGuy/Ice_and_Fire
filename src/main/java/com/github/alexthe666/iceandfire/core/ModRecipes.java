@@ -59,8 +59,8 @@ public class ModRecipes {
     }
 
     public static void postInit() {
-        NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
-        NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
+        NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("nuggetBronze");
+        NonNullList<ItemStack> copperItems = OreDictionary.getOres("nuggetCopper");
         if (!bronzeItems.isEmpty()) {
             for (ItemStack bronzeIngot : bronzeItems) {
                 if (bronzeIngot != ItemStack.EMPTY) {
