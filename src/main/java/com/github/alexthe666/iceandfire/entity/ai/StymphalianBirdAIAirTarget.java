@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -25,6 +26,9 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
                 return false;
             }
             if (bird.isChild()) {
+                return false;
+            }
+            if (bird.doesWantToLand()) {
                 return false;
             }
             if (bird.airTarget != null && (bird.isTargetBlocked(new Vec3d(bird.airTarget)))) {
@@ -62,20 +66,21 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
     }
 
     public Vec3d findAirTarget() {
-        return new Vec3d(getNearbyAirTarget());
+        return new Vec3d(getNearbyAirTarget(bird));
     }
 
-    public BlockPos getNearbyAirTarget() {
+    public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
         if (bird.getAttackTarget() == null) {
             BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
             if (pos != null && bird.world.getBlockState(pos).getMaterial() == Material.AIR) {
                 return pos;
+            }
+            if(bird.flock != null && bird.flock.isLeader(bird)){
+                bird.flock.setTarget(bird.airTarget);
             }
         } else {
             return new BlockPos((int) bird.getAttackTarget().posX, (int) bird.getAttackTarget().posY + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().posZ);
         }
         return bird.getPosition();
     }
-
-
 }

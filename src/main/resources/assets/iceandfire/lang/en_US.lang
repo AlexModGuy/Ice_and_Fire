@@ -132,6 +132,7 @@ item.iceandfire.deathworm_red_boots.name=Red Death Worm Chitin Boots
 item.iceandfire.deathworm_egg.name=Death Worm Egg
 item.iceandfire.deathworm_egg_giant.name=Giant Death Worm Egg
 item.iceandfire.rotten_egg.name=Rotten Egg
+item.iceandfire.stymphalian_bird_feather.name=Stymphalian Bird Feather
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -207,6 +208,9 @@ entity.deathworm.name=Death Worm
 entity.deathwormegg.name=Death Worm Egg
 entity.cockatrice.name=Cockatrice
 entity.cockatriceegg.name=Cockatrice Egg
+entity.stymphalianbird.name=Stymphalian Bird
+entity.stymphalianfeather.name=Stymphalian Bird Feather
+
 dragon.red=Red
 dragon.green=Emerald
 dragon.bronze=Bronze

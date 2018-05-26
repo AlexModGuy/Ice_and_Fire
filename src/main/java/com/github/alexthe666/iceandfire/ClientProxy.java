@@ -218,6 +218,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_red_leggings", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_boots, 0, new ModelResourceLocation("iceandfire:deathworm_red_boots", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.rotten_egg, 0, new ModelResourceLocation("iceandfire:rotten_egg", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_bird_feather, 0, new ModelResourceLocation("iceandfire:stymphalian_bird_feather", "inventory"));
 
 	}
 
@@ -287,6 +288,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCockatrice.class, new RenderCockatrice(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCockatriceEgg.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.rotten_egg, Minecraft.getMinecraft().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianBird.class, new RenderStymphalianBird(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianFeather.class, new RenderStymphalianFeather(Minecraft.getMinecraft().getRenderManager()));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());

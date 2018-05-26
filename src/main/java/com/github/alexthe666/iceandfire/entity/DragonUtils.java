@@ -110,18 +110,36 @@ public class DragonUtils {
 	public static BlockPos getBlockInViewStymphalian(EntityStymphalianBird bird) {
 		float radius = 0.75F * (0.7F * 6) * -3 - bird.getRNG().nextInt(24);
 		float neg = bird.getRNG().nextBoolean() ? 1 : -1;
-		float angle = (0.01745329251F * bird.renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
+		float renderYawOffset = bird.flock != null && !bird.flock.isLeader(bird) ? getStymphalianFlockDirection(bird) : bird.renderYawOffset;
+		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
 		BlockPos radialPos = new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ);
 		BlockPos ground = bird.world.getHeight(radialPos);
 		int distFromGround = (int) bird.posY - ground.getY();
-		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, bird.posY + bird.getRNG().nextInt(16) - 8) : (int) bird.posY + bird.getRNG().nextInt(16) + 1);
+		int flightHeight = (int) Math.min(IceAndFire.CONFIG.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16): ground.getY() + bird.getRNG().nextInt(16));
+		BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.posY + bird.getRNG().nextInt(16) + 1);
 		BlockPos pos = bird.doesWantToLand() ? ground : newPos;
 		if (!bird.isTargetBlocked(new Vec3d(newPos)) && bird.getDistanceSqToCenter(newPos) > 6) {
 			return newPos;
 		}
 		return null;
+	}
+
+	private static float getStymphalianFlockDirection(EntityStymphalianBird bird){
+		EntityStymphalianBird leader = bird.flock.getLeader();
+		if(bird.getDistanceSq(leader) > 2){
+			double d0 = leader.posX - bird.posX;
+			double d2 = leader.posZ - bird.posZ;
+			double d1 = leader.posY + (double)leader.getEyeHeight() - (bird.posY + (double)bird.getEyeHeight());
+			double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+			float f = (float)(MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+			float degrees = MathHelper.wrapDegrees(f - bird.rotationYaw);
+
+			return bird.rotationYaw + degrees;
+		}else{
+			return leader.renderYawOffset;
+		}
 	}
 
 	public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, EntityLivingBase target) {
