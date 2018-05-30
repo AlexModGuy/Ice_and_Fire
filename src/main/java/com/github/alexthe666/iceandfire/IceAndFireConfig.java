@@ -139,7 +139,7 @@ public class IceAndFireConfig {
 	public int spawnCyclopsChance = 80;
 
 	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "sirens", comment = "Maximum siren health")
+	@ConfigEntry(category = "siredns", comment = "Maximum siren health")
 	public double sirenMaxHealth = 100D;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "sirens", comment = "Wether to spawn siren islands caves or not")
@@ -163,9 +163,24 @@ public class IceAndFireConfig {
 	@ConfigEntry(category = "death worms", comment = "True if death worms are allowed to spawn.")
 	public boolean spawnDeathWorm = true;
 	@SuppressWarnings("deprecation")
-	@ConfigEntry(category = "death worms", comment = "Death worm spawn weight. Lower = lower chance to spawn.")
+	@ConfigEntry(category = "death worms", comment = "Death worm spawn weight. Lower number = lower chance to spawn.")
 	public int deathWormSpawnRate = 5;
 
+	@ConfigEntry(category = "cockatrices", comment = "How far away cockatrices will detect chickens being hurt.")
+	public int cockatriceChickenSearchLength = 40;
+	@ConfigEntry(category = "cockatrices", comment = "1 out of this number chance per tick for a chicken to lay a cockatrice egg.")
+	public int cockatriceEggChance = 4320000;
+
+	@ConfigEntry(category = "stymphalian birds", comment = "How many blocks away can stymphalian birds spot potential prey. Note that increasing this could cause lag.")
+	public int stymphalianBirdTargetSearchLength = 64;
+
+	@ConfigEntry(category = "stymphalian birds", comment = "Strength of damage from each feather fired by a stymphalian bird(default is half a heart)")
+	public float stymphalianBirdFeatherAttackStength = 1F;
+
+	@ConfigEntry(category = "stymphalian birds", comment = "How far away stymphalian birds will consider other birds to be in the same flock.")
+	public int stymphalianBirdFlockLength = 40;
+	@ConfigEntry(category = "stymphalian birds", comment = "How high stymphalian birds can fly, in Y height.")
+	public int stymphalianBirdFlightHeight = 80;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -16,12 +17,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -38,8 +38,10 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -56,6 +58,7 @@ import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarpl
 
 public class EventLiving {
 
+	private boolean stepHeightSwitched = false;
 	/*@SubscribeEvent
 	public void onGetCollisionBoxes(GetCollisionBoxesEvent event) {
 		if(event.getEntity() instanceof EntityDeathWorm && !event.getCollisionBoxesList().isEmpty()){
@@ -80,6 +83,50 @@ public class EventLiving {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void onLivingAttacked(LivingAttackEvent event) {
+		if(event.getSource().getTrueSource() != null){
+			Entity attacker = event.getSource().getTrueSource();
+			if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
+				signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
+		if(event.getTarget() != null){
+			EntityLivingBase attacker = event.getEntityLiving();
+			if (isAnimaniaChicken(event.getTarget())) {
+				signalChickenAlarm(event.getTarget(), attacker);
+			}
+		}
+	}
+
+	private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker){
+		float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+		List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
+		Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+		if (!list.isEmpty()) {
+			Iterator<Entity> itr = list.iterator();
+			while (itr.hasNext()) {
+				Entity entity = itr.next();
+				if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
+					EntityCockatrice cockatrice = (EntityCockatrice) entity;
+					if(attacker instanceof EntityPlayer){
+						EntityPlayer player = (EntityPlayer)attacker;
+						if(!player.isCreative() && !cockatrice.isOwner(player)){
+							cockatrice.setAttackTarget(player);
+						}
+					}
+					else {
+						cockatrice.setAttackTarget((EntityLivingBase)attacker);
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -145,8 +192,14 @@ public class EventLiving {
 	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && event.getEntityLiving().getRNG().nextInt(1 + IceAndFire.CONFIG.cockatriceEggChance) == 0 && !event.getEntityLiving().isChild()){
+			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+		}
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 		if(sirenProps != null && sirenProps.isCharmed){
+			stepHeightSwitched = false;
 			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
 				sirenProps.isCharmed = false;
 			}
@@ -204,9 +257,9 @@ public class EventLiving {
 					sirenProps.isCharmed = false;
 				}
 			}
-		}else if(sirenProps != null && !sirenProps.isCharmed){
+		}else if(sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched){
 			event.getEntityLiving().stepHeight = 0.6F;
-
+			stepHeightSwitched = true;
 		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
@@ -358,6 +411,17 @@ public class EventLiving {
 		String className = entity.getClass().getName();
 		return className.contains("sheep") || entity instanceof EntitySheep;
 	}
+
+	public static boolean isAnimaniaChicken(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("chicken") || entity instanceof EntityChicken;
+	}
+
+	public static boolean isAnimaniaFerret(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("ferret");
+	}
+
 	//@SubscribeEvent
 	//public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
 	//	if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {

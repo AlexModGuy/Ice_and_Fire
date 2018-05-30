@@ -1,0 +1,14 @@
+También es posible la creación de
+armaduras para dragones. Las más
+comunes son hierro, oro y diamante.
+Siguen el mismo esquema que las armaduras,
+excepto por el hecho de que utilizan
+bloques en lugar de usar lingotes.
+
+
+
+También se puede crear una flauta
+de hueso de dragón con una barra de
+hierro y dos huesos de dragón. Este
+instrumento permite calmar a un dragón 
+manso y traerlo de vuelta al suelo

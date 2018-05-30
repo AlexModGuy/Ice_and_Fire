@@ -207,6 +207,12 @@ public class ModItems {
 	public static Item deathworm_red_boots = new ItemDeathwormArmor(red_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_egg")
 	public static Item deathworm_egg = new ItemDeathwormEgg();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":rotten_egg")
+	public static Item rotten_egg = new ItemRottenEgg();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_feather")
+	public static Item stymphalian_bird_feather = new ItemGeneric("stymphalian_bird_feather", "iceandfire.stymphalian_bird_feather");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_arrow")
+	public static Item stymphalian_arrow = new ItemStymphalianArrow();
 
 	static {
 		EnumDragonArmor.initArmors();

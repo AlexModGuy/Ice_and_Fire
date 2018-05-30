@@ -44,6 +44,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	}
 
 	public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
+		degree *= 1 + (looker.getDistance(seen) * 0.1);
 		Vec3d vec3d = looker.getLook(1.0F).normalize();
 		Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
 		double d0 = vec3d1.lengthVector();
