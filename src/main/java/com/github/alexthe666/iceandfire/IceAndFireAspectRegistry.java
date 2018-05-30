@@ -14,7 +14,14 @@ import thaumcraft.api.aspects.AspectList;
 public class IceAndFireAspectRegistry {
 
     public static final Aspect MYTHICAL = new Aspect("mythus", 0XD9D5AB, new Aspect[]{Aspect.BEAST, Aspect.MAGIC}, new ResourceLocation("iceandfire:textures/thaumcraft/mythical.png"), 1);
-    public static final Aspect DRAGON = new Aspect("draco", 0XA2271F, new Aspect[]{IceAndFireAspectRegistry.MYTHICAL, Aspect.DESIRE}, new ResourceLocation("iceandfire:textures/thaumcraft/dragon.png"), 1);
+    public static final Aspect DRAGON = getOrCreateAspect("draco", 0XA2271F, new Aspect[]{IceAndFireAspectRegistry.MYTHICAL, Aspect.DESIRE}, new ResourceLocation("iceandfire", "textures/thaumcraft/dragon.png"), 1);
+
+    public static Aspect getOrCreateAspect(String tag, int color, Aspect[] components, ResourceLocation image, int blend)
+    {
+        Aspect a = Aspect.getAspect(tag);
+        if(a != null) return a;
+        return new Aspect(tag, color, components, image, blend);
+    }
 
     public static void register(){
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.bestiary), new AspectList().add(IceAndFireAspectRegistry.DRAGON, 2).add(IceAndFireAspectRegistry.MYTHICAL, 5).add(Aspect.BEAST, 6).add(Aspect.MAGIC, 2).add(Aspect.MIND, 4).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
@@ -148,6 +155,8 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerEntityTag("siren", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 50).add(Aspect.MAN, 10).add(Aspect.WATER, 20).add(Aspect.DESIRE, 150).add(Aspect.DEATH, 5).add(Aspect.SENSES, 40));
         ThaumcraftApi.registerEntityTag("hippocampus", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.WATER, 15).add(Aspect.DESIRE, 5).add(Aspect.BEAST, 5));
         ThaumcraftApi.registerEntityTag("deathworm", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.DEATH, 15).add(Aspect.MOTION, 5).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(Aspect.ELDRITCH, 15));
+        ThaumcraftApi.registerEntityTag("stymphalianbird", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.METAL, 20).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 15).add(Aspect.AVERSION, 15));
+        ThaumcraftApi.registerEntityTag("cockatrice", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.ALCHEMY, 20).add(Aspect.DARKNESS, 20).add(Aspect.AVERSION, 15));
 
     }
 }
