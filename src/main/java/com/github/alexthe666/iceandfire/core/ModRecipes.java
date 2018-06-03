@@ -31,6 +31,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
         OreDictionary.registerOre("foodMeat", Items.RABBIT);
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
+        OreDictionary.registerOre("boneWithered", ModItems.witherbone);        
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
