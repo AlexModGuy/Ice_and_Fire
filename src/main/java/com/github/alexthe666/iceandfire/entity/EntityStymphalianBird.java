@@ -4,11 +4,13 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -22,6 +24,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
@@ -31,6 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
@@ -42,13 +46,14 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;
     private Animation currentAnimation;
-    private static final DataParameter<Integer> VICTOR_ENTITY = EntityDataManager.<Integer>createKey(EntityStymphalianBird.class, DataSerializers.VARINT);
+    private static final DataParameter<Optional<UUID>> VICTOR_ENTITY = EntityDataManager.<Optional<UUID>>createKey(EntityStymphalianBird.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private EntityLivingBase victorEntity;
     private boolean isFlying;
@@ -99,21 +104,39 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VICTOR_ENTITY, Integer.valueOf(0));
+        this.dataManager.register(VICTOR_ENTITY, Optional.absent());
         this.dataManager.register(FLYING, false);
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("VictorEntity", this.dataManager.get(VICTOR_ENTITY).intValue());
+        if (this.getVictorId() == null) {
+            tag.setString("VictorUUID", "");
+        } else {
+            tag.setString("VictorUUID", this.getVictorId().toString());
+        }
         tag.setBoolean("Flying", this.isFlying());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
-        this.setVictorEntity(tag.getInteger("VictorEntity"));
+        String s;
+
+        if (tag.hasKey("VictorUUID", 8)) {
+            s = tag.getString("VictorUUID");
+        } else {
+            String s1 = tag.getString("Victor");
+            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+        }
+
+        if (!s.isEmpty()) {
+            try {
+                this.setVictorId(UUID.fromString(s));
+            } catch (Throwable var4) {
+            }
+        }
         this.setFlying(tag.getBoolean("Flying"));
     }
 
@@ -133,26 +156,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     public void onDeath(DamageSource cause) {
         if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase && !world.isRemote) {
-            this.setVictorEntity(cause.getTrueSource().getEntityId());
-            this.signalVictor();
-        }
-    }
-
-    private void signalVictor() {
-        float d0 = IceAndFire.CONFIG.stymphalianBirdFlockLength;
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, (new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D)).grow(d0, 10.0D, d0), STYMPHALIAN_PREDICATE);
-        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(this));
-        if (!list.isEmpty()) {
-            Iterator<Entity> itr = list.iterator();
-            while (itr.hasNext()) {
-                Entity entity = itr.next();
-                if(entity instanceof EntityStymphalianBird){
-                    EntityStymphalianBird bird = (EntityStymphalianBird)entity;
-                    if (this.hasVictorEntity() && this.getVictorEntity() != null) {
-                        bird.setVictorEntity(this.getVictorEntity().getEntityId());
-                    }
-                }
-
+            this.setVictorId(cause.getTrueSource().getUniqueID());
+            if(this.flock != null){
+                this.flock.setFearTarget((EntityLivingBase)cause.getTrueSource());
             }
         }
     }
@@ -200,33 +206,31 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return entityitem;
     }
 
-    public void setVictorEntity(int entityId) {
-        this.dataManager.set(VICTOR_ENTITY, Integer.valueOf(entityId));
+    @Nullable
+    public UUID getVictorId() {
+        return (UUID) ((Optional) this.dataManager.get(VICTOR_ENTITY)).orNull();
     }
 
-    public boolean hasVictorEntity() {
-        return ((Integer) this.dataManager.get(VICTOR_ENTITY)).intValue() != 0;
+    public void setVictorId(@Nullable UUID uuid) {
+        this.dataManager.set(VICTOR_ENTITY, Optional.fromNullable(uuid));
     }
 
     @Nullable
-    public Entity getVictorEntity() {
-        if (!this.hasVictorEntity()) {
+    public EntityLivingBase getVictor() {
+        try {
+            UUID uuid = this.getVictorId();
+            return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+        } catch (IllegalArgumentException var2) {
             return null;
-        } else if (this.world.isRemote) {
-            if (this.victorEntity != null) {
-                return this.victorEntity;
-            } else {
-                Entity entity = this.world.getEntityByID(((Integer) this.dataManager.get(VICTOR_ENTITY)).intValue());
-                if (entity instanceof EntityLivingBase) {
-                    this.victorEntity = (EntityLivingBase) entity;
-                    return this.victorEntity;
-                } else {
-                    return null;
-                }
-            }
-        } else {
-            return this.world.getEntityByID(((Integer) this.dataManager.get(VICTOR_ENTITY)).intValue());
         }
+    }
+
+    public boolean isVictor(EntityLivingBase entityIn) {
+        return entityIn == this.getVictor();
+    }
+
+    public void setVictor(EntityLivingBase player) {
+        this.setVictorId(player.getUniqueID());
     }
 
     public boolean isTargetBlocked(Vec3d target) {
@@ -254,28 +258,28 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.flock == null){
+        if (this.flock == null) {
             StymphalianBirdFlock otherFlock = StymphalianBirdFlock.getNearbyFlock(this);
-            if(otherFlock == null){
+            if (otherFlock == null) {
                 this.flock = StymphalianBirdFlock.createFlock(this);
-            }else{
+            } else {
                 this.flock = otherFlock;
                 this.flock.addToFlock(this);
             }
-        }else{
-            if(!this.flock.isLeader(this)){
+        } else {
+            if (!this.flock.isLeader(this)) {
                 double dist = this.getDistanceSq(this.flock.getLeader());
-                if(dist > 360){
+                if (dist > 360) {
                     this.setFlying(true);
                     this.navigator.clearPath();
                     this.airTarget = StymphalianBirdAIAirTarget.getNearbyAirTarget(this.flock.getLeader());
                     this.aiFlightLaunch = false;
-                }else if(!this.flock.getLeader().isFlying()){
+                } else if (!this.flock.getLeader().isFlying()) {
                     this.setFlying(false);
                     this.airTarget = null;
                     this.aiFlightLaunch = false;
                 }
-                if(this.onGround && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS){
+                if (this.onGround && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
                     this.setFlying(false);
                 }
             }
@@ -335,12 +339,12 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         } else if (getAttackTarget() != null) {
             flyTowardsTarget();
         }
-        if(!world.isRemote && this.doesWantToLand() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS){
+        if (!world.isRemote && this.doesWantToLand() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
 
         }
-        if(!world.isRemote && this.onGround && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS){
+        if (!world.isRemote && this.onGround && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
         }
@@ -350,16 +354,16 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             this.flyTicks = 0;
             this.aiFlightLaunch = true;
         }
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             if (aiFlightLaunch && this.launchTicks < 40) {
                 this.launchTicks++;
             } else {
                 this.launchTicks = 0;
                 aiFlightLaunch = false;
             }
-            if(this.isFlying()){
+            if (this.isFlying()) {
                 this.flyTicks++;
-            }else{
+            } else {
                 this.flyTicks = 0;
             }
         }
@@ -368,7 +372,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         } else {
             airBorneCounter = 0;
         }
-        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS && !this.isFlying() && !world.isRemote){
+        if (this.getAnimation() == ANIMATION_SHOOT_ARROWS && !this.isFlying() && !world.isRemote) {
             this.setFlying(true);
             aiFlightLaunch = true;
         }
@@ -380,9 +384,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
-    private boolean isLeaderNotFlying(){
+    private boolean isLeaderNotFlying() {
         return this.flock != null && this.flock.getLeader() != null && !this.flock.getLeader().isFlying();
     }
+
     public void flyAround() {
         if (airTarget != null && this.isFlying()) {
             if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
@@ -416,12 +421,12 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         }
     }
 
-    private float getFlySpeed(boolean y){
+    private float getFlySpeed(boolean y) {
         float speed = 2;
-        if(this.flock != null && !this.flock.isLeader(this) && this.getDistanceSq(this.flock.getLeader()) > 10){
+        if (this.flock != null && !this.flock.isLeader(this) && this.getDistanceSq(this.flock.getLeader()) > 10) {
             speed = 4;
         }
-        if(this.getAnimation() == ANIMATION_SHOOT_ARROWS && !y){
+        if (this.getAnimation() == ANIMATION_SHOOT_ARROWS && !y) {
             speed *= 0.05;
         }
         return speed;
@@ -432,8 +437,11 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
+        if(this.isVictor(entity)){
+            return;
+        }
         super.setAttackTarget(entity);
-        if(this.flock != null && this.flock.isLeader(this) && entity != null){
+        if (this.flock != null && this.flock.isLeader(this) && entity != null) {
             this.flock.onLeaderAttack(entity);
         }
     }
@@ -450,8 +458,8 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     public boolean doesWantToLand() {
-        if(this.flock != null){
-            if(!this.flock.isLeader(this) && this.flock.getLeader() != null){
+        if (this.flock != null) {
+            if (!this.flock.isLeader(this) && this.flock.getLeader() != null) {
                 return this.flock.getLeader().doesWantToLand();
             }
         }

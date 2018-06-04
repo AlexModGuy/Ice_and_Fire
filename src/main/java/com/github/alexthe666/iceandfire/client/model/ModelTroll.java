@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -223,6 +224,58 @@ public class ModelTroll extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityTroll) entity);
         animator.update(entity);
+        animator.setAnimation(EntityTroll.ANIMATION_STRIKE_HORIZONTAL);
+        animator.startKeyframe(10);
+        this.rotate(animator, body, 0, 31, 0);
+        this.rotate(animator, upperBody, 18, 39, 0);
+        this.rotate(animator, leftarm, 18, 0, -10);
+        this.rotate(animator, rightarm, 41, 57, 65);
+        this.rotate(animator, rightarm2, 50, 0, 0);
+        this.rotate(animator, rightleg, -15, 57, 5);
+        this.rotate(animator, leftleg, -13, -44, -5);
+        animator.move(body , 0, 3, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, body, 0, 31, 0);
+        this.rotate(animator, upperBody, 18, -39, 0);
+        this.rotate(animator, leftarm, 18, 0, -10);
+        this.rotate(animator, rightarm, -60, -40, -35);
+        this.rotate(animator, rightarm2, 80, -45, 40);
+        this.rotate(animator, rightleg, -15, 57, 5);
+        this.rotate(animator, leftleg, -13, -44, -5);
+        this.rotate(animator, log1, 15, 0, 0);
+        animator.move(body , 0, 3, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+
+        animator.setAnimation(EntityTroll.ANIMATION_STRIKE_VERTICAL);
+        animator.startKeyframe(7);
+        this.rotate(animator, upperBody, -30, 0, 0);
+        this.rotate(animator, rightleg, -15, 57, 5);
+        this.rotate(animator, leftleg, -13, -44, -5);
+        this.rotate(animator, leftarm, -203, 35, -15);
+        this.rotate(animator, rightarm, -212, -40, 25);
+        this.rotate(animator, leftarm2, 18, 0, 0);
+        this.rotate(animator, rightarm2, 122, -13, 7);
+        this.rotate(animator, log1, 0, -40, 0);
+        animator.move(body, 0, 3, 0);
+        animator.move(log1, 5, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, body, 5, 0, 0);
+        this.rotate(animator, upperBody, 35, 0, 0);
+        this.rotate(animator, rightleg, -15, 57, 5);
+        this.rotate(animator, leftleg, -13, -44, -5);
+        this.rotate(animator, leftarm, -103, 20, -15);
+        this.rotate(animator, rightarm, -112, -20, 25);
+        this.rotate(animator, leftarm2, 18, 0, 0);
+        this.rotate(animator, rightarm2, 122, -13, 7);
+        this.rotate(animator, log1, 90, 25, 20);
+        animator.move(body, 0, 3, 0);
+        animator.move(log1, 2, 0, 0);
+        animator.endKeyframe();
+        animator.setStaticKeyframe(3);
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityTroll entity) {

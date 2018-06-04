@@ -34,7 +34,7 @@ public enum EnumTroll {
             }
         }
         if (types.isEmpty()) {
-            return values()[new Random().nextInt(values().length - 1)];
+            return values()[new Random().nextInt(values().length)];
         } else {
             return types.get(new Random().nextInt(types.size()));
         }
@@ -42,7 +42,7 @@ public enum EnumTroll {
     }
 
     public static Weapon getWeaponForType(EnumTroll troll){
-        return troll.weapons[new Random().nextInt(troll.weapons.length - 1)];
+        return troll.weapons[new Random().nextInt(troll.weapons.length)];
     }
 
     public enum Weapon {

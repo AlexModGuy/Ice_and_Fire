@@ -5,7 +5,9 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.*;
@@ -114,7 +116,7 @@ public class DragonUtils {
 		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
-		BlockPos radialPos = new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ);
+		BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ));
 		BlockPos ground = bird.world.getHeight(radialPos);
 		int distFromGround = (int) bird.posY - ground.getY();
 		int flightHeight = (int) Math.min(IceAndFire.CONFIG.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16): ground.getY() + bird.getRNG().nextInt(16));
@@ -124,6 +126,17 @@ public class DragonUtils {
 			return newPos;
 		}
 		return null;
+	}
+
+	private static BlockPos getStymphalianFearPos(EntityStymphalianBird bird, BlockPos fallback){
+		if(bird.getVictor() != null && bird.getVictor() instanceof EntityCreature){
+			Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature)bird.getVictor(), 16, IceAndFire.CONFIG.stymphalianBirdFlightHeight, new Vec3d(bird.getVictor().posX, bird.getVictor().posY, bird.getVictor().posZ));
+			if(vec3d != null){
+				BlockPos pos = new BlockPos(vec3d);
+				return new BlockPos(pos.getX(), 0, pos.getZ());
+			}
+		}
+		return fallback;
 	}
 
 	private static float getStymphalianFlockDirection(EntityStymphalianBird bird){

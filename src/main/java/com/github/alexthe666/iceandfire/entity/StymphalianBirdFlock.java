@@ -99,4 +99,10 @@ public class StymphalianBirdFlock {
             }
         }
     }
+
+    public void setFearTarget(EntityLivingBase living) {
+        for(EntityStymphalianBird bird : members){
+            bird.setVictor(living);
+        }
+    }
 }
