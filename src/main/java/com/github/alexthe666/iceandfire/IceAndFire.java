@@ -22,6 +22,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -78,7 +79,9 @@ public class IceAndFire {
 
 		ModRecipes.init();
 		ModVillagers.INSTANCE.init();
-		IceAndFireAspectRegistry.register();
+		if (Loader.isModLoaded("thaumcraft")) {
+			IceAndFireAspectRegistry.register();
+		}
 		logger.info("The watcher waits on the northern wall");
 		logger.info("A daughter picks up a warrior's sword");
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
