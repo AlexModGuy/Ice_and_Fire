@@ -181,6 +181,12 @@ public class IceAndFireConfig {
 	public int stymphalianBirdFlockLength = 40;
 	@ConfigEntry(category = "stymphalian birds", comment = "How high stymphalian birds can fly, in Y height.")
 	public int stymphalianBirdFlightHeight = 80;
+
+
+	@ConfigEntry(category = "trolls", comment = "Maximum troll health")
+	public double trollMaxHealth = 50;
+	@ConfigEntry(category = "trolls", comment = "How much damage trolls cause with their kick and stomp attacks.")
+	public double trollAttackStrength = 10;
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

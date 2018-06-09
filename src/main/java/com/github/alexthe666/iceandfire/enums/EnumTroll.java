@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -38,7 +40,6 @@ public enum EnumTroll {
         } else {
             return types.get(new Random().nextInt(types.size()));
         }
-
     }
 
     public static Weapon getWeaponForType(EnumTroll troll){
@@ -47,12 +48,11 @@ public enum EnumTroll {
 
     public enum Weapon {
         AXE, COLUMN, COLUMN_FOREST, COLUMN_FROST, HAMMER, TRUNK, TRUNK_FROST;
-
         public ResourceLocation TEXTURE;
-
+        public Item item;
         Weapon(){
             TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/weapon/weapon_" + this.name().toLowerCase() + ".png");
-
+            item = new ItemTrollWeapon(this);
         }
 
     }

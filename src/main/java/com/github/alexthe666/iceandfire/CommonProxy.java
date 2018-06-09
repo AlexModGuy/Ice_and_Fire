@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.recipe.RecipeShinyScales;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
@@ -181,6 +182,9 @@ public class CommonProxy {
 			event.getRegistry().register(armor.chestplate);
 			event.getRegistry().register(armor.leggings);
 			event.getRegistry().register(armor.boots);
+		}
+		for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
+			event.getRegistry().register(weapon.item);
 		}
 	}
 

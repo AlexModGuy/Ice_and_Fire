@@ -135,6 +135,13 @@ item.iceandfire.rotten_egg.name=Rotten Egg
 item.iceandfire.stymphalian_bird_feather.name=Stymphalian Bird Feather
 item.iceandfire.stymphalian_arrow.name=Stymphalian Arrow
 item.iceandfire.stymphalian_arrow.desc=The metallic fletching enables the arrow to soar like a bird.
+item.iceandfire.troll_weapon.axe.name=Troll's Axe
+item.iceandfire.troll_weapon.column.name=Troll's Stone Column
+item.iceandfire.troll_weapon.column_forest.name=Troll's Mossy Column
+item.iceandfire.troll_weapon.column_frost.name=Troll's Frosted Axe
+item.iceandfire.troll_weapon.hammer.name=Troll's Hammer
+item.iceandfire.troll_weapon.trunk.name=Troll's Tree Trunk
+item.iceandfire.troll_weapon.trunk_frost.name=Troll's Frosted Tree Trunk
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge

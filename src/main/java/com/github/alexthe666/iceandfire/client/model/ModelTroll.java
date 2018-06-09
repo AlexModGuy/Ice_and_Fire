@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -215,7 +216,13 @@ public class ModelTroll extends ModelDragonBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
+        if(entity instanceof EntityTroll && EntityGorgon.isStoneMob((EntityTroll)entity)){
+            animateStatue((EntityTroll)entity);
+            this.log1.showModel = false;
+        }else{
+            animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
+            this.log1.showModel = true;
+        }
         this.body.render(f5);
 
     }
@@ -279,6 +286,13 @@ public class ModelTroll extends ModelDragonBase {
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityTroll entity) {
+        this.progressRotation(head, entity.stoneProgress, (float)Math.toRadians(-31), 0.0F, 0.0F);
+        this.progressRotation(jaw, entity.stoneProgress, (float)Math.toRadians(54), 0.0F, 0.0F);
+        this.progressRotation(leftarm, entity.stoneProgress, (float)Math.toRadians(10), (float)Math.toRadians(-73), (float)Math.toRadians(-60));
+        this.progressRotation(leftarm2, entity.stoneProgress, (float)Math.toRadians(-80), 0.0F, 0.0F);
+        this.progressRotation(rightarm, entity.stoneProgress, (float)Math.toRadians(-101), (float)Math.toRadians(70), 0);
+        this.progressRotation(rightarm2, entity.stoneProgress, (float)Math.toRadians(-40), 0.0F, 0.0F);
+
         float speed_walk = 0.2F;
         float speed_idle = 0.05F;
         float degree_walk = 0.75F;
@@ -306,6 +320,17 @@ public class ModelTroll extends ModelDragonBase {
         this.faceTarget(f3, f4, 1, this.head);
 
     }
+
+    public void animateStatue(EntityTroll troll) {
+        this.resetToDefaultPose();
+        this.progressRotation(head, troll.stoneProgress, (float)Math.toRadians(-31), 0.0F, 0.0F);
+        this.progressRotation(jaw, troll.stoneProgress, (float)Math.toRadians(54), 0.0F, 0.0F);
+        this.progressRotation(leftarm, troll.stoneProgress, (float)Math.toRadians(10), (float)Math.toRadians(-73), (float)Math.toRadians(-60));
+        this.progressRotation(leftarm2, troll.stoneProgress, (float)Math.toRadians(-80), 0.0F, 0.0F);
+        this.progressRotation(rightarm, troll.stoneProgress, (float)Math.toRadians(-101), (float)Math.toRadians(70), 0);
+        this.progressRotation(rightarm2, troll.stoneProgress, (float)Math.toRadians(-40), 0.0F, 0.0F);
+    }
+
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -13,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,8 +72,10 @@ public class EventClient {
 						try{
 						Render render = entry.getValue().createRenderFor(Minecraft.getMinecraft().getRenderManager());
 						if (render != null && render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
-							((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
-							((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
+							LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
+							LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
+							((RenderLivingBase) render).addLayer(stoneLayer);
+							((RenderLivingBase) render).addLayer(crackLayer);
 						}
 						}catch(NullPointerException exp){
 							System.out.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
@@ -84,9 +88,10 @@ public class EventClient {
 				for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : entityRendersOld.entrySet()) {
 					Render render = entry.getValue();
 					if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
-						((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
-						((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
-
+						LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
+						LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
+						((RenderLivingBase) render).addLayer(stoneLayer);
+						((RenderLivingBase) render).addLayer(crackLayer);
 					}
 				}
 			}

@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
@@ -49,8 +50,8 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F);
 	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL = new ModelDeathWormArmor(0.5F);
 	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL_LEGS = new ModelDeathWormArmor(0.2F);
-
 	private FontRenderer bestiaryFontRenderer;
+	private static IceAndFireTEISR TEISR = new IceAndFireTEISR();
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -220,7 +221,10 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.rotten_egg, 0, new ModelResourceLocation("iceandfire:rotten_egg", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_bird_feather, 0, new ModelResourceLocation("iceandfire:stymphalian_bird_feather", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_arrow, 0, new ModelResourceLocation("iceandfire:stymphalian_arrow", "inventory"));
-
+		for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
+			weapon.item.setTileEntityItemStackRenderer(TEISR);
+			ModelLoader.setCustomModelResourceLocation(weapon.item, 0, new ModelResourceLocation("iceandfire:troll_weapon", "inventory"));
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -361,4 +365,6 @@ public class ClientProxy extends CommonProxy {
 	public Object getFontRenderer() {
 		return this.bestiaryFontRenderer;
 	}
+
+
 }
