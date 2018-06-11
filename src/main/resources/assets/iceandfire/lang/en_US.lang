@@ -158,6 +158,10 @@ item.iceandfire.mountain_troll_leather_helmet.name=Mountain Troll Leather Helmet
 item.iceandfire.mountain_troll_leather_chestplate.name=Mountain Troll Leather Chestplate
 item.iceandfire.mountain_troll_leather_leggings.name=Mountain Troll Leather Leggings
 item.iceandfire.mountain_troll_leather_boots.name=Mountain Troll Leather Boots
+item.iceandfire.troll_leather_armor_helmet.desc=-10%% Projectile Damage
+item.iceandfire.troll_leather_armor_chestplate.desc=-30%% Projectile Damage
+item.iceandfire.troll_leather_armor_leggings.desc=-20%% Projectile Damage
+item.iceandfire.troll_leather_armor_boots.desc=-10%% Projectile Damage
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge

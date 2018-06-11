@@ -22,11 +22,13 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,10 +40,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -70,6 +69,28 @@ public class EventLiving {
 			}
 		}
 	}*/
+
+	@SubscribeEvent
+	public void onEntityDamage(LivingHurtEvent event) {
+		if(event.getSource().isProjectile()){
+			float multi = 1;
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.HEAD)) {
+				multi -= 0.1;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.CHEST)) {
+				multi -= 0.3;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.LEGS)) {
+				multi -= 0.2;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.FEET)) {
+				multi -= 0.1;
+			}
+			event.setAmount(event.getAmount() * multi);
+		}
+
+	}
+
 	@SubscribeEvent
 	public void onEntityDrop(LivingDropsEvent event) {
 		if (event.getEntityLiving() instanceof EntityWitherSkeleton) {

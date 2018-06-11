@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +15,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,14 +52,6 @@ public class ItemTrollArmor extends ItemArmor {
         return "";
     }
 
-    @SubscribeEvent
-    public void onEntityDamage(LivingHurtEvent event, DamageSource source) {
-        Entity attacker = source.getImmediateSource();
-        if (attacker != null) {
-            event.setAmount(event.getAmount() * 0.8F);
-        }
-    }
-
     @SideOnly(Side.CLIENT)
     public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
         return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 7 : 6);
@@ -65,5 +59,11 @@ public class ItemTrollArmor extends ItemArmor {
 
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         return "iceandfire:textures/models/armor/armor_troll_" + troll.name().toLowerCase() + (renderIndex == 2 ? "_legs.png" : ".png");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("item.iceandfire.troll_leather_armor_" + getArmorPart(this.armorType) + ".desc"));
     }
 }

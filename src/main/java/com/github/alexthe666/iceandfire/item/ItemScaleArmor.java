@@ -33,14 +33,6 @@ public class ItemScaleArmor extends ItemArmor {
 		this.setCreativeTab(IceAndFire.TAB);
 	}
 
-	@SubscribeEvent
-	public void onEntityDamage(LivingHurtEvent event, DamageSource source) {
-		Entity attacker = source.getImmediateSource();
-		if (attacker != null) {
-			event.setAmount(event.getAmount() * 0.8F);
-		}
-	}
-
 	@SideOnly(Side.CLIENT)
 	public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
 		return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (renderIndex == 2 ? 1 : 0) : (renderIndex == 2 ? 3 : 2)));
