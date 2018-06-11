@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagInt;
@@ -101,7 +102,18 @@ public class IceAndFireAspectRegistry {
         for(int i = 0; i < EnumHippogryphTypes.values().length; i++){
             ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.hippogryph_egg, 1, i), new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.AIR, 5).add(Aspect.DESIRE, 20).add(Aspect.FLIGHT, 8).add(Aspect.BEAST, 6));
         }
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.rotten_egg), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 2).add(Aspect.LIFE, 5).add(Aspect.DEATH, 5).add(Aspect.UNDEAD, 5).add(Aspect.ENTROPY, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.stymphalian_bird_feather), new AspectList().add(Aspect.BEAST, 5).add(IceAndFireAspectRegistry.MYTHICAL, 15).add(Aspect.DESIRE, 5).add(Aspect.METAL, 7).add(Aspect.FLIGHT, 3));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.stymphalian_arrow), new AspectList().add(Aspect.BEAST, 2).add(IceAndFireAspectRegistry.MYTHICAL, 5).add(Aspect.DESIRE, 2).add(Aspect.PROTECT, 2).add(Aspect.METAL, 7).add(Aspect.FLIGHT, 3).add(Aspect.CRAFT, 3));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.troll_tusk), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.DEATH, 5).add(Aspect.BEAST, 5).add(Aspect.AVERSION, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.stone_statue), new AspectList().add(Aspect.BEAST, 20).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.DEATH, 10).add(Aspect.MAGIC, 5).add(Aspect.AVERSION, 2).add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5));
 
+        for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
+            ThaumcraftApi.registerObjectTag(new ItemStack(weapon.item), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.DEATH, 5).add(Aspect.PROTECT, 15).add(Aspect.CRAFT, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5));
+        }
+        ThaumcraftApi.registerObjectTag(new ItemStack(EnumTroll.MOUNTAIN.leather), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.EARTH, 7));
+        ThaumcraftApi.registerObjectTag(new ItemStack(EnumTroll.FROST.leather), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.COLD, 7));
+        ThaumcraftApi.registerObjectTag(new ItemStack(EnumTroll.FOREST.leather), new AspectList().add(Aspect.BEAST, 10).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.PLANT, 7));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.lectern), new AspectList().add(Aspect.PLANT, 8).add(IceAndFireAspectRegistry.MYTHICAL, 10).add(Aspect.SENSES, 10).add(Aspect.MIND, 12));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.podium, 1, 0), new AspectList().add(Aspect.PLANT, 7).add(IceAndFireAspectRegistry.MYTHICAL, 3).add(Aspect.SENSES, 4).add(Aspect.DESIRE, 20));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.podium, 1, 1), new AspectList().add(Aspect.PLANT, 7).add(IceAndFireAspectRegistry.MYTHICAL, 3).add(Aspect.SENSES, 4).add(Aspect.DESIRE, 20));
@@ -141,6 +153,7 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 3), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 4), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 5), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.eggInIce), new AspectList().add(IceAndFireAspectRegistry.DRAGON, 5).add(Aspect.COLD, 20).add(Aspect.DESIRE, 20).add(Aspect.BEAST, 6));
 
         ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(IceAndFireAspectRegistry.DRAGON, 10).add(Aspect.MAGIC, 2));
         ThaumcraftApi.registerEntityTag("dragonskull", new AspectList().add(Aspect.DEATH, 5).add(Aspect.DESIRE, 5).add(IceAndFireAspectRegistry.DRAGON, 10).add(Aspect.MAGIC, 2));
@@ -157,6 +170,7 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerEntityTag("deathworm", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.DEATH, 15).add(Aspect.MOTION, 5).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(Aspect.ELDRITCH, 15));
         ThaumcraftApi.registerEntityTag("stymphalianbird", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.METAL, 20).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 15).add(Aspect.AVERSION, 15));
         ThaumcraftApi.registerEntityTag("cockatrice", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.ALCHEMY, 20).add(Aspect.DARKNESS, 20).add(Aspect.AVERSION, 15));
+        ThaumcraftApi.registerEntityTag("if_troll", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 30).add(Aspect.BEAST, 20).add(Aspect.AVERSION, 10).add(Aspect.DARKNESS, 20).add(Aspect.MAGIC, 15).add(Aspect.MAN, 5));
 
     }
 }

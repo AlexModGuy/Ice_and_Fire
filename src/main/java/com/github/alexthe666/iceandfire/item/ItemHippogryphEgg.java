@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,14 +30,12 @@ public class ItemHippogryphEgg extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.hippogryph_egg");
 		this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
+		this.setHasSubtypes(true);
 	}
 
 	public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
 		EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-		ItemStack stack = new ItemStack(ModItems.hippogryph_egg);
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("Type", eggType.ordinal());
-		stack.setTagCompound(nbt);
+		ItemStack stack = new ItemStack(ModItems.hippogryph_egg, 1, eggType.ordinal());
 		return stack;
 	}
 
@@ -51,16 +50,9 @@ public class ItemHippogryphEgg extends Item {
 		if (tab == this.getCreativeTab()) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 				if (!type.developer) {
-					items.add(createEggStack(type, type));
+					items.add(new ItemStack(this, 1, type.ordinal()));
 				}
 			}
-		}
-	}
-
-	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
 		}
 	}
 
@@ -86,9 +78,7 @@ public class ItemHippogryphEgg extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (stack.getTagCompound() != null) {
-			String type = EnumHippogryphTypes.values()[stack.getTagCompound().getInteger("Type")].name().toLowerCase();
-			tooltip.add(StatCollector.translateToLocal("entity.hippogryph." + type));
-		}
+		String type = EnumHippogryphTypes.values()[MathHelper.clamp(stack.getMetadata(), 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
+		tooltip.add(StatCollector.translateToLocal("entity.hippogryph." + type));
 	}
 }
