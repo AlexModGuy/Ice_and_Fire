@@ -1,10 +1,16 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +26,28 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE_STONE;
     private BiomeDictionary.Type spawnBiome;
     private Weapon[] weapons;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
+    public Item leather;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_helmet")
+    public Item helmet;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_chestplate")
+    public Item chestplate;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leggings")
+    public Item leggings;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_boots")
+    public Item boots;
 
     EnumTroll(BiomeDictionary.Type biome, Weapon... weapons){
         spawnBiome = biome;
         this.weapons = weapons;
         TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + ".png");
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_stone.png");
+        leather = new ItemTrollLeather(this);
+        helmet = new ItemTrollArmor(this, 0, EntityEquipmentSlot.HEAD);
+        chestplate = new ItemTrollArmor(this, 1, EntityEquipmentSlot.CHEST);
+        leggings = new ItemTrollArmor(this, 2, EntityEquipmentSlot.LEGS);
+        boots = new ItemTrollArmor(this, 3, EntityEquipmentSlot.FEET);
+
     }
 
     public static EnumTroll getBiomeType(Biome biome) {

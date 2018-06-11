@@ -67,7 +67,7 @@ public class ItemTrollWeapon extends ItemSword {
     }
 
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(entityIn instanceof EntityPlayer){
+        if(entityIn instanceof EntityPlayer&& isSelected){
             EntityPlayer player = (EntityPlayer)entityIn;
             if(player.getCooledAttackStrength(0) < 0.95 && player.swingProgress > 0){
                 player.swingProgressInt--;

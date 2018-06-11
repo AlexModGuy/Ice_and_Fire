@@ -50,6 +50,8 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F);
 	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL = new ModelDeathWormArmor(0.5F);
 	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL_LEGS = new ModelDeathWormArmor(0.2F);
+	private static final ModelTrollArmor TROLL_ARMOR_MODEL = new ModelTrollArmor(0.75F);
+	private static final ModelTrollArmor TROLL_ARMOR_MODEL_LEGS = new ModelTrollArmor(0.35F);
 	private FontRenderer bestiaryFontRenderer;
 	private static IceAndFireTEISR TEISR = new IceAndFireTEISR();
 
@@ -225,7 +227,16 @@ public class ClientProxy extends CommonProxy {
 			weapon.item.setTileEntityItemStackRenderer(TEISR);
 			ModelLoader.setCustomModelResourceLocation(weapon.item, 0, new ModelResourceLocation("iceandfire:troll_weapon", "inventory"));
 		}
+		for (EnumTroll troll : EnumTroll.values()) {
+			ModelLoader.setCustomModelResourceLocation(troll.leather, 0, new ModelResourceLocation("iceandfire:troll_leather_" + troll.name().toLowerCase(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.helmet, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_helmet", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.chestplate, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_chestplate", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.leggings, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_leggings", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.boots, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_boots", "inventory"));
+		}
+		ModelLoader.setCustomModelResourceLocation(ModItems.troll_tusk, 0, new ModelResourceLocation("iceandfire:troll_tusk", "inventory"));
 	}
+
 
 	@SideOnly(Side.CLIENT)
 	public static void renderArmors(EnumDragonArmor armor) {
@@ -358,6 +369,10 @@ public class ClientProxy extends CommonProxy {
 				return DEATHWORM_ARMOR_MODEL;
 			case 5:
 				return DEATHWORM_ARMOR_MODEL_LEGS;
+			case 6:
+				return TROLL_ARMOR_MODEL;
+			case 7:
+				return TROLL_ARMOR_MODEL_LEGS;
 		}
 		return null;
 	}

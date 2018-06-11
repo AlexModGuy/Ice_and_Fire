@@ -186,6 +186,13 @@ public class CommonProxy {
 		for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
 			event.getRegistry().register(weapon.item);
 		}
+		for (EnumTroll troll : EnumTroll.values()) {
+			event.getRegistry().register(troll.leather);
+			event.getRegistry().register(troll.helmet);
+			event.getRegistry().register(troll.chestplate);
+			event.getRegistry().register(troll.leggings);
+			event.getRegistry().register(troll.boots);
+		}
 	}
 
 	@SubscribeEvent

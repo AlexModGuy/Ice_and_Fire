@@ -283,6 +283,12 @@ public class ModelTroll extends ModelDragonBase {
         animator.endKeyframe();
         animator.setStaticKeyframe(3);
         animator.resetKeyframe(5);
+
+        animator.setAnimation(EntityTroll.ANIMATION_SPEAK);
+        animator.startKeyframe(5);
+        this.rotate(animator, jaw, 20, 0, 0);
+        animator.resetKeyframe(5);
+
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityTroll entity) {

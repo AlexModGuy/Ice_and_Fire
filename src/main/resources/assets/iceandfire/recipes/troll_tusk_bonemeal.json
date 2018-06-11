@@ -1,0 +1,14 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:troll_tusk",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "minecraft:dye",
+    "data": 15,
+    "count": 5
+  }
+}

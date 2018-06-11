@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -49,6 +50,10 @@ public class ModRecipes {
         ModItems.yellow_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 0));
         ModItems.white_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 1));
         ModItems.red_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 2));
+        ModItems.trollWeapon.setRepairItem(new ItemStack(Blocks.STONE));
+        ModItems.troll_mountain.setRepairItem(new ItemStack(EnumTroll.MOUNTAIN.leather));
+        ModItems.troll_forest.setRepairItem(new ItemStack(EnumTroll.FOREST.leather));
+        ModItems.troll_frost.setRepairItem(new ItemStack(EnumTroll.FROST.leather));
 
 
     }

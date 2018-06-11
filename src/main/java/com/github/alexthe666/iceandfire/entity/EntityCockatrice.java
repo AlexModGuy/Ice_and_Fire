@@ -353,15 +353,25 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (this.isTamed() && this.isOwner(player)) {
-            this.setCommand(this.getCommand() + 1);
-            if (this.getCommand() > 2) {
-                this.setCommand(0);
+            if(player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS){
+                if(this.getHealth() < this.getMaxHealth()){
+                    this.heal(4);
+                    this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                    player.getHeldItem(hand).shrink(1);
+                }
+                return true;
+            }else{
+                this.setCommand(this.getCommand() + 1);
+                if (this.getCommand() > 2) {
+                    this.setCommand(0);
+                }
+                if (world.isRemote) {
+                    player.sendMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()));
+                }
+                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                return true;
             }
-            if (world.isRemote) {
-                player.sendMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()));
-            }
-            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-            return true;
+
         }
         return super.processInteract(player, hand);
     }
@@ -369,6 +379,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isSitting() && this.getAttackTarget() != null){
+            this.setAttackTarget(null);
+        }
         if (!world.isRemote) {
             if (this.getAttackTarget() == null || this.getAttackTarget().isDead) {
                 this.setTargetedEntity(0);
@@ -406,7 +419,6 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         boolean sitting = isSitting();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
-            System.out.println(world.isRemote);
         } else if (!sitting && sitProgress > 0.0F) {
             sitProgress -= 0.5F;
         }
@@ -529,6 +541,20 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             forward = 0;
         }
         super.travel(strafe, forward, vertical);
+    }
+
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
     }
 
     @Nullable

@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "T T",
+    "T T"
+  ],
+  "key": {
+    "T": {
+      "item": "iceandfire:frost_troll_leather",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:frost_troll_leather_boots",
+    "data": 0
+  }
+}

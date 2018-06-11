@@ -435,6 +435,20 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public void fall(float distance, float damageMultiplier) {
     }
 
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
+    }
+
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
         if(this.isVictor(entity)){

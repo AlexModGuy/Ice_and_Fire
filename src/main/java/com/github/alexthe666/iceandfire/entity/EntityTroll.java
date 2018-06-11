@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAITargetSheepPlayers;
@@ -21,6 +22,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -28,9 +30,12 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -55,6 +60,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
     private static final DataParameter<Integer> WEAPON = EntityDataManager.<Integer>createKey(EntityTroll.class, DataSerializers.VARINT);
     public static Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
+    public static Animation ANIMATION_SPEAK = Animation.create(10);
     public float stoneProgress;
 
     public EntityTroll(World worldIn) {
@@ -156,6 +162,93 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         return livingdata;
     }
 
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float damage) {
+        if (source.damageType.contains("arrow")) {
+            return false;
+        }
+        return super.attackEntityFrom(source, damage);
+    }
+
+    protected void onDeathUpdate() {
+        super.onDeathUpdate();
+        if (this.deathTime == 20 && !this.world.isRemote) {
+            switch(this.getType()){
+                case MOUNTAIN:
+                    if(this.getRNG().nextInt(3) == 0) {
+                        dropItemAt(new ItemStack(Items.EMERALD, this.getRNG().nextInt(1), 0), this.posX, this.posY, this.posZ);
+                    }
+                    break;
+                case FROST:
+                    if(this.getRNG().nextInt(3) == 0) {
+                        dropItemAt(new ItemStack(ModItems.sapphireGem, this.getRNG().nextInt(1), 0), this.posX, this.posY, this.posZ);
+                    }
+                    dropItemAt(new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(3) + 1, 0), this.posX, this.posY, this.posZ);
+                    break;
+                case FOREST:
+                    dropItemAt(new ItemStack(Blocks.BROWN_MUSHROOM, this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
+                    dropItemAt(new ItemStack(Blocks.RED_MUSHROOM, this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
+                    break;
+            }
+            dropItemAt(new ItemStack(this.getType().leather, 1 + this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
+            dropItemAt(new ItemStack(ModItems.troll_tusk, this.getRNG().nextInt(2), 0), this.posX, this.posY, this.posZ);
+            if(this.getRNG().nextInt(3) == 0){
+                ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
+                weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
+                dropItemAt(weaponStack, this.posX, this.posY, this.posZ);
+            }else{
+                ItemStack brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                ItemStack brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                if(this.getWeaponType() == EnumTroll.Weapon.AXE){
+                    brokenDrop = new ItemStack(Items.STICK, this.getRNG().nextInt(2) + 1, 0);
+                    brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN){
+                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
+                    brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN_FOREST){
+                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 1);
+                    brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN_FROST){
+                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1, 2);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.HAMMER){
+                    brokenDrop = new ItemStack(Items.BONE, this.getRNG().nextInt(2) + 1, 0);
+                    brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.TRUNK){
+                    brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
+                    brokenDrop2 = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
+                }
+                if(this.getWeaponType() == EnumTroll.Weapon.TRUNK_FROST){
+                    brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(4) + 1, 1);
+                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1, 2);
+                }
+                dropItemAt(brokenDrop, this.posX, this.posY, this.posZ);
+                dropItemAt(brokenDrop2, this.posX, this.posY, this.posZ);
+
+            }
+        }
+    }
+
+    @Nullable
+    private EntityItem dropItemAt(ItemStack stack, double x, double y, double z) {
+        if(stack.getCount() > 0){
+            EntityItem entityitem = new EntityItem(this.world, x, y, z, stack);
+            entityitem.setDefaultPickupDelay();
+            if (captureDrops)
+                this.capturedDrops.add(entityitem);
+            else
+                this.world.spawnEntity(entityitem);
+            return entityitem;
+        }
+        return null;
+
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
         boolean stone = EntityGorgon.isStoneMob(this);
@@ -166,7 +259,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
             stoneProgress -= 2F;
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
-            this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1));
+            this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
         }
         if (this.world.isDaytime() && !this.world.isRemote) {
             float f = this.getBrightness();
@@ -249,6 +342,20 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
+    }
+
     @Override
     public int getAnimationTick() {
         return animationTick;
@@ -271,6 +378,6 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{NO_ANIMATION, ANIMATION_STRIKE_HORIZONTAL, ANIMATION_STRIKE_VERTICAL};
+        return new Animation[]{NO_ANIMATION, ANIMATION_STRIKE_HORIZONTAL, ANIMATION_STRIKE_VERTICAL, ANIMATION_SPEAK};
     }
 }
