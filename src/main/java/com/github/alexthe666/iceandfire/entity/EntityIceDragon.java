@@ -84,7 +84,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(SWIMMING, false);
+		this.dataManager.register(SWIMMING, Boolean.valueOf(false));
 	}
 
 	@Override
@@ -436,7 +436,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public boolean isSwimming() {
 		if (world.isRemote) {
-			boolean swimming = this.dataManager.get(SWIMMING);
+			boolean swimming = this.dataManager.get(SWIMMING).booleanValue();
 			this.isSwimming = swimming;
 			return swimming;
 		}

@@ -105,7 +105,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(VICTOR_ENTITY, Optional.absent());
-        this.dataManager.register(FLYING, false);
+        this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     public boolean isFlying() {
         if (world.isRemote) {
-            return this.isFlying = this.dataManager.get(FLYING);
+            return this.isFlying = this.dataManager.get(FLYING).booleanValue();
         }
         return isFlying;
     }

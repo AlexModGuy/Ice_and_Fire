@@ -7,14 +7,12 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
-import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,8 +22,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -41,7 +37,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -185,10 +180,10 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VARIANT, 0);
-        this.dataManager.register(SCALE, 1F);
-        this.dataManager.register(CONTROL_STATE, (byte) 0);
-        this.dataManager.register(WORM_AGE, 10);
+        this.dataManager.register(VARIANT, Integer.valueOf(0));
+        this.dataManager.register(SCALE, Float.valueOf(1F));
+        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
+        this.dataManager.register(WORM_AGE, Integer.valueOf(10));
         this.dataManager.register(HOME, BlockPos.ORIGIN);
     }
 
@@ -213,7 +208,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE);
+        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -222,40 +217,41 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE);
+        return Byte.valueOf(dataManager.get(CONTROL_STATE));
     }
 
     public void setControlState(byte state) {
-        dataManager.set(CONTROL_STATE, state);
+        dataManager.set(CONTROL_STATE, Byte.valueOf(state));
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT);
+        return Integer.valueOf(this.dataManager.get(VARIANT).intValue());
     }
 
     public void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
 
     public BlockPos getWormHome() {
-        return this.dataManager.get(HOME);
+        return (BlockPos)this.dataManager.get(HOME);
     }
 
     public void setWormHome(BlockPos home) {
-        this.dataManager.set(HOME, home);
+        if(home instanceof BlockPos){
+            this.dataManager.set(HOME, (BlockPos)home);
+        }
     }
 
-
     public int getWormAge() {
-        return Math.max(1, this.dataManager.get(WORM_AGE));
+        return Math.max(1, Integer.valueOf(dataManager.get(WORM_AGE).intValue()));
     }
 
     public void setWormAge(int age) {
-        this.dataManager.set(WORM_AGE, age);
+        this.dataManager.set(WORM_AGE, Integer.valueOf(age));
     }
 
     public float getScale() {
-        return this.dataManager.get(SCALE);
+        return Float.valueOf(this.dataManager.get(SCALE).floatValue());
     }
 
     public float getScaleForAge() {
@@ -263,7 +259,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public void setDeathWormScale(float scale) {
-        this.dataManager.set(SCALE, scale);
+        this.dataManager.set(SCALE, Float.valueOf(scale));
         this.updateAttributes();
         clearSegments();
         if (!this.world.isRemote) {
@@ -668,15 +664,15 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public boolean up() {
-        return (dataManager.get(CONTROL_STATE) & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
     public boolean dismount() {
-        return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
     public boolean attack() {
-        return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
     public void up(boolean up) {

@@ -350,7 +350,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     public boolean isSinging() {
         if (world.isRemote) {
-            return this.isSinging = this.dataManager.get(SINGING);
+            return this.isSinging = this.dataManager.get(SINGING).booleanValue();
         }
         return isSinging;
     }
@@ -369,7 +369,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     public boolean isSwimming() {
         if (world.isRemote) {
-            return this.isSwimming = this.dataManager.get(SWIMMING);
+            return this.isSwimming = this.dataManager.get(SWIMMING).booleanValue();
         }
         return isSwimming;
     }
@@ -386,7 +386,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public boolean isAgressive() {
-        return this.dataManager.get(AGGRESSIVE);
+        return this.dataManager.get(AGGRESSIVE).booleanValue();
     }
 
     public void setCharmed(boolean aggressive) {
@@ -394,7 +394,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public boolean isCharmed() {
-        return this.dataManager.get(CHARMED);
+        return this.dataManager.get(CHARMED).booleanValue();
     }
 
     public void setHairColor(int hairColor) {
@@ -402,7 +402,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public int getHairColor() {
-        return this.dataManager.get(HAIR_COLOR);
+        return this.dataManager.get(HAIR_COLOR).intValue();
     }
 
     public void setSingingPose(int pose) {
@@ -410,7 +410,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public int getSingingPose() {
-        return this.dataManager.get(SING_POSE);
+        return this.dataManager.get(SING_POSE).intValue();
     }
 
     protected void applyEntityAttributes() {
@@ -423,12 +423,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(HAIR_COLOR, 0);
-        this.dataManager.register(SING_POSE, 0);
-        this.dataManager.register(AGGRESSIVE, false);
-        this.dataManager.register(SINGING, false);
-        this.dataManager.register(SWIMMING, false);
-        this.dataManager.register(CHARMED, false);
+        this.dataManager.register(HAIR_COLOR, Integer.valueOf(0));
+        this.dataManager.register(SING_POSE, Integer.valueOf(0));
+        this.dataManager.register(AGGRESSIVE, Boolean.valueOf(false));
+        this.dataManager.register(SINGING, Boolean.valueOf(false));
+        this.dataManager.register(SWIMMING, Boolean.valueOf(false));
+        this.dataManager.register(CHARMED, Boolean.valueOf(false));
     }
 
     @Override

@@ -122,7 +122,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(BLINDED, false);
+        this.dataManager.register(BLINDED, Boolean.valueOf(false));
     }
 
     @Override
@@ -138,11 +138,11 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     public void setBlinded(boolean blind) {
-        this.dataManager.set(BLINDED, blind);
+        this.dataManager.set(BLINDED, Boolean.valueOf(blind));
     }
 
     public boolean isBlinded() {
-        return this.dataManager.get(BLINDED);
+        return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
 

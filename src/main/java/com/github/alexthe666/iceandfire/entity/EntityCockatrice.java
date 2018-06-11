@@ -175,8 +175,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(HEN, false);
-        this.dataManager.register(STARING, false);
+        this.dataManager.register(HEN, Boolean.valueOf(false));
+        this.dataManager.register(STARING, Boolean.valueOf(false));
         this.dataManager.register(TARGET_ENTITY, Integer.valueOf(0));
         this.dataManager.register(TAMING_PLAYER, Integer.valueOf(0));
         this.dataManager.register(TAMING_LEVEL, Integer.valueOf(0));
@@ -303,23 +303,23 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public void setHen(boolean hen) {
-        this.dataManager.set(HEN, hen);
+        this.dataManager.set(HEN, Boolean.valueOf(hen));
     }
 
     public boolean isHen() {
-        return this.dataManager.get(HEN);
+        return this.dataManager.get(HEN).booleanValue();
     }
 
     public void setTamingLevel(int level) {
-        this.dataManager.set(TAMING_LEVEL, level);
+        this.dataManager.set(TAMING_LEVEL, Integer.valueOf(level));
     }
 
     public int getTamingLevel() {
-        return this.dataManager.get(TAMING_LEVEL);
+        return Integer.valueOf(this.dataManager.get(TAMING_LEVEL).intValue());
     }
 
     public void setCommand(int command) {
-        this.dataManager.set(COMMAND, command);
+        this.dataManager.set(COMMAND, Integer.valueOf(command));
 
         if (command == 1) {
             this.setSitting(true);
@@ -329,18 +329,18 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public int getCommand() {
-        return this.dataManager.get(COMMAND);
+        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
     }
 
     public boolean isStaring() {
         if (world.isRemote) {
-            return this.isStaring = this.dataManager.get(STARING);
+            return this.isStaring = Boolean.valueOf(this.dataManager.get(STARING).booleanValue());
         }
         return isStaring;
     }
 
     public void setStaring(boolean staring) {
-        this.dataManager.set(STARING, staring);
+        this.dataManager.set(STARING, Boolean.valueOf(staring));
         if (!world.isRemote) {
             this.isStaring = staring;
         }

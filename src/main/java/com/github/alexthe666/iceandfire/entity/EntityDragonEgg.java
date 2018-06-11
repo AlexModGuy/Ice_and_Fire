@@ -60,12 +60,12 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(DRAGON_TYPE, 0);
-		this.getDataManager().register(DRAGON_AGE, 0);
+		this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
+		this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
 	}
 
 	public EnumDragonEgg getType() {
-		return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE)];
+		return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE).intValue()];
 	}
 
 	public void setType(EnumDragonEgg newtype) {
@@ -78,7 +78,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 	}
 
 	public int getDragonAge() {
-		return this.getDataManager().get(DRAGON_AGE);
+		return this.getDataManager().get(DRAGON_AGE).intValue();
 	}
 
 	public void setDragonAge(int i) {

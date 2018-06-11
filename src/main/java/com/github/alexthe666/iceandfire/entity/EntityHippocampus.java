@@ -108,11 +108,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VARIANT, 0);
-        this.dataManager.register(ARMOR, 0);
-        this.dataManager.register(SADDLE, false);
-        this.dataManager.register(CHESTED, false);
-        this.dataManager.register(CONTROL_STATE, (byte) 0);
+        this.dataManager.register(VARIANT, Integer.valueOf(0));
+        this.dataManager.register(ARMOR, Integer.valueOf(0));
+        this.dataManager.register(SADDLE, Boolean.valueOf(false));
+        this.dataManager.register(CHESTED, Boolean.valueOf(false));
+        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
     }
 
     public boolean canBeSteered() {
@@ -167,7 +167,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE);
+        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -176,7 +176,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE);
+        return dataManager.get(CONTROL_STATE).byteValue();
     }
 
     public void setControlState(byte state) {
@@ -260,15 +260,15 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean up() {
-        return (dataManager.get(CONTROL_STATE) & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
     public boolean down() {
-        return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
     public boolean dismount() {
-        return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
 
@@ -343,7 +343,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
 
     public boolean isSaddled() {
-        return this.dataManager.get(SADDLE);
+        return this.dataManager.get(SADDLE).booleanValue();
     }
 
     public void setSaddled(boolean saddle) {
@@ -351,7 +351,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean isChested() {
-        return this.dataManager.get(CHESTED);
+        return this.dataManager.get(CHESTED).booleanValue();
     }
 
     public void setChested(boolean chested) {
@@ -381,7 +381,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public int getArmor() {
-        return this.dataManager.get(ARMOR);
+        return this.dataManager.get(ARMOR).intValue();
     }
 
     public void setArmor(int armorType) {
@@ -389,7 +389,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT);
+        return this.dataManager.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {

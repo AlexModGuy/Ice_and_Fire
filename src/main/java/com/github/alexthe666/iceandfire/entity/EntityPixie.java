@@ -126,7 +126,7 @@ public class EntityPixie extends EntityTameable {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(COLOR, 0);
+		this.getDataManager().register(COLOR, Integer.valueOf(0));
 	}
 
 	protected void collideWithEntity(Entity entityIn) {
@@ -251,7 +251,7 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public int getColor() {
-		return this.getDataManager().get(COLOR);
+		return this.getDataManager().get(COLOR).intValue();
 	}
 
 	public void setColor(int color) {

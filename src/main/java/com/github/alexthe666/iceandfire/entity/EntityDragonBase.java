@@ -281,43 +281,43 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(HUNGER, 0);
-        this.dataManager.register(AGE_TICKS, 0);
-        this.dataManager.register(GENDER, false);
-        this.dataManager.register(VARIANT, 0);
-        this.dataManager.register(SLEEPING, false);
-        this.dataManager.register(FIREBREATHING, false);
-        this.dataManager.register(HOVERING, false);
-        this.dataManager.register(FLYING, false);
-        this.dataManager.register(HEAD_ARMOR, 0);
-        this.dataManager.register(NECK_ARMOR, 0);
-        this.dataManager.register(BODY_ARMOR, 0);
-        this.dataManager.register(TAIL_ARMOR, 0);
-        this.dataManager.register(DEATH_STAGE, 0);
-        this.dataManager.register(MODEL_DEAD, false);
-        this.dataManager.register(CONTROL_STATE, (byte) 0);
-        this.dataManager.register(TACKLE, false);
+        this.dataManager.register(HUNGER, Integer.valueOf(0));
+        this.dataManager.register(AGE_TICKS, Integer.valueOf(0));
+        this.dataManager.register(GENDER, Boolean.valueOf(false));
+        this.dataManager.register(VARIANT, Integer.valueOf(0));
+        this.dataManager.register(SLEEPING, Boolean.valueOf(false));
+        this.dataManager.register(FIREBREATHING, Boolean.valueOf(false));
+        this.dataManager.register(HOVERING, Boolean.valueOf(false));
+        this.dataManager.register(FLYING, Boolean.valueOf(false));
+        this.dataManager.register(HEAD_ARMOR, Integer.valueOf(0));
+        this.dataManager.register(NECK_ARMOR, Integer.valueOf(0));
+        this.dataManager.register(BODY_ARMOR, Integer.valueOf(0));
+        this.dataManager.register(TAIL_ARMOR, Integer.valueOf(0));
+        this.dataManager.register(DEATH_STAGE, Integer.valueOf(0));
+        this.dataManager.register(MODEL_DEAD, Boolean.valueOf(false));
+        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
+        this.dataManager.register(TACKLE, Boolean.valueOf(false));
 
     }
 
     public boolean up() {
-        return (dataManager.get(CONTROL_STATE) & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
     public boolean down() {
-        return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
     public boolean attack() {
-        return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
     public boolean strike() {
-        return (dataManager.get(CONTROL_STATE) >> 3 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
     }
 
     public boolean dismount() {
-        return (dataManager.get(CONTROL_STATE) >> 4 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 4 & 1) == 1;
     }
 
     public void up(boolean up) {
@@ -341,7 +341,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE);
+        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -350,11 +350,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE);
+        return dataManager.get(CONTROL_STATE).byteValue();
     }
 
     public void setControlState(byte state) {
-        dataManager.set(CONTROL_STATE, state);
+        dataManager.set(CONTROL_STATE, (byte)state);
     }
 
     @Override
@@ -501,7 +501,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getHunger() {
-        return this.dataManager.get(HUNGER);
+        return this.dataManager.get(HUNGER).intValue();
     }
 
     public void setHunger(int hunger) {
@@ -509,7 +509,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT);
+        return this.dataManager.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
@@ -517,7 +517,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getAgeInDays() {
-        return this.dataManager.get(AGE_TICKS) / 24000;
+        return this.dataManager.get(AGE_TICKS).intValue() / 24000;
     }
 
     public void setAgeInDays(int age) {
@@ -525,7 +525,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getAgeInTicks() {
-        return this.dataManager.get(AGE_TICKS);
+        return this.dataManager.get(AGE_TICKS).intValue();
     }
 
     public void setAgeInTicks(int age) {
@@ -533,7 +533,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public int getDeathStage() {
-        return this.dataManager.get(DEATH_STAGE);
+        return this.dataManager.get(DEATH_STAGE).intValue();
     }
 
     public void setDeathStage(int stage) {
@@ -541,12 +541,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean isMale() {
-        return this.dataManager.get(GENDER);
+        return this.dataManager.get(GENDER).booleanValue();
     }
 
     public boolean isModelDead() {
         if (world.isRemote) {
-            return this.isModelDead = this.dataManager.get(MODEL_DEAD);
+            return this.isModelDead = this.dataManager.get(MODEL_DEAD).booleanValue();
         }
         return isModelDead;
     }
@@ -560,7 +560,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isHovering() {
         if (world.isRemote) {
-            return this.isHovering = this.dataManager.get(HOVERING);
+            return this.isHovering = this.dataManager.get(HOVERING).booleanValue();
         }
         return isHovering;
     }
@@ -574,7 +574,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isFlying() {
         if (world.isRemote) {
-            return this.isFlying = this.dataManager.get(FLYING);
+            return this.isFlying = this.dataManager.get(FLYING).booleanValue();
         }
         return isFlying;
     }
@@ -592,7 +592,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isSleeping() {
         if (world.isRemote) {
-            boolean isSleeping = this.dataManager.get(SLEEPING);
+            boolean isSleeping = this.dataManager.get(SLEEPING).booleanValue();
             this.isSleeping = isSleeping;
             return isSleeping;
         }
@@ -612,7 +612,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isBreathingFire() {
         if (world.isRemote) {
-            boolean breathing = this.dataManager.get(FIREBREATHING);
+            boolean breathing = this.dataManager.get(FIREBREATHING).booleanValue();
             this.isBreathingFire = breathing;
             return breathing;
         }
@@ -640,7 +640,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean isSitting() {
         if (world.isRemote) {
-            boolean isSitting = (this.dataManager.get(TAMED) & 1) != 0;
+            boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -658,13 +658,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public int getArmorInSlot(int i) {
         switch (i) {
             default:
-                return this.dataManager.get(HEAD_ARMOR);
+                return this.dataManager.get(HEAD_ARMOR).intValue();
             case 1:
-                return this.dataManager.get(NECK_ARMOR);
+                return this.dataManager.get(NECK_ARMOR).intValue();
             case 2:
-                return this.dataManager.get(BODY_ARMOR);
+                return this.dataManager.get(BODY_ARMOR).intValue();
             case 3:
-                return this.dataManager.get(TAIL_ARMOR);
+                return this.dataManager.get(TAIL_ARMOR).intValue();
         }
     }
 
@@ -1640,7 +1640,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     private boolean isTackling() {
         if (world.isRemote) {
-            boolean tackling = this.dataManager.get(TACKLE);
+            boolean tackling = this.dataManager.get(TACKLE).booleanValue();
             this.isTackling = tackling;
             return tackling;
         }
