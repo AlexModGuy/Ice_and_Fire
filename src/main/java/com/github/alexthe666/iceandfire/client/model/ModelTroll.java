@@ -231,6 +231,59 @@ public class ModelTroll extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityTroll) entity);
         animator.update(entity);
+        animator.setAnimation(EntityTroll.ANIMATION_SPEAK);
+        animator.startKeyframe(5);
+        this.rotate(animator, jaw, 25, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, jaw, 0, 0, 0);
+        animator.endKeyframe();
+
+        animator.setAnimation(EntityTroll.ANIMATION_ROAR);
+        animator.startKeyframe(5);
+        this.rotateMinus(animator, leftleg, -31, -26, -5);
+        this.rotateMinus(animator, rightleg, -31, 26, 5);
+        this.rotate(animator, upperBody, 18, 0, 5);
+        this.rotateMinus(animator, leftleg2, 41, 0, 5);
+        this.rotateMinus(animator, rightleg2, 41, 0, -5);
+        this.rotateMinus(animator, leftarm, -26, -44, -2);
+        this.rotateMinus(animator, leftarm2, -60, 0, 0);
+        this.rotateMinus(animator, rightarm, -39, 57, 0);
+        this.rotateMinus(animator, rightarm2, -73, 13, -7);
+        this.rotate(animator, head, -57, 0, 0);
+        this.rotate(animator, jaw, 60, 0, 0);
+        animator.move(body , 0, 2, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotateMinus(animator, leftleg, -31, -26, -5);
+        this.rotateMinus(animator, rightleg, -31, 26, 5);
+        this.rotate(animator, upperBody, 18, 0, 5);
+        this.rotateMinus(animator, leftleg2, 41, 0, 5);
+        this.rotateMinus(animator, rightleg2, 41, 0, -5);
+        this.rotateMinus(animator, leftarm, -26, -44, -2);
+        this.rotateMinus(animator, leftarm2, -60, 0, 0);
+        this.rotateMinus(animator, rightarm, -39, 57, 0);
+        this.rotateMinus(animator, rightarm2, -73, 13, -7);
+        this.rotate(animator, head, -57, -28, 0);
+        this.rotate(animator, jaw, 60, 0, 0);
+        animator.move(body , 0, 2, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotateMinus(animator, leftleg, -31, -26, -5);
+        this.rotateMinus(animator, rightleg, -31, 26, 5);
+        this.rotate(animator, upperBody, 18, 0, 5);
+        this.rotateMinus(animator, leftleg2, 41, 0, 5);
+        this.rotateMinus(animator, rightleg2, 41, 0, -5);
+        this.rotateMinus(animator, leftarm, -26, -44, -2);
+        this.rotateMinus(animator, leftarm2, -60, 0, 0);
+        this.rotateMinus(animator, rightarm, -39, 57, 0);
+        this.rotateMinus(animator, rightarm2, -73, 13, -7);
+        this.rotate(animator, head, -57, 28, 0);
+        this.rotate(animator, jaw, 60, 0, 0);
+        animator.move(body , 0, 2, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(10);
+
         animator.setAnimation(EntityTroll.ANIMATION_STRIKE_HORIZONTAL);
         animator.startKeyframe(10);
         this.rotate(animator, body, 0, 31, 0);
@@ -283,12 +336,7 @@ public class ModelTroll extends ModelDragonBase {
         animator.endKeyframe();
         animator.setStaticKeyframe(3);
         animator.resetKeyframe(5);
-
-        animator.setAnimation(EntityTroll.ANIMATION_SPEAK);
-        animator.startKeyframe(5);
-        this.rotate(animator, jaw, 20, 0, 0);
-        animator.resetKeyframe(5);
-
+        animator.endKeyframe();
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityTroll entity) {

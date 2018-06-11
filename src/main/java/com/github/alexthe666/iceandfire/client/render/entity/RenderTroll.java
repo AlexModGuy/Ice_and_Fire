@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollEyes;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollStone;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollWeapon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
@@ -17,6 +18,7 @@ public class RenderTroll extends RenderLiving<EntityTroll> implements ICustomSto
 	public RenderTroll(RenderManager renderManager) {
 		super(renderManager, new ModelTroll(), 0.9F);
 		this.layerRenderers.add(new LayerTrollWeapon(this));
+		this.layerRenderers.add(new LayerTrollEyes(this));
 	}
 
 	@Override

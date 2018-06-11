@@ -24,6 +24,7 @@ public enum EnumTroll {
 
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;
+    public ResourceLocation TEXTURE_EYES;
     private BiomeDictionary.Type spawnBiome;
     private Weapon[] weapons;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
@@ -42,6 +43,7 @@ public enum EnumTroll {
         this.weapons = weapons;
         TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + ".png");
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_stone.png");
+        TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_eyes.png");
         leather = new ItemTrollLeather(this);
         helmet = new ItemTrollArmor(this, 0, EntityEquipmentSlot.HEAD);
         chestplate = new ItemTrollArmor(this, 1, EntityEquipmentSlot.CHEST);

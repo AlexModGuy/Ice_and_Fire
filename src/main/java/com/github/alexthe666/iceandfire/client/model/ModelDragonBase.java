@@ -17,6 +17,10 @@ public abstract class ModelDragonBase extends AdvancedModelBase implements ICust
 		animator.rotate(model, (float) Math.toRadians(x), (float) Math.toRadians(y), (float) Math.toRadians(z));
 	}
 
+	public void rotateMinus(ModelAnimator animator, AdvancedModelRenderer model, float x, float y, float z) {
+		animator.rotate(model, (float) Math.toRadians(x) - model.defaultRotationX, (float) Math.toRadians(y) - model.defaultRotationY, (float) Math.toRadians(z) - model.defaultRotationZ);
+	}
+
 	public void progressRotation(AdvancedModelRenderer model, float progress, float rotX, float rotY, float rotZ) {
 		model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 20.0F;
 		model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 20.0F;

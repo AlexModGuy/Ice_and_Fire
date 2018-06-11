@@ -58,9 +58,10 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
     private Animation currentAnimation;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityTroll.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> WEAPON = EntityDataManager.<Integer>createKey(EntityTroll.class, DataSerializers.VARINT);
-    public static Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
-    public static Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
-    public static Animation ANIMATION_SPEAK = Animation.create(10);
+    public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
+    public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
+    public static final Animation ANIMATION_SPEAK = Animation.create(10);
+    public static final Animation ANIMATION_ROAR = Animation.create(25);
     public float stoneProgress;
 
     public EntityTroll(World worldIn) {
@@ -258,6 +259,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         } else if (!stone && stoneProgress > 0.0F) {
             stoneProgress -= 2F;
         }
+        if(!stone && this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
+            this.setAnimation(ANIMATION_ROAR);
+        }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
             this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
         }
@@ -378,6 +382,6 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{NO_ANIMATION, ANIMATION_STRIKE_HORIZONTAL, ANIMATION_STRIKE_VERTICAL, ANIMATION_SPEAK};
+        return new Animation[]{NO_ANIMATION, ANIMATION_STRIKE_HORIZONTAL, ANIMATION_STRIKE_VERTICAL, ANIMATION_SPEAK, ANIMATION_ROAR};
     }
 }

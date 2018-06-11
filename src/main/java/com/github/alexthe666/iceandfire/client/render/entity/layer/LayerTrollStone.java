@@ -20,8 +20,6 @@ import org.lwjgl.opengl.GL11;
 
 public class LayerTrollStone implements LayerRenderer {
 
-	private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
-	private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
 	private RenderLivingBase renderer;
 
 	public LayerTrollStone(RenderLivingBase renderer) {
