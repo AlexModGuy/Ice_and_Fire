@@ -125,13 +125,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(VARIANT, 0);
-		this.dataManager.register(ARMOR, 0);
-		this.dataManager.register(SADDLE, false);
-		this.dataManager.register(CHESTED, false);
-		this.dataManager.register(HOVERING, false);
-		this.dataManager.register(FLYING, false);
-		this.dataManager.register(CONTROL_STATE, (byte) 0);
+		this.dataManager.register(VARIANT, Integer.valueOf(0));
+		this.dataManager.register(ARMOR, Integer.valueOf(0));
+		this.dataManager.register(SADDLE, Boolean.valueOf(false));
+		this.dataManager.register(CHESTED, Boolean.valueOf(false));
+		this.dataManager.register(HOVERING, Boolean.valueOf(false));
+		this.dataManager.register(FLYING, Boolean.valueOf(false));
+		this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
 
 	}
 
