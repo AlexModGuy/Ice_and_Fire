@@ -66,7 +66,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     public EntityCockatrice(World worldIn) {
         super(worldIn);
-        this.setSize(0.96F, 0.9F);
+        this.setSize(1.3F, 1.2F);
     }
 
     public boolean getCanSpawnHere() {
@@ -225,6 +225,10 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Nullable
     public EntityLivingBase getTargetedEntity() {
+        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
+        if(blindness){
+            return null;
+        }
         if (!this.hasTargetedEntity()) {
             return null;
         } else if (this.world.isRemote) {
@@ -448,7 +452,11 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 forcePreyToLook((EntityLiving) this.getAttackTarget());
             }
         }
-        if (!this.world.isRemote && this.getAttackTarget() != null && EntityGorgon.isEntityLookingAt(this, this.getAttackTarget(), VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(this.getAttackTarget(), this, VIEW_RADIUS)) {
+        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
+        if(blindness){
+            this.setStaring(false);
+        }
+        if (!this.world.isRemote && !blindness && this.getAttackTarget() != null && EntityGorgon.isEntityLookingAt(this, this.getAttackTarget(), VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(this.getAttackTarget(), this, VIEW_RADIUS)) {
             if (!shouldMelee()) {
                 if (!this.isStaring()) {
                     this.setStaring(true);
@@ -484,7 +492,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             }
         }
 
-        if (this.world.isRemote && this.getTargetedEntity() != null && EntityGorgon.isEntityLookingAt(this, this.getTargetedEntity(), VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(this.getTargetedEntity(), this, VIEW_RADIUS)) {
+        if (this.world.isRemote && this.getTargetedEntity() != null && EntityGorgon.isEntityLookingAt(this, this.getTargetedEntity(), VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(this.getTargetedEntity(), this, VIEW_RADIUS) && this.isStaring()) {
             if (this.hasTargetedEntity()) {
                 if (this.clientSideAttackTime < this.getAttackDuration()) {
                     ++this.clientSideAttackTime;
@@ -531,7 +539,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
         if (this.getAttackTarget() != null) {
             if (this.getDistance(this.getAttackTarget()) < 4D || EventLiving.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget())) {
-                return this.getAnimation() == NO_ANIMATION;
+                return true;
             }
         }
         return false;

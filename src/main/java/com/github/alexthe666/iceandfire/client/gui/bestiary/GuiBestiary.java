@@ -813,6 +813,35 @@ public class GuiBestiary extends GuiScreen {
 				}
 				writeFromTxt();
 				break;
+			case COCKATRICE:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
+					drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.STRING), 20, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.LEATHER), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.STRING), 59, 30, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.blindfold), 60, 18, 2F);
+					drawItemStack(new ItemStack(ModItems.witherbone), 30, 58, 2.5F);
+					drawItemStack(new ItemStack(ModItems.rotten_egg), 109, 18, 2.5F);
+				}
+				if(bookPages == 2){
+
+				}
+				writeFromTxt();
+				break;
 		}
 	}
 

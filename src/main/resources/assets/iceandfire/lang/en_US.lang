@@ -292,6 +292,9 @@ bestiary.cyclops=Cyclopes
 bestiary.siren=Sirens
 bestiary.hippocampus=Hippocampi
 bestiary.deathworm=Death Worms
+bestiary.cockatrice=Cockatrices
+bestiary.stymphalianbird=Stymphalian Birds
+bestiary.troll=Trolls
 
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead
