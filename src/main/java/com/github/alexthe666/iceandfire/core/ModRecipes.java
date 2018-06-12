@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -44,7 +45,9 @@ public class ModRecipes {
         ModItems.boneTools.setRepairItem(new ItemStack(ModItems.witherbone));
         ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
         ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
-        ModItems.dragon.setRepairItem(new ItemStack(ModItems.dragonbone));
+        for(EnumDragonArmor armor : EnumDragonArmor.values()){
+            armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
+        }
         ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
         ModItems.earplugsArmor.setRepairItem(new ItemStack(Blocks.WOODEN_BUTTON));
         ModItems.yellow_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 0));
