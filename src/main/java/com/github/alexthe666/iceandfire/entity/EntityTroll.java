@@ -44,9 +44,11 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -67,6 +69,11 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
     public EntityTroll(World worldIn) {
         super(worldIn);
         this.setSize(1.2F, 3.5F);
+    }
+
+    public boolean getCanSpawnHere() {
+        BlockPos pos = new BlockPos(this);
+        return this.getRNG().nextInt(IceAndFire.CONFIG.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {
@@ -255,12 +262,14 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         boolean stone = EntityGorgon.isStoneMob(this);
         if (stone && stoneProgress < 20.0F) {
             stoneProgress += 2F;
-            System.out.println(world.isRemote);
         } else if (!stone && stoneProgress > 0.0F) {
             stoneProgress -= 2F;
         }
         if(!stone && this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
             this.setAnimation(ANIMATION_ROAR);
+        }
+        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5){
+            this.playSound(ModSounds.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
             this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
@@ -379,6 +388,22 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
     public void setAnimation(Animation animation) {
         currentAnimation = animation;
     }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.TROLL_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.TROLL_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.TROLL_DIE;
+    }
+
 
     @Override
     public Animation[] getAnimations() {

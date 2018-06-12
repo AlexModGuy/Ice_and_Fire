@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.google.common.base.Predicate;
@@ -68,6 +69,10 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     public EntityCockatrice(World worldIn) {
         super(worldIn);
         this.setSize(0.96F, 0.9F);
+    }
+
+    public boolean getCanSpawnHere() {
+        return this.getRNG().nextInt(IceAndFire.CONFIG.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.core;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
@@ -51,7 +52,6 @@ public class ModEntities {
 		registerUnspawnable(EntityStymphalianFeather.class, "stymphalianfeather", 25);
 		registerUnspawnable(EntityStymphalianArrow.class, "stymphalianarrow", 26);
 		registerSpawnable(EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);
-
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 				if (!type.developer) {
@@ -69,6 +69,24 @@ public class ModEntities {
 				if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH)) {
 					List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
 					spawnList.add(new Biome.SpawnListEntry(EntityDeathWorm.class, IceAndFire.CONFIG.deathWormSpawnRate, 1, 3));
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnTrolls) {
+			for (EnumTroll type : EnumTroll.values()) {
+				for (Biome biome : Biome.REGISTRY) {
+					if (biome != null && BiomeDictionary.hasType(biome, type.spawnBiome)) {
+						List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.MONSTER);
+						spawnList.add(new Biome.SpawnListEntry(EntityTroll.class, IceAndFire.CONFIG.trollSpawnRate, 1, 1));
+					}
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnCockatrices) {
+			for (Biome biome : Biome.REGISTRY) {
+				if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SPARSE)) {
+					List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
+					spawnList.add(new Biome.SpawnListEntry(EntityCockatrice.class, IceAndFire.CONFIG.cockatriceSpawnRate, 1, 2));
 				}
 			}
 		}

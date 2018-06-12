@@ -214,7 +214,17 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("siren_song")
 	public static final SoundEvent SIREN_SONG = createSoundEvent("siren_song");
 
+	@GameRegistry.ObjectHolder("troll_die")
+	public static final SoundEvent TROLL_DIE = createSoundEvent("troll_die");
 
+	@GameRegistry.ObjectHolder("troll_idle")
+	public static final SoundEvent TROLL_IDLE = createSoundEvent("troll_idle");
+
+	@GameRegistry.ObjectHolder("troll_hurt")
+	public static final SoundEvent TROLL_HURT = createSoundEvent("troll_hurt");
+
+	@GameRegistry.ObjectHolder("troll_roar")
+	public static final SoundEvent TROLL_ROAR = createSoundEvent("troll_roar");
 
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);

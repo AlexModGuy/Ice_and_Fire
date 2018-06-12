@@ -67,10 +67,11 @@ public class IceAndFire {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
+		TAB = new CreativeTab(MODID);
 		ModEntities.init();
+		MinecraftForge.EVENT_BUS.register(PROXY);
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");
-		TAB = new CreativeTab(MODID);
 	}
 
 
@@ -87,7 +88,6 @@ public class IceAndFire {
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
-
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new com.github.alexthe666.iceandfire.client.GuiHandler());

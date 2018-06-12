@@ -100,7 +100,11 @@ public class CommonProxy {
 				ModSounds.MERMAID_IDLE,
 				ModSounds.MERMAID_HURT,
 				ModSounds.MERMAID_DIE,
-				ModSounds.SIREN_SONG
+				ModSounds.SIREN_SONG,
+				ModSounds.TROLL_IDLE,
+				ModSounds.TROLL_HURT,
+				ModSounds.TROLL_DIE,
+				ModSounds.TROLL_ROAR
 		);
 	}
 

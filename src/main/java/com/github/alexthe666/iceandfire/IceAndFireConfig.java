@@ -150,6 +150,9 @@ public class IceAndFireConfig {
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "hippocampi", comment = "True if hippocampi are allowed to spawn.")
 	public boolean spawnHippocampus = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "hippocampi", comment = "1 out of this number chance for hippocampi to spawn.")
+	public int hippocampusSpawnChance = 30;
 
 	@ConfigEntry(category = "death worms", comment = "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag.")
 	public int deathWormTargetSearchLength = 64;
@@ -164,29 +167,50 @@ public class IceAndFireConfig {
 	public boolean spawnDeathWorm = true;
 	@SuppressWarnings("deprecation")
 	@ConfigEntry(category = "death worms", comment = "Death worm spawn weight. Lower number = lower chance to spawn.")
-	public int deathWormSpawnRate = 5;
+	public int deathWormSpawnRate = 3;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "death worms", comment = "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.")
+	public int deathWormSpawnCheckChance = 3;
 
 	@ConfigEntry(category = "cockatrices", comment = "How far away cockatrices will detect chickens being hurt.")
 	public int cockatriceChickenSearchLength = 40;
 	@ConfigEntry(category = "cockatrices", comment = "1 out of this number chance per tick for a chicken to lay a cockatrice egg.")
 	public int cockatriceEggChance = 4320000;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "cockatrices", comment = "True if cockatrices are allowed to spawn.")
+	public boolean spawnCockatrices= true;
+	@ConfigEntry(category = "cockatrices", comment = "Death worm spawn weight. Lower number = lower chance to spawn.")
+	public int cockatriceSpawnRate = 4;
+	@ConfigEntry(category = "cockatrices", comment = "A double check to see if the game can spawn cockatrices. Higher number = lower chance to spawn.")
+	public int cockatriceSpawnCheckChance = 0;
 
 	@ConfigEntry(category = "stymphalian birds", comment = "How many blocks away can stymphalian birds spot potential prey. Note that increasing this could cause lag.")
 	public int stymphalianBirdTargetSearchLength = 64;
-
 	@ConfigEntry(category = "stymphalian birds", comment = "Strength of damage from each feather fired by a stymphalian bird(default is half a heart)")
 	public float stymphalianBirdFeatherAttackStength = 1F;
-
 	@ConfigEntry(category = "stymphalian birds", comment = "How far away stymphalian birds will consider other birds to be in the same flock.")
 	public int stymphalianBirdFlockLength = 40;
 	@ConfigEntry(category = "stymphalian birds", comment = "How high stymphalian birds can fly, in Y height.")
 	public int stymphalianBirdFlightHeight = 80;
+	@ConfigEntry(category = "stymphalian birds", comment = "True if stymphalian birds are allowed to spawn.")
+	public boolean spawnStymphalianBirds = true;
+	@ConfigEntry(category = "stymphalian birds", comment = "1 out of this number chance for hippocampi to spawn.")
+	public int stymphalianBirdSpawnChance = 50;
 
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "trolls", comment = "True if trolls are allowed to spawn.")
+	public boolean spawnTrolls = true;
+	@SuppressWarnings("deprecation")
+	@ConfigEntry(category = "trolls", comment = "Troll spawn weight. Lower number = lower chance to spawn.")
+	public int trollSpawnRate = 10;
+	@ConfigEntry(category = "trolls", comment = "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.")
+	public int trollSpawnCheckChance = 1;
 
 	@ConfigEntry(category = "trolls", comment = "Maximum troll health")
 	public double trollMaxHealth = 50;
 	@ConfigEntry(category = "trolls", comment = "How much damage trolls cause with their kick and stomp attacks.")
 	public double trollAttackStrength = 10;
+
 	//@SuppressWarnings("deprecation")
 	//@ConfigEntry(category = "compatability", comment = "Turn this on if you use the aether mod and want dragons to spawn in that dimension")
 	//public boolean useAetherCompat = false;

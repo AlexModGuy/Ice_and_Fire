@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
@@ -111,7 +112,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if (IceAndFire.CONFIG.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(30) == 0) {
+		if (IceAndFire.CONFIG.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.hippocampusSpawnChance + 1) == 0) {
 			for(int i = 0; i < random.nextInt(5); i++){
 				BlockPos pos = new BlockPos(x + random.nextInt(10) - 5, 20 + random.nextInt(40), z + random.nextInt(10) - 5);
 				if(world.getBlockState(pos).getMaterial() == Material.WATER){
@@ -121,6 +122,19 @@ public class StructureGenerator implements IWorldGenerator {
 					if(campus.isNotColliding()){
 						world.spawnEntity(campus);
 					}
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnStymphalianBirds && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP) && random.nextInt(IceAndFire.CONFIG.stymphalianBirdSpawnChance + 1) == 0) {
+			for(int i = 0; i < 8 + random.nextInt(10); i++){
+				BlockPos pos = height.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
+				if(world.getBlockState(pos.down()).isOpaqueCube()){
+					EntityStymphalianBird bird = new EntityStymphalianBird(world);
+					bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
+					if(bird.isNotColliding()){
+						world.spawnEntity(bird);
+					}
+					System.out.println("aaa" + bird.getPosition());
 				}
 			}
 		}

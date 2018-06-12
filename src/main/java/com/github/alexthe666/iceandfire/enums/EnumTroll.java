@@ -25,7 +25,7 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;
     public ResourceLocation TEXTURE_EYES;
-    private BiomeDictionary.Type spawnBiome;
+    public BiomeDictionary.Type spawnBiome;
     private Weapon[] weapons;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
     public Item leather;
@@ -65,6 +65,8 @@ public enum EnumTroll {
             return types.get(new Random().nextInt(types.size()));
         }
     }
+
+
 
     public static Weapon getWeaponForType(EnumTroll troll){
         return troll.weapons[new Random().nextInt(troll.weapons.length)];

@@ -1,4 +1,30 @@
 {
+  "troll_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:troll_idle_0",
+      "iceandfire:troll_idle_1"
+    ]
+  },
+  "troll_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:troll_roar"
+    ]
+  },
+  "troll_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:troll_hurt_0",
+      "iceandfire:troll_hurt_1"
+    ]
+  },
+  "troll_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:troll_die"
+    ]
+  },
   "naga_attack": {
     "category": "neutral",
     "sounds": [
