@@ -104,8 +104,8 @@ public class EventClient {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (player.isRiding() && player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityDragonBase) {
 			EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
-			float newDistance = (IceAndFire.CONFIG.dragonRiding3rdPersonDistanceModifier * dragon.getRenderSize()) + 4;
-			event.setViewDistance(newDistance);
+			//float newDistance = (IceAndFire.CONFIG.dragonRiding3rdPersonDistanceModifier * dragon.getRenderSize()) + 4;
+			//event.setViewDistance(newDistance);
 		}
 	}
 
