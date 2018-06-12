@@ -29,7 +29,7 @@ public enum EnumBestiaryPages {
 	DEATHWORM(3),
 	COCKATRICE(2),
 	STYMPHALIANBIRD(1),
-	TROLL(1);
+	TROLL(2);
 
 	public int pages;
 

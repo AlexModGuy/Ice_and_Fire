@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -862,6 +863,33 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.stymphalian_arrow), 60, 18, 2F);
 
+				}
+				writeFromTxt();
+				break;
+			case TROLL:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 15, 60, 156, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 50, 55, 181, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 85, 60, 206, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 155, 22, 114, 145, 24, 66, 512F);
+					drawImage(DRAWINGS_1, 190, 19, 188, 142, 47, 69, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					int i = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.Weapon.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.Weapon.values()[i].item), 30, 7, 2.5F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leather), 100, 30, 2.5F);
+					drawItemStack(new ItemStack(ModItems.troll_tusk), 120, 30, 2.5F);
+				}
+				if(bookPages == 2){
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].helmet), 27, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
 				}
 				writeFromTxt();
 				break;
