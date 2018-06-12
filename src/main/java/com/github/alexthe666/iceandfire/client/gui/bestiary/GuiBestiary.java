@@ -837,7 +837,30 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.witherbone), 30, 58, 2.5F);
 					drawItemStack(new ItemStack(ModItems.rotten_egg), 109, 18, 2.5F);
 				}
-				if(bookPages == 2){
+				writeFromTxt();
+				break;
+			case STYMPHALIANBIRD:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 34, 46, 114, 72, 59, 37, 512F);
+					drawImage(DRAWINGS_1, 155, 35, 114, 109, 67, 35, 512F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 109, 60, 2.5F);
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.FLINT), 40, 13, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 40, 49, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_arrow), 60, 18, 2F);
 
 				}
 				writeFromTxt();

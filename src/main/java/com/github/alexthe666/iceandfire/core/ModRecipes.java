@@ -1,12 +1,22 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,6 +24,33 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ModRecipes {
 
     public static void init() {
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.dragonbone_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityDragonArrow entityarrow = new EntityDragonArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+
+
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
         OreDictionary.registerOre("oreSilver", ModBlocks.silverOre);
