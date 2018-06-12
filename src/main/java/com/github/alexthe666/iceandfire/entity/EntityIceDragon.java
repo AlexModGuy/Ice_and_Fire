@@ -62,7 +62,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, true));
 		this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
-		this.tasks.addTask(4, new EntityAITempt(this, 1.0D, ModItems.frost_stew, false));
+		this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
 		this.tasks.addTask(5, new DragonAIAirTarget(this));
 		this.tasks.addTask(5, new DragonAIWaterTarget(this));
 		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
@@ -84,7 +84,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(SWIMMING, false);
+		this.dataManager.register(SWIMMING, Boolean.valueOf(false));
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 				break;
 			case 1:
-				if (new Random().nextInt(2) == 0  && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
+				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
@@ -436,7 +436,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public boolean isSwimming() {
 		if (world.isRemote) {
-			boolean swimming = this.dataManager.get(SWIMMING);
+			boolean swimming = this.dataManager.get(SWIMMING).booleanValue();
 			this.isSwimming = swimming;
 			return swimming;
 		}

@@ -25,7 +25,7 @@ public class RenderDragonFireCharge extends Render {
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 
-	//Todo: Make sure pulling partialTicks did not screw things up. This will come when the build runs.
+	//TODO: Make sure pulling partialTicks did not screw things up. This will come when the build runs.
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();

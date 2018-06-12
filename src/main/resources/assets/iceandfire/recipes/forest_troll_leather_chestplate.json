@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "T T",
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "iceandfire:troll_leather_forest",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:forest_troll_leather_chestplate",
+    "data": 0
+  }
+}

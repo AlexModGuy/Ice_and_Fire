@@ -1,30 +1,38 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -32,19 +40,57 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
+import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarplugs;
 
 public class EventLiving {
+
+	private boolean stepHeightSwitched = false;
+	/*@SubscribeEvent
+	public void onGetCollisionBoxes(GetCollisionBoxesEvent event) {
+		if(event.getEntity() instanceof EntityDeathWorm && !event.getCollisionBoxesList().isEmpty()){
+			for(AxisAlignedBB bb : event.getCollisionBoxesList()){
+				BlockPos pos = new BlockPos(bb.minX, bb.minY, bb.minZ);
+				if(event.getEntity().world.getBlockState(pos).getMaterial() == Material.SAND){
+					event.getCollisionBoxesList().remove(bb);
+				}
+			}
+		}
+	}*/
+
+	@SubscribeEvent
+	public void onEntityDamage(LivingHurtEvent event) {
+		if(event.getSource().isProjectile()){
+			float multi = 1;
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.HEAD)) {
+				multi -= 0.1;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.CHEST)) {
+				multi -= 0.3;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.LEGS)) {
+				multi -= 0.2;
+			}
+			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.FEET)) {
+				multi -= 0.1;
+			}
+			event.setAmount(event.getAmount() * multi);
+		}
+
+	}
+
 	@SubscribeEvent
 	public void onEntityDrop(LivingDropsEvent event) {
 		if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
@@ -58,6 +104,50 @@ public class EventLiving {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void onLivingAttacked(LivingAttackEvent event) {
+		if(event.getSource().getTrueSource() != null){
+			Entity attacker = event.getSource().getTrueSource();
+			if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
+				signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
+		if(event.getTarget() != null){
+			EntityLivingBase attacker = event.getEntityLiving();
+			if (isAnimaniaChicken(event.getTarget())) {
+				signalChickenAlarm(event.getTarget(), attacker);
+			}
+		}
+	}
+
+	private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker){
+		float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+		List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
+		Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+		if (!list.isEmpty()) {
+			Iterator<Entity> itr = list.iterator();
+			while (itr.hasNext()) {
+				Entity entity = itr.next();
+				if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
+					EntityCockatrice cockatrice = (EntityCockatrice) entity;
+					if(attacker instanceof EntityPlayer){
+						EntityPlayer player = (EntityPlayer)attacker;
+						if(!player.isCreative() && !cockatrice.isOwner(player)){
+							cockatrice.setAttackTarget(player);
+						}
+					}
+					else {
+						cockatrice.setAttackTarget((EntityLivingBase)attacker);
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -85,7 +175,7 @@ public class EventLiving {
 			if (properties != null && properties.isStone || stonePlayer) {
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-					if (stack.getItem() != null && stack.getItem() instanceof ItemPickaxe) {
+					if (stack.getItem() != null && (stack.getItem() instanceof ItemPickaxe || stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()))) {
 						boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
 						boolean ready = false;
 						if (properties != null && !stonePlayer) {
@@ -120,13 +210,88 @@ public class EventLiving {
 		}
 	}
 
+	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && event.getEntityLiving().getRNG().nextInt(1 + IceAndFire.CONFIG.cockatriceEggChance) == 0 && !event.getEntityLiving().isChild()){
+			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+		}
+		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
+		if(sirenProps != null && sirenProps.isCharmed){
+			stepHeightSwitched = false;
+			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
+				sirenProps.isCharmed = false;
+			}
+			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
+				if (rand.nextInt(7) == 0) {
+					for(int i = 0; i < 5; i++){
+						event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+					}
+				}
+				EntityLivingBase entity = event.getEntityLiving();
+				EntitySiren effectiveSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+				entity.motionX += (Math.signum(effectiveSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
+				entity.motionY += (Math.signum(effectiveSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
+				entity.motionZ += (Math.signum(effectiveSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
+				float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
+				entity.stepHeight = 1;
+				//entity.moveForward = 0.5F;
+				double d0 = effectiveSiren.posX - entity.posX;
+				double d2 = effectiveSiren.posZ - entity.posZ;
+				double d1 = effectiveSiren.posY - 1 - entity.posY;
+				if(entity.isRiding()){
+					entity.dismountRidingEntity();
+				}
+				if(entity.onGround && entity.collidedHorizontally){
+					entity.motionY =  0.42F;
+
+					if (entity.isPotionActive(MobEffects.JUMP_BOOST))
+					{
+						entity.motionY += (double)((float)(entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+					}
+
+					if (entity.isSprinting())
+					{
+						float f = entity.rotationYaw * 0.017453292F;
+						entity.motionX -= (double)(MathHelper.sin(f) * 0.2F);
+						entity.motionZ += (double)(MathHelper.cos(f) * 0.2F);
+					}
+
+					entity.isAirBorne = true;
+					net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+				}
+				double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+				float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+				entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
+				entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+				if(entity.getDistance(effectiveSiren) < 5D){
+					sirenProps.isCharmed = false;
+					effectiveSiren.setSinging(false);
+					effectiveSiren.setAttackTarget((EntityLivingBase) entity);
+					effectiveSiren.setAggressive(true);
+					effectiveSiren.triggerOtherSirens((EntityLivingBase) entity);
+				}
+				if(effectiveSiren.isDead || entity.getDistance(effectiveSiren) > 33 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()){
+					sirenProps.isCharmed = false;
+				}
+			}
+		}else if(sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched){
+			event.getEntityLiving().stepHeight = 0.6F;
+			stepHeightSwitched = true;
+		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
 			if (properties != null && properties.isStone || stonePlayer) {
 				EntityLiving living = ((EntityLiving) event.getEntityLiving());
+				if(!living.getPassengers().isEmpty()){
+					for(Entity e : living.getPassengers()){
+						e.dismountRidingEntity();
+					}
+				}
 				living.motionX *= 0D;
 				living.motionZ *= 0D;
 				living.motionY -= 0.1D;
@@ -155,7 +320,17 @@ public class EventLiving {
 		}
 	}
 
-	@SubscribeEvent
+	public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
+		float f = MathHelper.wrapDegrees(targetAngle - angle);
+		if (f > maxIncrease) {
+			f = maxIncrease;
+		}
+		if (f < -maxIncrease) {
+			f = -maxIncrease;
+		}
+		return angle + f;
+	}
+		@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
@@ -249,7 +424,7 @@ public class EventLiving {
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
-			animal.tasks.addTask(4, new EntitySheepAIFollowCyclops(animal, 1.2D));
+			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
 		}
 	}
 
@@ -257,6 +432,17 @@ public class EventLiving {
 		String className = entity.getClass().getName();
 		return className.contains("sheep") || entity instanceof EntitySheep;
 	}
+
+	public static boolean isAnimaniaChicken(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("chicken") || entity instanceof EntityChicken;
+	}
+
+	public static boolean isAnimaniaFerret(Entity entity){
+		String className = entity.getClass().getName();
+		return className.contains("ferret");
+	}
+
 	//@SubscribeEvent
 	//public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
 	//	if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {

@@ -65,7 +65,7 @@ public class ItemGorgonHead extends Item {
 		Entity pointedEntity = null;
 		List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
-				boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS);
+				boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 				return entity != null && entity.canBeCollidedWith() && !blindness && !(entity instanceof IBlacklistedFromStatues) && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
 			}
 		}));
@@ -107,7 +107,7 @@ public class ItemGorgonHead extends Item {
 						worldIn.spawnEntity(statue);
 					}
 					for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-						statue.setItemStackToSlot(slot, ((EntityZombie) pointedEntity).getItemStackFromSlot(slot));
+						statue.setItemStackToSlot(slot, ((EntityLivingBase) pointedEntity).getItemStackFromSlot(slot));
 					}
 				} else {
 

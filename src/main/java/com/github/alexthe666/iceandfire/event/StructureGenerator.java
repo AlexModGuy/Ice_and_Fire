@@ -3,9 +3,12 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
@@ -39,25 +42,20 @@ public class StructureGenerator implements IWorldGenerator {
 	private static final WorldGenIceDragonCave ICE_DRAGON_CAVE = new WorldGenIceDragonCave();
 	private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
 	private static final WorldGenCyclopsCave CYCLOPS_CAVE = new WorldGenCyclopsCave();
+	private static final WorldGenSirenIsland SIREN_ISLAND = new WorldGenSirenIsland();
 	private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
 
 	public static BlockPos getHeight(World world, BlockPos pos) {
-		for (int y = 0; y < 256; y++) {
-			BlockPos pos1 = pos.up(y);
-			if (world.getBlockState(pos1.up()).getBlock() == Blocks.AIR && world.getBlockState(pos1.down()).getBlock() != Blocks.AIR) {
-				return pos1;
-			}
-		}
-		return pos;
+		return world.getHeight(pos);
 	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		int x = (chunkX * 16) + random.nextInt(16);
-		int z = (chunkZ * 16) + random.nextInt(16);
+		int x = (chunkX * 16) + 8;
+		int z = (chunkZ * 16) + 8;
 		BlockPos height = getHeight(world, new BlockPos(x, 0, z));
 		if (IceAndFire.CONFIG.spawnGorgons) {
-			IBlockState blockState = world.getBlockState(height);
+			IBlockState blockState = world.getBlockState(height.down());
 			if (blockState.isFullBlock() && world.isAirBlock(height.up()) && random.nextInt(IceAndFire.CONFIG.spawnGorgonsChance + 1) == 0 && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
 				Rotation rotation = Rotation.values()[random.nextInt(Rotation.values().length)];
 				Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
@@ -71,7 +69,11 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 		}
-		if(IceAndFire.CONFIG.generateCyclopsCaves && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0 && world.getBlockState(height).isOpaqueCube()){
+		if(IceAndFire.CONFIG.generateSirenIslands && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.generateSirenChance + 1) == 0){
+			SIREN_ISLAND.generate(world, random, height);
+		}
+
+		if(IceAndFire.CONFIG.generateCyclopsCaves && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube()){
 			CYCLOPS_CAVE.generate(world, random, height);
 		}
 		if (IceAndFire.CONFIG.spawnPixies) {
@@ -107,6 +109,32 @@ public class StructureGenerator implements IWorldGenerator {
 				firedragon.rotationYaw = random.nextInt(360);
 				if (!world.isRemote) {
 					world.spawnEntity(firedragon);
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.hippocampusSpawnChance + 1) == 0) {
+			for(int i = 0; i < random.nextInt(5); i++){
+				BlockPos pos = new BlockPos(x + random.nextInt(10) - 5, 20 + random.nextInt(40), z + random.nextInt(10) - 5);
+				if(world.getBlockState(pos).getMaterial() == Material.WATER){
+					EntityHippocampus campus = new EntityHippocampus(world);
+					campus.setVariant(random.nextInt(5));
+					campus.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
+					if(campus.isNotColliding()){
+						world.spawnEntity(campus);
+					}
+				}
+			}
+		}
+		if (IceAndFire.CONFIG.spawnStymphalianBirds && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP) && random.nextInt(IceAndFire.CONFIG.stymphalianBirdSpawnChance + 1) == 0) {
+			for(int i = 0; i < 8 + random.nextInt(10); i++){
+				BlockPos pos = height.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
+				if(world.getBlockState(pos.down()).isOpaqueCube()){
+					EntityStymphalianBird bird = new EntityStymphalianBird(world);
+					bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
+					if(bird.isNotColliding()){
+						world.spawnEntity(bird);
+					}
+					System.out.println("aaa" + bird.getPosition());
 				}
 			}
 		}

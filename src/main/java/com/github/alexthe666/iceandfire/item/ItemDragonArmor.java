@@ -22,6 +22,7 @@ public class ItemDragonArmor extends Item {
 	public ItemDragonArmor(int type, String name) {
 		this.type = type;
 		this.name = name;
+		this.setHasSubtypes(true);
 		this.setUnlocalizedName("iceandfire." + name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.maxStackSize = 1;

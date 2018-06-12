@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderCyclops;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -14,6 +13,8 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
@@ -48,7 +49,12 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelFireDragonArmor(0.2F);
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL = new ModelIceDragonArmor(0.5F);
 	private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F);
+	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL = new ModelDeathWormArmor(0.5F);
+	private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL_LEGS = new ModelDeathWormArmor(0.2F);
+	private static final ModelTrollArmor TROLL_ARMOR_MODEL = new ModelTrollArmor(0.75F);
+	private static final ModelTrollArmor TROLL_ARMOR_MODEL_LEGS = new ModelTrollArmor(0.35F);
 	private FontRenderer bestiaryFontRenderer;
+	private static IceAndFireTEISR TEISR = new IceAndFireTEISR();
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -162,7 +168,10 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_horn_fire, 0, new ModelResourceLocation("iceandfire:dragon_horn_fire", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_horn_ice, 0, new ModelResourceLocation("iceandfire:dragon_horn_ice", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_flute, 0, new ModelResourceLocation("iceandfire:dragon_flute", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.hippogryph_egg, 0, new ModelResourceLocation("iceandfire:hippogryph_egg", "inventory"));
+		for(int i = 0; i < EnumHippogryphTypes.values().length; i++){
+			ModelLoader.setCustomModelResourceLocation(ModItems.hippogryph_egg, i, new ModelResourceLocation("iceandfire:hippogryph_egg", "inventory"));
+
+		}
 		ModelLoader.setCustomModelResourceLocation(ModItems.iron_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:iron_hippogryph_armor", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.gold_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:gold_hippogryph_armor", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.diamond_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:diamond_hippogryph_armor", "inventory"));
@@ -187,6 +196,14 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.jar), 5, new ModelResourceLocation("iceandfire:jar_4", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.frozenSplinters), 0, new ModelResourceLocation("iceandfire:frozen_splinters", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.nest), 0, new ModelResourceLocation("iceandfire:nest", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.earplugs, 0, new ModelResourceLocation("iceandfire:earplugs", "inventory"));
+		ModelBakery.registerItemVariants(ModItems.deathworm_chitin, new ResourceLocation("iceandfire:deathworm_chitin_yellow"), new ResourceLocation("iceandfire:deathworm_chitin_white"), new ResourceLocation("iceandfire:deathworm_chitin_red"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 0, new ModelResourceLocation("iceandfire:deathworm_chitin_yellow", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 1, new ModelResourceLocation("iceandfire:deathworm_chitin_white", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_chitin, 2, new ModelResourceLocation("iceandfire:deathworm_chitin_red", "inventory"));
+		ModelBakery.registerItemVariants(ModItems.deathworm_egg, new ResourceLocation("iceandfire:deathworm_egg"), new ResourceLocation("iceandfire:deathworm_egg_giant"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_egg, 0, new ModelResourceLocation("iceandfire:deathworm_egg", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_egg, 1, new ModelResourceLocation("iceandfire:deathworm_egg_giant", "inventory"));
 		for (EnumDragonArmor armor : EnumDragonArmor.values()) {
 			renderArmors(armor);
 		}
@@ -194,8 +211,36 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_chestplate, 0, new ModelResourceLocation("iceandfire:sheep_chestplate", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_leggings, 0, new ModelResourceLocation("iceandfire:sheep_leggings", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.sheep_boots, 0, new ModelResourceLocation("iceandfire:sheep_boots", "inventory"));
-
+		ModelLoader.setCustomModelResourceLocation(ModItems.shiny_scales, 0, new ModelResourceLocation("iceandfire:shiny_scales", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_yellow_boots, 0, new ModelResourceLocation("iceandfire:deathworm_yellow_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_white_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_white_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_white_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_white_boots, 0, new ModelResourceLocation("iceandfire:deathworm_white_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_helmet, 0, new ModelResourceLocation("iceandfire:deathworm_red_helmet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_chestplate, 0, new ModelResourceLocation("iceandfire:deathworm_red_chestplate", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_leggings, 0, new ModelResourceLocation("iceandfire:deathworm_red_leggings", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.deathworm_red_boots, 0, new ModelResourceLocation("iceandfire:deathworm_red_boots", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.rotten_egg, 0, new ModelResourceLocation("iceandfire:rotten_egg", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_bird_feather, 0, new ModelResourceLocation("iceandfire:stymphalian_bird_feather", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_arrow, 0, new ModelResourceLocation("iceandfire:stymphalian_arrow", "inventory"));
+		for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
+			weapon.item.setTileEntityItemStackRenderer(TEISR);
+			ModelLoader.setCustomModelResourceLocation(weapon.item, 0, new ModelResourceLocation("iceandfire:troll_weapon", "inventory"));
+		}
+		for (EnumTroll troll : EnumTroll.values()) {
+			ModelLoader.setCustomModelResourceLocation(troll.leather, 0, new ModelResourceLocation("iceandfire:troll_leather_" + troll.name().toLowerCase(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.helmet, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_helmet", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.chestplate, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_chestplate", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.leggings, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_leggings", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(troll.boots, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_boots", "inventory"));
+		}
+		ModelLoader.setCustomModelResourceLocation(ModItems.troll_tusk, 0, new ModelResourceLocation("iceandfire:troll_tusk", "inventory"));
 	}
+
 
 	@SideOnly(Side.CLIENT)
 	public static void renderArmors(EnumDragonArmor armor) {
@@ -256,6 +301,16 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGorgon.class, new RenderGorgon(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityPixie.class, new RenderPixie(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCyclops.class, new RenderCyclops(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySiren.class, new RenderSiren(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHippocampus.class, new RenderHippocampus(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDeathWorm.class, new RenderDeathWorm(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDeathWormEgg.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.deathworm_egg, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCockatrice.class, new RenderCockatrice(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCockatriceEgg.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), ModItems.rotten_egg, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianBird.class, new RenderStymphalianBird(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianFeather.class, new RenderStymphalianFeather(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianArrow.class, new RenderStymphalianArrow(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTroll.class, new RenderTroll(Minecraft.getMinecraft().getRenderManager()));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
@@ -286,6 +341,12 @@ public class ClientProxy extends CommonProxy {
 		if (name.equals("if_pixie")) {
 			particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
 		}
+		if (name.equals("siren_appearance")) {
+			particle = new ParticleSirenAppearance(world, x, y, z);
+		}
+		if (name.equals("siren_music")) {
+			particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
+		}
 		if (particle != null) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
@@ -308,6 +369,14 @@ public class ClientProxy extends CommonProxy {
 				return ICE_DRAGON_SCALE_ARMOR_MODEL;
 			case 3:
 				return ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS;
+			case 4:
+				return DEATHWORM_ARMOR_MODEL;
+			case 5:
+				return DEATHWORM_ARMOR_MODEL_LEGS;
+			case 6:
+				return TROLL_ARMOR_MODEL;
+			case 7:
+				return TROLL_ARMOR_MODEL_LEGS;
 		}
 		return null;
 	}
@@ -315,4 +384,6 @@ public class ClientProxy extends CommonProxy {
 	public Object getFontRenderer() {
 		return this.bestiaryFontRenderer;
 	}
+
+
 }

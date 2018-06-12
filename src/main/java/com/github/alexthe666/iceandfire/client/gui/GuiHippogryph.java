@@ -29,6 +29,7 @@ public class GuiHippogryph extends GuiContainer {
 	}
 
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		this.fontRenderer.drawString(this.hippogryphInv.getDisplayName().getUnformattedText(), 8, 6, 4210752);
 		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 	}
@@ -48,6 +49,8 @@ public class GuiHippogryph extends GuiContainer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.mousePosx = (float) mouseX;
 		this.mousePosY = (float) mouseY;
+		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

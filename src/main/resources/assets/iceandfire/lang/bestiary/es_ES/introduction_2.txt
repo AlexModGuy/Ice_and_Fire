@@ -1,0 +1,14 @@
+Una vez que se ha colocado un escritorio,
+se puede interactuar haciendo clic 
+derecho sobre él. El interior tendrá
+tres ranuras, la más a la izquierda
+para un bestiario de entrada, 
+la parte inferior para manuscritos, 
+y el más a la derecha para el
+bestiario de salida. por cada
+manuscrito, un nuevo índice aparecerá 
+en el bestiario. Estas nuevas páginas 
+pueden ser información sobre criaturas 
+míticas, diferente tipos de gente,
+guías de elaboración e inclusive
+alquimia básica.

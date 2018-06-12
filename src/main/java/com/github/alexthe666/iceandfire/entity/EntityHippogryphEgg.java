@@ -45,8 +45,7 @@ public class EntityHippogryphEgg extends EntityEgg {
 			hippogryph.setGrowingAge(-24000);
 			hippogryph.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
 			if (itemstack != null) {
-				NBTTagCompound nbt = itemstack.getTagCompound();
-				hippogryph.setVariant(nbt.getInteger("Type"));
+				hippogryph.setVariant(itemstack.getMetadata());
 			}
 			this.world.spawnEntity(hippogryph);
 		}

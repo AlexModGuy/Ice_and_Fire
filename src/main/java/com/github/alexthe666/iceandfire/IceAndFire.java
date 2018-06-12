@@ -22,6 +22,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -42,13 +43,13 @@ import java.util.Random;
 public class IceAndFire {
 
 	public static final String MODID = "iceandfire";
-	public static final String VERSION = "1.3.1";
-	public static final String LLIBRARY_VERSION = "1.7.7";
+	public static final String VERSION = "1.4.0";
+	public static final String LLIBRARY_VERSION = "1.7.9";
 	public static final String NAME = "Ice And Fire";
 	public static final Logger logger = LogManager.getLogger(NAME);
 	@Instance(value = MODID)
 	public static IceAndFire INSTANCE;
-	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class})
+	@NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class, MessageUpdatePixieHouse.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class, MessageDeathWormHitbox.class, MessageDeathWormInteract.class})
 	public static SimpleNetworkWrapper NETWORK_WRAPPER;
 	@SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
 	public static CommonProxy PROXY;
@@ -66,10 +67,11 @@ public class IceAndFire {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new EventLiving());
+		TAB = new CreativeTab(MODID);
 		ModEntities.init();
+		MinecraftForge.EVENT_BUS.register(PROXY);
 		logger.info("A raven flies from the north to the sea");
 		logger.info("A dragon whispers her name in the east");
-		TAB = new CreativeTab(MODID);
 	}
 
 
@@ -78,12 +80,14 @@ public class IceAndFire {
 
 		ModRecipes.init();
 		ModVillagers.INSTANCE.init();
+		if (Loader.isModLoaded("thaumcraft")) {
+			IceAndFireAspectRegistry.register();
+		}
 		logger.info("The watcher waits on the northern wall");
 		logger.info("A daughter picks up a warrior's sword");
 		MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
 		MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
 		VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
-
 		PROXY.render();
 		GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new com.github.alexthe666.iceandfire.client.GuiHandler());
@@ -124,6 +128,7 @@ public class IceAndFire {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		PROXY.postRender();
+		ModRecipes.postInit();
 
 		logger.info("A brother bound to a love he must hide");
 		logger.info("The younger's armor is worn in the mind");

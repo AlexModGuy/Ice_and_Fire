@@ -36,7 +36,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends EntityMob implements IAnimatedEntity {
+public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -74,7 +74,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+                return !EntityGorgon.isStoneMob(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
         this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {
@@ -122,7 +122,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(BLINDED, false);
+        this.dataManager.register(BLINDED, Boolean.valueOf(false));
     }
 
     @Override
@@ -138,20 +138,16 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     }
 
     public void setBlinded(boolean blind) {
-        this.dataManager.set(BLINDED, blind);
+        this.dataManager.set(BLINDED, Boolean.valueOf(blind));
     }
 
     public boolean isBlinded() {
-        return this.dataManager.get(BLINDED);
+        return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
 
     protected boolean canDespawn() {
         return false;
-    }
-
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEAD;
     }
 
     public void updatePassenger(Entity passenger) {
@@ -307,5 +303,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     @Nullable
     protected SoundEvent getDeathSound() {
         return ModSounds.CYCLOPS_DIE;
+    }
+
+    @Override
+    public boolean canBeTurnedToStone() {
+        return !this.isBlinded();
     }
 }

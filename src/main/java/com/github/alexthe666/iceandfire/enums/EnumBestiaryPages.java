@@ -25,7 +25,10 @@ public enum EnumBestiaryPages {
 	HIPPOGRYPH(1),
 	GORGON(1),
 	PIXIE(1),
-	CYCLOPS(2);
+	CYCLOPS(2),
+	SIREN(2),
+	HIPPOCAMPUS(2),
+	DEATHWORM(3);
 
 	public int pages;
 

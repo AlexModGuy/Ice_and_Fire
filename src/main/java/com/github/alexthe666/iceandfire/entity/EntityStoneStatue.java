@@ -61,4 +61,8 @@ public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromS
 	}
 
 
+	@Override
+	public boolean canBeTurnedToStone() {
+		return false;
+	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,10 +29,6 @@ public class PixieAIFollowOwner extends EntityAIBase {
 		this.minDist = minDistIn;
 		this.maxDist = maxDistIn;
 		this.setMutexBits(3);
-
-		if (!(tameableIn.getNavigator() instanceof PathNavigateGround)) {
-			throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
-		}
 	}
 
 	public boolean shouldExecute() {

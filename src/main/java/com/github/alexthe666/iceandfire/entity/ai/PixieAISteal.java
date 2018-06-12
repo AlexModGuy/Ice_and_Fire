@@ -34,6 +34,9 @@ public class PixieAISteal extends EntityAIBase {
 		if (temptedEntity.getRNG().nextInt(3) == 0) {
 			return false;
 		}
+		if (temptedEntity.isTamed()) {
+			return false;
+		}
 		if (this.delayTemptCounter > 0) {
 			--this.delayTemptCounter;
 			return false;

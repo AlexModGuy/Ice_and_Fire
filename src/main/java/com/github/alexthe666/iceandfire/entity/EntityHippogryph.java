@@ -125,13 +125,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(VARIANT, 0);
-		this.dataManager.register(ARMOR, 0);
-		this.dataManager.register(SADDLE, false);
-		this.dataManager.register(CHESTED, false);
-		this.dataManager.register(HOVERING, false);
-		this.dataManager.register(FLYING, false);
-		this.dataManager.register(CONTROL_STATE, (byte) 0);
+		this.dataManager.register(VARIANT, Integer.valueOf(0));
+		this.dataManager.register(ARMOR, Integer.valueOf(0));
+		this.dataManager.register(SADDLE, Boolean.valueOf(false));
+		this.dataManager.register(CHESTED, Boolean.valueOf(false));
+		this.dataManager.register(HOVERING, Boolean.valueOf(false));
+		this.dataManager.register(FLYING, Boolean.valueOf(false));
+		this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
 
 	}
 
@@ -264,13 +264,15 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				return true;
 			}
-			if (player.isSneaking()) {
-				this.openGUI(player);
-				return true;
-			} else if (this.isSaddled() && !this.isChild()) {
-				player.startRiding(this, true);
-				this.setSitting(false);
-				return true;
+			if(itemstack.isEmpty()) {
+				if (player.isSneaking()) {
+					this.openGUI(player);
+					return true;
+				} else if (this.isSaddled() && !this.isChild()) {
+					player.startRiding(this, true);
+					this.setSitting(false);
+					return true;
+				}
 			}
 		}
 		return super.processInteract(player, hand);
@@ -284,19 +286,19 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean up() {
-		return (dataManager.get(CONTROL_STATE) & 1) == 1;
+		return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
 	}
 
 	public boolean down() {
-		return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
+		return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
 	}
 
 	public boolean attack() {
-		return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
+		return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
 	}
 
 	public boolean dismount() {
-		return (dataManager.get(CONTROL_STATE) >> 3 & 1) == 1;
+		return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
 	}
 
 	public void up(boolean up) {
@@ -316,7 +318,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	private void setStateField(int i, boolean newState) {
-		byte prevState = dataManager.get(CONTROL_STATE);
+		byte prevState = dataManager.get(CONTROL_STATE).byteValue();
 		if (newState) {
 			dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
 		} else {
@@ -325,11 +327,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public byte getControlState() {
-		return dataManager.get(CONTROL_STATE);
+		return dataManager.get(CONTROL_STATE).byteValue();
 	}
 
 	public void setControlState(byte state) {
-		dataManager.set(CONTROL_STATE, state);
+		dataManager.set(CONTROL_STATE, Byte.valueOf(state));
 	}
 
 	@Override
@@ -398,7 +400,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public int getVariant() {
-		return this.dataManager.get(VARIANT);
+		return Integer.valueOf(this.dataManager.get(VARIANT).intValue());
 	}
 
 	public EnumHippogryphTypes getEnumVariant() {
@@ -410,23 +412,23 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public void setVariant(int variant) {
-		this.dataManager.set(VARIANT, variant);
+		this.dataManager.set(VARIANT, Integer.valueOf(variant));
 	}
 
 	public boolean isSaddled() {
-		return this.dataManager.get(SADDLE);
+		return Boolean.valueOf(this.dataManager.get(SADDLE).booleanValue());
 	}
 
 	public void setSaddled(boolean saddle) {
-		this.dataManager.set(SADDLE, saddle);
+		this.dataManager.set(SADDLE, Boolean.valueOf(saddle));
 	}
 
 	public boolean isChested() {
-		return this.dataManager.get(CHESTED);
+		return Boolean.valueOf(this.dataManager.get(CHESTED).booleanValue());
 	}
 
 	public void setChested(boolean chested) {
-		this.dataManager.set(CHESTED, chested);
+		this.dataManager.set(CHESTED, Boolean.valueOf(chested));
 		this.hasChestVarChanged = true;
 	}
 
@@ -454,38 +456,38 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	public boolean isHovering() {
 		if (world.isRemote) {
-			return this.isHovering = this.dataManager.get(HOVERING);
+			return this.isHovering = Boolean.valueOf(this.dataManager.get(HOVERING).booleanValue());
 		}
 		return isHovering;
 	}
 
 	public void setHovering(boolean hovering) {
-		this.dataManager.set(HOVERING, hovering);
+		this.dataManager.set(HOVERING, Boolean.valueOf(hovering));
 		if (!world.isRemote) {
-			this.isHovering = hovering;
+			this.isHovering = Boolean.valueOf(hovering);
 		}
 	}
 
 	public boolean isFlying() {
 		if (world.isRemote) {
-			return this.isFlying = this.dataManager.get(FLYING);
+			return this.isFlying = Boolean.valueOf(this.dataManager.get(FLYING).booleanValue());
 		}
 		return isFlying;
 	}
 
 	public void setFlying(boolean flying) {
-		this.dataManager.set(FLYING, flying);
+		this.dataManager.set(FLYING, Boolean.valueOf(flying));
 		if (!world.isRemote) {
-			this.isFlying = flying;
+			this.isFlying = Boolean.valueOf(flying);
 		}
 	}
 
 	public int getArmor() {
-		return this.dataManager.get(ARMOR);
+		return Integer.valueOf(this.dataManager.get(ARMOR).intValue());
 	}
 
 	public void setArmor(int armorType) {
-		this.dataManager.set(ARMOR, armorType);
+		this.dataManager.set(ARMOR, Integer.valueOf(armorType));
 	}
 
 	@Override
@@ -618,37 +620,36 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	@Override
-	public void travel(float strafe, float forward, float vertical) {
-		if (!this.canMove() && !this.isBeingRidden()) {
-			strafe = 0;
-			forward = 0;
-			super.travel(strafe, forward, vertical);
-			return;
-		}
-		if (this.isBeingRidden() && this.canBeSteered()) {
-			EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-			if (controller != null) {
-				strafe = controller.moveStrafing * 0.5F;
-				forward = controller.moveForward;
-				if (forward <= 0.0F) {
-					forward *= 0.25F;
-				}
-				if (this.isFlying() || this.isHovering()) {
-					motionX *= 1.06;
-					motionZ *= 1.06;
-				}
-				jumpMovementFactor = 0.05F;
-				this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
-				super.travel(strafe, vertical = 0, forward);
+		public void travel(float strafe, float forward, float vertical) {
+			if (!this.canMove() && !this.isBeingRidden()) {
+				strafe = 0;
+				forward = 0;
+				super.travel(strafe, forward, vertical);
 				return;
 			}
-		}
+			if (this.isBeingRidden() && this.canBeSteered()) {
+				EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
+				if (controller != null) {
+					strafe = controller.moveStrafing * 0.5F;
+					forward = controller.moveForward;
+					if (forward <= 0.0F) {
+						forward *= 0.25F;
+					}
+					if (this.isFlying() || this.isHovering()) {
+						motionX *= 1.06;
+						motionZ *= 1.06;
+					}
+					jumpMovementFactor = 0.05F;
+					this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+					super.travel(strafe, vertical = 0, forward);
+					return;
+				}
+			}
 		super.travel(strafe, forward, vertical);
 	}
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		System.out.println("help");
 
 		if (this.getAnimation() != this.ANIMATION_SCRATCH && this.getAnimation() != this.ANIMATION_BITE) {
 			this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
