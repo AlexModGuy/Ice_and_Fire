@@ -6,7 +6,8 @@ import net.minecraft.util.text.TextFormatting;
 import java.util.Map;
 
 public enum EnumDragonEgg {
-    RED(0, TextFormatting.DARK_RED, true), GREEN(1, TextFormatting.DARK_GREEN, true), BRONZE(2, TextFormatting.GOLD, true), GRAY(3, TextFormatting.GRAY, true), BLUE(4, TextFormatting.AQUA, false), WHITE(5, TextFormatting.WHITE, false), SAPPHIRE(6, TextFormatting.BLUE, false), SILVER(7, TextFormatting.DARK_GRAY, false);
+    RED(0, TextFormatting.DARK_RED, true), GREEN(1, TextFormatting.DARK_GREEN, true), BRONZE(2, TextFormatting.GOLD, true), GRAY(3, TextFormatting.GRAY, true),
+    BLUE(4, TextFormatting.AQUA, false), WHITE(5, TextFormatting.WHITE, false), SAPPHIRE(6, TextFormatting.BLUE, false), SILVER(7, TextFormatting.DARK_GRAY, false);
 
     private static final Map<Integer, EnumDragonEgg> META_LOOKUP = Maps.newHashMap();
 

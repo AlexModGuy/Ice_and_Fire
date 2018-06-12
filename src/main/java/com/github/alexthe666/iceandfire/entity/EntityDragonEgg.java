@@ -121,12 +121,6 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 		}
 	}
 
-	public String getTexture() {
-		String i = getType().isFire ? "firedragon/" : "icedragon/";
-		return "iceandfire:textures/models/" + i + "egg_" + getType().name().toLowerCase() + ".png";
-
-	}
-
 	@Override
 	public boolean isAIDisabled() {
 		return true;

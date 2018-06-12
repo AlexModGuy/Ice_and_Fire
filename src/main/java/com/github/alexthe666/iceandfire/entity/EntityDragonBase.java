@@ -149,6 +149,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
     }
 
+    public int getHorizontalFaceSpeed() {
+        return 10 * this.getDragonStage() / 5;
+    }
+
     private void initDragonInv() {
         ContainerHorseChest animalchest = this.dragonInv;
         this.dragonInv = new ContainerHorseChest("dragonInventory", 4);
@@ -1200,10 +1204,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public abstract String getVariantName(int variant);
 
-    public abstract String getTexture();
-
-    public abstract String getTextureOverlay();
-
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -1857,5 +1857,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
             }
         }
+    }
+
+    public boolean shouldRenderEyes() {
+        return !this.isSleeping() && !this.isModelDead();
     }
 }

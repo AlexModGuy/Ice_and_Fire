@@ -87,22 +87,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.dataManager.register(SWIMMING, Boolean.valueOf(false));
 	}
 
-	@Override
-	public String getTexture() {
-		if (this.isModelDead()) {
-			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
-				return "iceandfire:textures/models/icedragon/ice_skeleton_" + this.getDragonStage();
-			} else {
-				return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
-			}
-		}
-		if (this.isSleeping() || this.isBlinking()) {
-			return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
-		} else {
-			return "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
-		}
-	}
-
 	public String getVariantName(int variant) {
 		switch (variant) {
 			default:
@@ -473,11 +457,6 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public Animation[] getAnimations() {
 		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityIceDragon.ANIMATION_TAILWHACK, EntityIceDragon.ANIMATION_FIRECHARGE, EntityIceDragon.ANIMATION_WINGBLAST, EntityIceDragon.ANIMATION_ROAR};
-	}
-
-	@Override
-	public String getTextureOverlay() {
-		return this.isSleeping() || this.isBlinking() || this.isModelDead() ? null : "iceandfire:textures/models/icedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
 
 	public boolean isBreedingItem(@Nullable ItemStack stack) {

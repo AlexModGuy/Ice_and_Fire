@@ -84,6 +84,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         this.tasks.addTask(4, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
         ((PathNavigateGround) this.getNavigator()).setAvoidSun(true);
     }
 

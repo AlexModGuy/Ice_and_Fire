@@ -12,6 +12,9 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderDragonSkull extends RenderLiving {
 
+	public static final ResourceLocation SKULL_FIRE = new ResourceLocation("iceandfire:textures/models/firedragon/fire_skeleton_4.png");
+	public static final ResourceLocation SKULL_ICE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_4.png");
+
 	public RenderDragonSkull(RenderManager renderManager) {
 		super(renderManager, new ModelFireSkull(), 0.3F);
 	}
@@ -39,9 +42,9 @@ public class RenderDragonSkull extends RenderLiving {
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		if (entity instanceof EntityDragonSkull) {
 			if(((EntityDragonSkull) entity).getType() == 0){
-				return new ResourceLocation("iceandfire:textures/models/firedragon/fire_skeleton_" + ((EntityDragonSkull) entity).getStage() + ".png");
+				return SKULL_FIRE;
 			}else{
-				return new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_" + ((EntityDragonSkull) entity).getStage() + ".png");
+				return SKULL_ICE;
 			}
 		}
 		return null;

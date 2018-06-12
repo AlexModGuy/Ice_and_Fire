@@ -20,6 +20,20 @@ import javax.annotation.Nullable;
 
 public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
+	private static final ResourceLocation VARIANT_0 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0.png");
+	private static final ResourceLocation VARIANT_0_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0_blinking.png");
+	private static final ResourceLocation VARIANT_1 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_1.png");
+	private static final ResourceLocation VARIANT_1_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_1_blinking.png");
+	private static final ResourceLocation VARIANT_2 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_2.png");
+	private static final ResourceLocation VARIANT_2_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_2_blinking.png");
+	private static final ResourceLocation VARIANT_3 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_3.png");
+	private static final ResourceLocation VARIANT_3_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_3_blinking.png");
+	private static final ResourceLocation VARIANT_4 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_4.png");
+	private static final ResourceLocation VARIANT_4_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_4_blinking.png");
+	private static final ResourceLocation VARIANT_5 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_5.png");
+	private static final ResourceLocation VARIANT_5_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_5_blinking.png");
+	
+	
 	public RenderHippocampus(RenderManager renderManager) {
 		super(renderManager, new ModelHippocampus(), 0.8F);
 		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
@@ -32,7 +46,21 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 	@Nullable
 	@Override
 	protected ResourceLocation getEntityTexture(EntityHippocampus entity) {
-		return new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_" + entity.getVariant() + (entity.isBlinking() ? "_blinking" : "") + ".png");
+		switch(entity.getVariant()){
+			default:
+				return entity.isBlinking() ? VARIANT_0_BLINK : VARIANT_0;
+			case 1:
+				return entity.isBlinking() ? VARIANT_1_BLINK : VARIANT_1;
+			case 2:
+				return entity.isBlinking() ? VARIANT_2_BLINK : VARIANT_2;
+			case 3:
+				return entity.isBlinking() ? VARIANT_3_BLINK : VARIANT_3;
+			case 4:
+				return entity.isBlinking() ? VARIANT_4_BLINK : VARIANT_4;
+			case 5:
+				return entity.isBlinking() ? VARIANT_5_BLINK : VARIANT_5;
+
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
