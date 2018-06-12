@@ -46,8 +46,8 @@ public class ModEntities {
 		registerSpawnable(EntityHippocampus.class, "hippocampus", 19, 0X4491C7, 0X4FC56B);
 		registerSpawnable(EntityDeathWorm.class, "deathworm", 20, 0XD1CDA3, 0X423A3A);
 		registerUnspawnable(EntityDeathWormEgg.class, "deathwormegg", 21);
-		registerSpawnable(EntityCockatrice.class, "cockatrice", 22, 0X8F5005, 0X4F5A23);
-		registerUnspawnable(EntityCockatriceEgg.class, "cockatriceegg", 23);
+		registerSpawnable(EntityCockatrice.class, "if_cockatrice", 22, 0X8F5005, 0X4F5A23);
+		registerUnspawnable(EntityCockatriceEgg.class, "if_cockatriceegg", 23);
 		registerSpawnable(EntityStymphalianBird.class, "stymphalianbird", 24, 0X744F37, 0X9E6C4B);
 		registerUnspawnable(EntityStymphalianFeather.class, "stymphalianfeather", 25);
 		registerUnspawnable(EntityStymphalianArrow.class, "stymphalianarrow", 26);

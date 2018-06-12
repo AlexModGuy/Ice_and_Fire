@@ -169,7 +169,7 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerEntityTag("hippocampus", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.WATER, 15).add(Aspect.DESIRE, 5).add(Aspect.BEAST, 5));
         ThaumcraftApi.registerEntityTag("deathworm", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.DEATH, 15).add(Aspect.MOTION, 5).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(Aspect.ELDRITCH, 15));
         ThaumcraftApi.registerEntityTag("stymphalianbird", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.METAL, 20).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 15).add(Aspect.AVERSION, 15));
-        ThaumcraftApi.registerEntityTag("cockatrice", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.ALCHEMY, 20).add(Aspect.DARKNESS, 20).add(Aspect.AVERSION, 15));
+        ThaumcraftApi.registerEntityTag("if_cockatrice", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.ALCHEMY, 20).add(Aspect.DARKNESS, 20).add(Aspect.AVERSION, 15));
         ThaumcraftApi.registerEntityTag("if_troll", new AspectList().add(IceAndFireAspectRegistry.MYTHICAL, 30).add(Aspect.BEAST, 20).add(Aspect.AVERSION, 10).add(Aspect.DARKNESS, 20).add(Aspect.MAGIC, 15).add(Aspect.MAN, 5));
 
     }

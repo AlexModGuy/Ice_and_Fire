@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.google.common.base.Predicate;
@@ -21,10 +22,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -609,6 +607,21 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             }
         }
         return false;
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.COCKATRICE_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.COCKATRICE_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.COCKATRICE_DIE;
     }
 
     @SideOnly(Side.CLIENT)

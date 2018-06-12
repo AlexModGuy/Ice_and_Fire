@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.google.common.base.Optional;
@@ -38,6 +39,7 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -285,7 +287,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             }
             this.flock.update();
         }
-        if (!world.isRemote && this.getAttackTarget() != null) {
+        if (!world.isRemote && this.getAttackTarget() != null && !this.getAttackTarget().isDead) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
@@ -304,6 +306,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 if (this.isFlying()) {
                     rotationYaw = renderYawOffset;
                     if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVector(), target.getPositionVector())) {
+                        this.playSound(ModSounds.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
                             float wingX = (float) (posX + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
                             float wingZ = (float) (posZ + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
@@ -447,6 +450,21 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             this.setAnimation(ANIMATION_SPEAK);
         }
         super.playHurtSound(source);
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.STYMPHALIAN_BIRD_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.STYMPHALIAN_BIRD_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.STYMPHALIAN_BIRD_DIE;
     }
 
     @Override

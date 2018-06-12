@@ -104,7 +104,15 @@ public class CommonProxy {
 				ModSounds.TROLL_IDLE,
 				ModSounds.TROLL_HURT,
 				ModSounds.TROLL_DIE,
-				ModSounds.TROLL_ROAR
+				ModSounds.TROLL_ROAR,
+				ModSounds.COCKATRICE_IDLE,
+				ModSounds.COCKATRICE_HURT,
+				ModSounds.COCKATRICE_DIE,
+				ModSounds.COCKATRICE_CRY,
+				ModSounds.STYMPHALIAN_BIRD_IDLE,
+				ModSounds.STYMPHALIAN_BIRD_HURT,
+				ModSounds.STYMPHALIAN_BIRD_DIE,
+				ModSounds.STYMPHALIAN_BIRD_ATTACK
 		);
 	}
 

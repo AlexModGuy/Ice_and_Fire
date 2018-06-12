@@ -1,4 +1,59 @@
 {
+  "stymphalian_bird_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:stymphalian_bird_idle_0",
+      "iceandfire:stymphalian_bird_idle_1",
+      "iceandfire:stymphalian_bird_idle_2"
+    ]
+  },
+  "stymphalian_bird_attack": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:stymphalian_bird_attack"
+    ]
+  },
+  "stymphalian_bird_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:stymphalian_bird_hurt_0",
+      "iceandfire:stymphalian_bird_hurt_1"
+    ]
+  },
+  "stymphalian_bird_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:stymphalian_bird_die"
+    ]
+  },
+  "cockatrice_cry": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cockatrice_cry"
+    ]
+  },
+  "cockatrice_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cockatrice_hurt_0",
+      "iceandfire:cockatrice_hurt_1"
+    ]
+  },
+  "cockatrice_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cockatrice_idle_0",
+      "iceandfire:cockatrice_idle_1",
+      "iceandfire:cockatrice_idle_2"
+    ]
+  },
+  "cockatrice_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:cockatrice_die_0",
+      "iceandfire:cockatrice_die_1"
+    ]
+  },
   "troll_idle": {
     "category": "neutral",
     "sounds": [
