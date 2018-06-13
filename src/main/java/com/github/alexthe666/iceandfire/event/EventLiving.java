@@ -340,8 +340,6 @@ public class EventLiving {
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-			System.out.println(properties.isStone);
-
 			if (properties != null && properties.isStone) {
 				event.setCanceled(true);
 			}

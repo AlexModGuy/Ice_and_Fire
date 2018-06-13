@@ -126,10 +126,8 @@ public class SandExplosion extends Explosion {
                             if (entity instanceof EntityDeathWorm && ((EntityDeathWorm) entity).isOwner(((EntityDeathWorm) exploder).getOwner())) {
                                 return;
                             }
-                            if (entity instanceof EntityLivingBase && ((EntityDeathWorm) exploder).isOwner((EntityLivingBase) entity)) {
-                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
-                            } else {
-                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
+                            if (!(entity instanceof EntityLivingBase && ((EntityDeathWorm) exploder).isOwner((EntityLivingBase) entity))) {
+                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 6);
                             }
                         }
                     }
@@ -138,9 +136,9 @@ public class SandExplosion extends Explosion {
                     if (entity instanceof EntityLivingBase) {
                         d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
                     }
-                    entity.motionX += d5 * d11;
-                    entity.motionY += d7 * d11;
-                    entity.motionZ += d9 * d11;
+                    entity.motionX += d5 * d11 * 0.25;
+                    entity.motionY += d7 * d11 * 0.25;
+                    entity.motionZ += d9 * d11 * 0.25;
 
                     if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
                         this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));

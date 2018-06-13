@@ -56,10 +56,10 @@ public class IceAndFireConfig {
 	public boolean spawnHippocampus = true;
 	public int hippocampusSpawnChance = 30;
 	public int deathWormTargetSearchLength = 64;
-	public double deathWormMaxHealth = 30D;
-	public double deathWormAttackStrength = 6D;
+	public double deathWormMaxHealth = 10D;
+	public double deathWormAttackStrength = 3D;
 	public boolean spawnDeathWorm = true;
-	public int deathWormSpawnRate = 3;
+	public int deathWormSpawnRate = 2;
 	public int deathWormSpawnCheckChance = 3;
 	public int cockatriceChickenSearchLength = 40;
 	public int cockatriceEggChance = 4320000;
@@ -137,10 +137,10 @@ public class IceAndFireConfig {
 		this.hippocampusSpawnChance = config.getInt("Spawn Hippocampus Chance", "all", 30, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.deathWormTargetSearchLength = config.getInt("Death Worm Target Search Length", "all", 64, 1, 10000, "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag");
-		this.deathWormMaxHealth = (double)config.getFloat("Death Worm Base Health", "all", 30, 1, 10000, "Default deathworm health, this is scaled to the worm's particular size");
-		this.deathWormAttackStrength = (double)config.getFloat("Death Worm Base Attack Strength", "all", 6, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
+		this.deathWormMaxHealth = (double)config.getFloat("Death Worm Base Health", "all", 10, 1, 10000, "Default deathworm health, this is scaled to the worm's particular size");
+		this.deathWormAttackStrength = (double)config.getFloat("Death Worm Base Attack Strength", "all", 3, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
 		this.spawnDeathWorm = config.getBoolean("Spawn Death Worms", "all", true, "True if deathworms are allowed to spawn");
-		this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 3, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
+		this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 2, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
 		this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
 		this.cockatriceChickenSearchLength = config.getInt("Cockatrice chicken Search Length", "all", 40, 1, 10000, "How many blocks away can cockatrices detect chickens. Note that increasing this could cause lag.");

@@ -469,7 +469,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     private void updateAttributes() {
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.max(0.15D, 0.15D * this.getScaleForAge()));
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFire.CONFIG.deathWormAttackStrength * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFire.CONFIG.deathWormMaxHealth * this.getScaleForAge()));
         this.heal(30F * this.getScaleForAge());
@@ -518,18 +518,19 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         } else {
             this.faceEntity(this.getAttackTarget(), 10.0F, 10.0F);
             double dist = this.getDistanceSq(this.getAttackTarget());
+            System.out.println(dist);
             if (dist >= 4.0D * getScaleForAge() && dist <= 16.0D * getScaleForAge() && (this.isInSand() || this.onGround)) {
                 double d0 = this.getAttackTarget().posX - this.posX;
                 double d1 = this.getAttackTarget().posZ - this.posZ;
                 float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
                 if ((double) leap >= 1.0E-4D) {
-                    this.motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D * getScaleForAge();
-                    this.motionZ += d1 / (double) leap * 0.800000011920929D + this.motionZ * 0.20000000298023224D * getScaleForAge();
+                    this.motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D;
+                    this.motionZ += d1 / (double) leap * 0.800000011920929D + this.motionZ * 0.20000000298023224D;
                 }
                 this.motionY = 0.5F;
-
+                this.setAnimation(ANIMATION_BITE);
             }
-            if (dist < Math.max(3, 5D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 6) {
+            if (dist < Math.max(2, 2D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE) {
                 float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
                 this.motionY /= 2.0D;
@@ -595,7 +596,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                     float angle = (0.01745329251F * this.renderYawOffset);
                     double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                     double extraZ = (double) (radius * MathHelper.cos(angle));
-                    SandExplosion explosion = new SandExplosion(world, this, this.posX + extraX, this.posY - this.getEyeHeight(), this.posZ + extraZ, this.getScaleForAge());
+                    SandExplosion explosion = new SandExplosion(world, this, this.posX + extraX, this.posY - this.getEyeHeight(), this.posZ + extraZ, this.getScaleForAge() * 0.75F);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
                 }
@@ -611,7 +612,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
             if (world.isRemote) {
                 this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
                 for (int i = 0; i < segments.length; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
                 }
             }
             if(this.ticksExisted % 10 == 0){
@@ -754,7 +755,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 strafe = controller.moveStrafing * 0.5F;
                 forward = controller.moveForward;
                 this.fallDistance = 0;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
                 super.travel(strafe, vertical = 0, forward);
                 return;
             }
@@ -816,7 +817,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.worm.rotationYaw = this.limitAngle(this.worm.rotationYaw, angle, 30.0F);
-                this.worm.setAIMoveSpeed((float) 2F);
+                this.worm.setAIMoveSpeed((float) 1F);
                 this.worm.motionY += (double) this.worm.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.worm.rotationYaw * 0.017453292F;
