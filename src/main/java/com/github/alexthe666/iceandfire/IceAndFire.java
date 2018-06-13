@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.Random;
 
-@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME)
+@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME, guiFactory = "com.github.alexthe666.iceandfire.client.gui.IceAndFireGuiFactory")
 public class IceAndFire {
 
     public static final String MODID = "iceandfire";
@@ -62,18 +62,19 @@ public class IceAndFire {
     public static DamageSource gorgon;
     public static Biome GLACIER;
     public static Potion FROZEN_POTION;
-    public static IceAndFireConfig CONFIG;
-
+    public static IceAndFireConfig CONFIG = new IceAndFireConfig();
+    public static Configuration configFile;
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Configuration config = new Configuration(new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg"));
+        configFile = new Configuration(new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg"));
+
         try {
-            config.load();
-            CONFIG.init(config);
+            configFile.load();
+            CONFIG.init(configFile);
         } catch (Exception e) {
             System.out.println("Ice and Fire Config could not load!");
         } finally {
-            config.save();
+            configFile.save();
         }
 
         MinecraftForge.EVENT_BUS.register(new EventLiving());
