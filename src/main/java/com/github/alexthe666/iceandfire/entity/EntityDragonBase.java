@@ -904,7 +904,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 ticksStill = 0;
             }
             if(this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
-                System.out.println(this.isStuck());
                 if (this.getAnimation() == NO_ANIMATION) {
                     this.setAnimation(ANIMATION_TAILWHACK);
                 }

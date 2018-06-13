@@ -35,6 +35,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -83,6 +84,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             tail_buffer = new ChainBuffer();
         }
         initHippocampusInv();
+    }
+
+    public float getBlockPathWeight(BlockPos pos) {
+        return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
     }
 
     public boolean isNotColliding() {
@@ -488,11 +493,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     forward = controller.moveForward * 0.25F;
                     strafe = controller.moveStrafing * 0.125F;
 
-                    this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+                    this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
                     super.travel(strafe, vertical, forward);
                     return;
                 }
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
                 super.travel(strafe, vertical = 0, forward);
                 this.prevLimbSwingAmount = this.limbSwingAmount;
                 double deltaX = this.posX - this.prevPosX;
@@ -694,7 +699,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.hippo.rotationYaw = this.limitAngle(this.hippo.rotationYaw, angle, 30.0F);
-                this.hippo.setAIMoveSpeed((float) 2F);
+                this.hippo.setAIMoveSpeed((float) 1F);
                 this.hippo.motionY += (double)this.hippo.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double)Math.max(1.0F, this.entity.width)) {
                     float f = this.hippo.rotationYaw * 0.017453292F;

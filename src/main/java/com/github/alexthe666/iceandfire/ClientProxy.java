@@ -170,7 +170,6 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_flute, 0, new ModelResourceLocation("iceandfire:dragon_flute", "inventory"));
 		for(int i = 0; i < EnumHippogryphTypes.values().length; i++){
 			ModelLoader.setCustomModelResourceLocation(ModItems.hippogryph_egg, i, new ModelResourceLocation("iceandfire:hippogryph_egg", "inventory"));
-
 		}
 		ModelLoader.setCustomModelResourceLocation(ModItems.iron_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:iron_hippogryph_armor", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.gold_hippogryph_armor, 0, new ModelResourceLocation("iceandfire:gold_hippogryph_armor", "inventory"));
@@ -228,7 +227,6 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_bird_feather, 0, new ModelResourceLocation("iceandfire:stymphalian_bird_feather", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.stymphalian_arrow, 0, new ModelResourceLocation("iceandfire:stymphalian_arrow", "inventory"));
 		for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
-			weapon.item.setTileEntityItemStackRenderer(TEISR);
 			ModelLoader.setCustomModelResourceLocation(weapon.item, 0, new ModelResourceLocation("iceandfire:troll_weapon", "inventory"));
 		}
 		for (EnumTroll troll : EnumTroll.values()) {
@@ -265,11 +263,15 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 0, TileEntityDummyGorgonHead.class);
 		ForgeHooksClient.registerTESRItemStack(ModItems.gorgon_head, 1, TileEntityDummyGorgonHeadActive.class);
 		renderEntities();
-	}
 
+
+	}
 
 	public void postRender() {
 		EventClient.initializeStoneLayer();
+		for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
+			weapon.item.setTileEntityItemStackRenderer(TEISR);
+		}
 	}
 
 	@SuppressWarnings("deprecation")

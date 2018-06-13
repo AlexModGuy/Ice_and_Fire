@@ -34,8 +34,8 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
         if (!this.mob.isInWater() || this.mob.isRiding() || this.mob.isBeingRidden()) {
             return false;
         }
-        if (this.mob.getRNG().nextFloat() < 0.5F) {
-            Path path = this.mob.getNavigator().getPath();
+        Path path = this.mob.getNavigator().getPath();
+        if (this.mob.getRNG().nextFloat() < 0.5F ||path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq((double)path.getFinalPathPoint().x, (double)path.getFinalPathPoint().y, (double)path.getFinalPathPoint().z) < 3) {
             if (path != null && path.getFinalPathPoint() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }
@@ -56,28 +56,16 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
     }
 
     public BlockPos findWaterTarget() {
+        BlockPos blockpos = new BlockPos(this.mob.posX, this.mob.getEntityBoundingBox().minY, mob.posZ);
         if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
-            List<BlockPos> water = new ArrayList<>();
-            for (int x = (int) this.mob.posX - range; x < (int) this.mob.posX + range; x++) {
-                for (int y = (int)this.mob.posY - range; y < (int) this.mob.posY + range; y++) {
-                    for (int z = (int) this.mob.posZ - range; z < (int) this.mob.posZ + range; z++) {
-                        if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER && isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(x, y, z))) {
-                                water.add(new BlockPos(x, y, z));
-                        }
-
-                    }
+            for (int i = 0; i < 10; ++i) {
+                BlockPos blockpos1 = blockpos.add(mob.getRNG().nextInt(20) - 10, mob.getRNG().nextInt(6) - 3, mob.getRNG().nextInt(20) - 10);
+                if (mob.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
+                    return blockpos1;
                 }
-            }
-            if (!water.isEmpty()) {
-                if(avoidAttacker && this.mob.getAttackingEntity() != null){
-                    Collections.sort(water, this.fleePosSorter);
-
-                }
-                return water.get(this.mob.getRNG().nextInt(water.size()));
             }
         } else {
-            BlockPos blockpos1 = new BlockPos(this.mob.getAttackTarget());
-            return new BlockPos((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
+            return  new BlockPos(this.mob.getAttackTarget());
         }
         return null;
     }

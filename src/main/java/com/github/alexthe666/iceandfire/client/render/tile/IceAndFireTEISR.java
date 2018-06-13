@@ -17,5 +17,5 @@ public class IceAndFireTEISR extends TileEntityItemStackRenderer {
             ItemTrollWeapon weaponItem = (ItemTrollWeapon)itemStackIn.getItem();
             renderTrollWeapon.renderItem(weaponItem.weapon, 0, 0, 0, 0.0F, 0, 0.0F);
         }
-}
+    }
 }

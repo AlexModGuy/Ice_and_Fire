@@ -38,11 +38,14 @@ public class SirenEntityProperties extends EntityProperties<EntityLivingBase> {
 	}
 
 	public EntitySiren getClosestSiren(World world, EntityLivingBase player){
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(32, 32, 32);
+		if(player instanceof EntityPlayer && ((EntityPlayer) player).isCreative()){
+			return null;
+		}
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(EntitySiren.SEARCH_RANGE, EntitySiren.SEARCH_RANGE, EntitySiren.SEARCH_RANGE);
 		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, aabb);
 		Collections.sort(entities, new EntityAINearestAttackableTarget.Sorter(player));
 		for(Entity entity : entities){
-			if(entity instanceof EntitySiren && !((EntitySiren) entity).isAgressive()){
+			if(entity instanceof EntitySiren && !((EntitySiren) entity).isAgressive() && !((EntitySiren) entity).isDead){
 				return (EntitySiren)entity;
 			}
 		}

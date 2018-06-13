@@ -110,7 +110,7 @@ public class EventClient {
 	}
 
 	private Random rand = new Random();
-
+	private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if (event.getEntityLiving() instanceof EntityPlayer) {
@@ -119,7 +119,7 @@ public class EventClient {
 			if (player.world.isRemote && sirenProps != null) {
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 				EntitySiren siren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
-				if(siren == null || siren.isDead || event.getEntityLiving().getDistance(siren) > 33 || player.isCreative()){
+				if(siren == null){
 					sirenProps.isCharmed = false;
 				}
 				if (sirenProps.isCharmed) {
@@ -127,7 +127,7 @@ public class EventClient {
 						IceAndFire.PROXY.spawnParticle("siren_appearance", player.world, player.posX, player.posY, player.posZ, 0, 0, 0);
 					}
 					if (sirenProps.isCharmed && !renderer.isShaderActive()) {
-						renderer.loadShader(new ResourceLocation("iceandfire:shaders/post/siren.json"));
+						renderer.loadShader(SIREN_SHADER);
 					}
 
 				}
