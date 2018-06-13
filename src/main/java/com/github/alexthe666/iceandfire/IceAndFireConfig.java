@@ -50,7 +50,7 @@ public class IceAndFireConfig {
 	public double cyclopsMaxHealth = 150;
 	public double cyclopsAttackStrength = 15;
 	public double cyclopsBiteStrength = 40;
-	public double sirenMaxHealth = 100D;
+	public double sirenMaxHealth = 50D;
 	public boolean generateSirenIslands = true;
 	public int generateSirenChance = 300;
 	public boolean spawnHippocampus = true;
@@ -129,7 +129,7 @@ public class IceAndFireConfig {
 		this.cyclopsAttackStrength = (double)config.getFloat("Cyclops Attack Strength", "all", 15, 1, 10000, "Cyclops attack strength");
 		this.cyclopsBiteStrength = (double)config.getFloat("Cyclops Bite Strength", "all", 40, 1, 10000, "Amount of damage done with cyclops bite attack.");
 
-		this.sirenMaxHealth = (double)config.getFloat("Siren Max Health", "all", 100, 1, 10000, "Maximum siren health");
+		this.sirenMaxHealth = (double)config.getFloat("Siren Max Health", "all", 50, 1, 10000, "Maximum siren health");
 		this.generateSirenIslands = config.getBoolean("Spawn Sirens", "all", true, "True if siren islands are allowed to spawn");
 		this.generateSirenChance = config.getInt("Spawn Sirens Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
 

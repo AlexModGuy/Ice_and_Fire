@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
-import net.ilexiconn.llibrary.client.event.PlayerViewDistanceEvent;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -97,16 +96,6 @@ public class EventClient {
 			}
 		}
 
-	}
-
-	@SubscribeEvent
-	public void on3rdPersonView(PlayerViewDistanceEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		if (player.isRiding() && player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityDragonBase) {
-			EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
-			//float newDistance = (IceAndFire.CONFIG.dragonRiding3rdPersonDistanceModifier * dragon.getRenderSize()) + 4;
-			//event.setViewDistance(newDistance);
-		}
 	}
 
 	private Random rand = new Random();

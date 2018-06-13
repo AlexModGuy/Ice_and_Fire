@@ -129,7 +129,7 @@ public class FireExplosion extends Explosion {
 							d5 = d5 / d13;
 							d7 = d7 / d13;
 							d9 = d9 / d13;
-							if (exploder instanceof EntityDragonBase) {
+							if (exploder != null && exploder instanceof EntityDragonBase) {
 								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 									return;
 								}

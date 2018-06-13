@@ -122,7 +122,7 @@ public class SandExplosion extends Explosion {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        if (exploder instanceof EntityDeathWorm) {
+                        if (exploder != null && exploder instanceof EntityDeathWorm) {
                             if (entity instanceof EntityDeathWorm && ((EntityDeathWorm) entity).isOwner(((EntityDeathWorm) exploder).getOwner())) {
                                 return;
                             }
