@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -82,6 +81,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public static Animation ANIMATION_SHAKEPREY;
     public static Animation ANIMATION_WINGBLAST;
     public static Animation ANIMATION_ROAR;
+    public static Animation ANIMATION_TAILWHACK;
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -129,6 +129,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     private ItemStackHandler itemHandler = null;
     public int walkCycle;
     private int tacklingTicks;
+    private int ticksStill;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -890,9 +891,33 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         return this.world.isDaytime();
     }
 
+    private boolean isStuck(){
+        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 40;
+    }
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(!world.isRemote){
+            if((int)this.prevPosX == (int)this.posX && (int)this.prevPosZ == (int)this.posZ){
+                this.ticksStill++;
+            }else{
+                ticksStill = 0;
+            }
+            if(this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
+                System.out.println(this.isStuck());
+                if (this.getAnimation() == NO_ANIMATION) {
+                    this.setAnimation(ANIMATION_TAILWHACK);
+                }
+                if (this.getAnimation() == ANIMATION_TAILWHACK && this.getAnimationTick() == 10) {
+                    IBlockState state = world.getBlockState(new BlockPos(this));
+                    BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, this.posX, this.posY, this.posZ, (4) * this.getDragonStage() - 2);
+                    explosion.doExplosionA();
+                    explosion.doExplosionB(true);
+                    this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1, 1);
+
+                }
+            }
+        }
 
         if(this.isTackling() && !this.isFlying() && this.onGround){
             tacklingTicks++;

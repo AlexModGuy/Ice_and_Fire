@@ -31,7 +31,6 @@ import java.util.Random;
 public class EntityIceDragon extends EntityDragonBase {
 
 	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
-	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -44,7 +43,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	public BlockPos waterTarget;
 
 	public EntityIceDragon(World worldIn) {
-		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
+		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);

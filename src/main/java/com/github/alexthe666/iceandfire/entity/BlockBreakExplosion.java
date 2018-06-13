@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityTNTPrimed;
@@ -25,18 +26,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TrollExplosion extends Explosion {
+public class BlockBreakExplosion extends Explosion {
     private final World worldObj;
     private final double explosionX;
     private final double explosionY;
     private final double explosionZ;
-    private final EntityTroll exploder;
+    private final EntityCreature exploder;
     private final float explosionSize;
     private final List<BlockPos> affectedBlockPositions;
     private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
     private final Vec3d position;
 
-    public TrollExplosion(World world, EntityTroll entity, double x, double y, double z, float size) {
+    public BlockBreakExplosion(World world, EntityCreature entity, double x, double y, double z, float size) {
         super(world, entity, x, y, z, size, true, true);
         this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
         this.playerKnockbackMap = Maps.<EntityPlayer, Vec3d>newHashMap();
@@ -144,24 +145,23 @@ public class TrollExplosion extends Explosion {
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
             if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
-                double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
-                double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();
-                double d2 = blockpos.getZ() + this.worldObj.rand.nextFloat();
+                double d0 = (double)((float)blockpos.getX() + this.worldObj.rand.nextFloat());
+                double d1 = (double)((float)blockpos.getY() + this.worldObj.rand.nextFloat());
+                double d2 = (double)((float)blockpos.getZ() + this.worldObj.rand.nextFloat());
                 double d3 = d0 - this.explosionX;
                 double d4 = d1 - this.explosionY;
                 double d5 = d2 - this.explosionZ;
-                double d6 = MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+                double d6 = (double)MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
                 d3 = d3 / d6;
                 d4 = d4 / d6;
                 d5 = d5 / d6;
-                double d7 = 0.5D / (d6 / this.explosionSize + 0.1D);
-                d7 = d7 * (this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
+                double d7 = 0.5D / (d6 / (double)this.explosionSize + 0.1D);
+                d7 = d7 * (double)(this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+                this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
             }
             if (state.getMaterial() != Material.AIR) {
                 if (block.canDropFromExplosion(this)) {

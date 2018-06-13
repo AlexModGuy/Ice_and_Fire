@@ -25,7 +25,6 @@ import java.util.Random;
 
 public class EntityFireDragon extends EntityDragonBase {
 
-	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -34,7 +33,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	public static final float[] growth_stage_5 = new float[]{20F, 30F};
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
+		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
 		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
