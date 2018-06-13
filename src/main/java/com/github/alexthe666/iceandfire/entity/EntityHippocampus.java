@@ -577,7 +577,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     itemstack.shrink(1);
                 }
                 if(!this.isTamed() && this.getRNG().nextInt(3) == 0){
-                    this.setTamed(true);
+                    this.setTamedBy(player);
                     for (int i = 0; i < 6; i++) {
                         this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
                     }
@@ -585,7 +585,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 return true;
 
             }
-             if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+             if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
                 this.setSitting(false);
                 this.setInLove(player);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -594,11 +594,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 }
                 return true;
             }
-            if (itemstack != null && itemstack.getItem() == Items.STICK) {
+            if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
                 this.setSitting(!this.isSitting());
                 return true;
             }
-        if(itemstack.isEmpty()) {
+        if(isOwner(player) && itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;

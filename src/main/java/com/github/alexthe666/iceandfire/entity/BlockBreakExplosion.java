@@ -167,7 +167,6 @@ public class BlockBreakExplosion extends Explosion {
                 if (block.canDropFromExplosion(this)) {
                     block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
                 }
-
                 block.onBlockExploded(this.worldObj, blockpos, this);
             }
         }
