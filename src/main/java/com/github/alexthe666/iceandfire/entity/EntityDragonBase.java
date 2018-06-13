@@ -892,7 +892,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private boolean isStuck(){
-        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 40;
+        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 40 && !this.isHovering() && canMove();
     }
     @Override
     public void onLivingUpdate() {

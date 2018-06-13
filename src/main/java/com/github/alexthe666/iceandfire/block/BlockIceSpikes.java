@@ -29,6 +29,7 @@ public class BlockIceSpikes extends Block {
 		this.setUnlocalizedName("iceandfire.dragon_ice_spikes");
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setSoundType(SoundType.GLASS);
+		this.setHarvestLevel("pickaxe", 0);
 		this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
 	}
 

@@ -144,7 +144,7 @@ public class FireExplosion extends Explosion {
 									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 								}
 							}
-							if (entity.isDead) {
+							if (entity.isDead && this.exploder != null && this.exploder instanceof EntityDragonBase) {
 								((EntityDragonBase) this.exploder).attackDecision = true;
 							}
 						}

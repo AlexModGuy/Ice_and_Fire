@@ -38,8 +38,8 @@ public class ItemStoneStatue extends Item {
 			boolean isPlayer = stack.getTagCompound().getBoolean("IAFStoneStatueEntityPlayer");
 			int id = stack.getTagCompound().getInteger("IAFStoneStatueEntityID");
 			if (EntityList.getKey(EntityList.getClassFromID(id)) != null) {
-				String mobName = isPlayer ? I18n.format("entity.player.name") : net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName();
-				tooltip.add(mobName);
+			    String untranslated = isPlayer ? "entity.player.name" : "entity." + net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName() + ".name";
+				tooltip.add(I18n.format(untranslated));
 			}
 		}
 	}
