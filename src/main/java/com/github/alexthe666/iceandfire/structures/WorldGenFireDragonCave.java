@@ -53,7 +53,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 				world.setBlockState(pos, Blocks.GOLD_ORE.getDefaultState(), 3);
 			}
 			if (chance > 40 && chance < 50) {
-				world.setBlockState(pos, ModBlocks.silverOre.getDefaultState(), 3);
+				world.setBlockState(pos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : ModBlocks.charedStone.getDefaultState(), 3);
 			}
 			if (chance > 50 && chance < 60) {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState(), 3);
