@@ -30,7 +30,6 @@ public class ItemRottenEgg extends Item {
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setUnlocalizedName("iceandfire.rotten_egg");
 		this.setRegistryName(IceAndFire.MODID, "rotten_egg");
-		this.maxStackSize = 1;
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {

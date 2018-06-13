@@ -210,72 +210,81 @@ public class EventLiving {
 	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && event.getEntityLiving().getRNG().nextInt(1 + IceAndFire.CONFIG.cockatriceEggChance) == 0 && !event.getEntityLiving().isChild()){
-			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-			event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving())&& !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
+			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
+			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
+				if(event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0){
+					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+					event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+				}
+				chickenProps.timeUntilNextEgg = 4 * (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
+			}
+
 		}
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-		EntitySiren closestSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
-		if(event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
-			if (sirenProps != null && closestSiren != null && closestSiren.isActuallySinging()) {
-				stepHeightSwitched = false;
-				if (EntitySiren.isWearingEarplugs(event.getEntityLiving())) {
-					sirenProps.isCharmed = false;
-				} else {
-					sirenProps.isCharmed = true;
-					if (rand.nextInt(7) == 0) {
-						for (int i = 0; i < 5; i++) {
-							event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
-						}
-					}
-					EntityLivingBase entity = event.getEntityLiving();
-					entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
-					entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
-					entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
-					float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
-					entity.stepHeight = 1;
-					double d0 = closestSiren.posX - entity.posX;
-					double d2 = closestSiren.posZ - entity.posZ;
-					double d1 = closestSiren.posY - 1 - entity.posY;
-					if (entity.isRiding()) {
-						entity.dismountRidingEntity();
-					}
-					if (entity.onGround && entity.collidedHorizontally) {
-						entity.motionY = 0.42F;
-
-						if (entity.isPotionActive(MobEffects.JUMP_BOOST)) {
-							entity.motionY += (double) ((float) (entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
-						}
-
-						if (entity.isSprinting()) {
-							float f = entity.rotationYaw * 0.017453292F;
-							entity.motionX -= (double) (MathHelper.sin(f) * 0.2F);
-							entity.motionZ += (double) (MathHelper.cos(f) * 0.2F);
-						}
-
-						entity.isAirBorne = true;
-						net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
-					}
-					double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-					float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-					float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-					entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-					entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
-					if (entity.getDistance(closestSiren) < 5D) {
+		if(sirenProps != null) {
+			EntitySiren closestSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+			if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
+				if (sirenProps != null && closestSiren != null && closestSiren.isActuallySinging()) {
+					stepHeightSwitched = false;
+					if (EntitySiren.isWearingEarplugs(event.getEntityLiving())) {
 						sirenProps.isCharmed = false;
-						closestSiren.setSinging(false);
-						closestSiren.setAttackTarget((EntityLivingBase) entity);
-						closestSiren.setAggressive(true);
-						closestSiren.triggerOtherSirens((EntityLivingBase) entity);
+					} else {
+						sirenProps.isCharmed = true;
+						if (rand.nextInt(7) == 0) {
+							for (int i = 0; i < 5; i++) {
+								event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+							}
+						}
+						EntityLivingBase entity = event.getEntityLiving();
+						entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
+						entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
+						entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
+						float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
+						entity.stepHeight = 1;
+						double d0 = closestSiren.posX - entity.posX;
+						double d2 = closestSiren.posZ - entity.posZ;
+						double d1 = closestSiren.posY - 1 - entity.posY;
+						if (entity.isRiding()) {
+							entity.dismountRidingEntity();
+						}
+						if (entity.onGround && entity.collidedHorizontally) {
+							entity.motionY = 0.42F;
+
+							if (entity.isPotionActive(MobEffects.JUMP_BOOST)) {
+								entity.motionY += (double) ((float) (entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+							}
+
+							if (entity.isSprinting()) {
+								float f = entity.rotationYaw * 0.017453292F;
+								entity.motionX -= (double) (MathHelper.sin(f) * 0.2F);
+								entity.motionZ += (double) (MathHelper.cos(f) * 0.2F);
+							}
+
+							entity.isAirBorne = true;
+							net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+						}
+						double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+						float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+						float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+						entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
+						entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+						if (entity.getDistance(closestSiren) < 5D) {
+							sirenProps.isCharmed = false;
+							closestSiren.setSinging(false);
+							closestSiren.setAttackTarget((EntityLivingBase) entity);
+							closestSiren.setAggressive(true);
+							closestSiren.triggerOtherSirens((EntityLivingBase) entity);
+						}
+						if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
+							sirenProps.isCharmed = false;
+						}
 					}
-					if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
-						sirenProps.isCharmed = false;
-					}
+				} else if (sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched) {
+					event.getEntityLiving().stepHeight = 0.6F;
+					stepHeightSwitched = true;
 				}
-			} else if (sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched) {
-				event.getEntityLiving().stepHeight = 0.6F;
-				stepHeightSwitched = true;
 			}
 		}
 		if (event.getEntityLiving() instanceof EntityLiving) {

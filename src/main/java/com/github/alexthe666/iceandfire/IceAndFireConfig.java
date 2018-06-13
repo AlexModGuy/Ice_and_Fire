@@ -27,6 +27,7 @@ public class IceAndFireConfig {
 	public boolean spawnGlaciers = true;
 	public int glacierSpawnChance = 4;
 	public int oreToStoneRatioForDragonCaves = 45;
+	public int dragonEggTime = 7200;
 	public int dragonGriefing = 0;
 	public int dragonFlapNoiseDistance = 4;
 	public int dragonFluteDistance = 8;
@@ -62,7 +63,7 @@ public class IceAndFireConfig {
 	public int deathWormSpawnRate = 2;
 	public int deathWormSpawnCheckChance = 3;
 	public int cockatriceChickenSearchLength = 40;
-	public int cockatriceEggChance = 4320000;
+	public int cockatriceEggChance = 100;
 	public boolean spawnCockatrices= true;
 	public int cockatriceSpawnRate = 4;
 	public int cockatriceSpawnCheckChance = 0;
@@ -101,6 +102,7 @@ public class IceAndFireConfig {
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
 
+		this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
 		this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
 		this.dragonFlapNoiseDistance = config.getInt("Dragon Flap Noise Distance", "all", 4, 0, 10000, "Dragon Flap Noise Distance - Larger number, further away you can hear it");
 		this.dragonFluteDistance = config.getInt("Dragon Flute Distance", "all", 4, 0, 10000, "Dragon Flute Distance - how many chunks away is the dragon flute effective?");
@@ -144,7 +146,7 @@ public class IceAndFireConfig {
 		this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
 		this.cockatriceChickenSearchLength = config.getInt("Cockatrice chicken Search Length", "all", 40, 1, 10000, "How many blocks away can cockatrices detect chickens. Note that increasing this could cause lag.");
-		this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 4320000, 1000, Integer.MAX_VALUE, "1 out of this number chance per tick for a chicken to lay a cockatrice egg.");
+		this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 1000, 1, Integer.MAX_VALUE, "1 out of this number chance per tick for a chicken to lay a cockatrice egg.");
 		this.spawnCockatrices = config.getBoolean("Spawn Cockatrices", "all", true, "True if cockatrices are allowed to spawn");
 		this.cockatriceSpawnRate = config.getInt("Cockatrice Spawn Weight", "all", 4, 1, 10000, "Cockatrice spawn weight. Lower = lower chance to spawn");
 		this.cockatriceSpawnCheckChance = config.getInt("Cockatrice Spawn Check Chance", "all", 0, 0, 10000, "A double check to see if the game can spawn cockatrices. Higher number = lower chance to spawn.");

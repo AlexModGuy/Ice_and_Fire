@@ -51,6 +51,7 @@ public class ItemDragonEgg extends Item {
 			EntityDragonEgg egg = new EntityDragonEgg(worldIn);
 			egg.setType(type);
 			egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			egg.onPlayerPlace(player);
 			if (!worldIn.isRemote) {
 				worldIn.spawnEntity(egg);
 			}
