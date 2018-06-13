@@ -63,20 +63,12 @@ public class IceAndFire {
     public static Biome GLACIER;
     public static Potion FROZEN_POTION;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
-    public static Configuration configFile;
+    public static Configuration config;
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        configFile = new Configuration(new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg"));
-
-        try {
-            configFile.load();
-            CONFIG.init(configFile);
-        } catch (Exception e) {
-            System.out.println("Ice and Fire Config could not load!");
-        } finally {
-            configFile.save();
-        }
-
+        loadConfig();
+        syncConfig();
         MinecraftForge.EVENT_BUS.register(new EventLiving());
         TAB = new CreativeTab(MODID);
         ModEntities.init();
@@ -85,6 +77,24 @@ public class IceAndFire {
         logger.info("A dragon whispers her name in the east");
     }
 
+    public static void loadConfig() {
+        File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (Exception e) {
+                logger.warn("Could not create a new Ice and Fire config file.");
+                logger.warn(e.getLocalizedMessage());
+            }
+        }
+        config = new Configuration(configFile);
+        config.load();
+    }
+
+    public static void syncConfig(){
+        CONFIG.init(config);
+        config.save();
+    }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {

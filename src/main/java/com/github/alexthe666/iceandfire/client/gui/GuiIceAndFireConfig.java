@@ -9,23 +9,12 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 
 public class GuiIceAndFireConfig extends GuiConfig {
     public GuiIceAndFireConfig(GuiScreen parent) {
-        super(parent, new ConfigElement(IceAndFire.configFile.getCategory("all")).getChildElements(), IceAndFire.MODID, false, false, "Ice And Fire Confg");
-        titleLine2 = IceAndFire.configFile.getConfigFile().getAbsolutePath();
+        super(parent, new ConfigElement(IceAndFire.config.getCategory("all")).getChildElements(), IceAndFire.MODID, false, false, "Ice And Fire Confg");
+        titleLine2 = IceAndFire.config.getConfigFile().getAbsolutePath();
     }
 
-    @Override
-    public void initGui() {
-        super.initGui();
-    }
-
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        super.actionPerformed(button);
+   @Override
+    public void onGuiClosed(){
+        super.onGuiClosed();
     }
 }
