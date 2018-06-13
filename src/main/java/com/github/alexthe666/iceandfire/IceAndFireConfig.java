@@ -39,13 +39,13 @@ public class IceAndFireConfig {
 	public boolean spawnHippogryphs = true;
 	public int hippogryphSpawnRate = 5;
 	public boolean spawnGorgons = true;
-	public int spawnGorgonsChance = 80;
+	public int spawnGorgonsChance = 50;
 	public double gorgonMaxHealth = 100D;
 	public boolean spawnPixies = true;
 	public int spawnPixiesChance = 60;
 	public int pixieVillageSize = 5;
 	public boolean generateCyclopsCaves = true;
-	public int spawnCyclopsChance = 80;
+	public int spawnCyclopsChance = 170;
 	public int cyclopesSheepSearchLength = 17;
 	public double cyclopsMaxHealth = 150;
 	public double cyclopsAttackStrength = 15;
@@ -115,7 +115,7 @@ public class IceAndFireConfig {
 		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 5, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 
 		this.spawnGorgons = config.getBoolean("Spawn Gorgons", "all", true, "True if gorgon temples are allowed to spawn");
-		this.spawnGorgonsChance = config.getInt("Spawn Gorgon Chance", "all", 80, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.spawnGorgonsChance = config.getInt("Spawn Gorgon Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.gorgonMaxHealth = (double)config.getFloat("Gorgon Max Health", "all", 100, 1, 10000, "Maximum gorgon health");
 
 		this.spawnPixies = config.getBoolean("Spawn Pixies", "all", true, "True if pixie villages are allowed to spawn");
@@ -123,7 +123,7 @@ public class IceAndFireConfig {
 		this.pixieVillageSize = config.getInt("Pixie Village Size", "all", 5, 1, 10000, "size of pixie villages");
 
 		this.generateCyclopsCaves = config.getBoolean("Spawn Cyclopes", "all", true, "True if cyclops caves are allowed to spawn");
-		this.spawnCyclopsChance = config.getInt("Spawn Cyclops Chance", "all", 80, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.spawnCyclopsChance = config.getInt("Spawn Cyclops Chance", "all", 170, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.cyclopsMaxHealth = (double)config.getFloat("Cyclops Max Health", "all", 150, 1, 10000, "Maximum cyclops health");
 		this.cyclopesSheepSearchLength = config.getInt("Cyclopes Sheep Search Length", "all", 17, 1, 10000, "How many blocks away can cyclopes detect sheep. Note that increasing this could cause lag.");
 		this.cyclopsAttackStrength = (double)config.getFloat("Cyclops Attack Strength", "all", 15, 1, 10000, "Cyclops attack strength");

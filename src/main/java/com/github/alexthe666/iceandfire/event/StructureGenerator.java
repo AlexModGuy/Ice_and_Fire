@@ -64,7 +64,11 @@ public class StructureGenerator implements IWorldGenerator {
 				PlacementSettings settings = new PlacementSettings().setRotation(rotation).setMirror(mirror);
 				Template template = templateManager.getTemplate(server, GORGON_TEMPLE);
 				BlockPos center = height.add(template.getSize().getX() / 2, -9, template.getSize().getZ() / 2);
-				if (world.getBlockState(center).isOpaqueCube()) {
+				BlockPos corner1 = height.down();
+				BlockPos corner2 = height.add(template.getSize().getX(), -1, 0);
+				BlockPos corner3 = height.add(template.getSize().getX(), -1, template.getSize().getZ());
+				BlockPos corner4 = height.add(0, -1, template.getSize().getZ());
+				if (world.getBlockState(center).isOpaqueCube() && world.getBlockState(corner1).isOpaqueCube() && world.getBlockState(corner2).isOpaqueCube() && world.getBlockState(corner3).isOpaqueCube() && world.getBlockState(corner4).isOpaqueCube()) {
 					template.addBlocksToWorldChunk(world, center, settings);
 				}
 			}
