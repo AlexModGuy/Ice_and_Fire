@@ -43,9 +43,9 @@ public class BlockJar extends BlockContainer {
 		this.setRegistryName(IceAndFire.MODID, "jar" + (empty ? "_empty" : "_pixie"));
 		if(!empty){
 			this.setLightLevel(0.75F);
+			GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
 		}
 		this.empty = empty;
-		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
 	}
 
 	@Override
