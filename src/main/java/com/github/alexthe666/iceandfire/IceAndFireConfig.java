@@ -51,6 +51,7 @@ public class IceAndFireConfig {
 	public double cyclopsBiteStrength = 40;
 	public double sirenMaxHealth = 50D;
 	public boolean generateSirenIslands = true;
+	public boolean sirenShader = true;
 	public int generateSirenChance = 300;
 	public boolean spawnHippocampus = true;
 	public int hippocampusSpawnChance = 70;
@@ -132,6 +133,7 @@ public class IceAndFireConfig {
 
 		this.sirenMaxHealth = (double)config.getFloat("Siren Max Health", "all", 50, 1, 10000, "Maximum siren health");
 		this.generateSirenIslands = config.getBoolean("Spawn Sirens", "all", true, "True if siren islands are allowed to spawn");
+		this.sirenShader = config.getBoolean("Use Siren Shader", "all", true, "True to make the screen pink when sirens attract players");
 		this.generateSirenChance = config.getInt("Spawn Sirens Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnHippocampus = config.getBoolean("Spawn Hippocampus", "all", true, "True if hippocampi are allowed to spawn");
