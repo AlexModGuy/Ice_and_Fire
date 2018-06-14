@@ -203,7 +203,7 @@ public class CommonProxy {
                 Object obj = f.get(null);
                 if (obj instanceof Block) {
                     ItemBlock itemBlock;
-                    if (obj instanceof BlockJar) {
+                    if (obj == ModBlocks.jar_pixie) {
                         itemBlock = ((BlockJar) obj).new ItemBlockJar((Block) obj);
                     } else if (obj instanceof BlockPixieHouse) {
                         itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);

@@ -31,15 +31,20 @@ import java.util.Random;
 public class BlockJar extends BlockContainer {
 	private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
 	public Item itemBlock;
+	private boolean empty;
 
-	public BlockJar() {
+	public BlockJar(boolean empty) {
 		super(Material.GLASS);
 		this.setHardness(1.0F);
 		this.setResistance(2.0F);
 		this.setSoundType(SoundType.GLASS);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.jar");
-		this.setRegistryName(IceAndFire.MODID, "jar");
+		this.setUnlocalizedName("iceandfire.jar" + (empty ? "_empty" : "_pixie"));
+		this.setRegistryName(IceAndFire.MODID, "jar" + (empty ? "_empty" : "_pixie"));
+		if(!empty){
+			this.setLightLevel(0.75F);
+		}
+		this.empty = empty;
 		GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
 	}
 
@@ -64,7 +69,7 @@ public class BlockJar extends BlockContainer {
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState iblockstate = worldIn.getBlockState(pos.down());
-		return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
+		return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP) || iblockstate.getBlock().canPlaceTorchOnTop(iblockstate, worldIn, pos);
 	}
 
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
@@ -98,7 +103,7 @@ public class BlockJar extends BlockContainer {
 	}
 
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
+		if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
 			((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
 			EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ModItems.pixie_dust));
 			if (!world.isRemote) {
@@ -124,9 +129,9 @@ public class BlockJar extends BlockContainer {
 
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar) {
-			if (stack.getMetadata() > 0) {
+			if (!empty) {
 				((TileEntityJar) world.getTileEntity(pos)).hasPixie = true;
-				((TileEntityJar) world.getTileEntity(pos)).pixieType = stack.getMetadata() - 1;
+				((TileEntityJar) world.getTileEntity(pos)).pixieType = stack.getMetadata();
 			} else {
 				((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
 			}
@@ -135,7 +140,7 @@ public class BlockJar extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityJar();
+		return new TileEntityJar(empty);
 	}
 
 	public class ItemBlockJar extends ItemBlock {
@@ -147,13 +152,13 @@ public class BlockJar extends BlockContainer {
 
 		public String getUnlocalizedName(ItemStack stack) {
 			int i = stack.getMetadata();
-			return stack.getMetadata() == 0 ? "tile.iceandfire.jar" : "tile.iceandfire.jar_" + (i - 1);
+			return "tile.iceandfire.jar_" + i;
 		}
 
 		@SideOnly(Side.CLIENT)
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 			if(tab == IceAndFire.TAB){
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 5; i++) {
 					subItems.add(new ItemStack(this, 1, i));
 				}
 			}

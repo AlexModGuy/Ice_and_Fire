@@ -155,11 +155,11 @@ public class EntityPixie extends EntityTameable {
 		if (this.isOwner(player)) {
 			this.setSitting(!this.isSitting());
 			return true;
-		} else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(ModBlocks.jar) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
+		} else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(ModBlocks.jar_empty) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
 			if (!player.isCreative()) {
 				player.getHeldItem(hand).shrink(1);
 			}
-			ItemStack stack = new ItemStack(ModBlocks.jar, 1, this.getColor() + 1);
+			ItemStack stack = new ItemStack(ModBlocks.jar_pixie, 1, this.getColor());
 			if (!world.isRemote) {
 				if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
 					this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);

@@ -145,12 +145,12 @@ public class IceAndFireAspectRegistry {
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.pixieHouse, 1, 3), new AspectList().add(Aspect.EARTH, 3).add(Aspect.CRAFT, 1).add(Aspect.PLANT, 3).add(IceAndFireAspectRegistry.MYTHICAL, 2).add(Aspect.MAGIC, 3));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.pixieHouse, 1, 4), new AspectList().add(Aspect.EARTH, 3).add(Aspect.CRAFT, 1).add(Aspect.PLANT, 3).add(IceAndFireAspectRegistry.MYTHICAL, 2).add(Aspect.MAGIC, 3));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.pixieHouse, 1, 5), new AspectList().add(Aspect.EARTH, 3).add(Aspect.CRAFT, 1).add(Aspect.PLANT, 3).add(IceAndFireAspectRegistry.MYTHICAL, 2).add(Aspect.MAGIC, 3));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 0), new AspectList().add(Aspect.CRYSTAL, 3).add(Aspect.AIR, 5));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 1), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 2), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 3), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 4), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
-        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar, 1, 5), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_empty), new AspectList().add(Aspect.CRYSTAL, 3).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 0), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 1), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 2), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 3), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 4), new AspectList().add(Aspect.CRYSTAL, 3).add(IceAndFireAspectRegistry.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.eggInIce), new AspectList().add(IceAndFireAspectRegistry.DRAGON, 5).add(Aspect.COLD, 20).add(Aspect.DESIRE, 20).add(Aspect.BEAST, 6));
 
         ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(IceAndFireAspectRegistry.DRAGON, 10).add(Aspect.MAGIC, 2));

@@ -548,7 +548,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Blocks.GLASS), 160, 150, 1.5F);
 					drawItemStack(new ItemStack(Blocks.GLASS), 199, 150, 1.5F);
 					GL11.glPopMatrix();
-					drawItemStack(new ItemStack(ModBlocks.jar), 171, 85, 2F);
+					drawItemStack(new ItemStack(ModBlocks.jar_empty), 171, 85, 2F);
 					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 
