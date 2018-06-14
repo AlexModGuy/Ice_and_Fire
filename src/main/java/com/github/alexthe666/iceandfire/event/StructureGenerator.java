@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
@@ -113,6 +114,19 @@ public class StructureGenerator implements IWorldGenerator {
 				firedragon.rotationYaw = random.nextInt(360);
 				if (!world.isRemote) {
 					world.spawnEntity(firedragon);
+				}
+			}
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && random.nextInt(IceAndFire.CONFIG.generateDragonSkeletonChance + 1) == 0) {
+				EntityIceDragon icedragon = new EntityIceDragon(world);
+				icedragon.setPosition(x, height.getY() + 1, z);
+				int dragonage = 10 + random.nextInt(100);
+				icedragon.growDragon(dragonage);
+				icedragon.modelDeadProgress = 20;
+				icedragon.setModelDead(true);
+				icedragon.setDeathStage((dragonage / 5) / 2);
+				icedragon.rotationYaw = random.nextInt(360);
+				if (!world.isRemote) {
+					world.spawnEntity(icedragon);
 				}
 			}
 		}
