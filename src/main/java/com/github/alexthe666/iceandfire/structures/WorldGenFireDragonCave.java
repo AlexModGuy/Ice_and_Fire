@@ -141,7 +141,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 		dragon.setVariant(new Random().nextInt(4));
 		dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
 		dragon.setSleeping(true);
-		dragon.homeArea = position;
+		dragon.homePos = position;
 		dragon.setHunger(50);
 		worldIn.spawnEntity(dragon);
 		return true;

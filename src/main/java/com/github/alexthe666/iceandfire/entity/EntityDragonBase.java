@@ -103,7 +103,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public boolean attackDecision;
     public int flightCycle;
     public BlockPos airTarget;
-    public BlockPos homeArea;
+    public BlockPos homePos;
+    public boolean hasHomePosition = false;
     @SideOnly(Side.CLIENT)
     public RollBuffer roll_buffer;
     @SideOnly(Side.CLIENT)
@@ -399,10 +400,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
         }
-        if (homeArea != null) {
-            compound.setInteger("HomeAreaX", homeArea.getX());
-            compound.setInteger("HomeAreaY", homeArea.getY());
-            compound.setInteger("HomeAreaZ", homeArea.getZ());
+        compound.setBoolean("HasHomePosition", this.hasHomePosition);
+        if (homePos != null && this.hasHomePosition) {
+            compound.setInteger("HomeAreaX", homePos.getX());
+            compound.setInteger("HomeAreaY", homePos.getY());
+            compound.setInteger("HomeAreaZ", homePos.getZ());
         }
     }
 
@@ -458,8 +460,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (!compound.getString("CustomName").isEmpty()) {
             this.setCustomNameTag(compound.getString("CustomName"));
         }
-        if (compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
-            homeArea = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
+        this.hasHomePosition = compound.getBoolean("HasHomePosition");
+        if (hasHomePosition && compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
+            homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
         }
         this.setTackling(compound.getBoolean("Tackle"));
 
@@ -551,7 +554,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean isModelDead() {
         if (world.isRemote) {
-            return this.isModelDead = this.dataManager.get(MODEL_DEAD).booleanValue();
+            return this.isModelDead = Boolean.valueOf(this.dataManager.get(MODEL_DEAD).booleanValue());
         }
         return isModelDead;
     }
@@ -892,7 +895,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private boolean isStuck(){
-        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 40 && !this.isHovering() && canMove();
+        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
     }
     @Override
     public void onLivingUpdate() {
@@ -904,7 +907,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                 ticksStill = 0;
             }
             if(this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
-                if (this.getAnimation() == NO_ANIMATION) {
+                if (this.getAnimation() == NO_ANIMATION && this.ticksExisted % 5 == 0) {
                     this.setAnimation(ANIMATION_TAILWHACK);
                 }
                 if (this.getAnimation() == ANIMATION_TAILWHACK && this.getAnimationTick() == 10) {

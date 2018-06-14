@@ -205,6 +205,7 @@ public class EventLiving {
 	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+
 		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving())&& !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
 			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
 			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
