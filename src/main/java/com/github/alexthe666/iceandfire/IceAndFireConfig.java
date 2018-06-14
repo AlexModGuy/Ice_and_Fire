@@ -35,9 +35,9 @@ public class IceAndFireConfig {
 	public boolean canDragonsDespawn = true;
 	public int dragonTargetSearchLength = 64;
 	public boolean spawnHippogryphs = true;
-	public int hippogryphSpawnRate = 5;
+	public int hippogryphSpawnRate = 2;
 	public boolean spawnGorgons = true;
-	public int spawnGorgonsChance = 50;
+	public int spawnGorgonsChance = 75;
 	public double gorgonMaxHealth = 100D;
 	public boolean spawnPixies = true;
 	public int spawnPixiesChance = 60;
@@ -52,7 +52,7 @@ public class IceAndFireConfig {
 	public boolean generateSirenIslands = true;
 	public int generateSirenChance = 300;
 	public boolean spawnHippocampus = true;
-	public int hippocampusSpawnChance = 30;
+	public int hippocampusSpawnChance = 70;
 	public int deathWormTargetSearchLength = 64;
 	public double deathWormMaxHealth = 10D;
 	public double deathWormAttackStrength = 3D;
@@ -111,10 +111,10 @@ public class IceAndFireConfig {
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
-		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 5, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
+		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 
 		this.spawnGorgons = config.getBoolean("Spawn Gorgons", "all", true, "True if gorgon temples are allowed to spawn");
-		this.spawnGorgonsChance = config.getInt("Spawn Gorgon Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.spawnGorgonsChance = config.getInt("Spawn Gorgon Chance", "all", 75, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.gorgonMaxHealth = (double)config.getFloat("Gorgon Max Health", "all", 100, 1, 10000, "Maximum gorgon health");
 
 		this.spawnPixies = config.getBoolean("Spawn Pixies", "all", true, "True if pixie villages are allowed to spawn");
@@ -133,7 +133,7 @@ public class IceAndFireConfig {
 		this.generateSirenChance = config.getInt("Spawn Sirens Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnHippocampus = config.getBoolean("Spawn Hippocampus", "all", true, "True if hippocampi are allowed to spawn");
-		this.hippocampusSpawnChance = config.getInt("Spawn Hippocampus Chance", "all", 30, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.hippocampusSpawnChance = config.getInt("Spawn Hippocampus Chance", "all", 70, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.deathWormTargetSearchLength = config.getInt("Death Worm Target Search Length", "all", 64, 1, 10000, "How many blocks away can death worms spot potential prey. Note that increasing this could cause lag");
 		this.deathWormMaxHealth = (double)config.getFloat("Death Worm Base Health", "all", 10, 1, 10000, "Default deathworm health, this is scaled to the worm's particular size");
