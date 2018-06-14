@@ -1,14 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
-import com.github.alexthe666.iceandfire.client.model.ModelGorgonHead;
-import com.github.alexthe666.iceandfire.client.model.ModelGorgonHeadActive;
 import com.github.alexthe666.iceandfire.client.model.ModelTrollWeapon;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTrollWeapon extends TileEntitySpecialRenderer {

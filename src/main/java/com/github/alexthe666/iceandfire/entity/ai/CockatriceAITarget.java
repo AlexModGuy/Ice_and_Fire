@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CockatriceAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {

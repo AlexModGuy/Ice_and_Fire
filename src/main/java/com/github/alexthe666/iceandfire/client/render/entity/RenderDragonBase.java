@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import com.github.alexthe666.iceandfire.client.model.ModelFireDragon;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonEyes;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;

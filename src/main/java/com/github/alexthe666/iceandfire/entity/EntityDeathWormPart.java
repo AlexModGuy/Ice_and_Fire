@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.message.MessageDeathWormInteract;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 

@@ -1,17 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-
-import java.util.Collections;
-import java.util.List;
 
 public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 

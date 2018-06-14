@@ -54,7 +54,8 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelTrollArmor TROLL_ARMOR_MODEL = new ModelTrollArmor(0.75F);
 	private static final ModelTrollArmor TROLL_ARMOR_MODEL_LEGS = new ModelTrollArmor(0.35F);
 	private FontRenderer bestiaryFontRenderer;
-	private static IceAndFireTEISR TEISR = new IceAndFireTEISR();
+	@SideOnly(Side.CLIENT)
+	private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -267,6 +268,7 @@ public class ClientProxy extends CommonProxy {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void postRender() {
 		EventClient.initializeStoneLayer();
 		for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {

@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Random;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TrollAIFleeSun extends EntityAIBase {
     private final EntityTroll troll;

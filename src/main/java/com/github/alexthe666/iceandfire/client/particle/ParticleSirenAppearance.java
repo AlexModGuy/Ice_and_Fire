@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
