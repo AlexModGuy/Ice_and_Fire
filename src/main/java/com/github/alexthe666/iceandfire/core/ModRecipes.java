@@ -12,9 +12,11 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -68,7 +70,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
         OreDictionary.registerOre("foodMeat", Items.RABBIT);
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
-        OreDictionary.registerOre("boneWithered", ModItems.witherbone);        
+        OreDictionary.registerOre("boneWithered", ModItems.witherbone);
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
@@ -92,7 +94,11 @@ public class ModRecipes {
         ModItems.troll_mountain.setRepairItem(new ItemStack(EnumTroll.MOUNTAIN.leather));
         ModItems.troll_forest.setRepairItem(new ItemStack(EnumTroll.FOREST.leather));
         ModItems.troll_frost.setRepairItem(new ItemStack(EnumTroll.FROST.leather));
-
+        ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("Potion", "water_breathing");
+        waterBreathingPotion.setTagCompound(tag);
+        BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(ModItems.shiny_scales), waterBreathingPotion);
 
     }
 

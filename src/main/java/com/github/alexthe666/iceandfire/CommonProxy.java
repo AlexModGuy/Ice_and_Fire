@@ -10,7 +10,6 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
-import com.github.alexthe666.iceandfire.recipe.RecipeShinyScales;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -140,14 +139,6 @@ public class CommonProxy {
             throw new RuntimeException(e);
         }
     }
-
-    @SubscribeEvent
-    public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-        IRecipe recipe = new RecipeShinyScales();
-        recipe.setRegistryName(new ResourceLocation("iceandfire:shiny_scales_recipe"));
-        event.getRegistry().register(recipe);
-    }
-
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {

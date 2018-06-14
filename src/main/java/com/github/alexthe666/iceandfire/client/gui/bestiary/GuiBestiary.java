@@ -707,26 +707,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 123, 75, 1.5F);
 					GL11.glPopMatrix();
 				}
-				if (bookPages == 2) {
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					GL11.glPushMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
-					GL11.glPopMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
-					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
-					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
-					GL11.glPopMatrix();
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
-					GL11.glPopMatrix();
-					GL11.glPopMatrix();
-				}
-					writeFromTxt();
+				writeFromTxt();
 				break;
 			case HIPPOCAMPUS:
 				if(bookPages == 0){
@@ -751,24 +732,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glScalef(1.5F, 1.5F, 1F);
 					drawItemStack(new ItemStack(Items.STICK), 35, 25, 1.5F);
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 35, 75, 1.5F);
-					GL11.glPopMatrix();
-
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					GL11.glPushMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
-					GL11.glPopMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
-					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
-					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
-					GL11.glPopMatrix();
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
-					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
