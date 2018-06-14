@@ -46,7 +46,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     private int animationTick;
     private Animation currentAnimation;
     private static final DataParameter<Optional<UUID>> VICTOR_ENTITY = EntityDataManager.<Optional<UUID>>createKey(EntityStymphalianBird.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityStymphalianBird.class, DataSerializers.BOOLEAN);
     private EntityLivingBase victorEntity;
     private boolean isFlying;
     public float flyProgress;

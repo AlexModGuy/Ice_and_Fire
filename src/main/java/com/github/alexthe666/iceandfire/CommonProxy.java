@@ -30,6 +30,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.lang.reflect.Field;
@@ -179,14 +180,13 @@ public class CommonProxy {
     }
 
     public static void registerSpawnable(RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
-        EntityEntry e = new EntityEntry(entityClass, name);
+        EntityEntry e = new EntityEntry(entityClass, name).setRegistryName(new ResourceLocation(IceAndFire.MODID, name));
         e.setEgg(new EntityList.EntityEggInfo(new ResourceLocation(IceAndFire.MODID, name), mainColor, subColor));
         event.getRegistry().register(e);
     }
 
     public static void registerUnspawnable(RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id) {
-        System.out.println(name);
-        event.getRegistry().register( new EntityEntry(entityClass, "iceandfire:" + name));
+        event.getRegistry().register(new EntityEntry(entityClass, name).setRegistryName(new ResourceLocation(IceAndFire.MODID, name)));
     }
 
     @SubscribeEvent
