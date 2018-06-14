@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import java.util.List;
 
 public class ModEntities {
-
+/*
 	public static void registerSpawnable(Class entityClass, String name, int id, int mainColor, int subColor) {
 		EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID, name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true, mainColor, subColor);
 	}
@@ -22,12 +22,12 @@ public class ModEntities {
 	public static void registerUnspawnable(Class entityClass, String name, int id) {
 		EntityRegistry.registerModEntity(new ResourceLocation(IceAndFire.MODID, name), entityClass, name, id, IceAndFire.INSTANCE, 64, 3, true);
 	}
-
+*/
 	public static void init() {
 		EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
-		registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);
+		/*registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);
 		registerUnspawnable(EntityDragonArrow.class, "dragonarrow", 2);
 		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);
 		registerUnspawnable(EntityDragonFire.class, "dragonfire", 4);
@@ -52,7 +52,7 @@ public class ModEntities {
 		registerSpawnable(EntityStymphalianBird.class, "stymphalianbird", 24, 0X744F37, 0X9E6C4B);
 		registerUnspawnable(EntityStymphalianFeather.class, "stymphalianfeather", 25);
 		registerUnspawnable(EntityStymphalianArrow.class, "stymphalianarrow", 26);
-		registerSpawnable(EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);
+		registerSpawnable(EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);*/
 		if (IceAndFire.CONFIG.spawnHippogryphs) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 				if (!type.developer) {
