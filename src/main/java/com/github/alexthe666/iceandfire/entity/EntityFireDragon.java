@@ -68,7 +68,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
-				return entity instanceof EntityLivingBase;
+				return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase)entity);
 			}
 		}));
 		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));

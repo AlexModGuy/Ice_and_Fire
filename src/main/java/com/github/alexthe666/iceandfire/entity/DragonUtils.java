@@ -194,4 +194,11 @@ public class DragonUtils {
 		}
 		return true;
 	}
+
+    public static boolean isAlive(EntityLivingBase entity) {
+		if(entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()){
+			return false;
+		}
+		return true;
+    }
 }

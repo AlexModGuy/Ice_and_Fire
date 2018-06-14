@@ -116,7 +116,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		this.targetTasks.addTask(5, new HippogryphAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
-				return entity instanceof EntityLivingBase && !(entity instanceof EntityHorse);
+				return entity instanceof EntityLivingBase && !(entity instanceof EntityHorse) && DragonUtils.isAlive((EntityLivingBase)entity);
 			}
 		}));
 

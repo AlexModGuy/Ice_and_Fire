@@ -82,7 +82,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 if(EntityDeathWorm.this.isTamed()){
                     return input instanceof EntityMob;
                 }else{
-                    return input instanceof EntityLivingBase && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return input instanceof EntityLivingBase && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
         }));

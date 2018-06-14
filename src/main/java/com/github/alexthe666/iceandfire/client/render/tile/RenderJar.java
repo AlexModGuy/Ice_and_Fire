@@ -60,6 +60,7 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 					GL11.glTranslatef(0F, 0.60F, 0F);
 				}
 				GL11.glDisable(GL11.GL_CULL_FACE);
+				GlStateManager.rotate(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, f), 0.0F, 1.0F, 0.0F);
 				GL11.glScalef(0.50F, 0.50F, 0.50F);
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 				GlStateManager.disableLighting();

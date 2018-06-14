@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1250;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -149,6 +149,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             tail_buffer = new ChainBuffer();
         }
         legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
+    }
+
+    public boolean isMobDead(){
+        return this.isModelDead();
     }
 
     public int getHorizontalFaceSpeed() {

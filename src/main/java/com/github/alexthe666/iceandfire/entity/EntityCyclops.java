@@ -78,7 +78,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
         this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {

@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
-public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues {
+public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
 
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
@@ -211,5 +211,10 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 
     public void onPlayerPlace(EntityPlayer player) {
         this.setOwnerId(player.getUniqueID());
+    }
+
+    @Override
+    public boolean isMobDead() {
+        return true;
     }
 }
