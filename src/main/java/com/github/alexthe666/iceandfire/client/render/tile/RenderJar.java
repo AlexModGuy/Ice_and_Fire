@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
+import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -58,32 +59,16 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
 				} else {
 					GL11.glTranslatef(0F, 0.60F, 0F);
 				}
-				GL11.glScalef(0.50F, 0.50F, 0.50F);
-				GlStateManager.rotate(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, f), 0.0F, 1.0F, 0.0F);
-				GL11.glPushMatrix();
 				GL11.glDisable(GL11.GL_CULL_FACE);
-				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.CONSTANT_ALPHA);
+				GL11.glScalef(0.50F, 0.50F, 0.50F);
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 				GlStateManager.disableLighting();
-				GlStateManager.depthMask(true);
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 				GlStateManager.enableLighting();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				GlStateManager.enableColorMaterial();
 				MODEL_PIXIE.animateInJar(entity.hasProduced, entity, 0);
-				GlStateManager.disableColorMaterial();
-				int i = entity.getWorld().getCombinedLight(entity.getPos(), entity.getWorld().getLightFor(EnumSkyBlock.BLOCK, entity.getPos()));
-				int j = i % 65536;
-				int k = i / 65536;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-				GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-				GlStateManager.enableTexture2D();
-				GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 			}
-			GL11.glPopMatrix();
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
 		}

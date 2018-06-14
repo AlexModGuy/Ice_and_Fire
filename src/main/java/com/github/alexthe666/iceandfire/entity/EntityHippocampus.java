@@ -48,13 +48,13 @@ import javax.annotation.Nullable;
 
 public class EntityHippocampus extends EntityTameable implements IAnimatedEntity {
 
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private int animationTick;
     private Animation currentAnimation;
     public float onLandProgress;
     private boolean isLandNavigator;
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.<Boolean>createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> ARMOR = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> CHESTED = EntityDataManager.<Boolean>createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
