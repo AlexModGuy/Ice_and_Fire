@@ -8,6 +8,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
 
@@ -166,5 +170,22 @@ public class DragonUtils {
 			return ground;
 		}
 		return target.getPosition();
+	}
+
+	public static boolean canTameDragonAttack(EntityTameable dragon, Entity entity){
+		String className = entity.getClass().getSimpleName();
+		if(className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")){
+			return false;
+		}
+		if(entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer){
+			return false;
+		}
+		if(entity instanceof EntityTameable){
+			EntityTameable tameable = (EntityTameable)entity;
+			if(tameable.getOwnerId() != null && tameable.getOwnerId().equals(dragon.getOwnerId())){
+				return false;
+			}
+		}
+		return true;
 	}
 }
