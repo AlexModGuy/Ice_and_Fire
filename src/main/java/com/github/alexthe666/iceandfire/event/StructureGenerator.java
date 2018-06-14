@@ -138,7 +138,6 @@ public class StructureGenerator implements IWorldGenerator {
 					if(bird.isNotColliding()){
 						world.spawnEntity(bird);
 					}
-					System.out.println("aaa" + bird.getPosition());
 				}
 			}
 		}

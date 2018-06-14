@@ -117,8 +117,6 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         for (int i = 0; i < segments.length; i++) {
             segments[i] = new EntityDeathWormPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
         }
-        System.out.println(this.world.isRemote);
-
     }
 
     private void clearSegments(){
@@ -518,7 +516,6 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         } else {
             this.faceEntity(this.getAttackTarget(), 10.0F, 10.0F);
             double dist = this.getDistanceSq(this.getAttackTarget());
-            System.out.println(dist);
             if (dist >= 4.0D * getScaleForAge() && dist <= 16.0D * getScaleForAge() && (this.isInSand() || this.onGround)) {
                 double d0 = this.getAttackTarget().posX - this.posX;
                 double d1 = this.getAttackTarget().posZ - this.posZ;

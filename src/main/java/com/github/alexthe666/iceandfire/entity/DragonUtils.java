@@ -28,7 +28,6 @@ public class DragonUtils {
 			BlockPos dragonPos = new BlockPos(dragon);
 
 		}
-		System.out.println(renderYawOffset);
 		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
 
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));

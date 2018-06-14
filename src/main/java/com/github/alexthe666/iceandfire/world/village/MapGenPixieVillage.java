@@ -94,7 +94,6 @@ public class MapGenPixieVillage extends WorldGenerator {
 			structurevillagepieces$start.buildComponent(structurevillagepieces$start, this.components, rand);
 			List<StructureComponent> list1 = structurevillagepieces$start.pendingRoads;
 			List<StructureComponent> list2 = structurevillagepieces$start.pendingHouses;
-			System.out.println(structurevillagepieces$start.pendingRoads.size());
 			while (!list1.isEmpty() || !list2.isEmpty()) {
 				if (list1.isEmpty()) {
 					int i = rand.nextInt(list2.size());
