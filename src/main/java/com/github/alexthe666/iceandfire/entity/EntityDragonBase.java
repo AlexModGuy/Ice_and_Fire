@@ -1859,7 +1859,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
         }
         if(this.getDragonStage() > 3){
-            int size  = (this.getDragonStage() - 3) * 5;
+            int size  = (this.getDragonStage() - 3) * 12;
             List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
             for(Entity entity : entities){
                 boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
