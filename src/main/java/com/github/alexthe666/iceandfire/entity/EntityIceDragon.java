@@ -239,19 +239,20 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public void onLivingUpdate() {
-
 		super.onLivingUpdate();
-		if (this.getAttackTarget() != null && !this.isSleeping()) {
-			if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
-				shootIceAtMob(this.getAttackTarget());
-			} else {
-				if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
-					attackEntityAsMob(this.getAttackTarget());
-				}
+		if(!world.isRemote){
+			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
+				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
+					shootIceAtMob(this.getAttackTarget());
+				} else {
+					if (this.getEntityBoundingBox().expand(this.getRenderSize() / 3, this.getRenderSize() / 3, this.getRenderSize() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+						attackEntityAsMob(this.getAttackTarget());
+					}
 
+				}
+			} else {
+				this.setBreathingFire(false);
 			}
-		} else {
-			this.setBreathingFire(false);
 		}
 		boolean swimming = isSwimming() && !isHovering() && !isFlying() && ridingProgress == 0;
 		if (swimming && swimProgress < 20.0F) {

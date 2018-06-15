@@ -33,6 +33,7 @@ public class IceAndFireConfig {
 	public int maxDragonFlight = 128;
 	public int dragonGoldSearchLength = 17;
 	public boolean canDragonsDespawn = true;
+	public boolean dragonDigWhenStuck = true;
 	public int dragonTargetSearchLength = 64;
 	public boolean spawnHippogryphs = true;
 	public int hippogryphSpawnRate = 2;
@@ -110,6 +111,7 @@ public class IceAndFireConfig {
 		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 10, 1000, "How high dragons can fly, in Y height.");
 		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
 		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
+		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");

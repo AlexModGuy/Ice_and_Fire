@@ -762,7 +762,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     }
                     if (stack.getItem() != null) {
                         int itemFoodAmount = FoodUtils.getFoodPoints(stack, true);
-                        if (itemFoodAmount > 0) {
+                        if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                             //this.growDragon(1);
                             this.setHunger(this.getHunger() + itemFoodAmount);
                             this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
