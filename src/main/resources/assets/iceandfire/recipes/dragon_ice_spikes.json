@@ -2,12 +2,11 @@
   "type": "forge:ore_shaped",
   "pattern": [
     "I I",
-    "III"
+    "I I"
   ],
   "key": {
     "I": {
-      "item": "iceandfire:dragon_ice",
-      "data": 1
+      "item": "iceandfire:dragon_ice"
     }
   },
   "result": {
