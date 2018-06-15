@@ -5,6 +5,7 @@ import net.minecraftforge.common.config.Configuration;
 public class IceAndFireConfig {
 
 	public boolean customMainMenu = true;
+	public boolean logCascadingWorldGen = false;
 	public boolean generateSilverOre = true;
 	public boolean generateSapphireOre = true;
 	public boolean generateDragonSkeletons = true;
@@ -83,6 +84,7 @@ public class IceAndFireConfig {
     public void init(Configuration config) {
     	this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
+		this.logCascadingWorldGen  = config.getBoolean("Log Cascading World Gen", "all", false, "Whether to log cascading world gen lag. We hope to fix all cascading lag in the future, but the server console spam is over the top.");
 		this.generateSapphireOre  = config.getBoolean("Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
 		this.generateDragonSkeletons  = config.getBoolean("Generate Dragon Skeletons", "all", true, "Whether to generate dragon skeletons or not");
 		this.generateDragonSkeletonChance  = config.getInt("Generate Dragon Skeleton Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
