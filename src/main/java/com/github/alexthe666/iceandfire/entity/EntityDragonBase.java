@@ -1153,7 +1153,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
