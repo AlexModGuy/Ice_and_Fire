@@ -138,7 +138,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
             this.setAnimation(ANIMATION_BITE);
             this.playSound(this.getScaleForAge() > 3 ? ModSounds.DEATHWORM_GIANT_ATTACK : ModSounds.DEATHWORM_ATTACK, 1, 1);
         }
-        if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1) {
+        if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1 && this.world.getGameRules().getBoolean("mobGriefing")) {
             SandExplosion explosion = new SandExplosion(world, this, entityIn.posX, entityIn.posY, entityIn.posZ, this.getScaleForAge());
             explosion.doExplosionA();
             explosion.doExplosionB(true);
