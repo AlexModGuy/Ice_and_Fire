@@ -12,6 +12,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -33,10 +34,10 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 	
 	public RenderHippocampus(RenderManager renderManager) {
 		super(renderManager, new ModelHippocampus(), 0.8F);
-		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
 		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusSaddle(this));
 		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusBridle(this));
 		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusChest(this));
+		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
 		this.layerRenderers.add(new RenderHippocampus.LayerHippocampusArmor(this));
 	}
 
@@ -96,6 +97,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
 		public void doRenderLayer(EntityHippocampus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale){
 			if (entitylivingbaseIn.hasCustomName() && entitylivingbaseIn.getCustomNameTag().toLowerCase().contains("rainbow")) {
+				GL11.glPushMatrix();
 				this.renderer.bindTexture(entitylivingbaseIn.isBlinking() ? TEXTURE_BLINK : TEXTURE);
 				int i1 = 25;
 				int i = entitylivingbaseIn.ticksExisted / 25 + entitylivingbaseIn.getEntityId();
@@ -107,6 +109,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 				float[] afloat2 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(l));
 				GlStateManager.color(afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f);
 				this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+				GL11.glPopMatrix();
 			}
 		}
 
@@ -129,10 +132,11 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 		public LayerHippocampusBridle(RenderHippocampus renderer) {
 			this.renderer = renderer;
 		}
+		private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png");
 
 		public void doRenderLayer(EntityHippocampus entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.isSaddled() && entity.getControllingPassenger() != null) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png"));
+				this.renderer.bindTexture(TEXTURE);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}
@@ -151,6 +155,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 	@SideOnly(Side.CLIENT)
 	private class LayerHippocampusChest implements LayerRenderer {
 		private final RenderHippocampus renderer;
+		private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippocampus/chest.png");
 
 		public LayerHippocampusChest(RenderHippocampus renderer) {
 			this.renderer = renderer;
@@ -158,7 +163,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
 		public void doRenderLayer(EntityHippocampus entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.isChested()) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippocampus/chest.png"));
+				this.renderer.bindTexture(TEXTURE);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}
@@ -182,10 +187,28 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 			this.renderer = renderer;
 		}
 
+		private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_diamond.png");
+		private final ResourceLocation TEXTURE_GOLD = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_gold.png");
+		private final ResourceLocation TEXTURE_IRON = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_iron.png");
+
+
 		public void doRenderLayer(EntityHippocampus entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.getArmor() != 0) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_" + (entity.getArmor() != 1 ? entity.getArmor() != 2 ? "diamond" : "gold" : "iron") + ".png"));
+				GL11.glPushMatrix();
+				switch(entity.getArmor()) {
+					case 1:
+						this.renderer.bindTexture(TEXTURE_IRON);
+						break;
+					case 2:
+						this.renderer.bindTexture(TEXTURE_GOLD);
+						break;
+					case 3:
+						this.renderer.bindTexture(TEXTURE_DIAMOND);
+						break;
+				}
+				GlStateManager.color(1F, 1F, 1F);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+				GL11.glPopMatrix();
 			}
 		}
 

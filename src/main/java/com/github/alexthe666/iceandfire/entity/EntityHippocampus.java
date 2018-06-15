@@ -612,7 +612,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public void openGUI(EntityPlayer playerEntity) {
-        if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
+        if (this.world.isRemote && (!this.isBeingRidden() || !this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 5, this.world, this.getEntityId(), 0, 0);
         }
     }
