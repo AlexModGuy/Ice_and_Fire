@@ -76,7 +76,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(3, aiMelee = new EntityAIAttackMelee(this, 1.5D, false));
+        this.tasks.addTask(3, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
         this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F) {
             public boolean shouldExecute() {
                 return super.shouldExecute() && EntityCockatrice.this.getCommand() == 2;
@@ -161,7 +161,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
@@ -397,7 +397,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 2) {
+            if (dist < 4) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
@@ -406,15 +406,14 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             double d0 = this.getAttackTarget().posX - this.posX;
             double d1 = this.getAttackTarget().posZ - this.posZ;
             float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
-            if (dist <= 16.0D && this.onGround && this.getAnimationTick() == 10) {
-
+            if (dist <= 16.0D && this.onGround && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
                 if ((double) leap >= 1.0E-4D) {
                     this.motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D;
                     this.motionZ += d1 / (double) leap * 0.800000011920929D + this.motionZ * 0.20000000298023224D;
                 }
                 this.motionY = 0.5F;
             }
-            if (dist < 1 && this.getAnimationTick() > 10) {
+            if (dist < 3 && this.getAnimationTick() > 10) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                 if ((double) leap >= 1.0E-4D) {
                     this.getAttackTarget().motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D;
