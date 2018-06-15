@@ -175,7 +175,7 @@ public class CommonProxy {
         builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
         builder.name(name);
         builder.egg(mainColor, subColor);
-        builder.tracker(64, 3, true);
+        builder.tracker(64, 1, true);
         event.getRegistry().register(builder.build());
     }
 
@@ -183,7 +183,7 @@ public class CommonProxy {
         builder.entity(entityClass);
         builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
         builder.name(name);
-        builder.tracker(64, 3, true);
+        builder.tracker(64, 1, true);
         event.getRegistry().register(builder.build());
     }
 
