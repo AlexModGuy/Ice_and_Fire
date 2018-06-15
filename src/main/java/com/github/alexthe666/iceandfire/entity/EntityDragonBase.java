@@ -1158,7 +1158,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.updateAttributes();
             this.growDragon(0);
         }
-        if (this.getAgeInTicks() % 1200 == 0) {
+        if (this.getAgeInTicks() % IceAndFire.CONFIG.dragonHungerTickRate == 0) {
             if (this.getHunger() > 0) {
                 this.setHunger(this.getHunger() - 1);
             }
