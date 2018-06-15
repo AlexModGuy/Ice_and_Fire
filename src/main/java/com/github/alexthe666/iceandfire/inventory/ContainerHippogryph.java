@@ -71,6 +71,10 @@ public class ContainerHippogryph extends Container {
 					public boolean isEnabled() {
 						return ContainerHippogryph.this.hippogryph.isChested();
 					}
+
+					public boolean isItemValid(ItemStack stack) {
+						return ContainerHippogryph.this.hippogryph.isChested();
+					}
 				});
 			}
 		}

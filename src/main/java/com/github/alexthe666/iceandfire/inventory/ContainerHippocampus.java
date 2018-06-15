@@ -71,6 +71,10 @@ public class ContainerHippocampus extends Container {
                     public boolean isEnabled() {
                         return ContainerHippocampus.this.hippocampus.isChested();
                     }
+
+                    public boolean isItemValid(ItemStack stack) {
+                        return ContainerHippocampus.this.hippocampus.isChested();
+                    }
                 });
             }
         }
@@ -92,17 +96,16 @@ public class ContainerHippocampus extends Container {
 
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-
             if (index < this.hippocampusInventory.getSizeInventory()) {
                 if (!this.mergeItemStack(itemstack1, this.hippocampusInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.getSlot(2).isItemValid(itemstack1)) {
+            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
                 if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -114,18 +117,17 @@ public class ContainerHippocampus extends Container {
                 if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.hippocampusInventory.getSizeInventory() <= 3 || !this.mergeItemStack(itemstack1, 3, this.hippocampusInventory.getSizeInventory(), false)) {
+            } else if (this.hippocampusInventory.getSizeInventory() <= 3 || !this.mergeItemStack(itemstack1, 2, this.hippocampusInventory.getSizeInventory(), false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty()) {
+            if (itemstack1.isEmpty()){
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
         }
-
-        return itemstack;
+        return ItemStack.EMPTY;
     }
 
     /**
