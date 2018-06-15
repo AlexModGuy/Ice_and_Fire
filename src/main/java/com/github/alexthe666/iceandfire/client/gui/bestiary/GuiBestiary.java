@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -547,7 +548,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Blocks.GLASS), 160, 150, 1.5F);
 					drawItemStack(new ItemStack(Blocks.GLASS), 199, 150, 1.5F);
 					GL11.glPopMatrix();
-					drawItemStack(new ItemStack(ModBlocks.jar), 171, 85, 2F);
+					drawItemStack(new ItemStack(ModBlocks.jar_empty), 171, 85, 2F);
 					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 
@@ -706,26 +707,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 123, 75, 1.5F);
 					GL11.glPopMatrix();
 				}
-				if (bookPages == 2) {
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					GL11.glPushMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
-					GL11.glPopMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
-					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
-					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
-					GL11.glPopMatrix();
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
-					GL11.glPopMatrix();
-					GL11.glPopMatrix();
-				}
-					writeFromTxt();
+				writeFromTxt();
 				break;
 			case HIPPOCAMPUS:
 				if(bookPages == 0){
@@ -750,24 +732,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glScalef(1.5F, 1.5F, 1F);
 					drawItemStack(new ItemStack(Items.STICK), 35, 25, 1.5F);
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 35, 75, 1.5F);
-					GL11.glPopMatrix();
-
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					GL11.glPushMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
-					GL11.glPopMatrix();
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					boolean drawTwo = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
-					drawItemStack(new ItemStack(ModItems.shiny_scales), 180, 20, 1.5F);
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 197, 20, 1.5F);
-					drawItemStack(drawTwo ? new ItemStack(ModItems.shiny_scales) : ItemStack.EMPTY, 215, 20, 1.5F);
-					GL11.glPopMatrix();
-					drawItemStack(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER_BREATHING), 170, 10, 2F);
-					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
@@ -810,6 +774,85 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Items.FISHING_ROD), 135, 55, 1.5F);
 
 					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
+			case COCKATRICE:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
+					drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.STRING), 20, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.LEATHER), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.STRING), 59, 30, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.blindfold), 60, 18, 2F);
+					drawItemStack(new ItemStack(ModItems.witherbone), 30, 58, 2.5F);
+					drawItemStack(new ItemStack(ModItems.rotten_egg), 109, 18, 2.5F);
+				}
+				writeFromTxt();
+				break;
+			case STYMPHALIANBIRD:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 34, 46, 114, 72, 59, 37, 512F);
+					drawImage(DRAWINGS_1, 155, 35, 114, 109, 67, 35, 512F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 109, 60, 2.5F);
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.FLINT), 40, 13, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 40, 49, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_arrow), 60, 18, 2F);
+
+				}
+				writeFromTxt();
+				break;
+			case TROLL:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 15, 60, 156, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 50, 55, 181, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 85, 60, 206, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 155, 22, 114, 145, 24, 66, 512F);
+					drawImage(DRAWINGS_1, 190, 19, 188, 142, 47, 69, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					int i = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.Weapon.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.Weapon.values()[i].item), 30, 7, 2.5F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leather), 100, 30, 2.5F);
+					drawItemStack(new ItemStack(ModItems.troll_tusk), 120, 30, 2.5F);
+				}
+				if(bookPages == 2){
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].helmet), 27, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
 				}
 				writeFromTxt();
 				break;

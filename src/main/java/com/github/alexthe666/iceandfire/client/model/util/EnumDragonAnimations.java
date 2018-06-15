@@ -5,8 +5,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
-
 @SideOnly(Side.CLIENT)
 public enum EnumDragonAnimations {
     T_POSE(""),

@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -16,22 +15,19 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.*;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -44,7 +40,7 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.GetCollisionBoxesEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -53,22 +49,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static com.github.alexthe666.iceandfire.entity.EntitySiren.isWearingEarplugs;
-
 public class EventLiving {
 
 	private boolean stepHeightSwitched = false;
-	/*@SubscribeEvent
-	public void onGetCollisionBoxes(GetCollisionBoxesEvent event) {
-		if(event.getEntity() instanceof EntityDeathWorm && !event.getCollisionBoxesList().isEmpty()){
-			for(AxisAlignedBB bb : event.getCollisionBoxesList()){
-				BlockPos pos = new BlockPos(bb.minX, bb.minY, bb.minZ);
-				if(event.getEntity().world.getBlockState(pos).getMaterial() == Material.SAND){
-					event.getCollisionBoxesList().remove(bb);
-				}
-			}
-		}
-	}*/
 
 	@SubscribeEvent
 	public void onEntityDamage(LivingHurtEvent event) {
@@ -104,6 +87,16 @@ public class EventLiving {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void onEntityDespawn(LivingSpawnEvent.AllowDespawn event) {
+		if (event.getEntityLiving() instanceof EntityLiving) {
+			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+			if (properties != null && properties.isStone) {
+				event.setResult(Event.Result.DENY);
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -213,74 +206,121 @@ public class EventLiving {
 	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && event.getEntityLiving().getRNG().nextInt(1 + IceAndFire.CONFIG.cockatriceEggChance) == 0 && !event.getEntityLiving().isChild()){
-			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-			event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-			event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving())&& !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
+			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
+			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
+				if(event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0){
+					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+					event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+				}
+				chickenProps.timeUntilNextEgg = 4 * (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
+			}
+
 		}
+		FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), FrozenEntityProperties.class);
+		if(frozenProps != null){
+			boolean prevFrozen = frozenProps.isFrozen;
+			if(event.getEntityLiving() instanceof EntityIceDragon){
+				frozenProps.isFrozen = false;
+			}
+			if(!event.getEntityLiving().world.isRemote) {
+				if(frozenProps.isFrozen && event.getEntityLiving().isBurning()){
+					frozenProps.isFrozen = false;
+					event.getEntityLiving().extinguish();
+				}
+				if (event.getEntityLiving().deathTime > 0) {
+					frozenProps.isFrozen = false;
+				}
+				if (frozenProps.ticksUntilUnfrozen > 0) {
+					frozenProps.ticksUntilUnfrozen--;
+				} else {
+					frozenProps.ticksUntilUnfrozen = 0;
+					frozenProps.isFrozen = false;
+				}
+			}
+			if(frozenProps.isFrozen && !(event.getEntityLiving() instanceof EntityPlayer && ((EntityPlayer)event.getEntityLiving()).isCreative())){
+				event.getEntityLiving().motionX *= 0.25;
+				event.getEntityLiving().motionZ *= 0.25;
+				event.getEntityLiving().motionY -= 0.1D;
+			}
+			if(prevFrozen != frozenProps.isFrozen){
+				if(frozenProps.isFrozen){
+					event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
+				}else{
+					for (int i = 0; i < 15; i++) {
+						event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, new int[]{Block.getIdFromBlock(ModBlocks.dragon_ice)});
+					}
+					event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
+				}
+			}
+		}
+
 		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-		if(sirenProps != null && sirenProps.isCharmed){
-			stepHeightSwitched = false;
-			if(EntitySiren.isWearingEarplugs(event.getEntityLiving())){
-				sirenProps.isCharmed = false;
+		if(sirenProps != null) {
+			EntitySiren closestSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+			if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
+				if (sirenProps != null && closestSiren != null && closestSiren.isActuallySinging()) {
+					stepHeightSwitched = false;
+					if (EntitySiren.isWearingEarplugs(event.getEntityLiving())) {
+						sirenProps.isCharmed = false;
+					} else {
+						sirenProps.isCharmed = true;
+						if (rand.nextInt(7) == 0) {
+							for (int i = 0; i < 5; i++) {
+								event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+							}
+						}
+						EntityLivingBase entity = event.getEntityLiving();
+						entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
+						entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
+						entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
+						float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
+						entity.stepHeight = 1;
+						double d0 = closestSiren.posX - entity.posX;
+						double d2 = closestSiren.posZ - entity.posZ;
+						double d1 = closestSiren.posY - 1 - entity.posY;
+						if (entity.isRiding()) {
+							entity.dismountRidingEntity();
+						}
+						if (entity.onGround && entity.collidedHorizontally) {
+							entity.motionY = 0.42F;
+
+							if (entity.isPotionActive(MobEffects.JUMP_BOOST)) {
+								entity.motionY += (double) ((float) (entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+							}
+
+							if (entity.isSprinting()) {
+								float f = entity.rotationYaw * 0.017453292F;
+								entity.motionX -= (double) (MathHelper.sin(f) * 0.2F);
+								entity.motionZ += (double) (MathHelper.cos(f) * 0.2F);
+							}
+
+							entity.isAirBorne = true;
+							net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+						}
+						double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+						float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+						float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+						entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
+						entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+						if (entity.getDistance(closestSiren) < 5D) {
+							sirenProps.isCharmed = false;
+							closestSiren.setSinging(false);
+							closestSiren.setAttackTarget((EntityLivingBase) entity);
+							closestSiren.setAggressive(true);
+							closestSiren.triggerOtherSirens((EntityLivingBase) entity);
+						}
+						if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
+							sirenProps.isCharmed = false;
+						}
+					}
+				} else if (sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched) {
+					event.getEntityLiving().stepHeight = 0.6F;
+					stepHeightSwitched = true;
+				}
 			}
-			if(sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) != null){
-				if (rand.nextInt(7) == 0) {
-					for(int i = 0; i < 5; i++){
-						event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
-					}
-				}
-				EntityLivingBase entity = event.getEntityLiving();
-				EntitySiren effectiveSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
-				entity.motionX += (Math.signum(effectiveSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
-				entity.motionY += (Math.signum(effectiveSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
-				entity.motionZ += (Math.signum(effectiveSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
-				float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
-				entity.stepHeight = 1;
-				//entity.moveForward = 0.5F;
-				double d0 = effectiveSiren.posX - entity.posX;
-				double d2 = effectiveSiren.posZ - entity.posZ;
-				double d1 = effectiveSiren.posY - 1 - entity.posY;
-				if(entity.isRiding()){
-					entity.dismountRidingEntity();
-				}
-				if(entity.onGround && entity.collidedHorizontally){
-					entity.motionY =  0.42F;
-
-					if (entity.isPotionActive(MobEffects.JUMP_BOOST))
-					{
-						entity.motionY += (double)((float)(entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
-					}
-
-					if (entity.isSprinting())
-					{
-						float f = entity.rotationYaw * 0.017453292F;
-						entity.motionX -= (double)(MathHelper.sin(f) * 0.2F);
-						entity.motionZ += (double)(MathHelper.cos(f) * 0.2F);
-					}
-
-					entity.isAirBorne = true;
-					net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
-				}
-				double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-				float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-				entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-				entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
-				if(entity.getDistance(effectiveSiren) < 5D){
-					sirenProps.isCharmed = false;
-					effectiveSiren.setSinging(false);
-					effectiveSiren.setAttackTarget((EntityLivingBase) entity);
-					effectiveSiren.setAggressive(true);
-					effectiveSiren.triggerOtherSirens((EntityLivingBase) entity);
-				}
-				if(effectiveSiren.isDead || entity.getDistance(effectiveSiren) > 33 || sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving()) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()){
-					sirenProps.isCharmed = false;
-				}
-			}
-		}else if(sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched){
-			event.getEntityLiving().stepHeight = 0.6F;
-			stepHeightSwitched = true;
 		}
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
@@ -344,8 +384,6 @@ public class EventLiving {
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-			System.out.println(properties.isStone);
-
 			if (properties != null && properties.isStone) {
 				event.setCanceled(true);
 			}

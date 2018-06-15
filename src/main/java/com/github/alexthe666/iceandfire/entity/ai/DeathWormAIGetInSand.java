@@ -1,18 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Random;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class DeathWormAIGetInSand extends EntityAIBase {
     private final EntityDeathWorm creature;

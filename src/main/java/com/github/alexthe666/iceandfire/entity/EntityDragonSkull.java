@@ -16,7 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues {
+public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues, IDeadMob {
 
 	private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
@@ -172,5 +172,10 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	@Override
 	public boolean canBeTurnedToStone() {
 		return false;
+	}
+
+	@Override
+	public boolean isMobDead() {
+		return true;
 	}
 }

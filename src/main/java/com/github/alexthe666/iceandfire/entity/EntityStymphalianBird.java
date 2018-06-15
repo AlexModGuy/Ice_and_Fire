@@ -2,31 +2,24 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAITarget;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -36,16 +29,16 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.*;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity {
@@ -54,7 +47,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     private int animationTick;
     private Animation currentAnimation;
     private static final DataParameter<Optional<UUID>> VICTOR_ENTITY = EntityDataManager.<Optional<UUID>>createKey(EntityStymphalianBird.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityStymphalianBird.class, DataSerializers.BOOLEAN);
     private EntityLivingBase victorEntity;
     private boolean isFlying;
     public float flyProgress;
@@ -258,6 +251,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()){
+            this.setAttackTarget(null);
+        }
         if (this.flock == null) {
             StymphalianBirdFlock otherFlock = StymphalianBirdFlock.getNearbyFlock(this);
             if (otherFlock == null) {
@@ -285,7 +281,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             }
             this.flock.update();
         }
-        if (!world.isRemote && this.getAttackTarget() != null) {
+        if (!world.isRemote && this.getAttackTarget() != null && !this.getAttackTarget().isDead) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
@@ -304,6 +300,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 if (this.isFlying()) {
                     rotationYaw = renderYawOffset;
                     if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVector(), target.getPositionVector())) {
+                        this.playSound(ModSounds.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
                             float wingX = (float) (posX + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
                             float wingZ = (float) (posZ + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
@@ -449,9 +446,24 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         super.playHurtSound(source);
     }
 
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.STYMPHALIAN_BIRD_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.STYMPHALIAN_BIRD_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.STYMPHALIAN_BIRD_DIE;
+    }
+
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
-        if(this.isVictor(entity)){
+        if(this.isVictor(entity) && entity != null){
             return;
         }
         super.setAttackTarget(entity);

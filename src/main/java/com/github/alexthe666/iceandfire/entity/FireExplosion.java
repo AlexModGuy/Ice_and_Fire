@@ -129,7 +129,7 @@ public class FireExplosion extends Explosion {
 							d5 = d5 / d13;
 							d7 = d7 / d13;
 							d9 = d9 / d13;
-							if (exploder instanceof EntityDragonBase) {
+							if (exploder != null && exploder instanceof EntityDragonBase) {
 								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 									return;
 								}
@@ -144,7 +144,7 @@ public class FireExplosion extends Explosion {
 									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 								}
 							}
-							if (entity.isDead) {
+							if (entity.isDead && this.exploder != null && this.exploder instanceof EntityDragonBase) {
 								((EntityDragonBase) this.exploder).attackDecision = true;
 							}
 						}
@@ -199,7 +199,7 @@ public class FireExplosion extends Explosion {
 				if (block == Blocks.GRASS_PATH) {
 					worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
 				}
-				if (state.getMaterial() != Material.AIR) {
+				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave")) {
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
 					}

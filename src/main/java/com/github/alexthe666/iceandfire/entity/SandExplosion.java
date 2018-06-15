@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
@@ -14,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,7 +23,6 @@ import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 public class SandExplosion extends Explosion {
@@ -122,14 +118,12 @@ public class SandExplosion extends Explosion {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        if (exploder instanceof EntityDeathWorm) {
+                        if (exploder != null && exploder instanceof EntityDeathWorm) {
                             if (entity instanceof EntityDeathWorm && ((EntityDeathWorm) entity).isOwner(((EntityDeathWorm) exploder).getOwner())) {
                                 return;
                             }
-                            if (entity instanceof EntityLivingBase && ((EntityDeathWorm) exploder).isOwner((EntityLivingBase) entity)) {
-                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
-                            } else {
-                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
+                            if (!(entity instanceof EntityLivingBase && ((EntityDeathWorm) exploder).isOwner((EntityLivingBase) entity))) {
+                                entity.attackEntityFrom(DamageSource.FALLING_BLOCK, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 6);
                             }
                         }
                     }
@@ -138,9 +132,9 @@ public class SandExplosion extends Explosion {
                     if (entity instanceof EntityLivingBase) {
                         d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
                     }
-                    entity.motionX += d5 * d11;
-                    entity.motionY += d7 * d11;
-                    entity.motionZ += d9 * d11;
+                    entity.motionX += d5 * d11 * 0.25;
+                    entity.motionY += d7 * d11 * 0.25;
+                    entity.motionZ += d9 * d11 * 0.25;
 
                     if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
                         this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));

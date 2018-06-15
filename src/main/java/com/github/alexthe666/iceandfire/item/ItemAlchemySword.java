@@ -5,6 +5,8 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -42,6 +44,8 @@ public class ItemAlchemySword extends ItemSword {
 			if (target instanceof EntityFireDragon) {
 				target.attackEntityFrom(DamageSource.DROWN, 13.5F);
 			}
+			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
+			frozenProps.setFrozenFor(200);
 			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
 			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
 			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);

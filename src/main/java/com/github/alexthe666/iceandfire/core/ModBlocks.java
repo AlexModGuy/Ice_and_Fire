@@ -72,8 +72,10 @@ public class ModBlocks {
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
 	public static Block pixieHouse = new BlockPixieHouse();
-	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar")
-	public static Block jar = new BlockJar();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_empty")
+	public static Block jar_empty = new BlockJar(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_pixie")
+	public static Block jar_pixie = new BlockJar(false);
 
 	static {
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");

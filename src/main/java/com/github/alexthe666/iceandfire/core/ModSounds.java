@@ -226,6 +226,30 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("troll_roar")
 	public static final SoundEvent TROLL_ROAR = createSoundEvent("troll_roar");
 
+	@GameRegistry.ObjectHolder("cockatrice_die")
+	public static final SoundEvent COCKATRICE_DIE = createSoundEvent("cockatrice_die");
+
+	@GameRegistry.ObjectHolder("cockatrice_idle")
+	public static final SoundEvent COCKATRICE_IDLE = createSoundEvent("cockatrice_idle");
+
+	@GameRegistry.ObjectHolder("cockatrice_hurt")
+	public static final SoundEvent COCKATRICE_HURT = createSoundEvent("cockatrice_hurt");
+
+	@GameRegistry.ObjectHolder("cockatrice_cry")
+	public static final SoundEvent COCKATRICE_CRY = createSoundEvent("cockatrice_cry");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_die")
+	public static final SoundEvent STYMPHALIAN_BIRD_DIE = createSoundEvent("stymphalian_bird_die");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_idle")
+	public static final SoundEvent STYMPHALIAN_BIRD_IDLE = createSoundEvent("stymphalian_bird_idle");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_hurt")
+	public static final SoundEvent STYMPHALIAN_BIRD_HURT = createSoundEvent("stymphalian_bird_hurt");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_attack")
+	public static final SoundEvent STYMPHALIAN_BIRD_ATTACK = createSoundEvent("stymphalian_bird_attack");
+	
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);

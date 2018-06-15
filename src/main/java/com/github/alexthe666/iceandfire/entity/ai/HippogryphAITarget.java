@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,11 +23,15 @@ public class HippogryphAITarget<T extends EntityLivingBase> extends EntityAINear
 		}
 		if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.hippogryph.getClass())) {
 			if (this.hippogryph.width >= this.targetEntity.width) {
-				if (this.targetEntity instanceof EntityPlayer && !hippogryph.isOwner(this.targetEntity)) {
+				if (this.targetEntity instanceof EntityPlayer) {
 					return !hippogryph.isTamed();
 				} else {
 					if (!hippogryph.isOwner(this.targetEntity) && hippogryph.canMove() && this.targetEntity instanceof EntityAnimal) {
-						return true;
+						if(hippogryph.isTamed()){
+							return DragonUtils.canTameDragonAttack(hippogryph, this.targetEntity);
+						}else{
+							return true;
+						}
 					}
 				}
 			}

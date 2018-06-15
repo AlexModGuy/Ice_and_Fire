@@ -13,13 +13,11 @@ public enum EnumBestiaryPages {
 
 	INTRODUCTION(2),
 	FIREDRAGON(4),
-
 	FIREDRAGONEGG(1),
 	ICEDRAGON(4),
 	ICEDRAGONEGG(1),
 	TAMEDDRAGONS(3),
 	MATERIALS(2),
-
 	ALCHEMY(0),
 	VILLAGERS(0),
 	HIPPOGRYPH(1),
@@ -28,7 +26,10 @@ public enum EnumBestiaryPages {
 	CYCLOPS(2),
 	SIREN(2),
 	HIPPOCAMPUS(2),
-	DEATHWORM(3);
+	DEATHWORM(3),
+	COCKATRICE(2),
+	STYMPHALIANBIRD(1),
+	TROLL(2);
 
 	public int pages;
 

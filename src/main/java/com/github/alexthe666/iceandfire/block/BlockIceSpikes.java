@@ -25,10 +25,11 @@ public class BlockIceSpikes extends Block {
 
 	public BlockIceSpikes() {
 		super(Material.PACKED_ICE);
-		this.setHardness(5F);
+		this.setHardness(2.5F);
 		this.setUnlocalizedName("iceandfire.dragon_ice_spikes");
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setSoundType(SoundType.GLASS);
+		this.setHarvestLevel("pickaxe", 1);
 		this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
 	}
 

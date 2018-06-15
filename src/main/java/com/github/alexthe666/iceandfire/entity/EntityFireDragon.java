@@ -25,7 +25,6 @@ import java.util.Random;
 
 public class EntityFireDragon extends EntityDragonBase {
 
-	public static Animation ANIMATION_TAILWHACK;
 	public static Animation ANIMATION_FIRECHARGE;
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -34,7 +33,7 @@ public class EntityFireDragon extends EntityDragonBase {
 	public static final float[] growth_stage_5 = new float[]{20F, 30F};
 
 	public EntityFireDragon(World worldIn) {
-		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.2F, 0.5F);
+		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
 		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
@@ -69,26 +68,10 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
-				return entity instanceof EntityLivingBase;
+				return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase)entity);
 			}
 		}));
 		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
-	}
-
-	@Override
-	public String getTexture() {
-		if (this.isModelDead()) {
-			if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
-				return "iceandfire:textures/models/firedragon/fire_skeleton_" + this.getDragonStage();
-			} else {
-				return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
-			}
-		}
-		if (this.isSleeping() || this.isBlinking()) {
-			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_sleeping";
-		} else {
-			return "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "";
-		}
 	}
 
 	public String getVariantName(int variant) {
@@ -381,11 +364,6 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public Animation[] getAnimations() {
 		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR};
-	}
-
-	@Override
-	public String getTextureOverlay() {
-		return this.isSleeping() || this.isBlinking() || this.isModelDead() ? null : "iceandfire:textures/models/firedragon/" + this.getVariantName(this.getVariant()) + this.getDragonStage() + "_eyes";
 	}
 
 	public boolean isBreedingItem(ItemStack stack) {

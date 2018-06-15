@@ -1,15 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.google.common.collect.Sets;
-
-import java.util.Set;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
+
+import java.util.Set;
 
 public class AquaticAITempt extends EntityAIBase {
     private final EntityCreature temptedEntity;

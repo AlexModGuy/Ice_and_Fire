@@ -31,20 +31,20 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 	@Nullable
 	@Override
 	protected ResourceLocation getEntityTexture(EntityHippogryph entity) {
-		return new ResourceLocation("iceandfire:textures/models/hippogryph/" + entity.getEnumVariant().name().toLowerCase() + (entity.isBlinking() ? "_blink" : "") + ".png");
+		return entity.isBlinking() ? entity.getEnumVariant().TEXTURE_BLINK : entity.getEnumVariant().TEXTURE;
 	}
 
 	@SideOnly(Side.CLIENT)
 	private class LayerHippogriffSaddle implements LayerRenderer {
 		private final RenderHippogryph renderer;
-
+		private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png");
 		public LayerHippogriffSaddle(RenderHippogryph renderer) {
 			this.renderer = renderer;
 		}
 
 		public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.isSaddled()) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png"));
+				this.renderer.bindTexture(TEXTURE);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}
@@ -63,6 +63,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 	@SideOnly(Side.CLIENT)
 	private class LayerHippogriffBridle implements LayerRenderer {
 		private final RenderHippogryph renderer;
+		private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png");
 
 		public LayerHippogriffBridle(RenderHippogryph renderer) {
 			this.renderer = renderer;
@@ -70,7 +71,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
 		public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.isSaddled() && entity.getControllingPassenger() != null) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png"));
+				this.renderer.bindTexture(TEXTURE);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}
@@ -89,6 +90,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 	@SideOnly(Side.CLIENT)
 	private class LayerHippogriffChest implements LayerRenderer {
 		private final RenderHippogryph renderer;
+		private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png");
 
 		public LayerHippogriffChest(RenderHippogryph renderer) {
 			this.renderer = renderer;
@@ -96,7 +98,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
 		public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.isChested()) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png"));
+				this.renderer.bindTexture(TEXTURE);
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}
@@ -115,6 +117,9 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 	@SideOnly(Side.CLIENT)
 	private class LayerHippogriffArmor implements LayerRenderer {
 		private final RenderHippogryph renderer;
+		private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_diamond.png");
+		private final ResourceLocation TEXTURE_GOLD = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_gold.png");
+		private final ResourceLocation TEXTURE_IRON = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_iron.png");
 
 		public LayerHippogriffArmor(RenderHippogryph renderer) {
 			this.renderer = renderer;
@@ -122,7 +127,17 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
 		public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 			if (entity.getArmor() != 0) {
-				this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_" + (entity.getArmor() != 1 ? entity.getArmor() != 2 ? "diamond" : "gold" : "iron") + ".png"));
+				switch(entity.getArmor()){
+					case 1:
+						this.renderer.bindTexture(TEXTURE_IRON);
+						break;
+					case 2:
+						this.renderer.bindTexture(TEXTURE_GOLD);
+						break;
+					case 3:
+						this.renderer.bindTexture(TEXTURE_DIAMOND);
+						break;
+				}
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}
 		}

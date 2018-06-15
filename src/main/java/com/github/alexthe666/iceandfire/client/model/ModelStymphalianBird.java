@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -335,8 +334,10 @@ public class ModelStymphalianBird extends ModelDragonBase {
         animator.resetKeyframe(5);
         animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
         animator.startKeyframe(5);
-        this.rotate(animator, Jaw, 25, 0, 0);
-        animator.resetKeyframe(5);
+        this.rotate(animator, Jaw, 35, 0, 0);
+        animator.startKeyframe(5);
+        this.rotate(animator, Jaw, 0, 0, 0);
+        animator.endKeyframe();
         animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
         animator.startKeyframe(20);
         shootPosture();

@@ -2,11 +2,7 @@ package com.github.alexthe666.iceandfire.api;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 
@@ -16,6 +12,9 @@ public class FoodUtils {
         int foodPoints = Math.round(entity.width * entity.height * 10);
         if(entity instanceof EntityAgeable){
             return foodPoints;
+        }
+        if(entity instanceof EntityPlayer){
+            return 15;
         }
         return 0;
     }

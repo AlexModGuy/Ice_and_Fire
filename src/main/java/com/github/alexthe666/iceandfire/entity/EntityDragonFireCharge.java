@@ -55,6 +55,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 		if (this.isInWater()) {
 			setDead();
 		}
+
 		if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
 			super.onUpdate();
 
@@ -103,6 +104,9 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 
 		if (!this.world.isRemote) {
 			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
+				return;
+			}
+			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
 				return;
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {

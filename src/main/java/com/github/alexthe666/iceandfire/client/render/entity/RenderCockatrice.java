@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -60,7 +60,8 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
         EntityLivingBase entitylivingbase = entity.getTargetedEntity();
 
-        if (entitylivingbase != null && EntityGorgon.isEntityLookingAt(entity, entitylivingbase, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
+        boolean blindness = entity.isPotionActive(MobEffects.BLINDNESS) || entitylivingbase != null && entitylivingbase.isPotionActive(MobEffects.BLINDNESS);
+        if (!blindness && entitylivingbase != null && EntityGorgon.isEntityLookingAt(entity, entitylivingbase, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
             float f = entity.getAttackAnimationScale(partialTicks);
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();

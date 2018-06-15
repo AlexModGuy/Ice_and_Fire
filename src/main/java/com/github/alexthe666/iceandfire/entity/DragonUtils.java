@@ -8,8 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.*;
 
 import javax.annotation.Nullable;
@@ -20,7 +23,20 @@ public class DragonUtils {
 	public static BlockPos getBlockInView(EntityDragonBase dragon) {
 		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * - 7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
 		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
-		float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
+		float renderYawOffset = dragon.renderYawOffset;
+		if(dragon.hasHomePosition && dragon.homePos != null){
+			BlockPos dragonPos = new BlockPos(dragon);
+			BlockPos ground = dragon.world.getHeight(dragonPos);
+			int distFromGround = (int) dragon.posY - ground.getY();
+			for(int i = 0; i < 10; i++){
+				BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
+				if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
+					return pos;
+				}
+			}
+		}
+		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
+
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
 		BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
@@ -98,6 +114,17 @@ public class DragonUtils {
 		float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
+		if(hippo.hasHomePosition && hippo.homePos != null){
+			BlockPos dragonPos = new BlockPos(hippo);
+			BlockPos ground = hippo.world.getHeight(dragonPos);
+			int distFromGround = (int) hippo.posY - ground.getY();
+			for(int i = 0; i < 10; i++){
+				BlockPos pos = new BlockPos(hippo.homePos.getX() + hippo.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1), (hippo.homePos.getZ() + hippo.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
+				if (!hippo.isTargetBlocked(new Vec3d(pos)) && hippo.getDistanceSqToCenter(pos) > 6) {
+					return pos;
+				}
+			}
+		}
 		BlockPos radialPos = new BlockPos(hippo.posX + extraX, 0, hippo.posZ + extraZ);
 		BlockPos ground = hippo.world.getHeight(radialPos);
 		int distFromGround = (int) hippo.posY - ground.getY();
@@ -168,4 +195,28 @@ public class DragonUtils {
 		}
 		return target.getPosition();
 	}
+
+	public static boolean canTameDragonAttack(EntityTameable dragon, Entity entity){
+		String className = entity.getClass().getSimpleName();
+		if(className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")){
+			return false;
+		}
+		if(entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer){
+			return false;
+		}
+		if(entity instanceof EntityTameable){
+			EntityTameable tameable = (EntityTameable)entity;
+			if(tameable.getOwnerId() != null && tameable.getOwnerId().equals(dragon.getOwnerId())){
+				return false;
+			}
+		}
+		return true;
+	}
+
+    public static boolean isAlive(EntityLivingBase entity) {
+		if(entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()){
+			return false;
+		}
+		return true;
+    }
 }

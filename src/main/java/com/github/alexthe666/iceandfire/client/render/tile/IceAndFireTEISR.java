@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,5 +16,5 @@ public class IceAndFireTEISR extends TileEntityItemStackRenderer {
             ItemTrollWeapon weaponItem = (ItemTrollWeapon)itemStackIn.getItem();
             renderTrollWeapon.renderItem(weaponItem.weapon, 0, 0, 0, 0.0F, 0, 0.0F);
         }
-}
+    }
 }

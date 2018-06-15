@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,31 +14,21 @@ public class LayerDragonArmor implements LayerRenderer {
 	private final RenderLiving renderer;
 
 	private int slot;
-	private String dragonType;
 
-	public LayerDragonArmor(RenderLiving renderer, int slot, String dragonType) {
+	public LayerDragonArmor(RenderLiving renderer, int slot) {
 		this.renderer = renderer;
 		this.slot = slot;
-		this.dragonType = dragonType;
 	}
 
 	public void doRenderLayer(EntityDragonBase entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entity.getArmorInSlot(slot) != 0) {
-			this.renderer.bindTexture(new ResourceLocation("iceandfire:textures/models/" + dragonType + "/armor_" + armorPart() + "_" + entity.getArmorInSlot(slot) + ".png"));
-			this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
-		}
-	}
+			if(entity instanceof EntityIceDragon){
+				this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).ICETEXTURE);
+			}else{
+				this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).FIRETEXTURE);
 
-	public String armorPart() {
-		switch (slot) {
-			case 1:
-				return "neck";
-			case 2:
-				return "body";
-			case 3:
-				return "tail";
-			default:
-				return "head";
+			}
+			this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 		}
 	}
 

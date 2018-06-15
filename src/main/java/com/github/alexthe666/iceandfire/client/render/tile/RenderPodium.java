@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
@@ -11,10 +12,25 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderPodium extends TileEntitySpecialRenderer {
 
-	public static String getTexture(EnumDragonEgg type) {
-		String i = type.isFire ? "firedragon/" : "icedragon/";
-		return "iceandfire:textures/models/" + i + "egg_" + type.name().toLowerCase() + ".png";
-
+	protected static ResourceLocation getEggTexture(EnumDragonEgg type) {
+		switch (type) {
+			default:
+				return RenderDragonEgg.EGG_RED;
+			case GREEN:
+				return RenderDragonEgg.EGG_GREEN;
+			case BRONZE:
+				return RenderDragonEgg.EGG_BRONZE;
+			case GRAY:
+				return RenderDragonEgg.EGG_GREY;
+			case BLUE:
+				return RenderDragonEgg.EGG_BLUE;
+			case WHITE:
+				return RenderDragonEgg.EGG_WHITE;
+			case SAPPHIRE:
+				return RenderDragonEgg.EGG_SAPPHIRE;
+			case SILVER:
+				return RenderDragonEgg.EGG_SILVER;
+		}
 	}
 
 	@Override
@@ -25,13 +41,11 @@ public class RenderPodium extends TileEntitySpecialRenderer {
 		if (!podium.getStackInSlot(0).isEmpty()) {
 			if (podium.getStackInSlot(0).getItem() != null) {
 				if (podium.getStackInSlot(0).getItem() instanceof ItemDragonEgg) {
-
 					ItemDragonEgg item = (ItemDragonEgg) podium.getStackInSlot(0).getItem();
-
 					GL11.glPushMatrix();
 					GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
 					GL11.glPushMatrix();
-					this.bindTexture(new ResourceLocation(getTexture(item.type)));
+					this.bindTexture(getEggTexture(item.type));
 					GL11.glPushMatrix();
 					model.renderPodium();
 					GL11.glPopMatrix();

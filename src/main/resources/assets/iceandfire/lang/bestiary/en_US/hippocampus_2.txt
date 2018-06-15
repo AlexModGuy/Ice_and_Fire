@@ -9,20 +9,8 @@ whilst holding a stick.
 If killed, a hippocampi drops
 shiny scales.
 
-These shiny scales can be used
-to craft mysterious potions that
-grant water breathing.
-
-
-
-
-
-
-
-
-
-
-
-The more scales used in the
-process, the longer the
-potion's effect will last.
+These shiny scales, when mixed
+with a water bottle in a
+brewing stand, can be turned
+into potions of water
+breathing.

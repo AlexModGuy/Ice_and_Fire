@@ -35,6 +35,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -47,13 +48,13 @@ import javax.annotation.Nullable;
 
 public class EntityHippocampus extends EntityTameable implements IAnimatedEntity {
 
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private int animationTick;
     private Animation currentAnimation;
     public float onLandProgress;
     private boolean isLandNavigator;
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.<Boolean>createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> ARMOR = EntityDataManager.<Integer>createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> CHESTED = EntityDataManager.<Boolean>createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
@@ -83,6 +84,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             tail_buffer = new ChainBuffer();
         }
         initHippocampusInv();
+    }
+
+    public float getBlockPathWeight(BlockPos pos) {
+        return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
     }
 
     public boolean isNotColliding() {
@@ -260,15 +265,15 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean up() {
-        return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
+        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) & 1) == 1;
     }
 
     public boolean down() {
-        return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
+        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
     }
 
     public boolean dismount() {
-        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
+        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
     }
 
 
@@ -488,11 +493,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     forward = controller.moveForward * 0.25F;
                     strafe = controller.moveStrafing * 0.125F;
 
-                    this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+                    this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
                     super.travel(strafe, vertical, forward);
                     return;
                 }
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
+                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
                 super.travel(strafe, vertical = 0, forward);
                 this.prevLimbSwingAmount = this.limbSwingAmount;
                 double deltaX = this.posX - this.prevPosX;
@@ -572,7 +577,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     itemstack.shrink(1);
                 }
                 if(!this.isTamed() && this.getRNG().nextInt(3) == 0){
-                    this.setTamed(true);
+                    this.setTamedBy(player);
                     for (int i = 0; i < 6; i++) {
                         this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
                     }
@@ -580,7 +585,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 return true;
 
             }
-             if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+             if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
                 this.setSitting(false);
                 this.setInLove(player);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -589,11 +594,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 }
                 return true;
             }
-            if (itemstack != null && itemstack.getItem() == Items.STICK) {
+            if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
                 this.setSitting(!this.isSitting());
                 return true;
             }
-        if(itemstack.isEmpty()) {
+        if(isOwner(player) && itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
@@ -607,7 +612,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public void openGUI(EntityPlayer playerEntity) {
-        if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
+        if (this.world.isRemote && (!this.isBeingRidden() || !this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 5, this.world, this.getEntityId(), 0, 0);
         }
     }
@@ -694,7 +699,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.hippo.rotationYaw = this.limitAngle(this.hippo.rotationYaw, angle, 30.0F);
-                this.hippo.setAIMoveSpeed((float) 2F);
+                this.hippo.setAIMoveSpeed((float) 1F);
                 this.hippo.motionY += (double)this.hippo.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double)Math.max(1.0F, this.entity.width)) {
                     float f = this.hippo.rotationYaw * 0.017453292F;

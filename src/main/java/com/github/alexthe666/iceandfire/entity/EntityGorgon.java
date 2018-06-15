@@ -94,7 +94,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+				return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);

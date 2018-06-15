@@ -1,10 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -28,11 +33,15 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 					}
 					return !dragon.isModelDead();
 				}
-				if (this.targetEntity instanceof EntityPlayer && !dragon.isOwner(this.targetEntity)) {
-					return !dragon.isTamed();
+				if (this.targetEntity instanceof EntityPlayer && dragon.isTamed()) {
+					return false;
 				} else {
 					if (!dragon.isOwner(this.targetEntity) && FoodUtils.getFoodPoints(this.targetEntity) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
-						return true;
+						if(dragon.isTamed()){
+							return DragonUtils.canTameDragonAttack(dragon, this.targetEntity);
+						}else{
+							return true;
+						}
 					}
 				}
 			}

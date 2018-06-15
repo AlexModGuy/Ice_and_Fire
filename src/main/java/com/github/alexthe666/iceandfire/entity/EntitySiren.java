@@ -11,7 +11,6 @@ import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -54,6 +53,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     private static final DataParameter<Boolean> SINGING = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> CHARMED = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntitySiren.class, DataSerializers.BYTE);
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
     public float singProgress;
@@ -73,6 +73,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         this.switchNavigator(true);
         this.tasks.addTask(0, new SirenAIFindWaterTarget(this));
         this.tasks.addTask(1, new AquaticAIGetInWater(this, 1.0D));
+        this.tasks.addTask(1, new AquaticAIGetOutOfWater(this, 1.0D));
         this.tasks.addTask(2, new SirenAIWander(this, 1));
         this.tasks.addTask(3, new EntityAILookIdle(this));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
@@ -95,6 +96,34 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
     }
 
+    public boolean isOnLadder() {
+        return this.isBesideClimbableBlock();
+    }
+
+    public void onUpdate() {
+        super.onUpdate();
+
+        if (!this.world.isRemote) {
+            this.setBesideClimbableBlock(this.collidedHorizontally);
+        }
+    }
+
+    public boolean isBesideClimbableBlock() {
+        return (((Byte) this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
+    }
+
+    public void setBesideClimbableBlock(boolean climbing) {
+        byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
+
+        if (climbing) {
+            b0 = (byte) (b0 | 1);
+        } else {
+            b0 = (byte) (b0 & -2);
+        }
+
+        this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    }
+
     protected boolean canDespawn() {
         return false;
     }
@@ -109,12 +138,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
-        if(this.getRNG().nextInt(2) == 0){
-            if(this.getAnimation() != ANIMATION_PULL){
+        if (this.getRNG().nextInt(2) == 0) {
+            if (this.getAnimation() != ANIMATION_PULL) {
                 this.setAnimation(ANIMATION_PULL);
                 this.playSound(ModSounds.NAGA_ATTACK, 1, 1);
             }
-        }else {
+        } else {
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
                 this.playSound(ModSounds.NAGA_ATTACK, 1, 1);
@@ -132,20 +161,20 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         return nodeType == PathNodeType.WATER ? 0F : super.getPathPriority(nodeType);
     }
 
-    private void switchNavigator(boolean onLand){
-        if(onLand){
+    private void switchNavigator(boolean onLand) {
+        if (onLand) {
             this.moveHelper = new EntityMoveHelper(this);
             this.navigator = new PathNavigateAmphibious(this, world);
             this.isLandNavigator = true;
-        }else{
+        } else {
             this.moveHelper = new EntitySiren.SwimmingMoveHelper();
             this.navigator = new PathNavigateSwimmer(this, world);
             this.isLandNavigator = false;
         }
     }
 
-    private boolean isPathOnHighGround(){
-        if(this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
+    private boolean isPathOnHighGround() {
+        if (this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
             BlockPos target = new BlockPos(this.navigator.getPath().getFinalPathPoint().x, this.navigator.getPath().getFinalPathPoint().y, this.navigator.getPath().getFinalPathPoint().z);
             BlockPos siren = new BlockPos(this);
             if (world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY()) {
@@ -154,6 +183,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
         return false;
     }
+
     @Override
     public boolean canBreatheUnderwater() {
         return true;
@@ -165,19 +195,16 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     @Override
-    public boolean isOnLadder() {
-        return false;
-    }
-
-    @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
-        if(this.getAnimation()  == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 5){
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        if (!world.isRemote && this.getAttackTarget() == null && !this.isAgressive()) {
+            this.setSinging(true);
         }
-        if(this.getAnimation()  == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 5){
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 5) {
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        }
+        if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 5) {
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             this.getAttackTarget().motionX += (Math.signum(this.posX - this.getAttackTarget().posX) * 0.5D - this.getAttackTarget().motionX) * 0.100000000372529 * 5;
             this.getAttackTarget().motionY += (Math.signum(this.posY - this.getAttackTarget().posY + 1) * 0.5D - this.getAttackTarget().motionY) * 0.100000000372529 * 5;
             this.getAttackTarget().motionZ += (Math.signum(this.posZ - this.getAttackTarget().posZ) * 0.5D - this.getAttackTarget().motionZ) * 0.100000000372529 * 5;
@@ -195,42 +222,44 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 2.5F, this);
         }
-        if(this.isAgressive()){
+        if (this.isAgressive()) {
             ticksAgressive++;
-        }else{
+        } else {
             ticksAgressive = 0;
         }
-        if(ticksAgressive > 300 && this.isAgressive() && this.getAttackTarget() == null){
+        if (ticksAgressive > 300 && this.isAgressive() && this.getAttackTarget() == null && !world.isRemote) {
             this.setAggressive(false);
             this.ticksAgressive = 0;
             this.setSinging(false);
         }
-        if((this.getAttackTarget() != null && !this.getAttackTarget().isInWater() || this.isPathOnHighGround()) && this.collidedHorizontally && this.isInWater()){
-            float f = this.rotationYaw * 0.017453292F;
-            this.motionX -= (double)(MathHelper.sin(f) * 0.2F);
-            this.motionZ += (double)(MathHelper.cos(f) * 0.2F);
-            this.motionY +=  0.35F;
-        }
-        if(this.isInWater() && !this.isSwimming()){
+
+        if (this.isInWater() && !this.isSwimming()) {
             this.setSwimming(true);
         }
-        if(!this.isInWater() && this.isSwimming()){
+        if (!this.isInWater() && this.isSwimming()) {
             this.setSwimming(false);
         }
-        if(this.isInWater() && this.isLandNavigator){
+        boolean pathOnHighGround = this.isPathOnHighGround() || this.getAttackTarget() != null && !this.getAttackTarget().isInWater() && !this.getAttackTarget().isOverWater();
+        if(this.getAttackTarget() == null || !this.getAttackTarget().isInWater() && !this.getAttackTarget().isOverWater()){
+            if (pathOnHighGround && this.isInWater()) {
+                jump();
+                doWaterSplashEffect();
+            }
+        }
+        if ((this.isInWater() && !pathOnHighGround) && this.isLandNavigator) {
             switchNavigator(false);
         }
-        if(!this.isInWater() && !this.isLandNavigator){
+        if ((!this.isInWater() || pathOnHighGround) && !this.isLandNavigator) {
             switchNavigator(true);
         }
-        if(this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()){
+        if (this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()) {
             this.setAttackTarget(null);
             this.setAggressive(false);
         }
-        if(this.getAttackTarget() != null && !this.isAgressive()){
+        if (this.getAttackTarget() != null && !this.isAgressive()) {
             this.setAggressive(true);
         }
-        boolean singing = isSinging() && !wantsToSing() && !this.isAgressive() && !this.isInWater() && onGround;
+        boolean singing = isActuallySinging() && !this.isAgressive() && !this.isInWater() && onGround;
         if (singing && singProgress < 20.0F) {
             singProgress += 1F;
         } else if (!singing && singProgress > 0.0F) {
@@ -242,14 +271,14 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         } else if (!swimming && swimProgress > 0.0F) {
             swimProgress -= 0.5F;
         }
-        if(!EntityGorgon.isStoneMob(this)){
+        if (!world.isRemote && !EntityGorgon.isStoneMob(this) && this.isActuallySinging()) {
             checkForPrey();
         }
-        else if(this.isSinging()){
+        if (!world.isRemote && EntityGorgon.isStoneMob(this) && this.isSinging()) {
             this.setSinging(false);
         }
-        if(singing && !this.wantsToSing() && !this.isInWater()){
-            if(this.getRNG().nextInt(3) == 0){
+        if (isActuallySinging() && !this.isInWater()) {
+            if (this.getRNG().nextInt(3) == 0) {
                 this.renderYawOffset = 0;
                 renderYawOffset = rotationYaw;
                 float radius = -0.9F;
@@ -261,59 +290,31 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
             }
 
         }
-        if(this.isSinging() && !this.isInWater() && this.ticksExisted % 200 == 0){
+        if (this.isActuallySinging() && !this.isInWater() && this.ticksExisted % 200 == 0) {
             this.playSound(ModSounds.SIREN_SONG, 2, 1);
-        }
-        if(!EntityGorgon.isStoneMob(this) && this.isSinging()){
-            this.setSinging(false);
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    private void checkForPrey(){
-        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(SEARCH_RANGE, SEARCH_RANGE, SEARCH_RANGE));
-        for(Entity entity : entities){
-            if(entity instanceof EntityLivingBase && isDrawnToSong(entity)){
-                SirenEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
-                if(this.isSinging()){
-                    this.setAggressive(false);
-                    if(!this.wantsToSing() && !this.isInWater()) {
-                        if (properties != null && !properties.isCharmed && !isWearingEarplugs((EntityLivingBase)entity)) {
-                            properties.isCharmed = true;
-                        }
-                        if (getDistance(entity) < 5D) {
-                            if (properties != null && properties.isCharmed) {
-                                properties.isCharmed = false;
-                            }
-                            if(!world.isRemote){
-                                this.setSinging(false);
-                                this.setAttackTarget((EntityLivingBase) entity);
-                                this.setAggressive(true);
-                                this.triggerOtherSirens((EntityLivingBase) entity);
-                            }
-                        }
-                    }
-                }else if(getDistance(entity) >= 5D && !this.isAgressive() && !this.world.isRemote){
-                    this.setSinging(true);
-                }
-            }
-        }
+    private void checkForPrey() {
+        this.setSinging(true);
     }
 
-    public static boolean isWearingEarplugs(EntityLivingBase entity){
+    public static boolean isWearingEarplugs(EntityLivingBase entity) {
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         return helmet.getItem() == ModItems.earplugs;
     }
+
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if(source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase){
-            this.triggerOtherSirens((EntityLivingBase)source.getTrueSource());
+        if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
+            this.triggerOtherSirens((EntityLivingBase) source.getTrueSource());
         }
         return super.attackEntityFrom(source, amount);
     }
 
     public void triggerOtherSirens(EntityLivingBase aggressor) {
         List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(12, 12, 12));
-        for(Entity entity : entities) {
+        for (Entity entity : entities) {
             if (entity instanceof EntitySiren) {
                 ((EntitySiren) entity).setAttackTarget(aggressor);
                 ((EntitySiren) entity).setAggressive(true);
@@ -355,8 +356,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         return isSinging;
     }
 
-    public boolean wantsToSing(){
+    public boolean wantsToSing() {
         return this.isSinging() && this.isInWater() && !this.isAgressive();
+    }
+
+    public boolean isActuallySinging() {
+        return isSinging() && !wantsToSing();
     }
 
     public void setSinging(boolean singing) {
@@ -429,6 +434,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         this.dataManager.register(SINGING, Boolean.valueOf(false));
         this.dataManager.register(SWIMMING, Boolean.valueOf(false));
         this.dataManager.register(CHARMED, Boolean.valueOf(false));
+        this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
     }
 
     @Override
@@ -480,7 +486,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         return this.isAgressive() ? ModSounds.NAGA_DIE : ModSounds.MERMAID_DIE;
     }
 
-    public static boolean isDrawnToSong(Entity entity){
+    public static boolean isDrawnToSong(Entity entity) {
         return entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof IHearsSiren;
     }
 
@@ -490,7 +496,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
             float f4;
             float f5;
             if (this.isInWater()) {
-                this.moveRelative(strafe, forward, vertical,0.1F);
+                this.moveRelative(strafe, forward, vertical, 0.1F);
                 f4 = 0.8F;
                 float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
                 if (d0 > 3.0F) {
@@ -533,25 +539,24 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
         @Override
         public void onUpdateMoveHelper() {
-            if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.siren.getNavigator().noPath()) {
+            if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.siren.getNavigator().noPath() && !this.siren.isBeingRidden()) {
                 double distanceX = this.posX - this.siren.posX;
                 double distanceY = this.posY - this.siren.posY;
                 double distanceZ = this.posZ - this.siren.posZ;
-                double distance = Math.abs(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
-                distance = (double) MathHelper.sqrt(distance);
+                double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
+                double distanceWithY = (double) MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.siren.rotationYaw = this.limitAngle(this.siren.rotationYaw, angle, 30.0F);
-                this.siren.setAIMoveSpeed((float) 0.5F);
-                this.siren.motionY += (double) distanceY * 0.1D;
-                if ( distanceX * distanceX + distanceZ * distanceZ < (double)Math.max(1.0F, this.entity.width)) {
+                this.siren.setAIMoveSpeed((float) 1F);
+                this.siren.motionY += (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D;
+                if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.siren.rotationYaw * 0.017453292F;
-                    this.siren.motionX -= (double)(MathHelper.sin(f) * 0.35F);
-                    this.siren.motionZ += (double)(MathHelper.cos(f) * 0.35F);
-                    this.siren.motionY +=  0.42F;
+                    this.siren.motionX -= (double) (MathHelper.sin(f) * 0.35F);
+                    this.siren.motionZ += (double) (MathHelper.cos(f) * 0.35F);
                 }
-            }else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
-
+            } else if (this.action == EntityMoveHelper.Action.JUMPING) {
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
                 if (this.entity.onGround) {
                     this.action = EntityMoveHelper.Action.WAIT;
                 }

@@ -1,12 +1,22 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,6 +24,33 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ModRecipes {
 
     public static void init() {
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.dragonbone_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityDragonArrow entityarrow = new EntityDragonArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+
+
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
         OreDictionary.registerOre("oreSilver", ModBlocks.silverOre);
@@ -33,7 +70,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_MUTTON);
         OreDictionary.registerOre("foodMeat", Items.RABBIT);
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
-        OreDictionary.registerOre("boneWithered", ModItems.witherbone);        
+        OreDictionary.registerOre("boneWithered", ModItems.witherbone);
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
@@ -57,7 +94,11 @@ public class ModRecipes {
         ModItems.troll_mountain.setRepairItem(new ItemStack(EnumTroll.MOUNTAIN.leather));
         ModItems.troll_forest.setRepairItem(new ItemStack(EnumTroll.FOREST.leather));
         ModItems.troll_frost.setRepairItem(new ItemStack(EnumTroll.FROST.leather));
-
+        ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("Potion", "water_breathing");
+        waterBreathingPotion.setTagCompound(tag);
+        BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(ModItems.shiny_scales), waterBreathingPotion);
 
     }
 

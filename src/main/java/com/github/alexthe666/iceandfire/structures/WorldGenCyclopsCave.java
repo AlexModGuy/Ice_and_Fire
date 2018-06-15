@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.structures;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.minecraft.block.BlockBone;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntitySheep;
@@ -122,6 +121,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                     worldIn.setBlockState(end.offset(direction, side), Blocks.OAK_FENCE.getDefaultState());
                     if(worldIn.isAirBlock(end.offset(direction, side).offset(direction.rotateY())) && sheepsSpawned < sheeps){
                         BlockPos sheepPos = end.offset(direction, side).offset(direction.rotateY());
+
                         EntitySheep entitySheep = new EntitySheep(worldIn);
                         entitySheep.setPosition(sheepPos.getX() + 0.5F, sheepPos.getY() + 0.5F, sheepPos.getZ() + 0.5F);
                         entitySheep.setFleeceColor(rand.nextInt(4) == 0 ? EnumDyeColor.YELLOW : EnumDyeColor.WHITE);

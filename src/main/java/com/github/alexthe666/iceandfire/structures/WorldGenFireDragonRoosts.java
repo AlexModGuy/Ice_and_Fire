@@ -60,7 +60,8 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 		dragon.setHealth(dragon.getMaxHealth());
 		dragon.setVariant(new Random().nextInt(4));
 		dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-		dragon.homeArea = position;
+		dragon.homePos = position;
+		dragon.hasHomePosition = true;
 		dragon.setHunger(50);
 		worldIn.spawnEntity(dragon);
 		return true;
