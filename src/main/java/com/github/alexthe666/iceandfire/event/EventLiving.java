@@ -40,6 +40,7 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -86,6 +87,16 @@ public class EventLiving {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void onEntityDespawn(LivingSpawnEvent.AllowDespawn event) {
+		if (event.getEntityLiving() instanceof EntityLiving) {
+			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+			if (properties != null && properties.isStone) {
+				event.setResult(Event.Result.DENY);
+			}
+		}
 	}
 
 	@SubscribeEvent
