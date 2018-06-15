@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "I I",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "iceandfire:dragon_ice",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragon_ice_spikes",
+    "data": 0,
+    "count" : 4
+  }
+}
