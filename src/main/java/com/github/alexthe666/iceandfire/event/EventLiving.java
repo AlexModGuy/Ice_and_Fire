@@ -215,6 +215,10 @@ public class EventLiving {
 				frozenProps.isFrozen = false;
 			}
 			if(!event.getEntityLiving().world.isRemote) {
+				if(frozenProps.isFrozen && event.getEntityLiving().isBurning()){
+					frozenProps.isFrozen = false;
+					event.getEntityLiving().extinguish();
+				}
 				if (event.getEntityLiving().deathTime > 0) {
 					frozenProps.isFrozen = false;
 				}

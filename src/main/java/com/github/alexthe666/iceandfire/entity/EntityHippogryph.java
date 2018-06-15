@@ -40,6 +40,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -82,6 +83,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	private int flyTicks;
 	private int hoverTicks;
 	private boolean hasChestVarChanged = false;
+	public BlockPos homePos;
+	public boolean hasHomePosition = false;
 
 	public EntityHippogryph(World worldIn) {
 		super(worldIn);
@@ -239,7 +242,18 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				return true;
 			}
 			if (itemstack != null && itemstack.getItem() == Items.STICK) {
-				this.setSitting(!this.isSitting());
+				if(player.isSneaking()){
+					BlockPos pos = new BlockPos(this);
+					this.homePos = pos;
+					this.hasHomePosition = true;
+					if (world.isRemote) {
+						player.sendMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()));
+					}
+					return true;
+				}else{
+					this.setSitting(!this.isSitting());
+
+				}
 				return true;
 			}
 			if (itemstack != null && itemstack.getItem() == Items.SPECKLED_MELON && this.getEnumVariant() != EnumHippogryphTypes.DODO) {
@@ -359,7 +373,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
 			compound.setString("CustomName", this.getCustomNameTag());
 		}
-
+		compound.setBoolean("HasHomePosition", this.hasHomePosition);
+		if (homePos != null && this.hasHomePosition) {
+			compound.setInteger("HomeAreaX", homePos.getX());
+			compound.setInteger("HomeAreaY", homePos.getY());
+			compound.setInteger("HomeAreaZ", homePos.getZ());
+		}
 	}
 
 	@Override
@@ -396,6 +415,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(hippogryphInventory.getStackInSlot(2))));
 				}
 			}
+		}
+		this.hasHomePosition = compound.getBoolean("HasHomePosition");
+		if (hasHomePosition && compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
+			homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
 		}
 	}
 

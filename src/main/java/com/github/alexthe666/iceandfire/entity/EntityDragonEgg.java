@@ -141,6 +141,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
                 dragon.setVariant(getType().ordinal());
                 dragon.setGender(new Random().nextBoolean());
                 dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setHunger(50);
                 if (!world.isRemote) {
                     world.spawnEntity(dragon);
                 }

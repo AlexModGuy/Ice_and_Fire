@@ -58,7 +58,7 @@ import java.util.Random;
 
 public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob {
 
-    private static final int FLIGHT_CHANCE_PER_TICK = 1250;
+    private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -789,12 +789,23 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             return true;
                         }
                         if (stack.getItem() == ModItems.dragon_stick) {
-                            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                            this.setSitting(!this.isSitting());
-                            if (world.isRemote) {
-                                player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+                            if(player.isSneaking()){
+                                BlockPos pos = new BlockPos(this);
+                                this.homePos = pos;
+                                this.hasHomePosition = true;
+                                if (world.isRemote) {
+                                    player.sendMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()));
+                                }
+                                return true;
+                            }else{
+                                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
+                                this.setSitting(!this.isSitting());
+                                if (world.isRemote) {
+                                    player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+                                }
+                                return true;
                             }
-                            return true;
+
                         }
 
                         if (stack.getItem() == ModItems.dragon_horn && !world.isRemote) {
@@ -899,7 +910,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     private boolean isStuck(){
-        return (!this.getNavigator().noPath() || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
+        return (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15) || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
     }
     @Override
     public void onLivingUpdate() {
@@ -1142,7 +1153,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(1500) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
