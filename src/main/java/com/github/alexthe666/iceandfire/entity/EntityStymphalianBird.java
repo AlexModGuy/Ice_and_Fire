@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -250,6 +251,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()){
+            this.setAttackTarget(null);
+        }
         if (this.flock == null) {
             StymphalianBirdFlock otherFlock = StymphalianBirdFlock.getNearbyFlock(this);
             if (otherFlock == null) {
@@ -459,7 +463,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
-        if(this.isVictor(entity)){
+        if(this.isVictor(entity) && entity != null){
             return;
         }
         super.setAttackTarget(entity);

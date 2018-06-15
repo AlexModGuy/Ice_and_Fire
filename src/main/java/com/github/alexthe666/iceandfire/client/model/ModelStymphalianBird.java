@@ -335,7 +335,9 @@ public class ModelStymphalianBird extends ModelDragonBase {
         animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
         animator.startKeyframe(5);
         this.rotate(animator, Jaw, 35, 0, 0);
-        animator.resetKeyframe(5);
+        animator.startKeyframe(5);
+        this.rotate(animator, Jaw, 0, 0, 0);
+        animator.endKeyframe();
         animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
         animator.startKeyframe(20);
         shootPosture();
