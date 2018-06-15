@@ -1891,6 +1891,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     public boolean shouldRenderEyes() {
-        return !this.isSleeping() && !this.isModelDead();
+        return !this.isSleeping() && !this.isModelDead() && !this.isBlinking();
     }
 }
