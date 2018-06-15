@@ -11,10 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAISit;
+import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,7 +59,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
 		this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
 		this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
 		this.tasks.addTask(5, new DragonAIAirTarget(this));

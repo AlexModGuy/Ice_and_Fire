@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
@@ -126,6 +127,12 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				}
 				if (this.shootingEntity != null) {
 					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
+					if (movingObject.entityHit instanceof EntityLivingBase) {
+						FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, FrozenEntityProperties.class);
+						if(frozenProps != null) {
+							frozenProps.setFrozenFor(200);
+						}
+					}
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					}

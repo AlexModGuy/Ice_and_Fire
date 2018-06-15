@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
@@ -88,7 +90,12 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 1);
-				this.setDead();
+				if(movingObject.entityHit instanceof EntityLivingBase){
+					FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, FrozenEntityProperties.class);
+					if(frozenProps != null) {
+						frozenProps.setFrozenFor(200);
+					}
+				}
 			}
 		}
 		this.setDead();
