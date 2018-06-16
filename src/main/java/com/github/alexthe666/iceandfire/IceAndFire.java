@@ -74,6 +74,9 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");
+        if (Loader.isModLoaded("thaumcraft")) {
+            IceAndFireAspectRegistry.register();
+        }
     }
 
     public static void loadConfig() {
@@ -100,9 +103,6 @@ public class IceAndFire {
 
         ModRecipes.init();
         ModVillagers.INSTANCE.init();
-        if (Loader.isModLoaded("thaumcraft")) {
-            IceAndFireAspectRegistry.register();
-        }
         logger.info("The watcher waits on the northern wall");
         logger.info("A daughter picks up a warrior's sword");
         MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
