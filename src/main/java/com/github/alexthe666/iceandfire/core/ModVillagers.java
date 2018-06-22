@@ -24,7 +24,6 @@ public class ModVillagers {
 
 	public static final ModVillagers INSTANCE = new ModVillagers();
 
-	public static final ResourceLocation PROFESSIONS = new ResourceLocation("iceandfire:snowvillagerprofessions");
 	public VillagerRegistry.VillagerProfession fisherman;
 	public VillagerRegistry.VillagerProfession craftsman;
 	public VillagerRegistry.VillagerProfession shaman;

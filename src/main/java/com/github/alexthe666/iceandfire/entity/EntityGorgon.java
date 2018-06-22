@@ -199,6 +199,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.smallArms = true;
 							if (!world.isRemote) {
 								world.spawnEntity(statue);
+								this.getAttackTarget().setDead();
 							}
 							statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
 							statue.rotationYaw = this.getAttackTarget().rotationYaw;
