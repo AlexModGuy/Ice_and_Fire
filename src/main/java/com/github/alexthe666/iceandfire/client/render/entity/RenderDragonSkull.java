@@ -14,9 +14,11 @@ public class RenderDragonSkull extends RenderLiving {
 
 	public static final ResourceLocation SKULL_FIRE = new ResourceLocation("iceandfire:textures/models/firedragon/fire_skeleton_4.png");
 	public static final ResourceLocation SKULL_ICE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_4.png");
+	public static final ModelFireSkull FIRE_SKULL_MODEL = new ModelFireSkull();
+	public static final ModelIceSkull ICE_SKULL_MODEL = new ModelIceSkull();
 
 	public RenderDragonSkull(RenderManager renderManager) {
-		super(renderManager, new ModelFireSkull(), 0.3F);
+		super(renderManager, FIRE_SKULL_MODEL, 0.3F);
 	}
 
 	@Override
@@ -27,15 +29,6 @@ public class RenderDragonSkull extends RenderLiving {
 			GL11.glRotatef(((EntityDragonSkull) par1EntityLivingBase).getYaw(), 0, 1, 0);
 			super.preRenderCallback(par1EntityLivingBase, par2);
 		}
-
-		if (((EntityDragonSkull) par1EntityLivingBase).getType() == 0) {
-			if (this.mainModel.getClass() != ModelFireSkull.class) {
-				this.mainModel = new ModelFireSkull();
-			}
-		} else if (this.mainModel.getClass() != ModelIceSkull.class) {
-			this.mainModel = new ModelIceSkull();
-		}
-
 	}
 
 	@Override

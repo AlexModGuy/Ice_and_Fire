@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonSkull;
+import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -78,7 +80,11 @@ public class ModelFireSkull extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.Head.render(f5);
+		if (entity instanceof EntityDragonSkull && ((EntityDragonSkull) entity).getType() == 1) {
+			RenderDragonSkull.ICE_SKULL_MODEL.Head.render(f5);
+		}else{
+			this.Head.render(f5);
+		}
 	}
 
 	/**
