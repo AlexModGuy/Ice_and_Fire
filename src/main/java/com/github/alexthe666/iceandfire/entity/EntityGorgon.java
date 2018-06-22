@@ -107,7 +107,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isPotionActive(MobEffects.BLINDNESS));
+		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
 		if (blindness) {
 			if (this.getAnimation() != ANIMATION_HIT) {
 				this.setAnimation(ANIMATION_HIT);
@@ -126,7 +126,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
 		super.setAttackTarget(entitylivingbaseIn);
 		if (entitylivingbaseIn != null) {
-			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS);
+			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entitylivingbaseIn).canBeTurnedToStone();
 			if (blindness) {
 				this.tasks.removeTask(aiStare);
 				this.tasks.addTask(3, aiMelee);
@@ -185,7 +185,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		}
 
 		if (this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
-			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
+			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
 			if (!blindness) {
 				if (this.getAnimation() != ANIMATION_SCARE) {
 					this.playSound(ModSounds.GORGON_ATTACK, 1, 1);
@@ -208,7 +208,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
-							if (this.getAttackTarget() instanceof EntityLiving || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
+							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
 								if (properties != null || !properties.isStone) {
@@ -234,8 +234,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 									dragon.setHovering(false);
 									dragon.airTarget = null;
 								}
-							} else {
-								this.getAttackTarget().setDead();
 							}
 						}
 					}
