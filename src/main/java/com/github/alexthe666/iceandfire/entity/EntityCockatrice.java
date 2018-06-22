@@ -367,7 +367,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                     player.getHeldItem(hand).shrink(1);
                 }
                 return true;
-            } else if(player.getHeldItem(hand) == ItemStack.EMPTY) {
+            } else if(player.getHeldItem(hand).isEmpty()) {
                 this.setCommand(this.getCommand() + 1);
                 if (this.getCommand() > 2) {
                     this.setCommand(0);
