@@ -65,7 +65,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     public EntityCockatrice(World worldIn) {
         super(worldIn);
-        this.setSize(1.3F, 1.2F);
+        this.setSize(0.95F, 0.95F);
     }
 
     public boolean getCanSpawnHere() {
