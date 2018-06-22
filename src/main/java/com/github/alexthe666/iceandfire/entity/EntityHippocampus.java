@@ -235,7 +235,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         }
         if (this.up()) {
             if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
-                this.motionY = 1D;
+                this.jump();
             }else if(this.isInWater()){
                 this.motionY += 0.4D;
             }
