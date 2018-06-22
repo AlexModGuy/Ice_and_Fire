@@ -604,7 +604,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
-            } else if (this.isSaddled() && !this.isChild() && !world.isRemote) {
+            } else if (this.isSaddled() && !this.isChild() && !player.isRiding() && !world.isRemote) {
                 player.startRiding(this, true);
                 this.setSitting(false);
                 return true;

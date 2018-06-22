@@ -820,7 +820,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     }
                 } else {
                     if (!player.isSneaking()) {
-                        if (this.getDragonStage() > 2) {
+                        if (this.getDragonStage() > 2 && !player.isRiding()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
                             //player.addStat(ModAchievements.dragonRide, 1);
