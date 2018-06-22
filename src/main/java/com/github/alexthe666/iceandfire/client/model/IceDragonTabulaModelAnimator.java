@@ -133,7 +133,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         float degree_idle = 0.5F;
         float degree_fly = 0.5F;
         if(!entity.isAIDisabled()) {
-            if (entity.swimProgress >= 0F) {
+            if (entity.isSwimming()) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, limbSwing, limbSwingAmount);
                 model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, limbSwing, limbSwingAmount);
                 model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, limbSwing, limbSwingAmount);

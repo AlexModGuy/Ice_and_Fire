@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
+import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
@@ -22,6 +24,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -29,6 +32,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -100,12 +104,54 @@ public class EventClient {
 
 	}
 
+	@SubscribeEvent
+	public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(player.getRidingEntity() != null) {
+			if(player.getRidingEntity() instanceof EntityDragonBase){
+				int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
+				float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
+				if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 1) {
+					if(currentView == 0){
+					}else if(currentView == 1){
+						GL11.glTranslatef(scale * 0.5F, 0F, -scale * 3F);
+					}else if(currentView == 2){
+						GL11.glTranslatef(0, 0F, -scale * 3F);
+					}else if(currentView == 3){
+						GL11.glTranslatef(scale * 0.5F, 0F, -scale * 0.5F);
+					}
+				}
+				if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 2) {
+					if(currentView == 0){
+					}else if(currentView == 1){
+						GL11.glTranslatef(-scale  * 1.2F, 0F, 5);
+					}else if(currentView == 2){
+						GL11.glTranslatef(scale  * 1.2F, 0F, 5);
+					}else if(currentView == 3){
+						GL11.glTranslatef(scale * -1.5F, 0F, scale * 1.5F);
+					}
+				}
+			}
+
+		}
+	}
+
 	private Random rand = new Random();
 	private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		if (event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+			if (player.world.isRemote && ModKeys.dragon_change_view.isPressed()) {
+				int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
+				if(currentView + 1 > 3){
+					currentView = 0;
+				}else{
+					currentView++;
+				}
+				IceAndFire.PROXY.setDragon3rdPersonView(currentView);
+			}
+
 			SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 			if (player.world.isRemote && sirenProps != null) {
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;

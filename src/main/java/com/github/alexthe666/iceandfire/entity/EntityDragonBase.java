@@ -777,7 +777,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         if (stack.getItem() == ModItems.dragon_meal) {
                             this.growDragon(1);
                             this.setHunger(this.getHunger() + 20);
-                            this.setHealth(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
+                            this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
                             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
                             this.spawnItemCrackParticles(stack.getItem());
                             this.spawnItemCrackParticles(Items.BONE);
