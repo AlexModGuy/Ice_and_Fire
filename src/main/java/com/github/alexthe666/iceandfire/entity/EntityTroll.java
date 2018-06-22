@@ -58,6 +58,12 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         this.setSize(1.2F, 3.5F);
     }
 
+    @Override
+    public boolean isAIDisabled() {
+        return EntityGorgon.isStoneMob(this) || super.isAIDisabled();
+    }
+
+
     public boolean getCanSpawnHere() {
         BlockPos pos = new BlockPos(this);
         return this.getRNG().nextInt(IceAndFire.CONFIG.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= 50 && super.getCanSpawnHere();
