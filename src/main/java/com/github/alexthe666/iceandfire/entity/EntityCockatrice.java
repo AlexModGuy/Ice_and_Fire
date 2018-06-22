@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -359,14 +360,14 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (this.isTamed() && this.isOwner(player)) {
-            if(player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS){
-                if(this.getHealth() < this.getMaxHealth()){
+            if (player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS) {
+                if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(4);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                     player.getHeldItem(hand).shrink(1);
                 }
                 return true;
-            }else{
+            } else if(player.getHeldItem(hand) == ItemStack.EMPTY) {
                 this.setCommand(this.getCommand() + 1);
                 if (this.getCommand() > 2) {
                     this.setCommand(0);
@@ -379,7 +380,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             }
 
         }
-        return super.processInteract(player, hand);
+        return false;
     }
 
     @Override
