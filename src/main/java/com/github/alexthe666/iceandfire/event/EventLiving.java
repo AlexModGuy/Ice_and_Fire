@@ -129,14 +129,15 @@ public class EventLiving {
 				Entity entity = itr.next();
 				if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
 					EntityCockatrice cockatrice = (EntityCockatrice) entity;
-					if(attacker instanceof EntityPlayer){
-						EntityPlayer player = (EntityPlayer)attacker;
-						if(!player.isCreative() && !cockatrice.isOwner(player)){
-							cockatrice.setAttackTarget(player);
+					if(!DragonUtils.hasSameOwner(cockatrice, attacker)) {
+						if (attacker instanceof EntityPlayer) {
+							EntityPlayer player = (EntityPlayer) attacker;
+							if (!player.isCreative() && !cockatrice.isOwner(player)) {
+								cockatrice.setAttackTarget(player);
+							}
+						} else {
+							cockatrice.setAttackTarget((EntityLivingBase) attacker);
 						}
-					}
-					else {
-						cockatrice.setAttackTarget((EntityLivingBase)attacker);
 					}
 				}
 			}
