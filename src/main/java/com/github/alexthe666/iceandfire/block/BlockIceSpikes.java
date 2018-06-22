@@ -34,7 +34,7 @@ public class BlockIceSpikes extends Block {
 	}
 
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-		entityIn.attackEntityFrom(DamageSource.IN_WALL, 1);
+		entityIn.attackEntityFrom(DamageSource.CACTUS, 1);
 		if (entityIn instanceof EntityLivingBase && entityIn.motionX != 0 && entityIn.motionZ != 0) {
 			((EntityLivingBase) entityIn).knockBack(entityIn, 0.5F, entityIn.motionX, entityIn.motionZ);
 		}
