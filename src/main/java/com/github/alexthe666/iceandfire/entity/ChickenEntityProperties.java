@@ -25,7 +25,7 @@ public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 
 	@Override
 	public void init() {
-		timeUntilNextEgg = 4 *(this.getEntity().getRNG().nextInt(6000) + 6000);
+		timeUntilNextEgg = (this.getEntity().getRNG().nextInt(6000) + 6000);
 	}
 
 	@Override

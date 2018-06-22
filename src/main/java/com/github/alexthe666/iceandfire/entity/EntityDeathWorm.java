@@ -606,7 +606,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
             this.noClip = this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
         } else {
             this.noClip = true;
-            IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ));
+            IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
             int blockId = Block.getStateId(state);
             if(state.isOpaqueCube()) {
                 if (world.isRemote) {
@@ -741,6 +741,10 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
 
     public Entity[] getWormParts() {
         return segments;
+    }
+
+    public int getHorizontalFaceSpeed() {
+        return 10;
     }
 
     @Override

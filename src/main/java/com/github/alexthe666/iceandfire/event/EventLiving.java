@@ -207,7 +207,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 
-		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving())&& !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
 			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
 			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
 				if(event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0){
@@ -215,7 +215,7 @@ public class EventLiving {
 					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 					event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
 				}
-				chickenProps.timeUntilNextEgg = 4 * (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
+				chickenProps.timeUntilNextEgg = (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
 			}
 
 		}
