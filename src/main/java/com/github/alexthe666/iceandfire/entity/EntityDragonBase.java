@@ -1056,7 +1056,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (tackling && tackleProgress < 5F) {
             tackleProgress += 0.5F;
         } else if (!tackling && tackleProgress > 0.0F) {
-            tackleProgress -= 1F;
+            tackleProgress -= 1.5F;
         }
         boolean flying = !tackling && this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
         if (flying && flyProgress < 20.0F) {
@@ -1453,7 +1453,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
-        if (world.isRemote) {
+        if (world.isRemote && !this.isModelDead()) {
             roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
             turn_buffer.calculateChainSwingBuffer(50, 0, 4, this);
             tail_buffer.calculateChainSwingBuffer(90, 10, 2.5F, this);

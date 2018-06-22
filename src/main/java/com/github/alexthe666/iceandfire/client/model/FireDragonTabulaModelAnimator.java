@@ -146,8 +146,10 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             model.bob(model.getCube("ArmL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
         }
-        entity.turn_buffer.applyChainSwingBuffer(neckParts);
-        entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
+        if(!entity.isModelDead()){
+            entity.turn_buffer.applyChainSwingBuffer(neckParts);
+            entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
+        }
     }
 
     public void animate(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
