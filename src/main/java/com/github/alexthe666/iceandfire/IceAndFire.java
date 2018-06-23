@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
@@ -74,7 +75,9 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");
-        IceAndFireAspectRegistry.register();
+        if (Loader.isModLoaded("thaumcraft")) {
+            ThaumcraftCompatBridge.registerAspects();
+        }
     }
 
     public static void loadConfig() {
