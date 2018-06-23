@@ -82,7 +82,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
-                return EntitySiren.this.isAgressive() && !entity.isCreative();
+                return EntitySiren.this.isAgressive() && !(entity.isCreative() ||entity.isSpectator());
             }
         }));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, true, false, new Predicate<EntityVillager>() {

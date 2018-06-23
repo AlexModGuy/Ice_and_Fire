@@ -297,4 +297,10 @@ public class CommonProxy {
         }
     }
 
+    public int getDragon3rdPersonView() {
+        return 0;
+    }
+
+    public void setDragon3rdPersonView(int view) {
+    }
 }

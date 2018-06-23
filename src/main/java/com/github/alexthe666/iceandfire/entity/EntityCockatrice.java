@@ -10,12 +10,14 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -65,7 +67,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     public EntityCockatrice(World worldIn) {
         super(worldIn);
-        this.setSize(1.3F, 1.2F);
+        this.setSize(0.95F, 0.95F);
     }
 
     public boolean getCanSpawnHere() {
@@ -92,7 +94,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(4, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return (entity instanceof EntityMob && EntityCockatrice.this.isTamed() || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
+                return (entity instanceof EntityMob && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
             }
         }));
         this.targetTasks.addTask(5, new CockatriceAITargetItems(this, false));
@@ -359,14 +361,14 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (this.isTamed() && this.isOwner(player)) {
-            if(player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS){
-                if(this.getHealth() < this.getMaxHealth()){
+            if (player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS) {
+                if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(4);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                     player.getHeldItem(hand).shrink(1);
                 }
                 return true;
-            }else{
+            } else if(player.getHeldItem(hand).isEmpty()) {
                 this.setCommand(this.getCommand() + 1);
                 if (this.getCommand() > 2) {
                     this.setCommand(0);
@@ -379,7 +381,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             }
 
         }
-        return super.processInteract(player, hand);
+        return false;
     }
 
     @Override

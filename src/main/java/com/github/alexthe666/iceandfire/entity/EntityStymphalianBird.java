@@ -101,6 +101,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
+    protected boolean canDespawn() {
+        return false;
+    }
+
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);

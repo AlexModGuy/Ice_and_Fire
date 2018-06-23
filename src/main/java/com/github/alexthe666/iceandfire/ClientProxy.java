@@ -58,6 +58,7 @@ public class ClientProxy extends CommonProxy {
 	private FontRenderer bestiaryFontRenderer;
 	@SideOnly(Side.CLIENT)
 	private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
+	private int thirdPersonViewDragon = 0;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -391,5 +392,11 @@ public class ClientProxy extends CommonProxy {
 		return this.bestiaryFontRenderer;
 	}
 
+	public int getDragon3rdPersonView() {
+		return thirdPersonViewDragon;
+	}
 
+	public void setDragon3rdPersonView(int view) {
+		thirdPersonViewDragon = view;
+	}
 }

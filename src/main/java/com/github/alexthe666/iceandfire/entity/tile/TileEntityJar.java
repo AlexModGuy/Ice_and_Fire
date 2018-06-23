@@ -36,6 +36,11 @@ public class TileEntityJar extends TileEntity implements ITickable {
 	public float prevRotationYaw;
 	private Random rand;
 
+	public TileEntityJar() {
+		this.rand = new Random();
+		this.hasPixie = true;
+	}
+
 	public TileEntityJar(boolean empty) {
 		this.rand = new Random();
 		this.hasPixie = !empty;

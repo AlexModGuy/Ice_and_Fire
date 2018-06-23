@@ -79,9 +79,9 @@ public class ModRecipes {
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
         ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));
-        ModItems.boneTools.setRepairItem(new ItemStack(ModItems.witherbone));
-        ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
-        ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.witherbone));
+        ModItems.boneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
+        ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
+        ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         for(EnumDragonArmor armor : EnumDragonArmor.values()){
             armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
         }

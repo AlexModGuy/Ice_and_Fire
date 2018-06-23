@@ -235,7 +235,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         }
         if (this.up()) {
             if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
-                this.motionY = 1D;
+                this.jump();
             }else if(this.isInWater()){
                 this.motionY += 0.4D;
             }
@@ -568,13 +568,15 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
             if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 0) {
-                this.heal(5);
-                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-                for (int i = 0; i < 3; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
-                }
-                if (!player.isCreative()) {
-                    itemstack.shrink(1);
+                if(!world.isRemote) {
+                    this.heal(5);
+                    this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                    for (int i = 0; i < 3; i++) {
+                        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
+                    }
+                    if (!player.isCreative()) {
+                        itemstack.shrink(1);
+                    }
                 }
                 if(!this.isTamed() && this.getRNG().nextInt(3) == 0){
                     this.setTamedBy(player);
@@ -602,7 +604,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
-            } else if (this.isSaddled() && !this.isChild()) {
+            } else if (this.isSaddled() && !this.isChild() && !player.isRiding() && !world.isRemote) {
                 player.startRiding(this, true);
                 this.setSitting(false);
                 return true;

@@ -37,7 +37,7 @@ public class SirenEntityProperties extends EntityProperties<EntityLivingBase> {
 	}
 
 	public EntitySiren getClosestSiren(World world, EntityLivingBase player){
-		if(player instanceof EntityPlayer && ((EntityPlayer) player).isCreative()){
+		if(player instanceof EntityPlayer && (((EntityPlayer) player).isCreative() || ((EntityPlayer) player).isSpectator())){
 			return null;
 		}
 		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(EntitySiren.SEARCH_RANGE, EntitySiren.SEARCH_RANGE, EntitySiren.SEARCH_RANGE);

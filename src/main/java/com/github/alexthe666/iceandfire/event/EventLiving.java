@@ -129,14 +129,15 @@ public class EventLiving {
 				Entity entity = itr.next();
 				if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
 					EntityCockatrice cockatrice = (EntityCockatrice) entity;
-					if(attacker instanceof EntityPlayer){
-						EntityPlayer player = (EntityPlayer)attacker;
-						if(!player.isCreative() && !cockatrice.isOwner(player)){
-							cockatrice.setAttackTarget(player);
+					if(!DragonUtils.hasSameOwner(cockatrice, attacker)) {
+						if (attacker instanceof EntityPlayer) {
+							EntityPlayer player = (EntityPlayer) attacker;
+							if (!player.isCreative() && !cockatrice.isOwner(player)) {
+								cockatrice.setAttackTarget(player);
+							}
+						} else {
+							cockatrice.setAttackTarget((EntityLivingBase) attacker);
 						}
-					}
-					else {
-						cockatrice.setAttackTarget((EntityLivingBase)attacker);
 					}
 				}
 			}
@@ -207,7 +208,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 
-		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving())&& !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
+		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
 			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
 			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
 				if(event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0){
@@ -215,7 +216,7 @@ public class EventLiving {
 					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 					event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
 				}
-				chickenProps.timeUntilNextEgg = 4 * (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
+				chickenProps.timeUntilNextEgg = (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
 			}
 
 		}

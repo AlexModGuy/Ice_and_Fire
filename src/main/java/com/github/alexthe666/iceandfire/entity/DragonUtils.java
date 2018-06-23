@@ -213,6 +213,16 @@ public class DragonUtils {
 		return true;
 	}
 
+	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
+		if(entity instanceof EntityTameable){
+			EntityTameable tameable = (EntityTameable)entity;
+			if(tameable.getOwnerId() != null && cockatrice.getOwnerId() != null && tameable.getOwnerId().equals(cockatrice.getOwnerId())){
+				return true;
+			}
+		}
+		return false;
+	}
+
     public static boolean isAlive(EntityLivingBase entity) {
 		if(entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()){
 			return false;

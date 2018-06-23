@@ -37,7 +37,6 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.setSize(0.78F, 1.2F);
 		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
-
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
@@ -48,6 +47,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		ANIMATION_WINGBLAST = Animation.create(50);
 		ANIMATION_ROAR = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
+		this.stepHeight = 1;
 	}
 
 	@Override

@@ -777,7 +777,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         if (stack.getItem() == ModItems.dragon_meal) {
                             this.growDragon(1);
                             this.setHunger(this.getHunger() + 20);
-                            this.setHealth(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
+                            this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
                             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
                             this.spawnItemCrackParticles(stack.getItem());
                             this.spawnItemCrackParticles(Items.BONE);
@@ -820,7 +820,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                     }
                 } else {
                     if (!player.isSneaking()) {
-                        if (this.getDragonStage() > 2) {
+                        if (this.getDragonStage() > 2 && !player.isRiding()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
                             //player.addStat(ModAchievements.dragonRide, 1);
@@ -1056,7 +1056,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (tackling && tackleProgress < 5F) {
             tackleProgress += 0.5F;
         } else if (!tackling && tackleProgress > 0.0F) {
-            tackleProgress -= 1F;
+            tackleProgress -= 1.5F;
         }
         boolean flying = !tackling && this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
         if (flying && flyProgress < 20.0F) {
@@ -1453,7 +1453,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
-        if (world.isRemote) {
+        if (world.isRemote && !this.isModelDead()) {
             roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
             turn_buffer.calculateChainSwingBuffer(50, 0, 4, this);
             tail_buffer.calculateChainSwingBuffer(90, 10, 2.5F, this);

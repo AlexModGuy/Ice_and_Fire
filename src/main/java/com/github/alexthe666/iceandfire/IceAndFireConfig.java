@@ -66,7 +66,7 @@ public class IceAndFireConfig {
 	public int deathWormSpawnRate = 2;
 	public int deathWormSpawnCheckChance = 3;
 	public int cockatriceChickenSearchLength = 40;
-	public int cockatriceEggChance = 100;
+	public int cockatriceEggChance = 10;
 	public boolean spawnCockatrices= true;
 	public int cockatriceSpawnRate = 4;
 	public int cockatriceSpawnCheckChance = 0;
@@ -155,7 +155,7 @@ public class IceAndFireConfig {
 		this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
 		this.cockatriceChickenSearchLength = config.getInt("Cockatrice chicken Search Length", "all", 40, 1, 10000, "How many blocks away can cockatrices detect chickens. Note that increasing this could cause lag.");
-		this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 1000, 1, Integer.MAX_VALUE, "1 out of this number chance per tick for a chicken to lay a cockatrice egg.");
+		this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 10, 1, Integer.MAX_VALUE, "1 out of this number chance per 6000 ticks for a chicken to lay a cockatrice egg.");
 		this.spawnCockatrices = config.getBoolean("Spawn Cockatrices", "all", true, "True if cockatrices are allowed to spawn");
 		this.cockatriceSpawnRate = config.getInt("Cockatrice Spawn Weight", "all", 4, 1, 10000, "Cockatrice spawn weight. Lower = lower chance to spawn");
 		this.cockatriceSpawnCheckChance = config.getInt("Cockatrice Spawn Check Chance", "all", 0, 0, 10000, "A double check to see if the game can spawn cockatrices. Higher number = lower chance to spawn.");
@@ -168,7 +168,7 @@ public class IceAndFireConfig {
 		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
-		this.trollSpawnRate = config.getInt("Cockatrice Spawn Weight", "all", 10, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
+		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 10, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
 		this.trollSpawnCheckChance = config.getInt("Troll Spawn Check Chance", "all", 1, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
 		this.trollMaxHealth = (double)config.getFloat("Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
 		this.trollAttackStrength = (double)config.getFloat("Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
