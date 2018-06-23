@@ -12,17 +12,17 @@ import thaumcraft.api.aspects.AspectList;
 
 public class ThaumcraftCompat {
 
-    public static final Aspect MYTHICAL = new Aspect("mythus", 0XD9D5AB, new Aspect[]{Aspect.BEAST, Aspect.MAGIC}, new ResourceLocation("iceandfire:textures/thaumcraft/mythical.png"), 1);
-    public static final Aspect DRAGON = getOrCreateAspect("draco", 0XA2271F, new Aspect[]{ThaumcraftCompat.MYTHICAL, Aspect.DESIRE}, new ResourceLocation("iceandfire", "textures/thaumcraft/dragon.png"), 1);
+    static final Aspect MYTHICAL = new Aspect("mythus", 0XD9D5AB, new Aspect[]{Aspect.BEAST, Aspect.MAGIC}, new ResourceLocation("iceandfire:textures/thaumcraft/mythical.png"), 1);
+    static final Aspect DRAGON = getOrCreateAspect("draco", 0XA2271F, new Aspect[]{ThaumcraftCompat.MYTHICAL, Aspect.DESIRE}, new ResourceLocation("iceandfire", "textures/thaumcraft/dragon.png"), 1);
 
-    public static Aspect getOrCreateAspect(String tag, int color, Aspect[] components, ResourceLocation image, int blend)
+    static Aspect getOrCreateAspect(String tag, int color, Aspect[] components, ResourceLocation image, int blend)
     {
         Aspect a = Aspect.getAspect(tag);
         if(a != null) return a;
         return new Aspect(tag, color, components, image, blend);
     }
 
-    public static void registerAspectsInternal(){
+    static void registerAspectsInternal(){
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.bestiary), new AspectList().add(ThaumcraftCompat.DRAGON, 2).add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.BEAST, 6).add(Aspect.MAGIC, 2).add(Aspect.MIND, 4).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.manuscript), new AspectList().add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.PLANT, 3).add(Aspect.MIND, 2).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.sapphireGem), new AspectList().add(Aspect.CRYSTAL, 15).add(Aspect.DESIRE, 10));
