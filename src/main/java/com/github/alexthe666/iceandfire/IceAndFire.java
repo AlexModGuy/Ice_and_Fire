@@ -74,7 +74,9 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");
-        IceAndFireAspectRegistry.register();
+        if (Loader.isModLoaded("thaumcraft")) {
+            IceAndFireAspectRegistry.register();
+        }
     }
 
     public static void loadConfig() {
