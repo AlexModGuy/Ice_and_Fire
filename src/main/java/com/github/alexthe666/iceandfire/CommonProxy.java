@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -124,6 +126,9 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        if (Loader.isModLoaded("thaumcraft")) {
+            ThaumcraftCompatBridge.registerAspects();
+        }
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -142,6 +147,9 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+        if (Loader.isModLoaded("thaumcraft")) {
+            ThaumcraftCompatBridge.registerAspects();
+        }
         registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event,EntityDragonEgg.class, "dragonegg", 1);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonArrow>create(), event,EntityDragonArrow.class, "dragonarrow", 2);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonSkull>create(), event,EntityDragonSkull.class, "dragonskull", 3);
@@ -191,6 +199,9 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
+        if (Loader.isModLoaded("thaumcraft")) {
+            ThaumcraftCompatBridge.registerAspects();
+        }
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -222,6 +233,9 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
+        if (Loader.isModLoaded("thaumcraft")) {
+            ThaumcraftCompatBridge.registerAspects();
+        }
         try {
             for (Field f : ModItems.class.getDeclaredFields()) {
                 Object obj = f.get(null);
