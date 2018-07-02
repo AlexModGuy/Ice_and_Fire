@@ -28,12 +28,19 @@ public class WorldGenCyclopsCave extends WorldGenerator {
         int i1 = 16;
         int i2 = i1 - 2;
         int sheepPenCount = 0;
+        int dist = 6;
+        if(worldIn.isAirBlock(position.add(i1 - dist, -3, -i1 + dist)) || worldIn.isAirBlock(position.add(i1 - dist, -3, i1 - dist)) || worldIn.isAirBlock(position.add(-i1 + dist, -3, -i1 + dist)) || worldIn.isAirBlock(position.add(-i1 + dist, -3, i1 - dist))){
+            return false;
+        }
+
         {
             int ySize = rand.nextInt(2);
             int j = i1 + rand.nextInt(2);
             int k = 12 + ySize;
             int l = i1 + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
+
+
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
@@ -51,6 +58,8 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                     }
                 }
             }
+
+
         }
         {
             int ySize = rand.nextInt(2);
