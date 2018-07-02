@@ -387,9 +387,12 @@ public class EntityPixie extends EntityTameable {
 		}
 
 		public boolean shouldExecute() {
-			BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+			if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.isSitting() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
+				return false;
+			}
 
-			return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.isSitting() && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(20) == 0 && EntityPixie.this.ticksUntilHouseAI == 0 && !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
+			BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+			return !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
 		}
 
 		public boolean shouldContinueExecuting() {
