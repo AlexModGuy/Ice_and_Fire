@@ -158,6 +158,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 this.flock.setFearTarget((EntityLivingBase)cause.getTrueSource());
             }
         }
+        super.onDeath(cause);
     }
 
     protected void onDeathUpdate() {
