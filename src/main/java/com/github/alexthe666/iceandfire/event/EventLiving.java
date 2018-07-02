@@ -258,11 +258,11 @@ public class EventLiving {
 			}
 		}
 
-		SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-		if(sirenProps != null) {
-			EntitySiren closestSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
-			if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
-				if (sirenProps != null && closestSiren != null && closestSiren.isActuallySinging()) {
+		if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
+			SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
+			if (sirenProps != null) {
+				EntitySiren closestSiren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+				if (closestSiren != null && closestSiren.isActuallySinging()) {
 					stepHeightSwitched = false;
 					if (EntitySiren.isWearingEarplugs(event.getEntityLiving())) {
 						sirenProps.isCharmed = false;
@@ -317,12 +317,13 @@ public class EventLiving {
 							sirenProps.isCharmed = false;
 						}
 					}
-				} else if (sirenProps != null && !sirenProps.isCharmed && !stepHeightSwitched) {
+				} else if (!sirenProps.isCharmed && !stepHeightSwitched) {
 					event.getEntityLiving().stepHeight = 0.6F;
 					stepHeightSwitched = true;
 				}
 			}
 		}
+
 		if (event.getEntityLiving() instanceof EntityLiving) {
 			boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
