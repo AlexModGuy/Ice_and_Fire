@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
+import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -57,16 +58,16 @@ public class EventLiving {
 	public void onEntityDamage(LivingHurtEvent event) {
 		if(event.getSource().isProjectile()){
 			float multi = 1;
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.HEAD)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.1;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.CHEST)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.3;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.LEGS)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.2;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.FEET)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.1;
 			}
 			event.setAmount(event.getAmount() * multi);
