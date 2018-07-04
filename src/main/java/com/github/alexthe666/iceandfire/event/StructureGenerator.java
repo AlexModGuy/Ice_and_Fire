@@ -209,13 +209,22 @@ public class StructureGenerator implements IWorldGenerator {
 				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
 				if (ModBlocks.frost_lily.canPlaceBlockAt(world, surface)) {
 					world.setBlockState(surface, ModBlocks.frost_lily.getDefaultState());
+			}
+			}
+		}
+		if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))){
+			if (random.nextInt(5) == 0) {
+				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+				if (ModBlocks.fire_lily.canPlaceBlockAt(world, surface)) {
+					world.setBlockState(surface, ModBlocks.fire_lily.getDefaultState());
 				}
 			}
 		}
-		if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY) || BiomeDictionary.hasType(world.getBiome(height), Type.NETHER))) {
+		if (BiomeDictionary.hasType(world.getBiome(height), Type.NETHER)){
 			if (random.nextInt(5) == 0) {
-				if (ModBlocks.fire_lily.canPlaceBlockAt(world, height.up())) {
-					world.setBlockState(height.up(), ModBlocks.fire_lily.getDefaultState());
+				BlockPos surface = getNetherHeight(world, new BlockPos(x, 0, z));
+				if(surface != null){
+					world.setBlockState(surface.up(), ModBlocks.fire_lily.getDefaultState());
 				}
 			}
 		}
@@ -238,6 +247,16 @@ public class StructureGenerator implements IWorldGenerator {
 			return useBlackOrWhiteLists;
 		}
 		return !useBlackOrWhiteLists;
+	}
+
+	private BlockPos getNetherHeight(World world, BlockPos pos){
+		for(int i = 0; i < 255; i++){
+			BlockPos ground = pos.up(i);
+			if(world.getBlockState(ground).getBlock() == Blocks.NETHERRACK && world.isAirBlock(ground.up())){
+				return ground;
+			}
+		}
+		return null;
 	}
 
 	//private boolean isAether(World world) {
