@@ -161,7 +161,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 		if (IceAndFire.CONFIG.generateDragonDens && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
 			boolean isHills = BiomeDictionary.hasType(world.getBiome(height), Type.HILLS) || BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN);
-			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getDefaultTemperature() > -0.5 && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER)) {
+			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getDefaultTemperature() > -0.5 && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER) && !BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
 					int newY = 20 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);
@@ -170,7 +170,7 @@ public class StructureGenerator implements IWorldGenerator {
 					}
 				}
 			}
-			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
 					int newY = 20 + random.nextInt(20);
 					BlockPos pos = new BlockPos(x, newY, z);
