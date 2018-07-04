@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -41,7 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity {
+public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;
