@@ -802,7 +802,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                                 return true;
                             }else{
                                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                                this.setSitting(!this.isSitting());
+                                if(!world.isRemote){
+                                    this.setSitting(!this.isSitting());
+                                }
                                 if (world.isRemote) {
                                     player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
                                 }
@@ -941,7 +943,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
         if(this.isTackling() && !this.isFlying() && this.onGround){
             tacklingTicks++;
-            if(tacklingTicks == 20){
+            if(tacklingTicks == 40){
                 tacklingTicks = 0;
                 this.setTackling(false);
                 this.setFlying(false);
@@ -1222,7 +1224,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
                             IBlockState state = world.getBlockState(new BlockPos(a, b, c));
                             Block block = state.getBlock();
-                            if (!(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness) {
+                            if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness) {
                                 this.motionX *= 0.6D;
                                 this.motionZ *= 0.6D;
                                 if (block != Blocks.AIR) {
