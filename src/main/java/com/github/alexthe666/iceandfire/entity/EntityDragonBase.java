@@ -15,6 +15,8 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,6 +26,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -938,7 +941,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
         if(this.isTackling() && !this.isFlying() && this.onGround){
             tacklingTicks++;
-            if(tacklingTicks == 40){
+            if(tacklingTicks == 20){
                 tacklingTicks = 0;
                 this.setTackling(false);
                 this.setFlying(false);
@@ -1206,6 +1209,32 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if (this.isFlying() && this.getAttackTarget() != null && this.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
             this.attackEntityAsMob(this.getAttackTarget());
+        }
+        this.breakBlock();
+    }
+
+    public void breakBlock() {
+        if (IceAndFire.CONFIG.dragonGriefing != 2) {
+            float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
+            if (!isModelDead() && this.getDragonStage() >= 3 && this.canMove()) {
+                for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
+                    for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
+                        for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
+                            IBlockState state = world.getBlockState(new BlockPos(a, b, c));
+                            Block block = state.getBlock();
+                            if (!(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness) {
+                                this.motionX *= 0.6D;
+                                this.motionZ *= 0.6D;
+                                if (block != Blocks.AIR) {
+                                    if (!world.isRemote) {
+                                        world.destroyBlock(new BlockPos(a, b, c), true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

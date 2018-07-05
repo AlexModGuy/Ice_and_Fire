@@ -68,7 +68,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(7, new DragonAILookIdle(this));
-		this.tasks.addTask(8, new DragonAIBreakBlocks(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
