@@ -154,6 +154,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
     }
 
+
     public boolean isMobDead(){
         return this.isModelDead();
     }
@@ -802,12 +803,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                                 return true;
                             }else{
                                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                                if(!world.isRemote){
-                                    this.setSitting(!this.isSitting());
-                                }
-                                if (world.isRemote) {
-                                    player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
-                                }
+                                this.setSitting(!this.isSitting());
+                                player.sendMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")));
+
                                 return true;
                             }
 
@@ -1002,8 +1000,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (motionY > 0.8) {
                 this.motionY = 0.5;
             }
-            if (motionY < -0.8) {
-                this.motionY = -0.8;
+            if (motionY < -0.58) {
+                this.motionY = -0.5;
             }
             if (motionY > 1) {
                 this.motionY = 0;
@@ -1314,6 +1312,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
                 this.stepHeight = 1;
             }
+        }
+    }
+
+    protected void removePassenger(Entity passenger) {
+        if(passenger instanceof EntityPlayer){
+            this.setPositionAndRotation(passenger.posX, passenger.posY, passenger.posZ, 0, 0);
         }
     }
 

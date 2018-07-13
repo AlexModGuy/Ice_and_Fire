@@ -192,7 +192,7 @@ public class ModItems {
 	public static Item deathworm_yellow_leggings = new ItemDeathwormArmor(yellow_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_yellow_leggings", "iceandfire.deathworm_yellow_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_boots")
 	public static Item deathworm_yellow_boots = new ItemDeathwormArmor(yellow_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_yellow_boots", "iceandfire.deathworm_yellow_boots");
-	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deatite_helmet")
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_helmet")
 	public static Item deathworm_white_helmet = new ItemDeathwormArmor(white_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_white_helmet", "iceandfire.deathworm_white_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_chestplate")
 	public static Item deathworm_white_chestplate = new ItemDeathwormArmor(white_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_white_chestplate", "iceandfire.deathworm_white_chestplate");
