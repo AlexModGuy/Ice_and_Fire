@@ -240,6 +240,13 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(this.isInLava() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround){
+			this.setHovering(true);
+			this.setSleeping(false);
+			this.setSitting(false);
+			this.flyHovering = 0;
+			this.flyTicks = 0;
+		}
 		if(!world.isRemote){
 			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
