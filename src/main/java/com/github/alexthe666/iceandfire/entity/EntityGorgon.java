@@ -268,6 +268,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.gorgonMaxHealth);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
 	}
 
 	@Override

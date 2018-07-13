@@ -91,6 +91,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public double maximumHealth;
     public double minimumSpeed;
     public double maximumSpeed;
+    public double minimumArmor;
+    public double maximumArmor;
     public float sitProgress;
     public float sleepProgress;
     public float hoverProgress;
@@ -143,6 +145,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.maximumHealth = maximumHealth;
         this.minimumSpeed = minimumSpeed;
         this.maximumSpeed = maximumSpeed;
+        this.minimumArmor = 1D;
+        this.maximumArmor = 20D;
         ANIMATION_EAT = Animation.create(20);
         updateAttributes();
         initDragonInv();
@@ -220,6 +224,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 2, this.getIntFromArmor(this.dragonInv.getStackInSlot(2))));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), 3, this.getIntFromArmor(this.dragonInv.getStackInSlot(3))));
         }
+        double armorStep = (maximumArmor - minimumArmor) / (125);
+        double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
     }
 
     public void openGUI(EntityPlayer playerEntity) {
@@ -501,6 +508,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 
     }
 
@@ -508,11 +516,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         double healthStep = (maximumHealth - minimumHealth) / (125);
         double attackStep = (maximumDamage - minimumDamage) / (125);
         double speedStep = (maximumSpeed - minimumSpeed) / (125);
+        double armorStep = (maximumArmor - minimumArmor) / (125);
         if (this.getAgeInDays() <= 125) {
             this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
             this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
             this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
-
+            double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
+            this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
         }
     }
 
@@ -705,8 +715,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), i, armorType));
         }
+        double armorStep = (maximumArmor - minimumArmor) / (125);
+        double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
     }
 
+    private double calculateArmorModifier(){
+        double val = 1D;
+        for(int i = 0; i < 4; i++){
+            switch(getArmorInSlot(i)){
+                case 1:
+                    val += 2D;
+                    break;
+                case 2:
+                    val += 3D;
+                    break;
+                case 3:
+                    val += 5D;
+                    break;
+            }
+        }
+        return val;
+    }
     public boolean canMove() {
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
     }
@@ -1316,9 +1346,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     }
 
     protected void removePassenger(Entity passenger) {
-        if(passenger instanceof EntityPlayer){
-            this.setPositionAndRotation(passenger.posX, passenger.posY, passenger.posZ, 0, 0);
-        }
+        super.removePassenger(passenger);
     }
 
     private float bob(float speed, float degree, boolean bounce, float f, float f1) {
@@ -1411,16 +1439,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         if(!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0){
             this.roar();
         }
-
-        float damageReductionHead = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
-        float damageReductionNeck = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
-        float damageReductionBody = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.3F;
-        float damageReductionTail = getIntFromArmor(this.dragonInv.getStackInSlot(0)) / 3 * 0.2F;
-        if (i > 0) {
-            this.setSitting(false);
-            this.setSleeping(false);
-        }
-        i -= damageReductionHead + damageReductionNeck + damageReductionBody + damageReductionTail;
         return super.attackEntityFrom(dmg, i);
 
     }

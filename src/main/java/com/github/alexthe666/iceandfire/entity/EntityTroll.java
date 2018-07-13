@@ -87,6 +87,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.trollAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.trollMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
 
     }
 
