@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,7 +26,10 @@ public class DeathWormAITarget<T extends EntityLivingBase> extends EntityAINeare
                 if (!deathworm.isOwner(this.targetEntity)) {
                     return true;
                 }
-                if (this.targetEntity instanceof EntityMob) {
+                if (this.targetEntity instanceof EntityMob && deathworm.getWormAge() > 2) {
+                    if(this.targetEntity instanceof EntityCreeper){
+                        return deathworm.getWormAge() > 3;
+                    }
                     return true;
                 }
             }
