@@ -23,14 +23,18 @@ public class ItemTrollArmor extends ItemArmor {
 
     public EnumTroll troll;
 
-    public ItemTrollArmor(EnumTroll troll, int renderIndex, EntityEquipmentSlot slot) {
-        super(troll == EnumTroll.MOUNTAIN ? ModItems.troll_mountain : troll == EnumTroll.FOREST ? ModItems.troll_forest : ModItems.troll_frost, renderIndex, slot);
+    public ItemTrollArmor(EnumTroll troll, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
+        super(material, renderIndex, slot);
         this.troll = troll;
         this.setCreativeTab(IceAndFire.TAB);
         this.setUnlocalizedName("iceandfire." + troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
         this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
-
     }
+
+    public ItemArmor.ArmorMaterial getArmorMaterial() {
+        return troll.material;
+    }
+
 
     private String getArmorPart(EntityEquipmentSlot slot) {
         switch (slot){
