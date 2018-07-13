@@ -246,9 +246,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					BlockPos pos = new BlockPos(this);
 					this.homePos = pos;
 					this.hasHomePosition = true;
-					if (world.isRemote) {
-						player.sendMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()));
-					}
+					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
 					return true;
 				}else{
 					this.setSitting(!this.isSitting());
