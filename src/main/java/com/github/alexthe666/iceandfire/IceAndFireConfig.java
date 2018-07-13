@@ -64,6 +64,7 @@ public class IceAndFireConfig {
 	public double deathWormMaxHealth = 10D;
 	public double deathWormAttackStrength = 3D;
 	public boolean spawnDeathWorm = true;
+	public boolean deathWormAttackMonsters = true;
 	public int deathWormSpawnRate = 2;
 	public int deathWormSpawnCheckChance = 3;
 	public int cockatriceChickenSearchLength = 40;
@@ -76,6 +77,7 @@ public class IceAndFireConfig {
 	public int stymphalianBirdFlockLength = 40;
 	public int stymphalianBirdFlightHeight = 80;
 	public boolean spawnStymphalianBirds = true;
+	public boolean stympahlianBirdAttackAnimals = false;
 	public int stymphalianBirdSpawnChance = 50;
 	public boolean spawnTrolls = true;
 	public int trollSpawnRate = 20;
@@ -153,6 +155,7 @@ public class IceAndFireConfig {
 		this.deathWormMaxHealth = (double)config.getFloat("Death Worm Base Health", "all", 10, 1, 10000, "Default deathworm health, this is scaled to the worm's particular size");
 		this.deathWormAttackStrength = (double)config.getFloat("Death Worm Base Attack Strength", "all", 3, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
 		this.spawnDeathWorm = config.getBoolean("Spawn Death Worms", "all", true, "True if deathworms are allowed to spawn");
+		this.deathWormAttackMonsters = config.getBoolean("Death Worms Target Monsters", "all", true, "True if wild deathworms are allowed to target and attack monsters");
 		this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 2, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
 		this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
@@ -167,6 +170,7 @@ public class IceAndFireConfig {
 		this.stymphalianBirdFlockLength = config.getInt("Stymphalian Bird Flock Length", "all", 40, 1, 10000, "How far away stymphalian birds will consider other birds to be in the same flock.");
 		this.stymphalianBirdFlightHeight = config.getInt("Max Stymphalian Bird Flight Height", "all", 80, 10, 1000, "How high stymphalian birds can fly, in Y height.");
 		this.spawnStymphalianBirds = config.getBoolean("Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
+		this.stympahlianBirdAttackAnimals = config.getBoolean("Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
 		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
