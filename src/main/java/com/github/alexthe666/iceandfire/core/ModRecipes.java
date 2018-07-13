@@ -72,6 +72,20 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
 
+        OreDictionary.registerOre("listAllEgg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("objectEgg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("bakingEgg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("egg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("ingredientEgg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("foodSimpleEgg", ModItems.hippogryph_egg);
+
+        OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("egg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
+
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
