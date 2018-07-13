@@ -50,9 +50,9 @@ public class GuiBestiary extends GuiScreen {
 	public int indexPagesTotal = 1;
 	protected ItemStack book;
 	protected boolean index;
-	protected FontRenderer font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
-
+	protected FontRenderer font;
 	public GuiBestiary(ItemStack book) {
+		font = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 		this.book = book;
 		int indexPageTotal = 0;
 		if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
@@ -67,6 +67,7 @@ public class GuiBestiary extends GuiScreen {
 
 	public void initGui() {
 		super.initGui();
+		font = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 		int centerX = (this.width - this.X) / 2;
 		int centerY = (this.height - this.Y) / 2;
 		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages));
@@ -872,6 +873,10 @@ public class GuiBestiary extends GuiScreen {
 			int linenumber = 0;
 			while ((line = bufferedReader.readLine()) != null) {
 				GL11.glPushMatrix();
+				if(usingVanillaFont()) {
+					GL11.glScalef(0.945F, 0.945F, 0.945F);
+					GL11.glTranslatef(0, 5.5F, 0);
+				}
 				if (linenumber <= 19) {
 					font.drawString(line, 15, 20 + linenumber * 10, 0X303030, false);
 				} else {
@@ -888,6 +893,9 @@ public class GuiBestiary extends GuiScreen {
 		GL11.glScalef(2, 2, 2);
 		font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A, false);
 		GL11.glPopMatrix();
+	}
+	private boolean usingVanillaFont(){
+		return font == Minecraft.getMinecraft().fontRenderer;
 	}
 
 	public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
