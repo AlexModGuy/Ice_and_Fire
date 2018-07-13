@@ -697,6 +697,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void riderShootFire(Entity controller) {
     }
 
+    @Override
+    public void onKillEntity(EntityLivingBase entity) {
+        super.onKillEntity(entity);
+        this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
+    }
+
     public void setArmorInSlot(int i, int armorType) {
         switch (i) {
             case 0:
