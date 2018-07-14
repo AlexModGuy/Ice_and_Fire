@@ -18,6 +18,7 @@ public class IceAndFireConfig {
 	public int dragonDenGoldAmount = 4;
 	public boolean generateSnowVillages = true;
 	public int generateSnowVillageChance = 100;
+	public int dangerousWorldGenDistanceLimit = 200;
 	public int[] dragonBlacklistedDimensions = new int[]{1, -1};
 	public int[] dragonWhitelistedDimensions = new int[]{0};
 	public boolean useDimensionBlackList = true;
@@ -109,6 +110,7 @@ public class IceAndFireConfig {
 		this.spawnGlaciers = config.getBoolean("Generate Glaciers", "all", true, "Whether to generate glacier biomes or not");
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
+		this.dangerousWorldGenDistanceLimit = config.getInt("Dangerous World Gen Distance From Spawn", "all", 200, 1, Integer.MAX_VALUE, "How many blocks away does dangerous(dragons, cyclops, etc.) world gen have to generate from spawn");
 
 		this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
 		this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
