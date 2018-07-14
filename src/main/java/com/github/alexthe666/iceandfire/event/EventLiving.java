@@ -37,6 +37,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -53,6 +54,16 @@ import java.util.Random;
 public class EventLiving {
 
 	private boolean stepHeightSwitched = false;
+
+	@SubscribeEvent
+	public void onEntityMount(EntityMountEvent event) {
+		if(event.getEntityBeingMounted() instanceof EntityDragonBase || event.getEntityBeingMounted() instanceof EntityHippogryph){
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote){
+				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
+				event.getEntityBeingMounted().setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public void onEntityDamage(LivingHurtEvent event) {
