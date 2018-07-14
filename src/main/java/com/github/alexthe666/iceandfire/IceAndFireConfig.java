@@ -174,7 +174,7 @@ public class IceAndFireConfig {
 		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
-		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 20, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
+		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 500, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
 		this.trollSpawnCheckChance = config.getInt("Troll Spawn Check Chance", "all", 1, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
 		this.trollMaxHealth = (double)config.getFloat("Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
 		this.trollAttackStrength = (double)config.getFloat("Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
