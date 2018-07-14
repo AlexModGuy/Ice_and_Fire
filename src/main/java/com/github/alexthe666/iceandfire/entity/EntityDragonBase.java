@@ -158,7 +158,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
     }
 
-
     public boolean isMobDead(){
         return this.isModelDead();
     }
@@ -1255,7 +1254,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                         for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
                             IBlockState state = world.getBlockState(new BlockPos(a, b, c));
                             Block block = state.getBlock();
-                            if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness) {
+                            if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && state.getBlock().canEntityDestroy(state, world, new BlockPos(a, b, c), this)) {
                                 this.motionX *= 0.6D;
                                 this.motionZ *= 0.6D;
                                 if (block != Blocks.AIR) {
