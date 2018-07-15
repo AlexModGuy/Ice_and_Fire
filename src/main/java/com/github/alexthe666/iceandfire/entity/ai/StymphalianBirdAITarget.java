@@ -31,7 +31,11 @@ public class StymphalianBirdAITarget<T extends EntityLivingBase> extends EntityA
 
     @Override
     public boolean shouldExecute() {
-        return super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.bird.getClass());
+        boolean supe = super.shouldExecute();
+        if(targetEntity != null && bird.getVictor() != null && bird.getVictor().getUniqueID().equals(targetEntity.getUniqueID())){
+            return false;
+        }
+        return supe && this.targetEntity != null && !this.targetEntity.getClass().equals(this.bird.getClass());
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
