@@ -148,7 +148,7 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 		}
 		if (IceAndFire.CONFIG.spawnStymphalianBirds && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP) && random.nextInt(IceAndFire.CONFIG.stymphalianBirdSpawnChance + 1) == 0) {
-			for(int i = 0; i < 8 + random.nextInt(10); i++){
+			for(int i = 0; i < 4 + random.nextInt(4); i++){
 				BlockPos pos = height.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
 				if(world.getBlockState(pos.down()).isOpaqueCube()){
 					EntityStymphalianBird bird = new EntityStymphalianBird(world);

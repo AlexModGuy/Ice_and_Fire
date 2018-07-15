@@ -79,7 +79,7 @@ public class IceAndFireConfig {
 	public int stymphalianBirdFlightHeight = 80;
 	public boolean spawnStymphalianBirds = true;
 	public boolean stympahlianBirdAttackAnimals = false;
-	public int stymphalianBirdSpawnChance = 50;
+	public int stymphalianBirdSpawnChance = 100;
 	public boolean spawnTrolls = true;
 	public int trollSpawnRate = 20;
 	public int trollSpawnCheckChance = 1;
@@ -173,7 +173,7 @@ public class IceAndFireConfig {
 		this.stymphalianBirdFlightHeight = config.getInt("Max Stymphalian Bird Flight Height", "all", 80, 10, 1000, "How high stymphalian birds can fly, in Y height.");
 		this.spawnStymphalianBirds = config.getBoolean("Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
 		this.stympahlianBirdAttackAnimals = config.getBoolean("Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
-		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
 		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 500, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
