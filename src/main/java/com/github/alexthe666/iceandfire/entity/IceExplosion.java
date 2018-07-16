@@ -205,7 +205,7 @@ public class IceExplosion extends Explosion {
 				if (block == Blocks.GRASS_PATH) {
 					worldObj.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
 				}
-				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave") && state.getBlock().canEntityDestroy(state, worldObj, blockpos, this.exploder)) {
+				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave") && DragonUtils.canDragonBreak(state.getBlock())) {
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
 					}

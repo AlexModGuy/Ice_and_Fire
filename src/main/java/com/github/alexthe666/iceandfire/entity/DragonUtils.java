@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -217,6 +218,20 @@ public class DragonUtils {
 	public static boolean isVillager(Entity entity){
 		String className = entity.getClass().getSimpleName();
 		return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
+	}
+
+	public static boolean canDragonBreak(Block block){
+		return block != net.minecraft.init.Blocks.BARRIER &&
+				block != net.minecraft.init.Blocks.OBSIDIAN &&
+				block != net.minecraft.init.Blocks.END_STONE &&
+				block != net.minecraft.init.Blocks.BEDROCK &&
+				block != net.minecraft.init.Blocks.END_PORTAL &&
+				block != net.minecraft.init.Blocks.END_PORTAL_FRAME &&
+				block != net.minecraft.init.Blocks.COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.REPEATING_COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.CHAIN_COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.IRON_BARS &&
+				block != net.minecraft.init.Blocks.END_GATEWAY;
 	}
 
 	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
