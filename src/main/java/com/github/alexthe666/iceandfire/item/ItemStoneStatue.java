@@ -20,6 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -79,7 +80,8 @@ public class ItemStoneStatue extends Item {
 					}
 					return EnumActionResult.SUCCESS;
 				} else {
-					Class classFromEntity = EntityList.getClassFromID(stack.getTagCompound().getInteger("IAFStoneStatueEntityID"));
+					EntityEntry entry = net.minecraftforge.registries.GameData.getEntityRegistry().getValue((stack.getTagCompound().getInteger("IAFStoneStatueEntityID")));
+					Class classFromEntity = entry.getEntityClass();
 					Entity entity = null;
 					if (classFromEntity == null) {
 						return EnumActionResult.SUCCESS;
