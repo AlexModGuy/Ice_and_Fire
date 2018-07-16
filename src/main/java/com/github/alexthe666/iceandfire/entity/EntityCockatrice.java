@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues {
+public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;

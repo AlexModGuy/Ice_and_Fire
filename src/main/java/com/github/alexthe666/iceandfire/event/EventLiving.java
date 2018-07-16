@@ -5,17 +5,18 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
+import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -46,6 +47,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -477,6 +479,14 @@ public class EventLiving {
 		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
 			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+		}
+		if(event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature){
+			EntityCreature villager = (EntityCreature)event.getEntity();
+			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, new Predicate<EntityLivingBase>(){
+			public boolean apply(@Nullable EntityLivingBase entity) {
+				return entity != null && entity instanceof IVillagerFear;
+			}
+        }, 12.0F, 0.8D, 0.8D));
 		}
 	}
 

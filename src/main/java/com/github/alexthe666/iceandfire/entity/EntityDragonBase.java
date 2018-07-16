@@ -59,7 +59,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);

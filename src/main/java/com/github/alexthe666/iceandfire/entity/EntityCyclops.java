@@ -40,7 +40,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues {
+public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;

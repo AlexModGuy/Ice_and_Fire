@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityGorgon extends EntityMob implements IAnimatedEntity {
+public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
 	public static Animation ANIMATION_SCARE;
 	public static Animation ANIMATION_HIT;

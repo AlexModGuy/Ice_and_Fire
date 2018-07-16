@@ -42,7 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob {
+public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob, IVillagerFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;

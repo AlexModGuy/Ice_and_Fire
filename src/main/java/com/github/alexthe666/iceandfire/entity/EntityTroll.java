@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityTroll extends EntityMob implements IAnimatedEntity {
+public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;

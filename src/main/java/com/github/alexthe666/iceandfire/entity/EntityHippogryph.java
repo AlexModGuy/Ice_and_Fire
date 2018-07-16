@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute {
+public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear {
 
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
 	private static final int FLIGHT_CHANCE_PER_TICK = 1200;

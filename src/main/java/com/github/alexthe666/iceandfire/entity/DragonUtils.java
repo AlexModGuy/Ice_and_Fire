@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.EntityTameable;
@@ -211,6 +212,11 @@ public class DragonUtils {
 			}
 		}
 		return true;
+	}
+
+	public static boolean isVillager(Entity entity){
+		String className = entity.getClass().getSimpleName();
+		return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
 	}
 
 	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
