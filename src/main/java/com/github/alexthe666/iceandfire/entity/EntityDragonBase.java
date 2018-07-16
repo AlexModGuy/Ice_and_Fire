@@ -833,7 +833,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
                             }
                             return true;
                         }
-                        if (stack.getItem() == ModItems.sickly_dragon_meal) {
+                        if (stack.getItem() == ModItems.sickly_dragon_meal && !this.isAgingDisabled()) {
                             this.setHunger(this.getHunger() + 20);
                             this.heal(this.getMaxHealth());
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
