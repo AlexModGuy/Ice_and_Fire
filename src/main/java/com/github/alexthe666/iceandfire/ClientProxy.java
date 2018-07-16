@@ -160,6 +160,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 2, new ModelResourceLocation("iceandfire:dragonarmor_diamond_body", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 3, new ModelResourceLocation("iceandfire:dragonarmor_diamond_tail", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_meal, 0, new ModelResourceLocation("iceandfire:dragon_meal", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.sickly_dragon_meal, 0, new ModelResourceLocation("iceandfire:sickly_dragon_meal", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.fire_dragon_flesh, 0, new ModelResourceLocation("iceandfire:fire_dragon_flesh", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.ice_dragon_flesh, 0, new ModelResourceLocation("iceandfire:ice_dragon_flesh", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.fire_dragon_heart, 0, new ModelResourceLocation("iceandfire:fire_dragon_heart", "inventory"));

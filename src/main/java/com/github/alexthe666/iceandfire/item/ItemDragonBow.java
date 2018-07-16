@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDragonBow extends Item {
+public class ItemDragonBow extends ItemBow {
 
 	public ItemDragonBow() {
 		this.maxStackSize = 1;
@@ -46,8 +46,8 @@ public class ItemDragonBow extends Item {
 		});
 	}
 
-	public static float getArrowVelocity(int p_185059_0_) {
-		float f = p_185059_0_ / 20.0F;
+	public static float getArrowVelocity(int i) {
+		float f = i / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 
 		if (f > 1.0F) {
@@ -79,10 +79,6 @@ public class ItemDragonBow extends Item {
 		return !stack.isEmpty() && stack.getItem() == ModItems.dragonbone_arrow;
 	}
 
-	/**
-	 * Called when the player stops using an Item (stops holding the right mouse
-	 * button).
-	 */
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if (entityLiving instanceof EntityPlayer) {
@@ -96,7 +92,7 @@ public class ItemDragonBow extends Item {
 
 			if (!itemstack.isEmpty() || flag) {
 				if (itemstack.isEmpty()) {
-					itemstack = new ItemStack(Items.ARROW);
+					itemstack = new ItemStack(ModItems.dragonbone_arrow);
 				}
 
 				float f = getArrowVelocity(i);

@@ -13,13 +13,4 @@ public class ItemGeneric extends Item {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
-
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (entityIn instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityIn;
-
-			//if (this == ModItems.manuscript) {
-			//player.addStat(ModAchievements.manuscript, 1);
-		}
-	}
 }

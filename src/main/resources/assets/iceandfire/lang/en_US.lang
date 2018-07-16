@@ -163,6 +163,8 @@ item.iceandfire.troll_leather_armor_helmet.desc=-10%% Projectile Damage
 item.iceandfire.troll_leather_armor_chestplate.desc=-30%% Projectile Damage
 item.iceandfire.troll_leather_armor_leggings.desc=-20%% Projectile Damage
 item.iceandfire.troll_leather_armor_boots.desc=-10%% Projectile Damage
+item.iceandfire.sickly_dragon_meal.name=Sickly Dragon Meal
+item.iceandfire.sickly_dragon_meal.desc=Stunts dragon growth
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
