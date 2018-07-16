@@ -1511,7 +1511,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             if (this.getAnimation() != this.ANIMATION_BITE) {
                 this.setAnimation(this.ANIMATION_BITE);
             }
-            if (target != null) {
+            if (target != null && !DragonUtils.hasSameOwner(this, target)) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
