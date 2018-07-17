@@ -85,6 +85,7 @@ public class IceAndFireConfig {
 	public int trollSpawnCheckChance = 1;
 	public double trollMaxHealth = 50;
 	public double trollAttackStrength = 10;
+	public boolean villagersFearDragons = true;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -125,7 +126,7 @@ public class IceAndFireConfig {
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 		this.dragonWanderFromHomeDistance = config.getInt("Dragon Wander From Home Distance", "all", 40, 1, 10000, "How many blocks away can dragons wander from their defined \"home\" position.");
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
-
+		this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
 		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 

@@ -480,13 +480,13 @@ public class EventLiving {
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
 			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
 		}
-		if(event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature){
+		if(event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons){
 			EntityCreature villager = (EntityCreature)event.getEntity();
 			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, new Predicate<EntityLivingBase>(){
 			public boolean apply(@Nullable EntityLivingBase entity) {
 				return entity != null && entity instanceof IVillagerFear;
 			}
-        }, 12.0F, 0.8D, 0.8D));
+        	}, 12.0F, 0.8D, 0.8D));
 		}
 	}
 
