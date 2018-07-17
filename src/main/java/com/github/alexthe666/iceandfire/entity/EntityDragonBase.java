@@ -1017,7 +1017,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             this.spawnGroundEffects();
             if(this.getAttackTarget() != null){
                 boolean flag = this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
-                this.getAttackTarget().knockBack(this.getAttackTarget(), this.getDragonStage() * 1.1F, 1, 1);
+                this.getAttackTarget().knockBack(this.getAttackTarget(), this.getDragonStage() * 0.6F, 1, 1);
                 this.attackDecision = this.getRNG().nextBoolean();
             }
         }
@@ -1380,10 +1380,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
     }
 
-    protected void removePassenger(Entity passenger) {
-        super.removePassenger(passenger);
-    }
-
     private float bob(float speed, float degree, boolean bounce, float f, float f1) {
         float bob = (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
         if (bounce) {
@@ -1394,22 +1390,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     private void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
-        if (this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() > 45 && prey != null || this.getAnimation() == NO_ANIMATION) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 15F : prey instanceof EntityLivingBase ? (float) ((EntityLivingBase) prey).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+        if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 43 && prey != null) {
+            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 17F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
             prey.dismountRidingEntity();
-            if(prey instanceof EntityLivingBase){
-                ((EntityLivingBase)prey).deathTime = 0;
-            }
         }
-        if(this.getAnimation() == this.ANIMATION_SHAKEPREY && this.getAnimationTick() < 45){
-            ((EntityLivingBase)prey).deathTime = 19;
+        if(this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() < 45 && prey != null){
+            prey.startRiding(this);
         }
         renderYawOffset = rotationYaw;
         float modTick_0 = this.getAnimationTick() - 25;
         float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
         float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
         float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
-        float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 *2F) * 0.015F + 0.15F;
+        float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 *2F) * 0.015F;
         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
         double extraZ = (double) (radius * MathHelper.cos(angle));
         double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));

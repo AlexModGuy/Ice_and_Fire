@@ -154,6 +154,9 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if(this.getAnimation() == ANIMATION_WINGBLAST){
+			return false;
+		}
 		switch (new Random().nextInt(4)) {
 			case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
@@ -202,13 +205,6 @@ public class EntityIceDragon extends EntityDragonBase {
 					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
 						this.setAnimation(this.ANIMATION_WINGBLAST);
 						return false;
-					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 40) {
-						boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						if (entityIn instanceof EntityLivingBase) {
-							((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
-						}
-						this.attackDecision = this.getRNG().nextBoolean();
-						return flag2;
 					}
 				}else{
 					if (this.getAnimation() != this.ANIMATION_BITE) {
