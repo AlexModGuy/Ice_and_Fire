@@ -83,7 +83,7 @@ public class DragonUtils {
 		double d2 = d1;
 		for (int j = 0; j < list.size(); ++j) {
 			Entity entity1 = (Entity) list.get(j);
-			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
+			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize() + 2F);
 			RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
 			if (axisalignedbb.contains(vec3d)) {
