@@ -225,7 +225,8 @@ public class DragonUtils {
 				|| entity instanceof EntityRabbit || entity instanceof AbstractHorse
 				|| className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
 				|| className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
-				|| className.contains("Hedgehog");
+				|| className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
+				|| className.contains("Hog") || className.contains("Hog");
 	}
 
 	public static boolean canDragonBreak(Block block){

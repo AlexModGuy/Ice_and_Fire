@@ -1414,7 +1414,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         double extraZ = (double) (radius * MathHelper.cos(angle));
         double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
         prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
-
     }
 
     public int getDragonStage() {
