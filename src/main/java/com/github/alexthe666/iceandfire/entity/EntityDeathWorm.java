@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IVillagerFear {
+public class EntityDeathWorm extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -804,6 +804,11 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
         this.limbSwing += this.limbSwingAmount;
 
+    }
+
+    @Override
+    public boolean shouldAnimalsFear(Entity entity) {
+        return true;
     }
 
     public class SandMoveHelper extends EntityMoveHelper {

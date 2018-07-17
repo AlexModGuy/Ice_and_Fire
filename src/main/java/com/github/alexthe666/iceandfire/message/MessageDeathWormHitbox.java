@@ -40,7 +40,7 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
 	@SideOnly(Side.CLIENT)
 	public void onClientReceived(Minecraft client, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.deathWormId);
-		if (entity instanceof EntityDeathWorm) {
+		if (entity != null && entity instanceof EntityDeathWorm) {
 			EntityDeathWorm worm = (EntityDeathWorm)entity;
 			worm.initSegments(message.scale);
 		}
@@ -49,7 +49,7 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.deathWormId);
-		if (entity instanceof EntityDeathWorm) {
+		if (entity != null && entity instanceof EntityDeathWorm) {
 			EntityDeathWorm worm = (EntityDeathWorm)entity;
 			worm.initSegments(message.scale);
 		}

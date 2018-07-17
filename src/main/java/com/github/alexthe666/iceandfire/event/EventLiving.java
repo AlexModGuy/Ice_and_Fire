@@ -488,6 +488,14 @@ public class EventLiving {
 			}
         	}, 12.0F, 0.8D, 0.8D));
 		}
+		if(event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons){
+			EntityCreature animal = (EntityCreature)event.getEntity();
+			animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>(){
+				public boolean apply(@Nullable EntityLivingBase entity) {
+					return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
+				}
+			}, 12.0F, 0.8D, 1.1D));
+		}
 	}
 
 	public static boolean isAnimaniaSheep(Entity entity){

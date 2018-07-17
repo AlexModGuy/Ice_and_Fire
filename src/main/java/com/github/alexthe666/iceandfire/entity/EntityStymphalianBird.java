@@ -42,7 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob, IVillagerFear {
+public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;
@@ -521,5 +521,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{NO_ANIMATION, ANIMATION_PECK, ANIMATION_SHOOT_ARROWS, ANIMATION_SPEAK};
+    }
+
+    @Override
+    public boolean shouldAnimalsFear(Entity entity) {
+        return IceAndFire.CONFIG.stympahlianBirdAttackAnimals;
     }
 }

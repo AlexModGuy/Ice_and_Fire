@@ -59,7 +59,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear {
+public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -935,6 +935,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         this.setAgeInDays(this.getAgeInDays() + ageInDays);
         this.setScaleForAge(false);
+        this.resetPositionToBB();
         if (this.getAgeInDays() % 25 == 0) {
             for (int i = 0; i < this.getRenderSize() * 4; i++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;
@@ -1989,5 +1990,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     public boolean shouldRenderEyes() {
         return !this.isSleeping() && !this.isModelDead() && !this.isBlinking();
+    }
+
+    @Override
+    public boolean shouldAnimalsFear(Entity entity) {
+        return DragonUtils.canTameDragonAttack(this, entity);
     }
 }

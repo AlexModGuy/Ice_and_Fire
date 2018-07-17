@@ -11,8 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
@@ -218,6 +217,15 @@ public class DragonUtils {
 	public static boolean isVillager(Entity entity){
 		String className = entity.getClass().getSimpleName();
 		return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
+	}
+
+	public static boolean isLivestock(Entity entity){
+		String className = entity.getClass().getSimpleName();
+		return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
+				|| entity instanceof EntityRabbit || entity instanceof AbstractHorse
+				|| className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
+				|| className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
+				|| className.contains("Hedgehog");
 	}
 
 	public static boolean canDragonBreak(Block block){
