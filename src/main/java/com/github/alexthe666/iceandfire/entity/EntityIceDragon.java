@@ -169,7 +169,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 				break;
 			case 1:
-				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
+				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);

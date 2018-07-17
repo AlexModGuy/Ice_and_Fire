@@ -219,6 +219,11 @@ public class DragonUtils {
 		return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
 	}
 
+	public static boolean isAnimaniaMob(Entity entity){
+		String className = entity.getClass().getCanonicalName().toLowerCase();
+		return className.contains("animania");
+	}
+
 	public static boolean isLivestock(Entity entity){
 		String className = entity.getClass().getSimpleName();
 		return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
