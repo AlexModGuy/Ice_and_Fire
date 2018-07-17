@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
@@ -144,7 +145,9 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmR1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+            if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY){
+                model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+            }
         }
         if(!entity.isModelDead()){
             entity.turn_buffer.applyChainSwingBuffer(neckParts);
