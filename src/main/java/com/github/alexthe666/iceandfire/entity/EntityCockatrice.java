@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
@@ -363,7 +364,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (this.isTamed() && this.isOwner(player)) {
-            if (player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS) {
+            if (FoodUtils.isSeeds(player.getHeldItem(hand))) {
                 if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(4);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
