@@ -494,7 +494,7 @@ public class EventLiving {
 				public boolean apply(@Nullable EntityLivingBase entity) {
 					return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
 				}
-			}, 12.0F, 0.8D, 1.1D));
+			}, 12.0F, 1.2D, 1.5D));
 		}
 	}
 
