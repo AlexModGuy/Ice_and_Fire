@@ -391,7 +391,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         compound.setBoolean("AttackDecision", attackDecision);
         compound.setBoolean("Hovering", this.isHovering());
         compound.setBoolean("Flying", this.isFlying());
-        compound.setBoolean("Sitting", this.isSitting());
         compound.setInteger("ArmorHead", this.getArmorInSlot(0));
         compound.setInteger("ArmorNeck", this.getArmorInSlot(1));
         compound.setInteger("ArmorBody", this.getArmorInSlot(2));
@@ -432,7 +431,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         this.setGender(compound.getBoolean("Gender"));
         this.setVariant(compound.getInteger("Variant"));
         this.setSleeping(compound.getBoolean("Sleeping"));
-        this.setSitting(compound.getBoolean("Sitting"));
         this.setBreathingFire(compound.getBoolean("FireBreathing"));
         this.attackDecision = compound.getBoolean("AttackDecision");
         this.setHovering(compound.getBoolean("Hovering"));

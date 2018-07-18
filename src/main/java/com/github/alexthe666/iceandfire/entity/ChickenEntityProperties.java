@@ -25,7 +25,7 @@ public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 
 	@Override
 	public void init() {
-		timeUntilNextEgg = (this.getEntity().getRNG().nextInt(6000) + 6000);
+		timeUntilNextEgg = generateTime();
 	}
 
 	@Override
@@ -36,5 +36,9 @@ public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 	@Override
 	public Class<EntityAnimal> getEntityClass() {
 		return EntityAnimal.class;
+	}
+
+	public int generateTime(){
+		return this.getEntity().getRNG().nextInt(6000) + 6000;
 	}
 }
