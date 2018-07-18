@@ -345,7 +345,12 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         if (!world.isRemote && this.doesWantToLand() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
-
+        }
+        if (!world.isRemote && this.isOffsetPositionInLiquid(0, 0, 0) && !this.isFlying()) {
+            this.setFlying(true);
+            this.launchTicks = 0;
+            this.flyTicks = 0;
+            this.aiFlightLaunch = true;
         }
         if (!world.isRemote && this.onGround && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
