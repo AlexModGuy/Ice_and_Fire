@@ -717,6 +717,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()){
+			this.setHovering(true);
+			this.setSitting(false);
+			this.hoverTicks = 0;
+			this.flyTicks = 0;
+		}
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
 		if (properties != null && properties.isStone) {
 			this.setFlying(false);

@@ -59,10 +59,18 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event) {
-		if(event.getEntityBeingMounted() instanceof EntityDragonBase || event.getEntityBeingMounted() instanceof EntityHippogryph){
-			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote){
+		if(event.getEntityBeingMounted() instanceof EntityDragonBase){
+			EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && dragon.isOwner((EntityPlayer)event.getEntityMounting())){
 				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
-				event.getEntityBeingMounted().setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+				dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			}
+		}
+		if(event.getEntityBeingMounted() instanceof EntityHippogryph){
+			EntityHippogryph hippogryph = (EntityHippogryph)event.getEntityBeingMounted();
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((EntityPlayer)event.getEntityMounting())){
+				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
+				hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 			}
 		}
 	}

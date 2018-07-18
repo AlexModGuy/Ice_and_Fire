@@ -974,6 +974,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        System.out.println(this.noClip  );
         if(!world.isRemote){
             if((int)this.prevPosX == (int)this.posX && (int)this.prevPosZ == (int)this.posZ){
                 this.ticksStill++;
@@ -1010,6 +1011,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
         if(!world.isRemote && this.getRNG().nextInt(500) == 0 && !this.isModelDead() && !this.isSleeping()){
             this.roar();
+        }
+        if(!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()){
+            this.setHovering(true);
+            this.setSleeping(false);
+            this.setSitting(false);
+            this.flyHovering = 0;
+            this.hoverTicks = 0;
+            this.flyTicks = 0;
         }
         if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
@@ -1341,7 +1350,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
-            if (this.getControllingPassenger() == null || this.getControllingPassenger() != passenger) {
+            if (this.getControllingPassenger() == null || this.getControllingPassenger().getEntityId() != passenger.getEntityId()) {
                 updatePreyInMouth(passenger);
             } else {
                 if (this.isModelDead()) {
@@ -1478,7 +1487,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
-        this.setScaleForAge(true);
+        if(world.isRemote){
+            this.setScaleForAge(true);
+        }
         if (world.isRemote) {
             this.updateClientControls();
         }
