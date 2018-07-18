@@ -19,6 +19,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -168,6 +169,11 @@ public class EntityPixie extends EntityTameable {
 			}
 			//player.addStat(ModAchievements.jarPixie);
 			this.setDead();
+		}else if(player.getHeldItem(hand).getItem() == Items.SUGAR){
+			this.heal(5);
+			player.getHeldItem(hand).shrink(1);
+			this.playSound(ModSounds.PIXIE_TAUNT, 1F, 1F);
+			return true;
 		}
 		return super.processInteract(player, hand);
 	}
