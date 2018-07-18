@@ -36,7 +36,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed());
+				return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
 			}
 		};
 		this.setMutexBits(3);
