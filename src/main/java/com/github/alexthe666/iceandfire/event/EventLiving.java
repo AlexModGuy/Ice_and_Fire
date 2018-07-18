@@ -65,6 +65,7 @@ public class EventLiving {
 				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
 				if(dragon.isOwner((EntityPlayer)event.getEntityMounting())){
 					dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+					player.fallDistance = -dragon.height;
 				} else{
 					dragon.renderYawOffset = dragon.rotationYaw;
 					float modTick_0 = dragon.getAnimationTick() - 25;
