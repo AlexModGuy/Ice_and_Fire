@@ -974,7 +974,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        System.out.println(this.noClip  );
         if(!world.isRemote){
             if((int)this.prevPosX == (int)this.posX && (int)this.prevPosZ == (int)this.posZ){
                 this.ticksStill++;
@@ -1397,12 +1396,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     private void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
-        if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 43 && prey != null) {
+        if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 17F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
             prey.dismountRidingEntity();
-        }
-        if(this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() < 45 && prey != null){
-            prey.startRiding(this);
+
         }
         renderYawOffset = rotationYaw;
         float modTick_0 = this.getAnimationTick() - 25;

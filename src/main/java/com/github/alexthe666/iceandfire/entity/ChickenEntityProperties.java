@@ -4,10 +4,12 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Random;
+
 public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 
 	public int timeUntilNextEgg;
-
+	private static Random rand = new Random();
 	@Override
 	public int getTrackingTime() {
 		return 20;
@@ -39,6 +41,6 @@ public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 	}
 
 	public int generateTime(){
-		return this.getEntity().getRNG().nextInt(6000) + 6000;
+		return rand.nextInt(6000) + 6000;
 	}
 }

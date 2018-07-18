@@ -61,10 +61,24 @@ public class EventLiving {
 	public void onEntityMount(EntityMountEvent event) {
 		if(event.getEntityBeingMounted() instanceof EntityDragonBase){
 			EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
-			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && dragon.isOwner((EntityPlayer)event.getEntityMounting())){
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote){
 				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
-				dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+				if(dragon.isOwner((EntityPlayer)event.getEntityMounting())){
+					dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+				} else{
+					dragon.renderYawOffset = dragon.rotationYaw;
+					float modTick_0 = dragon.getAnimationTick() - 25;
+					float modTick_1 = dragon.getAnimationTick() > 25 && dragon.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
+					float modTick_2 = dragon.getAnimationTick() > 30 ? 10 : Math.max(0, dragon.getAnimationTick() - 20);
+					float radius = 0.75F * (0.6F * dragon.getRenderSize() / 3) * -3;
+					float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (modTick_1 *2F) * 0.015F;
+					double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+					double extraZ = (double) (radius * MathHelper.cos(angle));
+					double extraY = modTick_2 == 0 ? 0 : 0.035F * ((dragon.getRenderSize() / 3) + (modTick_2 * 0.5 * (dragon.getRenderSize() / 3)));
+					player.setPosition(dragon.posX + extraX, dragon.posY + extraY, dragon.posZ + extraZ);
+				}
 			}
+
 		}
 		if(event.getEntityBeingMounted() instanceof EntityHippogryph){
 			EntityHippogryph hippogryph = (EntityHippogryph)event.getEntityBeingMounted();
@@ -223,6 +237,14 @@ public class EventLiving {
 					}
 				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onEntityUseItem(PlayerInteractEvent.RightClickItem event){
+		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase){
+			System.out.println(event.getEntityLiving().world.isRemote);
+			((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((EntityPlayer)event.getEntityLiving(), event.getHand());
 		}
 	}
 
