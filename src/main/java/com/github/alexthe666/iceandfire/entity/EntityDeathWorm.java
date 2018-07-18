@@ -48,6 +48,8 @@ import javax.annotation.Nullable;
 public class EntityDeathWorm extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     private int animationTick;
+    private boolean willExplode = false;
+    private int ticksTillExplosion = 60;
     private Animation currentAnimation;
     private EntityDeathWormPart[] segments = new EntityDeathWormPart[6];
     @SideOnly(Side.CLIENT)
@@ -77,6 +79,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new DeathwormAITargetItems(this, false, false));
         this.targetTasks.addTask(5, new DeathWormAITarget(this, EntityLivingBase.class, false, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase input) {
@@ -127,6 +130,11 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 world.removeEntityDangerously(entity);
             }
         }
+    }
+
+    public void setExplosive(boolean explosive){
+        this.willExplode = true;
+        this.ticksTillExplosion = 60;
     }
 
     @Override
@@ -201,7 +209,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         compound.setFloat("Scale", this.getScale());
         compound.setInteger("WormAge", this.getWormAge());
         compound.setLong("WormHome", this.getWormHome().toLong());
-
+        compound.setBoolean("WillExplode", this.willExplode);
     }
 
     @Override
@@ -211,7 +219,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         this.setDeathWormScale(compound.getFloat("Scale"));
         this.setWormAge(compound.getInteger("WormAge"));
         this.setWormHome(BlockPos.fromLong(compound.getLong("WormHome")));
-
+        this.willExplode = compound.getBoolean("WillExplode");
     }
 
     private void setStateField(int i, boolean newState) {
@@ -380,29 +388,24 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
-        if (this.noClip) {
-            return false;
-        } else {
-            BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+        BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 
-            for (int i = 0; i < 8; ++i) {
-                int j = MathHelper.floor(this.posY + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
-                int k = MathHelper.floor(this.posX + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.width * 0.8F));
-                int l = MathHelper.floor(this.posZ + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
+        for (int i = 0; i < 8; ++i) {
+            int j = MathHelper.floor(this.posY + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
+            int k = MathHelper.floor(this.posX + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.width * 0.8F));
+            int l = MathHelper.floor(this.posZ + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
 
-                if (blockpos$pooledmutableblockpos.getX() != k || blockpos$pooledmutableblockpos.getY() != j || blockpos$pooledmutableblockpos.getZ() != l) {
-                    blockpos$pooledmutableblockpos.setPos(k, j, l);
+            if (blockpos$pooledmutableblockpos.getX() != k || blockpos$pooledmutableblockpos.getY() != j || blockpos$pooledmutableblockpos.getZ() != l) {
+                blockpos$pooledmutableblockpos.setPos(k, j, l);
 
-                    if (this.world.getBlockState(blockpos$pooledmutableblockpos).causesSuffocation() && this.world.getBlockState(blockpos$pooledmutableblockpos).getMaterial() != Material.SAND) {
-                        blockpos$pooledmutableblockpos.release();
-                        return true;
-                    }
+                if (this.world.getBlockState(blockpos$pooledmutableblockpos).causesSuffocation() && this.world.getBlockState(blockpos$pooledmutableblockpos).getMaterial() != Material.SAND) {
+                    blockpos$pooledmutableblockpos.release();
+                    return true;
                 }
             }
-
-            blockpos$pooledmutableblockpos.release();
-            return false;
         }
+        blockpos$pooledmutableblockpos.release();
+        return false;
     }
 
 
@@ -482,8 +485,14 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public void onLivingUpdate() {
-
         super.onLivingUpdate();
+        if(this.willExplode){
+            if(this.ticksTillExplosion == 0){
+                world.newExplosion(null, this.posX, this.posY, this.posZ, 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this));
+            }else{
+                this.ticksTillExplosion--;
+            }
+        }
         if (this.ticksExisted == 1) {
             initSegments(this.getScaleForAge());
         }
@@ -628,7 +637,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         if (isInSand() && !this.isSandNavigator) {
             switchNavigator(true);
         }
-        if (!isInSand() && this.isSandNavigator) {
+        if (!isInSandStrict() && this.isSandNavigator) {
             switchNavigator(false);
         }
         if (world.isRemote) {
@@ -716,6 +725,10 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         return this.getControllingPassenger() == null && this.world.isMaterialInBB(this.getEntityBoundingBox().grow(0.25D, 0.25D, 0.25D), Material.SAND);
     }
 
+    public boolean isInSandStrict() {
+        return this.getControllingPassenger() == null && this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.SAND);
+    }
+
     @Override
     public int getAnimationTick() {
         return animationTick;
@@ -769,7 +782,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         }
         if (this.isServerWorld()) {
             float f5;
-            if (this.isInSand()) {
+            if (this.isInSandStrict()) {
                 this.moveRelative(strafe, vertical, forward, 0.1F);
                 f4 = 0.8F;
                 float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
