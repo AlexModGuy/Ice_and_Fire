@@ -391,6 +391,18 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public void setArmor(int armorType) {
         this.dataManager.set(ARMOR, armorType);
+        double armorValue = 0;
+        switch(armorType){
+            case 1:
+                armorValue = 5;
+                break;
+            case 2:
+                armorValue = 7;
+                break;
+            case 3:
+                armorValue = 11;
+        }
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
     }
 
     public int getVariant() {

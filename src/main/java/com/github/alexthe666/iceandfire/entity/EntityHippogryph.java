@@ -509,6 +509,18 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	public void setArmor(int armorType) {
 		this.dataManager.set(ARMOR, Integer.valueOf(armorType));
+		double armorValue = 0;
+		switch(armorType){
+			case 1:
+				armorValue = 5;
+				break;
+			case 2:
+				armorValue = 7;
+				break;
+			case 3:
+				armorValue = 11;
+		}
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
 	}
 
 	@Override
@@ -538,8 +550,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
 			return false;
 		}
-		float damageReduction = getArmor() * 0.2F;
-		i -= damageReduction;
 		return super.attackEntityFrom(dmg, i);
 	}
 
