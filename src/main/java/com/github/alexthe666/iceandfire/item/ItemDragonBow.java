@@ -98,7 +98,7 @@ public class ItemDragonBow extends ItemBow {
 				float f = getArrowVelocity(i);
 
 				if ((double) f >= 0.1D) {
-					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+					boolean flag1 = entityplayer.capabilities.isCreativeMode || this.isInfinite(itemstack, stack, entityplayer);
 
 					if (!worldIn.isRemote) {
 						EntityArrow entityarrow = createArrow(worldIn, itemstack, entityplayer);
@@ -147,6 +147,11 @@ public class ItemDragonBow extends ItemBow {
 				}
 			}
 		}
+	}
+
+	public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player) {
+		int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.INFINITY, bow);
+		return enchant > 0 && stack.getItem() == ModItems.dragonbone_arrow;
 	}
 
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

@@ -1484,9 +1484,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if(world.isRemote){
-            this.setScaleForAge(true);
-        }
+        this.setScaleForAge(true);
         if (world.isRemote) {
             this.updateClientControls();
         }
@@ -1673,7 +1671,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     protected void playHurtSound(DamageSource source) {
         if (!this.isModelDead()) {
-            if (this.getAnimation() == this.NO_ANIMATION) {
+            if (this.getAnimation() == this.NO_ANIMATION && !this.world.isRemote) {
                 this.setAnimation(ANIMATION_SPEAK);
             }
             super.playHurtSound(source);
