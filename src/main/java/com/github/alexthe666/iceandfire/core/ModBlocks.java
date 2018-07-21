@@ -67,7 +67,6 @@ public class ModBlocks {
 	public static Block dragon_ice_spikes = new BlockIceSpikes();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":nest")
 	public static Block nest = new BlockGeneric(Material.GRASS, "nest", "iceandfire.nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
-
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
@@ -76,6 +75,10 @@ public class ModBlocks {
 	public static Block jar_empty = new BlockJar(true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_pixie")
 	public static Block jar_pixie = new BlockJar(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin")
+	public static Block myrmex_resin = new BlockMyrmexResin(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin_sticky")
+	public static Block myrmex_resin_sticky = new BlockMyrmexResin(true);
 
 	static {
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");

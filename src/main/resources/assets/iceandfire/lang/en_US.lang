@@ -48,6 +48,10 @@ tile.iceandfire.jar_2.name=Blue Pixie Jar
 tile.iceandfire.jar_3.name=Green Pixie Jar
 tile.iceandfire.jar_4.name=Yellow Pixie Jar
 tile.iceandfire.nest.name=Dragon Nest
+tile.iceandfire.desert_myrmex_resin.name=Desert Myrmex Resin
+tile.iceandfire.desert_myrmex_resin_sticky.name=Sticky Desert Myrmex Resin
+tile.iceandfire.jungle_myrmex_resin.name=Jungle Myrmex Resin
+tile.iceandfire.jungle_myrmex_resin_sticky.name=Sticky Jungle Myrmex Resin
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.BlockJar;
+import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -10,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
+import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
@@ -213,6 +215,8 @@ public class CommonProxy {
                         itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
                     } else if (obj instanceof BlockPodium) {
                         itemBlock = new ItemBlockPodium((Block) obj);
+                    } else if (obj instanceof BlockMyrmexResin) {
+                        itemBlock = new ItemBlockMyrmexResin((Block) obj);
                     } else {
                         itemBlock = new ItemBlock((Block) obj);
                     }
