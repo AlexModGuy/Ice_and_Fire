@@ -667,6 +667,20 @@ public class MyrmexHivePieces {
             return (worldHeight + 1) / 4;
         }
 
+        public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand) {
+            if (rand.nextBoolean()) {
+                generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 1, EnumFacing.WEST, this.getComponentType());
+            }
+            if (rand.nextBoolean()) {
+                generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 1, EnumFacing.EAST, this.getComponentType());
+            }
+            if (rand.nextBoolean()) {
+                generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 1, this.boundingBox.maxY - 4, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+            }
+            if (rand.nextBoolean()) {
+                generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 1, this.boundingBox.maxY - 4, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+            }
+        }
 
         @Override
         protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
