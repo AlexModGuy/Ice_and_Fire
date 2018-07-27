@@ -213,12 +213,12 @@ public class MyrmexHivePieces {
         }
 
         void generateNextPiece(Start componentIn, List<StructureComponent> listIn, Random rand, int x, int y, int z, EnumFacing facing, int type) {
-            switch (rand.nextInt(5)) {
+            switch (rand.nextInt(2)) {
                 case 0:
-                    generateAndAddChamber((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+                    generateAndAddChamber((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, facing, this.getComponentType());
                     break;
                 case 1:
-                    generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+                    generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, facing, this.getComponentType());
                     break;
                 default:
                     break;
@@ -485,7 +485,7 @@ public class MyrmexHivePieces {
                     EntityMyrmexWorker worker = new EntityMyrmexWorker(worldIn);
                     worker.setLocationAndAngles((double) j + 0.5D, (double) k, (double) l + 0.5D, 0.0F, 0.0F);
                     worker.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(worker)), (IEntityLivingData) null);
-                    worker.setGrowthStage(new Random().nextInt(2));
+                    worker.setGrowthStage(new Random().nextInt(3));
                     worldIn.spawnEntity(worker);
                 }
             }
@@ -608,7 +608,7 @@ public class MyrmexHivePieces {
             int xRand = randomIn.nextInt(6);
             int zRand = randomIn.nextInt(6);
             {
-                int i1 = 7;
+                int i1 = 8;
                 int i2 = i1 - 2;
                 int j = i2 + xRand;
                 int k = 5 + yRand;

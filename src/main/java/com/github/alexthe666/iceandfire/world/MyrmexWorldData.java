@@ -19,7 +19,7 @@ import java.util.List;
 
 public class MyrmexWorldData extends WorldSavedData {
 
-    private static final String IDENTIFIER = "iceandfire";
+    private static final String IDENTIFIER = "iceandfire_myrmex";
 
     private World world;
     private final List<BlockPos> villagerPositionsList = Lists.<BlockPos>newArrayList();
@@ -183,5 +183,9 @@ public class MyrmexWorldData extends WorldSavedData {
             world.setData(IDENTIFIER, data);
         }
         return data;
+    }
+
+    public static void addHive(World world, MyrmexHive hive){
+        get(world).villageList.add(hive);
     }
 }

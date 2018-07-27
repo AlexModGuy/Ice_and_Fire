@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.village.SnowVillagePieces;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,7 +46,7 @@ public class MapGenMyrmexHive extends WorldGenerator {
 	public boolean generate(World world, Random rand, BlockPos position) {
 		this.distance = 9;
 		boolean canSpawn = canSpawnStructureAtCoords(world, position.getX() >> 4, position.getZ() >> 4);
-		if (new Random().nextInt(IceAndFire.CONFIG.generateSnowVillageChance + 1) == 0) {
+		if (new Random().nextInt(IceAndFire.CONFIG.generateSnowVillageChance + 1) == 0 && MyrmexWorldData.get(world).getNearestVillage(position, 200) == null) {
 			int new_size = 32;
 			getStructureStart(world, position.getX() >> 4, position.getZ() >> 4, rand).generateStructure(world, rand, new StructureBoundingBox(position.getX() - new_size, position.getZ() - new_size, position.getX() + new_size, position.getZ() + new_size));
 		}
@@ -89,6 +90,7 @@ public class MapGenMyrmexHive extends WorldGenerator {
 
 		public Start(World worldIn, Random rand, int x, int z, int size) {
 			super(x, z);
+			MyrmexWorldData.addHive(worldIn, new MyrmexHive(worldIn, new BlockPos(x << 4, 40, z << 4), 50));
 			List<MyrmexHivePieces.PieceWeight> list = MyrmexHivePieces.getStructureVillageWeightedPieceList(rand, size);
 			MyrmexHivePieces.Start start = new MyrmexHivePieces.Start(worldIn.getBiomeProvider(), 0, rand, (x << 4) + 2, (z << 4) + 2, list, size);
 			this.components.add(start);

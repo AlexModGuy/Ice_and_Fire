@@ -47,6 +47,12 @@ public class MyrmexHive {
         this.world = worldIn;
     }
 
+    public MyrmexHive(World worldIn, BlockPos center, int radius) {
+        this.world = worldIn;
+        this.center = center;
+        this.villageRadius = radius;
+    }
+
     public void setWorld(World worldIn) {
         this.world = worldIn;
     }
@@ -242,7 +248,7 @@ public class MyrmexHive {
      * Returns true, if there is not a single village door left. Called by VillageCollection
      */
     public boolean isAnnihilated() {
-        return this.villageDoorInfoList.isEmpty();
+        return false;
     }
 
     public void addOrRenewAgressor(EntityLivingBase entitylivingbaseIn) {

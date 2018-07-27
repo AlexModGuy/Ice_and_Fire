@@ -56,7 +56,13 @@ public class BlockMyrmexResin extends Block {
         items.add(new ItemStack(this, 1, 1));
     }
 
-  @Override
+    @Deprecated
+    public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+        return false;
+    }
+
+
+    @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(VARIANT, EnumType.values()[MathHelper.clamp(meta, 0, 1)]);
