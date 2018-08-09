@@ -205,7 +205,7 @@ public class StructureGenerator implements IWorldGenerator {
 		if (IceAndFire.CONFIG.generateSnowVillages && !isDimensionBlacklisted(world.provider.getDimension(), false) && BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
-		if (IceAndFire.CONFIG.generateSnowVillages && random.nextInt(25) == 0 && BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY)) {
+		if (IceAndFire.CONFIG.generateSnowVillages && random.nextInt(100) == 0 && BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY)) {
 			MYRMEX_HIVE.generate(world, random, height);
 		}
 		if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
