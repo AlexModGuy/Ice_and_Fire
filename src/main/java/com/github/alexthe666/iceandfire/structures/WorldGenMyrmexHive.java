@@ -54,7 +54,11 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             for(int i = 0; i < length; i++){
                 generateCircle(world, rand, offset.offset(direction, i), 3, 5, direction);
             }
-            generateRoom(world, rand, offset.offset(direction, length), 7, 4, roomChance / 2, direction);
+            if(rand.nextInt(3) == 0){
+                generateEntrance(world, rand, offset.offset(direction, length), 4, 4, direction);
+            }else{
+                generateRoom(world, rand, offset.offset(direction, length), 7, 4, roomChance / 2, direction);
+            }
         }
     }
 
@@ -63,21 +67,32 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, position, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, position, size, height - 1, Blocks.AIR.getDefaultState());
-        if(rand.nextInt(4) == 0 && direction.getOpposite() != EnumFacing.NORTH){
+        if(rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.NORTH){
             generatePath(world, rand, position.offset(EnumFacing.NORTH, size - 2), 5 + rand.nextInt(20), EnumFacing.NORTH, roomChance);
         }
-        if(rand.nextInt(4) == 0 && direction.getOpposite() != EnumFacing.SOUTH) {
+        if(rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.SOUTH) {
             generatePath(world, rand, position.offset(EnumFacing.SOUTH, size - 2), 5 + rand.nextInt(20), EnumFacing.SOUTH, roomChance);
         }
-        if(rand.nextInt(4) == 0 && direction.getOpposite() != EnumFacing.WEST) {
+        if(rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.WEST) {
             generatePath(world, rand, position.offset(EnumFacing.WEST, size - 2), 5 + rand.nextInt(20), EnumFacing.WEST, roomChance);
         }
-        if(rand.nextInt(4) == 0 && direction.getOpposite() != EnumFacing.EAST) {
+        if(rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.EAST) {
             generatePath(world, rand, position.offset(EnumFacing.EAST, size - 2), 5 + rand.nextInt(20), EnumFacing.EAST, roomChance);
         }
     }
 
+    private void generateEntrance(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction){
+        BlockPos up = position.up();
+        while(!world.canBlockSeeSky(up)){
+            generateCircle(world, rand, up, size, height, direction);
+            up = up.up().offset(direction);
+        }
+        IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
+        IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        generateSphere(world, rand, up.up(), size + 2, height + 2, resin, sticky_resin);
+        generateSphere(world, rand, up.up(), size, height - 1, Blocks.AIR.getDefaultState());
 
+    }
 
     private void generateCircle(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
         IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
@@ -147,5 +162,11 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
         return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
+    }
+
+    private enum RoomType{
+        DEFAULT,
+        FOOD,
+        EMPTY
     }
 }
