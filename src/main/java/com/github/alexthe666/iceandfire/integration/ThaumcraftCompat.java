@@ -6,9 +6,12 @@ import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectRegistryEvent;
 
 public class ThaumcraftCompat {
 
@@ -22,7 +25,22 @@ public class ThaumcraftCompat {
         return new Aspect(tag, color, components, image, blend);
     }
 
-    static void registerAspectsInternal(){
+
+    private static final ThaumcraftCompat INSTANCE = new ThaumcraftCompat();
+    private static boolean registered = false;
+
+    @Deprecated
+    static void register() {
+        if (!registered) {
+            registered = true;
+            MinecraftForge.EVENT_BUS.register(INSTANCE);
+        } else {
+            throw new RuntimeException("You can only call ThaumcraftCompat.register() once");
+        }
+    }
+
+    @SubscribeEvent
+    public void aspectRegistrationEvent(AspectRegistryEvent evt){
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.bestiary), new AspectList().add(ThaumcraftCompat.DRAGON, 2).add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.BEAST, 6).add(Aspect.MAGIC, 2).add(Aspect.MIND, 4).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.manuscript), new AspectList().add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.PLANT, 3).add(Aspect.MIND, 2).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         ThaumcraftApi.registerObjectTag(new ItemStack(ModItems.sapphireGem), new AspectList().add(Aspect.CRYSTAL, 15).add(Aspect.DESIRE, 10));
