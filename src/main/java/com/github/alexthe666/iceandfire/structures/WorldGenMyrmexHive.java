@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
@@ -170,8 +172,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos)) {
-                if(world.getBlockState(blockpos.down()).isFullCube() && world.isAirBlock(blockpos.up())){
+            if (blockpos.distanceSq(position) <= (double) (f * f)) {
+                if(world.getBlockState(blockpos.down()).isFullCube() && world.isAirBlock(blockpos)){
                     decorate(world, blockpos, position, size, rand, roomType);
                 }
             }
@@ -181,17 +183,28 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private void decorate(World world, BlockPos blockpos, BlockPos center, int size, Random random, RoomType roomType) {
         switch(roomType){
             case FOOD:
-                if(random.nextInt(15) == 0){
+                if(random.nextInt(45) == 0 && world.getBlockState(blockpos.down()).getBlock() instanceof BlockMyrmexResin){
                     WorldGenMyrmexDecoration.generateSkeleton(world, blockpos, center, size, random);
                 }
-                if(random.nextInt(8) == 0){
+                if(random.nextInt(20) == 0){
                     WorldGenMyrmexDecoration.generateLeaves(world, blockpos, center, size, random);
                 }
-                if(random.nextInt(8) == 0){
+                if(random.nextInt(12) == 0){
                     WorldGenMyrmexDecoration.generatePumpkins(world, blockpos, center, size, random);
                 }
-                if(random.nextInt(2) == 0){
+                if(random.nextInt(6) == 0){
                     WorldGenMyrmexDecoration.generateMushrooms(world, blockpos, center, size, random);
+                }
+                break;
+            case NURSERY:
+                if(random.nextInt(2) == 0){
+                    EntityMyrmexBase baby = new EntityMyrmexWorker(world);
+                    baby.setGrowthStage(random.nextInt(2));
+                    baby.setLocationAndAngles(blockpos.getX(), blockpos.getY(), blockpos.getZ(), random.nextFloat() * 360F, 0F);
+                    baby.setRotationYawHead(random.nextFloat() * 360F);
+                    if(!world.isRemote && !baby.isEntityInsideOpaqueBlock()){
+                        world.spawnEntity(baby);
+                    }
                 }
                 break;
             default:
