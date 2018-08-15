@@ -3,14 +3,15 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
@@ -82,7 +83,7 @@ public class DragonUtils {
 		double d2 = d1;
 		for (int j = 0; j < list.size(); ++j) {
 			Entity entity1 = (Entity) list.get(j);
-			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
+			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize() + 2F);
 			RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
 			if (axisalignedbb.contains(vec3d)) {
@@ -211,6 +212,40 @@ public class DragonUtils {
 			}
 		}
 		return true;
+	}
+
+	public static boolean isVillager(Entity entity){
+		String className = entity.getClass().getSimpleName();
+		return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
+	}
+
+	public static boolean isAnimaniaMob(Entity entity){
+		String className = entity.getClass().getCanonicalName().toLowerCase();
+		return className.contains("animania");
+	}
+
+	public static boolean isLivestock(Entity entity){
+		String className = entity.getClass().getSimpleName();
+		return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
+				|| entity instanceof EntityRabbit || entity instanceof AbstractHorse
+				|| className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
+				|| className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
+				|| className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
+				|| className.contains("Hog") || className.contains("Hog");
+	}
+
+	public static boolean canDragonBreak(Block block){
+		return block != net.minecraft.init.Blocks.BARRIER &&
+				block != net.minecraft.init.Blocks.OBSIDIAN &&
+				block != net.minecraft.init.Blocks.END_STONE &&
+				block != net.minecraft.init.Blocks.BEDROCK &&
+				block != net.minecraft.init.Blocks.END_PORTAL &&
+				block != net.minecraft.init.Blocks.END_PORTAL_FRAME &&
+				block != net.minecraft.init.Blocks.COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.REPEATING_COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.CHAIN_COMMAND_BLOCK &&
+				block != net.minecraft.init.Blocks.IRON_BARS &&
+				block != net.minecraft.init.Blocks.END_GATEWAY;
 	}
 
 	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){

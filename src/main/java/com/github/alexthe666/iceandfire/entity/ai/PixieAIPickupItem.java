@@ -22,21 +22,21 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
 	protected final Predicate<? super EntityItem> targetEntitySelector;
 	protected EntityItem targetEntity;
 
-	public PixieAIPickupItem(EntityCreature creature, boolean checkSight) {
+	public PixieAIPickupItem(EntityPixie creature, boolean checkSight) {
 		this(creature, checkSight, false);
 	}
 
-	public PixieAIPickupItem(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
+	public PixieAIPickupItem(EntityPixie creature, boolean checkSight, boolean onlyNearby) {
 		this(creature, 20, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
 	}
 
-	public PixieAIPickupItem(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+	public PixieAIPickupItem(EntityPixie creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
 		super(creature, checkSight, onlyNearby);
 		this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE || item.getItem().getItem() == Items.SUGAR);
+				return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
 			}
 		};
 		this.setMutexBits(3);

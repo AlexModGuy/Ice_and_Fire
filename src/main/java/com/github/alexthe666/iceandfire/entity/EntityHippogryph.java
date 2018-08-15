@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute {
+public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear {
 
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
 	private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -246,9 +246,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					BlockPos pos = new BlockPos(this);
 					this.homePos = pos;
 					this.hasHomePosition = true;
-					if (world.isRemote) {
-						player.sendMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()));
-					}
+					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
 					return true;
 				}else{
 					this.setSitting(!this.isSitting());
@@ -511,6 +509,18 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	public void setArmor(int armorType) {
 		this.dataManager.set(ARMOR, Integer.valueOf(armorType));
+		double armorValue = 0;
+		switch(armorType){
+			case 1:
+				armorValue = 5;
+				break;
+			case 2:
+				armorValue = 7;
+				break;
+			case 3:
+				armorValue = 11;
+		}
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
 	}
 
 	@Override
@@ -540,8 +550,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
 			return false;
 		}
-		float damageReduction = getArmor() * 0.2F;
-		i -= damageReduction;
 		return super.attackEntityFrom(dmg, i);
 	}
 
@@ -719,6 +727,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()){
+			this.setHovering(true);
+			this.setSitting(false);
+			this.hoverTicks = 0;
+			this.flyTicks = 0;
+		}
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
 		if (properties != null && properties.isStone) {
 			this.setFlying(false);
@@ -1070,5 +1084,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		public void onInventoryChanged(IInventory invBasic) {
 			hippogryph.refreshInventory();
 		}
+	}
+
+	@Override
+	public boolean shouldAnimalsFear(Entity entity) {
+		return DragonUtils.canTameDragonAttack(this, entity);
 	}
 }

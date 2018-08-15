@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityTroll extends EntityMob implements IAnimatedEntity {
+public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -87,6 +87,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.trollAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.trollMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
 
     }
 
@@ -185,7 +186,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
                     if(this.getRNG().nextInt(3) == 0) {
                         dropItemAt(new ItemStack(ModItems.sapphireGem, this.getRNG().nextInt(1), 0), this.posX, this.posY, this.posZ);
                     }
-                    dropItemAt(new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(3) + 1, 0), this.posX, this.posY, this.posZ);
+                    dropItemAt(new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(3) + 1), this.posX, this.posY, this.posZ);
                     break;
                 case FOREST:
                     dropItemAt(new ItemStack(Blocks.BROWN_MUSHROOM, this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
@@ -215,7 +216,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
                 }
                 if(this.getWeaponType() == EnumTroll.Weapon.COLUMN_FROST){
                     brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
-                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1, 2);
+                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
                 }
                 if(this.getWeaponType() == EnumTroll.Weapon.HAMMER){
                     brokenDrop = new ItemStack(Items.BONE, this.getRNG().nextInt(2) + 1, 0);
@@ -227,7 +228,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
                 }
                 if(this.getWeaponType() == EnumTroll.Weapon.TRUNK_FROST){
                     brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(4) + 1, 1);
-                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1, 2);
+                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
                 }
                 dropItemAt(brokenDrop, this.posX, this.posY, this.posZ);
                 dropItemAt(brokenDrop2, this.posX, this.posY, this.posZ);
@@ -297,10 +298,10 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity {
                 }
             }
         }
-        if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10) {
+        if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         }
-        if (this.getAnimation() == ANIMATION_STRIKE_HORIZONTAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10) {
+        if (this.getAnimation() == ANIMATION_STRIKE_HORIZONTAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             float f1 = 0.5F;
             float f2 = this.getAttackTarget().moveForward;

@@ -20,7 +20,7 @@ public class IndexPageButton extends GuiButton {
 
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
 		if (this.visible) {
-			FontRenderer fontrenderer = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+			FontRenderer fontrenderer  = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			mc.renderEngine.bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;

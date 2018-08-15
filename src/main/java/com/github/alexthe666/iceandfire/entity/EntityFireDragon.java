@@ -61,7 +61,6 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(8, new DragonAILookIdle(this));
-		this.tasks.addTask(9, new DragonAIBreakBlocks(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
@@ -119,6 +118,9 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if(this.getAnimation() == ANIMATION_WINGBLAST){
+			return false;
+		}
 		switch (new Random().nextInt(4)) {
 		case 0:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
@@ -131,7 +133,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				}
 				break;
 			case 1:
-				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase)) {
+				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
@@ -167,13 +169,6 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
 						this.setAnimation(this.ANIMATION_WINGBLAST);
 						return true;
-					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 40) {
-						boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						if (entityIn instanceof EntityLivingBase) {
-							((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
-						}
-						this.attackDecision = this.getRNG().nextBoolean();
-						return flag2;
 					}
 				}else{
 					if (this.getAnimation() != this.ANIMATION_BITE) {

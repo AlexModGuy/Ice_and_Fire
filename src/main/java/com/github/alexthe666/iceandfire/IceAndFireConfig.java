@@ -5,6 +5,7 @@ import net.minecraftforge.common.config.Configuration;
 public class IceAndFireConfig {
 
 	public boolean customMainMenu = true;
+	public boolean useVanillaFont = false;
 	public boolean logCascadingWorldGen = false;
 	public boolean generateSilverOre = true;
 	public boolean generateSapphireOre = true;
@@ -17,6 +18,7 @@ public class IceAndFireConfig {
 	public int dragonDenGoldAmount = 4;
 	public boolean generateSnowVillages = true;
 	public int generateSnowVillageChance = 100;
+	public int dangerousWorldGenDistanceLimit = 200;
 	public int[] dragonBlacklistedDimensions = new int[]{1, -1};
 	public int[] dragonWhitelistedDimensions = new int[]{0};
 	public boolean useDimensionBlackList = true;
@@ -63,6 +65,7 @@ public class IceAndFireConfig {
 	public double deathWormMaxHealth = 10D;
 	public double deathWormAttackStrength = 3D;
 	public boolean spawnDeathWorm = true;
+	public boolean deathWormAttackMonsters = true;
 	public int deathWormSpawnRate = 2;
 	public int deathWormSpawnCheckChance = 3;
 	public int cockatriceChickenSearchLength = 40;
@@ -75,15 +78,19 @@ public class IceAndFireConfig {
 	public int stymphalianBirdFlockLength = 40;
 	public int stymphalianBirdFlightHeight = 80;
 	public boolean spawnStymphalianBirds = true;
-	public int stymphalianBirdSpawnChance = 50;
+	public boolean stympahlianBirdAttackAnimals = false;
+	public int stymphalianBirdSpawnChance = 100;
 	public boolean spawnTrolls = true;
-	public int trollSpawnRate = 10;
+	public int trollSpawnRate = 20;
 	public int trollSpawnCheckChance = 1;
 	public double trollMaxHealth = 50;
 	public double trollAttackStrength = 10;
+	public boolean villagersFearDragons = true;
+	public boolean animalsFearDragons = true;
 
     public void init(Configuration config) {
-    	this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
+		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
+		this.useVanillaFont = config.getBoolean("Use Vanilla Font", "all", false, "Whether to use the vanilla font in the bestiary or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
 		this.logCascadingWorldGen  = config.getBoolean("Log Cascading World Gen", "all", false, "Whether to log cascading world gen lag. We hope to fix all cascading lag in the future, but the server console spam is over the top.");
 		this.generateSapphireOre  = config.getBoolean("Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
@@ -105,6 +112,7 @@ public class IceAndFireConfig {
 		this.spawnGlaciers = config.getBoolean("Generate Glaciers", "all", true, "Whether to generate glacier biomes or not");
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
+		this.dangerousWorldGenDistanceLimit = config.getInt("Dangerous World Gen Distance From Spawn", "all", 200, 1, Integer.MAX_VALUE, "How many blocks away does dangerous(dragons, cyclops, etc.) world gen have to generate from spawn");
 
 		this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
 		this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
@@ -119,7 +127,8 @@ public class IceAndFireConfig {
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 		this.dragonWanderFromHomeDistance = config.getInt("Dragon Wander From Home Distance", "all", 40, 1, 10000, "How many blocks away can dragons wander from their defined \"home\" position.");
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
-
+		this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
+		this.animalsFearDragons = config.getBoolean("Animals Fear Dragons", "all", true, "True if animals should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
 		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 
@@ -151,6 +160,7 @@ public class IceAndFireConfig {
 		this.deathWormMaxHealth = (double)config.getFloat("Death Worm Base Health", "all", 10, 1, 10000, "Default deathworm health, this is scaled to the worm's particular size");
 		this.deathWormAttackStrength = (double)config.getFloat("Death Worm Base Attack Strength", "all", 3, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
 		this.spawnDeathWorm = config.getBoolean("Spawn Death Worms", "all", true, "True if deathworms are allowed to spawn");
+		this.deathWormAttackMonsters = config.getBoolean("Death Worms Target Monsters", "all", true, "True if wild deathworms are allowed to target and attack monsters");
 		this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 2, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
 		this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
@@ -165,10 +175,11 @@ public class IceAndFireConfig {
 		this.stymphalianBirdFlockLength = config.getInt("Stymphalian Bird Flock Length", "all", 40, 1, 10000, "How far away stymphalian birds will consider other birds to be in the same flock.");
 		this.stymphalianBirdFlightHeight = config.getInt("Max Stymphalian Bird Flight Height", "all", 80, 10, 1000, "How high stymphalian birds can fly, in Y height.");
 		this.spawnStymphalianBirds = config.getBoolean("Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
-		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 50, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.stympahlianBirdAttackAnimals = config.getBoolean("Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
+		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
 
 		this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
-		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 10, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
+		this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 500, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
 		this.trollSpawnCheckChance = config.getInt("Troll Spawn Check Chance", "all", 1, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
 		this.trollMaxHealth = (double)config.getFloat("Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
 		this.trollAttackStrength = (double)config.getFloat("Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");

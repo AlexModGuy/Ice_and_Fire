@@ -54,7 +54,7 @@ public class EntityDeathWormEgg extends EntityThrowable {
             result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0.0F);
         }
 
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote && this.thrower != null) {
             EntityDeathWorm deathworm = new EntityDeathWorm(this.world);
             deathworm.setVariant(new Random().nextInt(3));
             deathworm.setTamed(true);

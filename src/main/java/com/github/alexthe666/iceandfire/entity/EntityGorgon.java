@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityGorgon extends EntityMob implements IAnimatedEntity {
+public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
 	public static Animation ANIMATION_SCARE;
 	public static Animation ANIMATION_HIT;
@@ -268,6 +268,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.gorgonMaxHealth);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
 	}
 
 	@Override
@@ -308,5 +309,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	@Nullable
 	protected SoundEvent getDeathSound() {
 		return ModSounds.GORGON_DIE;
+	}
+
+	@Override
+	public boolean shouldAnimalsFear(Entity entity) {
+		return true;
 	}
 }

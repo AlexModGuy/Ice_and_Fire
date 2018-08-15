@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -41,7 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity {
+public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
     private int animationTick;
@@ -256,7 +257,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()){
+        if(this.getAttackTarget() != null && (this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))){
             this.setAttackTarget(null);
         }
         if (this.flock == null) {
@@ -344,7 +345,12 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         if (!world.isRemote && this.doesWantToLand() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
-
+        }
+        if (!world.isRemote && this.isOffsetPositionInLiquid(0, 0, 0) && !this.isFlying()) {
+            this.setFlying(true);
+            this.launchTicks = 0;
+            this.flyTicks = 0;
+            this.aiFlightLaunch = true;
         }
         if (!world.isRemote && this.onGround && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
@@ -520,5 +526,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{NO_ANIMATION, ANIMATION_PECK, ANIMATION_SHOOT_ARROWS, ANIMATION_SPEAK};
+    }
+
+    @Override
+    public boolean shouldAnimalsFear(Entity entity) {
+        return IceAndFire.CONFIG.stympahlianBirdAttackAnimals;
     }
 }

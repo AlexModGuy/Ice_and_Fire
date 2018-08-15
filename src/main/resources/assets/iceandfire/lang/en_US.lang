@@ -48,6 +48,10 @@ tile.iceandfire.jar_2.name=Blue Pixie Jar
 tile.iceandfire.jar_3.name=Green Pixie Jar
 tile.iceandfire.jar_4.name=Yellow Pixie Jar
 tile.iceandfire.nest.name=Dragon Nest
+tile.iceandfire.desert_myrmex_resin.name=Desert Myrmex Resin
+tile.iceandfire.desert_myrmex_resin_sticky.name=Sticky Desert Myrmex Resin
+tile.iceandfire.jungle_myrmex_resin.name=Jungle Myrmex Resin
+tile.iceandfire.jungle_myrmex_resin_sticky.name=Sticky Jungle Myrmex Resin
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
@@ -163,6 +167,8 @@ item.iceandfire.troll_leather_armor_helmet.desc=-10%% Projectile Damage
 item.iceandfire.troll_leather_armor_chestplate.desc=-30%% Projectile Damage
 item.iceandfire.troll_leather_armor_leggings.desc=-20%% Projectile Damage
 item.iceandfire.troll_leather_armor_boots.desc=-10%% Projectile Damage
+item.iceandfire.sickly_dragon_meal.name=Sickly Dragon Meal
+item.iceandfire.sickly_dragon_meal.desc=Stunts dragon growth
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge

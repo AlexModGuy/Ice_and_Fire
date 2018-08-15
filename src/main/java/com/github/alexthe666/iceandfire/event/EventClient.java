@@ -169,7 +169,7 @@ public class EventClient {
 					}
 
 				}
-				if (IceAndFire.CONFIG.sirenShader && !sirenProps.isCharmed && renderer.isShaderActive()) {
+				if (IceAndFire.CONFIG.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
 					renderer.stopUseShader();
 				}
 			}

@@ -39,6 +39,7 @@ public class FireExplosion extends Explosion {
 	private final List<BlockPos> affectedBlockPositions;
 	private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
 	private final Vec3d position;
+	private boolean mobGreifing;
 
 	public FireExplosion(World world, Entity entity, double x, double y, double z, float size, boolean smoke) {
 		super(world, entity, x, y, z, size, true, smoke);
@@ -53,6 +54,7 @@ public class FireExplosion extends Explosion {
 		this.explosionZ = z;
 		this.isSmoking = smoke;
 		this.position = new Vec3d(explosionX, explosionY, explosionZ);
+		this.mobGreifing = worldObj.getGameRules().getBoolean("mobGriefing");
 	}
 
 	/**
@@ -196,10 +198,11 @@ public class FireExplosion extends Explosion {
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
-				if (block == Blocks.GRASS_PATH) {
-					worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
-				}
-				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave")) {
+
+				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
+					if (block == Blocks.GRASS_PATH) {
+						worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
+					}
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
 					}
@@ -230,7 +233,7 @@ public class FireExplosion extends Explosion {
 		}
 
 		for (BlockPos blockpos1 : this.affectedBlockPositions) {
-			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
+			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0 && mobGreifing) {
 				this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());
 			}
 		}

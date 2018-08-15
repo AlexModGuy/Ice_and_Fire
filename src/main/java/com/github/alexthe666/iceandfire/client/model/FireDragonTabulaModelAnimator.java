@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
@@ -56,7 +57,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 }
             }
             if (entity.hoverProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName))) {
+                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)) {
                     transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
                 }
             }
@@ -82,12 +83,12 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 }
             }
             if(entity.tackleProgress > 0.0F){
-                if(!isPartEqual(EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))){
+                if(!isPartEqual(EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
                     transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }
             if(entity.fireBreathProgress > 0.0F){
-                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName))){
+                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
                     transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 5, false);
                 }
             }
@@ -99,7 +100,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                if(x != flightPart.rotateAngleX && y != flightPart.rotateAngleY && z != flightPart.rotateAngleZ){
+                if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ){
                     this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
             }
@@ -144,12 +145,18 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
             model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmR1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+            if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY){
+                model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+            }
         }
         if(!entity.isModelDead()){
             entity.turn_buffer.applyChainSwingBuffer(neckParts);
             entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
         }
+    }
+
+    private boolean isWing(IceAndFireTabulaModel model, AdvancedModelRenderer modelRenderer){
+        return model.getCube("ArmL1").childModels.contains(modelRenderer) || model.getCube("ArmR1").childModels.contains(modelRenderer);
     }
 
     public void animate(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {

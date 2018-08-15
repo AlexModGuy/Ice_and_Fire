@@ -5,16 +5,18 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
+import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
+import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -36,6 +38,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -44,6 +47,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -54,19 +58,52 @@ public class EventLiving {
 	private boolean stepHeightSwitched = false;
 
 	@SubscribeEvent
+	public void onEntityMount(EntityMountEvent event) {
+		if(event.getEntityBeingMounted() instanceof EntityDragonBase){
+			EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote){
+				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
+				if(dragon.isOwner((EntityPlayer)event.getEntityMounting())){
+					dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+					player.fallDistance = -dragon.height;
+				} else{
+					dragon.renderYawOffset = dragon.rotationYaw;
+					float modTick_0 = dragon.getAnimationTick() - 25;
+					float modTick_1 = dragon.getAnimationTick() > 25 && dragon.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
+					float modTick_2 = dragon.getAnimationTick() > 30 ? 10 : Math.max(0, dragon.getAnimationTick() - 20);
+					float radius = 0.75F * (0.6F * dragon.getRenderSize() / 3) * -3;
+					float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (modTick_1 *2F) * 0.015F;
+					double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+					double extraZ = (double) (radius * MathHelper.cos(angle));
+					double extraY = modTick_2 == 0 ? 0 : 0.035F * ((dragon.getRenderSize() / 3) + (modTick_2 * 0.5 * (dragon.getRenderSize() / 3)));
+					player.setPosition(dragon.posX + extraX, dragon.posY + extraY, dragon.posZ + extraZ);
+				}
+			}
+
+		}
+		if(event.getEntityBeingMounted() instanceof EntityHippogryph){
+			EntityHippogryph hippogryph = (EntityHippogryph)event.getEntityBeingMounted();
+			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((EntityPlayer)event.getEntityMounting())){
+				EntityPlayer player = (EntityPlayer)event.getEntityMounting();
+				hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			}
+		}
+	}
+
+	@SubscribeEvent
 	public void onEntityDamage(LivingHurtEvent event) {
 		if(event.getSource().isProjectile()){
 			float multi = 1;
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.HEAD)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.1;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.CHEST)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.3;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.LEGS)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.2;
 			}
-			if (event.getEntityLiving().hasItemInSlot(EntityEquipmentSlot.FEET)) {
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
 				multi -= 0.1;
 			}
 			event.setAmount(event.getAmount() * multi);
@@ -204,19 +241,30 @@ public class EventLiving {
 		}
 	}
 
+	@SubscribeEvent
+	public void onEntityUseItem(PlayerInteractEvent.RightClickItem event){
+		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase){
+			System.out.println(event.getEntityLiving().world.isRemote);
+			((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((EntityPlayer)event.getEntityLiving(), event.getHand());
+		}
+	}
+
 	Random rand = new Random();
 	@SubscribeEvent
 	public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-
 		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
 			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
-			if(chickenProps != null && chickenProps.timeUntilNextEgg == 0){
-				if(event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0){
-					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-					event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-					event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+			if(chickenProps != null){
+				if(chickenProps.timeUntilNextEgg == 0) {
+					if (event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0) {
+						event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+						event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+						event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+					}
+					chickenProps.timeUntilNextEgg = chickenProps.generateTime();
+				}else{
+					chickenProps.timeUntilNextEgg--;
 				}
-				chickenProps.timeUntilNextEgg = (event.getEntityLiving().getRNG().nextInt(6000) + 6000);
 			}
 
 		}
@@ -465,6 +513,22 @@ public class EventLiving {
 		if(event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal){
 			EntityAnimal animal = (EntityAnimal)event.getEntity();
 			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+		}
+		if(event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons){
+			EntityCreature villager = (EntityCreature)event.getEntity();
+			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, new Predicate<EntityLivingBase>(){
+			public boolean apply(@Nullable EntityLivingBase entity) {
+				return entity != null && entity instanceof IVillagerFear;
+			}
+        	}, 12.0F, 0.8D, 0.8D));
+		}
+		if(event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons){
+			EntityCreature animal = (EntityCreature)event.getEntity();
+			animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>(){
+				public boolean apply(@Nullable EntityLivingBase entity) {
+					return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
+				}
+			}, 12.0F, 1.2D, 1.5D));
 		}
 	}
 

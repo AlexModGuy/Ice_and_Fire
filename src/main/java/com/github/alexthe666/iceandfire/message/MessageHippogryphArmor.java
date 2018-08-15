@@ -51,7 +51,7 @@ public class MessageHippogryphArmor extends AbstractMessage<MessageHippogryphArm
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageHippogryphArmor message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.dragonId);
-		if (entity instanceof EntityHippogryph) {
+		if (entity != null && entity instanceof EntityHippogryph) {
 			EntityHippogryph hippo = (EntityHippogryph) entity;
 			if (message.slot_index == 0) {
 				hippo.setSaddled(message.armor_type == 1);

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventLiving;
@@ -12,6 +13,8 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -37,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues {
+public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -94,7 +97,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(4, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return (entity instanceof EntityMob && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
+                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
             }
         }));
         this.targetTasks.addTask(5, new CockatriceAITargetItems(this, false));
@@ -361,7 +364,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (this.isTamed() && this.isOwner(player)) {
-            if (player.getHeldItem(hand).getItem() == Items.WHEAT_SEEDS) {
+            if (FoodUtils.isSeeds(player.getHeldItem(hand))) {
                 if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(4);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -373,9 +376,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 if (this.getCommand() > 2) {
                     this.setCommand(0);
                 }
-                if (world.isRemote) {
-                    player.sendMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()));
-                }
+                player.sendStatusMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()), true);
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 return true;
             }

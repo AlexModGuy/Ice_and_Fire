@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "inventory": {
+      "model": "iceandfire:desert_myrmex_resin"
+    },
+    "variant=desert": {
+      "model": "iceandfire:desert_myrmex_resin"
+    },
+    "variant=jungle": {
+      "model": "iceandfire:jungle_myrmex_resin"
+    }
+  }
+}

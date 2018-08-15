@@ -11,6 +11,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
@@ -53,5 +54,9 @@ public class ItemModAxe extends ItemTool {
 	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		Material material = state.getMaterial();
 		return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
+	}
+
+	public boolean canDisableShield(ItemStack stack, ItemStack shield, EntityLivingBase entity, EntityLivingBase attacker){
+		return true;
 	}
 }

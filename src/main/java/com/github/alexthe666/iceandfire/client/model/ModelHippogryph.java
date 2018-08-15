@@ -637,7 +637,7 @@ public class ModelHippogryph extends ModelDragonBase {
 		this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
 
 		if (hippo.isFlying() || hippo.airBorneCounter > 50 || hippo.isHovering()) {
-			hippo.roll_buffer.applyChainFlapBuffer(Body);
+			//hippo.roll_buffer.applyChainFlapBuffer(Body);
 			this.flap(WingL, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
 			this.flap(WingR, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
 			this.flap(WingL2, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);

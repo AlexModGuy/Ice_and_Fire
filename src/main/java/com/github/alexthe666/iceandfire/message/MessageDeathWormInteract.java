@@ -42,7 +42,7 @@ public class MessageDeathWormInteract extends AbstractMessage<MessageDeathWormIn
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageDeathWormInteract message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.deathWormId);
-        if (entity instanceof EntityDeathWorm) {
+        if (entity != null && entity instanceof EntityDeathWorm) {
             EntityDeathWorm worm = (EntityDeathWorm)entity;
             if(message.dmg > 0F){
                 worm.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
@@ -55,7 +55,7 @@ public class MessageDeathWormInteract extends AbstractMessage<MessageDeathWormIn
     @Override
     public void onServerReceived(MinecraftServer server, MessageDeathWormInteract message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.deathWormId);
-        if (entity instanceof EntityDeathWorm) {
+        if (entity != null && entity instanceof EntityDeathWorm) {
             EntityDeathWorm worm = (EntityDeathWorm)entity;
             if(message.dmg > 0F){
                 worm.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);

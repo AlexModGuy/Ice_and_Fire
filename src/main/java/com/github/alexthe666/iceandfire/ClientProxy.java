@@ -160,6 +160,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 2, new ModelResourceLocation("iceandfire:dragonarmor_diamond_body", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 3, new ModelResourceLocation("iceandfire:dragonarmor_diamond_tail", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_meal, 0, new ModelResourceLocation("iceandfire:dragon_meal", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.sickly_dragon_meal, 0, new ModelResourceLocation("iceandfire:sickly_dragon_meal", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.fire_dragon_flesh, 0, new ModelResourceLocation("iceandfire:fire_dragon_flesh", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.ice_dragon_flesh, 0, new ModelResourceLocation("iceandfire:ice_dragon_flesh", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.fire_dragon_heart, 0, new ModelResourceLocation("iceandfire:fire_dragon_heart", "inventory"));
@@ -241,6 +242,13 @@ public class ClientProxy extends CommonProxy {
 			ModelLoader.setCustomModelResourceLocation(troll.boots, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_boots", "inventory"));
 		}
 		ModelLoader.setCustomModelResourceLocation(ModItems.troll_tusk, 0, new ModelResourceLocation("iceandfire:troll_tusk", "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.myrmex_resin), new ResourceLocation("iceandfire:desert_myrmex_resin"), new ResourceLocation("iceandfire:jungle_myrmex_resin"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.myrmex_resin_sticky), new ResourceLocation("iceandfire:desert_myrmex_resin_sticky"), new ResourceLocation("iceandfire:jungle_myrmex_resin_sticky"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.myrmex_resin), 0, new ModelResourceLocation("iceandfire:desert_myrmex_resin", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.myrmex_resin), 1, new ModelResourceLocation("iceandfire:jungle_myrmex_resin", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.myrmex_resin_sticky), 0, new ModelResourceLocation("iceandfire:desert_myrmex_resin_sticky", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.myrmex_resin_sticky), 1, new ModelResourceLocation("iceandfire:jungle_myrmex_resin_sticky", "inventory"));
+
 	}
 
 
@@ -318,6 +326,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianFeather.class, new RenderStymphalianFeather(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianArrow.class, new RenderStymphalianArrow(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityTroll.class, new RenderTroll(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMyrmexWorker.class, new RenderMyrmexBase(Minecraft.getMinecraft().getRenderManager(), new ModelMyrmexWorker(), 0.5F));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());

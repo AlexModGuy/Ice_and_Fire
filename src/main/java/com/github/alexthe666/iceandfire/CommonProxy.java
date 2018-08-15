@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.BlockJar;
+import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -10,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
+import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
@@ -176,6 +178,7 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianFeather>create(), event,EntityStymphalianFeather.class, "stymphalianfeather", 25);
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianArrow>create(), event,EntityStymphalianArrow.class, "stymphalianarrow", 26);
         registerSpawnable(EntityEntryBuilder.<EntityTroll>create(), event,EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0XBE9444);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
@@ -213,6 +216,8 @@ public class CommonProxy {
                         itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
                     } else if (obj instanceof BlockPodium) {
                         itemBlock = new ItemBlockPodium((Block) obj);
+                    } else if (obj instanceof BlockMyrmexResin) {
+                        itemBlock = new ItemBlockMyrmexResin((Block) obj);
                     } else {
                         itemBlock = new ItemBlock((Block) obj);
                     }

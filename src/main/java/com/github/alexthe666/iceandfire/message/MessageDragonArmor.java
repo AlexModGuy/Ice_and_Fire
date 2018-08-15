@@ -50,7 +50,7 @@ public class MessageDragonArmor extends AbstractMessage<MessageDragonArmor> {
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageDragonArmor message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.dragonId);
-		if (entity instanceof EntityDragonBase) {
+		if (entity != null && entity instanceof EntityDragonBase) {
 			EntityDragonBase dragon = (EntityDragonBase) entity;
 			dragon.setArmorInSlot(message.armor_index, message.armor_type);
 		}
