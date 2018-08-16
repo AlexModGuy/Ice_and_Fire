@@ -128,9 +128,6 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        if (Loader.isModLoaded("thaumcraft")) {
-            ThaumcraftCompatBridge.registerAspects();
-        }
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -149,9 +146,6 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        if (Loader.isModLoaded("thaumcraft")) {
-            ThaumcraftCompatBridge.registerAspects();
-        }
         registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event,EntityDragonEgg.class, "dragonegg", 1);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonArrow>create(), event,EntityDragonArrow.class, "dragonarrow", 2);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonSkull>create(), event,EntityDragonSkull.class, "dragonskull", 3);
@@ -202,9 +196,6 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
-        if (Loader.isModLoaded("thaumcraft")) {
-            ThaumcraftCompatBridge.registerAspects();
-        }
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -238,9 +229,6 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        if (Loader.isModLoaded("thaumcraft")) {
-            ThaumcraftCompatBridge.registerAspects();
-        }
         try {
             for (Field f : ModItems.class.getDeclaredFields()) {
                 Object obj = f.get(null);
