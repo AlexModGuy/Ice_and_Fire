@@ -9,8 +9,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
+import thaumcraft.api.crafting.IInfusionStabiliser;
 
-public class BlockElementalFlower extends BlockBush {
+@Optional.Interface(iface = "thaumcraft.api.crafting.IInfusionStabiliser", modid = "thaumcraft")
+public class BlockElementalFlower extends BlockBush implements IInfusionStabiliser {
 	public Item itemBlock;
 
 	public BlockElementalFlower(boolean isFire) {
@@ -30,6 +33,12 @@ public class BlockElementalFlower extends BlockBush {
 	}
 
 	protected boolean canSustainBush(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	@Optional.Method(modid = "thaumcraft")
+	public boolean canStabaliseInfusion(World world, BlockPos pos) {
 		return true;
 	}
 }

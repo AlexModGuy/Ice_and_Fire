@@ -28,7 +28,7 @@ archivesBaseName = "iceandfire"
 sourceCompatibility = targetCompatibility = "1.8"
 
 minecraft {
-    version = "1.12.2-14.23.4.2750"
+    version = "1.12.2-14.23.4.2705"
     runDir = "run"
     mappings = "snapshot_20171003"
     makeObfSourceJar = false
@@ -55,7 +55,7 @@ repositories {
 
 dependencies {
     deobfCompile "net.ilexiconn:llibrary:1.7.9-1.12.2"
-    compile "com.azanor:thaumcraft-api:6.1-beta22"
+    compile "com.azanor:thaumcraft-api:6.1-beta23"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.25-B40_1.12"
     runtime "mezz.jei:jei_1.12.2:4.9.1.181"
 }
