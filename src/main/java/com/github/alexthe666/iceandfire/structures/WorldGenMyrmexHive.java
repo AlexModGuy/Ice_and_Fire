@@ -4,8 +4,6 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -13,11 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,6 +202,19 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                     }
                 }
                 break;
+            case SHINY:
+                if(random.nextInt(12) == 0){
+                    WorldGenMyrmexDecoration.generateGold(world, blockpos, center, size, random);
+                }
+                break;
+            case TRASH:
+                if(random.nextInt(24) == 0){
+                    WorldGenMyrmexDecoration.generateTrashHeap(world, blockpos, center, size, random);
+                }
+                if(random.nextBoolean()) {
+                    WorldGenMyrmexDecoration.generateTrashOre(world, blockpos, center, size, random);
+                }
+                break;
             default:
                 break;
         }
@@ -223,7 +231,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         FOOD(true),
         EMPTY(true),
         NURSERY(true),
-        SHINY(true);
+        SHINY(true),
+        TRASH(true);
         boolean random;
 
         RoomType(boolean random){

@@ -10,6 +10,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -50,6 +51,11 @@ public class BlockSilverPile extends Block {
 	@Override
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos).getValue(LAYERS) < 5;
+	}
+
+	@Deprecated
+	public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+		return false;
 	}
 
 	@Override

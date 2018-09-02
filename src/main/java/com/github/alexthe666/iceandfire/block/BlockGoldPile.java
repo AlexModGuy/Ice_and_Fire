@@ -9,6 +9,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -52,12 +53,11 @@ public class BlockGoldPile extends Block {
 		return worldIn.getBlockState(pos).getValue(LAYERS) < 5;
 	}
 
-	/**
-	 * Checks if an IBlockState represents a block that is opaque and a full
-	 * cube.
-	 *
-	 * @param state The block state to check.
-	 */
+	@Deprecated
+	public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+		return false;
+	}
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean isTopSolid(IBlockState state) {
