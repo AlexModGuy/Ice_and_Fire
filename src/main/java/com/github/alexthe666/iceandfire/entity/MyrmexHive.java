@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
@@ -7,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.passive.EntityVillager;
@@ -22,14 +24,16 @@ import net.minecraft.village.VillageDoorInfo;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MyrmexHive {
     private World world;
     private final List<VillageDoorInfo> villageDoorInfoList = Lists.<VillageDoorInfo>newArrayList();
+    private final List<BlockPos> foodRooms = Lists.<BlockPos>newArrayList();
+    private final List<BlockPos> babyRooms = Lists.<BlockPos>newArrayList();
+    private final List<BlockPos> miscRooms = Lists.<BlockPos>newArrayList();
+    private final List<BlockPos> allRooms = Lists.<BlockPos>newArrayList();
+    private final Map<BlockPos, EnumFacing> entrances = Maps.<BlockPos, EnumFacing>newHashMap();
     private BlockPos centerHelper = BlockPos.ORIGIN;
     private BlockPos center = BlockPos.ORIGIN;
     private int villageRadius;
@@ -136,6 +140,18 @@ public class MyrmexHive {
 
     public BlockPos getCenter() {
         return this.center;
+    }
+
+    public BlockPos getCenterGround() {
+        return getGroundedPos(this.world, this.center);
+    }
+
+    public static BlockPos getGroundedPos(World world, BlockPos pos) {
+        BlockPos current = pos;
+        while(world.isAirBlock(current.down())){
+            current = current.down();
+        }
+        return current;
     }
 
     public int getVillageRadius() {
@@ -422,15 +438,38 @@ public class MyrmexHive {
         this.center = new BlockPos(compound.getInteger("CX"), compound.getInteger("CY"), compound.getInteger("CZ"));
         this.centerHelper = new BlockPos(compound.getInteger("ACX"), compound.getInteger("ACY"), compound.getInteger("ACZ"));
         NBTTagList nbttaglist = compound.getTagList("Doors", 10);
-
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
             VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), nbttagcompound.getInteger("IDX"), nbttagcompound.getInteger("IDZ"), nbttagcompound.getInteger("TS"));
             this.villageDoorInfoList.add(villagedoorinfo);
         }
 
-        NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
+        NBTTagList foodRoomList = compound.getTagList("FoodRooms", 10);
+        this.foodRooms.clear();
+        for (int i = 0; i < foodRoomList.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = foodRoomList.getCompoundTagAt(i);
+            this.foodRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+        }
+        NBTTagList babyRoomList = compound.getTagList("BabyRooms", 10);
+        this.babyRooms.clear();
+        for (int i = 0; i < babyRoomList.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = babyRoomList.getCompoundTagAt(i);
+            this.babyRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+        }
+        NBTTagList miscRoomList = compound.getTagList("MiscRooms", 10);
+        this.miscRooms.clear();
+        for (int i = 0; i < miscRoomList.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = miscRoomList.getCompoundTagAt(i);
+            this.miscRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+        }
+        NBTTagList entrancesList = compound.getTagList("Entrances", 10);
+        this.entrances.clear();
+        for (int i = 0; i < miscRoomList.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = entrancesList.getCompoundTagAt(i);
+            this.entrances.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
+        }
 
+        NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
         for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
             NBTTagCompound nbttagcompound1 = nbttaglist1.getCompoundTagAt(j);
 
@@ -460,7 +499,6 @@ public class MyrmexHive {
         compound.setInteger("ACY", this.centerHelper.getY());
         compound.setInteger("ACZ", this.centerHelper.getZ());
         NBTTagList nbttaglist = new NBTTagList();
-
         for (VillageDoorInfo villagedoorinfo : this.villageDoorInfoList) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             nbttagcompound.setInteger("X", villagedoorinfo.getDoorBlockPos().getX());
@@ -471,6 +509,44 @@ public class MyrmexHive {
             nbttagcompound.setInteger("TS", villagedoorinfo.getLastActivityTimestamp());
             nbttaglist.appendTag(nbttagcompound);
         }
+
+        NBTTagList foodRoomList = new NBTTagList();
+        for (BlockPos pos : this.foodRooms) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setInteger("X", pos.getX());
+            nbttagcompound.setInteger("Y", pos.getY());
+            nbttagcompound.setInteger("Z", pos.getZ());
+            foodRoomList.appendTag(nbttagcompound);
+        }
+        compound.setTag("FoodRooms", foodRoomList);
+        NBTTagList babyRoomList = new NBTTagList();
+        for (BlockPos pos : this.babyRooms) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setInteger("X", pos.getX());
+            nbttagcompound.setInteger("Y", pos.getY());
+            nbttagcompound.setInteger("Z", pos.getZ());
+            babyRoomList.appendTag(nbttagcompound);
+        }
+        compound.setTag("BabyRooms", babyRoomList);
+        NBTTagList miscRoomList = new NBTTagList();
+        for (BlockPos pos : this.miscRooms) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setInteger("X", pos.getX());
+            nbttagcompound.setInteger("Y", pos.getY());
+            nbttagcompound.setInteger("Z", pos.getZ());
+            miscRoomList.appendTag(miscRoomList);
+        }
+        compound.setTag("MiscRooms", babyRoomList);
+        NBTTagList entrancesList = new NBTTagList();
+        for (Map.Entry<BlockPos, EnumFacing> entry : this.entrances.entrySet()) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setInteger("X", entry.getKey().getX());
+            nbttagcompound.setInteger("Y", entry.getKey().getY());
+            nbttagcompound.setInteger("Z", entry.getKey().getZ());
+            nbttagcompound.setInteger("Facing", entry.getValue().getHorizontalIndex());
+            entrancesList.appendTag(miscRoomList);
+        }
+        compound.setTag("Entrances", babyRoomList);
 
         compound.setTag("Doors", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
@@ -492,18 +568,62 @@ public class MyrmexHive {
         compound.setTag("Players", nbttaglist1);
     }
 
-    /**
-     * Prevent villager breeding for a fixed interval of time
-     */
-    public void endMatingSeason() {
-        this.noBreedTicks = this.tickCounter;
+    public void addRoom(BlockPos center, WorldGenMyrmexHive.RoomType roomType){
+        if(roomType == WorldGenMyrmexHive.RoomType.FOOD){
+            this.foodRooms.add(center);
+        }else if(roomType == WorldGenMyrmexHive.RoomType.NURSERY){
+            this.babyRooms.add(center);
+        }else{
+            this.miscRooms.add(center);
+        }
     }
 
-    /**
-     * Return whether villagers mating refractory period has passed
-     */
-    public boolean isMatingSeason() {
-        return this.noBreedTicks == 0 || this.tickCounter - this.noBreedTicks >= 3600;
+    public List<BlockPos> getRooms(WorldGenMyrmexHive.RoomType roomType){
+        if(roomType == WorldGenMyrmexHive.RoomType.FOOD){
+            return foodRooms;
+        }else if(roomType == WorldGenMyrmexHive.RoomType.NURSERY){
+            return babyRooms;
+        }else{
+            return miscRooms;
+        }
+    }
+
+    public List<BlockPos> getAllRooms(){
+        allRooms.clear();
+        //allRooms.add(center);
+        allRooms.addAll(foodRooms);
+        allRooms.addAll(babyRooms);
+        allRooms.addAll(miscRooms);
+        return allRooms;
+    }
+
+    public BlockPos getRandomRoom(Random random){
+        List<BlockPos> rooms = getAllRooms();
+        return rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
+    }
+    public BlockPos getRandomRoom(WorldGenMyrmexHive.RoomType roomType, Random random){
+        List<BlockPos> rooms = getRooms(roomType);
+        return rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
+    }
+
+    public BlockPos getClosestEntranceToEntity(Entity entity, Random random){
+        Map.Entry<BlockPos, EnumFacing> closest = getClosestEntrance(entity);
+        BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
+        return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
+    }
+
+    public Map<BlockPos, EnumFacing> getEntrances(){
+        return entrances;
+    }
+
+    private Map.Entry<BlockPos, EnumFacing> getClosestEntrance(Entity entity){
+        Map.Entry<BlockPos, EnumFacing> closest = null;
+        for (Map.Entry<BlockPos, EnumFacing> entry : this.entrances.entrySet()) {
+            if(closest == null || closest.getKey().distanceSq(entity.posX, entity.posY, entity.posZ) > entry.getKey().distanceSq(entity.posX, entity.posY, entity.posZ)){
+                closest = entry;
+            }
+        }
+        return closest;
     }
 
     public void setDefaultPlayerReputation(int defaultReputation) {

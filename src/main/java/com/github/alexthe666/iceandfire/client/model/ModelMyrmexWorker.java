@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelMyrmexWorker extends ModelMyrmexBase {
@@ -231,6 +230,7 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         animator.update(entity);
     }
 
+
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         this.resetToDefaultPose();
@@ -266,6 +266,11 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         this.flap(models[1], speed, -degree * 1.2F, reverse, offset, weight * 0.5F, f, f1);
         this.walk(models[0], speed, degree, reverse, offset, 0F, f, f1);
 
+    }
+
+    @Override
+    public ModelRenderer[] getHeadParts(){
+        return new ModelRenderer[]{Neck1, HeadBase};
     }
 
     @Override

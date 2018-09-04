@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIForage;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
 import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -19,6 +20,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_worker.png");
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
+    public boolean keepSearching = false;
 
     public EntityMyrmexWorker(World worldIn) {
         super(worldIn);
@@ -27,10 +29,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(2, new EntityAIMoveTowardsTarget(this, 1D, 32.0F));
-        this.tasks.addTask(3, new MyrmexAIMoveThroughHive(this, 1D, true));
-        this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1D));
+        this.tasks.addTask(2, new MyrmexAIMoveThroughHive(this, 1.0D));
+        this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
+        this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1D));
+        this.tasks.addTask(5, new MyrmexAIForage(this));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
@@ -45,7 +47,6 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
@@ -59,5 +60,13 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     @Override
     public float getModelScale() {
         return 0.6F;
+    }
+
+    public boolean shouldLeaveHive(){
+        return this.getRidingEntity() == null && this.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && this.getAttackTarget() == null;
+    }
+
+    public boolean shouldEnterHive(){
+        return this.getRidingEntity() != null || !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
     }
 }

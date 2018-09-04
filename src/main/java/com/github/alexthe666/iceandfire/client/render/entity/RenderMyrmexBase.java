@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import com.github.alexthe666.iceandfire.client.model.ModelGorgon;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -14,6 +12,7 @@ public class RenderMyrmexBase extends RenderLiving<EntityMyrmexBase> {
 
 	public RenderMyrmexBase(RenderManager renderManager, ModelBase model, float shadowSize) {
 		super(renderManager, model, shadowSize);
+		this.addLayer(new LayerMyrmexItem(this));
 	}
 
 	@Override
