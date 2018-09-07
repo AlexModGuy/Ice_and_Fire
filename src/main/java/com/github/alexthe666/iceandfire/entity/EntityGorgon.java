@@ -125,7 +125,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
 	public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
 		super.setAttackTarget(entitylivingbaseIn);
-		if (entitylivingbaseIn != null) {
+		if (entitylivingbaseIn != null && !world.isRemote) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entitylivingbaseIn).canBeTurnedToStone();
 			if (blindness) {
 				this.tasks.removeTask(aiStare);
