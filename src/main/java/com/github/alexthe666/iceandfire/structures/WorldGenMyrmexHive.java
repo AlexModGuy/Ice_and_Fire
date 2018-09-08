@@ -91,6 +91,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
 
     private void generateEntrance(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction){
         BlockPos up = position.up();
+        hive.getEntranceBottoms().put(up, direction);
         while(!world.canBlockSeeSky(up)){
             generateCircle(world, rand, up, size, height, direction);
             up = up.up().offset(direction);

@@ -20,7 +20,8 @@ public class MyrmexAIForage extends EntityAIBase {
 
     private final EntityMyrmexWorker myrmex;
     private final BlockSorter targetSorter;
-    private BlockPos targetBlock;
+    private BlockPos targetBlock = BlockPos.ORIGIN;
+    private int wanderRadius = RADIUS * 2;
 
     public MyrmexAIForage(EntityMyrmexWorker myrmex) {
         super();
@@ -31,11 +32,10 @@ public class MyrmexAIForage extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (!myrmex.canSeeSky()) {
+        if (!this.myrmex.getNavigator().noPath() || !myrmex.canSeeSky() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
             return false;
         }
-
-        List<BlockPos> allBlocks = new ArrayList<>();
+        List<BlockPos> allBlocks = new ArrayList<BlockPos>();
         for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS, RADIUS))) {
             if (EntityMyrmexBase.isEdibleBlock(this.myrmex.world.getBlockState(pos))) {
                 allBlocks.add(pos);
@@ -44,7 +44,8 @@ public class MyrmexAIForage extends EntityAIBase {
         }
         if (allBlocks.isEmpty()) {
             this.myrmex.keepSearching = true;
-            Vec3d vec = RandomPositionGenerator.findRandomTargetBlockTowards(this.myrmex, RADIUS * 2, 7, this.myrmex.getLookVec());
+            this.wanderRadius += RADIUS;
+            Vec3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
             if(vec != null){
                 this.targetBlock = new BlockPos(vec);
             }
@@ -62,6 +63,10 @@ public class MyrmexAIForage extends EntityAIBase {
                 return false;
             }
         }
+        if(myrmex.shouldEnterHive()){
+            this.myrmex.keepSearching = false;
+            return false;
+        }
         return this.myrmex.getNavigator().noPath();
     }
 
@@ -72,29 +77,29 @@ public class MyrmexAIForage extends EntityAIBase {
             if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 2) {
                 this.resetTask();
             }
-        }
-        if (this.targetBlock != null) {
+        }else if (this.targetBlock != null) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             IBlockState block = this.myrmex.world.getBlockState(this.targetBlock);
+
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 double distance = this.getDistance(this.targetBlock);
-                if(this.myrmex.getNavigator().noPath()){
-                    this.targetBlock = null;
-                    this.resetTask();
-                    return;
-                }
-                if (distance < this.myrmex.getEntityBoundingBox().getAverageEdgeLength() * 2) {
+                if (distance <= 5) {
                     this.myrmex.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Item.getItemFromBlock(block.getBlock())));
                     this.myrmex.world.destroyBlock(this.targetBlock, false);
                     this.targetBlock = null;
                     this.resetTask();
+                    this.myrmex.keepSearching = false;
+                    this.wanderRadius = RADIUS;
+                    return;
                 }
             }
         }
+
     }
 
     public void resetTask(){
         this.targetBlock = BlockPos.ORIGIN;
+        this.myrmex.keepSearching = true;
     }
 
     private double getDistance(BlockPos pos) {

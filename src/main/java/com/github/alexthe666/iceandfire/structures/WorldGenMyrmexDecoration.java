@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -114,10 +115,10 @@ public class WorldGenMyrmexDecoration {
         IBlockState gold = rand.nextBoolean() ? ModBlocks.goldPile.getDefaultState() : ModBlocks.silverPile.getDefaultState();
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             worldIn.setBlockState(blockpos, gold.withProperty(BlockGoldPile.LAYERS, 8), 3);
-            worldIn.setBlockState(blockpos.north(), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlockState(blockpos.south(), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlockState(blockpos.west(), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlockState(blockpos.east(), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.south()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.west()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.east()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
             if (rand.nextInt(3) == 0) {
                 worldIn.setBlockState(blockpos.up(), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
                 if (worldIn.getBlockState(blockpos.up()).getBlock() instanceof BlockChest) {

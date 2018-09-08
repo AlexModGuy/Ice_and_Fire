@@ -20,20 +20,23 @@ public class MyrmexAILeaveHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(this.myrmex.shouldEnterHive()){
+        if(this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky()){
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
         if (village == null) {
             return false;
         } else {
-            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG()));
+            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
             this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
             return this.path != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
+        if(myrmex.canSeeSky() && this.myrmex.getDistanceSq(nextEntrance) <= 3){
+            return false;
+        }
         return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance) > 3 && this.myrmex.shouldLeaveHive();
     }
 

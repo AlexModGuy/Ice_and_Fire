@@ -6,6 +6,8 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockCactus;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
@@ -296,11 +298,12 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public static boolean isEdibleBlock(IBlockState blockState) {
         Block block = blockState.getBlock();
-        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS;
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus;
     }
 
     public boolean isOnResin(){
         IBlockState state = world.getBlockState(new BlockPos(this).down());
-        return state.getBlock() instanceof BlockMyrmexResin;
+        IBlockState state2 = world.getBlockState(new BlockPos(this).down(2));
+        return state.getBlock() instanceof BlockMyrmexResin || state2.getBlock() instanceof BlockMyrmexResin;
     }
 }

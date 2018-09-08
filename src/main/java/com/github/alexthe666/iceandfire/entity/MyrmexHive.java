@@ -34,6 +34,7 @@ public class MyrmexHive {
     private final List<BlockPos> miscRooms = Lists.<BlockPos>newArrayList();
     private final List<BlockPos> allRooms = Lists.<BlockPos>newArrayList();
     private final Map<BlockPos, EnumFacing> entrances = Maps.<BlockPos, EnumFacing>newHashMap();
+    private final Map<BlockPos, EnumFacing> entranceBottoms = Maps.<BlockPos, EnumFacing>newHashMap();
     private BlockPos centerHelper = BlockPos.ORIGIN;
     private BlockPos center = BlockPos.ORIGIN;
     private int villageRadius;
@@ -464,9 +465,16 @@ public class MyrmexHive {
         }
         NBTTagList entrancesList = compound.getTagList("Entrances", 10);
         this.entrances.clear();
-        for (int i = 0; i < miscRoomList.tagCount(); ++i) {
+        for (int i = 0; i < entrancesList.tagCount(); ++i) {
             NBTTagCompound nbttagcompound = entrancesList.getCompoundTagAt(i);
             this.entrances.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
+        }
+
+        NBTTagList entranceBottomsList = compound.getTagList("EntranceBottoms", 10);
+        this.entranceBottoms.clear();
+        for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = entranceBottomsList.getCompoundTagAt(i);
+            this.entranceBottoms.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
         }
 
         NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
@@ -544,9 +552,20 @@ public class MyrmexHive {
             nbttagcompound.setInteger("Y", entry.getKey().getY());
             nbttagcompound.setInteger("Z", entry.getKey().getZ());
             nbttagcompound.setInteger("Facing", entry.getValue().getHorizontalIndex());
-            entrancesList.appendTag(miscRoomList);
+            entrancesList.appendTag(nbttagcompound);
         }
-        compound.setTag("Entrances", babyRoomList);
+        compound.setTag("Entrances", entrancesList);
+
+        NBTTagList entranceBottomsList = new NBTTagList();
+        for (Map.Entry<BlockPos, EnumFacing> entry : this.entranceBottoms.entrySet()) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setInteger("X", entry.getKey().getX());
+            nbttagcompound.setInteger("Y", entry.getKey().getY());
+            nbttagcompound.setInteger("Z", entry.getKey().getZ());
+            nbttagcompound.setInteger("Facing", entry.getValue().getHorizontalIndex());
+            entranceBottomsList.appendTag(nbttagcompound);
+        }
+        compound.setTag("EntranceBottoms", entranceBottomsList);
 
         compound.setTag("Doors", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
@@ -606,14 +625,33 @@ public class MyrmexHive {
         return rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
 
-    public BlockPos getClosestEntranceToEntity(Entity entity, Random random){
+    public BlockPos getClosestEntranceToEntity(Entity entity, Random random, boolean randomize){
         Map.Entry<BlockPos, EnumFacing> closest = getClosestEntrance(entity);
-        BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
-        return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
+        if(randomize) {
+            BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
+            return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
+        }else{
+            return closest.getKey();
+        }
     }
+
+    public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random){
+        Map.Entry<BlockPos, EnumFacing> closest = null;
+        for (Map.Entry<BlockPos, EnumFacing> entry : this.entranceBottoms.entrySet()) {
+            if(closest == null || closest.getKey().distanceSq(entity.posX, entity.posY, entity.posZ) > entry.getKey().distanceSq(entity.posX, entity.posY, entity.posZ)){
+                closest = entry;
+            }
+        }
+        return closest.getKey();
+    }
+
 
     public Map<BlockPos, EnumFacing> getEntrances(){
         return entrances;
+    }
+
+    public Map<BlockPos, EnumFacing> getEntranceBottoms(){
+        return entranceBottoms;
     }
 
     private Map.Entry<BlockPos, EnumFacing> getClosestEntrance(Entity entity){

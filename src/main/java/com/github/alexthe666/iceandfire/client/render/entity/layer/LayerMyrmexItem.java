@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -40,7 +39,7 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
             this.translateToHand(handSide);
-            if(stack.getItem() instanceof ItemBlock){
+            if(Minecraft.getMinecraft().getRenderItem().shouldRenderItemIn3D(stack)){
                 GlStateManager.translate(0F, 0.25F, -1.65F);
             }else{
                 GlStateManager.translate(0F, 1F, -2F);

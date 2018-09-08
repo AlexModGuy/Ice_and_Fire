@@ -20,7 +20,7 @@ public class MyrmexAIMoveThroughHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(this.myrmex.shouldLeaveHive()){
+        if(!this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky()){
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
