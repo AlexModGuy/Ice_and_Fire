@@ -71,6 +71,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.RABBIT);
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
+        OreDictionary.registerOre("boneDragon", ModItems.dragonbone);
 
         OreDictionary.registerOre("listAllEgg", ModItems.hippogryph_egg);
         OreDictionary.registerOre("objectEgg", ModItems.hippogryph_egg);
