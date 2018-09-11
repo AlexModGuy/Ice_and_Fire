@@ -4,8 +4,8 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
+import com.github.alexthe666.iceandfire.entity.MyrmexHive;
+import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -13,11 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +26,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private static final IBlockState STICKY_DESERT_RESIN = ModBlocks.myrmex_resin_sticky.getDefaultState();
     private static final IBlockState JUNGLE_RESIN = ModBlocks.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     private static final IBlockState STICKY_JUNGLE_RESIN = ModBlocks.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private MyrmexHive hive;
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
@@ -39,6 +37,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     }
 
     private void generateMainRoom(World world, Random rand, BlockPos position) {
+        hive = new MyrmexHive(world, position, 100);
+        MyrmexWorldData.addHive(world, hive);
         IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
         IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, position, 14, 7, resin, sticky_resin);
@@ -48,6 +48,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         generatePath(world, rand, position.offset(EnumFacing.SOUTH, 9), 15 + rand.nextInt(10), EnumFacing.SOUTH, 100);
         generatePath(world, rand, position.offset(EnumFacing.WEST, 9), 15 + rand.nextInt(10), EnumFacing.WEST, 100);
         generatePath(world, rand, position.offset(EnumFacing.EAST, 9), 15 + rand.nextInt(10), EnumFacing.EAST, 100);
+
     }
 
     private void generatePath(World world, Random rand, BlockPos offset, int length, EnumFacing direction, int roomChance) {
@@ -69,9 +70,11 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private void generateRoom(World world, Random rand, BlockPos position, int size, int height, int roomChance, EnumFacing direction) {
         IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
         IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        RoomType type = RoomType.random(rand);
         generateSphere(world, rand, position, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, position, size, height - 1, Blocks.AIR.getDefaultState());
-        decorateSphere(world, rand, position, size, height - 1, RoomType.random(rand));
+        decorateSphere(world, rand, position, size, height - 1, type);
+        hive.addRoom(position, type);
         if(rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.NORTH){
             generatePath(world, rand, position.offset(EnumFacing.NORTH, size - 2), 5 + rand.nextInt(20), EnumFacing.NORTH, roomChance);
         }
@@ -88,6 +91,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
 
     private void generateEntrance(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction){
         BlockPos up = position.up();
+        hive.getEntranceBottoms().put(up, direction);
         while(!world.canBlockSeeSky(up)){
             generateCircle(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
@@ -96,6 +100,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, up.up(), size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, up.up(), size, height - 1, Blocks.AIR.getDefaultState());
+        hive.getEntrances().put(up, direction);
 
     }
 
@@ -202,9 +207,23 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                     baby.setGrowthStage(random.nextInt(2));
                     baby.setLocationAndAngles(blockpos.getX(), blockpos.getY(), blockpos.getZ(), random.nextFloat() * 360F, 0F);
                     baby.setRotationYawHead(random.nextFloat() * 360F);
+                    baby.setHive(hive);
                     if(!world.isRemote && !baby.isEntityInsideOpaqueBlock()){
                         world.spawnEntity(baby);
                     }
+                }
+                break;
+            case SHINY:
+                if(random.nextInt(12) == 0){
+                    WorldGenMyrmexDecoration.generateGold(world, blockpos, center, size, random);
+                }
+                break;
+            case TRASH:
+                if(random.nextInt(24) == 0){
+                    WorldGenMyrmexDecoration.generateTrashHeap(world, blockpos, center, size, random);
+                }
+                if(random.nextBoolean()) {
+                    WorldGenMyrmexDecoration.generateTrashOre(world, blockpos, center, size, random);
                 }
                 break;
             default:
@@ -217,13 +236,14 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
     }
 
-    private enum RoomType{
+    public enum RoomType{
         DEFAULT(false),
         QUEEN(false),
         FOOD(true),
         EMPTY(true),
         NURSERY(true),
-        SHINY(true);
+        SHINY(true),
+        TRASH(true);
         boolean random;
 
         RoomType(boolean random){

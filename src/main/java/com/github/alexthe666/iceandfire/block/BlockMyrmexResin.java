@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -80,12 +80,12 @@ public class BlockMyrmexResin extends Block {
 
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return sticky ? STICKY_AABB : super.getCollisionBoundingBox(blockState, worldIn, pos);
+        return super.getCollisionBoundingBox(blockState, worldIn, pos);
     }
 
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        if(sticky) {
+        if(sticky && !(entityIn instanceof EntityMyrmexBase)) {
             entityIn.motionX *= 0.4D;
             entityIn.motionZ *= 0.4D;
         }

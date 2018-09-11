@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockCactus;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,7 +42,6 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     private static final ResourceLocation TEXTURE_JUNGLE_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
     private static final ResourceLocation TEXTURE_JUNGLE_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
-
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
     }
@@ -58,6 +58,16 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         return super.attackEntityFrom(dmg, i);
     }
 
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
+    }
+
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.0F;
+    }
+
     protected PathNavigate createNavigator(World worldIn) {
         return new PathNavigateClimber(this, worldIn);
     }
@@ -71,6 +81,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public void onUpdate() {
         super.onUpdate();
+
         this.setScaleForAge(false);
         if (!this.world.isRemote) {
             this.setBesideClimbableBlock(this.collidedHorizontally);
@@ -85,6 +96,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if(!this.world.isRemote  && this.getGrowthStage() < 2 && this.getRNG().nextInt(150) == 0 && this.getAnimation() == NO_ANIMATION){
             this.setAnimation(ANIMATION_PUPA_WIGGLE);
         }
+
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
@@ -139,6 +151,10 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
 
         this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+    }
+
+    public boolean isOnLadder(){
+        return isBesideClimbableBlock();
     }
 
     @Nullable
@@ -205,6 +221,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     protected void updateAITasks() {
+        super.updateAITasks();
         if (--this.randomTickDivider <= 0) {
             BlockPos blockpos = new BlockPos(this);
             this.world.getVillageCollection().addToVillagerPositionList(blockpos);
@@ -229,9 +246,9 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         this.isLookingForHome = true;
     }
 
-    public boolean shouldStayInHive(){
-        return true;
-    }
+    public abstract boolean shouldLeaveHive();
+
+    public abstract boolean shouldEnterHive();
 
     @Override
     public void setScaleForAge(boolean baby) {
@@ -256,6 +273,10 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         return hive;
     }
 
+    public void setHive(MyrmexHive newHive) {
+        hive = newHive;
+    }
+
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity){
         if(entity instanceof EntityMyrmexBase){
             if(myrmex.isJungle() == ((EntityMyrmexBase)entity).isJungle()){
@@ -263,5 +284,26 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             }
         }
         return false;
+    }
+
+    protected void collideWithEntity(Entity entityIn) {
+        if (!haveSameHive(this, entityIn)) {
+            entityIn.applyEntityCollision(this);
+        }
+    }
+
+    public boolean canSeeSky() {
+        return world.canBlockSeeSky(new BlockPos(this));
+    }
+
+    public static boolean isEdibleBlock(IBlockState blockState) {
+        Block block = blockState.getBlock();
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus;
+    }
+
+    public boolean isOnResin(){
+        IBlockState state = world.getBlockState(new BlockPos(this).down());
+        IBlockState state2 = world.getBlockState(new BlockPos(this).down(2));
+        return state.getBlock() instanceof BlockMyrmexResin || state2.getBlock() instanceof BlockMyrmexResin;
     }
 }

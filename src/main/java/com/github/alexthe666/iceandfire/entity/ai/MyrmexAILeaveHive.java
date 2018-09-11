@@ -7,34 +7,37 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
-public class MyrmexAIMoveThroughHive extends EntityAIBase {
+public class MyrmexAILeaveHive extends EntityAIBase {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private Path path;
-    private BlockPos nextRoom = BlockPos.ORIGIN;
+    private BlockPos nextEntrance = BlockPos.ORIGIN;
 
-    public MyrmexAIMoveThroughHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
+    public MyrmexAILeaveHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
         this.setMutexBits(1);
     }
 
     public boolean shouldExecute() {
-        if(!this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky()){
+        if(this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky()){
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
         if (village == null) {
             return false;
         } else {
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(this.myrmex.getRNG()));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextRoom);
+            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
+            this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
             return this.path != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom) > 3 && this.myrmex.shouldEnterHive();
+        if(myrmex.canSeeSky() && this.myrmex.getDistanceSq(nextEntrance) <= 3){
+            return false;
+        }
+        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance) > 3 && this.myrmex.shouldLeaveHive();
     }
 
     public void startExecuting() {
@@ -42,8 +45,7 @@ public class MyrmexAIMoveThroughHive extends EntityAIBase {
     }
 
     public void resetTask() {
-        nextRoom = BlockPos.ORIGIN;
+        nextEntrance = BlockPos.ORIGIN;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
-
     }
 }

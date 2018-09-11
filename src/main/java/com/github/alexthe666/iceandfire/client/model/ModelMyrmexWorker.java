@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelMyrmexWorker extends ModelMyrmexBase {
@@ -221,19 +220,53 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
 
     @Override
     public void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.Body2.render(f5);
         animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityMyrmexWorker) entity);
+        this.Body2.render(f5);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityMyrmexBase) entity);
         animator.update(entity);
+        animator.setAnimation(EntityMyrmexWorker.ANIMATION_BITE);
+        animator.startKeyframe(5);
+        ModelUtils.rotate(animator, Neck1, -50, 0, 0);
+        ModelUtils.rotate(animator, HeadBase, 50, 0, 0);
+        ModelUtils.rotate(animator, MandibleR, 0, 25, 0);
+        ModelUtils.rotate(animator, MandibleL, 0, -25, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        ModelUtils.rotate(animator, Neck1, 30, 0, 0);
+        ModelUtils.rotate(animator, HeadBase, -30, 0, 0);
+        ModelUtils.rotate(animator, MandibleR, 0, -45, 0);
+        ModelUtils.rotate(animator, MandibleL, 0, 45, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityMyrmexWorker.ANIMATION_STING);
+        animator.startKeyframe(5);
+        animator.move(Body2, 0, -4, 0);
+        ModelUtils.rotate(animator, Body3, -35, 0, 0);
+        ModelUtils.rotate(animator, Body4, -49, 0, 0);
+        ModelUtils.rotate(animator, Body5, -5, 0, 0);
+        ModelUtils.rotate(animator, Tail1, -57, 0, 0);
+        ModelUtils.rotate(animator, Tail2, -40, 0, 0);
+        ModelUtils.rotate(animator, Stinger, 90, 0, 0);
+        ModelUtils.rotateFrom(animator, legTopR3, 44, -7, 44);
+        ModelUtils.rotateFrom(animator, legTopR3_1, 44, 7, -44);
+        ModelUtils.rotateFrom(animator, legMidR3, 0, 0, 50);
+        ModelUtils.rotateFrom(animator, legMidR2, 0, 0, -45);
+        ModelUtils.rotateFrom(animator, legMidR1, 0, 0, 45);
+        ModelUtils.rotateFrom(animator, legMidR3_1, 0, 0, -50);
+        ModelUtils.rotateFrom(animator, legMidR2_1, 0, 0, 45);
+        ModelUtils.rotateFrom(animator, legMidR1_1, 0, 0, -45);
+        animator.endKeyframe();
+        animator.resetKeyframe(10);
+
     }
+
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        this.resetToDefaultPose();
         AdvancedModelRenderer[] GASTER = new AdvancedModelRenderer[]{Body4, Body5, Tail1, Tail2, Stinger};
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, HeadBase};
         AdvancedModelRenderer[] LEGR1 = new AdvancedModelRenderer[]{legTopR1, legMidR1, legBottomR1};
@@ -266,6 +299,11 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         this.flap(models[1], speed, -degree * 1.2F, reverse, offset, weight * 0.5F, f, f1);
         this.walk(models[0], speed, degree, reverse, offset, 0F, f, f1);
 
+    }
+
+    @Override
+    public ModelRenderer[] getHeadParts(){
+        return new ModelRenderer[]{Neck1, HeadBase};
     }
 
     @Override
