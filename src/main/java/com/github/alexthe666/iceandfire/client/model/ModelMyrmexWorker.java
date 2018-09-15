@@ -279,7 +279,9 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         float speed_idle = 0.05F;
         float degree_walk = 0.3F;
         float degree_idle = 0.25F;
-        this.faceTarget(f3, f4, 2, NECK);
+        if(entity.getPassengers().isEmpty()) {
+            this.faceTarget(f3, f4, 2, NECK);
+        }
         this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, entity.ticksExisted, 1);
         this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, entity.ticksExisted, 1);
         this.swing(MandibleR, speed_idle, degree_idle * -0.5F, false, 1, 0.2F, entity.ticksExisted, 1);

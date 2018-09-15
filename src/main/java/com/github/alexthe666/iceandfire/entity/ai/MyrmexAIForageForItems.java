@@ -44,7 +44,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.getNavigator().noPath() || !myrmex.canSeeSky() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
+        if (!this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
             return false;
         }
         List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);

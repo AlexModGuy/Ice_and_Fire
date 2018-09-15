@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.inventory.*;
 import net.minecraft.entity.Entity;
@@ -65,6 +66,15 @@ public class GuiHandler implements IGuiHandler {
 					}
 				}
 				break;
+
+			case 6:
+				if (tile != null) {
+
+					if (tile instanceof TileEntityMyrmexCocoon) {
+						return new ContainerMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile, player);
+					}
+				}
+				break;
 		}
 		return null;
 
@@ -119,6 +129,13 @@ public class GuiHandler implements IGuiHandler {
 
 					if (entity instanceof EntityHippocampus) {
 						return new com.github.alexthe666.iceandfire.client.gui.GuiHippocampus(player.inventory, (EntityHippocampus) entity);
+					}
+				}
+				break;
+			case 6:
+				if (tile != null) {
+					if (tile instanceof TileEntityMyrmexCocoon) {
+						return new com.github.alexthe666.iceandfire.client.gui.GuiMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile);
 					}
 				}
 				break;

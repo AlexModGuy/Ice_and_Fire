@@ -52,6 +52,8 @@ tile.iceandfire.desert_myrmex_resin.name=Desert Myrmex Resin
 tile.iceandfire.desert_myrmex_resin_sticky.name=Sticky Desert Myrmex Resin
 tile.iceandfire.jungle_myrmex_resin.name=Jungle Myrmex Resin
 tile.iceandfire.jungle_myrmex_resin_sticky.name=Sticky Jungle Myrmex Resin
+tile.iceandfire.desert_myrmex_cocoon.name=Desert Myrmex Cocoon
+tile.iceandfire.jungle_myrmex_cocoon.name=Jungle Myrmex Cocoon
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
