@@ -27,11 +27,13 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private static final IBlockState JUNGLE_RESIN = ModBlocks.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     private static final IBlockState STICKY_JUNGLE_RESIN = ModBlocks.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     private MyrmexHive hive;
+    private int entrances = 0;
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         int down = Math.max(15, position.getY() - 20 + rand.nextInt(10));
         BlockPos undergroundPos = new BlockPos(position.getX(), down, position.getZ());
+        entrances = 0;
         generateMainRoom(worldIn, rand, undergroundPos);
         return false;
     }
@@ -59,7 +61,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             for(int i = 0; i < length; i++){
                 generateCircle(world, rand, offset.offset(direction, i), 3, 5, direction);
             }
-            if(rand.nextInt(3) == 0){
+            if(entrances < 3 && rand.nextInt(1 + entrances * 2) == 0){
                 generateEntrance(world, rand, offset.offset(direction, length), 4, 4, direction);
             }else{
                 generateRoom(world, rand, offset.offset(direction, length), 7, 4, roomChance / 2, direction);
@@ -101,7 +103,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         generateSphere(world, rand, up.up(), size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, up.up(), size, height - 1, Blocks.AIR.getDefaultState());
         hive.getEntrances().put(up, direction);
-
+        entrances++;
     }
 
     private void generateCircle(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
@@ -191,7 +193,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 if(random.nextInt(45) == 0 && world.getBlockState(blockpos.down()).getBlock() instanceof BlockMyrmexResin){
                     WorldGenMyrmexDecoration.generateSkeleton(world, blockpos, center, size, random);
                 }
-                if(random.nextInt(20) == 0){
+                if(random.nextInt(13) == 0){
                     WorldGenMyrmexDecoration.generateLeaves(world, blockpos, center, size, random);
                 }
                 if(random.nextInt(12) == 0){
@@ -199,6 +201,9 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 }
                 if(random.nextInt(6) == 0){
                     WorldGenMyrmexDecoration.generateMushrooms(world, blockpos, center, size, random);
+                }
+                if(random.nextInt(12) == 0){
+                    WorldGenMyrmexDecoration.generateCocoon(world, blockpos, random, isJungleBiome(world, center), isJungleBiome(world, center) ? WorldGenMyrmexDecoration.JUNGLE_MYRMEX_FOOD_CHEST : WorldGenMyrmexDecoration.DESERT_MYRMEX_FOOD_CHEST);
                 }
                 break;
             case NURSERY:
@@ -224,6 +229,9 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 }
                 if(random.nextBoolean()) {
                     WorldGenMyrmexDecoration.generateTrashOre(world, blockpos, center, size, random);
+                }
+                if(random.nextInt(12) == 0){
+                    WorldGenMyrmexDecoration.generateCocoon(world, blockpos, random, isJungleBiome(world, center), WorldGenMyrmexDecoration.MYRMEX_TRASH_CHEST);
                 }
                 break;
             default:

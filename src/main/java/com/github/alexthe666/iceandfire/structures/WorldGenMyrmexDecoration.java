@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -19,47 +20,51 @@ import java.util.Random;
 
 public class WorldGenMyrmexDecoration {
 
-    public static final ResourceLocation MYRMEX_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_hive"));
+    public static final ResourceLocation MYRMEX_GOLD_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_loot_chest"));
+    public static final ResourceLocation DESERT_MYRMEX_FOOD_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_desert_food_chest"));
+    public static final ResourceLocation JUNGLE_MYRMEX_FOOD_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_jungle_food_chest"));
+    public static final ResourceLocation MYRMEX_TRASH_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_trash_chest"));
 
     public static void generateSkeleton(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        EnumFacing direction = EnumFacing.HORIZONTALS[new Random().nextInt(3)];
-        EnumFacing.Axis oppositeAxis = direction.getAxis() == EnumFacing.Axis.X ? EnumFacing.Axis.Z : EnumFacing.Axis.X;
-        int maxRibHeight = rand.nextInt(2);
-        for (int spine = 0; spine < 5 + rand.nextInt(2) * 2; spine++) {
-            BlockPos segment = blockpos.offset(direction, spine);
-            if (origin.distanceSq(segment) <= (double) (radius * radius)) {
-                worldIn.setBlockState(segment, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, direction.getAxis()));
-            }
-            if (spine % 2 != 0) {
-                BlockPos rightRib = segment.offset(direction.rotateYCCW());
-                BlockPos leftRib = segment.offset(direction.rotateY());
-                if (origin.distanceSq(rightRib) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+        if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
+            EnumFacing direction = EnumFacing.HORIZONTALS[new Random().nextInt(3)];
+            EnumFacing.Axis oppositeAxis = direction.getAxis() == EnumFacing.Axis.X ? EnumFacing.Axis.Z : EnumFacing.Axis.X;
+            int maxRibHeight = rand.nextInt(2);
+            for (int spine = 0; spine < 5 + rand.nextInt(2) * 2; spine++) {
+                BlockPos segment = blockpos.offset(direction, spine);
+                if (origin.distanceSq(segment) <= (double) (radius * radius)) {
+                    worldIn.setBlockState(segment, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, direction.getAxis()));
                 }
-                if (origin.distanceSq(leftRib) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(leftRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
-                }
-                for (int ribHeight = 1; ribHeight < maxRibHeight + 2; ribHeight++) {
-                    if (origin.distanceSq(rightRib.up(ribHeight).offset(direction.rotateYCCW())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                if (spine % 2 != 0) {
+                    BlockPos rightRib = segment.offset(direction.rotateYCCW());
+                    BlockPos leftRib = segment.offset(direction.rotateY());
+                    if (origin.distanceSq(rightRib) <= (double) (radius * radius)) {
+                        worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
                     }
-                    if (origin.distanceSq(leftRib.up(ribHeight).offset(direction.rotateY())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                    if (origin.distanceSq(leftRib) <= (double) (radius * radius)) {
+                        worldIn.setBlockState(leftRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    }
+                    for (int ribHeight = 1; ribHeight < maxRibHeight + 2; ribHeight++) {
+                        if (origin.distanceSq(rightRib.up(ribHeight).offset(direction.rotateYCCW())) <= (double) (radius * radius)) {
+                            worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        }
+                        if (origin.distanceSq(leftRib.up(ribHeight).offset(direction.rotateY())) <= (double) (radius * radius)) {
+                            worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        }
+                    }
+                    if (origin.distanceSq(rightRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
+                        worldIn.setBlockState(rightRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    }
+                    if (origin.distanceSq(leftRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
+                        worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
                     }
                 }
-                if (origin.distanceSq(rightRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(rightRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
-                }
-                if (origin.distanceSq(leftRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
-                }
             }
-
         }
     }
 
     public static void generateLeaves(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        if (worldIn.getBlockState(blockpos.down()).isFullCube()) {
+        if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             IBlockState leaf = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.DECAYABLE, Boolean.valueOf(false));
             for (BiomeDictionary.Type type : BiomeDictionary.getTypes(worldIn.getBiome(blockpos))) {
                 if (type == BiomeDictionary.Type.SANDY || type == BiomeDictionary.Type.SAVANNA || type == BiomeDictionary.Type.WASTELAND) {
@@ -75,33 +80,37 @@ public class WorldGenMyrmexDecoration {
                     break;
                 }
             }
-            for (int i = blockpos.getY(); i <= blockpos.getY() + 2; ++i) {
-                int j = i - blockpos.getY();
-                int k = 2 - j;
-
-                for (int l = blockpos.getX() - k; l <= blockpos.getX() + k; ++l) {
-                    int i1 = l - blockpos.getX();
-
-                    for (int j1 = blockpos.getZ() - k; j1 <= blockpos.getZ() + k; ++j1) {
-                        int k1 = j1 - blockpos.getZ();
-
-                        if (Math.abs(i1) != k || Math.abs(k1) != k || rand.nextInt(2) != 0) {
-                            BlockPos blockpos2 = new BlockPos(l, i, j1);
-                            IBlockState state = worldIn.getBlockState(blockpos2);
-
-                            if (state.getBlock().canBeReplacedByLeaves(state, worldIn, blockpos2)) {
-                                worldIn.setBlockState(blockpos2, leaf, 3);
-                            }
-                        }
+            int i1 = 0;
+            for (int i = 0; i1 >= 0 && i < 3; ++i) {
+                int j = i1 + rand.nextInt(2);
+                int k = i1 + rand.nextInt(2);
+                int l = i1 + rand.nextInt(2);
+                float f = (float) (j + k + l) * 0.333F + 0.5F;
+                for (BlockPos pos : BlockPos.getAllInBox(blockpos.add(-j, -k, -l), blockpos.add(j, k, l))) {
+                    if (pos.distanceSq(blockpos) <= (double) (f * f) && worldIn.isAirBlock(pos)) {
+                        worldIn.setBlockState(pos, leaf, 4);
                     }
                 }
+                blockpos = blockpos.add(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
             }
         }
     }
 
     public static void generatePumpkins(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        if (worldIn.getBlockState(blockpos.down()).isFullCube()) {
+        if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             worldIn.setBlockState(blockpos, BiomeDictionary.hasType(worldIn.getBiome(blockpos), BiomeDictionary.Type.JUNGLE) ? Blocks.MELON_BLOCK.getDefaultState() : Blocks.PUMPKIN.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.getHorizontal(rand.nextInt(3))));
+        }
+    }
+
+    public static void generateCocoon(World worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
+        if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
+            worldIn.setBlockState(blockpos, jungle ? ModBlocks.jungle_myrmex_cocoon.getDefaultState() : ModBlocks.desert_myrmex_cocoon.getDefaultState(), 3);
+
+            if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityLockableLoot && !((TileEntityLockableLoot) worldIn.getTileEntity(blockpos)).isInvalid()) {
+                TileEntity tileentity1 = worldIn.getTileEntity(blockpos);
+                ((TileEntityLockableLoot) tileentity1).setLootTable(lootTable, rand.nextLong());
+
+            }
         }
     }
 
@@ -124,7 +133,7 @@ public class WorldGenMyrmexDecoration {
                 if (worldIn.getBlockState(blockpos.up()).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up());
                     if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
-                        ((TileEntityChest) tileentity1).setLootTable(MYRMEX_CHEST, rand.nextLong());
+                        ((TileEntityChest) tileentity1).setLootTable(MYRMEX_GOLD_CHEST, rand.nextLong());
                     }
                 }
             }
