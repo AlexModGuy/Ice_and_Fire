@@ -21,7 +21,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(this.myrmex.shouldLeaveHive() || this.myrmex.isOnResin() || !first){
+        if(this.myrmex.shouldLeaveHive() || !this.myrmex.canSeeSky() || !first){
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
@@ -48,7 +48,11 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
                 this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
                 this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
             }
-
+        }
+        if(this.myrmex.getDistanceSq(nextEntrance) < 5 && !first){
+            this.myrmex.isEnteringHive = false;
+        }else{
+            this.myrmex.isEnteringHive = true;
         }
     }
 

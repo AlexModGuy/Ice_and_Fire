@@ -54,15 +54,16 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(3, new MyrmexAIReEnterHive(this, 1.0D));
-        this.tasks.addTask(4, new MyrmexAIForage(this));
-        this.tasks.addTask(5, new MyrmexAIMoveThroughHive(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
+        this.tasks.addTask(3, new MyrmexAIStoreItems(this, 1.0D));
+        this.tasks.addTask(4, new MyrmexAIReEnterHive(this, 1.0D));
+        this.tasks.addTask(5, new MyrmexAIForage(this));
+        this.tasks.addTask(6, new MyrmexAIMoveThroughHive(this, 1.0D));
+        this.tasks.addTask(7, new EntityAIWanderAvoidWater(this, 1D));
+        this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, false, true, new Predicate<EntityLiving>() {
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity);
             }

@@ -36,6 +36,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     MyrmexHive hive;
     private int randomTickDivider;
     private boolean isLookingForHome;
+    public boolean isEnteringHive = false;
     protected int growthTicks = 1;
     private static final ResourceLocation TEXTURE_DESERT_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_larva.png");
     private static final ResourceLocation TEXTURE_DESERT_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
