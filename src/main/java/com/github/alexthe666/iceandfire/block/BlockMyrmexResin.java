@@ -85,9 +85,16 @@ public class BlockMyrmexResin extends Block {
 
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        if(sticky && !(entityIn instanceof EntityMyrmexBase)) {
-            entityIn.motionX *= 0.4D;
-            entityIn.motionZ *= 0.4D;
+        if(sticky) {
+            if((entityIn instanceof EntityMyrmexBase)){
+                entityIn.motionX *= 1.2D;
+                entityIn.motionY *= 1.2D;
+                entityIn.motionZ *= 1.2D;
+            }else{
+                entityIn.motionX *= 0.4D;
+                entityIn.motionZ *= 0.4D;
+            }
+
         }
     }
 

@@ -25,7 +25,9 @@ public class RenderMyrmexBase extends RenderLiving<EntityMyrmexBase> {
 			scale /= 1.5F;
 		}
 		GL11.glScalef(scale, scale, scale);
-
+		if(myrmex.isRiding() && myrmex.getGrowthStage() < 2){
+			GL11.glRotatef(90, 0, 1, 0);
+		}
 	}
 
 	@Override

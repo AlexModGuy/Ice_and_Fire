@@ -1,12 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -14,19 +13,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget {
+public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
-    protected EntityItem targetEntity;
+    protected final Predicate<? super EntityMyrmexBase> targetEntitySelector;
+    protected EntityMyrmexBase targetEntity;
     public EntityMyrmexWorker myrmex;
 
-    public MyrmexAIForageForItems(EntityMyrmexWorker myrmex) {
+    public MyrmexAIPickupBabies(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
-        this.targetEntitySelector = new Predicate<EntityItem>() {
+        this.targetEntitySelector = new Predicate<EntityMyrmexBase>() {
             @Override
-            public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty();
+            public boolean apply(@Nullable EntityMyrmexBase myrmex) {
+                return myrmex != null && myrmex.getGrowthStage() < 2 && !myrmex.isInNursery();
             }
         };
         this.myrmex = myrmex;
@@ -35,10 +34,10 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex.holdingBaby() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
+        if (!this.myrmex.canMove() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
-        }
-        List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+    }
+        List<EntityMyrmexBase> list = this.taskOwner.world.<EntityMyrmexBase>getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
@@ -64,9 +63,8 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
         if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
-            this.myrmex.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(this.targetEntity.getItem().getItem(), 1, this.targetEntity.getItem().getItemDamage()));
-            this.targetEntity.getItem().shrink(1);
+        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 2) {
+            this.targetEntity.startRiding(this.myrmex);
             resetTask();
         }
     }
@@ -79,7 +77,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
     public static class Sorter implements Comparator<Entity> {
         private final Entity theEntity;
 
-        public Sorter(Entity theEntityIn) {
+        public Sorter(EntityMyrmexBase theEntityIn) {
             this.theEntity = theEntityIn;
         }
 

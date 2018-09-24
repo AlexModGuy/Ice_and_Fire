@@ -21,10 +21,13 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(this.myrmex.shouldLeaveHive() || !this.myrmex.canSeeSky() || !first){
+        if(!this.myrmex.canMove() || this.myrmex.shouldLeaveHive() || !this.myrmex.canSeeSky() || !first){
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
+        MyrmexHive village = this.myrmex.getHive();
+        if (village == null) {
+            village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 500);
+        }
         if (village == null) {
             return false;
         } else {

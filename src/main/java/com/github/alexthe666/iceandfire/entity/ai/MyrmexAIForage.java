@@ -32,7 +32,7 @@ public class MyrmexAIForage extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.getNavigator().noPath() || !myrmex.canSeeSky() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
+        if (!this.myrmex.canMove() || this.myrmex.holdingBaby() || !this.myrmex.getNavigator().noPath() || !myrmex.canSeeSky() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();

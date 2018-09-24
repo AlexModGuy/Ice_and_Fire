@@ -22,14 +22,17 @@ public class MyrmexAIMoveThroughHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(!this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && this.myrmex instanceof EntityMyrmexWorker){
+        if(!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && this.myrmex instanceof EntityMyrmexWorker){
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 300);
+        if (village == null) {
+            village = this.myrmex.getHive();
+        }
         if (village == null) {
             return false;
         } else {
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(this.myrmex.getRNG()));
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(this.myrmex.getRNG(), this.myrmex.getPosition()));
             this.path = this.myrmex.getNavigator().getPathToPos(nextRoom);
             return this.path != null;
         }

@@ -616,13 +616,13 @@ public class MyrmexHive {
         return allRooms;
     }
 
-    public BlockPos getRandomRoom(Random random){
+    public BlockPos getRandomRoom(Random random, BlockPos returnPos){
         List<BlockPos> rooms = getAllRooms();
-        return rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
+        return rooms.isEmpty() ? returnPos : rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
-    public BlockPos getRandomRoom(WorldGenMyrmexHive.RoomType roomType, Random random){
+    public BlockPos getRandomRoom(WorldGenMyrmexHive.RoomType roomType, Random random, BlockPos returnPos){
         List<BlockPos> rooms = getRooms(roomType);
-        return rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
+        return rooms.isEmpty() ? returnPos : rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
 
     public BlockPos getClosestEntranceToEntity(Entity entity, Random random, boolean randomize){

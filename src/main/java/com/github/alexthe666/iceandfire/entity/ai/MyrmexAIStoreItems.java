@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.block.BlockMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
-import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
@@ -29,14 +29,14 @@ public class MyrmexAIStoreItems extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
+        MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
             return false;
         } else {
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG()));
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
             nextCocoon = getNearbyCocoon(nextRoom);
             if (nextCocoon != null) {
                 this.path = this.myrmex.getNavigator().getPathToPos(nextCocoon);
@@ -68,6 +68,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
                             cocoon.setInventorySlotContents(i, itemstack);
                             cocoon.markDirty();
                             this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                            this.myrmex.isEnteringHive = false;
                             return;
                         }
                         if (ItemStack.areItemsEqual(itemstack1, itemstack)) {
@@ -81,6 +82,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
                                     cocoon.markDirty();
                                 }
                                 this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                                this.myrmex.isEnteringHive = false;
                                 return;
                             }
                         }
