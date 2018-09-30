@@ -167,7 +167,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 
     @Override
     public boolean attackEntityFrom(DamageSource var1, float var2) {
-        if (!world.isRemote && !var1.canHarmInCreative()) {
+        if (!world.isRemote && !var1.canHarmInCreative() && !isDead) {
             this.dropItem(this.getItem().getItem(), 1);
         }
         this.setDead();
