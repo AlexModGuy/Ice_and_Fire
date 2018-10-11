@@ -19,7 +19,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -37,6 +36,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     private Animation currentAnimation;
     MyrmexHive hive;
     public boolean isEnteringHive = false;
+    public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
     private static final ResourceLocation TEXTURE_DESERT_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_larva.png");
     private static final ResourceLocation TEXTURE_DESERT_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
@@ -74,7 +74,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     protected PathNavigate createNavigator(World worldIn) {
-        return new PathNavigateClimber(this, worldIn);
+        return super.createNavigator(worldIn);
     }
 
     protected void entityInit() {
@@ -95,7 +95,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
         this.setScaleForAge(false);
         if (!this.world.isRemote) {
-            if(this.getNavigator().getPath() != null && this.getNavigator().getPath().getFinalPathPoint() != null && this.getNavigator().getPath().getFinalPathPoint().y < this.posY){
+            if(this.getNavigator().getPath() != null && this.getNavigator().getPath().getFinalPathPoint() != null && this.getNavigator().getPath().getFinalPathPoint().y < this.posY || this.getNavigator().noPath()){
                 this.setBesideClimbableBlock(false);
             }else{
                 this.setBesideClimbableBlock(this.collidedHorizontally);
@@ -173,7 +173,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public boolean isOnLadder() {
-        return isBesideClimbableBlock();
+        return false;
     }
 
     @Nullable
@@ -313,7 +313,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
 
     public boolean isInNursery() {
-        if (hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty()) {
+        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty()) {
             return false;
         }
         BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());

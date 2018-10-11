@@ -28,10 +28,16 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private static final IBlockState STICKY_JUNGLE_RESIN = ModBlocks.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     private MyrmexHive hive;
     private int entrances = 0;
+    private int totalRooms;
+    private boolean hasFoodRoom;
+    private boolean hasNursery;
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         int down = Math.max(15, position.getY() - 20 + rand.nextInt(10));
+        hasFoodRoom = false;
+        hasNursery = false;
+        totalRooms = 0;
         BlockPos undergroundPos = new BlockPos(position.getX(), down, position.getZ());
         entrances = 0;
         generateMainRoom(worldIn, rand, undergroundPos);
@@ -61,10 +67,11 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             for(int i = 0; i < length; i++){
                 generateCircle(world, rand, offset.offset(direction, i), 3, 5, direction);
             }
-            if(entrances < 3 && rand.nextInt(1 + entrances * 2) == 0){
+            if(entrances < 3 && rand.nextInt(1 + entrances * 2) == 0 && hasFoodRoom && hasNursery && totalRooms > 3){
                 generateEntrance(world, rand, offset.offset(direction, length), 4, 4, direction);
             }else{
                 generateRoom(world, rand, offset.offset(direction, length), 7, 4, roomChance / 2, direction);
+                totalRooms++;
             }
         }
     }
@@ -73,6 +80,13 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
         IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         RoomType type = RoomType.random(rand);
+        if(!hasFoodRoom){
+            type = RoomType.FOOD;
+            hasFoodRoom = true;
+        }else if(!hasNursery){
+            type = RoomType.NURSERY;
+            hasNursery = true;
+        }
         generateSphere(world, rand, position, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, position, size, height - 1, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, position, size, height - 1, type);
