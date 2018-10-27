@@ -59,10 +59,12 @@ public class ModelDragonEgg extends AdvancedModelBase {
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		this.resetToDefaultPose();
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		EntityDragonEgg dragon = (EntityDragonEgg) entity;
-		if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().isFire) {
-			this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
-			this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+		if(entity instanceof EntityDragonEgg) {
+			EntityDragonEgg dragon = (EntityDragonEgg) entity;
+			if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().isFire) {
+				this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
+				this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+			}
 		}
 
 	}

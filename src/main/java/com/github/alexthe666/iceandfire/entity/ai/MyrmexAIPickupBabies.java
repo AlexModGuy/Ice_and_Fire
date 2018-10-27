@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,17 +17,17 @@ import java.util.List;
 
 public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityMyrmexBase> targetEntitySelector;
-    protected EntityMyrmexBase targetEntity;
+    protected final Predicate<? super EntityLivingBase> targetEntitySelector;
+    protected EntityLivingBase targetEntity;
     public EntityMyrmexWorker myrmex;
 
     public MyrmexAIPickupBabies(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
-        this.targetEntitySelector = new Predicate<EntityMyrmexBase>() {
+        this.targetEntitySelector = new Predicate<EntityLivingBase>() {
             @Override
-            public boolean apply(@Nullable EntityMyrmexBase myrmex) {
-                return myrmex != null && myrmex.getGrowthStage() < 2 && !myrmex.isInNursery();
+            public boolean apply(@Nullable EntityLivingBase myrmex) {
+                return myrmex != null && (myrmex instanceof EntityMyrmexBase && ((EntityMyrmexBase)myrmex).getGrowthStage() < 2 && !((EntityMyrmexBase)myrmex).isInNursery() || myrmex instanceof EntityMyrmexEgg && !((EntityMyrmexEgg)myrmex).isInNursery());
             }
         };
         this.myrmex = myrmex;
@@ -36,13 +38,13 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
-    }
-        List<EntityMyrmexBase> list = this.taskOwner.world.<EntityMyrmexBase>getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
-        if (list.isEmpty()) {
+        }
+        List<EntityLivingBase> listBabies = this.taskOwner.world.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        if (listBabies.isEmpty()) {
             return false;
         } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
+            Collections.sort(listBabies, this.theNearestAttackableTargetSorter);
+            this.targetEntity = listBabies.get(0);
             return true;
         }
     }

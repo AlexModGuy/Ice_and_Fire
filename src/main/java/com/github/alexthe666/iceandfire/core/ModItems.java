@@ -220,7 +220,10 @@ public class ModItems {
 	public static Item stymphalian_arrow = new ItemStymphalianArrow();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_tusk")
 	public static Item troll_tusk = new ItemGeneric("troll_tusk", "iceandfire.troll_tusk");
-
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_egg")
+	public static Item myrmex_desert_egg = new ItemMyrmexEgg(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_egg")
+	public static Item myrmex_jungle_egg = new ItemMyrmexEgg(true);
 	static {
 		EnumDragonArmor.initArmors();
 	}

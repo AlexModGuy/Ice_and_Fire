@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
+import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -102,7 +103,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
-		return index != 0 ? true : stack.getItem() instanceof ItemDragonEgg;
+		return index != 0 || (stack.getItem() instanceof ItemDragonEgg || stack.getItem() instanceof ItemMyrmexEgg);
 	}
 
 	@Override

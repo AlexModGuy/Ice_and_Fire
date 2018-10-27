@@ -38,10 +38,11 @@ public class BlockMyrmexResin extends Block {
         this.setCreativeTab(IceAndFire.TAB);
         this.setSoundType(sticky ? SoundType.SLIME : SoundType.GROUND);
         this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky" : "myrmex_resin");
-        if(sticky){
-            this.slipperiness = 0.8F;
-        }
         this.sticky = sticky;
+    }
+
+    public float getSlipperiness(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
+        return entity != null && entity instanceof EntityMyrmexBase ? slipperiness : 0.75F;
     }
 
     @Override

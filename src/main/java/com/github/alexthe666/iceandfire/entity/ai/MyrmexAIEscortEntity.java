@@ -2,10 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class MyrmexAIEscortEntity extends EntityAIBase {
     private final EntityMyrmexSoldier myrmex;
@@ -19,25 +16,16 @@ public class MyrmexAIEscortEntity extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.guardingEntity == null || !this.myrmex.guardingEntity.canSeeSky() && this.myrmex.canSeeSky() != this.myrmex.guardingEntity.canSeeSky()) {
+        if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.guardingEntity == null || !this.myrmex.guardingEntity.canSeeSky() && this.myrmex.canSeeSky() || this.myrmex.isEnteringHive) {
             return false;
         }
-        Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.myrmex, 8, 3, new Vec3d(this.myrmex.guardingEntity.posX, this.myrmex.guardingEntity.posY, this.myrmex.guardingEntity.posZ));
-        if(vec3d != null){
-            this.path = this.myrmex.getNavigator().getPathToPos(new BlockPos(vec3d));
-            return this.path != null;
-        }
-        return false;
+        return true;
     }
 
     public void updateTask() {
         if(this.myrmex.guardingEntity != null && (this.myrmex.getDistance(this.myrmex.guardingEntity) > 30 || this.myrmex.getNavigator().noPath())) {
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.myrmex, 8, 3, new Vec3d(this.myrmex.guardingEntity.posX, this.myrmex.guardingEntity.posY, this.myrmex.guardingEntity.posZ));
-            if (vec3d != null) {
-                this.path = this.myrmex.getNavigator().getPathToPos(new BlockPos(vec3d));
-            }
+            this.myrmex.getNavigator().tryMoveToEntityLiving(this.myrmex.guardingEntity, movementSpeed);
         }
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
     }
 
     public boolean shouldContinueExecuting() {

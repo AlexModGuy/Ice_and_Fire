@@ -268,7 +268,7 @@ public class MyrmexHive {
         return false;
     }
 
-    public void addOrRenewAgressor(EntityLivingBase entitylivingbaseIn) {
+    public void addOrRenewAgressor(EntityLivingBase entitylivingbaseIn, int agressiveLevel) {
         for (HiveAggressor hive$villageaggressor : this.villageAgressors) {
             if (hive$villageaggressor.agressor == entitylivingbaseIn) {
                 hive$villageaggressor.agressionTime = this.tickCounter;
@@ -276,22 +276,24 @@ public class MyrmexHive {
             }
         }
 
-        this.villageAgressors.add(new HiveAggressor(entitylivingbaseIn, this.tickCounter));
+        this.villageAgressors.add(new HiveAggressor(entitylivingbaseIn, this.tickCounter, agressiveLevel));
     }
 
     @Nullable
     public EntityLivingBase findNearestVillageAggressor(EntityLivingBase entitylivingbaseIn) {
         double d0 = Double.MAX_VALUE;
+        int previousAgressionLevel = 0;
         HiveAggressor hive$villageaggressor = null;
-
         for (int i = 0; i < this.villageAgressors.size(); ++i) {
             HiveAggressor hive$villageaggressor1 = this.villageAgressors.get(i);
             double d1 = hive$villageaggressor1.agressor.getDistanceSq(entitylivingbaseIn);
+            int agressionLevel = hive$villageaggressor1.agressionLevel;
 
-            if (d1 <= d0) {
+            if (d1 <= d0 || agressionLevel > previousAgressionLevel) {
                 hive$villageaggressor = hive$villageaggressor1;
                 d0 = d1;
             }
+            previousAgressionLevel = agressionLevel;
         }
 
         return hive$villageaggressor == null ? null : hive$villageaggressor.agressor;
@@ -670,13 +672,19 @@ public class MyrmexHive {
         }
     }
 
+    public boolean repopulate() {
+        return true;
+    }
+
     class HiveAggressor {
         public EntityLivingBase agressor;
         public int agressionTime;
+        public int agressionLevel;
 
-        HiveAggressor(EntityLivingBase agressorIn, int agressionTimeIn) {
+        HiveAggressor(EntityLivingBase agressorIn, int agressionTimeIn, int agressionLevel) {
             this.agressor = agressorIn;
             this.agressionTime = agressionTimeIn;
+            this.agressionLevel = agressionLevel;
         }
     }
 }

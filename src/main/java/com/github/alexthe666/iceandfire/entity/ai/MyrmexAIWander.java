@@ -13,6 +13,6 @@ public class MyrmexAIWander extends EntityAIWanderAvoidWater {
     }
 
     public boolean shouldExecute(){
-        return myrmex.canMove() && super.shouldExecute();
+        return myrmex.canMove() && myrmex.shouldWander() && super.shouldExecute();
     }
 }

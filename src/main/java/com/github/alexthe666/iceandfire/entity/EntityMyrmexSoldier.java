@@ -29,7 +29,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     public EntityMyrmexSoldier(World worldIn) {
         super(worldIn);
-        this.setSize(0.9F, 0.6F);
+        this.setSize(1.3F, 0.95F);
     }
 
     public void onLivingUpdate() {
@@ -49,6 +49,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if(this.guardingEntity != null){
             this.guardingEntity.isBeingGuarded = true;
+            this.isEnteringHive = this.guardingEntity.isEnteringHive;
             if(!this.guardingEntity.isEntityAlive()){
                 this.guardingEntity.isBeingGuarded = false;
                 this.guardingEntity = null;
@@ -95,8 +96,13 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return 0.8F;
     }
 
+    @Override
+    public int getCasteImportance() {
+        return 1;
+    }
+
     public boolean shouldLeaveHive(){
-        return this.isEnteringHive;
+        return false;
     }
 
     public boolean shouldEnterHive(){

@@ -14,14 +14,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -54,13 +57,29 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     @Override
     public boolean attackEntityFrom(DamageSource dmg, float i) {
-        if(dmg == DamageSource.IN_WALL && this.getGrowthStage() < 2){
+        if (dmg == DamageSource.IN_WALL && this.getGrowthStage() < 2) {
             return false;
         }
         if (this.getGrowthStage() < 2) {
             this.setAnimation(ANIMATION_PUPA_WIGGLE);
         }
         return super.attackEntityFrom(dmg, i);
+    }
+
+    protected float getJumpUpwardsMotion() {
+        return 0.52F;
+    }
+
+    protected void jump() {
+        this.motionY = (double) this.getJumpUpwardsMotion();
+        if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
+            this.motionY += (double) ((float) (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+        }
+        float f = this.rotationYaw * 0.017453292F;
+        this.motionX -= (double) (MathHelper.sin(f) * 0.2F);
+        this.motionZ += (double) (MathHelper.cos(f) * 0.2F);
+        this.isAirBorne = true;
+        net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
 
     protected void applyEntityAttributes() {
@@ -74,7 +93,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     protected PathNavigate createNavigator(World worldIn) {
-        return super.createNavigator(worldIn);
+        return new PathNavigateClimber(this, worldIn);
     }
 
     protected void entityInit() {
@@ -86,7 +105,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public void onUpdate() {
         super.onUpdate();
-        if(this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase){
+        if (this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase) {
             float yaw = this.getRidingEntity().rotationYaw;
             this.rotationYaw = yaw;
             this.rotationYawHead = yaw;
@@ -95,9 +114,9 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
         this.setScaleForAge(false);
         if (!this.world.isRemote) {
-            if(this.getNavigator().getPath() != null && this.getNavigator().getPath().getFinalPathPoint() != null && this.getNavigator().getPath().getFinalPathPoint().y < this.posY || this.getNavigator().noPath()){
+            if (this.getNavigator().getPath() != null && this.getNavigator().getPath().getFinalPathPoint() != null && this.getNavigator().getPath().getFinalPathPoint().y < this.posY || this.getNavigator().noPath()) {
                 this.setBesideClimbableBlock(false);
-            }else{
+            } else {
                 this.setBesideClimbableBlock(this.collidedHorizontally);
             }
         }
@@ -173,7 +192,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public boolean isOnLadder() {
-        return false;
+        return isBesideClimbableBlock();
     }
 
     @Nullable
@@ -211,7 +230,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         super.setRevengeTarget(livingBase);
 
         if (this.hive != null && livingBase != null) {
-            this.hive.addOrRenewAgressor(livingBase);
+            this.hive.addOrRenewAgressor(livingBase, this.getImportance());
 
             if (livingBase instanceof EntityPlayer) {
                 int i = -1;
@@ -280,12 +299,15 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
         if (entity instanceof EntityMyrmexBase) {
-            if(myrmex.hive != null && ((EntityMyrmexBase) entity).hive != null){
+            if (myrmex.hive != null && ((EntityMyrmexBase) entity).hive != null) {
                 if (myrmex.isJungle() == ((EntityMyrmexBase) entity).isJungle()) {
                     return myrmex.hive.getCenter() == ((EntityMyrmexBase) entity).hive.getCenter();
                 }
             }
 
+        }
+        if (entity instanceof EntityMyrmexEgg) {
+            return myrmex.isJungle() == ((EntityMyrmexEgg) entity).isJungle();
         }
         return false;
     }
@@ -313,11 +335,14 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
 
     public boolean isInNursery() {
-        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty()) {
+        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
             return false;
         }
-        BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
-        return this.getDistanceSqToCenter(nursery) < 45;
+        if (hive != null) {
+            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
+            return this.getDistanceSqToCenter(nursery) < 45;
+        }
+        return false;
     }
 
     @Override
@@ -329,5 +354,22 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             return;
         }
         super.travel(strafe, forward, vertical);
+    }
+
+    public int getImportance() {
+        if (this.getGrowthStage() < 2) {
+            return 1;
+        }
+        return getCasteImportance();
+    }
+
+    public abstract int getCasteImportance();
+
+    public boolean shouldMoveThroughHive() {
+        return true;
+    }
+
+    public boolean shouldWander() {
+        return this.hive == null;
     }
 }

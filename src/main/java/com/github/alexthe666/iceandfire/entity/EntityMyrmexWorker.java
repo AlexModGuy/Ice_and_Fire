@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -49,24 +51,39 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
             }
         }
+        if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
+            if(this.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg){
+                boolean isJungle = this.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.myrmex_jungle_egg;
+                int metadata = this.getHeldItem(EnumHand.MAIN_HAND).getMetadata();
+                EntityMyrmexEgg egg = new EntityMyrmexEgg(world);
+                egg.copyLocationAndAnglesFrom(this);
+                egg.setJungle(isJungle);
+                egg.setMyrmexCaste(metadata);
+                if(!world.isRemote){
+                    world.spawnEntity(egg);
+                }
+                egg.startRiding(this);
+                this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+            }
+        }
     }
 
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
+        this.tasks.addTask(2, new MyrmexAIStoreBabies(this, 1.0D));
+        this.tasks.addTask(3, new MyrmexAIStoreItems(this, 1.0D));
+        this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
+        this.tasks.addTask(5, new MyrmexAIReEnterHive(this, 1.0D));
+        this.tasks.addTask(6, new MyrmexAIForage(this));
+        this.tasks.addTask(7, new MyrmexAIMoveThroughHive(this, 1.0D));
+        this.tasks.addTask(8, new MyrmexAIWander(this, 1D));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(10, new EntityAILookIdle(this));
+        this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIForageForItems(this));
         this.targetTasks.addTask(3, new MyrmexAIPickupBabies(this));
-        this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(5, new MyrmexAIStoreItems(this, 1.0D));
-        this.tasks.addTask(5, new MyrmexAIStoreBabies(this, 1.0D));
-        this.tasks.addTask(6, new MyrmexAIReEnterHive(this, 1.0D));
-        this.tasks.addTask(7, new MyrmexAIForage(this));
-        this.tasks.addTask(8, new MyrmexAIMoveThroughHive(this, 1.0D));
-        this.tasks.addTask(9, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
-        this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
+        this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity);
             }
@@ -124,7 +141,12 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     public boolean holdingBaby(){
-        return this.getHeldEntity() != null && this.getHeldEntity() instanceof EntityMyrmexBase;
+        return this.getHeldEntity() != null && (this.getHeldEntity() instanceof EntityMyrmexBase || this.getHeldEntity() instanceof EntityMyrmexEgg);
+    }
+
+    @Override
+    public int getCasteImportance() {
+        return 0;
     }
 
     @Override

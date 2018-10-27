@@ -28,29 +28,28 @@ public class MyrmexAIStoreBabies extends EntityAIBase {
         if (village == null) {
             return false;
         } else {
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.myrmex.getRNG(), this.myrmex.getPosition()));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextRoom);
-            return this.path != null;
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.myrmex.getRNG(), this.myrmex.getPosition())).up();
+            return true;
         }
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.holdingBaby() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom) > 3 && this.myrmex.shouldEnterHive();
+        return this.myrmex.holdingBaby() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom) > 3 && this.myrmex.shouldEnterHive();
     }
 
     public void startExecuting() {
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
     }
 
     @Override
     public void updateTask() {
+        this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), this.movementSpeed);
         if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom) < 4 && this.myrmex.holdingBaby()) {
             if(!this.myrmex.getPassengers().isEmpty()){
                 for(Entity entity : this.myrmex.getPassengers()){
                     entity.dismountRidingEntity();
+                    resetTask();
                     entity.copyLocationAndAnglesFrom(this.myrmex);
                 }
-                resetTask();
             }
         }
     }
