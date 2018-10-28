@@ -350,6 +350,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (!this.canMove()) {
             strafe = 0;
             forward = 0;
+            vertical = 0;
             super.travel(strafe, forward, vertical);
             return;
         }
@@ -364,6 +365,10 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public abstract int getCasteImportance();
+
+    public boolean needsGaurding(){
+        return true;
+    }
 
     public boolean shouldMoveThroughHive() {
         return true;

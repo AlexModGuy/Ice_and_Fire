@@ -24,7 +24,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Enti
         this.targetEntitySelector = new Predicate<EntityMyrmexBase>() {
             @Override
             public boolean apply(@Nullable EntityMyrmexBase myrmex) {
-                return myrmex != null && !(myrmex instanceof EntityMyrmexSoldier) && myrmex.getGrowthStage() > 1 && EntityMyrmexBase.haveSameHive(MyrmexAIFindGaurdingEntity.this.myrmex, myrmex) && !myrmex.isBeingGuarded;
+                return myrmex != null && !(myrmex instanceof EntityMyrmexSoldier) && myrmex.getGrowthStage() > 1 && EntityMyrmexBase.haveSameHive(MyrmexAIFindGaurdingEntity.this.myrmex, myrmex) && !myrmex.isBeingGuarded && myrmex.needsGaurding();
             }
         };
         this.myrmex = myrmex;

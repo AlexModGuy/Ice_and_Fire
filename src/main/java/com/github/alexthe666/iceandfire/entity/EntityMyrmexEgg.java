@@ -110,6 +110,9 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
                 case 2:
                     myrmex = new EntityMyrmexQueen(world);
                     break;
+                case 3:
+                    myrmex = new EntityMyrmexSentinel(world);
+                    break;
             }
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);

@@ -40,6 +40,7 @@ public class ItemMyrmexEgg extends Item {
             items.add(new ItemStack(this, 1, 0));
             items.add(new ItemStack(this, 1, 1));
             items.add(new ItemStack(this, 1, 2));
+            items.add(new ItemStack(this, 1, 3));
         }
     }
 
@@ -55,7 +56,10 @@ public class ItemMyrmexEgg extends Item {
                 caste = "soldier";
                 break;
             case 2:
-                caste = "queen";
+                caste = "royal";
+                break;
+            case 3:
+                caste = "sentinel";
                 break;
         }
         tooltip.add(StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));

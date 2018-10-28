@@ -255,6 +255,7 @@ entity.if_troll.name=Troll
 entity.myrmex_worker.name=Myrmex Worker
 entity.myrmex_soldier.name=Myrmex Soldier
 entity.myrmex_queen.name=Myrmex Queen
+entity.myrmex_sentinel.name=Myrmex Sentinel
 entity.myrmex_egg.name=Myrmex Egg
 
 dragon.red=Red
@@ -295,6 +296,8 @@ cockatrice.command.2=This cockatrice is following.
 myrmex.caste_worker.name=Worker
 myrmex.caste_soldier.name=Soldier
 myrmex.caste_queen.name=Queen
+myrmex.caste_royal.name=Royal
+myrmex.caste_sentinel.name=Sentinel
 
 bestiary.contains=Contains:
 bestiary.introduction=Introduction

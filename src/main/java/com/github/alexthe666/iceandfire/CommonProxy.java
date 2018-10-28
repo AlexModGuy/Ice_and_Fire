@@ -170,6 +170,7 @@ public class CommonProxy {
         registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0XBE9444);
         registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 29, 0XA16026, 0XAD6E3E);
         registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 30, 0XA16026, 0XEAAE44);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 31, 0XA16026, 0XEAAE44);
 
         registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event,EntityMyrmexEgg.class, "myrmex_egg", 33);
     }
