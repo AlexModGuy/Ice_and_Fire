@@ -167,11 +167,11 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianFeather>create(), event, EntityStymphalianFeather.class, "stymphalianfeather", 25);
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianArrow>create(), event, EntityStymphalianArrow.class, "stymphalianarrow", 26);
         registerSpawnable(EntityEntryBuilder.<EntityTroll>create(), event, EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0XBE9444);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 29, 0XA16026, 0XAD6E3E);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 30, 0XA16026, 0XEAAE44);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 31, 0XA16026, 0XEAAE44);
-
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0X594520);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 29, 0XA16026, 0X7D622D);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 30, 0XA16026, 0XA27F3A);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexRoyal>create(), event,EntityMyrmexRoyal.class, "myrmex_royal", 31, 0XA16026, 0XC79B48);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 32, 0XA16026, 0XECB855);
         registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event,EntityMyrmexEgg.class, "myrmex_egg", 33);
     }
 

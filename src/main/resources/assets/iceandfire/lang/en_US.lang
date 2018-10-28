@@ -256,6 +256,7 @@ entity.myrmex_worker.name=Myrmex Worker
 entity.myrmex_soldier.name=Myrmex Soldier
 entity.myrmex_queen.name=Myrmex Queen
 entity.myrmex_sentinel.name=Myrmex Sentinel
+entity.myrmex_royal.name=Myrmex Royal
 entity.myrmex_egg.name=Myrmex Egg
 
 dragon.red=Red

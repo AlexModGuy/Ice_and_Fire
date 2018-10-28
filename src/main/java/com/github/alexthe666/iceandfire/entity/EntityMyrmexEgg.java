@@ -108,7 +108,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
                     myrmex = new EntityMyrmexSoldier(world);
                     break;
                 case 2:
-                    myrmex = new EntityMyrmexQueen(world);
+                    myrmex = new EntityMyrmexRoyal(world);
                     break;
                 case 3:
                     myrmex = new EntityMyrmexSentinel(world);
