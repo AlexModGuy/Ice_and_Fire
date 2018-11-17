@@ -14,7 +14,7 @@ import java.util.List;
 import static net.minecraft.entity.ai.RandomPositionGenerator.findRandomTarget;
 
 public class MyrmexAIFindHidingSpot extends EntityAIBase {
-    private static final int RADIUS = 15;
+    private static final int RADIUS = 32;
 
     private final EntityMyrmexSentinel myrmex;
     private BlockPos targetBlock = BlockPos.ORIGIN;
@@ -41,7 +41,7 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
         if(vec != null){
             this.targetBlock = new BlockPos(vec);
         }
-        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky();
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky() && this.myrmex.daylightTicks > 300;
     }
 
     @Override

@@ -12,25 +12,45 @@ import net.minecraft.block.BlockCactus;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateClimber;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Random;
+import java.util.UUID;
 
-public abstract class EntityMyrmexBase extends EntityTameable implements IAnimatedEntity {
+public abstract class EntityMyrmexBase extends EntityTameable implements IAnimatedEntity, IMerchant {
 
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.<Integer>createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
@@ -46,13 +66,51 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     private static final ResourceLocation TEXTURE_JUNGLE_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
     private static final ResourceLocation TEXTURE_JUNGLE_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
+    @Nullable
+    private EntityPlayer buyingPlayer;
+    @Nullable
+    private MerchantRecipeList buyingList;
+    private java.util.UUID lastBuyingPlayer;
+    private int careerId;
+    private int careerLevel;
+    private boolean needsInitilization;
+    private int timeUntilReset;
+    private int wealth;
 
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
     }
 
     public boolean canMove() {
-        return this.getGrowthStage() > 1;
+        return this.getGrowthStage() > 1 && !this.isTrading();
+    }
+
+    protected void updateAITasks() {
+        if (!this.isTrading() && this.timeUntilReset > 0) {
+            --this.timeUntilReset;
+
+            if (this.timeUntilReset <= 0) {
+                if (this.needsInitilization) {
+                    for (MerchantRecipe merchantrecipe : this.buyingList) {
+                        if (merchantrecipe.isRecipeDisabled()) {
+                            merchantrecipe.increaseMaxTradeUses(this.rand.nextInt(6) + this.rand.nextInt(6) + 2);
+                        }
+                    }
+
+                    this.populateBuyingList();
+                    this.needsInitilization = false;
+
+                    if (this.hive != null && this.lastBuyingPlayer != null) {
+                        this.world.setEntityState(this, (byte) 14);
+                        this.hive.modifyPlayerReputation(this.lastBuyingPlayer, 1);
+                    }
+                }
+
+                this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));
+            }
+        }
+
+        super.updateAITasks();
     }
 
     @Override
@@ -89,7 +147,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public float getBlockPathWeight(BlockPos pos) {
-        return 0.0F;
+        return 0.5F - this.world.getLightBrightness(pos);
     }
 
     protected PathNavigate createNavigator(World worldIn) {
@@ -144,7 +202,15 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         tag.setInteger("GrowthStage", this.getGrowthStage());
         tag.setInteger("GrowthTicks", growthTicks);
         tag.setBoolean("Variant", this.isJungle());
-
+        if (this.hive != null) {
+            tag.setUniqueId("HiveUUID", this.hive.hiveUUID);
+        }
+        tag.setInteger("Career", this.careerId);
+        tag.setInteger("CareerLevel", this.careerLevel);
+        tag.setInteger("Riches", this.wealth);
+        if (this.buyingList != null) {
+            tag.setTag("Offers", this.buyingList.getRecipiesAsTags());
+        }
     }
 
     @Override
@@ -153,6 +219,137 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         this.setGrowthStage(tag.getInteger("GrowthStage"));
         this.growthTicks = tag.getInteger("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
+        this.setJungleVariant(tag.getBoolean("Variant"));
+        if (hive == null) {
+            UUID id = tag.getUniqueId("HiveUUID");
+            hive = MyrmexWorldData.get(world).getHiveFromUUID(id);
+        }
+        this.careerId = tag.getInteger("Career");
+        this.careerLevel = tag.getInteger("CareerLevel");
+        if (tag.hasKey("Offers", 10)) {
+            NBTTagCompound nbttagcompound = tag.getCompoundTag("Offers");
+            this.buyingList = new MerchantRecipeList(nbttagcompound);
+        }
+        this.wealth = tag.getInteger("Riches");
+    }
+
+    public void setCustomer(@Nullable EntityPlayer player) {
+        this.buyingPlayer = player;
+    }
+
+    @Nullable
+    public EntityPlayer getCustomer() {
+        return this.buyingPlayer;
+    }
+
+    public boolean isTrading() {
+        return this.buyingPlayer != null;
+    }
+
+    @Nullable
+    public MerchantRecipeList getRecipes(EntityPlayer player) {
+        if (this.buyingList == null) {
+            this.populateBuyingList();
+        }
+
+        return this.buyingList;
+    }
+
+    public void verifySellingItem(ItemStack stack) {
+        if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
+            this.livingSoundTime = -this.getTalkInterval();
+            this.playSound(stack.isEmpty() ? SoundEvents.ENTITY_VILLAGER_NO : SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
+        }
+    }
+
+    public void useRecipe(MerchantRecipe recipe) {
+        recipe.incrementToolUses();
+        this.livingSoundTime = -this.getTalkInterval();
+        this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
+        int i = 3 + this.rand.nextInt(4);
+
+        if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
+            this.timeUntilReset = 40;
+            this.needsInitilization = true;
+            if (this.buyingPlayer != null) {
+                this.lastBuyingPlayer = this.buyingPlayer.getUniqueID();
+            } else {
+                this.lastBuyingPlayer = null;
+            }
+
+            i += 5;
+        }
+
+        if (recipe.getItemToBuy().getItem() == Items.EMERALD) {
+            this.wealth += recipe.getItemToBuy().getCount();
+        }
+
+        if (recipe.getRewardsExp()) {
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
+        }
+    }
+
+    private void populateBuyingList() {
+        if (this.careerId != 0 && this.careerLevel != 0) {
+            ++this.careerLevel;
+        } else {
+            this.careerId = this.getProfessionForge().getRandomCareer(this.rand) + 1;
+            this.careerLevel = 1;
+        }
+
+        if (this.buyingList == null) {
+            this.buyingList = new MerchantRecipeList();
+        }
+
+        int i = this.careerId - 1;
+        int j = this.careerLevel - 1;
+        java.util.List<EntityVillager.ITradeList> trades = this.getProfessionForge().getCareer(i).getTrades(j);
+
+        if (trades != null) {
+            for (EntityVillager.ITradeList entityvillager$itradelist : trades) {
+                entityvillager$itradelist.addMerchantRecipe(this, this.buyingList, this.rand);
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setRecipes(@Nullable MerchantRecipeList recipeList) {
+    }
+
+    public ITextComponent getDisplayName() {
+        Team team = this.getTeam();
+        String s = this.getCustomNameTag();
+
+        if (s != null && !s.isEmpty()) {
+            TextComponentString textcomponentstring = new TextComponentString(ScorePlayerTeam.formatPlayerName(team, s));
+            textcomponentstring.getStyle().setHoverEvent(this.getHoverEvent());
+            textcomponentstring.getStyle().setInsertion(this.getCachedUniqueIdString());
+            return textcomponentstring;
+        } else {
+            if (this.buyingList == null) {
+                this.populateBuyingList();
+            }
+            String s1 = this.getProfessionForge().getCareer(this.careerId - 1).getName();
+            {
+                ITextComponent itextcomponent = new TextComponentTranslation("entity.Villager." + s1, new Object[0]);
+                itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
+                itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
+
+                if (team != null) {
+                    itextcomponent.getStyle().setColor(team.getColor());
+                }
+
+                return itextcomponent;
+            }
+        }
+    }
+
+    public World getWorld() {
+        return this.world;
+    }
+
+    public BlockPos getPos() {
+        return new BlockPos(this);
     }
 
     public void setGrowthStage(int stage) {
@@ -258,11 +455,41 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         super.onDeath(cause);
     }
 
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
+
+        if (flag) {
+            itemstack.interactWithEntity(player, this, hand);
+            return true;
+        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isSneaking()) {
+            if (this.buyingList == null) {
+                this.populateBuyingList();
+            }
+
+            if (hand == EnumHand.MAIN_HAND) {
+                player.addStat(StatList.TALKED_TO_VILLAGER);
+            }
+
+            if (!this.world.isRemote && !this.buyingList.isEmpty()) {
+                this.setCustomer(player);
+                player.displayVillagerTradeGui(this);
+            } else if (this.buyingList.isEmpty()) {
+                return super.processInteract(player, hand);
+            }
+
+            return true;
+        } else {
+            return super.processInteract(player, hand);
+        }
+    }
+
     @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.hive = MyrmexWorldData.get(world).getNearestVillage(this.getPosition(), 400);
+        this.hive = MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400);
+        this.populateBuyingList();
         return livingdata;
     }
 
@@ -366,7 +593,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public abstract int getCasteImportance();
 
-    public boolean needsGaurding(){
+    public boolean needsGaurding() {
         return true;
     }
 
@@ -377,4 +604,29 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     public boolean shouldWander() {
         return this.hive == null;
     }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return null;
+    }
+
+    public static class BasicTrade implements EntityVillager.ITradeList {
+        public ItemStack first;
+        public ItemStack second;
+        public EntityVillager.PriceInfo firstPrice;
+        public EntityVillager.PriceInfo secondPrice;
+
+        public BasicTrade(ItemStack first, ItemStack second, EntityVillager.PriceInfo firstPrice, EntityVillager.PriceInfo secondPrice) {
+            this.first = first;
+            this.second = second;
+            this.firstPrice = firstPrice;
+            this.secondPrice = secondPrice;
+        }
+
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
+            int i = firstPrice.getPrice(random);
+            int j = secondPrice.getPrice(random);
+            recipeList.add(new MerchantRecipe(new ItemStack(first.getItem(), i, first.getItemDamage()), new ItemStack(second.getItem(), j, second.getItemDamage())));
+        }
+    }
+
 }

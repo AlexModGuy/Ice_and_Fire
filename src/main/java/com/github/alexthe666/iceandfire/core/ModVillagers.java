@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.core;
 
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.google.common.collect.Maps;
@@ -12,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
@@ -27,6 +27,16 @@ public class ModVillagers {
 	public VillagerRegistry.VillagerProfession fisherman;
 	public VillagerRegistry.VillagerProfession craftsman;
 	public VillagerRegistry.VillagerProfession shaman;
+	public VillagerRegistry.VillagerProfession desertMyrmexWorker;
+	public VillagerRegistry.VillagerProfession jungleMyrmexWorker;
+	public VillagerRegistry.VillagerProfession desertMyrmexSoldier;
+	public VillagerRegistry.VillagerProfession jungleMyrmexSoldier;
+	public VillagerRegistry.VillagerProfession desertMyrmexSentinel;
+	public VillagerRegistry.VillagerProfession jungleMyrmexSentinel;
+	public VillagerRegistry.VillagerProfession desertMyrmexRoyal;
+	public VillagerRegistry.VillagerProfession jungleMyrmexRoyal;
+	public VillagerRegistry.VillagerProfession desertMyrmexQueen;
+	public VillagerRegistry.VillagerProfession jungleMyrmexQueen;
 	public Map<Integer, VillagerRegistry.VillagerProfession> professions = Maps.newHashMap();
 
 	public void init() {
@@ -81,6 +91,66 @@ public class ModVillagers {
 			career.addTrade(2, new ListItemForSapphires(ModItems.witherbone, new EntityVillager.PriceInfo(2, 5)));
 			career.addTrade(2, new ListItemForSapphires(ModItems.wither_shard, new EntityVillager.PriceInfo(3, 2)));
 			register(shaman, 2);
+		}
+
+		desertMyrmexWorker = new VillagerRegistry.VillagerProfession("iceandfire:desertMyrmexWorker", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(desertMyrmexWorker, "desert_myrmex_worker");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_desert_resin), new EntityVillager.PriceInfo(32, 64), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		jungleMyrmexWorker = new VillagerRegistry.VillagerProfession("iceandfire:jungleMyrmexWorker", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(jungleMyrmexWorker, "jungle_myrmex_worker");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_jungle_resin), new EntityVillager.PriceInfo(32, 64), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		desertMyrmexSoldier = new VillagerRegistry.VillagerProfession("iceandfire:desertMyrmexSoldier", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(desertMyrmexSoldier, "desert_myrmex_soldier");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_desert_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		jungleMyrmexSoldier = new VillagerRegistry.VillagerProfession("iceandfire:jungleMyrmexSoldier", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(jungleMyrmexSoldier, "jungle_myrmex_soldier");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_jungle_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		desertMyrmexSentinel = new VillagerRegistry.VillagerProfession("iceandfire:desertMyrmexSentinel", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(desertMyrmexSentinel, "desert_myrmex_sentinel");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_desert_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		jungleMyrmexSentinel = new VillagerRegistry.VillagerProfession("iceandfire:jungleMyrmexSentinel", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(jungleMyrmexSentinel, "jungle_myrmex_sentinel");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_jungle_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		desertMyrmexRoyal = new VillagerRegistry.VillagerProfession("iceandfire:desertMyrmexRoyal", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(desertMyrmexRoyal, "desert_myrmex_royal");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_desert_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		jungleMyrmexRoyal = new VillagerRegistry.VillagerProfession("iceandfire:jungleMyrmexRoyal", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(jungleMyrmexRoyal, "jungle_myrmex_royal");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_jungle_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		desertMyrmexQueen = new VillagerRegistry.VillagerProfession("iceandfire:desertMyrmexQueen", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(desertMyrmexQueen, "desert_myrmex_queen");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_desert_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
+		}
+
+		jungleMyrmexQueen = new VillagerRegistry.VillagerProfession("iceandfire:jungleMyrmexQueen", "minecraft:textures/entity/zombie_villager/zombie_farmer.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");
+		{
+			VillagerRegistry.VillagerCareer career = new VillagerRegistry.VillagerCareer(jungleMyrmexQueen, "jungle_myrmex_queen");
+			career.addTrade(1, new EntityMyrmexBase.BasicTrade(new ItemStack(Blocks.DIRT), new ItemStack(ModItems.myrmex_jungle_resin), new EntityVillager.PriceInfo(1, 10), new EntityVillager.PriceInfo(1, 2)));
 		}
 	}
 

@@ -18,12 +18,14 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.UUID;
+
 public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
 
     private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.<Boolean>createKey(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.<Integer>createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.<Integer>createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
-
+    public UUID hiveUUID;
     public EntityMyrmexEgg(World worldIn) {
         super(worldIn);
         this.isImmuneToFire = true;
@@ -43,7 +45,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         tag.setBoolean("Jungle", this.isJungle());
         tag.setInteger("MyrmexAge", this.getMyrmexAge());
         tag.setInteger("MyrmexCaste", this.getMyrmexCaste());
-
+        tag.setUniqueId("HiveUUID", hiveUUID);
     }
 
     @Override
@@ -52,6 +54,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         this.setJungle(tag.getBoolean("Jungle"));
         this.setMyrmexAge(tag.getInteger("MyrmexAge"));
         this.setMyrmexCaste(tag.getInteger("MyrmexCaste"));
+        hiveUUID = tag.getUniqueId("hiveUUID");
     }
 
     @Override
@@ -117,6 +120,10 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
+            MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
+            if(!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000){
+                myrmex.setHive(hive);
+            }
             if (!world.isRemote) {
                 world.spawnEntity(myrmex);
             }
@@ -173,7 +180,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     public boolean isInNursery() {
-        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestVillage(new BlockPos(this), 100);
+        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(new BlockPos(this), 100);
         if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
             return false;
         }

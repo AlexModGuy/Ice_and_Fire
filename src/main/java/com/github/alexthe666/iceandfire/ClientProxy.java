@@ -252,6 +252,8 @@ public class ClientProxy extends CommonProxy {
 			ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_desert_egg, i, new ModelResourceLocation("iceandfire:myrmex_desert_egg", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_jungle_egg, i, new ModelResourceLocation("iceandfire:myrmex_jungle_egg", "inventory"));
 		}
+		ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_desert_resin, 0, new ModelResourceLocation("iceandfire:myrmex_desert_resin", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_jungle_resin, 0, new ModelResourceLocation("iceandfire:myrmex_jungle_resin", "inventory"));
 
 	}
 

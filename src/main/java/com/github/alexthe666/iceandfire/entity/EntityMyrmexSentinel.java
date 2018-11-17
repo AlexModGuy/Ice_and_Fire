@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -20,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 
@@ -37,6 +39,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public float holdingProgress;
     public float hidingProgress;
     public int visibleTicks = 0;
+    public int daylightTicks = 0;
 
     public EntityMyrmexSentinel(World worldIn) {
         super(worldIn);
@@ -53,6 +56,11 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             visibleTicks--;
         }else{
             visibleTicks = 0;
+        }
+        if(this.canSeeSky()){
+            this.daylightTicks++;
+        }else{
+            this.daylightTicks = 0;
         }
         boolean holding = getHeldEntity() != null;
         boolean hiding = isHiding();
@@ -101,6 +109,8 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
+        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new MyrmexAIFindHidingSpot(this));
         this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
@@ -116,6 +126,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSentinel.this, entity);
             }
         }));
+    }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexSentinel : ModVillagers.INSTANCE.desertMyrmexSentinel;
     }
 
     protected void entityInit() {
@@ -155,13 +169,14 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("Hiding", this.isHiding());
-
+        tag.setInteger("DaylightTicks", daylightTicks);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         this.setHiding(tag.getBoolean("Hiding"));
+        this.daylightTicks = tag.getInteger("DaylightTicks");
     }
 
     public boolean shouldLeaveHive(){

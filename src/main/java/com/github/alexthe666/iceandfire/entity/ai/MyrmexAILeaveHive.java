@@ -25,7 +25,7 @@ public class MyrmexAILeaveHive extends EntityAIBase {
         if(!this.myrmex.canMove() || !this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()  || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || this.myrmex.isEnteringHive){
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 100);
         if (village == null) {
             return false;
         } else {

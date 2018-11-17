@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.item.Item;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -84,13 +84,26 @@ public class MyrmexAIForage extends EntityAIBase {
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 double distance = this.getDistance(this.targetBlock);
                 if (distance <= 5) {
-                    this.myrmex.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Item.getItemFromBlock(block.getBlock())));
-                    this.myrmex.world.destroyBlock(this.targetBlock, false);
-                    this.targetBlock = null;
-                    this.resetTask();
-                    this.myrmex.keepSearching = false;
-                    this.wanderRadius = RADIUS;
-                    return;
+                    List<ItemStack> drops =  block.getBlock().getDrops(this.myrmex.world, this.targetBlock, block, 0); // use the old method until it gets removed, for backward compatibility
+                    if(!drops.isEmpty()){
+                        this.myrmex.world.destroyBlock(this.targetBlock, false);
+                        ItemStack heldStack = drops.get(0).copy();
+                        heldStack.setCount(1);
+                        drops.get(0).shrink(1);
+                        this.myrmex.setHeldItem(EnumHand.MAIN_HAND, heldStack);
+                        for(ItemStack stack : drops){
+                            EntityItem itemEntity = new EntityItem(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
+                            itemEntity.setDefaultPickupDelay();
+                            if(!this.myrmex.world.isRemote){
+                                this.myrmex.world.spawnEntity(itemEntity);
+                            }
+                        }
+                        this.targetBlock = null;
+                        this.resetTask();
+                        this.myrmex.keepSearching = false;
+                        this.wanderRadius = RADIUS;
+                        return;
+                    }
                 }
             }
         }

@@ -224,6 +224,10 @@ public class ModItems {
 	public static Item myrmex_desert_egg = new ItemMyrmexEgg(false);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_egg")
 	public static Item myrmex_jungle_egg = new ItemMyrmexEgg(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin")
+	public static Item myrmex_desert_resin = new ItemGeneric("myrmex_desert_resin", "iceandfire.myrmex_desert_resin");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin")
+	public static Item myrmex_jungle_resin = new ItemGeneric("myrmex_jungle_resin", "iceandfire.myrmex_jungle_resin");
 	static {
 		EnumDragonArmor.initArmors();
 	}

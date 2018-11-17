@@ -1,8 +1,13 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -12,13 +17,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +39,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
     public static final Animation ANIMATION_EGG = Animation.create(20);
+    public static final Animation ANIMATION_DIGNEST = Animation.create(45);
+    private static final DataParameter<Boolean> HASMADEHOME = EntityDataManager.<Boolean>createKey(EntityMyrmexQueen.class, DataSerializers.BOOLEAN);
     private int eggTicks = 0;
 
     public EntityMyrmexQueen(World worldIn) {
@@ -36,10 +48,16 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.setSize(2.9F, 1.86F);
     }
 
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
+    }
+
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("EggTicks", eggTicks);
+        tag.setBoolean("MadeHome", this.hasMadeHome());
 
     }
 
@@ -47,14 +65,56 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         this.eggTicks = tag.getInteger("EggTicks");
+        this.setMadeHome(tag.getBoolean("MadeHome"));
     }
 
+    public boolean hasMadeHome() {
+        return this.dataManager.get(HASMADEHOME).booleanValue();
+    }
+
+    public void setMadeHome(boolean madeHome) {
+        this.dataManager.set(HASMADEHOME, madeHome);
+    }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexQueen : ModVillagers.INSTANCE.desertMyrmexQueen;
+    }
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        eggTicks++;
+        if(this.getAnimation() == ANIMATION_DIGNEST){
+            spawnGroundEffects(3);
+        }
+        if(this.hive != null){
+            this.hive.tick(0, world);
+        }
 
-        if(eggTicks > 2000 || this.hive != null && this.hive.repopulate() && eggTicks > 2000){
+        if(hasMadeHome()) {
+            eggTicks++;
+        }else{
+            this.setAnimation(ANIMATION_DIGNEST);
+            if(this.getAnimationTick() == 42){
+                WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true);
+                int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
+                BlockPos genPos = new BlockPos(this.posX, down, this.posZ);
+                hiveGen.generate(world, this.getRNG(), genPos);
+                this.setMadeHome(true);
+                this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);
+                this.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30));
+                this.setHive(hiveGen.hive);
+                for(int i = 0; i < 3; i++){
+                    EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
+                    worker.copyLocationAndAnglesFrom(this);
+                    worker.setHive(this.hive);
+                    worker.setJungleVariant(this.isJungle());
+                    if(!world.isRemote){
+                        world.spawnEntity(worker);
+                    }
+                }
+                return;
+            }
+        }
+        if(eggTicks > 2000 && this.hive == null || this.hive != null && this.hive.repopulate() && eggTicks > 2000){
             float radius = -5.25F;
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
@@ -67,6 +127,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     egg.setJungle(this.isJungle());
                     egg.setMyrmexCaste(this.getRNG().nextInt(2));
                     egg.setLocationAndAngles(this.posX + extraX, this.posY + 0.75F, this.posZ + extraZ, 0, 0);
+                    if(hive != null){
+                        egg.hiveUUID = this.hive.hiveUUID;
+                    }
                     if(!world.isRemote){
                         world.spawnEntity(egg);
                     }
@@ -108,7 +171,14 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
     }
 
+    public boolean isEntityInvulnerable(DamageSource source)
+    {
+        return super.isEntityInvulnerable(source) || this.getAnimation() == ANIMATION_DIGNEST;
+    }
+
     protected void initEntityAI() {
+        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
+        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
         this.tasks.addTask(3, new MyrmexAIReEnterHive(this, 1.0D));
@@ -125,6 +195,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             }
         }));
 
+    }
+
+    public void fall(float distance, float damageMultiplier) {
     }
 
     public boolean shouldMoveThroughHive(){
@@ -180,8 +253,34 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return false;
     }
 
+    public boolean canMove() {
+        return super.canMove() && this.hasMadeHome();
+    }
+
+    public void spawnGroundEffects(float size) {
+        for (int i = 0; i < size * 3; i++) {
+            for (int i1 = 0; i1 < 10; i1++) {
+                double motionX = getRNG().nextGaussian() * 0.07D;
+                double motionY = getRNG().nextGaussian() * 0.07D;
+                double motionZ = getRNG().nextGaussian() * 0.07D;
+                float radius = size * rand.nextFloat();
+                float angle = (0.01745329251F * this.renderYawOffset) * 3.14F * rand.nextFloat();
+                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                double extraY = 0.8F;
+                double extraZ = (double) (radius * MathHelper.cos(angle));
+
+                IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                if (iblockstate.getMaterial() != Material.AIR) {
+                    if (world.isRemote) {
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING, ANIMATION_EGG};
+        return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING, ANIMATION_EGG, ANIMATION_DIGNEST};
     }
 }

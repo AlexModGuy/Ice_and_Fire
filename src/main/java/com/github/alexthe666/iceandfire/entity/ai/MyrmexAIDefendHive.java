@@ -25,7 +25,7 @@ public class MyrmexAIDefendHive extends EntityAITarget {
             if (this.isSuitableTarget(this.villageAgressorTarget, false)) {
                 return true;
             } else if (this.taskOwner.getRNG().nextInt(20) == 0) {
-                this.villageAgressorTarget = village.getNearestTargetPlayer(this.myrmex);
+                this.villageAgressorTarget = village.getNearestTargetPlayer(this.myrmex, this.myrmex.world);
                 return this.isSuitableTarget(this.villageAgressorTarget, false);
             } else {
                 return false;

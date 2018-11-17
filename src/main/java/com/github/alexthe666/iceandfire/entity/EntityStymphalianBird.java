@@ -182,7 +182,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 }
             }
             if (!copperItems.isEmpty()) {
-                for (ItemStack copperIngot : copperItems) {
+                    for (ItemStack copperIngot : copperItems) {
                     if (copperIngot != ItemStack.EMPTY) {
                         ItemStack stack = copperIngot.copy();
                         stack.setCount(1 + this.getRNG().nextInt(3));

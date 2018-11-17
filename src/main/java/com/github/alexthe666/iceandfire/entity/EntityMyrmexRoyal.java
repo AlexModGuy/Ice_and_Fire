@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,6 +44,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     private int hiveTicks = 0;
     public int releaseTicks = 0;
     private int breedingTicks = 0;
+    public int daylightTicks = 0;
     public float flyProgress;
     private boolean isFlying;
     private boolean isLandNavigator;
@@ -119,10 +123,15 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         if (!flying && !this.isLandNavigator) {
             switchNavigator(true);
         }
+        if(this.canSeeSky()){
+            this.daylightTicks++;
+        }else{
+            this.daylightTicks = 0;
+        }
         if(flying && this.canSeeSky() && this.isBreedingSeason()){
             this.releaseTicks++;
         }
-        if(!flying && this.canSeeSky() && this.isBreedingSeason() && this.getAttackTarget() == null && this.canMove() && this.onGround && !isMating){
+        if(!flying && this.canSeeSky() && daylightTicks > 300 && this.isBreedingSeason() && this.getAttackTarget() == null && this.canMove() && this.onGround && !isMating){
             this.setFlying(true);
             this.motionY += 0.42D;
         }
@@ -155,6 +164,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                             EntityMyrmexQueen queen = new EntityMyrmexQueen(this.world);
                             queen.copyLocationAndAnglesFrom(this);
                             queen.setJungleVariant(this.isJungle());
+                            queen.setMadeHome(false);
                             if(!world.isRemote){
                                 world.spawnEntity(queen);
                             }
@@ -172,6 +182,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
+        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(0, new MyrmexAIMoveToMate(this, 1.0D));
         this.tasks.addTask(1, new AIFlyRandom());
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
@@ -194,6 +206,10 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             }
         }));
 
+    }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexRoyal : ModVillagers.INSTANCE.desertMyrmexRoyal;
     }
 
     public boolean shouldMoveThroughHive(){
@@ -279,6 +295,22 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             }
         }
         return pos;
+    }
+
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+        if (!this.isInWater()) {
+            this.handleWaterMovement();
+        }
+
+        if (onGroundIn) {
+            if (this.fallDistance > 0.0F) {
+                state.getBlock().onFallenUpon(this.world, pos, this, this.fallDistance);
+            }
+
+            this.fallDistance = 0.0F;
+        } else if (y < 0.0D) {
+            this.fallDistance = (float) ((double) this.fallDistance - y);
+        }
     }
 
     class FlyMoveHelper extends EntityMoveHelper {

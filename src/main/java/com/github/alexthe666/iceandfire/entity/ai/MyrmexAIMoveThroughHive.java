@@ -25,7 +25,7 @@ public class MyrmexAIMoveThroughHive extends EntityAIBase {
         if(!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || !this.myrmex.shouldMoveThroughHive() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && this.myrmex instanceof EntityMyrmexWorker){
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 300);
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 300);
         if (village == null) {
             village = this.myrmex.getHive();
         }

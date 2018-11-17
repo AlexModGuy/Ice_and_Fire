@@ -246,7 +246,7 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
 
     @Override
     public void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityMyrmexBase) entity);
         this.Body2.render(f5);
         this.Body5.setScale(1.0F, 1.0F, 1.0F);
@@ -258,6 +258,44 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
+        animator.setAnimation(EntityMyrmexQueen.ANIMATION_DIGNEST);
+        animator.startKeyframe(15);
+        ModelUtils.rotateFrom(animator, Body2, 26, 0, 0);
+        ModelUtils.rotateFrom(animator, Neck1, -5, 0, 0);
+        ModelUtils.rotateFrom(animator, Body4, -8, 0, 0);
+        ModelUtils.rotateFrom(animator, Body5, -2, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail1, -13, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail2, -18, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail3, -13, 0, 0);
+        digPose();
+        animator.endKeyframe();
+        animator.startKeyframe(10);
+        animator.move(Body2, 0, 5, 0);
+        ModelUtils.rotateFrom(animator, Body2, 45, 0, 0);
+        ModelUtils.rotateFrom(animator, Neck1, -5, 0, 0);
+        ModelUtils.rotateFrom(animator, Body4, -8, 0, 0);
+        ModelUtils.rotateFrom(animator, Body5, -2, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail1, -13, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail2, -18, 0, 0);
+        ModelUtils.rotateFrom(animator, Tail3, -13, 0, 0);
+        digPose();
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        animator.move(Body2, 0, 30, 0);
+        ModelUtils.rotateFrom(animator, Body2, 78, 0, 0);
+        digPose();
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        animator.move(Body2, 0, 80, 0);
+        ModelUtils.rotateFrom(animator, Body2, 90, 0, 0);
+        digPose();
+        animator.endKeyframe();
+        animator.startKeyframe(10);
+        animator.move(Body2, 0, 80, 0);
+        ModelUtils.rotateFrom(animator, Body2, 90, 0, 0);
+        digPose();
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
         animator.setAnimation(EntityMyrmexQueen.ANIMATION_BITE);
         animator.startKeyframe(5);
         ModelUtils.rotate(animator, Neck1, -50, 0, 0);
@@ -292,15 +330,15 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         ModelUtils.rotateFrom(animator, legMidR1_1, 0, 0, -25);
         animator.endKeyframe();
         animator.resetKeyframe(10);
-        EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen)entity;
-        if(myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_EGG){
+        EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen) entity;
+        if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_EGG) {
             int animationTick = MathHelper.clamp(myrmexQueen.getAnimationTick(), 0, 20);
             double swellToPi = animationTick / 20F * Math.PI;
-            this.increaseScale(Body5,  0.5F * (float)Math.abs(Math.sin(swellToPi + 0.5F)));
-            this.increaseScale(Tail1, 0.75F * (float)Math.abs(Math.sin(swellToPi)));
-            this.increaseScale(Tail2, 0.75F * (float)Math.abs(Math.sin(swellToPi - 0.5F)));
-            this.increaseScale(Tail3, 0.75F * (float)Math.abs(Math.sin(swellToPi - 1.0F)));
-            this.Stinger.rotationPointZ += 10 * (float)Math.abs(Math.sin(swellToPi - 1.0F));
+            this.increaseScale(Body5, 0.5F * (float) Math.abs(Math.sin(swellToPi + 0.5F)));
+            this.increaseScale(Tail1, 0.75F * (float) Math.abs(Math.sin(swellToPi)));
+            this.increaseScale(Tail2, 0.75F * (float) Math.abs(Math.sin(swellToPi - 0.5F)));
+            this.increaseScale(Tail3, 0.75F * (float) Math.abs(Math.sin(swellToPi - 1.0F)));
+            this.Stinger.rotationPointZ += 10 * (float) Math.abs(Math.sin(swellToPi - 1.0F));
         }
     }
 
@@ -321,14 +359,23 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         float gasterSwell1 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F + 1.0F)));
         float gasterSwell2 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F + 0.5F)));
         float gasterSwell3 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F)));
-        EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen)entity;
-        if(myrmexQueen.getAnimation() != EntityMyrmexQueen.ANIMATION_EGG) {
+        EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen) entity;
+        if (myrmexQueen.getAnimation() != EntityMyrmexQueen.ANIMATION_EGG) {
             this.increaseScale(Tail1, gasterSwell1);
             this.increaseScale(Tail2, gasterSwell2);
             this.increaseScale(Tail3, gasterSwell3);
             this.Stinger.rotationPointZ += 20 * gasterSwell3;
         }
-        if(entity.getPassengers().isEmpty()) {
+        if(myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_DIGNEST){
+            this.animateLeg(LEGR1, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, entity.ticksExisted, 1);
+            this.animateLeg(LEGR3, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, entity.ticksExisted, 1);
+            this.animateLeg(LEGR2, speed_walk * 0.5F, degree_walk * 0.5F, true, 0, 1, entity.ticksExisted, 1);
+
+            this.animateLeg(LEGL1, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, entity.ticksExisted, 1);
+            this.animateLeg(LEGL3, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, entity.ticksExisted, 1);
+            this.animateLeg(LEGL2, speed_walk * 0.5F, degree_walk * 0.5F, true, 1, -1, entity.ticksExisted, 1);
+        }
+        if (entity.getPassengers().isEmpty()) {
             this.faceTarget(f3, f4, 2, NECK);
         }
         this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, entity.ticksExisted, 1);
@@ -344,7 +391,7 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         this.animateLeg(LEGL2, speed_walk, degree_walk, true, 1, -1, f, f1);
     }
 
-    private void animateLeg(AdvancedModelRenderer[] models, float speed, float degree, boolean reverse, float offset, float weight, float f, float f1){
+    private void animateLeg(AdvancedModelRenderer[] models, float speed, float degree, boolean reverse, float offset, float weight, float f, float f1) {
         this.flap(models[0], speed, degree * 0.4F, reverse, offset, weight * 0.2F, f, f1);
         this.flap(models[1], speed, degree * 2, reverse, offset, weight * -0.4F, f, f1);
         this.flap(models[1], speed, -degree * 1.2F, reverse, offset, weight * 0.5F, f, f1);
@@ -352,14 +399,14 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
 
     }
 
-    public void increaseScale(AdvancedModelRenderer box, float scale){
+    public void increaseScale(AdvancedModelRenderer box, float scale) {
         box.scaleX += scale;
         box.scaleY += scale;
         box.scaleZ += scale;
     }
 
     @Override
-    public AdvancedModelRenderer[] getHeadParts(){
+    public AdvancedModelRenderer[] getHeadParts() {
         return new AdvancedModelRenderer[]{Neck1, HeadBase};
     }
 
@@ -367,5 +414,27 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     public void renderStatue() {
         this.resetToDefaultPose();
         this.Body2.render(0.0625F);
+    }
+
+    private void digPose() {
+        ModelUtils.rotateFrom(animator, legTopR1, -28, -13, 36);
+        ModelUtils.rotateFrom(animator, legTopR2, -7, 15, -24);
+        ModelUtils.rotateFrom(animator, legTopR3, -2, 31, 13);
+        ModelUtils.rotateFrom(animator, legMidR1, 0, 0, 80);
+        ModelUtils.rotateFrom(animator, legMidR2, 0, 0, -83);
+        ModelUtils.rotateFrom(animator, legMidR3, 0, 0, 65);
+        ModelUtils.rotateFrom(animator, legBottomR1, 0, 0, -75);
+        ModelUtils.rotateFrom(animator, legBottomR2, 0, 0, 75);
+        ModelUtils.rotateFrom(animator, legBottomR3, 0, 0, -54);
+
+        ModelUtils.rotateFrom(animator, legTopR1_1, -28, 13, -36);
+        ModelUtils.rotateFrom(animator, legTopR2_1, -7, -15, 24);
+        ModelUtils.rotateFrom(animator, legTopR3_1, -2, -31, -13);
+        ModelUtils.rotateFrom(animator, legMidR1_1, 0, 0, -80);
+        ModelUtils.rotateFrom(animator, legMidR2_1, 0, 0, 83);
+        ModelUtils.rotateFrom(animator, legMidR3_1, 0, 0, -65);
+        ModelUtils.rotateFrom(animator, legBottomR1_1, 0, 0, 75);
+        ModelUtils.rotateFrom(animator, legBottomR2_1, 0, 0, -75);
+        ModelUtils.rotateFrom(animator, legBottomR3_1, 0, 0, 54);
     }
 }

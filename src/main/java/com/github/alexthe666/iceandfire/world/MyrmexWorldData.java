@@ -2,20 +2,16 @@ package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class MyrmexWorldData extends WorldSavedData {
 
@@ -23,54 +19,40 @@ public class MyrmexWorldData extends WorldSavedData {
 
     private World world;
     private final List<BlockPos> villagerPositionsList = Lists.<BlockPos>newArrayList();
-    private final List<MyrmexHive> villageList = Lists.<MyrmexHive>newArrayList();
+    private final List<MyrmexHive> hiveList = Lists.<MyrmexHive>newArrayList();
     private int tickCounter;
 
-    public MyrmexWorldData(String name) {
-        super(name);
+    public MyrmexWorldData(String name){
+            super(name);
     }
 
-    public MyrmexWorldData(World worldIn) {
-        super(fileNameForProvider(worldIn.provider));
-        this.world = worldIn;
+    public MyrmexWorldData(World world) {
+        super(IDENTIFIER);
+        this.world = world;
         this.markDirty();
     }
 
     public void setWorldsForAll(World worldIn) {
         this.world = worldIn;
-
-        for (MyrmexHive village : this.villageList) {
+        for (MyrmexHive village : this.hiveList) {
             village.setWorld(worldIn);
         }
     }
 
-    public void addToVillagerPositionList(BlockPos pos) {
-        if (this.villagerPositionsList.size() <= 64) {
-            if (!this.positionInList(pos)) {
-                this.villagerPositionsList.add(pos);
-            }
-        }
-    }
-
-    /**
-     * Runs a single tick for the village collection
-     */
     public void tick() {
         ++this.tickCounter;
-
-        for (MyrmexHive village : this.villageList) {
-            village.tick(this.tickCounter);
+        for (MyrmexHive hive : this.hiveList) {
+            hive.tick(this.tickCounter, world);
         }
-
-        this.removeAnnihilatedVillages();
+        this.removeAnnihilatedHives();
 
         if (this.tickCounter % 400 == 0) {
             this.markDirty();
         }
     }
 
-    private void removeAnnihilatedVillages() {
-        Iterator<MyrmexHive> iterator = this.villageList.iterator();
+    private void removeAnnihilatedHives() {
+        Iterator<MyrmexHive> iterator = this.hiveList.iterator();
 
         while (iterator.hasNext()) {
             MyrmexHive village = iterator.next();
@@ -82,15 +64,15 @@ public class MyrmexWorldData extends WorldSavedData {
         }
     }
 
-    public List<MyrmexHive> getVillageList() {
-        return this.villageList;
+    public List<MyrmexHive> getHivelist() {
+        return this.hiveList;
     }
 
-    public MyrmexHive getNearestVillage(BlockPos doorBlock, int radius) {
+    public MyrmexHive getNearestHive(BlockPos doorBlock, int radius) {
         MyrmexHive village = null;
         double d0 = 3.4028234663852886E38D;
 
-        for (MyrmexHive village1 : this.villageList) {
+        for (MyrmexHive village1 : this.hiveList) {
             double d1 = village1.getCenter().distanceSq(doorBlock);
 
             if (d1 < d0) {
@@ -106,22 +88,6 @@ public class MyrmexWorldData extends WorldSavedData {
         return village;
     }
 
-    private int countBlocksCanSeeSky(BlockPos centerPos, EnumFacing direction, int limitation) {
-        int i = 0;
-
-        for (int j = 1; j <= 5; ++j) {
-            if (this.world.canSeeSky(centerPos.offset(direction, j))) {
-                ++i;
-
-                if (i >= limitation) {
-                    return i;
-                }
-            }
-        }
-
-        return i;
-    }
-
     private boolean positionInList(BlockPos pos) {
         for (BlockPos blockpos : this.villagerPositionsList) {
             if (blockpos.equals(pos)) {
@@ -132,29 +98,21 @@ public class MyrmexWorldData extends WorldSavedData {
         return false;
     }
 
-    private boolean isWoodDoor(BlockPos doorPos) {
-        IBlockState iblockstate = this.world.getBlockState(doorPos);
-        Block block = iblockstate.getBlock();
-
-        if (block instanceof BlockDoor) {
-            return iblockstate.getMaterial() == Material.WOOD;
-        } else {
-            return false;
+    public void debug(){
+        for (MyrmexHive hive : this.hiveList) {
+            System.out.println(hive);
         }
     }
 
-    /**
-     * reads in data from the NBTTagCompound into this MapDataBase
-     */
     public void readFromNBT(NBTTagCompound nbt) {
         this.tickCounter = nbt.getInteger("Tick");
-        NBTTagList nbttaglist = nbt.getTagList("Villages", 10);
+        NBTTagList nbttaglist = nbt.getTagList("Hives", 10);
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
             MyrmexHive village = new MyrmexHive();
             village.readVillageDataFromNBT(nbttagcompound);
-            this.villageList.add(village);
+            this.hiveList.add(village);
         }
     }
 
@@ -162,30 +120,37 @@ public class MyrmexWorldData extends WorldSavedData {
         compound.setInteger("Tick", this.tickCounter);
         NBTTagList nbttaglist = new NBTTagList();
 
-        for (MyrmexHive village : this.villageList) {
+        for (MyrmexHive village : this.hiveList) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             village.writeVillageDataToNBT(nbttagcompound);
             nbttaglist.appendTag(nbttagcompound);
         }
 
-        compound.setTag("Villages", nbttaglist);
+        compound.setTag("Hives", nbttaglist);
         return compound;
     }
 
-    public static String fileNameForProvider(WorldProvider provider) {
-        return "myrmexHives" + provider.getDimensionType().getSuffix();
-    }
-
     public static MyrmexWorldData get(World world) {
-        MyrmexWorldData data = (MyrmexWorldData)world.loadData(MyrmexWorldData.class, IDENTIFIER);
-        if (data == null) {
-            data = new MyrmexWorldData(world);
-            world.setData(IDENTIFIER, data);
+        MapStorage storage =  world.getPerWorldStorage();
+        MyrmexWorldData instance = (MyrmexWorldData) storage.getOrLoadData(MyrmexWorldData.class, IDENTIFIER);
+
+        if (instance == null) {
+            instance = new MyrmexWorldData(world);
+            storage.setData(IDENTIFIER, instance);
         }
-        return data;
+        return instance;
     }
 
     public static void addHive(World world, MyrmexHive hive){
-        get(world).villageList.add(hive);
+        get(world).hiveList.add(hive);
+    }
+
+    public MyrmexHive getHiveFromUUID(UUID id) {
+        for (MyrmexHive hive : this.hiveList) {
+            if(hive.hiveUUID != null && hive.hiveUUID.equals(id)){
+                return hive;
+            }
+        }
+        return null;
     }
 }

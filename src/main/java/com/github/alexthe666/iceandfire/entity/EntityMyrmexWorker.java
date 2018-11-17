@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.google.common.base.Predicate;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 
@@ -69,6 +71,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
+        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new MyrmexAIStoreBabies(this, 1.0D));
         this.tasks.addTask(3, new MyrmexAIStoreItems(this, 1.0D));
@@ -178,6 +182,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             }
         }
         return super.attackEntityFrom(source, amount);
+    }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexWorker : ModVillagers.INSTANCE.desertMyrmexWorker;
     }
 
     public Entity getHeldEntity() {

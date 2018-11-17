@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -16,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 
@@ -59,6 +61,8 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
+        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new MyrmexAIEscortEntity(this, 1.0D));
         this.tasks.addTask(2, new MyrmexAIReEnterHive(this, 1.0D));
@@ -76,6 +80,10 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             }
         }));
 
+    }
+
+    public VillagerRegistry.VillagerProfession getProfessionForge() {
+        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexSoldier : ModVillagers.INSTANCE.desertMyrmexSoldier;
     }
 
     protected void applyEntityAttributes() {

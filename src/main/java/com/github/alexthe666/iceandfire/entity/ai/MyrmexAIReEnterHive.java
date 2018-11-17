@@ -26,7 +26,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
-            village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 500);
+            village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 500);
         }
         if (village == null) {
             return false;
@@ -43,7 +43,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
         this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
 
         if(this.myrmex.getDistanceSq(nextEntrance) < 9 && first){
-            MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestVillage(new BlockPos(this.myrmex), 100);
+            MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 100);
             if(village != null){
                 nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG()));
                 first = false;
