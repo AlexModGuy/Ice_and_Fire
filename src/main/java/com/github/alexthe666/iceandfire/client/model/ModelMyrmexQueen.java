@@ -413,6 +413,10 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
+        this.Body5.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail1.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail2.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail3.setScale(1.0F, 1.0F, 1.0F);
         this.Body2.render(0.0625F);
     }
 

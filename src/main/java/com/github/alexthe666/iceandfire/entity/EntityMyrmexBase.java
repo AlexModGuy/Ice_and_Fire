@@ -37,7 +37,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
@@ -329,18 +328,15 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             if (this.buyingList == null) {
                 this.populateBuyingList();
             }
-            String s1 = this.getProfessionForge().getCareer(this.careerId - 1).getName();
-            {
-                ITextComponent itextcomponent = new TextComponentTranslation("entity.Villager." + s1, new Object[0]);
-                itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
-                itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
+            TextComponentString itextcomponent = new TextComponentString(this.getName());
+            itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
+            itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
 
-                if (team != null) {
-                    itextcomponent.getStyle().setColor(team.getColor());
-                }
-
-                return itextcomponent;
+            if (team != null) {
+                itextcomponent.getStyle().setColor(team.getColor());
             }
+
+            return itextcomponent;
         }
     }
 
