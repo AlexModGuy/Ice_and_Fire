@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-public class ItemDeathWormChitin extends Item {
+public class ItemDeathWormChitin extends Item implements ICustomRendered{
     public ItemDeathWormChitin() {
         this.setCreativeTab(IceAndFire.TAB);
         this.setHasSubtypes(true);

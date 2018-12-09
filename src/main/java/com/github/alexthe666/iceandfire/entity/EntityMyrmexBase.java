@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
+import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -32,6 +35,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -47,7 +51,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Random;
-import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends EntityTameable implements IAnimatedEntity, IMerchant {
 
@@ -78,6 +81,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
+        this.stepHeight = 2;
     }
 
     public boolean canMove() {
@@ -171,11 +175,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
         this.setScaleForAge(false);
         if (!this.world.isRemote) {
-            if (this.getNavigator().getPath() != null && this.getNavigator().getPath().getFinalPathPoint() != null && this.getNavigator().getPath().getFinalPathPoint().y < this.posY || this.getNavigator().noPath()) {
-                this.setBesideClimbableBlock(false);
-            } else {
-                this.setBesideClimbableBlock(this.collidedHorizontally);
-            }
+            this.setBesideClimbableBlock(this.collidedHorizontally && (this.onGround || !this.collidedVertically));
         }
         if (this.getGrowthStage() < 2) {
             growthTicks++;
@@ -191,7 +191,14 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.getAttackTarget() != null && !(this.getAttackTarget() instanceof EntityPlayer) && this.getNavigator().noPath()) {
             this.setAttackTarget(null);
         }
+        if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) || this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable)this.getAttackTarget()) || this.getAttackTarget() instanceof EntityPlayer && this.hive != null && !this.hive.isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
+            this.setAttackTarget(null);
+        }
 
+        if(this.getHealth() < this.getMaxHealth() && this.ticksExisted % 500 == 0 && this.isOnResin()){
+            this.heal(1);
+            this.world.setEntityState(this, (byte) 76);
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
@@ -219,10 +226,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         this.growthTicks = tag.getInteger("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
         this.setJungleVariant(tag.getBoolean("Variant"));
-        if (hive == null) {
-            UUID id = tag.getUniqueId("HiveUUID");
-            hive = MyrmexWorldData.get(world).getHiveFromUUID(id);
-        }
+        hive = MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID"));
         this.careerId = tag.getInteger("Career");
         this.careerLevel = tag.getInteger("CareerLevel");
         if (tag.hasKey("Offers", 10)) {
@@ -264,6 +268,9 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     public void useRecipe(MerchantRecipe recipe) {
         recipe.incrementToolUses();
         this.livingSoundTime = -this.getTalkInterval();
+        if(this.getHive() != null && this.getCustomer() != null){
+            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
+        }
         this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
         int i = 3 + this.rand.nextInt(4);
 
@@ -279,7 +286,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             i += 5;
         }
 
-        if (recipe.getItemToBuy().getItem() == Items.EMERALD) {
+        if (recipe.getItemToBuy().getItem() == ModItems.myrmex_desert_resin || recipe.getItemToBuy().getItem() == ModItems.myrmex_jungle_resin) {
             this.wealth += recipe.getItemToBuy().getCount();
         }
 
@@ -309,6 +316,13 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
                 entityvillager$itradelist.addMerchantRecipe(this, this.buyingList, this.rand);
             }
         }
+    }
+
+    public boolean canAttackTamable(EntityTameable tameable){
+        if(tameable.getOwner() != null && this.getHive() != null){
+            return !this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
+        }
+        return true;
     }
 
     @SideOnly(Side.CLIENT)
@@ -385,7 +399,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public boolean isOnLadder() {
-        return isBesideClimbableBlock();
+        return super.isOnLadder();
     }
 
     @Nullable
@@ -420,20 +434,17 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public void setRevengeTarget(@Nullable EntityLivingBase livingBase) {
-        super.setRevengeTarget(livingBase);
+        if(this.hive == null || livingBase == null || livingBase instanceof EntityPlayer && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
+            super.setRevengeTarget(livingBase);
+            if (this.hive != null && livingBase != null) {
+                this.hive.addOrRenewAgressor(livingBase, this.getImportance());
+            }
+        }
 
         if (this.hive != null && livingBase != null) {
-            this.hive.addOrRenewAgressor(livingBase, this.getImportance());
-
             if (livingBase instanceof EntityPlayer) {
-                int i = -1;
-
-                if (this.isChild()) {
-                    i = -3;
-                }
-
+                int i = -5 * this.getCasteImportance();
                 this.hive.modifyPlayerReputation(livingBase.getUniqueID(), i);
-
                 if (this.isEntityAlive()) {
                     this.world.setEntityState(this, (byte) 13);
                 }
@@ -445,7 +456,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.hive != null) {
             Entity entity = cause.getTrueSource();
             if (entity != null) {
-                this.hive.modifyPlayerReputation(entity.getUniqueID(), -2);
+                this.hive.modifyPlayerReputation(entity.getUniqueID(), -15);
             }
         }
         super.onDeath(cause);
@@ -467,7 +478,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
                 player.addStat(StatList.TALKED_TO_VILLAGER);
             }
 
-            if (!this.world.isRemote && !this.buyingList.isEmpty()) {
+            if (!this.world.isRemote && !this.buyingList.isEmpty() && (this.hive == null || !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID()))) {
                 this.setCustomer(player);
                 player.displayVillagerTradeGui(this);
             } else if (this.buyingList.isEmpty()) {
@@ -547,13 +558,17 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public static boolean isEdibleBlock(IBlockState blockState) {
         Block block = blockState.getBlock();
+        if(block instanceof BlockMyrmexBiolight){
+            return false;
+        }
         return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus;
     }
 
     public boolean isOnResin() {
         IBlockState state = world.getBlockState(new BlockPos(this).down());
         IBlockState state2 = world.getBlockState(new BlockPos(this).down(2));
-        return state.getBlock() instanceof BlockMyrmexResin || state2.getBlock() instanceof BlockMyrmexResin;
+        return state.getBlock() instanceof BlockMyrmexResin || state2.getBlock() instanceof BlockMyrmexResin
+                || state.getBlock() instanceof BlockMyrmexConnectedResin || state2.getBlock() instanceof BlockMyrmexConnectedResin;
     }
 
 
@@ -603,6 +618,25 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleStatusUpdate(byte id) {
+        if (id == 76) {
+            this.playVillagerEffect();
+        }else{
+            super.handleStatusUpdate(id);
+        }
+    }
+
+    protected void playVillagerEffect() {
+        EnumParticleTypes enumparticletypes = EnumParticleTypes.VILLAGER_HAPPY;
+        for (int i = 0; i < 7; ++i) {
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+        }
     }
 
     public static class BasicTrade implements EntityVillager.ITradeList {

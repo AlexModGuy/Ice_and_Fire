@@ -8,16 +8,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.*;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDragonBow extends ItemBow {
+public class ItemDragonBow extends ItemBow implements ICustomRendered {
 
 	public ItemDragonBow() {
 		this.maxStackSize = 1;

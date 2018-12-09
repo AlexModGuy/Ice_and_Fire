@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMyrmexEgg extends Item {
+public class ItemMyrmexEgg extends Item implements ICustomRendered{
 
     boolean isJungle;
 
@@ -41,6 +42,7 @@ public class ItemMyrmexEgg extends Item {
             items.add(new ItemStack(this, 1, 1));
             items.add(new ItemStack(this, 1, 2));
             items.add(new ItemStack(this, 1, 3));
+            items.add(new ItemStack(this, 1, 4));
         }
     }
 
@@ -61,8 +63,14 @@ public class ItemMyrmexEgg extends Item {
             case 3:
                 caste = "sentinel";
                 break;
+            case 4:
+                caste = "queen";
         }
-        tooltip.add(StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
+        if(stack.getMetadata() == 4){
+            tooltip.add(TextFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
+        }else{
+            tooltip.add(StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
+        }
     }
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -88,5 +96,10 @@ public class ItemMyrmexEgg extends Item {
             return EnumActionResult.SUCCESS;
 
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack stack) {
+        return super.hasEffect(stack) || stack.getMetadata() == 4;
     }
 }

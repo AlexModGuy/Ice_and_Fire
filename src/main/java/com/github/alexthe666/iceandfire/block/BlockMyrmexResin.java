@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockMyrmexResin extends Block {
+public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     private boolean sticky;
     protected static final AxisAlignedBB STICKY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);

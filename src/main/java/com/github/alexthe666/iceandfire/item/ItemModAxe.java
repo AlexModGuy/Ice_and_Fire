@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,7 +12,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
@@ -41,13 +41,25 @@ public class ItemModAxe extends ItemTool {
 				target.attackEntityFrom(DamageSource.MAGIC, 2);
 			}
 		}
+		if (this.toolMaterial == ModItems.myrmexChitin) {
+			if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
+				target.attackEntityFrom(DamageSource.GENERIC, 4);
+			}
+			if (target instanceof EntityDeathWorm) {
+				target.attackEntityFrom(DamageSource.GENERIC, 4);
+			}
+		}
 		return super.hitEntity(stack, target, attacker);
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (this == ModItems.silver_axe)
+		if (this == ModItems.silver_axe) {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+		}
+		if (this == ModItems.myrmex_desert_axe || this == ModItems.myrmex_jungle_axe) {
+			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
+		}
 	}
 
 	@Override

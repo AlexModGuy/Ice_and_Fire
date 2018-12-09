@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class ItemGorgonHead extends Item {
+public class ItemGorgonHead extends Item implements ICustomRendered {
 
 	public ItemGorgonHead() {
 		this.setCreativeTab(IceAndFire.TAB);

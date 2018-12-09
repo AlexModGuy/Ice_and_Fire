@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -125,7 +126,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 if(this.getAnimationTick() == 10){
                     EntityMyrmexEgg egg = new EntityMyrmexEgg(this.world);
                     egg.setJungle(this.isJungle());
-                    egg.setMyrmexCaste(this.getRNG().nextInt(2));
+                    egg.setMyrmexCaste(this.getRNG().nextInt(3));
                     egg.setLocationAndAngles(this.posX + extraX, this.posY + 0.75F, this.posZ + extraZ, 0, 0);
                     if(hive != null){
                         egg.hiveUUID = this.hive.hiveUUID;
@@ -189,9 +190,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);
             }
         }));
 

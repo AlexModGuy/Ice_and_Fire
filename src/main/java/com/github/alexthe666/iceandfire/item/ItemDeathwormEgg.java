@@ -11,7 +11,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-public class ItemDeathwormEgg extends Item {
+public class ItemDeathwormEgg extends Item implements  ICustomRendered{
 
     public ItemDeathwormEgg() {
         this.setCreativeTab(IceAndFire.TAB);

@@ -9,17 +9,23 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
@@ -87,9 +93,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.targetTasks.addTask(2, new MyrmexAIForageForItems(this));
         this.targetTasks.addTask(3, new MyrmexAIPickupBabies(this));
         this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);
             }
         }));
 
@@ -190,5 +197,21 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public Entity getHeldEntity() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+    }
+
+    public void onPickupItem(EntityItem itemEntity){
+        Item item = itemEntity.getItem().getItem();
+        if(item == ModItems.myrmex_jungle_resin && this.isJungle() || item == ModItems.myrmex_desert_resin && !this.isJungle()){
+            EntityPlayer owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
+            if (owner != null && this.hive != null) {
+                this.hive.modifyPlayerReputation(owner.getUniqueID(), 5);
+                this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1, 1);
+                int reputation = this.hive.getPlayerReputation(owner.getUniqueID());
+                TextFormatting color = this.isJungle() ? TextFormatting.DARK_BLUE : TextFormatting.GOLD;
+                if (!world.isRemote) {
+                    world.spawnEntity(new EntityXPOrb(world, owner.posX, owner.posY, owner.posZ, 1 + rand.nextInt(3)));
+                }
+            }
+        }
     }
 }

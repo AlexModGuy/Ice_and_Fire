@@ -84,6 +84,18 @@ public class ModBlocks {
 	public static Block desert_myrmex_cocoon = new BlockMyrmexCocoon(false);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jungle_myrmex_cocoon")
 	public static Block jungle_myrmex_cocoon = new BlockMyrmexCocoon(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_biolight")
+	public static Block myrmex_desert_biolight = new BlockMyrmexBiolight(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_biolight")
+	public static Block myrmex_jungle_biolight = new BlockMyrmexBiolight(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_block")
+	public static Block myrmex_desert_resin_block = new BlockMyrmexConnectedResin(false, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_block")
+	public static Block myrmex_jungle_resin_block = new BlockMyrmexConnectedResin(true, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_glass")
+	public static Block myrmex_desert_resin_glass = new BlockMyrmexConnectedResin(false, true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_glass")
+	public static Block myrmex_jungle_resin_glass = new BlockMyrmexConnectedResin(true, true);
 
 	static {
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");

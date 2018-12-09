@@ -65,6 +65,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
             this.resetTask();
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
+            this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(this.targetEntity.getItem().getItem(), 1, this.targetEntity.getItem().getItemDamage()));
             this.targetEntity.getItem().shrink(1);
             resetTask();

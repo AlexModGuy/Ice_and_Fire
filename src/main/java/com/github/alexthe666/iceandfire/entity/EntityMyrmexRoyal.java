@@ -7,6 +7,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -197,12 +198,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIFindMate(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
                 if(entity instanceof EntityMyrmexBase && EntityMyrmexRoyal.this.isBreedingSeason()){
                     return false;
                 }
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexRoyal.this, entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexRoyal.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);
             }
         }));
 
@@ -262,7 +264,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public boolean isBreedingSeason(){
-        return true;//hiveTicks > 400;
+        return hiveTicks > 4000;
     }
 
     @SideOnly(Side.CLIENT)

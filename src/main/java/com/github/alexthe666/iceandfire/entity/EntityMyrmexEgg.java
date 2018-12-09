@@ -45,7 +45,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         tag.setBoolean("Jungle", this.isJungle());
         tag.setInteger("MyrmexAge", this.getMyrmexAge());
         tag.setInteger("MyrmexCaste", this.getMyrmexCaste());
-        tag.setUniqueId("HiveUUID", hiveUUID);
+        tag.setUniqueId("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
 
     public int getMyrmexAge() {
         return this.getDataManager().get(MYRMEX_AGE).intValue();
-    }
+}
 
     public void setMyrmexAge(int i) {
         this.getDataManager().set(MYRMEX_AGE, i);
@@ -115,6 +115,9 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
                     break;
                 case 3:
                     myrmex = new EntityMyrmexSentinel(world);
+                    break;
+                case 4:
+                    myrmex = new EntityMyrmexQueen(world);
                     break;
             }
             myrmex.setJungleVariant(this.isJungle());

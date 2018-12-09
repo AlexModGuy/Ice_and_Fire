@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class ItemHippogryphEgg extends Item {
+public class ItemHippogryphEgg extends Item implements ICustomRendered{
 
 	public ItemHippogryphEgg() {
 		this.setCreativeTab(IceAndFire.TAB);

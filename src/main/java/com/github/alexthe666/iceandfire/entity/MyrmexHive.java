@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.village.VillageDoorInfo;
 import net.minecraft.world.World;
 
@@ -37,7 +38,6 @@ public class MyrmexHive {
     private int noBreedTicks;
     private final Map<UUID, Integer> playerReputation = Maps.<UUID, Integer>newHashMap();
     private final List<HiveAggressor> villageAgressors = Lists.<HiveAggressor>newArrayList();
-    private int numIronGolems;
     public UUID hiveUUID;
 
     public MyrmexHive(){
@@ -145,7 +145,7 @@ public class MyrmexHive {
         EntityPlayer entityplayer = null;
 
         for (UUID s : this.playerReputation.keySet()) {
-            if (this.isPlayerReputationTooLow(s)) {
+            if (this.isPlayerReputationTooLowToFight(s)) {
                 EntityPlayer entityplayer1 = world.getPlayerEntityByUUID(s);
 
                 if (entityplayer1 != null) {
@@ -188,13 +188,36 @@ public class MyrmexHive {
 
     public int modifyPlayerReputation(UUID playerName, int reputation) {
         int i = this.getPlayerReputation(playerName);
-        int j = MathHelper.clamp(i + reputation, -30, 10);
+        int j = MathHelper.clamp(i + reputation, 0, 100);
+        EntityPlayer player = world.getPlayerEntityByUUID(playerName);
+        if(player != null) {
+            if(j - i != 0) {
+                player.sendStatusMessage(new TextComponentTranslation(j - i >= 0 ? "myrmex.message.raised_reputation" : "myrmex.message.lowered_reputation", Math.abs(j - i), j), true);
+            }
+            if(i < 25 && j >= 25){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.peaceful"), false);
+            }
+            if(i >= 25 && j < 25){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.hostile"), false);
+            }
+            if(i < 50 && j >= 50){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.trade"), false);
+            }
+            if(i >= 50 && j < 50){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.trade"), false);
+            }
+        }
+
         this.playerReputation.put(playerName, Integer.valueOf(j));
         return j;
     }
 
-    public boolean isPlayerReputationTooLow(UUID uuid) {
-        return this.getPlayerReputation(uuid) <= -15;
+    public boolean isPlayerReputationTooLowToTrade(UUID uuid) {
+        return this.getPlayerReputation(uuid) < 50;
+    }
+
+    public boolean isPlayerReputationTooLowToFight(UUID uuid) {
+        return this.getPlayerReputation(uuid) < 25;
     }
 
     /**
@@ -203,7 +226,6 @@ public class MyrmexHive {
     public void readVillageDataFromNBT(NBTTagCompound compound) {
         this.numMyrmex = compound.getInteger("PopSize");
         this.villageRadius = compound.getInteger("Radius");
-        this.numIronGolems = compound.getInteger("Golems");
         this.lastAddDoorTimestamp = compound.getInteger("Stable");
         this.tickCounter = compound.getInteger("Tick");
         this.noBreedTicks = compound.getInteger("MTick");
@@ -270,7 +292,6 @@ public class MyrmexHive {
     public void writeVillageDataToNBT(NBTTagCompound compound) {
         compound.setInteger("PopSize", this.numMyrmex);
         compound.setInteger("Radius", this.villageRadius);
-        compound.setInteger("Golems", this.numIronGolems);
         compound.setInteger("Stable", this.lastAddDoorTimestamp);
         compound.setInteger("Tick", this.tickCounter);
         compound.setInteger("MTick", this.noBreedTicks);
@@ -449,7 +470,7 @@ public class MyrmexHive {
 
     public boolean repopulate() {
         int roomCount = this.allRooms.size();
-        return this.numMyrmex < Math.min(80, roomCount * 4);
+        return this.numMyrmex < Math.min(80, roomCount * 9);
     }
 
     class HiveAggressor {

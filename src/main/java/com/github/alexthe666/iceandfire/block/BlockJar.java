@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
+import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockJar extends BlockContainer {
+public class BlockJar extends BlockContainer implements ICustomRendered {
 	private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
 	public Item itemBlock;
 	private boolean empty;

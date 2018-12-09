@@ -7,6 +7,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -52,6 +53,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
         if(visibleTicks > 0){
             visibleTicks--;
         }else{
@@ -63,7 +65,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             this.daylightTicks = 0;
         }
         boolean holding = getHeldEntity() != null;
-        boolean hiding = isHiding();
+        boolean hiding = isHiding() && !this.isTrading();
         if(holding || this.isOnResin() || this.getAttackTarget() != null || visibleTicks > 0){
             this.setHiding(false);
         }
@@ -121,9 +123,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 4, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSentinel.this, entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSentinel.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);
             }
         }));
     }

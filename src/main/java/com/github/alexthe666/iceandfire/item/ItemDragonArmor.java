@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonArmor extends Item {
+public class ItemDragonArmor extends Item implements ICustomRendered{
 
 	public int type;
 	public String name;

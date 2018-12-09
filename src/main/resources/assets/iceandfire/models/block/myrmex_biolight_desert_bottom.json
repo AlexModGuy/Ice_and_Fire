@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "iceandfire:blocks/myrmex_desert_biolight_bottom"
+  }
+}
