@@ -25,7 +25,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
         this.targetEntitySelector = new Predicate<EntityItem>() {
             @Override
             public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty();
+                return item instanceof EntityItem && !item.getItem().isEmpty() && !item.isInWater();
             }
         };
         this.myrmex = myrmex;
@@ -60,7 +60,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
     @Override
     public void updateTask() {
         super.updateTask();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+        if (this.targetEntity == null || this.targetEntity != null && (this.targetEntity.isDead || this.targetEntity.isInWater())) {
             this.resetTask();
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {

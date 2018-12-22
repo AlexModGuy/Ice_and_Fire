@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:myrmex_desert_resin",
+      "data": 0
+    },
+    {
+      "item": "iceandfire:myrmex_resin",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:myrmex_resin_sticky",
+    "data": 0,
+    "count": 1
+  }
+}

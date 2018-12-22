@@ -90,6 +90,8 @@ public class ModRecipes {
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
+        GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
+        GameRegistry.addSmelting(ModBlocks.myrmex_jungle_resin_block, new ItemStack(ModBlocks.myrmex_jungle_resin_glass), 1);
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
         ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));

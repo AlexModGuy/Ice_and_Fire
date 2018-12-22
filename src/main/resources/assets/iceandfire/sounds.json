@@ -1,4 +1,45 @@
 {
+  "myrmex_bite": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_bite_0",
+      "iceandfire:myrmex_bite_1"
+    ]
+  },
+  "myrmex_sting": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_sting_0",
+      "iceandfire:myrmex_sting_1"
+    ]
+  },
+  "myrmex_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_idle_0",
+      "iceandfire:myrmex_idle_1",
+      "iceandfire:myrmex_idle_2"
+    ]
+  },
+  "myrmex_walk": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_walk"
+    ]
+  },
+  "myrmex_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_hurt_0",
+      "iceandfire:myrmex_hurt_1"
+    ]
+  },
+  "myrmex_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:myrmex_die"
+    ]
+  },
   "stymphalian_bird_idle": {
     "category": "neutral",
     "sounds": [

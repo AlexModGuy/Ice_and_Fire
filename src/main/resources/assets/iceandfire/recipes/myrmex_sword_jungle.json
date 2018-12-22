@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "C",
+    "C",
+    "B"
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:myrmex_jungle_chitin",
+      "data": 0
+    },
+    "B": {
+      "item": "iceandfire:witherbone",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_jungle_sword",
+    "data": 0
+  }
+}

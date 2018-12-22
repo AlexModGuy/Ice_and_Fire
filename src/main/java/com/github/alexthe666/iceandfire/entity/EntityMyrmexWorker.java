@@ -26,6 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
@@ -37,6 +38,13 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public boolean keepSearching = true;
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
+    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_worker_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_worker_jungle"));
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
+    }
 
     public EntityMyrmexWorker(World worldIn) {
         super(worldIn);
@@ -46,10 +54,14 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+            this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 4) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
+        }
+        if (this.getAnimation() == ANIMATION_STING&& this.getAnimationTick() == 0){
+            this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());

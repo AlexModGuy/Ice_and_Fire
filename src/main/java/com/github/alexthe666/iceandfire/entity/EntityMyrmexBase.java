@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -20,6 +21,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -34,10 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -47,6 +46,8 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -108,6 +109,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
                     if (this.getHive() != null && this.lastBuyingPlayer != null) {
                         this.world.setEntityState(this, (byte) 14);
+                        this.getHive().setWorld(this.world);
                         this.getHive().modifyPlayerReputation(this.lastBuyingPlayer, 1);
                     }
                 }
@@ -228,7 +230,6 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         this.setGrowthStage(tag.getInteger("GrowthStage"));
         this.growthTicks = tag.getInteger("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
-        this.setJungleVariant(tag.getBoolean("Variant"));
         this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
         this.careerId = tag.getInteger("Career");
         this.careerLevel = tag.getInteger("CareerLevel");
@@ -272,6 +273,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         recipe.incrementToolUses();
         this.livingSoundTime = -this.getTalkInterval();
         if(this.getHive() != null && this.getCustomer() != null){
+            this.getHive().setWorld(this.world);
             this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
         }
         this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
@@ -447,6 +449,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.getHive() != null && livingBase != null) {
             if (livingBase instanceof EntityPlayer) {
                 int i = -5 * this.getCasteImportance();
+                this.getHive().setWorld(this.world);
                 this.getHive().modifyPlayerReputation(livingBase.getUniqueID(), i);
                 if (this.isEntityAlive()) {
                     this.world.setEntityState(this, (byte) 13);
@@ -459,6 +462,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.getHive() != null) {
             Entity entity = cause.getTrueSource();
             if (entity != null) {
+                this.getHive().setWorld(this.world);
                 this.getHive().modifyPlayerReputation(entity.getUniqueID(), -15);
             }
         }
@@ -537,8 +541,18 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setHive(MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400));
+        if(this.getHive() != null){
+            this.setJungleVariant(isJungleBiome(world, this.getHive().getCenter()));
+        }else{
+            this.setJungleVariant(rand.nextBoolean());
+        }
         this.populateBuyingList();
         return livingdata;
+    }
+
+    private static boolean isJungleBiome(World world, BlockPos position) {
+        Biome biome = world.getBiome(position);
+        return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
     }
 
     public abstract boolean shouldLeaveHive();
@@ -673,6 +687,33 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
     }
 
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.MYRMEX_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.MYRMEX_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.MYRMEX_DIE;
+    }
+
+    protected void playStepSound(BlockPos pos, Block blockIn){
+        this.playSound(ModSounds.MYRMEX_WALK, 0.16F * this.getMyrmexPitch(), 1.0F);
+    }
+
+    protected void playBiteSound(){
+        this.playSound(ModSounds.MYRMEX_BITE, 1.0F * this.getMyrmexPitch(), 1.0F);
+    }
+
+    protected void playStingSound(){
+        this.playSound(ModSounds.MYRMEX_STING, 1.0F * this.getMyrmexPitch(), 0.6F);
+    }
+
     protected void playVillagerEffect() {
         EnumParticleTypes enumparticletypes = EnumParticleTypes.VILLAGER_HAPPY;
         for (int i = 0; i < 7; ++i) {
@@ -682,6 +723,11 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
+
+    public float getMyrmexPitch() {
+        return 1;
+    }
+
 
     public static class BasicTrade implements EntityVillager.ITradeList {
         public ItemStack first;

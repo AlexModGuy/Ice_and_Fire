@@ -28,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,6 +52,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     private boolean isLandNavigator;
     private boolean isMating = false;
     public EntityMyrmexRoyal mate;
+    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_jungle"));
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
+    }
 
     public EntityMyrmexRoyal(World worldIn) {
         super(worldIn);
@@ -138,12 +146,14 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
         hiveTicks++;
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+            this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 6) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+            this.playStingSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 6) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));

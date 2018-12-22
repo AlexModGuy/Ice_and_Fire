@@ -144,7 +144,6 @@ public class MyrmexWorldData extends WorldSavedData {
     }
 
     public MyrmexHive getHiveFromUUID(UUID id) {
-        System.out.println(this.hiveList.size());
         for (MyrmexHive hive : this.hiveList) {
             if(hive.hiveUUID != null && hive.hiveUUID.equals(id)){
                 return hive;

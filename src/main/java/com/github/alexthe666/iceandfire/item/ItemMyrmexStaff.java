@@ -53,7 +53,6 @@ public class ItemMyrmexStaff extends Item {
         }
         UUID id = itemStackIn.getTagCompound().getUniqueId("HiveUUID");
         if (!worldIn.isRemote) {
-            System.out.println(id);
             MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
             MyrmexWorldData.get(worldIn).addHive(worldIn, new MyrmexHive());
             if(hive != null){

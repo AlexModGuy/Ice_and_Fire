@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "VCC",
+    " BC",
+    " B "
+  ],
+  "key": {
+    "V": {
+      "item": "iceandfire:myrmex_stinger",
+      "data": 0
+    },
+    "C": {
+      "item": "iceandfire:myrmex_desert_chitin",
+      "data": 0
+    },
+    "B": {
+      "item": "iceandfire:witherbone",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_desert_staff",
+    "data": 0
+  }
+}

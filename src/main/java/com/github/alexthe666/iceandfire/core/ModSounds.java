@@ -249,7 +249,25 @@ public final class ModSounds {
 
 	@GameRegistry.ObjectHolder("stymphalian_bird_attack")
 	public static final SoundEvent STYMPHALIAN_BIRD_ATTACK = createSoundEvent("stymphalian_bird_attack");
-	
+
+	@GameRegistry.ObjectHolder("myrmex_die")
+	public static final SoundEvent MYRMEX_DIE = createSoundEvent("myrmex_die");
+
+	@GameRegistry.ObjectHolder("myrmex_idle")
+	public static final SoundEvent MYRMEX_IDLE = createSoundEvent("myrmex_idle");
+
+	@GameRegistry.ObjectHolder("myrmex_hurt")
+	public static final SoundEvent MYRMEX_HURT = createSoundEvent("myrmex_hurt");
+
+	@GameRegistry.ObjectHolder("myrmex_walk")
+	public static final SoundEvent MYRMEX_WALK = createSoundEvent("myrmex_walk");
+
+	@GameRegistry.ObjectHolder("myrmex_bite")
+	public static final SoundEvent MYRMEX_BITE = createSoundEvent("myrmex_bite");
+
+	@GameRegistry.ObjectHolder("myrmex_sting")
+	public static final SoundEvent MYRMEX_STING = createSoundEvent("myrmex_sting");
+
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);

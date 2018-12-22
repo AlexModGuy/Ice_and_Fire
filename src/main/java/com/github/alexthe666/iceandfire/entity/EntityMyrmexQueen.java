@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
@@ -44,11 +45,19 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public static final Animation ANIMATION_DIGNEST = Animation.create(45);
     private static final DataParameter<Boolean> HASMADEHOME = EntityDataManager.<Boolean>createKey(EntityMyrmexQueen.class, DataSerializers.BOOLEAN);
     private int eggTicks = 0;
+    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_queen_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_queen_jungle"));
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
+    }
 
     public EntityMyrmexQueen(World worldIn) {
         super(worldIn);
         this.setSize(2.9F, 1.86F);
     }
+
 
     protected void entityInit() {
         super.entityInit();
@@ -152,10 +161,14 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+            this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
+        }
+        if (this.getAnimation() == ANIMATION_STING&& this.getAnimationTick() == 0){
+            this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());

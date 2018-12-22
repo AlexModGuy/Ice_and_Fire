@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
@@ -41,6 +42,13 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public float hidingProgress;
     public int visibleTicks = 0;
     public int daylightTicks = 0;
+    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_sentinel_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_sentinel_jungle"));
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
+    }
 
     public EntityMyrmexSentinel(World worldIn) {
         super(worldIn);
@@ -85,10 +93,12 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         if(this.getHeldEntity() != null){
             this.setAnimation(ANIMATION_NIBBLE);
             if(this.getAnimationTick() == 5){
+                this.playBiteSound();
                 this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 6));
             }
         }
         if (this.getAnimation() == ANIMATION_GRAB && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
+            this.playStingSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 16) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 2));
@@ -100,6 +110,9 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             if (dist < 16) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
             }
+        }
+        if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0){
+            this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {
             double dist = this.getDistanceSq(this.getAttackTarget());

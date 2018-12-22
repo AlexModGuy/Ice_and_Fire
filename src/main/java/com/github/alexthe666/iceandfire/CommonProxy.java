@@ -119,7 +119,13 @@ public class CommonProxy {
                 ModSounds.STYMPHALIAN_BIRD_IDLE,
                 ModSounds.STYMPHALIAN_BIRD_HURT,
                 ModSounds.STYMPHALIAN_BIRD_DIE,
-                ModSounds.STYMPHALIAN_BIRD_ATTACK
+                ModSounds.STYMPHALIAN_BIRD_ATTACK,
+                ModSounds.MYRMEX_IDLE,
+                ModSounds.MYRMEX_HURT,
+                ModSounds.MYRMEX_DIE,
+                ModSounds.MYRMEX_WALK,
+                ModSounds.MYRMEX_BITE,
+                ModSounds.MYRMEX_STING
         );
     }
 

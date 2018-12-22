@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "RR",
+    "RR"
+  ],
+  "key": {
+    "R": {
+      "item": "iceandfire:myrmex_desert_resin",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_desert_resin_block",
+    "data": 0
+  }
+}
