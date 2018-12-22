@@ -264,7 +264,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public boolean isBreedingSeason(){
-        return hiveTicks > 4000;
+        return hiveTicks > 4000 && (this.getHive() == null || this.getHive().reproduces);
     }
 
     @SideOnly(Side.CLIENT)

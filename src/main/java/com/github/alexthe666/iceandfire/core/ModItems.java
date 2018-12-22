@@ -262,9 +262,9 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_hoe")
 	public static Item myrmex_jungle_hoe = new ItemModHoe(myrmexChitin, "myrmex_jungle_hoe", "iceandfire.myrmex_jungle_hoe");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_staff")
-	public static Item myrmex_desert_staff = new ItemGeneric("myrmex_desert_staff", "iceandfire.myrmex_desert_staff");
+	public static Item myrmex_desert_staff = new ItemMyrmexStaff(false);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_staff")
-	public static Item myrmex_jungle_staff = new ItemGeneric("myrmex_jungle_staff", "iceandfire.myrmex_jungle_staff");
+	public static Item myrmex_jungle_staff = new ItemMyrmexStaff(true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_helmet")
 	public static Item myrmex_desert_helmet = new ItemModArmor(myrmexDesert, 0, EntityEquipmentSlot.HEAD, "myrmex_desert_helmet", "iceandfire.myrmex_desert_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_chestplate")

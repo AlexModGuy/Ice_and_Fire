@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
+import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
@@ -29,7 +31,9 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -60,6 +64,7 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
 	private int thirdPersonViewDragon = 0;
+	private static MyrmexHive referedClientHive = null;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -304,6 +309,19 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
+	public void openMyrmexStaffGui(ItemStack staff) {
+		Minecraft.getMinecraft().displayGuiScreen(new GuiMyrmexStaff(staff));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
+		Minecraft.getMinecraft().displayGuiScreen(new GuiMyrmexAddRoom(staff, pos, facing));
+	}
+
+
+	@SideOnly(Side.CLIENT)
 	public Object getArmorModel(int armorId) {
 		switch (armorId) {
 			case 0:
@@ -336,5 +354,13 @@ public class ClientProxy extends CommonProxy {
 
 	public void setDragon3rdPersonView(int view) {
 		thirdPersonViewDragon = view;
+	}
+
+	public static MyrmexHive getReferedClientHive(){
+		return referedClientHive;
+	}
+
+	public static void setReferedClientHive(MyrmexHive hive){
+		referedClientHive = hive;
 	}
 }

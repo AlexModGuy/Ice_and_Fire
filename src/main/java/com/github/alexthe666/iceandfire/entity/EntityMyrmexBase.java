@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
@@ -41,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
@@ -51,6 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends EntityTameable implements IAnimatedEntity, IMerchant {
 
@@ -59,7 +62,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     private static final DataParameter<Boolean> VARIANT = EntityDataManager.<Boolean>createKey(EntityMyrmexBase.class, DataSerializers.BOOLEAN);
     private int animationTick;
     private Animation currentAnimation;
-    MyrmexHive hive;
+    private MyrmexHive hive;
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
@@ -103,9 +106,9 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
                     this.populateBuyingList();
                     this.needsInitilization = false;
 
-                    if (this.hive != null && this.lastBuyingPlayer != null) {
+                    if (this.getHive() != null && this.lastBuyingPlayer != null) {
                         this.world.setEntityState(this, (byte) 14);
-                        this.hive.modifyPlayerReputation(this.lastBuyingPlayer, 1);
+                        this.getHive().modifyPlayerReputation(this.lastBuyingPlayer, 1);
                     }
                 }
 
@@ -179,7 +182,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
         if (this.getGrowthStage() < 2) {
             growthTicks++;
-            if (growthTicks == 24000) {
+            if (growthTicks == IceAndFire.CONFIG.myrmexLarvaTicks) {
                 this.setGrowthStage(this.getGrowthStage() + 1);
                 growthTicks = 0;
             }
@@ -191,7 +194,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.getAttackTarget() != null && !(this.getAttackTarget() instanceof EntityPlayer) && this.getNavigator().noPath()) {
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) || this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable)this.getAttackTarget()) || this.getAttackTarget() instanceof EntityPlayer && this.hive != null && !this.hive.isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
+        if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) || this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable)this.getAttackTarget()) || this.getAttackTarget() instanceof EntityPlayer && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
 
@@ -208,8 +211,8 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         tag.setInteger("GrowthStage", this.getGrowthStage());
         tag.setInteger("GrowthTicks", growthTicks);
         tag.setBoolean("Variant", this.isJungle());
-        if (this.hive != null) {
-            tag.setUniqueId("HiveUUID", this.hive.hiveUUID);
+        if (this.getHive() != null) {
+            tag.setUniqueId("HiveUUID", this.getHive().hiveUUID);
         }
         tag.setInteger("Career", this.careerId);
         tag.setInteger("CareerLevel", this.careerLevel);
@@ -226,7 +229,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         this.growthTicks = tag.getInteger("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
         this.setJungleVariant(tag.getBoolean("Variant"));
-        hive = MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID"));
+        this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
         this.careerId = tag.getInteger("Career");
         this.careerLevel = tag.getInteger("CareerLevel");
         if (tag.hasKey("Offers", 10)) {
@@ -434,17 +437,17 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public void setRevengeTarget(@Nullable EntityLivingBase livingBase) {
-        if(this.hive == null || livingBase == null || livingBase instanceof EntityPlayer && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
+        if(this.getHive() == null || livingBase == null || livingBase instanceof EntityPlayer && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
             super.setRevengeTarget(livingBase);
-            if (this.hive != null && livingBase != null) {
-                this.hive.addOrRenewAgressor(livingBase, this.getImportance());
+            if (this.getHive() != null && livingBase != null) {
+                this.getHive().addOrRenewAgressor(livingBase, this.getImportance());
             }
         }
 
-        if (this.hive != null && livingBase != null) {
+        if (this.getHive() != null && livingBase != null) {
             if (livingBase instanceof EntityPlayer) {
                 int i = -5 * this.getCasteImportance();
-                this.hive.modifyPlayerReputation(livingBase.getUniqueID(), i);
+                this.getHive().modifyPlayerReputation(livingBase.getUniqueID(), i);
                 if (this.isEntityAlive()) {
                     this.world.setEntityState(this, (byte) 13);
                 }
@@ -453,10 +456,10 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public void onDeath(DamageSource cause) {
-        if (this.hive != null) {
+        if (this.getHive() != null) {
             Entity entity = cause.getTrueSource();
             if (entity != null) {
-                this.hive.modifyPlayerReputation(entity.getUniqueID(), -15);
+                this.getHive().modifyPlayerReputation(entity.getUniqueID(), -15);
             }
         }
         super.onDeath(cause);
@@ -465,11 +468,17 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
+        boolean flag2 = itemstack.getItem() == ModItems.myrmex_jungle_staff || itemstack.getItem() == ModItems.myrmex_desert_staff;
 
+        if(flag2){
+            this.onStaffInteract(player, itemstack);
+            player.swingArm(hand);
+            return true;
+        }
         if (flag) {
             itemstack.interactWithEntity(player, this, hand);
             return true;
-        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isSneaking()) {
+        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.getGrowthStage() >= 2 && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isSneaking()) {
             if (this.buyingList == null) {
                 this.populateBuyingList();
             }
@@ -478,7 +487,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
                 player.addStat(StatList.TALKED_TO_VILLAGER);
             }
 
-            if (!this.world.isRemote && !this.buyingList.isEmpty() && (this.hive == null || !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID()))) {
+            if (!this.world.isRemote && !this.buyingList.isEmpty() && (this.getHive() == null || !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID()))) {
                 this.setCustomer(player);
                 player.displayVillagerTradeGui(this);
             } else if (this.buyingList.isEmpty()) {
@@ -491,11 +500,43 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
     }
 
+    public void onStaffInteract(EntityPlayer player, ItemStack itemstack) {
+        UUID staffUUID = itemstack.getTagCompound().getUniqueId("HiveUUID");
+        if(world.isRemote){
+            return;
+        }
+        if(!player.isCreative()) {
+            if ((this.getHive() != null && !this.getHive().canPlayerCommandHive(player.getUniqueID()))) {
+                return;
+            }
+        }
+        if(this.getHive() == null){
+            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.null_hive"), true);
+
+        }else{
+            if(staffUUID != null && staffUUID.equals(this.getHive().hiveUUID)){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_already_set"), true);
+            }else {
+                this.getHive().setWorld(this.world);
+                EntityMyrmexQueen queen = this.getHive().getQueen();
+                BlockPos center = this.getHive().getCenterGround();
+                if (queen.hasCustomName()) {
+                    player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_set_named", queen.getCustomNameTag(), center.getX(), center.getY(), center.getZ()), true);
+                } else {
+                    player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
+                }
+                itemstack.getTagCompound().setUniqueId("HiveUUID", this.getHive().hiveUUID);
+            }
+
+        }
+
+    }
+
     @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-        this.hive = MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400);
+        this.setHive(MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400));
         this.populateBuyingList();
         return livingdata;
     }
@@ -529,13 +570,16 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public void setHive(MyrmexHive newHive) {
         hive = newHive;
+        if(hive != null){
+            hive.addMyrmex(this);
+        }
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
         if (entity instanceof EntityMyrmexBase) {
-            if (myrmex.hive != null && ((EntityMyrmexBase) entity).hive != null) {
+            if (myrmex.getHive() != null && ((EntityMyrmexBase) entity).getHive() != null) {
                 if (myrmex.isJungle() == ((EntityMyrmexBase) entity).isJungle()) {
-                    return myrmex.hive.getCenter() == ((EntityMyrmexBase) entity).hive.getCenter();
+                    return myrmex.getHive().getCenter() == ((EntityMyrmexBase) entity).getHive().getCenter();
                 }
             }
 
@@ -573,11 +617,11 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
 
     public boolean isInNursery() {
-        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
+        if (getHive() != null && getHive().getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
             return false;
         }
-        if (hive != null) {
-            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
+        if (getHive() != null) {
+            BlockPos nursery = getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
             return this.getDistanceSqToCenter(nursery) < 45;
         }
         return false;
@@ -613,7 +657,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public boolean shouldWander() {
-        return this.hive == null;
+        return this.getHive() == null;
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
@@ -656,6 +700,29 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             int i = firstPrice.getPrice(random);
             int j = secondPrice.getPrice(random);
             recipeList.add(new MerchantRecipe(new ItemStack(first.getItem(), i, first.getItemDamage()), new ItemStack(second.getItem(), j, second.getItemDamage())));
+        }
+    }
+
+    public static int getRandomCaste(World world, Random random, boolean royal){
+        float rand = random.nextFloat();
+        if(royal) {
+            if (rand > 0.9) {
+                return 2;//royal
+            } else if (rand > 0.75) {
+                return 3;//sentinel
+            } else if (rand > 0.5) {
+                return 1;//soldier
+            } else {
+                return 0;//worker
+            }
+        }else{
+            if (rand > 0.8) {
+                return 3;//sentinel
+            } else if (rand > 0.6) {
+                return 1;//soldier
+            } else {
+                return 0;//worker
+            }
         }
     }
 

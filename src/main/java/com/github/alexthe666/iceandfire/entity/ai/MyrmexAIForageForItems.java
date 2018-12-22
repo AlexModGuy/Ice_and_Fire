@@ -5,7 +5,6 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -35,7 +34,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex.holdingBaby() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching) {
+        if (!this.myrmex.canMove() || this.myrmex.holdingBaby() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
             return false;
         }
         List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
@@ -66,15 +65,15 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
             this.myrmex.onPickupItem(targetEntity);
-            this.myrmex.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(this.targetEntity.getItem().getItem(), 1, this.targetEntity.getItem().getItemDamage()));
-            this.targetEntity.getItem().shrink(1);
+            this.myrmex.setHeldItem(EnumHand.MAIN_HAND, this.targetEntity.getItem());
+            this.targetEntity.setDead();
             resetTask();
         }
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return !this.taskOwner.getNavigator().noPath() && this.myrmex.getAttackTarget() == null;
     }
 
     public static class Sorter implements Comparator<Entity> {

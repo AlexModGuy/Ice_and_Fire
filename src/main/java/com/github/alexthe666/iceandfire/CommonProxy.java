@@ -18,8 +18,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -289,6 +291,9 @@ public class CommonProxy {
     public void openBestiaryGui(ItemStack book) {
     }
 
+    public void openMyrmexStaffGui(ItemStack staff) {
+    }
+
     public Object getArmorModel(int armorId) {
         return null;
     }
@@ -310,4 +315,8 @@ public class CommonProxy {
 
     public void setDragon3rdPersonView(int view) {
     }
+
+    public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
+    }
+
 }

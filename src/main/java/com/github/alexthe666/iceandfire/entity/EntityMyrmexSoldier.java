@@ -116,7 +116,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     public boolean shouldEnterHive(){
-        return guardingEntity == null || !guardingEntity.canSeeSky();
+        return guardingEntity == null || !guardingEntity.canSeeSky() || guardingEntity.shouldEnterHive();
     }
 
     @Override

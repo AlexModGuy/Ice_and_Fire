@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
@@ -100,7 +101,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         if (!canSeeSky()) {
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
-        if(this.getMyrmexAge() > 18000){
+        if(this.getMyrmexAge() > IceAndFire.CONFIG.myrmexEggTicks){
             this.setDead();
             EntityMyrmexBase myrmex;
             switch(this.getMyrmexCaste()){
@@ -123,10 +124,25 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
-            MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
-            if(!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000){
+            if(myrmex instanceof EntityMyrmexQueen){
+                EntityPlayer player = world.getClosestPlayerToEntity(this, 15);
+                MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
+                hive.hasOwner = true;
+                hive.ownerUUID = player.getUniqueID();
+                if(!world.isRemote){
+                    hive.modifyPlayerReputation(player.getUniqueID(), 100);
+                }
+                MyrmexWorldData.addHive(world, hive);
                 myrmex.setHive(hive);
+
+
+            }else{
+                MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
+                if(!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000){
+                    myrmex.setHive(hive);
+                }
             }
+
             if (!world.isRemote) {
                 world.spawnEntity(myrmex);
             }

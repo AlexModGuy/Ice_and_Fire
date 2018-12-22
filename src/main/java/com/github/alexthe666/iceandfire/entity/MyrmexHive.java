@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -9,8 +10,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -38,7 +39,12 @@ public class MyrmexHive {
     private int noBreedTicks;
     private final Map<UUID, Integer> playerReputation = Maps.<UUID, Integer>newHashMap();
     private final List<HiveAggressor> villageAgressors = Lists.<HiveAggressor>newArrayList();
+    private final List<UUID> myrmexList = Lists.<UUID>newArrayList();
     public UUID hiveUUID;
+    public String colonyName = "";
+    public boolean reproduces = true;
+    public boolean hasOwner = false;
+    public UUID ownerUUID = null;
 
     public MyrmexHive(){
         this.hiveUUID = UUID.randomUUID();
@@ -69,12 +75,21 @@ public class MyrmexHive {
     }
 
     private void updateNumMyrmex(World world) {
-        List<EntityMyrmexBase> list = world.<EntityMyrmexBase>getEntitiesWithinAABB(EntityMyrmexBase.class, new AxisAlignedBB((double) (this.center.getX() - this.villageRadius), (double) (this.center.getY() - 4), (double) (this.center.getZ() - this.villageRadius), (double) (this.center.getX() + this.villageRadius), (double) (this.center.getY() + 4), (double) (this.center.getZ() + this.villageRadius)));
-        this.numMyrmex = list.size();
-
+        this.numMyrmex = this.myrmexList.size();
         if (this.numMyrmex == 0) {
             this.playerReputation.clear();
         }
+    }
+
+    public EntityMyrmexQueen getQueen(){
+        List<EntityMyrmexQueen> allQueens = world.getEntities(EntityMyrmexQueen.class, EntitySelectors.NOT_SPECTATING);
+        List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
+        for(EntityMyrmexQueen queen : allQueens){
+            if(queen.getHive().equals(this)){
+                ourQueens.add(queen);
+            }
+        }
+        return ourQueens.isEmpty() ? null : ourQueens.get(0);
     }
 
     public BlockPos getCenter() {
@@ -189,7 +204,15 @@ public class MyrmexHive {
     public int modifyPlayerReputation(UUID playerName, int reputation) {
         int i = this.getPlayerReputation(playerName);
         int j = MathHelper.clamp(i + reputation, 0, 100);
-        EntityPlayer player = world.getPlayerEntityByUUID(playerName);
+        if(this.hasOwner && playerName.equals(ownerUUID)){
+            j = 100;
+        }
+        EntityPlayer player = null;
+        try {
+            player = world.getPlayerEntityByUUID(playerName);
+        }catch (Exception e){
+            IceAndFire.logger.warn("Myrmex Hive could not find player with associated UUID");
+        }
         if(player != null) {
             if(j - i != 0) {
                 player.sendStatusMessage(new TextComponentTranslation(j - i >= 0 ? "myrmex.message.raised_reputation" : "myrmex.message.lowered_reputation", Math.abs(j - i), j), true);
@@ -204,7 +227,13 @@ public class MyrmexHive {
                 player.sendStatusMessage(new TextComponentTranslation("myrmex.message.trade"), false);
             }
             if(i >= 50 && j < 50){
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.trade"), false);
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.no_trade"), false);
+            }
+            if(i < 75 && j >= 75){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.can_use_staff"), false);
+            }
+            if(i >= 75 && j < 75){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.cant_use_staff"), false);
             }
         }
 
@@ -216,6 +245,10 @@ public class MyrmexHive {
         return this.getPlayerReputation(uuid) < 50;
     }
 
+    public boolean canPlayerCommandHive(UUID uuid) {
+        return this.getPlayerReputation(uuid) >= 75;
+    }
+
     public boolean isPlayerReputationTooLowToFight(UUID uuid) {
         return this.getPlayerReputation(uuid) < 25;
     }
@@ -225,6 +258,10 @@ public class MyrmexHive {
      */
     public void readVillageDataFromNBT(NBTTagCompound compound) {
         this.numMyrmex = compound.getInteger("PopSize");
+        this.reproduces = compound.getBoolean("Reproduces");
+        this.hasOwner = compound.getBoolean("HasOwner");
+        this.ownerUUID = compound.getUniqueId("OwnerUUID");
+        this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInteger("Radius");
         this.lastAddDoorTimestamp = compound.getInteger("Stable");
         this.tickCounter = compound.getInteger("Tick");
@@ -237,7 +274,12 @@ public class MyrmexHive {
             VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), nbttagcompound.getInteger("IDX"), nbttagcompound.getInteger("IDZ"), nbttagcompound.getInteger("TS"));
             this.villageDoorInfoList.add(villagedoorinfo);
         }
-
+        NBTTagList hiveMembers = compound.getTagList("HiveMembers", 10);
+        this.myrmexList.clear();
+        for (int i = 0; i < hiveMembers.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound = hiveMembers.getCompoundTagAt(i);
+            this.myrmexList.add(nbttagcompound.getUniqueId("MyrmexUUID"));
+        }
         NBTTagList foodRoomList = compound.getTagList("FoodRooms", 10);
         this.foodRooms.clear();
         for (int i = 0; i < foodRoomList.tagCount(); ++i) {
@@ -270,9 +312,6 @@ public class MyrmexHive {
             this.entranceBottoms.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
-        if(hiveUUID == null){
-            hiveUUID = UUID.randomUUID();
-        }
         NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
         for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
             NBTTagCompound nbttagcompound1 = nbttaglist1.getCompoundTagAt(j);
@@ -291,6 +330,12 @@ public class MyrmexHive {
      */
     public void writeVillageDataToNBT(NBTTagCompound compound) {
         compound.setInteger("PopSize", this.numMyrmex);
+        compound.setBoolean("Reproduces", this.reproduces);
+        compound.setBoolean("HasOwner", this.hasOwner);
+        if (this.ownerUUID != null) {
+            compound.setUniqueId("OwnerUUID", this.ownerUUID);
+        }
+        compound.setString("ColonyName", this.colonyName);
         compound.setInteger("Radius", this.villageRadius);
         compound.setInteger("Stable", this.lastAddDoorTimestamp);
         compound.setInteger("Tick", this.tickCounter);
@@ -312,7 +357,13 @@ public class MyrmexHive {
             nbttagcompound.setInteger("TS", villagedoorinfo.getLastActivityTimestamp());
             nbttaglist.appendTag(nbttagcompound);
         }
-
+        NBTTagList hiveMembers = new NBTTagList();
+        for (UUID memberUUID : this.myrmexList) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setUniqueId("MyrmexUUID", memberUUID);
+            hiveMembers.appendTag(nbttagcompound);
+        }
+        compound.setTag("HiveMembers", hiveMembers);
         NBTTagList foodRoomList = new NBTTagList();
         for (BlockPos pos : this.foodRooms) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -337,9 +388,9 @@ public class MyrmexHive {
             nbttagcompound.setInteger("X", pos.getX());
             nbttagcompound.setInteger("Y", pos.getY());
             nbttagcompound.setInteger("Z", pos.getZ());
-            miscRoomList.appendTag(miscRoomList);
+            miscRoomList.appendTag(nbttagcompound);
         }
-        compound.setTag("MiscRooms", babyRoomList);
+        compound.setTag("MiscRooms", miscRoomList);
         NBTTagList entrancesList = new NBTTagList();
         for (Map.Entry<BlockPos, EnumFacing> entry : this.entrances.entrySet()) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -383,12 +434,61 @@ public class MyrmexHive {
     }
 
     public void addRoom(BlockPos center, WorldGenMyrmexHive.RoomType roomType){
-        if(roomType == WorldGenMyrmexHive.RoomType.FOOD){
+        if(roomType == WorldGenMyrmexHive.RoomType.FOOD && !this.foodRooms.contains(center)){
             this.foodRooms.add(center);
-        }else if(roomType == WorldGenMyrmexHive.RoomType.NURSERY){
+        }else if(roomType == WorldGenMyrmexHive.RoomType.NURSERY && !this.babyRooms.contains(center)){
             this.babyRooms.add(center);
-        }else{
+        }else if(!this.miscRooms.contains(center) && !this.miscRooms.contains(center)){
             this.miscRooms.add(center);
+        }
+        this.allRooms.add(center);
+    }
+
+    public void addRoomWithMessage(EntityPlayer player, BlockPos center, WorldGenMyrmexHive.RoomType roomType){
+        List<BlockPos> allCurrentRooms = new ArrayList<>(getAllRooms());
+        allCurrentRooms.addAll(this.getEntrances().keySet());
+        allCurrentRooms.addAll(this.getEntranceBottoms().keySet());
+        if(roomType == WorldGenMyrmexHive.RoomType.FOOD){
+            if(!this.foodRooms.contains(center) && !allCurrentRooms.contains(center)){
+                this.foodRooms.add(center);
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_food_room", center.getX(), center.getY(), center.getZ()), false);
+            }else{
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+
+            }
+        }else if(roomType == WorldGenMyrmexHive.RoomType.NURSERY){
+            if(!this.babyRooms.contains(center) && !allCurrentRooms.contains(center)){
+                this.babyRooms.add(center);
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_nursery_room", center.getX(), center.getY(), center.getZ()), false);
+            }else{
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+            }
+        }else if(!this.miscRooms.contains(center) && !allCurrentRooms.contains(center)){
+                this.miscRooms.add(center);
+            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_misc_room", center.getX(), center.getY(), center.getZ()), false);
+        }else{
+            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+        }
+    }
+
+    public void addEnteranceWithMessage(EntityPlayer player, boolean bottom, BlockPos center, EnumFacing facing){
+        List<BlockPos> allCurrentRooms = new ArrayList<>(getAllRooms());
+        allCurrentRooms.addAll(this.getEntrances().keySet());
+        allCurrentRooms.addAll(this.getEntranceBottoms().keySet());
+        if(bottom){
+            if(allCurrentRooms.contains(center)){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+            }else{
+                this.getEntranceBottoms().put(center, facing);
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_enterance_bottom", center.getX(), center.getY(), center.getZ()), false);
+            }
+        }else{
+            if(allCurrentRooms.contains(center)){
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+            }else{
+                this.getEntrances().put(center, facing);
+                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_enterance_surface", center.getX(), center.getY(), center.getZ()), false);
+            }
         }
     }
 
@@ -404,7 +504,7 @@ public class MyrmexHive {
 
     public List<BlockPos> getAllRooms(){
         allRooms.clear();
-        //allRooms.add(center);
+        allRooms.add(center);
         allRooms.addAll(foodRooms);
         allRooms.addAll(babyRooms);
         allRooms.addAll(miscRooms);
@@ -443,6 +543,12 @@ public class MyrmexHive {
         return closest != null ? closest.getKey() : entity.getPosition();
     }
 
+    public EntityPlayer getOwner(World world){
+        if(hasOwner){
+            return world.getPlayerEntityByUUID(ownerUUID);
+        }
+        return null;
+    }
 
     public Map<BlockPos, EnumFacing> getEntrances(){
         return entrances;
@@ -469,8 +575,23 @@ public class MyrmexHive {
     }
 
     public boolean repopulate() {
-        int roomCount = this.allRooms.size();
-        return this.numMyrmex < Math.min(80, roomCount * 9);
+        int roomCount = this.getAllRooms().size();
+        return this.numMyrmex < Math.min(80, roomCount * 9) && reproduces;
+    }
+
+    public void addMyrmex(EntityMyrmexBase myrmex) {
+        if(!this.myrmexList.contains(myrmex.getUniqueID())){
+            this.myrmexList.add(myrmex.getUniqueID());
+        }
+    }
+
+    public void removeRoom(BlockPos pos) {
+        this.foodRooms.remove(pos);
+        this.miscRooms.remove(pos);
+        this.babyRooms.remove(pos);
+        this.allRooms.remove(pos);
+        this.getEntrances().remove(pos);
+        this.getEntranceBottoms().remove(pos);
     }
 
     class HiveAggressor {
@@ -487,5 +608,9 @@ public class MyrmexHive {
 
     public String toString(){
         return "MyrmexHive(x=" + this.center.getX() + ",y=" + this.center.getY() + ",z="  + this.center.getZ() + "), population=" + this.getNumMyrmex() + "\nUUID: " + hiveUUID;
+    }
+
+    public boolean equals(MyrmexHive hive){
+        return this.hiveUUID.equals(hive.hiveUUID);
     }
 }

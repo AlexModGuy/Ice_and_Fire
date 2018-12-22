@@ -12,11 +12,13 @@ public class ChangePageButton extends GuiButton {
 	private final boolean right;
 	public int lastpage = 1;
 	private int page;
+	private int color;
 
-	public ChangePageButton(int id, int x, int y, boolean right, int bookpage) {
-		super(id, x, y, 23, 13, "");
+	public ChangePageButton(int id, int x, int y, boolean right, int bookpage, int color) {
+		super(id, x, y, 23, 10, "");
 		this.right = right;
 		page = bookpage;
+		this.color = color;
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class ChangePageButton extends GuiButton {
 			if (!this.right) {
 				j += 13;
 			}
+			j += color * 23;
 
 			this.drawTexturedModalRect(this.x, this.y, i, j, width, height);
 		}

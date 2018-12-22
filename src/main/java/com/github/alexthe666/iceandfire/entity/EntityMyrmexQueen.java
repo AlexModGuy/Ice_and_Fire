@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
@@ -54,6 +55,14 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
     }
 
+    public void setCustomNameTag(String name){
+        if (!this.getCustomNameTag().equals(name)) {
+            if(this.getHive() != null){
+                this.getHive().colonyName = name;
+            }
+        }
+        super.setCustomNameTag(name);
+    }
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
@@ -86,8 +95,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if(this.getAnimation() == ANIMATION_DIGNEST){
             spawnGroundEffects(3);
         }
-        if(this.hive != null){
-            this.hive.tick(0, world);
+        if(this.getHive() != null){
+            this.getHive().tick(0, world);
         }
 
         if(hasMadeHome()) {
@@ -106,7 +115,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 for(int i = 0; i < 3; i++){
                     EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
                     worker.copyLocationAndAnglesFrom(this);
-                    worker.setHive(this.hive);
+                    worker.setHive(this.getHive());
                     worker.setJungleVariant(this.isJungle());
                     if(!world.isRemote){
                         world.spawnEntity(worker);
@@ -115,7 +124,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 return;
             }
         }
-        if(eggTicks > 2000 && this.hive == null || this.hive != null && this.hive.repopulate() && eggTicks > 2000){
+        if(!world.isRemote && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks && this.getHive() == null || !world.isRemote && this.getHive() != null && this.getHive().repopulate() && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks){
             float radius = -5.25F;
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
@@ -126,10 +135,11 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 if(this.getAnimationTick() == 10){
                     EntityMyrmexEgg egg = new EntityMyrmexEgg(this.world);
                     egg.setJungle(this.isJungle());
-                    egg.setMyrmexCaste(this.getRNG().nextInt(3));
+                    int caste = getRandomCaste(world, this.getRNG(), getHive() == null || getHive().reproduces);
+                    egg.setMyrmexCaste(caste);
                     egg.setLocationAndAngles(this.posX + extraX, this.posY + 0.75F, this.posZ + extraZ, 0, 0);
-                    if(hive != null){
-                        egg.hiveUUID = this.hive.hiveUUID;
+                    if(getHive() != null){
+                        egg.hiveUUID = this.getHive().hiveUUID;
                     }
                     if(!world.isRemote){
                         world.spawnEntity(egg);

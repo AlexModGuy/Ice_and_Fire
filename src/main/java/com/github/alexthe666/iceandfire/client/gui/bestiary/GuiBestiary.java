@@ -16,10 +16,8 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -70,8 +68,8 @@ public class GuiBestiary extends GuiScreen {
 		font = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 		int centerX = (this.width - this.X) / 2;
 		int centerY = (this.height - this.Y) / 2;
-		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages));
-		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages));
+		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages, 0));
+		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages, 0));
 		if (!allPageTypes.isEmpty()) {
 			for (int i = 0; i < allPageTypes.size(); i++) {
 				int xIndex = i % -2;

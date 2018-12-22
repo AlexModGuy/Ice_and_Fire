@@ -25,7 +25,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
@@ -203,11 +202,9 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         Item item = itemEntity.getItem().getItem();
         if(item == ModItems.myrmex_jungle_resin && this.isJungle() || item == ModItems.myrmex_desert_resin && !this.isJungle()){
             EntityPlayer owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
-            if (owner != null && this.hive != null) {
-                this.hive.modifyPlayerReputation(owner.getUniqueID(), 5);
+            if (owner != null && this.getHive() != null) {
+                this.getHive().modifyPlayerReputation(owner.getUniqueID(), 5);
                 this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1, 1);
-                int reputation = this.hive.getPlayerReputation(owner.getUniqueID());
-                TextFormatting color = this.isJungle() ? TextFormatting.DARK_BLUE : TextFormatting.GOLD;
                 if (!world.isRemote) {
                     world.spawnEntity(new EntityXPOrb(world, owner.posX, owner.posY, owner.posZ, 1 + rand.nextInt(3)));
                 }

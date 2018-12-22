@@ -402,5 +402,6 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             }
             return list.get(rand.nextInt(list.size()));
         }
+
     }
 }

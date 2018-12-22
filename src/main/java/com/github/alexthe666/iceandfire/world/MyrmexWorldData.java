@@ -44,11 +44,8 @@ public class MyrmexWorldData extends WorldSavedData {
         for (MyrmexHive hive : this.hiveList) {
             hive.tick(this.tickCounter, world);
         }
-        this.removeAnnihilatedHives();
+        //this.removeAnnihilatedHives();
 
-        if (this.tickCounter % 400 == 0) {
-            this.markDirty();
-        }
     }
 
     private void removeAnnihilatedHives() {
@@ -138,6 +135,7 @@ public class MyrmexWorldData extends WorldSavedData {
             instance = new MyrmexWorldData(world);
             storage.setData(IDENTIFIER, instance);
         }
+        instance.markDirty();
         return instance;
     }
 
@@ -146,6 +144,7 @@ public class MyrmexWorldData extends WorldSavedData {
     }
 
     public MyrmexHive getHiveFromUUID(UUID id) {
+        System.out.println(this.hiveList.size());
         for (MyrmexHive hive : this.hiveList) {
             if(hive.hiveUUID != null && hive.hiveUUID.equals(id)){
                 return hive;
