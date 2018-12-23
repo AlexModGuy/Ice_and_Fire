@@ -30,6 +30,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private boolean hasFoodRoom;
     private boolean hasNursery;
     private boolean small;
+    private BlockPos centerOfHive;
 
     public WorldGenMyrmexHive(boolean small){
         this.small = small;
@@ -42,6 +43,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         totalRooms = 0;
         BlockPos undergroundPos = new BlockPos(position.getX(), position.getY(), position.getZ());
         entrances = 0;
+        centerOfHive = undergroundPos;
         generateMainRoom(worldIn, rand, undergroundPos);
         this.small = false;
         return false;
@@ -243,7 +245,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos)) {
+            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos) && !world.getBlockState(blockpos).isOpaqueCube()) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
             }
         }
@@ -315,6 +317,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 }
                 break;
             case NURSERY:
+                boolean jungle = isJungleBiome(world, centerOfHive);
                 if(random.nextInt(4) == 0 && !this.small){
                     EntityMyrmexBase baby;
                     switch(random.nextInt(4)){
@@ -335,6 +338,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                     baby.setLocationAndAngles(blockpos.getX(), blockpos.getY(), blockpos.getZ(), random.nextFloat() * 360F, 0F);
                     baby.setRotationYawHead(random.nextFloat() * 360F);
                     baby.setHive(hive);
+                    baby.setJungleVariant(jungle);
                     if(!world.isRemote && !baby.isEntityInsideOpaqueBlock()){
                         world.spawnEntity(baby);
                     }

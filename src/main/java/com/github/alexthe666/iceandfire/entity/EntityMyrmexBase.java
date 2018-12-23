@@ -14,6 +14,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCactus;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
@@ -24,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -119,6 +119,10 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         }
 
         super.updateAITasks();
+    }
+
+    protected int getExperiencePoints(EntityPlayer player) {
+        return (this.getCasteImportance() * 7) + this.world.rand.nextInt(3);
     }
 
     @Override
@@ -265,7 +269,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     public void verifySellingItem(ItemStack stack) {
         if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
             this.livingSoundTime = -this.getTalkInterval();
-            this.playSound(stack.isEmpty() ? SoundEvents.ENTITY_VILLAGER_NO : SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(stack.isEmpty() ? ModSounds.MYRMEX_HURT : ModSounds.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
         }
     }
 
@@ -276,7 +280,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             this.getHive().setWorld(this.world);
             this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
         }
-        this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
+        this.playSound(ModSounds.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
         int i = 3 + this.rand.nextInt(4);
 
         if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
@@ -619,7 +623,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if(block instanceof BlockMyrmexBiolight){
             return false;
         }
-        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus;
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus || block instanceof BlockLeaves;
     }
 
     public boolean isOnResin() {
@@ -703,7 +707,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn){
-        this.playSound(ModSounds.MYRMEX_WALK, 0.16F * this.getMyrmexPitch(), 1.0F);
+        this.playSound(ModSounds.MYRMEX_WALK, 0.16F * this.getMyrmexPitch() * (this.getRNG().nextFloat() * 0.6F + 0.4F), 1.0F);
     }
 
     protected void playBiteSound(){
@@ -725,7 +729,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
     }
 
     public float getMyrmexPitch() {
-        return 1;
+        return width;
     }
 
 

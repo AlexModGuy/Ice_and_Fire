@@ -106,12 +106,13 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             }
         }
         if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
+            this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 16) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
             }
         }
-        if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0){
+        if (this.getAnimation() == ANIMATION_STING && (this.getAnimationTick() == 0 || this.getAnimationTick() == 10)){
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {

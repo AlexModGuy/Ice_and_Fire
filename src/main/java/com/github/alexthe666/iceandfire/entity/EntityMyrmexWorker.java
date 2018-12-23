@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -213,7 +214,13 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public void onPickupItem(EntityItem itemEntity){
         Item item = itemEntity.getItem().getItem();
         if(item == ModItems.myrmex_jungle_resin && this.isJungle() || item == ModItems.myrmex_desert_resin && !this.isJungle()){
-            EntityPlayer owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
+
+            EntityPlayer owner = null;
+            try{
+                owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
+            }catch(Exception e){
+                IceAndFire.logger.warn("Myrmex picked up resin that wasn't thrown!");
+            }
             if (owner != null && this.getHive() != null) {
                 this.getHive().modifyPlayerReputation(owner.getUniqueID(), 5);
                 this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1, 1);
