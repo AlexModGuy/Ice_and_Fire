@@ -35,6 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -116,6 +117,13 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return 10 + this.world.rand.nextInt(5);
     }
 
+    public void onUpdate() {
+        super.onUpdate();
+        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+            this.setDead();
+        }
+    }
+
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
@@ -165,8 +173,8 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public void onDeath(DamageSource cause) {
         if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase && !world.isRemote) {
             this.setVictorId(cause.getTrueSource().getUniqueID());
-            if(this.flock != null){
-                this.flock.setFearTarget((EntityLivingBase)cause.getTrueSource());
+            if (this.flock != null) {
+                this.flock.setFearTarget((EntityLivingBase) cause.getTrueSource());
             }
         }
         super.onDeath(cause);
@@ -188,7 +196,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 }
             }
             if (!copperItems.isEmpty()) {
-                    for (ItemStack copperIngot : copperItems) {
+                for (ItemStack copperIngot : copperItems) {
                     if (copperIngot != ItemStack.EMPTY) {
                         ItemStack stack = copperIngot.copy();
                         stack.setCount(1 + this.getRNG().nextInt(3));
@@ -263,7 +271,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.getAttackTarget() != null && (this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))){
+        if (this.getAttackTarget() != null && (this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))) {
             this.setAttackTarget(null);
         }
         if (this.flock == null) {
@@ -480,7 +488,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
-        if(this.isVictor(entity) && entity != null){
+        if (this.isVictor(entity) && entity != null) {
             return;
         }
         super.setAttackTarget(entity);
