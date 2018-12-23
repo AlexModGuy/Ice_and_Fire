@@ -51,7 +51,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     private boolean willExplode = false;
     private int ticksTillExplosion = 60;
     private Animation currentAnimation;
-    private EntityDeathWormPart[] segments = new EntityDeathWormPart[6];
+    private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
     private boolean isSandNavigator;
@@ -117,9 +117,9 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
 
     public void initSegments(float scale) {
         this.setScaleForAge(false);
-        segments = new EntityDeathWormPart[6];
+        segments = new EntityMutlipartPart[11];
         for (int i = 0; i < segments.length; i++) {
-            segments[i] = new EntityDeathWormPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
+            segments[i] = new EntityMutlipartPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
         }
     }
 

@@ -14,6 +14,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
@@ -59,7 +60,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear {
+public abstract class EntityDragonBase extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -137,6 +138,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     public int walkCycle;
     private int tacklingTicks;
     private int ticksStill;
+    private float lastScale;
+    //private EntityMutlipartPart[] parts = new EntityMutlipartPart[1];//head, neck, left wing, right wing, left leg, right leg, tail1, tail2, tail3, tail4, tail5
+    private EntityMutlipartPart headPart;
+    private EntityMutlipartPart neckPart;
+    private EntityMutlipartPart rightWingUpperPart;
+    private EntityMutlipartPart rightWingLowerPart;
+    private EntityMutlipartPart leftWingUpperPart;
+    private EntityMutlipartPart leftWingLowerPart;
+    private EntityMutlipartPart tail1Part;
+    private EntityMutlipartPart tail2Part;
+    private EntityMutlipartPart tail3Part;
+    private EntityMutlipartPart tail4Part;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -157,6 +170,67 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
             tail_buffer = new ChainBuffer();
         }
         legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
+        resetParts(1);
+    }// /entitydata @e {NoAI:1}
+
+    public void resetParts(float scale){
+        removeParts();
+        headPart = new EntityMutlipartPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
+        neckPart = new EntityMutlipartPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
+        rightWingUpperPart = new EntityMutlipartPart(this, 1F * scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        rightWingLowerPart = new EntityMutlipartPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        leftWingUpperPart = new EntityMutlipartPart(this, 1F * scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        leftWingLowerPart = new EntityMutlipartPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        tail1Part = new EntityMutlipartPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
+        tail2Part = new EntityMutlipartPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
+        tail3Part = new EntityMutlipartPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
+        tail4Part = new EntityMutlipartPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
+    }
+
+    public void removeParts(){
+        if(headPart != null){
+            world.removeEntityDangerously(headPart);
+        }
+        if(neckPart != null){
+            world.removeEntityDangerously(neckPart);
+        }
+        if(rightWingUpperPart != null){
+            world.removeEntityDangerously(rightWingUpperPart);
+        }
+        if(rightWingLowerPart != null){
+            world.removeEntityDangerously(rightWingLowerPart);
+        }
+        if(leftWingUpperPart != null){
+            world.removeEntityDangerously(leftWingUpperPart);
+        }
+        if(leftWingLowerPart != null){
+            world.removeEntityDangerously(leftWingLowerPart);
+        }
+        if(tail1Part != null){
+            world.removeEntityDangerously(tail1Part);
+        }
+        if(tail2Part != null){
+            world.removeEntityDangerously(tail2Part);
+        }
+        if(tail3Part != null){
+            world.removeEntityDangerously(tail3Part);
+        }
+        if(tail4Part != null){
+            world.removeEntityDangerously(tail4Part);
+        }
+    }
+
+    public void updateParts(){
+        headPart.onUpdate();
+        neckPart.onUpdate();
+        rightWingUpperPart.onUpdate();
+        rightWingLowerPart.onUpdate();
+        leftWingUpperPart.onUpdate();
+        leftWingLowerPart.onUpdate();
+        tail1Part.onUpdate();
+        tail2Part.onUpdate();
+        tail3Part.onUpdate();
+        tail4Part.onUpdate();
     }
 
     public boolean isMobDead(){
@@ -276,6 +350,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
         }
     }
 
+    public void setDead(){
+        removeParts();
+        super.setDead();
+    }
+
     protected int getExperiencePoints(EntityPlayer player) {
         return 5 + this.getDragonStage() * 25;
     }
@@ -296,7 +375,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public boolean isAIDisabled() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.isModelDead() || properties == null || properties.isStone;
+        return this.isModelDead() || properties == null || properties.isStone || super.isAIDisabled();
     }
 
     @Override
@@ -1484,6 +1563,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
     @Override
     public void onUpdate() {
         super.onUpdate();
+        updateParts();
         this.setScaleForAge(true);
         if (world.isRemote) {
             this.updateClientControls();
@@ -1568,7 +1648,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IAnimat
 
     @Override
     public void setScaleForAge(boolean par1) {
-        this.setScale(Math.min(this.getRenderSize() * 0.35F, 7F));
+        float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
+        this.setScale(scale);
+        if(scale != lastScale){
+            resetParts(this.getRenderSize() / 3);
+        }
+        lastScale = scale;
     }
 
     public float getRenderSize() {
