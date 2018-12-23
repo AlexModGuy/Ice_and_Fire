@@ -27,6 +27,10 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
 					IBlockState state = world.getBlockState(blockpos);
+					float hardness = state.getBlock().getBlockHardness(state, world, blockpos);
+					if(hardness <= -1.0F){
+						return;
+					}
 					if (state.getMaterial() == Material.GRASS) {
 						world.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
 					} else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {

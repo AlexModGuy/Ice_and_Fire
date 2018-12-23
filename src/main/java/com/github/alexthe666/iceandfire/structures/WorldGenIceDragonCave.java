@@ -43,6 +43,10 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 	}
 
 	public static void setOres(World world, BlockPos pos) {
+		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
+		if(hardness <= -1.0F){
+			return;
+		}
 		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
 		if (vien_chance) {
 			int chance = new Random().nextInt(199) + 1;

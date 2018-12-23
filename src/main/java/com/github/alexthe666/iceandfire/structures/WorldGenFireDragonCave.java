@@ -43,6 +43,10 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 	}
 
 	public static void setOres(World world, BlockPos pos) {
+		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
+		if(hardness <= -1.0F){
+			return;
+		}
 		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
 		if (vien_chance) {
 			int chance = new Random().nextInt(199) + 1;
@@ -106,7 +110,8 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+					float hardness = worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position);
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) &&  hardness >= 0 && hardness != -1) {
 						worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
@@ -118,7 +123,8 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			int l = i2 + rand.nextInt(2);
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f) && worldIn.getBlockState(blockpos).getMaterial() == Material.ROCK && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+				float hardness = worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position);
+				if (blockpos.distanceSq(position) <= (double) (f * f) &&  hardness >= 0 && hardness != -1) {
 					this.setOres(worldIn, blockpos);
 				}
 			}
