@@ -12,15 +12,12 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -367,6 +364,11 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
+        if (flag) {
+            player.getHeldItem(hand).interactWithEntity(player, this, hand);
+            return true;
+        }
         if (this.isTamed() && this.isOwner(player)) {
             if (FoodUtils.isSeeds(player.getHeldItem(hand))) {
                 if (this.getHealth() < this.getMaxHealth()) {

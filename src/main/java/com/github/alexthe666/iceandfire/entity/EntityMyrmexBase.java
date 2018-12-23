@@ -475,7 +475,6 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
         boolean flag2 = itemstack.getItem() == ModItems.myrmex_jungle_staff || itemstack.getItem() == ModItems.myrmex_desert_staff;
 
         if(flag2){
@@ -483,6 +482,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
             player.swingArm(hand);
             return true;
         }
+        boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
         if (flag) {
             itemstack.interactWithEntity(player, this, hand);
             return true;
