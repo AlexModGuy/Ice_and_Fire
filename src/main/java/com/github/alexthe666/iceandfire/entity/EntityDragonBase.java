@@ -1555,7 +1555,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             return false;
         }
 
-        if (dmg.damageType.contains("arrow") && this.isRiding()) {
+        if ((dmg.damageType.contains("arrow") || getRidingEntity() != null && dmg.getTrueSource() != null && dmg.getTrueSource().isEntityEqual(this.getRidingEntity())) && this.isRiding()) {
             return false;
         }
 
