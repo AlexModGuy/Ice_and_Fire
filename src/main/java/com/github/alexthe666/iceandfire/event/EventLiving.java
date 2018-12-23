@@ -306,7 +306,7 @@ public class EventLiving {
 
 		if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
 			SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-			if (sirenProps != null) {
+			if (sirenProps != null && sirenProps.sirenID != 0) {
 				EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
 				if (closestSiren != null && closestSiren.isActuallySinging()) {
 					stepHeightSwitched = false;
