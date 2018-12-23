@@ -85,4 +85,8 @@ public class BlockGeneric extends Block {
 		}
 		return block != this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
+
+	public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon){
+		return this == ModBlocks.silverBlock || this == ModBlocks.sapphireBlock;
+	}
 }
