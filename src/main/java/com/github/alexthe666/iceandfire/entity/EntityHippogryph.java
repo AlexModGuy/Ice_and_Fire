@@ -100,6 +100,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		this.stepHeight = 1;
 	}
 
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 7 + this.world.rand.nextInt(10);
+	}
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));

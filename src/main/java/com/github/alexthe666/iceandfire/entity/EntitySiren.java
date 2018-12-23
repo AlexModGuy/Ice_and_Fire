@@ -96,6 +96,10 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 10 + this.world.rand.nextInt(10);
+    }
+
     public boolean isOnLadder() {
         return this.isBesideClimbableBlock();
     }

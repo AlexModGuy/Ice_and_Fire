@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
@@ -33,11 +32,13 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
@@ -52,6 +53,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     public static final Animation ANIMATION_SPEAK = Animation.create(10);
     public static final Animation ANIMATION_ROAR = Animation.create(25);
     public float stoneProgress;
+    public static final ResourceLocation FOREST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_forest"));
+    public static final ResourceLocation FROST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_frost"));
+    public static final ResourceLocation MOUNTAIN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_mountain"));
 
     public EntityTroll(World worldIn) {
         super(worldIn);
@@ -173,66 +177,66 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         return super.attackEntityFrom(source, damage);
     }
 
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        switch(this.getType()){
+            case MOUNTAIN:
+               return MOUNTAIN_LOOT;
+            case FROST:
+                return FROST_LOOT;
+            case FOREST:
+                return FOREST_LOOT;
+        }
+        return null;
+    }
+
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 15 + this.world.rand.nextInt(10);
+    }
+
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
-            switch(this.getType()){
-                case MOUNTAIN:
-                    if(this.getRNG().nextInt(3) == 0) {
-                        dropItemAt(new ItemStack(Items.EMERALD, this.getRNG().nextInt(1), 0), this.posX, this.posY, this.posZ);
+            if(IceAndFire.CONFIG.trollsDropWeapon) {
+                if (this.getRNG().nextInt(3) == 0) {
+                    ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
+                    weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
+                    dropItemAt(weaponStack, this.posX, this.posY, this.posZ);
+                } else {
+                    ItemStack brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                    ItemStack brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                    if (this.getWeaponType() == EnumTroll.Weapon.AXE) {
+                        brokenDrop = new ItemStack(Items.STICK, this.getRNG().nextInt(2) + 1, 0);
+                        brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
                     }
-                    break;
-                case FROST:
-                    if(this.getRNG().nextInt(3) == 0) {
-                        dropItemAt(new ItemStack(ModItems.sapphireGem, this.getRNG().nextInt(1), 0), this.posX, this.posY, this.posZ);
+                    if (this.getWeaponType() == EnumTroll.Weapon.COLUMN) {
+                        brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
+                        brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
                     }
-                    dropItemAt(new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(3) + 1), this.posX, this.posY, this.posZ);
-                    break;
-                case FOREST:
-                    dropItemAt(new ItemStack(Blocks.BROWN_MUSHROOM, this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
-                    dropItemAt(new ItemStack(Blocks.RED_MUSHROOM, this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
-                    break;
-            }
-            dropItemAt(new ItemStack(this.getType().leather, 1 + this.getRNG().nextInt(3), 0), this.posX, this.posY, this.posZ);
-            dropItemAt(new ItemStack(ModItems.troll_tusk, this.getRNG().nextInt(2), 0), this.posX, this.posY, this.posZ);
-            if(this.getRNG().nextInt(3) == 0){
-                ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
-                weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
-                dropItemAt(weaponStack, this.posX, this.posY, this.posZ);
-            }else{
-                ItemStack brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
-                ItemStack brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
-                if(this.getWeaponType() == EnumTroll.Weapon.AXE){
-                    brokenDrop = new ItemStack(Items.STICK, this.getRNG().nextInt(2) + 1, 0);
-                    brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN){
-                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
-                    brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN_FOREST){
-                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 1);
-                    brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.COLUMN_FROST){
-                    brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
-                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.HAMMER){
-                    brokenDrop = new ItemStack(Items.BONE, this.getRNG().nextInt(2) + 1, 0);
-                    brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.TRUNK){
-                    brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
-                    brokenDrop2 = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
-                }
-                if(this.getWeaponType() == EnumTroll.Weapon.TRUNK_FROST){
-                    brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(4) + 1, 1);
-                    brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
-                }
-                dropItemAt(brokenDrop, this.posX, this.posY, this.posZ);
-                dropItemAt(brokenDrop2, this.posX, this.posY, this.posZ);
+                    if (this.getWeaponType() == EnumTroll.Weapon.COLUMN_FOREST) {
+                        brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 1);
+                        brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 2);
+                    }
+                    if (this.getWeaponType() == EnumTroll.Weapon.COLUMN_FROST) {
+                        brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
+                        brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
+                    }
+                    if (this.getWeaponType() == EnumTroll.Weapon.HAMMER) {
+                        brokenDrop = new ItemStack(Items.BONE, this.getRNG().nextInt(2) + 1, 0);
+                        brokenDrop2 = new ItemStack(Blocks.COBBLESTONE, this.getRNG().nextInt(2) + 1, 0);
+                    }
+                    if (this.getWeaponType() == EnumTroll.Weapon.TRUNK) {
+                        brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
+                        brokenDrop2 = new ItemStack(Blocks.LOG, this.getRNG().nextInt(2) + 1, 0);
+                    }
+                    if (this.getWeaponType() == EnumTroll.Weapon.TRUNK_FROST) {
+                        brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(4) + 1, 1);
+                        brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
+                    }
+                    dropItemAt(brokenDrop, this.posX, this.posY, this.posZ);
+                    dropItemAt(brokenDrop2, this.posX, this.posY, this.posZ);
 
+                }
             }
         }
     }

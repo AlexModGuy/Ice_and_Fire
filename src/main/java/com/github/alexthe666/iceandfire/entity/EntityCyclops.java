@@ -67,6 +67,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 20 + this.world.rand.nextInt(15);
+    }
+
     protected void initEntityAI() {
         this.tasks.addTask(2, new EntityAIRestrictSun(this));
         this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));

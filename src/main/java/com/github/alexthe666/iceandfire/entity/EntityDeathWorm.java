@@ -110,6 +110,10 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         }
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return (int)(this.getScaleForAge() * 5) + this.world.rand.nextInt(10);
+    }
+
     public void onDeath(DamageSource cause) {
         clearSegments();
         super.onDeath(cause);

@@ -73,6 +73,10 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.setSize(0.95F, 0.95F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 10 + this.world.rand.nextInt(5);
+    }
+
     public boolean getCanSpawnHere() {
         return this.getRNG().nextInt(IceAndFire.CONFIG.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
     }

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
@@ -17,13 +16,14 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +35,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	private Animation currentAnimation;
 	private GorgonAIStareAttack aiStare;
 	private EntityAIAttackMelee aiMelee;
+	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
 
 	public EntityGorgon(World worldIn) {
 		super(worldIn);
@@ -51,6 +52,11 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		vec3d1 = vec3d1.normalize();
 		double d1 = vec3d.dotProduct(vec3d1);
 		return d1 > 1.0D - degree / d0 ? looker.canEntityBeSeen(seen) && !isStoneMob(seen) : false;
+	}
+
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LOOT;
 	}
 
 	public static boolean isStoneMob(EntityLivingBase mob) {
@@ -137,10 +143,11 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		}
 	}
 
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 20 + this.world.rand.nextInt(15);
+	}
+
 	protected void onDeathUpdate() {
-		if (deathTime == 20 && !world.isRemote) {
-			this.entityDropItem(new ItemStack(ModItems.gorgon_head), 0);
-		}
 		++this.deathTime;
 		this.livingSoundTime = 20;
 		for (int k = 0; k < 5; ++k) {

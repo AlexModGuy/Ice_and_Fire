@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
@@ -21,7 +20,6 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,12 +29,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -60,6 +60,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public static Animation ANIMATION_SPEAK = Animation.create(10);
     public StymphalianBirdFlock flock;
     private boolean aiFlightLaunch = false;
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "stymphalian_bird"));
     protected static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity entity) {
             return entity instanceof EntityStymphalianBird;
@@ -70,6 +71,11 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public EntityStymphalianBird(World worldIn) {
         super(worldIn);
         this.setSize(1.3F, 1.2F);
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 
     protected void initEntityAI() {
@@ -104,6 +110,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     protected boolean canDespawn() {
         return false;
+    }
+
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 10 + this.world.rand.nextInt(5);
     }
 
     @Override
@@ -165,10 +175,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
-            dropItemAt(new ItemStack(Items.IRON_INGOT, 1 + this.getRNG().nextInt(3)), this.posX, this.posY + 0.5F, this.posZ);
-            dropItemAt(new ItemStack(Items.IRON_NUGGET, 1 + this.getRNG().nextInt(3)), this.posX, this.posY + 0.5F, this.posZ);
-            dropItemAt(new ItemStack(ModItems.stymphalian_bird_feather, 2 + this.getRNG().nextInt(4)), this.posX, this.posY + 0.5F, this.posZ);
-
             NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
             NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
             if (!bronzeItems.isEmpty()) {
