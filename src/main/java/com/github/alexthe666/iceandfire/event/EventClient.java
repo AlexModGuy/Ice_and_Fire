@@ -155,7 +155,7 @@ public class EventClient {
 			SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
 			if (player.world.isRemote && sirenProps != null) {
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-				EntitySiren siren = sirenProps.getClosestSiren(event.getEntityLiving().world, event.getEntityLiving());
+				EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
 				if(siren == null){
 					sirenProps.isCharmed = false;
 				}

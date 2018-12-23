@@ -11,6 +11,7 @@ import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -66,11 +67,17 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
+    public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
+        public boolean apply(@Nullable Entity p_apply_1_) {
+            return (p_apply_1_ instanceof EntityPlayer && !((EntityPlayer) p_apply_1_).isCreative()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
+        }
+    };
 
     public EntitySiren(World worldIn) {
         super(worldIn);
         this.setSize(1.6F, 0.9F);
         this.switchNavigator(true);
+        this.stepHeight = 2;
         this.tasks.addTask(0, new SirenAIFindWaterTarget(this));
         this.tasks.addTask(1, new AquaticAIGetInWater(this, 1.0D));
         this.tasks.addTask(1, new AquaticAIGetOutOfWater(this, 1.0D));
@@ -82,7 +89,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
-                return EntitySiren.this.isAgressive() && !(entity.isCreative() ||entity.isSpectator());
+                return EntitySiren.this.isAgressive() && !(entity.isCreative() || entity.isSpectator());
             }
         }));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, true, false, new Predicate<EntityVillager>() {
@@ -98,34 +105,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     protected int getExperiencePoints(EntityPlayer player) {
         return 10 + this.world.rand.nextInt(10);
-    }
-
-    public boolean isOnLadder() {
-        return this.isBesideClimbableBlock();
-    }
-
-    public void onUpdate() {
-        super.onUpdate();
-
-        if (!this.world.isRemote) {
-            this.setBesideClimbableBlock(this.collidedHorizontally);
-        }
-    }
-
-    public boolean isBesideClimbableBlock() {
-        return (((Byte) this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
-    }
-
-    public void setBesideClimbableBlock(boolean climbing) {
-        byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
-
-        if (climbing) {
-            b0 = (byte) (b0 | 1);
-        } else {
-            b0 = (byte) (b0 & -2);
-        }
-
-        this.dataManager.set(CLIMBING, Byte.valueOf(b0));
     }
 
     protected boolean canDespawn() {
@@ -244,7 +223,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
             this.setSwimming(false);
         }
         boolean pathOnHighGround = this.isPathOnHighGround() || this.getAttackTarget() != null && !this.getAttackTarget().isInWater() && !this.getAttackTarget().isOverWater();
-        if(this.getAttackTarget() == null || !this.getAttackTarget().isInWater() && !this.getAttackTarget().isOverWater()){
+        if (this.getAttackTarget() == null || !this.getAttackTarget().isInWater() && !this.getAttackTarget().isOverWater()) {
             if (pathOnHighGround && this.isInWater()) {
                 jump();
                 doWaterSplashEffect();
@@ -277,6 +256,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
         if (!world.isRemote && !EntityGorgon.isStoneMob(this) && this.isActuallySinging()) {
             checkForPrey();
+            updateLure();
         }
         if (!world.isRemote && EntityGorgon.isStoneMob(this) && this.isSinging()) {
             this.setSinging(false);
@@ -324,6 +304,19 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 ((EntitySiren) entity).setAggressive(true);
                 ((EntitySiren) entity).setSinging(false);
 
+            }
+        }
+    }
+
+    public void updateLure() {
+        if(this.ticksExisted % 20 == 0){
+            List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
+            for(EntityLivingBase entity : entities){
+                SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
+                if(sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)){
+                    sirenProps.isCharmed = true;
+                    sirenProps.sirenID = this.getEntityId();
+                }
             }
         }
     }
