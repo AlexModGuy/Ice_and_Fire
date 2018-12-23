@@ -103,6 +103,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	public void turnIntoItem() {
+		if (isDead)
+			return;
 		this.setDead();
 		ItemStack stack = new ItemStack(ModItems.dragon_skull, 1, getType());
 		stack.setTagCompound(new NBTTagCompound());
