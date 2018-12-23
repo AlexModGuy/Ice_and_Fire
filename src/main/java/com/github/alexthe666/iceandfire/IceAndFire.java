@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
+import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.misc.CreativeTab;
 import com.github.alexthe666.iceandfire.world.village.ComponentAnimalFarm;
@@ -21,6 +22,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
@@ -76,7 +78,9 @@ public class IceAndFire {
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");
         ThaumcraftCompatBridge.loadThaumcraftCompat();
+        LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
     }
+
 
     public static void loadConfig() {
         File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");

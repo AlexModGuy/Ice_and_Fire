@@ -19,11 +19,13 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -41,6 +43,9 @@ public class EntityIceDragon extends EntityDragonBase {
 	public float swimProgress;
 	public int ticksSwiming;
 	public BlockPos waterTarget;
+	public static final ResourceLocation FEMALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_female"));
+	public static final ResourceLocation MALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_male"));
+	public static final ResourceLocation SKELETON_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_skeleton"));
 
 	public EntityIceDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
@@ -339,6 +344,15 @@ public class EntityIceDragon extends EntityDragonBase {
 				waterTarget = null;
 			}
 			swimTowardsTarget();
+		}
+	}
+
+	@Override
+	public ResourceLocation getDeadLootTable() {
+		if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
+			return SKELETON_LOOT;
+		}else{
+			return isMale() ? MALE_LOOT : FEMALE_LOOT;
 		}
 	}
 

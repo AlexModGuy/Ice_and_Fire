@@ -174,7 +174,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if (this.deathTime == 20 && !this.world.isRemote) {
+        if (this.deathTime == 20 && !this.world.isRemote && IceAndFire.CONFIG.stymphalianBirdsOreDictDrops) {
             NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
             NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
             if (!bronzeItems.isEmpty()) {

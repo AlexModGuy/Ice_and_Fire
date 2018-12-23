@@ -37,6 +37,9 @@ public class IceAndFireConfig {
 	public int dragonGoldSearchLength = 17;
 	public boolean canDragonsDespawn = true;
 	public boolean dragonDigWhenStuck = true;
+	public boolean dragonDropSkull = true;
+	public boolean dragonDropHeart = true;
+	public boolean dragonDropBlood = true;
 	public int dragonTargetSearchLength = 64;
 	public int dragonWanderFromHomeDistance = 40;
 	public int dragonHungerTickRate = 3000;
@@ -78,6 +81,7 @@ public class IceAndFireConfig {
 	public int stymphalianBirdFlockLength = 40;
 	public int stymphalianBirdFlightHeight = 80;
 	public boolean spawnStymphalianBirds = true;
+	public boolean stymphalianBirdsOreDictDrops = true;
 	public boolean stympahlianBirdAttackAnimals = false;
 	public int stymphalianBirdSpawnChance = 100;
 	public boolean spawnTrolls = true;
@@ -128,6 +132,9 @@ public class IceAndFireConfig {
 		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
 		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
 		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
+		this.dragonDropSkull = config.getBoolean("Dragons Drop Skull", "all", true, "True if dragons can drop their skull on death.");
+		this.dragonDropHeart = config.getBoolean("Dragons Drop Heart", "all", true, "True if dragons can drop their heart on death.");
+		this.dragonDropBlood = config.getBoolean("Dragons Drop Blood", "all", true, "True if dragons can drop their blood on death.");
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 		this.dragonWanderFromHomeDistance = config.getInt("Dragon Wander From Home Distance", "all", 40, 1, 10000, "How many blocks away can dragons wander from their defined \"home\" position.");
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
@@ -179,6 +186,7 @@ public class IceAndFireConfig {
 		this.stymphalianBirdFlockLength = config.getInt("Stymphalian Bird Flock Length", "all", 40, 1, 10000, "How far away stymphalian birds will consider other birds to be in the same flock.");
 		this.stymphalianBirdFlightHeight = config.getInt("Max Stymphalian Bird Flight Height", "all", 80, 10, 1000, "How high stymphalian birds can fly, in Y height.");
 		this.spawnStymphalianBirds = config.getBoolean("Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
+		this.stymphalianBirdsOreDictDrops = config.getBoolean("Stymphalian Birds drop ore dict items", "all", true, "True if stymphalian birds can drop items registered in the ore dictionary to ingotCopper, ingotBronze, nuggetCopper, nuggetBronze.");
 		this.stympahlianBirdAttackAnimals = config.getBoolean("Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
 		this.stymphalianBirdSpawnChance = config.getInt("Spawn Stymhphalian Bird Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
 

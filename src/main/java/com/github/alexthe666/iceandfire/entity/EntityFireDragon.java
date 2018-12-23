@@ -15,10 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -31,6 +33,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
 	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
 	public static final float[] growth_stage_5 = new float[]{20F, 30F};
+	public static final ResourceLocation FEMALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_female"));
+	public static final ResourceLocation MALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_male"));
+	public static final ResourceLocation SKELETON_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_skeleton"));
 
 	public EntityFireDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
@@ -276,6 +281,15 @@ public class EntityFireDragon extends EntityDragonBase {
 			} else {
 				this.setBreathingFire(true);
 			}
+		}
+	}
+
+	@Override
+	public ResourceLocation getDeadLootTable() {
+		if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
+			return SKELETON_LOOT;
+		}else{
+			return isMale() ? MALE_LOOT : FEMALE_LOOT;
 		}
 	}
 
