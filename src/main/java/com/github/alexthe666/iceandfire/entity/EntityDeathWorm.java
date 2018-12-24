@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     private int animationTick;
     private boolean willExplode = false;
