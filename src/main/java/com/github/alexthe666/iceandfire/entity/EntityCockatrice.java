@@ -80,15 +80,11 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(3, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
-        this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F) {
-            public boolean shouldExecute() {
-                return super.shouldExecute() && EntityCockatrice.this.getCommand() == 2;
-            }
-        });
-        this.tasks.addTask(5, new CockatriceAIWander(this, 1.0D));
+        this.tasks.addTask(2, new CockatriceAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
+        this.tasks.addTask(2, new CockatriceAIWander(this, 1.0D));
+        this.tasks.addTask(3, this.aiSit = new EntityAISit(this));
+        this.tasks.addTask(4, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
+        this.tasks.addTask(4, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
         this.tasks.addTask(6, new CockatriceAIAggroLook(this));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
@@ -133,13 +129,13 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if (melee) {
             this.tasks.removeTask(aiStare);
             if (aiMelee != null) {
-                this.tasks.addTask(3, aiMelee);
+                this.tasks.addTask(4, aiMelee);
             }
             this.isMeleeMode = true;
         } else {
             this.tasks.removeTask(aiMelee);
             if (aiStare != null) {
-                this.tasks.addTask(3, aiStare);
+                this.tasks.addTask(4, aiStare);
             }
             this.isMeleeMode = false;
         }
@@ -176,7 +172,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 10);
+        return !this.isSitting() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 7);
     }
 
 
@@ -292,14 +288,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public void setSitting(boolean sitting) {
+        super.setSitting(sitting);
         if (!world.isRemote) {
             this.isSitting = sitting;
-        }
-        byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
-        if (sitting) {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
-        } else {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
@@ -332,7 +323,6 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     public void setCommand(int command) {
         this.dataManager.set(COMMAND, Integer.valueOf(command));
-
         if (command == 1) {
             this.setSitting(true);
         } else {
@@ -384,6 +374,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 }
                 player.sendStatusMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()), true);
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+                System.out.println(this.world.isRemote);
                 return true;
             }
 
@@ -394,6 +385,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isSitting() && this.getCommand() != 1){
+            this.setSitting(false);
+        }
         if(this.isSitting() && this.getAttackTarget() != null){
             this.setAttackTarget(null);
         }

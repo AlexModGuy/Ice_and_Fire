@@ -27,7 +27,7 @@ public class CockatriceAIWander extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!cockatrice.canMove()) {
+		if (!cockatrice.canMove() || cockatrice.getCommand() != 0) {
 			return false;
 		}
 		if (!this.mustUpdate) {
