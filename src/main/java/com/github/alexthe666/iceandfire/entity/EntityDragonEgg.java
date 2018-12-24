@@ -26,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.UUID;
 
 public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
@@ -139,7 +138,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
                 world.setBlockToAir(pos);
                 EntityFireDragon dragon = new EntityFireDragon(world);
                 dragon.setVariant(getType().ordinal());
-                dragon.setGender(new Random().nextBoolean());
+                dragon.setGender(this.getRNG().nextBoolean());
                 dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setHunger(50);
                 if (!world.isRemote) {
