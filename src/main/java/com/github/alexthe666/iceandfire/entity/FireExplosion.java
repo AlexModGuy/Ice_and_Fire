@@ -117,7 +117,7 @@ public class FireExplosion extends Explosion {
 
 		for (Entity entity : list) {
 			if (!(entity instanceof EntityDragonFire)) {
-				if (!entity.isImmuneToExplosions()) {
+				if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 					double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;
 
 					if (d12 <= 1.0D) {
@@ -140,7 +140,7 @@ public class FireExplosion extends Explosion {
 									if (entity.isDead && entity instanceof EntityPlayer) {
 										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
-								} else {
+								} else if(!entity.isEntityEqual(exploder)){
 									entity.attackEntityFrom(IceAndFire.dragonFire, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
 									//if (entity.isDead && entity instanceof EntityPlayer) {
 									//	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);

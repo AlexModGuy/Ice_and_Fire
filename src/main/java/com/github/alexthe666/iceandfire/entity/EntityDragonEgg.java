@@ -120,17 +120,18 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     @Override
     public void onUpdate() {
         super.onUpdate();
+        this.setAir(200);
         BlockPos pos = new BlockPos(this);
         if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
             this.setDragonAge(this.getDragonAge() + 1);
         }
         if (world.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
+            this.setDead();
             world.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
             this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
             if (world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
                 ((TileEntityEggInIce) world.getTileEntity(pos)).type = this.getType();
                 ((TileEntityEggInIce) world.getTileEntity(pos)).ownerUUID = this.getOwnerId();
-                this.setDead();
             }
         }
         if (this.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {

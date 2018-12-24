@@ -889,7 +889,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         return true;
                     }
                     if (stack.getItem() != null) {
-                        int itemFoodAmount = FoodUtils.getFoodPoints(stack, true);
+                        int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
                         if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                             //this.growDragon(1);
                             this.setHunger(this.getHunger() + itemFoodAmount);
@@ -959,7 +959,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                     }
                 } else {
-                    if (!player.isSneaking()) {
+                    if (stack.isEmpty() && !player.isSneaking() && !world.isRemote && !this.isDead) {
                         if (this.getDragonStage() > 2 && !player.isRiding()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);

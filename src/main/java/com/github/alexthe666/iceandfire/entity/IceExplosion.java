@@ -117,8 +117,8 @@ public class IceExplosion extends Explosion {
 		Vec3d Vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
 
 		for (Entity entity : list) {
-			if (!(entity instanceof EntityDragonFire)) {
-				if (!entity.isImmuneToExplosions()) {
+			if (!(entity instanceof EntityDragonIceProjectile)) {
+				if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 					double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;
 
 					if (d12 <= 1.0D) {
@@ -143,11 +143,13 @@ public class IceExplosion extends Explosion {
 										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								} else {
-									entity.attackEntityFrom(IceAndFire.dragonIce, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-									if (entity instanceof EntityLivingBase) {
-										FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
-										if(frozenProps != null) {
-											frozenProps.setFrozenFor(200);
+									if(!entity.isEntityEqual(exploder)) {
+										entity.attackEntityFrom(IceAndFire.dragonIce, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
+										if (entity instanceof EntityLivingBase) {
+											FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
+											if (frozenProps != null) {
+												frozenProps.setFrozenFor(200);
+											}
 										}
 									}
 								}

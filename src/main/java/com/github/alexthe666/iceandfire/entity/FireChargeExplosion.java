@@ -120,7 +120,7 @@ public class FireChargeExplosion extends Explosion {
 		for (int k2 = 0; k2 < list.size(); ++k2) {
 			Entity entity = (Entity) list.get(k2);
 
-			if (!entity.isImmuneToExplosions()) {
+			if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 				double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / (double) f3;
 
 				if (d12 <= 1.0D) {

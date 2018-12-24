@@ -24,12 +24,14 @@ public class FoodUtils {
         return 0;
     }
 
-    public static int getFoodPoints(ItemStack item, boolean meatOnly){
+    public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish){
         if(item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem() instanceof ItemFood){
             int food = (int)(((ItemFood)item.getItem()).getHealAmount(item) * 10);
             if(!meatOnly){
                 return food;
             }else if(((ItemFood)item.getItem()).isWolfsFavoriteMeat()){
+                return food;
+            }else if(includeFish && item.getItem() == Items.FISH){
                 return food;
             }
         }
