@@ -88,7 +88,7 @@ public class FireDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnim
                 }
             }
             if(entity.fireBreathProgress > 0.0F){
-                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
+                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")){
                     transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 5, false);
                 }
             }

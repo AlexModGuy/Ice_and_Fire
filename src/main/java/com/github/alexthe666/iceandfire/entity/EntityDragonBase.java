@@ -505,6 +505,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             compound.setInteger("HomeAreaY", homePos.getY());
             compound.setInteger("HomeAreaZ", homePos.getZ());
         }
+        compound.setBoolean("AgingDisabled", this.isAgingDisabled());
     }
 
     @Override
@@ -563,6 +564,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
         }
         this.setTackling(compound.getBoolean("Tackle"));
+        this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
 
     }
 
@@ -963,19 +965,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                     }
                 } else {
-                    if (stack.isEmpty() && !player.isSneaking() && !world.isRemote && !this.isDead) {
+                    if (stack.isEmpty() && !player.isSneaking() && !this.isDead) {
+                        if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+                        }
                         if (this.getDragonStage() > 2 && !player.isRiding()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
-                            //player.addStat(ModAchievements.dragonRide, 1);
                             this.setSleeping(false);
-                        } else if (this.isRiding()) {
-                            this.dismountRidingEntity();
-                        } else if (this.getDragonStage() < 2) {
-                            this.startRiding(player, true);
-
                         }
 
+                        if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+                        }
                         return true;
                     } else if (stack.isEmpty() && player.isSneaking()) {
                         this.openGUI(player);
@@ -1072,6 +1074,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        System.out.println(this.getRidingEntity());
+
         if (!world.isRemote) {
             if(this.isInLove()){
                 this.world.setEntityState(this, (byte)18);
@@ -1727,7 +1731,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void updateRiding(Entity riding) {
-        if (riding.isPassenger(this) && riding instanceof EntityPlayer) {
+        if (riding != null && riding.isPassenger(this) && riding instanceof EntityPlayer) {
             int i = riding.getPassengers().indexOf(this);
             float radius = (i == 2 ? 0F : 0.4F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
             float angle = (0.01745329251F * ((EntityPlayer) riding).renderYawOffset) + (i == 1 ? -90 : i == 0 ? 90 : 0);
@@ -1845,7 +1849,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void flyTowardsTarget() {
-        if(airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight){
+        if(airTarget != null && airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight){
             airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
         }
         if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {

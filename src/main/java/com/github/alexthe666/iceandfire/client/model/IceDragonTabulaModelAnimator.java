@@ -110,7 +110,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                 }
             }
             if(entity.fireBreathProgress > 0.0F){
-                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.icedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
+                if(!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.icedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")){
                     transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.icedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 20, false);
                 }
             }
