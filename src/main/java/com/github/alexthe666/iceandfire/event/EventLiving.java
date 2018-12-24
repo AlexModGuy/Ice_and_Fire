@@ -56,6 +56,16 @@ public class EventLiving {
 	private boolean stepHeightSwitched = false;
 
 	@SubscribeEvent
+	public void onEntityFall(LivingFallEvent event) {
+		if(event.getEntityLiving() instanceof EntityPlayer){
+			MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscPlayerProperties.class);
+			if(properties.hasDismountedDragon){
+				event.setDamageMultiplier(0);
+				properties.hasDismountedDragon = false;
+			}
+		}
+	}
+	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event) {
 		if(event.getEntityBeingMounted() instanceof EntityDragonBase){
 			EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();

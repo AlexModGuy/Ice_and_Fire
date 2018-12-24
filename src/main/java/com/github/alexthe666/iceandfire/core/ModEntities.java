@@ -6,10 +6,8 @@ import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.List;
 
@@ -25,6 +23,7 @@ public class ModEntities {
 */
 	public static void init() {
 		EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);
+		EntityPropertiesHandler.INSTANCE.registerProperties(MiscPlayerProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(FrozenEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);

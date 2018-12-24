@@ -1620,6 +1620,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
+            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getControllingPassenger(), MiscPlayerProperties.class);
+            if(properties != null) {
+                properties.hasDismountedDragon = true;
+            }
             this.getControllingPassenger().dismountRidingEntity();
         }
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
