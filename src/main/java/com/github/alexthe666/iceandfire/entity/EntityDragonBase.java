@@ -1382,7 +1382,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void breakBlock() {
-        if (IceAndFire.CONFIG.dragonGriefing != 2) {
+        if (IceAndFire.CONFIG.dragonGriefing != 2 || this.isTamed() && !IceAndFire.CONFIG.tamedDragonGriefing) {
             float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
             if (!isModelDead() && this.getDragonStage() >= 3 && this.canMove()) {
                 for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
