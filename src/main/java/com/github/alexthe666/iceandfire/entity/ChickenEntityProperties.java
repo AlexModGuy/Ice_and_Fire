@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
 
-	public int timeUntilNextEgg;
+	public int timeUntilNextEgg = 1;
 	private static Random rand = new Random();
 	@Override
 	public int getTrackingTime() {
