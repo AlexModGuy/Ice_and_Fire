@@ -18,6 +18,7 @@ public class ItemAmbrosia extends ItemFood {
 		this.setUnlocalizedName("iceandfire.ambrosia");
 		this.setRegistryName(IceAndFire.MODID, "ambrosia");
 		this.setMaxStackSize(1);
+		this.setAlwaysEdible();
 	}
 
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
