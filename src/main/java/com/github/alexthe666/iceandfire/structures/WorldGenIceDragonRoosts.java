@@ -28,7 +28,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
 					IBlockState state = world.getBlockState(blockpos);
 					float hardness = state.getBlock().getBlockHardness(state, world, blockpos);
-					if(hardness <= -1.0F){
+					if(hardness == -1.0F){
 						return;
 					}
 					if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.CRAFTED_SNOW && world.canBlockSeeSky(blockpos)) {
