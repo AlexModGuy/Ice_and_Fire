@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -20,24 +21,26 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 	protected final Predicate<? super EntityItem> targetEntitySelector;
 	private final int targetChance;
 	protected EntityItem targetEntity;
-
+	private boolean isIce = false;
 	public DragonAITargetItems(EntityCreature creature, boolean checkSight) {
 		this(creature, checkSight, false);
 	}
 
 	public DragonAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
 		this(creature, 20, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
+		isIce = creature instanceof EntityIceDragon;
 	}
 
 	public DragonAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
 		super(creature, checkSight, onlyNearby);
+		isIce = creature instanceof EntityIceDragon;
 		this.targetChance = chance;
 		this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
 		this.setMutexBits(1);
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodUtils.getFoodPoints(item.getItem(), true) > 0;
+				return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
 			}
 		};
 	}
@@ -86,10 +89,10 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
 			this.targetEntity.getItem().shrink(1);
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-			int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true);
+			int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
 			((EntityDragonBase) this.taskOwner).setHunger(Math.min(100, ((EntityDragonBase) this.taskOwner).getHunger() + hunger));
 			((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getItem());
-			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true))));
+			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce))));
 			if (EntityDragonBase.ANIMATION_EAT != null) {
 				((EntityDragonBase) this.taskOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
 			}
