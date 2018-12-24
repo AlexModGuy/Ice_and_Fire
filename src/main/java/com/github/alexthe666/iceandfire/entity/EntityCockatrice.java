@@ -481,6 +481,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                             if (this.getTamingPlayer() != null && this.getTamingPlayer() instanceof EntityPlayer)
                                 this.setTamedBy((EntityPlayer) this.getTamingPlayer());
                             this.setAttackTarget(null);
+                            this.setTamingPlayer(0);
                             this.setTargetedEntity(0);
                         }
                     }
