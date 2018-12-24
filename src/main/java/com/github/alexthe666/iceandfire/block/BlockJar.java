@@ -108,6 +108,10 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 		return Item.getItemFromBlock(ModBlocks.jar_empty);
 	}
 
+	protected ItemStack getSilkTouchDrop(IBlockState state){
+		return new ItemStack(ModBlocks.jar_empty);
+	}
+
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
 			((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
