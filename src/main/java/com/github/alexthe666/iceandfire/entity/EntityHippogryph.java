@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear {
+public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor {
 
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
 	private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -1097,5 +1097,16 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	public boolean shouldAnimalsFear(Entity entity) {
 		return DragonUtils.canTameDragonAttack(this, entity);
+	}
+
+	public void dropArmor(){
+		if (hippogryphInventory != null && !this.world.isRemote) {
+			for (int i = 0; i < hippogryphInventory.getSizeInventory(); ++i) {
+				ItemStack itemstack = hippogryphInventory.getStackInSlot(i);
+				if (!itemstack.isEmpty()) {
+					this.entityDropItem(itemstack, 0.0F);
+				}
+			}
+		}
 	}
 }

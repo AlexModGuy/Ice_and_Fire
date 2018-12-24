@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippocampus extends EntityTameable implements IAnimatedEntity {
+public class EntityHippocampus extends EntityTameable implements IAnimatedEntity, IDropArmor {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -771,5 +771,16 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Nullable
     protected ResourceLocation getLootTable() {
         return LOOT;
+    }
+
+    public void dropArmor(){
+        if (hippocampusInventory != null && !this.world.isRemote) {
+            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
+                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
+                if (!itemstack.isEmpty()) {
+                    this.entityDropItem(itemstack, 0.0F);
+                }
+            }
+        }
     }
 }

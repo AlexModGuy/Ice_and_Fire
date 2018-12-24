@@ -60,7 +60,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear {
+public abstract class EntityDragonBase extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -951,8 +951,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             }
 
                         }
-
-                        if (stack.getItem() == ModItems.dragon_horn && !world.isRemote) {
+                        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+                        if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
                             ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
                             stack1.setTagCompound(new NBTTagCompound());
@@ -2114,5 +2114,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public boolean shouldAnimalsFear(Entity entity) {
         return DragonUtils.canTameDragonAttack(this, entity);
+    }
+
+    public void dropArmor(){
+        if (dragonInv != null && !this.world.isRemote) {
+            for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
+                ItemStack itemstack = dragonInv.getStackInSlot(i);
+                if (!itemstack.isEmpty()) {
+                    this.entityDropItem(itemstack, 0.0F);
+                }
+            }
+        }
     }
 }

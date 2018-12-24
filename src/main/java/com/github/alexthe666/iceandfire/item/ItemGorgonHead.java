@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -105,11 +104,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 					if (!worldIn.isRemote) {
 						worldIn.spawnEntity(statue);
 					}
-					for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-						statue.setItemStackToSlot(slot, ((EntityLivingBase) pointedEntity).getItemStackFromSlot(slot));
-					}
 				} else {
-
 					StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, StoneEntityProperties.class);
 					if (properties != null) {
 						properties.isStone = true;
@@ -126,6 +121,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 						dragon.setFlying(false);
 						dragon.setHovering(false);
 						dragon.airTarget = null;
+					}
+					if(pointedEntity instanceof IDropArmor){
+						((IDropArmor) pointedEntity).dropArmor();
 					}
 				}
 
