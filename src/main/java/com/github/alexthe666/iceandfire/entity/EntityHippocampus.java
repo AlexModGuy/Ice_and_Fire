@@ -98,12 +98,12 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         return false;
     }
 
-    private void switchNavigator(boolean onLand){
-        if(onLand){
+    private void switchNavigator(boolean onLand) {
+        if (onLand) {
             this.moveHelper = new EntityMoveHelper(this);
             this.navigator = new PathNavigateAmphibious(this, world);
             this.isLandNavigator = true;
-        }else{
+        } else {
             this.moveHelper = new EntityHippocampus.SwimmingMoveHelper();
             this.navigator = new PathNavigateSwimmer(this, world);
             this.isLandNavigator = false;
@@ -219,8 +219,8 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public void onLivingUpdate() {
         super.onLivingUpdate();
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if(getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase && this.ticksExisted % 20 == 0){
-            ((EntityLivingBase)getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
+        if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase && this.ticksExisted % 20 == 0) {
+            ((EntityLivingBase) getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
         }
         if (!this.onGround) {
             airBorneCounter++;
@@ -236,17 +236,17 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         if (this.up()) {
             if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
                 this.jump();
-            }else if(this.isInWater()){
+            } else if (this.isInWater()) {
                 this.motionY += 0.4D;
             }
         }
         if (this.down()) {
             this.motionY -= 0.4D;
         }
-        if(this.isInWater() && this.isLandNavigator){
+        if (this.isInWater() && this.isLandNavigator) {
             switchNavigator(false);
         }
-        if(!this.isInWater() && !this.isLandNavigator){
+        if (!this.isInWater() && !this.isLandNavigator) {
             switchNavigator(true);
         }
         boolean inWater = !this.isInWater();
@@ -282,7 +282,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean getCanSpawnHere() {
-        return this.posY > 30 && this.posY < (double)this.world.getSeaLevel();
+        return this.posY > 30 && this.posY < (double) this.world.getSeaLevel();
     }
 
     @Override
@@ -392,7 +392,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public void setArmor(int armorType) {
         this.dataManager.set(ARMOR, armorType);
         double armorValue = 0;
-        switch(armorType){
+        switch (armorType) {
             case 1:
                 armorValue = 5;
                 break;
@@ -449,7 +449,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
-        if(ageable instanceof EntityHippocampus){
+        if (ageable instanceof EntityHippocampus) {
             EntityHippocampus hippo = new EntityHippocampus(this.world);
             hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
             return hippo;
@@ -470,7 +470,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Override
     public void travel(float strafe, float vertical, float forward) {
         float f4;
-        if(this.isSitting()){
+        if (this.isSitting()) {
             super.travel(0, 0, 0);
             return;
         }
@@ -484,7 +484,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 }
                 this.fallDistance = 0;
                 if (this.isInWater()) {
-                    this.moveRelative(strafe, vertical, forward,1F);
+                    this.moveRelative(strafe, vertical, forward, 1F);
                     f4 = 0.8F;
                     float d0 = 3;
                     if (!this.onGround) {
@@ -501,7 +501,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                     this.motionZ *= 0.900000011920929D;
                     this.motionZ *= (double) f4;
                     motionY += 0.01185D;
-                }else{
+                } else {
                     forward = controller.moveForward * 0.25F;
                     strafe = controller.moveStrafing * 0.125F;
 
@@ -527,7 +527,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         if (this.isServerWorld()) {
             float f5;
             if (this.isInWater()) {
-                this.moveRelative(strafe, vertical, forward,0.1F);
+                this.moveRelative(strafe, vertical, forward, 0.1F);
                 f4 = 0.8F;
                 float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
                 if (d0 > 3.0F) {
@@ -563,6 +563,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     }
 
+    public boolean isBreedingItem(ItemStack stack) {
+        return stack.getItem() == Items.PRISMARINE_CRYSTALS;
+    }
+
     public void playLivingSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -579,40 +583,49 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-            if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 0) {
-                if(!world.isRemote) {
-                    this.heal(5);
-                    this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-                    for (int i = 0; i < 3; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
-                    }
-                    if (!player.isCreative()) {
-                        itemstack.shrink(1);
-                    }
-                }
-                if(!this.isTamed() && this.getRNG().nextInt(3) == 0){
-                    this.setTamedBy(player);
-                    for (int i = 0; i < 6; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
-                    }
-                }
-                return true;
-
+        if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+            this.setSitting(false);
+            this.setInLove(player);
+            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            if (!player.isCreative()) {
+                itemstack.shrink(1);
             }
-             if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
-                this.setSitting(false);
-                this.setInLove(player);
+            return true;
+        }
+        if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 0) {
+            if (!world.isRemote) {
+                this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                for (int i = 0; i < 3; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
+                }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
-                return true;
             }
-            if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
-                this.setSitting(!this.isSitting());
-                return true;
+            if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
+                this.setTamedBy(player);
+                for (int i = 0; i < 6; i++) {
+                    this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                }
             }
-        if(isOwner(player) && itemstack.isEmpty()) {
+            return true;
+
+        }
+        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+            this.setSitting(false);
+            this.setInLove(player);
+            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            if (!player.isCreative()) {
+                itemstack.shrink(1);
+            }
+            return true;
+        }
+        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
+            this.setSitting(!this.isSitting());
+            return true;
+        }
+        if (isOwner(player) && itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
@@ -709,19 +722,19 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 double distanceY = this.posY - this.hippo.posY;
                 double distanceZ = this.posZ - this.hippo.posZ;
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
-                double distanceWithY = (double)MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                double distanceWithY = (double) MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.hippo.rotationYaw = this.limitAngle(this.hippo.rotationYaw, angle, 30.0F);
                 this.hippo.setAIMoveSpeed((float) 1F);
-                this.hippo.motionY += (double)this.hippo.getAIMoveSpeed() * distanceY * 0.1D;
-                if (distance < (double)Math.max(1.0F, this.entity.width)) {
+                this.hippo.motionY += (double) this.hippo.getAIMoveSpeed() * distanceY * 0.1D;
+                if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.hippo.rotationYaw * 0.017453292F;
-                    this.hippo.motionX -= (double)(MathHelper.sin(f) * 0.35F);
-                    this.hippo.motionZ += (double)(MathHelper.cos(f) * 0.35F);
+                    this.hippo.motionX -= (double) (MathHelper.sin(f) * 0.35F);
+                    this.hippo.motionZ += (double) (MathHelper.cos(f) * 0.35F);
                 }
-            }else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+            } else if (this.action == EntityMoveHelper.Action.JUMPING) {
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
                 if (this.entity.onGround) {
                     this.action = EntityMoveHelper.Action.WAIT;
                 }
@@ -730,6 +743,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             }
         }
     }
+
     public class HippocampusInventory extends ContainerHorseChest {
 
         public HippocampusInventory(String inventoryTitle, int slotCount, EntityHippocampus hippogryph) {
