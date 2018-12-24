@@ -2065,16 +2065,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
         }
         if (this.getDragonStage() > 3) {
-            int size = (this.getDragonStage() - 3) * 12;
+            int size = (this.getDragonStage() - 3) * 30;
             List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
             for (Entity entity : entities) {
                 boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                 if (entity instanceof EntityLivingBase && !isStrongerDragon) {
                     EntityLivingBase living = (EntityLivingBase) entity;
                     if (this.isOwner(living)) {
-                        living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 60 * size));
+                        living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * size));
                     } else {
-                        living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 60 * size));
+                        living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 30 * size));
                     }
                 }
             }
