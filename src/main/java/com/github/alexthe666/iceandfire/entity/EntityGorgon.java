@@ -113,7 +113,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
+		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
 		if (blindness) {
 			if (this.getAnimation() != ANIMATION_HIT) {
 				this.setAnimation(ANIMATION_HIT);
