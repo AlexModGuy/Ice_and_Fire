@@ -122,6 +122,10 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
+                if(cube.boxName.equals("Head")){
+                    prevX = (float)Math.toRadians(6.04);
+                    x = (float)Math.toRadians(6.04);
+                }
                 if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ){
                     this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
@@ -171,7 +175,7 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
             model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmR1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             model.bob(model.getCube("ArmL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY){
+            if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR){
                 model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
             }
         }
@@ -271,12 +275,18 @@ public class IceDragonTabulaModelAnimator implements IIceAndFireTabulaModelAnima
         model.llibAnimator.resetKeyframe(10);
         model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_ROAR);
         model.llibAnimator.startKeyframe(10);
+        this.rotate(model.llibAnimator, model.getCube("Neck1"), -5, 0, 0);
+        this.rotate(model.llibAnimator, model.getCube("Head"), -5, 0, 0);
         moveToPose(model, EnumDragonAnimations.ROAR1.icedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
+        this.rotate(model.llibAnimator, model.getCube("Neck1"), -5, 0, 0);
+        this.rotate(model.llibAnimator, model.getCube("Head"), -5, 0, 0);
         moveToPose(model, EnumDragonAnimations.ROAR2.icedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
+        this.rotate(model.llibAnimator, model.getCube("Neck1"), -5, 0, 0);
+        this.rotate(model.llibAnimator, model.getCube("Head"), -5, 0, 0);
         moveToPose(model, EnumDragonAnimations.ROAR3.icedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
