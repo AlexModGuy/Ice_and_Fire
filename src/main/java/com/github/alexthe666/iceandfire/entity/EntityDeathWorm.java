@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -39,6 +38,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,6 +61,12 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     private static final DataParameter<Integer> WORM_AGE = EntityDataManager.<Integer>createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME = EntityDataManager.<BlockPos>createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
     public static Animation ANIMATION_BITE = Animation.create(10);
+    public static final ResourceLocation TAN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan"));
+    public static final ResourceLocation WHITE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white"));
+    public static final ResourceLocation RED_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_red"));
+    public static final ResourceLocation TAN_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan_giant"));
+    public static final ResourceLocation WHITE_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white_giant"));
+    public static final ResourceLocation RED_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_red_giant"));
 
     public EntityDeathWorm(World worldIn) {
         super(worldIn);
@@ -83,9 +89,9 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         this.targetTasks.addTask(5, new DeathWormAITarget(this, EntityLivingBase.class, false, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase input) {
-                if(EntityDeathWorm.this.isTamed()){
+                if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof EntityMob;
-                }else{
+                } else {
                     return (IceAndFire.CONFIG.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
@@ -103,7 +109,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
 
     public void onUpdateParts() {
         for (Entity entity : segments) {
-            if (entity != null){
+            if (entity != null) {
                 entity.onUpdate();
 
             }
@@ -111,12 +117,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return (int)(this.getScaleForAge() * 5) + this.world.rand.nextInt(10);
-    }
-
-    public void onDeath(DamageSource cause) {
-        clearSegments();
-        super.onDeath(cause);
+        return (int) (this.getScaleForAge() * 5) + this.world.rand.nextInt(10);
     }
 
     public void initSegments(float scale) {
@@ -127,16 +128,16 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         }
     }
 
-    private void clearSegments(){
+    private void clearSegments() {
         for (Entity entity : segments) {
-            if (entity != null){
+            if (entity != null) {
                 entity.onKillCommand();
                 world.removeEntityDangerously(entity);
             }
         }
     }
 
-    public void setExplosive(boolean explosive){
+    public void setExplosive(boolean explosive) {
         this.willExplode = true;
         this.ticksTillExplosion = 60;
     }
@@ -147,7 +148,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
-        if(this.getAnimation() != ANIMATION_BITE) {
+        if (this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(ANIMATION_BITE);
             this.playSound(this.getScaleForAge() > 3 ? ModSounds.DEATHWORM_GIANT_ATTACK : ModSounds.DEATHWORM_ATTACK, 1, 1);
         }
@@ -159,20 +160,46 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         return false;
     }
 
-    protected void onDeathUpdate() {
-        super.onDeathUpdate();
-        if (this.deathTime == 20 && !this.world.isRemote) {
-            int chitinCount = Math.round((1 + this.getRNG().nextInt(3)) * this.getScaleForAge());
-            int rottenFleshCount = Math.round((this.getRNG().nextInt(2)) * this.getScaleForAge());
-            for (int i = 0; i < chitinCount + 1; i++) {
-                dropItemAt(new ItemStack(ModItems.deathworm_chitin, 1, this.getVariant()), this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ);
+    public void onDeath(DamageSource cause) {
+        if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, cause)) return;
+        clearSegments();
+        if (!this.dead) {
+            Entity entity = cause.getTrueSource();
+            EntityLivingBase entitylivingbase = this.getAttackingEntity();
+
+            if (this.scoreValue >= 0 && entitylivingbase != null) {
+                entitylivingbase.awardKillScore(this, this.scoreValue, cause);
             }
-            for (int i = 0; i < rottenFleshCount; i++) {
-                dropItemAt(new ItemStack(Items.ROTTEN_FLESH, 1), this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ);
+
+            if (entity != null) {
+                entity.onKillEntity(this);
             }
-            if(this.getRNG().nextInt(3) == 0){
-                dropItemAt(new ItemStack(ModItems.deathworm_egg, 1, this.getRNG().nextInt(5) == 0 ? 1 : 0), this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ);
+
+            this.dead = true;
+            this.getCombatTracker().reset();
+
+            if (!this.world.isRemote) {
+                int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, cause);
+
+                captureDrops = true;
+                capturedDrops.clear();
+
+                if (this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")) {
+                    boolean flag = this.recentlyHit > 0;
+                    this.dropLoot(flag, i, cause);
+                }
+
+                captureDrops = false;
+
+                if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, cause, capturedDrops, i, recentlyHit > 0)) {
+                    for (EntityItem item : capturedDrops) {
+                        world.spawnEntity(item);
+                        item.posY = this.getSurface((int)item.posX, (int)item.posY, (int)item.posZ);
+                    }
+                }
             }
+
+            this.world.setEntityState(this, (byte) 3);
         }
     }
 
@@ -191,6 +218,20 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     @Nullable
+    protected ResourceLocation getLootTable() {
+        switch(this.getVariant()){
+            case 0:
+                return this.getScaleForAge() > 3 ? TAN_GIANT_LOOT : TAN_LOOT;
+            case 1:
+                return this.getScaleForAge() > 3 ? WHITE_GIANT_LOOT : WHITE_LOOT;
+            case 2:
+                return this.getScaleForAge() > 3 ? RED_GIANT_LOOT : RED_LOOT;
+        }
+        return null;
+    }
+
+
+    @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
         return null;
@@ -201,7 +242,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         super.entityInit();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(SCALE, Float.valueOf(1F));
-        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
+        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
         this.dataManager.register(WORM_AGE, Integer.valueOf(10));
         this.dataManager.register(HOME, BlockPos.ORIGIN);
     }
@@ -252,12 +293,12 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public BlockPos getWormHome() {
-        return (BlockPos)this.dataManager.get(HOME);
+        return (BlockPos) this.dataManager.get(HOME);
     }
 
     public void setWormHome(BlockPos home) {
-        if(home instanceof BlockPos){
-            this.dataManager.set(HOME, (BlockPos)home);
+        if (home instanceof BlockPos) {
+            this.dataManager.set(HOME, (BlockPos) home);
         }
     }
 
@@ -483,29 +524,29 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
     }
 
     public void onKillEntity(EntityLivingBase entityLivingIn) {
-        if(this.isTamed()){
+        if (this.isTamed()) {
             this.heal(5);
         }
     }
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.willExplode){
-            if(this.ticksTillExplosion == 0){
+        if (this.willExplode) {
+            if (this.ticksTillExplosion == 0) {
                 world.newExplosion(null, this.posX, this.posY, this.posZ, 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this));
-            }else{
+            } else {
                 this.ticksTillExplosion--;
             }
         }
         if (this.ticksExisted == 1) {
             initSegments(this.getScaleForAge());
         }
-        if(this.ticksExisted % 1000 == 0 && this.getWormAge() < 5){
+        if (this.ticksExisted % 1000 == 0 && this.getWormAge() < 5) {
             this.setWormAge(Math.min(5, this.getWormAge() + 1));
             this.clearSegments();
             this.setDeathWormScale(this.getScale());
             if (world.isRemote) {
-                for(int i = 0; i < 10 * this.getScaleForAge(); i++) {
+                for (int i = 0; i < 10 * this.getScaleForAge(); i++) {
                     this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
                     for (int j = 0; j < segments.length; j++) {
                         this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
@@ -513,16 +554,16 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                 }
             }
         }
-        if(this.getControllingPassenger() != null){
-            if(this.isEntityInsideOpaqueBlock()){
+        if (this.getControllingPassenger() != null) {
+            if (this.isEntityInsideOpaqueBlock()) {
                 this.motionY = 2;
                 this.noClip = true;
-            }else{
+            } else {
                 this.noClip = false;
             }
 
         }
-        if(this.getControllingPassenger() != null && this.getAttackTarget() != null){
+        if (this.getControllingPassenger() != null && this.getAttackTarget() != null) {
             this.getNavigator().clearPath();
             this.setAttackTarget(null);
         }
@@ -623,7 +664,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
             this.noClip = true;
             IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
             int blockId = Block.getStateId(state);
-            if(state.isOpaqueCube()) {
+            if (state.isOpaqueCube()) {
                 if (world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{blockId});
                     for (int i = 0; i < segments.length; i++) {
@@ -631,7 +672,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
                     }
                 }
             }
-            if(this.ticksExisted % 10 == 0){
+            if (this.ticksExisted % 10 == 0) {
                 this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1, 0.5F);
             }
         }
@@ -647,10 +688,10 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(90, 20, 5F, this);
         }
-        if(this.getControllingPassenger() != null){
+        if (this.getControllingPassenger() != null) {
             this.noClip = false;
             this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
-            if(isSandBelow()){
+            if (isSandBelow()) {
                 if (world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
                     for (int i = 0; i < segments.length; i++) {
@@ -772,7 +813,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         if (this.isBeingRidden() && this.canBeSteered()) {
             EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
             if (controller != null) {
-                if(this.getAttackTarget() != null){
+                if (this.getAttackTarget() != null) {
                     this.setAttackTarget(null);
                     this.getNavigator().clearPath();
                 }
