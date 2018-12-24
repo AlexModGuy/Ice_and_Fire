@@ -84,7 +84,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
-				if (this.shootingEntity != null) {
+				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
 					//if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
 					//	((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
 					//}

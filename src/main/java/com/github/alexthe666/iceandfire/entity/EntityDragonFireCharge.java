@@ -127,7 +127,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
 					return;
 				}
-				if (this.shootingEntity != null) {
+				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
 					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
