@@ -1845,6 +1845,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void flyTowardsTarget() {
+        if(airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight){
+            airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
+        }
         if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double y = this.attackDecision ? airTarget.getY() : this.posY;
 
