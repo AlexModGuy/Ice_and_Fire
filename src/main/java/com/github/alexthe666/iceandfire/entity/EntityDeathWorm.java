@@ -870,6 +870,10 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         return true;
     }
 
+    public boolean canBeTurnedToStone(){
+        return false;
+    }
+
     public class SandMoveHelper extends EntityMoveHelper {
         private EntityDeathWorm worm = EntityDeathWorm.this;
 
