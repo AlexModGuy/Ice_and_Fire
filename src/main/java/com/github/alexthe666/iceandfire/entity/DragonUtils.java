@@ -206,10 +206,7 @@ public class DragonUtils {
 			return false;
 		}
 		if(entity instanceof EntityTameable){
-			EntityTameable tameable = (EntityTameable)entity;
-			if(tameable.getOwnerId() != null && tameable.getOwnerId().equals(dragon.getOwnerId())){
-				return false;
-			}
+			return !((EntityTameable) entity).isTamed();
 		}
 		return true;
 	}
