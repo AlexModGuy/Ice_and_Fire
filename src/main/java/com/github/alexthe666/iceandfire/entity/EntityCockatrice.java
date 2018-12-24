@@ -359,6 +359,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             player.getHeldItem(hand).interactWithEntity(player, this, hand);
             return true;
         }
+        if(player.getHeldItem(hand).getItem() == Items.POISONOUS_POTATO){
+            return super.processInteract(player, hand);
+        }
         if (this.isTamed() && this.isOwner(player)) {
             if (FoodUtils.isSeeds(player.getHeldItem(hand))) {
                 if (this.getHealth() < this.getMaxHealth()) {
