@@ -525,7 +525,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
 
     public void onKillEntity(EntityLivingBase entityLivingIn) {
         if (this.isTamed()) {
-            this.heal(5);
+            this.heal(14);
         }
     }
 
@@ -544,6 +544,7 @@ public class EntityDeathWorm extends EntityTameable implements IMultipartEntity,
         if (this.ticksExisted % 1000 == 0 && this.getWormAge() < 5) {
             this.setWormAge(Math.min(5, this.getWormAge() + 1));
             this.clearSegments();
+            this.heal(15);
             this.setDeathWormScale(this.getScale());
             if (world.isRemote) {
                 for (int i = 0; i < 10 * this.getScaleForAge(); i++) {
