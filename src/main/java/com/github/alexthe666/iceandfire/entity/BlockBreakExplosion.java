@@ -77,7 +77,7 @@ public class BlockBreakExplosion extends Explosion {
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
 
-                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f))) {
+                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f)) && iblockstate.getBlock().canEntityDestroy(iblockstate, this.worldObj, blockpos, this.exploder)) {
                                 set.add(blockpos);
                             }
 
