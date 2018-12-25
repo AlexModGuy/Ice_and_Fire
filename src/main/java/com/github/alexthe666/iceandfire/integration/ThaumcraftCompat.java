@@ -170,7 +170,35 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 3), new AspectList().add(Aspect.CRYSTAL, 3).add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.jar_pixie, 1, 4), new AspectList().add(Aspect.CRYSTAL, 3).add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.MAGIC, 10).add(Aspect.AIR, 5));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.eggInIce), new AspectList().add(ThaumcraftCompat.DRAGON, 5).add(Aspect.COLD, 20).add(Aspect.DESIRE, 20).add(Aspect.BEAST, 6));
-
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_egg, 1, 0), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_egg, 1, 1), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_egg, 1, 2), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_egg, 1, 3), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_egg, 1, 4), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 25).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_egg, 1, 0), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_egg, 1, 1), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_egg, 1, 2), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_egg, 1, 3), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_egg, 1, 4), new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 25).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_resin), new AspectList().add(Aspect.EXCHANGE, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 7).add(Aspect.BEAST, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_resin), new AspectList().add(Aspect.EXCHANGE, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 7).add(Aspect.BEAST, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_chitin), new AspectList().add(Aspect.BEAST, 5).add(Aspect.PROTECT, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_chitin), new AspectList().add(Aspect.BEAST, 5).add(Aspect.PROTECT, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_stinger), new AspectList().add(Aspect.BEAST, 15).add(Aspect.TRAP, 5).add(Aspect.DEATH, 5).add(ThaumcraftCompat.MYTHICAL, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_desert_staff), new AspectList().add(Aspect.TOOL, 10).add(Aspect.BEAST, 20).add(ThaumcraftCompat.MYTHICAL, 15).add(Aspect.CRAFT, 5).add(Aspect.MAGIC, 15).add(Aspect.MOTION, 10).add(Aspect.ORDER, 40).add(Aspect.MIND, 10));
+        evt.register.registerObjectTag(new ItemStack(ModItems.myrmex_jungle_staff), new AspectList().add(Aspect.TOOL, 10).add(Aspect.BEAST, 20).add(ThaumcraftCompat.MYTHICAL, 15).add(Aspect.CRAFT, 5).add(Aspect.MAGIC, 15).add(Aspect.MOTION, 10).add(Aspect.ORDER, 40).add(Aspect.MIND, 10));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_resin, 1, 0), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_resin, 1, 1), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_resin_sticky, 1, 0), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_resin_sticky, 1, 1), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(ThaumcraftCompat.MYTHICAL, 2).add(Aspect.TRAP, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.desert_myrmex_cocoon), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(Aspect.CRAFT, 5).add(Aspect.MECHANISM, 5).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.jungle_myrmex_cocoon), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5).add(Aspect.CRAFT, 5).add(Aspect.MECHANISM, 5).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_desert_biolight), new AspectList().add(Aspect.EARTH, 5).add(Aspect.PLANT, 5).add(Aspect.AURA, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_jungle_biolight), new AspectList().add(Aspect.EARTH, 5).add(Aspect.PLANT, 5).add(Aspect.AURA, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_desert_resin_block), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ORDER, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_jungle_resin_block), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ORDER, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_desert_resin_glass), new AspectList().add(Aspect.EARTH, 5).add(Aspect.AIR, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+        evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_jungle_resin_glass), new AspectList().add(Aspect.EARTH, 5).add(Aspect.AIR, 2).add(ThaumcraftCompat.MYTHICAL, 2));
         ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.MAGIC, 2));
         ThaumcraftApi.registerEntityTag("dragonskull", new AspectList().add(Aspect.DEATH, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.MAGIC, 2));
         ThaumcraftApi.registerEntityTag("firedragon", new AspectList().add(Aspect.FIRE, 25).add(Aspect.BEAST, 15).add(Aspect.FLIGHT, 25).add(Aspect.MIND, 5).add(ThaumcraftCompat.DRAGON, 50).add(Aspect.MAGIC, 10));
@@ -187,6 +215,12 @@ public class ThaumcraftCompat {
         ThaumcraftApi.registerEntityTag("stymphalianbird", new AspectList().add(ThaumcraftCompat.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.METAL, 20).add(Aspect.BEAST, 20).add(Aspect.PROTECT, 15).add(Aspect.AVERSION, 15));
         ThaumcraftApi.registerEntityTag("if_cockatrice", new AspectList().add(ThaumcraftCompat.MYTHICAL, 35).add(Aspect.FLIGHT, 20).add(Aspect.ALCHEMY, 20).add(Aspect.DARKNESS, 20).add(Aspect.AVERSION, 15));
         ThaumcraftApi.registerEntityTag("if_troll", new AspectList().add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.BEAST, 20).add(Aspect.AVERSION, 10).add(Aspect.DARKNESS, 20).add(Aspect.MAGIC, 15).add(Aspect.MAN, 5));
+        ThaumcraftApi.registerEntityTag("myrmex_egg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.MYTHICAL, 5));
+        ThaumcraftApi.registerEntityTag("myrmex_worker", new AspectList().add(Aspect.BEAST, 15).add(Aspect.EXCHANGE, 5).add(ThaumcraftCompat.MYTHICAL, 10));
+        ThaumcraftApi.registerEntityTag("myrmex_soldier", new AspectList().add(Aspect.BEAST, 15).add(Aspect.PROTECT, 5).add(ThaumcraftCompat.MYTHICAL, 15));
+        ThaumcraftApi.registerEntityTag("myrmex_sentinel", new AspectList().add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(ThaumcraftCompat.MYTHICAL, 20));
+        ThaumcraftApi.registerEntityTag("myrmex_royal", new AspectList().add(Aspect.BEAST, 20).add(Aspect.SENSES, 10).add(Aspect.FLIGHT, 10).add(ThaumcraftCompat.MYTHICAL, 20));
+        ThaumcraftApi.registerEntityTag("myrmex_queen", new AspectList().add(Aspect.BEAST, 35).add(Aspect.EXCHANGE, 10).add(Aspect.LIFE, 10).add(ThaumcraftCompat.MYTHICAL, 30));
 
     }
 }
