@@ -264,6 +264,13 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         animationTick = tick;
     }
 
+    public void setDead() {
+        if(eyeEntity != null){
+            world.removeEntityDangerously(eyeEntity);
+        }
+        super.setDead();
+    }
+
     @Override
     public Animation getAnimation() {
         return currentAnimation;
