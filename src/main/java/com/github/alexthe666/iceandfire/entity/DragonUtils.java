@@ -77,7 +77,7 @@ public class DragonUtils {
 		Entity pointedEntity = null;
 		List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
-				return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase && !entity.isEntityEqual(dragon) && !entity.isOnSameTeam(dragon);
+				return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase && !entity.isEntityEqual(dragon) && !entity.isOnSameTeam(dragon) &&  (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead());
 			}
 		}));
 		double d2 = d1;
