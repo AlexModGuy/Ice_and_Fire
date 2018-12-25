@@ -78,7 +78,7 @@ public class CockatriceAITargetItems<T extends EntityItem> extends EntityAITarge
             EntityCockatrice cockatrice = (EntityCockatrice) this.taskOwner;
             this.targetEntity.getItem().shrink(1);
             this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            cockatrice.heal(5);
+            cockatrice.heal(8);
             cockatrice.setAnimation(EntityCockatrice.ANIMATION_EAT);
             resetTask();
         }

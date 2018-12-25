@@ -269,7 +269,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				return true;
 			}
-			if (itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood) itemstack.getItem()).isWolfsFavoriteMeat()) {
+			if (itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood) itemstack.getItem()).isWolfsFavoriteMeat() && this.getHealth() < this.getMaxHealth()) {
 				this.heal(5);
 				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 				for (int i = 0; i < 3; i++) {
