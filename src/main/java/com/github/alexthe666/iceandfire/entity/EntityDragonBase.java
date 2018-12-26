@@ -1074,8 +1074,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        System.out.println(this.getRidingEntity());
-
         if (!world.isRemote) {
             if(this.isInLove()){
                 this.world.setEntityState(this, (byte)18);

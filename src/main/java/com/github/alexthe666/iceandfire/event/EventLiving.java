@@ -252,7 +252,6 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityUseItem(PlayerInteractEvent.RightClickItem event){
 		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase){
-			System.out.println(event.getEntityLiving().world.isRemote);
 			((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((EntityPlayer)event.getEntityLiving(), event.getHand());
 		}
 	}

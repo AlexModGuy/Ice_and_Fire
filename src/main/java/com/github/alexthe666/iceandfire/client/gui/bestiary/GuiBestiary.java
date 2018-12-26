@@ -57,7 +57,7 @@ public class GuiBestiary extends GuiScreen {
 			if (book.getTagCompound() != null) {
 				List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
 				allPageTypes.addAll(pages);
-				indexPagesTotal = 1 + (pages.size() / 10);
+				indexPagesTotal = (pages.size() / 10);
 			}
 		}
 		index = true;
@@ -90,7 +90,7 @@ public class GuiBestiary extends GuiScreen {
 			}
 		}
 		for (int i = 0; i < this.indexButtons.size(); i++) {
-			if (i <= 9 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index) {
+			if (i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index) {
 				this.indexButtons.get(i).visible = true;
 			} else {
 				this.indexButtons.get(i).visible = false;
@@ -852,6 +852,61 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
 					drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
 					drawItemStack(new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
+				}
+				writeFromTxt();
+				break;
+			case MYRMEX:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 137, 10, 202, 16, 57, 21, 512F);
+					drawImage(DRAWINGS_1, 195, 10, 278, 16, 57, 21, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 7, 17, 202, 37, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 65, 17, 278, 37, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 7, 77, 202, 58, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 65, 77, 278, 58, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 145, 20, 278, 103, 43, 45, 512F);
+					drawImage(DRAWINGS_1, 195, 20, 321, 103, 43, 45, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 25, 13, 202, 79, 76, 24, 512F);
+					drawImage(DRAWINGS_1, 25, 40, 278, 79, 76, 24, 512F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_chitin), 125, 43, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_chitin), 155, 43, 2F);
+					int i = 133;
+					boolean jungle = Minecraft.getMinecraft().player.ticksExisted % 60 > 30;
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_shovel : ModItems.myrmex_desert_shovel), i += 16, 100, 1.51F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_pickaxe : ModItems.myrmex_desert_pickaxe), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_axe : ModItems.myrmex_desert_axe), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_sword : ModItems.myrmex_desert_sword), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_sword_venom : ModItems.myrmex_desert_sword_venom), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_hoe : ModItems.myrmex_desert_hoe), i += 16, 100, 1.5F);
+					int j = 148;
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_helmet : ModItems.myrmex_desert_helmet), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_chestplate : ModItems.myrmex_desert_chestplate), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_leggings : ModItems.myrmex_desert_leggings), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_boots : ModItems.myrmex_desert_boots), j += 16, 115, 1.5F);
+				}
+				if(bookPages == 3) {
+					drawItemStack(new ItemStack(ModItems.myrmex_stinger), 35, 22, 2.5F);
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_resin), 25, 64, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_resin), 55, 64, 2F);
+				}
+				if(bookPages == 4) {
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_staff), 25, 73, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_staff), 55, 73, 2F);
+
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_egg), 125, 90, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_egg), 155, 90, 2F);
 				}
 				writeFromTxt();
 				break;

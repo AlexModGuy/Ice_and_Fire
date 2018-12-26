@@ -377,7 +377,6 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 }
                 player.sendStatusMessage(new TextComponentTranslation("cockatrice.command." + this.getCommand()), true);
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-                System.out.println(this.world.isRemote);
                 return true;
             }
 
