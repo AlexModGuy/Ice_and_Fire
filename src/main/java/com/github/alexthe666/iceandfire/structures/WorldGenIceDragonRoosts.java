@@ -28,25 +28,24 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
 					IBlockState state = world.getBlockState(blockpos);
 					float hardness = state.getBlock().getBlockHardness(state, world, blockpos);
-					if(hardness == -1.0F){
-						return;
-					}
-					if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.CRAFTED_SNOW && world.canBlockSeeSky(blockpos)) {
-						world.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
-					} else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT || state.getMaterial() == Material.CRAFTED_SNOW && !world.canBlockSeeSky(blockpos)) {
-						world.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
-					} else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL) {
-						world.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
-					} else if (state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getUnlocalizedName().contains("cobblestone"))) {
-						world.setBlockState(blockpos, ModBlocks.frozenCobblestone.getDefaultState());
-					} else if (state.getMaterial() == Material.ROCK) {
-						world.setBlockState(blockpos, ModBlocks.frozenStone.getDefaultState());
-					} else if (state.getBlock() == Blocks.GRASS_PATH) {
-						world.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
-					} else if (state.getMaterial() == Material.WOOD) {
-						world.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
-					} else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS || state.getBlock() == Blocks.SNOW_LAYER) {
-						world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+					if(hardness != -1.0F) {
+						if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.CRAFTED_SNOW && world.canBlockSeeSky(blockpos)) {
+							world.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
+						} else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT || state.getMaterial() == Material.CRAFTED_SNOW && !world.canBlockSeeSky(blockpos)) {
+							world.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
+						} else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL) {
+							world.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
+						} else if (state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getUnlocalizedName().contains("cobblestone"))) {
+							world.setBlockState(blockpos, ModBlocks.frozenCobblestone.getDefaultState());
+						} else if (state.getMaterial() == Material.ROCK) {
+							world.setBlockState(blockpos, ModBlocks.frozenStone.getDefaultState());
+						} else if (state.getBlock() == Blocks.GRASS_PATH) {
+							world.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
+						} else if (state.getMaterial() == Material.WOOD) {
+							world.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
+						} else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS || state.getBlock() == Blocks.SNOW_LAYER) {
+							world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+						}
 					}
 				}
 			}

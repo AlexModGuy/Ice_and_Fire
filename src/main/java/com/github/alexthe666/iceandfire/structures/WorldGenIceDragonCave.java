@@ -44,7 +44,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 
 	public static void setOres(World world, BlockPos pos) {
 		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
-		if(hardness == -1.0F){
+		if(hardness == -1.0F || world.isAirBlock(pos)){
 			return;
 		}
 		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
@@ -97,7 +97,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
 						worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
 					}
 				}
