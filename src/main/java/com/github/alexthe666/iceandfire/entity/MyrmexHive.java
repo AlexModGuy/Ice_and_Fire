@@ -102,7 +102,7 @@ public class MyrmexHive {
 
     public static BlockPos getGroundedPos(World world, BlockPos pos) {
         BlockPos current = pos;
-        while(world.isAirBlock(current.down())){
+        while(world.isAirBlock(current.down()) && current.getY() > 0){
             current = current.down();
         }
         return current;
