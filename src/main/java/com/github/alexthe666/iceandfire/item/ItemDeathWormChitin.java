@@ -11,7 +11,7 @@ public class ItemDeathWormChitin extends Item implements ICustomRendered{
         this.setCreativeTab(IceAndFire.TAB);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
-        this.setUnlocalizedName("deathworm_chitin");
+        this.setTranslationKey("deathworm_chitin");
         this.setRegistryName(IceAndFire.MODID, "deathworm_chitin");
     }
 

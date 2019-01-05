@@ -82,7 +82,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             Vec3d vec3d = this.getPosition(entitylivingbase, (double) entitylivingbase.height * 0.5D, partialTicks);
             Vec3d vec3d1 = this.getPosition(entity, (double) f4, partialTicks);
             Vec3d vec3d2 = vec3d.subtract(vec3d1);
-            double d0 = vec3d2.lengthVector() + 1.0D;
+            double d0 = vec3d2.length() + 1.0D;
             vec3d2 = vec3d2.normalize();
             float f5 = (float) Math.acos(vec3d2.y);
             float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);

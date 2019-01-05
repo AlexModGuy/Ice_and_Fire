@@ -21,7 +21,7 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
         super(ModItems.trollWeapon);
-        this.setUnlocalizedName("iceandfire.troll_weapon." + weapon.name().toLowerCase());
+        this.setTranslationKey("iceandfire.troll_weapon." + weapon.name().toLowerCase());
         this.setCreativeTab(IceAndFire.TAB);
         this.setRegistryName(IceAndFire.MODID, "troll_weapon." + weapon.name().toLowerCase());
         this.weapon = weapon;

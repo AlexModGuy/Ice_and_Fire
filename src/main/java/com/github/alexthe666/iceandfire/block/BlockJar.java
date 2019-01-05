@@ -41,7 +41,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 		this.setResistance(2.0F);
 		this.setSoundType(SoundType.GLASS);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.jar" + (empty ? "_empty" : "_pixie"));
+		this.setTranslationKey("iceandfire.jar" + (empty ? "_empty" : "_pixie"));
 		this.setRegistryName(IceAndFire.MODID, "jar" + (empty ? "_empty" : "_pixie"));
 		if(!empty){
 			this.setLightLevel(0.75F);
@@ -128,7 +128,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

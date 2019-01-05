@@ -17,7 +17,7 @@ public class ItemDeathwormEgg extends Item implements  ICustomRendered{
         this.setCreativeTab(IceAndFire.TAB);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
-        this.setUnlocalizedName("deathworm_egg");
+        this.setTranslationKey("deathworm_egg");
         this.setRegistryName(IceAndFire.MODID, "iceandfire.deathworm_egg");
         this.maxStackSize = 1;
     }

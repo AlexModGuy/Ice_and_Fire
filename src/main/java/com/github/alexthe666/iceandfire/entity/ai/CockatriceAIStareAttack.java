@@ -96,7 +96,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
     public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
         Vec3d vec3d = looker.getLook(1.0F).normalize();
         Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
-        double d0 = vec3d1.lengthVector();
+        double d0 = vec3d1.length();
         vec3d1 = vec3d1.normalize();
         double d1 = vec3d.dotProduct(vec3d1);
         return d1 > 1.0D - degree / d0;

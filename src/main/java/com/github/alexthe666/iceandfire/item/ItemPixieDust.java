@@ -13,7 +13,7 @@ public class ItemPixieDust extends ItemFood {
 	public ItemPixieDust() {
 		super(1, 0.3F, false);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.pixie_dust");
+		this.setTranslationKey("iceandfire.pixie_dust");
 		this.setRegistryName(IceAndFire.MODID, "pixie_dust");
 	}
 

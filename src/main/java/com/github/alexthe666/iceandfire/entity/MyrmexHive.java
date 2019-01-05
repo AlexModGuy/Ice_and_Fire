@@ -302,14 +302,14 @@ public class MyrmexHive {
         this.entrances.clear();
         for (int i = 0; i < entrancesList.tagCount(); ++i) {
             NBTTagCompound nbttagcompound = entrancesList.getCompoundTagAt(i);
-            this.entrances.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
+            this.entrances.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.byHorizontalIndex(nbttagcompound.getInteger("Facing")));
         }
 
         NBTTagList entranceBottomsList = compound.getTagList("EntranceBottoms", 10);
         this.entranceBottoms.clear();
         for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
             NBTTagCompound nbttagcompound = entranceBottomsList.getCompoundTagAt(i);
-            this.entranceBottoms.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.getHorizontal(nbttagcompound.getInteger("Facing")));
+            this.entranceBottoms.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.byHorizontalIndex(nbttagcompound.getInteger("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
         NBTTagList nbttaglist1 = compound.getTagList("Players", 10);

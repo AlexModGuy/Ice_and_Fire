@@ -27,7 +27,7 @@ public class ItemTrollArmor extends ItemArmor {
         super(material, renderIndex, slot);
         this.troll = troll;
         this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire." + troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
+        this.setTranslationKey("iceandfire." + troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
         this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
     }
 

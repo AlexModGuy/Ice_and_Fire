@@ -21,6 +21,6 @@ public class ItemGenericDesc extends ItemGeneric {
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(stack.getUnlocalizedName() + ".desc"));
+		tooltip.add(I18n.format(stack.getTranslationKey() + ".desc"));
 	}
 }

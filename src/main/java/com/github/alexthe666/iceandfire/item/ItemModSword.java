@@ -25,7 +25,7 @@ public class ItemModSword extends ItemSword {
 
 	public ItemModSword(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 		this.toolMaterial = toolmaterial;

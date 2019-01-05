@@ -20,7 +20,7 @@ public class ItemDragonFlute extends Item {
 
 	public ItemDragonFlute() {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire.dragon_flute");
+		this.setTranslationKey("iceandfire.dragon_flute");
 		this.setRegistryName(IceAndFire.MODID, "dragon_flute");
 		this.setCreativeTab(IceAndFire.TAB);
 	}

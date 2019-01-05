@@ -42,7 +42,7 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
     public String getName() {
         Block block = world.getBlockState(this.pos).getBlock();
-        return this.hasCustomName() ? this.customName : block.getUnlocalizedName() + ".name";
+        return this.hasCustomName() ? this.customName : block.getTranslationKey() + ".name";
     }
 
     public void readFromNBT(NBTTagCompound compound) {

@@ -199,7 +199,7 @@ public class FireExplosion extends Explosion {
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
 
-				if (state.getMaterial() != Material.AIR && !state.getBlock().getUnlocalizedName().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
+				if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
 					if (block == Blocks.GRASS_PATH) {
 						worldObj.setBlockState(blockpos, ModBlocks.charedGrassPath.getDefaultState());
 					}

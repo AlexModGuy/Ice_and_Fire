@@ -17,7 +17,7 @@ public class ItemRottenEgg extends Item {
 
 	public ItemRottenEgg() {
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.rotten_egg");
+		this.setTranslationKey("iceandfire.rotten_egg");
 		this.setRegistryName(IceAndFire.MODID, "rotten_egg");
 	}
 

@@ -29,7 +29,7 @@ public class ItemStoneStatue extends Item {
 
 	public ItemStoneStatue() {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire.stone_statue");
+		this.setTranslationKey("iceandfire.stone_statue");
 		this.setRegistryName(IceAndFire.MODID, "stone_statue");
 	}
 

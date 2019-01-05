@@ -24,10 +24,10 @@ public class ItemMyrmexStaff extends Item {
     public ItemMyrmexStaff(boolean jungle) {
         this.setCreativeTab(IceAndFire.TAB);
         if(jungle){
-            this.setUnlocalizedName("iceandfire.myrmex_jungle_staff");
+            this.setTranslationKey("iceandfire.myrmex_jungle_staff");
             this.setRegistryName(IceAndFire.MODID, "myrmex_jungle_staff");
         }else{
-            this.setUnlocalizedName("iceandfire.myrmex_desert_staff");
+            this.setTranslationKey("iceandfire.myrmex_desert_staff");
             this.setRegistryName(IceAndFire.MODID, "myrmex_desert_staff");
         }
     }

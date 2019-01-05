@@ -41,7 +41,7 @@ public class BlockLectern extends BlockContainer {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.lectern");
+		this.setTranslationKey("iceandfire.lectern");
 		this.setRegistryName(IceAndFire.MODID, "lectern");
 		GameRegistry.registerTileEntity(TileEntityLectern.class, "lectern");
 	}
@@ -107,7 +107,7 @@ public class BlockLectern extends BlockContainer {
 	@Override
 	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class BlockLectern extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

@@ -38,7 +38,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         this.setHardness(2.0F);
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.podium");
+        this.setTranslationKey("iceandfire.podium");
         this.setRegistryName(IceAndFire.MODID, "podium");
         GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");
     }
@@ -140,7 +140,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

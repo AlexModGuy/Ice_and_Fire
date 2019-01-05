@@ -32,7 +32,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 
 	public ItemGorgonHead() {
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.gorgon_head");
+		this.setTranslationKey("iceandfire.gorgon_head");
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, "gorgon_head");
 	}
@@ -58,7 +58,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		double dist = 32;
 		Vec3d vec3d = entity.getPositionEyes(1.0F);
 		Vec3d vec3d1 = entity.getLook(1.0F);
-		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+		Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
 		double d1 = dist;
 		Entity pointedEntity = null;
 		List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {

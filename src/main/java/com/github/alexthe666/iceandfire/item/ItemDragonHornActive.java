@@ -33,7 +33,7 @@ public class ItemDragonHornActive extends Item {
 
 	public ItemDragonHornActive(String name) {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire." + name);
+		this.setTranslationKey("iceandfire." + name);
 		this.setRegistryName(IceAndFire.MODID, name);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
@@ -97,7 +97,7 @@ public class ItemDragonHornActive extends Item {
 			float f6 = MathHelper.sin(-f1 * 0.017453292F);
 			float f7 = f4 * f5;
 			float f8 = f3 * f5;
-			Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+			Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 			RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 			if (raytraceresult == null) {
 				return;
@@ -161,7 +161,7 @@ public class ItemDragonHornActive extends Item {
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		entityplayer.setActiveHand(hand);
-		Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+		Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 		RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}

@@ -22,7 +22,7 @@ public class BlockDragonOre extends Block {
         this.setHarvestLevel("pickaxe", toollevel);
         this.setResistance(resistance);
         this.setHardness(hardness);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         setRegistryName(IceAndFire.MODID, gameName);
 
     }

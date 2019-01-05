@@ -29,7 +29,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered{
         this.setHasSubtypes(true);
         this.setCreativeTab(IceAndFire.TAB);
         this.isJungle = isJungle;
-        this.setUnlocalizedName(isJungle ? "iceandfire.myrmex_jungle_egg" : "iceandfire.myrmex_desert_egg");
+        this.setTranslationKey(isJungle ? "iceandfire.myrmex_jungle_egg" : "iceandfire.myrmex_desert_egg");
         this.maxStackSize = 1;
         this.setRegistryName(IceAndFire.MODID, isJungle ? "myrmex_jungle_egg" : "myrmex_desert_egg");
     }

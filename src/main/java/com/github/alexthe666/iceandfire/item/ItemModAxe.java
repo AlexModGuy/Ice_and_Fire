@@ -29,7 +29,7 @@ public class ItemModAxe extends ItemTool {
 		super(toolmaterial, EFFECTIVE_ON);
 		this.attackDamage = toolmaterial == ModItems.boneTools ? 8 : 6;
 		this.attackSpeed = -3;
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}

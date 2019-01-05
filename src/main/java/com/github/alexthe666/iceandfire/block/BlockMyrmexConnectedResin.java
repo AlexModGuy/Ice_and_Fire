@@ -36,12 +36,12 @@ public class BlockMyrmexConnectedResin extends Block {
         if (glass) {
             this.setHardness(1.5F);
             this.setSoundType(SoundType.GLASS);
-            this.setUnlocalizedName(jungle ? "iceandfire.myrmex_jungle_resin_glass" : "iceandfire.myrmex_desert_resin_glass");
+            this.setTranslationKey(jungle ? "iceandfire.myrmex_jungle_resin_glass" : "iceandfire.myrmex_desert_resin_glass");
             this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_glass" : "myrmex_desert_resin_glass");
         } else {
             this.setHardness(3.5F);
             this.setSoundType(SoundType.STONE);
-            this.setUnlocalizedName(jungle ? "iceandfire.myrmex_jungle_resin_block" : "iceandfire.myrmex_desert_resin_block");
+            this.setTranslationKey(jungle ? "iceandfire.myrmex_jungle_resin_block" : "iceandfire.myrmex_desert_resin_block");
             this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_block" : "myrmex_desert_resin_block");
         }
         this.setCreativeTab(IceAndFire.TAB);
@@ -90,7 +90,7 @@ public class BlockMyrmexConnectedResin extends Block {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

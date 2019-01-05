@@ -52,7 +52,7 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
                 if (vec3d == null) {
                     return false;
                 } else {
-                    vec3d = vec3d.addVector(0, 3, 0);
+                    vec3d = vec3d.add(0, 3, 0);
                     this.stymphalianBird.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 3D);
                     this.stymphalianBird.getLookHelper().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
                     hidePlace = vec3d;

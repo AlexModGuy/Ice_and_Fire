@@ -36,7 +36,7 @@ public class BlockGoldPile extends Block {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
 		this.setTickRandomly(true);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.goldpile");
+		this.setTranslationKey("iceandfire.goldpile");
 		this.setHardness(0.3F);
 		this.setSoundType(ModBlocks.SOUND_TYPE_GOLD);
 		setRegistryName(IceAndFire.MODID, "goldpile");

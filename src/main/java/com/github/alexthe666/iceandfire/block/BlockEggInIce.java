@@ -37,7 +37,7 @@ public class BlockEggInIce extends BlockContainer {
 		this.setHardness(0.5F);
 		this.setLightOpacity(3);
 		this.setSoundType(SoundType.GLASS);
-		this.setUnlocalizedName("iceandfire.egginice");
+		this.setTranslationKey("iceandfire.egginice");
 		GameRegistry.registerTileEntity(TileEntityEggInIce.class, "eggInIce");
 		setRegistryName(IceAndFire.MODID, "egginice");
 	}
@@ -54,7 +54,7 @@ public class BlockEggInIce extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

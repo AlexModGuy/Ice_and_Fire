@@ -26,7 +26,7 @@ public class ItemAlchemySword extends ItemSword {
 
 	public ItemAlchemySword(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}

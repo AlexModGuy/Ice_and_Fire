@@ -36,7 +36,7 @@ public class BlockSilverPile extends Block {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
 		this.setTickRandomly(true);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.silverpile");
+		this.setTranslationKey("iceandfire.silverpile");
 		this.setHardness(0.3F);
 		this.setSoundType(ModBlocks.SOUND_TYPE_GOLD);
 		setRegistryName(IceAndFire.MODID, "silverpile");

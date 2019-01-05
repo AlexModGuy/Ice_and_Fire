@@ -13,7 +13,7 @@ public class ItemBlockMyrmexResin extends ItemBlock {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack itemstack) {
+    public String getTranslationKey(ItemStack itemstack) {
         if(sticky) {
             return itemstack.getItemDamage() == 1 ? "tile.iceandfire.jungle_myrmex_resin_sticky" : "tile.iceandfire.desert_myrmex_resin_sticky";
         }else{

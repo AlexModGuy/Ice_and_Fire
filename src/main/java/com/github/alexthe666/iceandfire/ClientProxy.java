@@ -148,11 +148,11 @@ public class ClientProxy extends CommonProxy {
 			for (Field f : ModItems.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof Item && !(obj instanceof ICustomRendered)) {
-					ModelLoader.setCustomModelResourceLocation((Item)obj, 0, new ModelResourceLocation("iceandfire:" + ((Item)obj).getRegistryName().getResourcePath(), "inventory"));
+					ModelLoader.setCustomModelResourceLocation((Item)obj, 0, new ModelResourceLocation("iceandfire:" + ((Item)obj).getRegistryName().getPath(), "inventory"));
 				} else if (obj instanceof Item[]) {
 					for (Item item : (Item[]) obj) {
 						if(!(item instanceof ICustomRendered)){
-							ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("iceandfire:" + item.getRegistryName().getResourcePath(), "inventory"));
+							ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("iceandfire:" + item.getRegistryName().getPath(), "inventory"));
 
 						}
 					}
@@ -165,11 +165,11 @@ public class ClientProxy extends CommonProxy {
 			for (Field f : ModBlocks.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof Block && !(obj instanceof ICustomRendered)) {
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock((Block)obj), 0, new ModelResourceLocation("iceandfire:" + ((Block)obj).getRegistryName().getResourcePath(), "inventory"));
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock((Block)obj), 0, new ModelResourceLocation("iceandfire:" + ((Block)obj).getRegistryName().getPath(), "inventory"));
 				} else if (obj instanceof Block[]) {
 					for (Block block : (Block[]) obj) {
 						if(!(block instanceof ICustomRendered)){
-							ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("iceandfire:" + block.getRegistryName().getResourcePath(), "inventory"));
+							ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("iceandfire:" + block.getRegistryName().getPath(), "inventory"));
 
 						}
 					}

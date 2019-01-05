@@ -17,7 +17,7 @@ public class ItemDragonHornStatic extends Item {
 	public ItemDragonHornStatic() {
 		this.maxStackSize = 1;
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.dragon_horn");
+		this.setTranslationKey("iceandfire.dragon_horn");
 		this.setRegistryName(IceAndFire.MODID, "dragon_horn");
 	}
 

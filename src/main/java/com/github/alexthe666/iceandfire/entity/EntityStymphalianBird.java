@@ -331,7 +331,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
                             EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(world, this);
                             entityarrow.setPosition(wingX, wingY, wingZ);
-                            entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().getDifficultyId() * 4));
+                            entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));
                             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
                             this.world.spawnEntity(entityarrow);
                         }

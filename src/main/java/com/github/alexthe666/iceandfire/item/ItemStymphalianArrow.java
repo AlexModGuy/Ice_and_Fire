@@ -19,7 +19,7 @@ public class ItemStymphalianArrow extends ItemArrow {
 
     public ItemStymphalianArrow() {
         this.setCreativeTab(IceAndFire.TAB);
-        this.setUnlocalizedName("iceandfire.stymphalian_arrow");
+        this.setTranslationKey("iceandfire.stymphalian_arrow");
         this.setRegistryName(IceAndFire.MODID, "stymphalian_arrow");
     }
 

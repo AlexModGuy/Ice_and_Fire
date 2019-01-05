@@ -41,7 +41,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.pixie_house");
+		this.setTranslationKey("iceandfire.pixie_house");
 		this.setRegistryName(IceAndFire.MODID, "pixie_house");
 		GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
 	}
@@ -111,7 +111,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

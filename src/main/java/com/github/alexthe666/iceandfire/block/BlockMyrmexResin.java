@@ -35,7 +35,7 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         super(Material.CLAY);
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumType.DESERT));
         this.setHardness(2.5F);
-        this.setUnlocalizedName(sticky ? "iceandfire.myrmex_resin_sticky" : "iceandfire.myrmex_resin");
+        this.setTranslationKey(sticky ? "iceandfire.myrmex_resin_sticky" : "iceandfire.myrmex_resin");
         this.setCreativeTab(IceAndFire.TAB);
         this.setSoundType(sticky ? SoundType.SLIME : SoundType.GROUND);
         this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky" : "myrmex_resin");

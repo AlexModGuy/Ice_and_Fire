@@ -27,7 +27,7 @@ public class ItemDragonEgg extends Item {
 		this.setHasSubtypes(true);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.type = type;
-		this.setUnlocalizedName("iceandfire.dragonegg");
+		this.setTranslationKey("iceandfire.dragonegg");
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, name);
 	}

@@ -26,7 +26,7 @@ public class BlockCharedPath extends BlockGrassPath {
     public BlockCharedPath(boolean isFire) {
         super();
         this.isFire = isFire;
-        this.setUnlocalizedName(isFire ? "iceandfire.charedGrassPath" : "iceandfire.frozenGrassPath");
+        this.setTranslationKey(isFire ? "iceandfire.charedGrassPath" : "iceandfire.frozenGrassPath");
         this.setHarvestLevel("shovel", 0);
         this.setHardness(0.6F);
         this.setSoundType(isFire ? SoundType.GROUND : SoundType.GLASS);

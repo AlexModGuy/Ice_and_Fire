@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ItemGeneric extends Item {
 	public ItemGeneric(String gameName, String name) {
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
 }
