@@ -31,7 +31,7 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
             return false;
         }
         Path path = this.mob.getNavigator().getPath();
-        if (this.mob.getRNG().nextFloat() < 0.5F ||path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq((double)path.getFinalPathPoint().x, (double)path.getFinalPathPoint().y, (double)path.getFinalPathPoint().z) < 3) {
+        if (this.mob.getRNG().nextFloat() < 0.15F ||path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq((double)path.getFinalPathPoint().x, (double)path.getFinalPathPoint().y, (double)path.getFinalPathPoint().z) < 3) {
             if (path != null && path.getFinalPathPoint() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }

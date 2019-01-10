@@ -528,7 +528,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             float f5;
             if (this.isInWater()) {
                 this.moveRelative(strafe, vertical, forward, 0.1F);
-                f4 = 0.8F;
+                f4 = 0.6F;
                 float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
                 if (d0 > 3.0F) {
                     d0 = 3.0F;
