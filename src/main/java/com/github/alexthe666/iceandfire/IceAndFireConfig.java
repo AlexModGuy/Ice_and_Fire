@@ -97,8 +97,9 @@ public class IceAndFireConfig {
 	public int myrmexEggTicks = 3000;
 	public int myrmexLarvaTicks = 35000;
 	public int myrmexColonyGenChance = 150;
+    public boolean experimentalPathFinder;
 
-	public void init(Configuration config) {
+    public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
 		this.useVanillaFont = config.getBoolean("Use Vanilla Font", "all", false, "Whether to use the vanilla font in the bestiary or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
@@ -204,6 +205,7 @@ public class IceAndFireConfig {
 		this.myrmexEggTicks = config.getInt("Myrmex Hatch Length", "all", 3000, 1, 10000, "How many ticks it takes for a Myrmex Egg to hatch.");
 		this.myrmexLarvaTicks = config.getInt("Myrmex Hatch Length", "all", 35000, 1, 10000, "How many ticks it takes for a Myrmex to move from a larva to a pupa, and from a pupa to an adult.");
 		this.myrmexColonyGenChance = config.getInt("Myrmex Colony Gen Chance", "all", 150, 1, 10000, "One out of this number chance per chunk to generate a myrmex hive.");
+		this.experimentalPathFinder = config.getBoolean("Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
 
 	}
 }

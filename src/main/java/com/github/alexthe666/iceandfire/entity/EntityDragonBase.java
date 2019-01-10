@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -39,6 +40,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -231,6 +234,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         tail2Part.onUpdate();
         tail3Part.onUpdate();
         tail4Part.onUpdate();
+    }
+
+    protected PathNavigate createNavigator(World worldIn) {
+        return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
     }
 
     public boolean canDestroyBlock(BlockPos pos){
