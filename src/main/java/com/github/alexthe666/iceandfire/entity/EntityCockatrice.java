@@ -12,6 +12,8 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,7 +98,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(5, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
+                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
             }
         }));
         this.tasks.removeTask(aiMelee);
