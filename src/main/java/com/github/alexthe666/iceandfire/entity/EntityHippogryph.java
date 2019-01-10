@@ -516,13 +516,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		double armorValue = 0;
 		switch(armorType){
 			case 1:
-				armorValue = 5;
+				armorValue = 10;
 				break;
 			case 2:
-				armorValue = 7;
+				armorValue = 20;
 				break;
 			case 3:
-				armorValue = 11;
+				armorValue = 30;
 		}
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
 	}
