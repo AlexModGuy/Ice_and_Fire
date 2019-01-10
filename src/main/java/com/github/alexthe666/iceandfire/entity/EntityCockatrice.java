@@ -363,7 +363,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             return super.processInteract(player, hand);
         }
         if (this.isTamed() && this.isOwner(player)) {
-            if (FoodUtils.isSeeds(player.getHeldItem(hand))) {
+            if (FoodUtils.isSeeds(player.getHeldItem(hand)) || player.getHeldItem(hand).getItem() == Items.ROTTEN_FLESH) {
                 if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(8);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
