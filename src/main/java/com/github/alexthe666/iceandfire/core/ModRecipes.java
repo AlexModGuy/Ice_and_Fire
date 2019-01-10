@@ -73,12 +73,12 @@ public class ModRecipes {
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
         OreDictionary.registerOre("boneDragon", ModItems.dragonbone);
 
-        OreDictionary.registerOre("listAllEgg", ModItems.hippogryph_egg);
-        OreDictionary.registerOre("objectEgg", ModItems.hippogryph_egg);
-        OreDictionary.registerOre("bakingEgg", ModItems.hippogryph_egg);
-        OreDictionary.registerOre("egg", ModItems.hippogryph_egg);
-        OreDictionary.registerOre("ingredientEgg", ModItems.hippogryph_egg);
-        OreDictionary.registerOre("foodSimpleEgg", ModItems.hippogryph_egg);
+        OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("egg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
 
         OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
