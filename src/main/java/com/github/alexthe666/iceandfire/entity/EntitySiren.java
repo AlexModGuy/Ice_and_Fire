@@ -20,6 +20,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -286,7 +287,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     public static boolean isWearingEarplugs(EntityLivingBase entity) {
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        return helmet.getItem() == ModItems.earplugs;
+        return helmet.getItem() == ModItems.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
