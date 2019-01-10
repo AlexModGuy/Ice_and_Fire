@@ -36,6 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
@@ -464,9 +465,11 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 if (!this.isStaring()) {
                     this.setStaring(true);
                 } else {
-                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.WITHER, 10, 2));
-                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, 0));
-                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10, 1));
+                    int attackStrength = this.getFriendsCount(this.getAttackTarget());
+                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.WITHER, 10, 2 + Math.min(8, attackStrength)));
+                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, Math.min(4, attackStrength)));
+                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10, 0));
+
                     this.getAttackTarget().setRevengeTarget(this);
                     if (!this.isTamed() && this.getAttackTarget() instanceof EntityPlayer) {
                         this.setTamingPlayer(this.getAttackTarget().getEntityId());
@@ -527,6 +530,24 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
+    }
+
+    private int getFriendsCount(EntityLivingBase attackTarget) {
+        if(this.getAttackTarget() == null){
+            return 0;
+        }
+        float dist = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+        List<EntityCockatrice> list = world.getEntitiesWithinAABB(EntityCockatrice.class, this.getEntityBoundingBox().expand(dist, dist, dist));
+        int i = 0;
+        for(EntityCockatrice cockatrice : list){
+            if(!cockatrice.isEntityEqual(this) && cockatrice.getAttackTarget() != null && cockatrice.getAttackTarget() == this.getAttackTarget()){
+                boolean bothLooking = EntityGorgon.isEntityLookingAt(cockatrice, cockatrice.getAttackTarget(), VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(cockatrice.getAttackTarget(), cockatrice, VIEW_RADIUS);
+                if(bothLooking){
+                    i++;
+                }
+            }
+        }
+        return i;
     }
 
     public float getAttackAnimationScale(float f) {
