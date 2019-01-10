@@ -181,7 +181,7 @@ public class ModelCyclops extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityCyclops) entity);
-               animator.update(entity);
+        animator.update(entity);
         animator.setAnimation(EntityCyclops.ANIMATION_STOMP);
         animator.startKeyframe(7);
         this.rotate(animator, rightleg, -62, 0, 0);

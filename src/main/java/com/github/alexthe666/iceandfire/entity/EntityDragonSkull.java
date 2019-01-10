@@ -28,7 +28,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 
 	public EntityDragonSkull(World worldIn) {
 		super(worldIn);
-		this.setSize(1.45F, 0.65F);
+		this.setSize(0.9F, 0.65F);
 		this.ignoreFrustumCheck = true;
 		// setScale(this.getDragonAge());
 	}
@@ -48,6 +48,17 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	@Override
 	public boolean isAIDisabled() {
 		return true;
+	}
+
+	public boolean isOnWall(){
+		return this.world.isAirBlock(this.getPosition().down());
+	}
+
+	public void onUpdate(){
+		this.prevRenderYawOffset = 0;
+		this.prevRotationYawHead = 0;
+		this.renderYawOffset = 0;
+		this.rotationYawHead = 0;
 	}
 
 	@Override

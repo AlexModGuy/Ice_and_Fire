@@ -31,6 +31,7 @@ public class RenderDragonSkull extends RenderLiving {
 		}
 	}
 
+
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		if (entity instanceof EntityDragonSkull) {
