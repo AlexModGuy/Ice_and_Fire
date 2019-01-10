@@ -87,6 +87,20 @@ public class ModRecipes {
         OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.deathworm_egg, 1, OreDictionary.WILDCARD_VALUE));
 
+        OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("egg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
+
+        OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("egg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
