@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,8 +51,22 @@ public class GuiBestiary extends GuiScreen {
 	protected ItemStack book;
 	protected boolean index;
 	protected FontRenderer font;
+
+	private FontRenderer getFont(){
+		System.out.println(Minecraft.getMinecraft().gameSettings.language);
+		FontRenderer font;
+		if(IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")){
+			font = Minecraft.getMinecraft().fontRenderer;
+		}else{
+			font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+		}
+		font.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+		font.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		return font;
+	}
+
 	public GuiBestiary(ItemStack book) {
-		font = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+		font = getFont();
 		this.book = book;
 		int indexPageTotal = 0;
 		if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
@@ -65,7 +81,6 @@ public class GuiBestiary extends GuiScreen {
 
 	public void initGui() {
 		super.initGui();
-		font = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 		int centerX = (this.width - this.X) / 2;
 		int centerY = (this.height - this.Y) / 2;
 		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages, 0));
