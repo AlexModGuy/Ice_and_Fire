@@ -70,7 +70,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
-            return (p_apply_1_ instanceof EntityPlayer && !((EntityPlayer) p_apply_1_).isCreative()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
+            return (p_apply_1_ instanceof EntityPlayer && !((EntityPlayer) p_apply_1_).isCreative() && !((EntityPlayer) p_apply_1_).isSpectator()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
         }
     };
 
