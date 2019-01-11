@@ -91,7 +91,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		ANIMATION_EAT = Animation.create(25);
 		ANIMATION_SPEAK = Animation.create(15);
 		ANIMATION_SCRATCH = Animation.create(25);
-		ANIMATION_BITE = Animation.create(25);
+		ANIMATION_BITE = Animation.create(20);
 		initHippogryphInv();
 		if (FMLCommonHandler.instance().getSide().isClient()) {
 			roll_buffer = new RollBuffer();
@@ -108,7 +108,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, true));
+		this.tasks.addTask(3, new HippogryphAIAttackMelee(this, 1.5D, true));
 		this.tasks.addTask(4, new HippogryphAIMate(this, 1.0D));
 		this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
 		this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
@@ -689,33 +689,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-
 		if (this.getAnimation() != this.ANIMATION_SCRATCH && this.getAnimation() != this.ANIMATION_BITE) {
 			this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
-		} else if (this.getAnimationTick() >= 5) {
-			if (this.getAnimation() == this.ANIMATION_SCRATCH) {
-				entityIn.isAirBorne = true;
-				float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
-				entityIn.motionX /= 2.0D;
-				entityIn.motionZ /= 2.0D;
-				entityIn.motionX -= 0.5 / (double) f * 4;
-				entityIn.motionZ -= 0.5 / (double) f * 4;
-
-				if (entityIn.onGround) {
-					entityIn.motionY /= 2.0D;
-					entityIn.motionY += 4;
-
-					if (entityIn.motionY > 0.4000000059604645D) {
-						entityIn.motionY = 0.4000000059604645D;
-					}
-				}
-			}
-			boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-			if (flag) {
-				this.applyEnchantments(this, entityIn);
-			}
-
-			return flag;
+		} else {
+			return true;
 		}
 		return false;
 	}
@@ -735,6 +712,32 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+			double dist = this.getDistanceSq(this.getAttackTarget());
+			if (dist < 4) {
+				this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+			}
+		}
+		if (this.getAnimation() == ANIMATION_SCRATCH && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+			double dist = this.getDistanceSq(this.getAttackTarget());
+			if (dist < 4) {
+				this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+				this.getAttackTarget().isAirBorne = true;
+				float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
+				this.getAttackTarget().motionX /= 2.0D;
+				this.getAttackTarget().motionZ /= 2.0D;
+				this.getAttackTarget().motionX -= 0.5 / (double) f * 4;
+				this.getAttackTarget().motionZ -= 0.5 / (double) f * 4;
+
+				if (this.getAttackTarget().onGround) {
+					this.getAttackTarget().motionY /= 2.0D;
+					this.getAttackTarget().motionY += 4;
+
+					if (this.getAttackTarget().motionY > 0.4000000059604645D) {
+						this.getAttackTarget().motionY = 0.4000000059604645D;
+					}
+				}}
+		}
 		if(!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()){
 			this.setHovering(true);
 			this.setSitting(false);

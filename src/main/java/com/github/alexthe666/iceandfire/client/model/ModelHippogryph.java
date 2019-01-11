@@ -419,7 +419,7 @@ public class ModelHippogryph extends ModelDragonBase {
 		animator.endKeyframe();
 		animator.resetKeyframe(5);
 		animator.setAnimation(EntityHippogryph.ANIMATION_BITE);
-		animator.startKeyframe(10);
+		animator.startKeyframe(5);
 		this.rotate(animator, Neck, -15, 0, 0);
 		this.rotate(animator, Neck2, -15, 0, 0);
 		this.rotate(animator, HeadPivot, 23, 0, 0);
