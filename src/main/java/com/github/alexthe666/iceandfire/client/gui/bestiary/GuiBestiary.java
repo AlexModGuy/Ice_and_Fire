@@ -53,7 +53,6 @@ public class GuiBestiary extends GuiScreen {
 	protected FontRenderer font;
 
 	private FontRenderer getFont(){
-		System.out.println(Minecraft.getMinecraft().gameSettings.language);
 		FontRenderer font;
 		if(IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")){
 			font = Minecraft.getMinecraft().fontRenderer;
@@ -73,7 +72,7 @@ public class GuiBestiary extends GuiScreen {
 			if (book.getTagCompound() != null) {
 				List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
 				allPageTypes.addAll(pages);
-				indexPagesTotal = (pages.size() / 10);
+				indexPagesTotal = (int)Math.ceil(pages.size() / 10D);
 			}
 		}
 		index = true;
@@ -996,7 +995,7 @@ public class GuiBestiary extends GuiScreen {
 				this.bookPages--;
 			}
 		}
-		if (button.id == 1 && (this.index ? this.indexPages + 1 < this.indexPagesTotal : this.pageType != null && this.bookPages < this.pageType.pages)) {
+		if (button.id == 1 && (this.index ? this.indexPages < this.indexPagesTotal  - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
 			if (this.index) {
 				this.indexPages++;
 			} else {
