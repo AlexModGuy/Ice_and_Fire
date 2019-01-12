@@ -93,6 +93,7 @@ public class IceAndFireConfig {
 	public double trollAttackStrength = 10;
 	public boolean villagersFearDragons = true;
 	public boolean animalsFearDragons = true;
+	public boolean generateMyrmexColonies = true;
 	public int myrmexPregnantTicks = 2500;
 	public int myrmexEggTicks = 3000;
 	public int myrmexLarvaTicks = 35000;
@@ -201,6 +202,7 @@ public class IceAndFireConfig {
 		this.trollMaxHealth = (double)config.getFloat("Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
 		this.trollAttackStrength = (double)config.getFloat("Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
 
+		this.generateMyrmexColonies = config.getBoolean("Spawn Myrmex", "all", true, "True if myrmex colonies are allowed to spawn");
 		this.myrmexPregnantTicks = config.getInt("Myrmex Gestation Length", "all", 2500, 1, 10000, "How many ticks it takes for a Myrmex Queen to produce an egg.");
 		this.myrmexEggTicks = config.getInt("Myrmex Hatch Length", "all", 3000, 1, 10000, "How many ticks it takes for a Myrmex Egg to hatch.");
 		this.myrmexLarvaTicks = config.getInt("Myrmex Hatch Length", "all", 35000, 1, 10000, "How many ticks it takes for a Myrmex to move from a larva to a pupa, and from a pupa to an adult.");
