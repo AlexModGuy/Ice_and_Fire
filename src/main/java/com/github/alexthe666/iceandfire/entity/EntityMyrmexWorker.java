@@ -86,6 +86,13 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
+        if(!this.getPassengers().isEmpty()){
+            for(Entity entity : this.getPassengers()){
+                if(entity instanceof EntityMyrmexBase && ((EntityMyrmexBase) entity).getGrowthStage() >= 2){
+                    entity.dismountRidingEntity();
+                }
+            }
+        }
     }
 
     protected void initEntityAI() {
