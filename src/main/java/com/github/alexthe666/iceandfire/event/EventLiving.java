@@ -212,6 +212,7 @@ public class EventLiving {
 			boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving) event.getTarget(), StoneEntityProperties.class);
 			if (properties != null && properties.isStone || stonePlayer) {
+				((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 					if (stack.getItem() != null && (stack.getItem() instanceof ItemPickaxe || stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()))) {
