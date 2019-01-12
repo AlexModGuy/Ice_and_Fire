@@ -34,8 +34,9 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private boolean jungle;
     private BlockPos centerOfHive;
 
-    public WorldGenMyrmexHive(boolean small){
+    public WorldGenMyrmexHive(boolean small, boolean jungle){
         this.small = small;
+        this.jungle = jungle;
     }
 
     @Override
@@ -45,7 +46,6 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         totalRooms = 0;
         BlockPos undergroundPos = new BlockPos(position.getX(), position.getY(), position.getZ());
         entrances = 0;
-        jungle = isJungleBiome(worldIn, position);
         centerOfHive = undergroundPos;
         generateMainRoom(worldIn, rand, undergroundPos);
         this.small = false;
@@ -55,8 +55,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private void generateMainRoom(World world, Random rand, BlockPos position) {
         hive = new MyrmexHive(world, position, 100);
         MyrmexWorldData.addHive(world, hive);
-        IBlockState resin = isJungleBiome(world, position) ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = isJungleBiome(world, position) ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, position, 14, 7, resin, sticky_resin);
         generateSphere(world, rand, position, 12, 5, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, position, 12, 5, RoomType.QUEEN);
@@ -481,10 +481,6 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    private static boolean isJungleBiome(World world, BlockPos position) {
-        Biome biome = world.getBiome(position);
-        return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
-    }
 
     public enum RoomType{
         DEFAULT(false),

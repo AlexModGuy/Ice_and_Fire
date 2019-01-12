@@ -113,7 +113,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }else if(this.canSeeSky()){
             this.setAnimation(ANIMATION_DIGNEST);
             if(this.getAnimationTick() == 42){
-                WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true);
+                WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle());
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.posX, down, this.posZ);
                 hiveGen.generate(world, this.getRNG(), genPos);
