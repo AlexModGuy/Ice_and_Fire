@@ -1392,6 +1392,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.attackEntityAsMob(this.getAttackTarget());
         }
         this.breakBlock();
+        if(this.posY > IceAndFire.CONFIG.maxDragonFlight){
+            this.setPosition(this.posX, IceAndFire.CONFIG.maxDragonFlight, this.posZ);
+        }
     }
 
     public void breakBlock() {

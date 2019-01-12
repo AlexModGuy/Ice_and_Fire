@@ -399,6 +399,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
+        if(this.posY > IceAndFire.CONFIG.stymphalianBirdFlightHeight){
+            this.setPosition(this.posX, IceAndFire.CONFIG.stymphalianBirdFlightHeight, this.posZ);
+        }
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
