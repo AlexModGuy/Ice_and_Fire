@@ -110,7 +110,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
         if(hasMadeHome()) {
             eggTicks++;
-        }else{
+        }else if(this.canSeeSky()){
             this.setAnimation(ANIMATION_DIGNEST);
             if(this.getAnimationTick() == 42){
                 WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true);
