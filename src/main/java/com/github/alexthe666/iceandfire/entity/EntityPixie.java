@@ -159,7 +159,7 @@ public class EntityPixie extends EntityTameable {
 			return true;
 		}
 		if (this.isOwner(player)) {
-			if(player.getHeldItem(hand).getItem() == Items.SUGAR){
+			if(player.getHeldItem(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()){
 				this.heal(5);
 				player.getHeldItem(hand).shrink(1);
 				this.playSound(ModSounds.PIXIE_TAUNT, 1F, 1F);
