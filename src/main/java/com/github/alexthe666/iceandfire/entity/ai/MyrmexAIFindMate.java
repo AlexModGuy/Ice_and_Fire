@@ -24,7 +24,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget
         this.targetEntitySelector = new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity myrmex) {
-                return myrmex != null && myrmex instanceof EntityMyrmexRoyal;
+                return myrmex != null && myrmex instanceof EntityMyrmexRoyal && ((EntityMyrmexRoyal) myrmex).getGrowthStage() >= 2;
             }
         };
         this.myrmex = myrmex;

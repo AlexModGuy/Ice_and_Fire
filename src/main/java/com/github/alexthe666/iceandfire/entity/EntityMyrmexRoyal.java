@@ -144,7 +144,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.setFlying(true);
             this.motionY += 0.42D;
         }
-        hiveTicks++;
+        if(this.getGrowthStage() >= 2){
+            hiveTicks++;
+        }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
@@ -278,7 +280,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public boolean isBreedingSeason(){
-        return hiveTicks > 4000 && (this.getHive() == null || this.getHive().reproduces);
+        return this.getGrowthStage() >= 2 && hiveTicks > 4000 && (this.getHive() == null || this.getHive().reproduces);
     }
 
     @SideOnly(Side.CLIENT)
