@@ -114,7 +114,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
-		if (blindness) {
+		if (blindness && this.deathTime == 0) {
 			if (this.getAnimation() != ANIMATION_HIT) {
 				this.setAnimation(ANIMATION_HIT);
 			}
@@ -133,7 +133,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		super.setAttackTarget(entitylivingbaseIn);
 		if (entitylivingbaseIn != null && !world.isRemote) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entitylivingbaseIn).canBeTurnedToStone();
-			if (blindness) {
+			if (blindness && this.deathTime == 0) {
 				this.tasks.removeTask(aiStare);
 				this.tasks.addTask(3, aiMelee);
 			} else {
@@ -186,14 +186,14 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-			if (!blindness && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
+			if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
 				forcePreyToLook((EntityLiving) this.getAttackTarget());
 			}
 		}
 
 		if (this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
-			if (!blindness) {
+			if (!blindness && this.deathTime == 0) {
 				if (this.getAnimation() != ANIMATION_SCARE) {
 					this.playSound(ModSounds.GORGON_ATTACK, 1, 1);
 					this.setAnimation(ANIMATION_SCARE);
