@@ -65,6 +65,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     public static final int SEARCH_RANGE = 32;
     private boolean isLandNavigator;
     private int ticksAgressive;
+    public int singCooldown;
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
@@ -181,6 +182,10 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(singCooldown > 0){
+            singCooldown--;
+            this.setSinging(false);
+        }
         if (!world.isRemote && this.getAttackTarget() == null && !this.isAgressive()) {
             this.setSinging(true);
         }
@@ -363,6 +368,9 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     public void setSinging(boolean singing) {
+        if(singCooldown > 0){
+            singing = false;
+        }
         this.dataManager.set(SINGING, singing);
         if (!world.isRemote) {
             this.isSinging = singing;

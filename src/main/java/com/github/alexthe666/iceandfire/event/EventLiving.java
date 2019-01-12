@@ -320,11 +320,14 @@ public class EventLiving {
 				EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
 				if (closestSiren != null && closestSiren.isActuallySinging()) {
 					stepHeightSwitched = false;
-					if (EntitySiren.isWearingEarplugs(event.getEntityLiving())) {
+					if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IceAndFire.CONFIG.sirenMaxSingTime) {
 						sirenProps.isCharmed = false;
 						sirenProps.sirenID = 0;
+						sirenProps.singTime = 0;
+						closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
 					} else {
 						sirenProps.isCharmed = true;
+						sirenProps.singTime++;
 						if (rand.nextInt(7) == 0) {
 							for (int i = 0; i < 5; i++) {
 								event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
@@ -366,6 +369,8 @@ public class EventLiving {
 						if (entity.getDistance(closestSiren) < 5D) {
 							sirenProps.isCharmed = false;
 							sirenProps.sirenID = 0;
+							sirenProps.singTime = 0;
+							closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
 							closestSiren.setSinging(false);
 							closestSiren.setAttackTarget((EntityLivingBase) entity);
 							closestSiren.setAggressive(true);
@@ -374,6 +379,7 @@ public class EventLiving {
 						if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
 							sirenProps.isCharmed = false;
 							sirenProps.sirenID = 0;
+							sirenProps.singTime = 0;
 						}
 					}
 				} else if (!sirenProps.isCharmed && !stepHeightSwitched) {

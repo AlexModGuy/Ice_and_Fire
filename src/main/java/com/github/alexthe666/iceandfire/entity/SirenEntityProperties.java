@@ -10,6 +10,8 @@ public class SirenEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	public boolean isCharmed;
 	public int sirenID;
+	public int singTime;
+
 	@Override
 	public int getTrackingTime() {
 		return 20;

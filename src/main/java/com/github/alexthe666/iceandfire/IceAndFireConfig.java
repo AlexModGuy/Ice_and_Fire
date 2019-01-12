@@ -63,6 +63,8 @@ public class IceAndFireConfig {
 	public double sirenMaxHealth = 50D;
 	public boolean generateSirenIslands = true;
 	public boolean sirenShader = true;
+	public int sirenMaxSingTime = 12000;
+	public int sirenTimeBetweenSongs = 2000;
 	public int generateSirenChance = 300;
 	public boolean spawnHippocampus = true;
 	public int hippocampusSpawnChance = 70;
@@ -171,6 +173,8 @@ public class IceAndFireConfig {
 		this.generateSirenIslands = config.getBoolean("Spawn Sirens", "all", true, "True if siren islands are allowed to spawn");
 		this.sirenShader = config.getBoolean("Use Siren Shader", "all", true, "True to make the screen pink when sirens attract players");
 		this.generateSirenChance = config.getInt("Spawn Sirens Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.sirenMaxSingTime = config.getInt("Siren Max Sing Time", "all", 12000, 100, 24000, "how long(in ticks) can a siren use its sing effect on a player, without a cooldown.");
+		this.sirenTimeBetweenSongs = config.getInt("Siren Time Between Songs", "all", 2000, 100, 24000, "how long(in ticks) a siren has to wait after failing to lure in a player");
 
 		this.spawnHippocampus = config.getBoolean("Spawn Hippocampus", "all", true, "True if hippocampi are allowed to spawn");
 		this.hippocampusSpawnChance = config.getInt("Spawn Hippocampus Chance", "all", 70, 1, 10000, "1 out of this number chance per chunk for generation");
