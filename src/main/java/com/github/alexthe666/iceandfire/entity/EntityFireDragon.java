@@ -42,6 +42,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.setSize(0.78F, 1.2F);
 		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
+		this.setPathPriority(PathNodeType.LAVA, 8.0F);
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);

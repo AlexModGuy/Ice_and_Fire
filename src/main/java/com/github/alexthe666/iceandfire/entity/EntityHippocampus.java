@@ -529,7 +529,6 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 }
                 this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
                 this.limbSwing += this.limbSwingAmount;
-                System.out.println(limbSwingAmount);
                 return;
             }
         }

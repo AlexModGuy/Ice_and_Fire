@@ -48,9 +48,6 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
         }
         this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
         this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
-        if(myrmex instanceof EntityMyrmexSoldier){
-           // System.out.println(nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false)));
-        }
         if(this.myrmex.getDistanceSq(nextEntrance) < 9 && first){
             if(hive != null){
                 nextEntrance = hive.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG());
