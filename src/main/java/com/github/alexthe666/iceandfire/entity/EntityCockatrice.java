@@ -470,7 +470,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                     int attackStrength = this.getFriendsCount(this.getAttackTarget());
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.WITHER, 10, 2 + Math.min(8, attackStrength)));
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, Math.min(4, attackStrength)));
-                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10, 0));
+                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20, 0));
 
                     this.getAttackTarget().setRevengeTarget(this);
                     if (!this.isTamed() && this.getAttackTarget() instanceof EntityPlayer) {
