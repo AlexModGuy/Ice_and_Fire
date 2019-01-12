@@ -218,6 +218,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if (!this.world.isRemote) {
+            if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
+                this.heal(1.0F);
+            }
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
         if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase && this.ticksExisted % 20 == 0) {
             ((EntityLivingBase) getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
@@ -394,13 +399,13 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         double armorValue = 0;
         switch (armorType) {
             case 1:
-                armorValue = 5;
+                armorValue = 10;
                 break;
             case 2:
-                armorValue = 7;
+                armorValue = 20;
                 break;
             case 3:
-                armorValue = 11;
+                armorValue = 30;
         }
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
     }

@@ -712,6 +712,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if (!this.world.isRemote) {
+			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
+				this.heal(1.0F);
+			}
+		}
 		if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
 			double dist = this.getDistanceSq(this.getAttackTarget());
 			if (dist < 4) {
