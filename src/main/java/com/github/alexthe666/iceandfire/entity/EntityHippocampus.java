@@ -524,8 +524,12 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 if (delta > 1.0F) {
                     delta = 1.0F;
                 }
+                if(delta > 0.5D && this.isInWater() && this.isBeingRidden()){
+                    this.doWaterSplashEffect();
+                }
                 this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
                 this.limbSwing += this.limbSwingAmount;
+                System.out.println(limbSwingAmount);
                 return;
             }
         }
