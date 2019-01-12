@@ -261,6 +261,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+        if(this.getGrowthStage() < 2){
+            return false;
+        }
         if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
             return true;

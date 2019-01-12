@@ -262,6 +262,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+        if(this.getGrowthStage() < 2){
+            return false;
+        }
         if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
             if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){

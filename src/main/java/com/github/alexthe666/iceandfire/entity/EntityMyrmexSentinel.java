@@ -239,6 +239,9 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+        if(this.getGrowthStage() < 2){
+            return false;
+        }
         if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_SLASH && this.getAnimation() != this.ANIMATION_GRAB && this.getHeldEntity() == null) {
             if(this.getRNG().nextInt(2) == 0 && entityIn.width < 2F){
                 this.setAnimation(this.ANIMATION_GRAB);
