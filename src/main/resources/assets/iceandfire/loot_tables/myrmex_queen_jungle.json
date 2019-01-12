@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "iceandfire:myrmex_desert_chitin",
+          "name": "iceandfire:myrmex_jungle_chitin",
           "weight": 1,
           "functions": [
             {
@@ -27,7 +27,7 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:myrmex_desert_resin",
+          "name": "iceandfire:myrmex_jungle_resin",
           "weight": 1,
           "functions": [
             {
