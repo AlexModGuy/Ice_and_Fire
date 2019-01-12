@@ -157,7 +157,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
 
     @Override
     public boolean isAIDisabled() {
-        return true;
+        return false;
     }
 
     @Override
