@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -73,6 +74,12 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
     @Override
     public int getMetaFromState(IBlockState state) {
         return ((EnumType) state.getValue(VARIANT)).ordinal();
+    }
+
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
+        Item item = Item.getItemFromBlock(this);
+        int i = this.getMetaFromState(state);
+        return new ItemStack(item, 1, i);
     }
 
     @Override
