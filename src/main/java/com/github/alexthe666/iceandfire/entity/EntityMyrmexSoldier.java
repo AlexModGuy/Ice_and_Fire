@@ -74,6 +74,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(0, new MyrmexAITradePlayer(this));
         this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
