@@ -32,7 +32,7 @@ public class CustomizeToDragon extends LootFunction {
                 return stack;
             }
             if(stack.getItem() instanceof ItemDragonScales){
-                stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
+                stack.setCount(dragon.getAgeInDays() / 25  + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
                 return new ItemStack(dragon.getVariantScale(dragon.getVariant()), stack.getCount(), stack.getMetadata());
             }
             if(stack.getItem() instanceof ItemDragonEgg){
