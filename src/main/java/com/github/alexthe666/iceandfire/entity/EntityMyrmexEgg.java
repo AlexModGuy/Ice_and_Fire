@@ -173,7 +173,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     private ItemStack getItem() {
-        return new ItemStack(this.isJungle() ? ModItems.myrmex_jungle_egg : ModItems.myrmex_desert_egg);
+        return new ItemStack(this.isJungle() ? ModItems.myrmex_jungle_egg : ModItems.myrmex_desert_egg, 1, this.getMyrmexCaste());
     }
 
     @Override
