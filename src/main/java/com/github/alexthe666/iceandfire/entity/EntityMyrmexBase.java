@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +58,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityMyrmexBase extends EntityTameable implements IAnimatedEntity, IMerchant {
+public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimatedEntity, IMerchant {
 
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.<Integer>createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
@@ -201,7 +202,9 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
         if (this.getAttackTarget() != null && !(this.getAttackTarget() instanceof EntityPlayer) && this.getNavigator().noPath()) {
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) || this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable)this.getAttackTarget()) || this.getAttackTarget() instanceof EntityPlayer && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
+        if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
+                this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable)this.getAttackTarget()) ||
+                this.getAttackTarget() instanceof EntityPlayer && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
 
@@ -330,7 +333,7 @@ public abstract class EntityMyrmexBase extends EntityTameable implements IAnimat
 
     public boolean canAttackTamable(EntityTameable tameable){
         if(tameable.getOwner() != null && this.getHive() != null){
-            return !this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
+            return this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
         }
         return true;
     }
