@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -9,7 +10,7 @@ import net.minecraft.world.World;
 
 public class PathNavigateExperimentalGround extends PathNavigateGround {
 
-    public PathNavigateExperimentalGround(EntityDragonBase entityDragonBase, World worldIn) {
+    public PathNavigateExperimentalGround(EntityLiving entityDragonBase, World worldIn) {
         super(entityDragonBase, worldIn);
     }
 

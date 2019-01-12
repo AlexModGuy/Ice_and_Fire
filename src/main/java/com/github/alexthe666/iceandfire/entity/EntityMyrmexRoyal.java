@@ -214,7 +214,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
-                if(entity instanceof EntityMyrmexBase && EntityMyrmexRoyal.this.isBreedingSeason()){
+                if(entity instanceof EntityMyrmexBase && EntityMyrmexRoyal.this.isBreedingSeason() || entity instanceof EntityMyrmexRoyal){
                     return false;
                 }
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexRoyal.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);

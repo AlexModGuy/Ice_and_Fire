@@ -40,7 +40,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     public EntityMyrmexSoldier(World worldIn) {
         super(worldIn);
-        this.setSize(1.3F, 0.95F);
+        this.setSize(0.99F, 0.95F);
     }
 
     public void onLivingUpdate() {

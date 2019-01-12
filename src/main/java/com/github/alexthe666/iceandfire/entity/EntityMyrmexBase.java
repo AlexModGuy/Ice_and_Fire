@@ -6,6 +6,8 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
+import com.github.alexthe666.iceandfire.entity.ai.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -161,11 +163,11 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     public float getBlockPathWeight(BlockPos pos) {
-        return 0.5F - this.world.getLightBrightness(pos);
+        return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
     }
 
     protected PathNavigate createNavigator(World worldIn) {
-        return new PathNavigateGround(this, worldIn);
+        return new PathNavigateMyrmex(this, worldIn);
     }
 
     protected void entityInit() {
@@ -631,10 +633,13 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     public boolean isOnResin() {
-        IBlockState state = world.getBlockState(new BlockPos(this).down());
-        IBlockState state2 = world.getBlockState(new BlockPos(this).down(2));
-        return state.getBlock() instanceof BlockMyrmexResin || state2.getBlock() instanceof BlockMyrmexResin
-                || state.getBlock() instanceof BlockMyrmexConnectedResin || state2.getBlock() instanceof BlockMyrmexConnectedResin;
+        double d0 = this.posY - 1;
+        BlockPos blockpos = new BlockPos(this.posX, d0, this.posZ);
+        while(world.isAirBlock(blockpos) && blockpos.getY() > 1){
+            blockpos = blockpos.down();
+        }
+        IBlockState iblockstate = this.world.getBlockState(blockpos);
+        return iblockstate.getBlock() instanceof BlockMyrmexResin || iblockstate.getBlock() instanceof BlockMyrmexConnectedResin;
     }
 
 

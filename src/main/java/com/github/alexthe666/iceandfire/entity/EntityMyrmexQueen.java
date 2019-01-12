@@ -205,7 +205,6 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.tasks.addTask(0, new MyrmexAITradePlayer(this));
         this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
         this.tasks.addTask(3, new MyrmexAIReEnterHive(this, 1.0D));
         this.tasks.addTask(4, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(4, new MyrmexAIWanderHiveCenter(this, 1.0D));

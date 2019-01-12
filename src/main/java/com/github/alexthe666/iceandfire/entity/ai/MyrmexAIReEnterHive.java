@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -13,6 +14,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     private Path path;
     private BlockPos nextEntrance = BlockPos.ORIGIN;
     private boolean first = true;
+    private MyrmexHive hive;
 
     public MyrmexAIReEnterHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
@@ -31,7 +33,8 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
         if (village == null) {
             return false;
         } else {
-            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
+            this.hive = village;
+            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
             this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
             first = true;
             return this.path != null;
@@ -39,20 +42,25 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     }
 
     public void updateTask(){
+        if(first){
+            hive.setWorld(this.myrmex.world);
+            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
+        }
         this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
         this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
-
+        if(myrmex instanceof EntityMyrmexSoldier){
+           // System.out.println(nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false)));
+        }
         if(this.myrmex.getDistanceSq(nextEntrance) < 9 && first){
-            MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 100);
-            if(village != null){
-                nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG()));
+            if(hive != null){
+                nextEntrance = hive.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG());
                 first = false;
                 this.myrmex.getNavigator().clearPath();
                 this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
                 this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
             }
         }
-        if(this.myrmex.getDistanceSq(nextEntrance) < 5 && !first){
+        if(this.myrmex.getDistanceSq(nextEntrance) < 15 && !first){
             this.myrmex.isEnteringHive = false;
         }else{
             this.myrmex.isEnteringHive = true;
@@ -60,7 +68,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        if(this.myrmex.getDistanceSq(nextEntrance) < 3 && !first){
+        if(this.myrmex.getDistanceSq(nextEntrance) < 15 && !first){
             return false;
         }
         return this.myrmex.shouldEnterHive();

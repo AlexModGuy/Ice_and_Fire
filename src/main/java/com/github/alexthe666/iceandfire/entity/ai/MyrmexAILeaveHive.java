@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
@@ -22,6 +23,9 @@ public class MyrmexAILeaveHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
+        if(this.myrmex instanceof EntityMyrmexQueen){
+            return false;
+        }
         if(!this.myrmex.canMove() || !this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()  || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || this.myrmex.isEnteringHive){
             return false;
         }
@@ -36,7 +40,8 @@ public class MyrmexAILeaveHive extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        if(myrmex.canSeeSky() && this.myrmex.getDistanceSq(nextEntrance) <= 3 || this.myrmex.shouldEnterHive()){
+
+        if(this.myrmex.getDistanceSq(nextEntrance) <= 3 || this.myrmex.shouldEnterHive()){
             return false;
         }
         return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance) > 3 && this.myrmex.shouldLeaveHive();

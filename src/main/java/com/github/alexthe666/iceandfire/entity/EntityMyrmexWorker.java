@@ -102,8 +102,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new MyrmexAIStoreBabies(this, 1.0D));
         this.tasks.addTask(3, new MyrmexAIStoreItems(this, 1.0D));
+        this.tasks.addTask(4, new MyrmexAIReEnterHive(this, 1.0D));
         this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(5, new MyrmexAIReEnterHive(this, 1.0D));
         this.tasks.addTask(6, new MyrmexAIForage(this));
         this.tasks.addTask(7, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(8, new MyrmexAIWander(this, 1D));

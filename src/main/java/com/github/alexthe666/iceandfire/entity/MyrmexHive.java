@@ -8,6 +8,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EntitySelectors;
@@ -527,7 +528,7 @@ public class MyrmexHive {
                 BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
                 return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
             } else {
-                return closest.getKey();
+                return closest.getKey().offset(closest.getValue(), 3);
             }
         }
         return entity.getPosition();

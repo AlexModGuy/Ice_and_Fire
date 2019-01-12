@@ -30,13 +30,12 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexBits(1);
     }
 
     @Override
     public boolean shouldExecute() {
         this.targetBlock = getTargetPosition(wanderRadius);
-        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky() && this.myrmex.daylightTicks > 300;
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky();
     }
 
     @Override
@@ -55,8 +54,8 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
         }else{
             if(this.myrmex.getAttackTarget() == null){
                 this.myrmex.setHiding(true);
+                resetTask();
             }
-            resetTask();
         }
 
     }
@@ -67,7 +66,7 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.myrmex.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.myrmex.getEntityBoundingBox().grow(targetDistance, 14.0D, targetDistance);
     }
 
     public BlockPos getTargetPosition(int radius){
