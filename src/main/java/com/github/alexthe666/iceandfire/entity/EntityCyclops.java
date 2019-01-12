@@ -11,6 +11,8 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -24,6 +26,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -253,6 +256,30 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
         eyeEntity.onUpdate();
+        breakBlock();
+    }
+
+    public void breakBlock() {
+        if (IceAndFire.CONFIG.cyclopsGriefing) {
+            for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
+                for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
+                    for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
+                        BlockPos pos = new BlockPos(a, b, c);
+                        IBlockState state = world.getBlockState(pos);
+                        Block block = state.getBlock();
+                        if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && (state.getBlock().isLeaves(state, world, pos) || state.getBlock().canSustainLeaves(state, world, pos))) {
+                            this.motionX *= 0.6D;
+                            this.motionZ *= 0.6D;
+                            if (block != Blocks.AIR) {
+                                if (!world.isRemote) {
+                                    world.destroyBlock(pos, true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     @Override
     public int getAnimationTick() {

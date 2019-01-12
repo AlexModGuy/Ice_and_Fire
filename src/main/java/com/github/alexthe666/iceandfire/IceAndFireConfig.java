@@ -59,6 +59,7 @@ public class IceAndFireConfig {
 	public double cyclopsMaxHealth = 150;
 	public double cyclopsAttackStrength = 15;
 	public double cyclopsBiteStrength = 40;
+	public boolean cyclopsGriefing = true;
 	public double sirenMaxHealth = 50D;
 	public boolean generateSirenIslands = true;
 	public boolean sirenShader = true;
@@ -163,6 +164,7 @@ public class IceAndFireConfig {
 		this.cyclopesSheepSearchLength = config.getInt("Cyclopes Sheep Search Length", "all", 17, 1, 10000, "How many blocks away can cyclopes detect sheep. Note that increasing this could cause lag.");
 		this.cyclopsAttackStrength = (double)config.getFloat("Cyclops Attack Strength", "all", 15, 1, 10000, "Cyclops attack strength");
 		this.cyclopsBiteStrength = (double)config.getFloat("Cyclops Bite Strength", "all", 40, 1, 10000, "Amount of damage done with cyclops bite attack.");
+		this.cyclopsGriefing = config.getBoolean("Cyclops Griefing", "all", true, "Whether or not cyclops can break logs or leaves in their way");
 
 		this.sirenMaxHealth = (double)config.getFloat("Siren Max Health", "all", 50, 1, 10000, "Maximum siren health");
 		this.generateSirenIslands = config.getBoolean("Spawn Sirens", "all", true, "True if siren islands are allowed to spawn");
