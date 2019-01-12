@@ -32,7 +32,7 @@ public class ModelIceDragonArmor extends ModelBiped {
 	public ModelRenderer RightLegSpike2;
 	public ModelRenderer RightLegSpike3;
 
-	public ModelIceDragonArmor(float modelSize) {
+	public ModelIceDragonArmor(float modelSize, boolean legs) {
 		super(modelSize, 0, 64, 64);
 		this.textureWidth = 64;
 		this.textureHeight = 64;
@@ -142,31 +142,34 @@ public class ModelIceDragonArmor extends ModelBiped {
 		this.HornL4.setRotationPoint(1.0F, -7.5F, 1.9F);
 		this.HornL4.addBox(-0.5F, -0.8F, -0.0F, 1, 2, 5, 0.0F);
 		this.setRotateAngle(HornL4, 0.45378560551852565F, 0.3141592653589793F, 0.03490658503988659F);
-		this.bipedHead.addChild(this.HornR);
-		this.bipedHead.addChild(this.HornR4);
-		this.Jaw.addChild(this.Teeth1);
-		this.bipedHead.addChild(this.HornR3);
-		this.bipedLeftLeg.addChild(this.LeftLegSpike);
-		this.bipedBody.addChild(this.BackSpike2);
-		this.bipedBody.addChild(this.BackSpike3);
-		this.bipedLeftArm.addChild(this.LeftShoulderSpike1);
-		this.HornL.addChild(this.HornL2);
-		this.bipedRightLeg.addChild(this.RightLegSpike3);
-		this.bipedLeftLeg.addChild(this.LeftLegSpike3);
-		this.bipedRightLeg.addChild(this.RightLegSpike2);
-		this.bipedBody.addChild(this.BackSpike1);
-		this.bipedHead.addChild(this.HornL3);
-		this.bipedRightArm.addChild(this.RightShoulderSpike1);
-		this.bipedLeftLeg.addChild(this.LeftLegSpike2);
-		this.Jaw.addChild(this.Teeth2);
-		this.bipedRightArm.addChild(this.RightShoulderSpike2);
-		this.bipedRightLeg.addChild(this.RightLegSpike);
-		this.HornR.addChild(this.HornR2);
-		this.bipedHead.addChild(this.HeadFront);
-		this.bipedLeftArm.addChild(this.LeftShoulderSpike2);
-		this.bipedHead.addChild(this.HornL);
-		this.bipedHead.addChild(this.Jaw);
-		this.bipedHead.addChild(this.HornL4);
+		if(legs){
+			this.bipedLeftLeg.addChild(this.LeftLegSpike3);
+			this.bipedLeftLeg.addChild(this.LeftLegSpike2);
+			this.bipedLeftLeg.addChild(this.LeftLegSpike);
+			this.bipedRightLeg.addChild(this.RightLegSpike3);
+			this.bipedRightLeg.addChild(this.RightLegSpike2);
+			this.bipedRightLeg.addChild(this.RightLegSpike);
+		}else{
+			this.bipedHead.addChild(this.HornR);
+			this.bipedHead.addChild(this.HornR4);
+			this.Jaw.addChild(this.Teeth1);
+			this.bipedHead.addChild(this.HornR3);
+			this.bipedBody.addChild(this.BackSpike2);
+			this.bipedBody.addChild(this.BackSpike3);
+			this.bipedLeftArm.addChild(this.LeftShoulderSpike1);
+			this.HornL.addChild(this.HornL2);
+			this.bipedBody.addChild(this.BackSpike1);
+			this.bipedHead.addChild(this.HornL3);
+			this.bipedRightArm.addChild(this.RightShoulderSpike1);
+			this.Jaw.addChild(this.Teeth2);
+			this.bipedRightArm.addChild(this.RightShoulderSpike2);
+			this.HornR.addChild(this.HornR2);
+			this.bipedHead.addChild(this.HeadFront);
+			this.bipedLeftArm.addChild(this.LeftShoulderSpike2);
+			this.bipedHead.addChild(this.HornL);
+			this.bipedHead.addChild(this.Jaw);
+			this.bipedHead.addChild(this.HornL4);
+		}
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
