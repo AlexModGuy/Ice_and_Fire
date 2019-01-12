@@ -576,7 +576,7 @@ public class MyrmexHive {
 
     public boolean repopulate() {
         int roomCount = this.getAllRooms().size();
-        return this.numMyrmex < Math.min(80, roomCount * 9) && reproduces;
+        return this.numMyrmex < Math.min(IceAndFire.CONFIG.myrmexColonySize, roomCount * 9) && reproduces;
     }
 
     public void addMyrmex(EntityMyrmexBase myrmex) {
