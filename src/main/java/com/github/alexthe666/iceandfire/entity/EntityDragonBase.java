@@ -327,9 +327,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     protected void onDeathUpdate() {
         this.deathTime = 0;
-        this.setModelDead(true);
-        if (this.getDeathStage() >= this.getAgeInDays() / 5) {
-            if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
+        if(!this.isModelDead()){
+            if (!this.world.isRemote && this.recentlyHit > 0) {
                 int i = this.getExperiencePoints(this.attackingPlayer);
                 i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
                 while (i > 0) {
@@ -338,6 +337,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
                 }
             }
+        }
+        this.setModelDead(true);
+
+        if (this.getDeathStage() >= this.getAgeInDays() / 5) {
             this.setDead();
             for (int k = 0; k < 40; ++k) {
                 double d2 = this.rand.nextGaussian() * 0.02D;
@@ -368,7 +371,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 5 + this.getDragonStage() * 25;
+        if(this.isChild()){
+            return 15;
+        }
+        return 15 + this.getDragonStage() * 35;
     }
 
     public int getIntFromArmor(ItemStack stack) {
