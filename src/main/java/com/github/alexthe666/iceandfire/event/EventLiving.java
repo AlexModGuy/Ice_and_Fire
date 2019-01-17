@@ -14,6 +14,7 @@ import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -304,7 +305,9 @@ public class EventLiving {
 			if(frozenProps.isFrozen && !(event.getEntityLiving() instanceof EntityPlayer && ((EntityPlayer)event.getEntityLiving()).isCreative())){
 				event.getEntityLiving().motionX *= 0.25;
 				event.getEntityLiving().motionZ *= 0.25;
-				event.getEntityLiving().motionY -= 0.1D;
+				if(!(event.getEntityLiving() instanceof EntityDragon)) {
+					event.getEntityLiving().motionY -= 0.1D;
+				}
 			}
 			if(prevFrozen != frozenProps.isFrozen){
 				if(frozenProps.isFrozen){
