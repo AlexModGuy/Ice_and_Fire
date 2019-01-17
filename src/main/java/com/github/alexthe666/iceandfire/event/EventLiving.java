@@ -219,7 +219,7 @@ public class EventLiving {
 				((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-					if (stack.getItem() != null && (stack.getItem() instanceof ItemPickaxe || stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()))) {
+					if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
 						boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
 						boolean ready = false;
 						if (properties != null && !stonePlayer) {
