@@ -81,6 +81,7 @@ public class IceAndFireConfig {
 	public int cockatriceSpawnRate = 4;
 	public int cockatriceSpawnCheckChance = 0;
 	public int stymphalianBirdTargetSearchLength = 64;
+	public int stymphalianBirdFeatherDropChance = 25;
 	public float stymphalianBirdFeatherAttackStength = 1F;
 	public int stymphalianBirdFlockLength = 40;
 	public int stymphalianBirdFlightHeight = 80;
@@ -194,6 +195,7 @@ public class IceAndFireConfig {
 		this.cockatriceSpawnCheckChance = config.getInt("Cockatrice Spawn Check Chance", "all", 0, 0, 10000, "A double check to see if the game can spawn cockatrices. Higher number = lower chance to spawn.");
 
 		this.stymphalianBirdTargetSearchLength = config.getInt("Stymphalian Bird Target Search Length", "all", 64, 1, 10000, "How many blocks away can stymphalian birds spot potential prey. Note that increasing this could cause lag.");
+		this.stymphalianBirdFeatherDropChance = config.getInt("Stymphalian Bird Feather Drop Chance", "all", 25, 0, 10000, "1/this number chance for a stymphalian feather to turn into an item before despawning. Zero means never.");
 		this.stymphalianBirdFeatherAttackStength = config.getFloat("Stymphalian Bird Feather Attack Strength", "all", 1, 0, 10000, "Stymphalian bird feather attack strength.");
 		this.stymphalianBirdFlockLength = config.getInt("Stymphalian Bird Flock Length", "all", 40, 1, 10000, "How far away stymphalian birds will consider other birds to be in the same flock.");
 		this.stymphalianBirdFlightHeight = config.getInt("Max Stymphalian Bird Flight Height", "all", 80, 10, 1000, "How high stymphalian birds can fly, in Y height.");
