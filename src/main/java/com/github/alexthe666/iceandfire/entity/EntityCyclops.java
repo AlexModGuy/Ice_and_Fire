@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -38,6 +39,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -49,6 +51,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     private Animation currentAnimation;
     public PartEntity eyeEntity;
     private static final DataParameter<Boolean> BLINDED = EntityDataManager.<Boolean>createKey(EntityCyclops.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityCyclops.class, DataSerializers.VARINT);
     public static Animation ANIMATION_STOMP;
     public static Animation ANIMATION_EATPLAYER;
     public static Animation ANIMATION_KICK;
@@ -135,19 +138,31 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(BLINDED, Boolean.valueOf(false));
+        this.dataManager.register(VARIANT, Integer.valueOf(0));
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Blind", this.isBlinded());
+        compound.setInteger("Variant", this.getVariant());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.setBlinded(compound.getBoolean("Blind"));
+        this.setVariant(compound.getInteger("Variant"));
     }
+
+    public int getVariant() {
+        return Integer.valueOf(this.dataManager.get(VARIANT).intValue());
+    }
+
+    public void setVariant(int variant) {
+        this.dataManager.set(VARIANT, Integer.valueOf(variant));
+    }
+
 
     public void setBlinded(boolean blind) {
         this.dataManager.set(BLINDED, Boolean.valueOf(blind));
@@ -257,6 +272,14 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         AnimationHandler.INSTANCE.updateAnimations(this);
         eyeEntity.onUpdate();
         breakBlock();
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        this.setVariant(this.getRNG().nextInt(4));
+        return livingdata;
     }
 
     public void breakBlock() {

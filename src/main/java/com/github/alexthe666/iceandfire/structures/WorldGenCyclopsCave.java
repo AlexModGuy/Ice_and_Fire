@@ -113,6 +113,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
             }
         }
         EntityCyclops cyclops = new EntityCyclops(worldIn);
+        cyclops.setVariant(rand.nextInt(3));
         cyclops.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         worldIn.spawnEntity(cyclops);
         return true;

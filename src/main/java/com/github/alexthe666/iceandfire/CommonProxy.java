@@ -164,7 +164,7 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityStoneStatue>create(), event, EntityStoneStatue.class, "stonestatue", 13);
         registerSpawnable(EntityEntryBuilder.<EntityGorgon>create(), event, EntityGorgon.class, "gorgon", 14, 0XD0D99F, 0X684530);
         registerSpawnable(EntityEntryBuilder.<EntityPixie>create(), event, EntityPixie.class, "if_pixie", 15, 0XFF7F89, 0XE2CCE2);
-        registerSpawnable(EntityEntryBuilder.<EntityCyclops>create(), event, EntityCyclops.class, "cyclops", 17, 0XBBAA92, 0X594729);
+        registerSpawnable(EntityEntryBuilder.<EntityCyclops>create(), event, EntityCyclops.class, "cyclops", 17, 0XB0826E, 0X3A1F0F);
         registerSpawnable(EntityEntryBuilder.<EntitySiren>create(), event, EntitySiren.class, "siren", 18, 0X8EE6CA, 0XF2DFC8);
         registerSpawnable(EntityEntryBuilder.<EntityHippocampus>create(), event, EntityHippocampus.class, "hippocampus", 19, 0X4491C7, 0X4FC56B);
         registerSpawnable(EntityEntryBuilder.<EntityDeathWorm>create(), event, EntityDeathWorm.class, "deathworm", 20, 0XD1CDA3, 0X423A3A);

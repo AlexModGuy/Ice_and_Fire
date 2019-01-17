@@ -51,9 +51,14 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget
             return false;
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
-            this.myrmex.mate = (EntityMyrmexRoyal)list.get(0);
-            this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
-            return true;
+            for(Entity royal : list){
+                if(this.myrmex.canMateWith((EntityMyrmexRoyal)royal)){
+                    this.myrmex.mate = (EntityMyrmexRoyal)royal;
+                    this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
+                    return true;
+                }
+            }
+        return false;
         }
     }
 
