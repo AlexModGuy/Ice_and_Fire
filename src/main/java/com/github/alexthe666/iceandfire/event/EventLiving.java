@@ -556,7 +556,7 @@ public class EventLiving {
 
 	public static boolean isAnimaniaChicken(Entity entity){
 		String className = entity.getClass().getName();
-		return className.contains("chicken") || entity instanceof EntityChicken;
+		return (className.contains("chicken") || entity instanceof EntityChicken) && entity instanceof EntityLiving && !entity.isCreatureType(EnumCreatureType.MONSTER, false);
 	}
 
 	public static boolean isAnimaniaFerret(Entity entity){
