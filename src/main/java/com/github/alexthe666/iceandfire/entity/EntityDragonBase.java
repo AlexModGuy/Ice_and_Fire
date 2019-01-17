@@ -2103,7 +2103,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                 if (entity instanceof EntityLivingBase && !isStrongerDragon) {
                     EntityLivingBase living = (EntityLivingBase) entity;
-                    if (this.isOwner(living)) {
+                    if (this.isOwner(living) || this.isOwnersPet(living)) {
                         living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * size));
                     } else {
                         living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 30 * size));
@@ -2111,7 +2111,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
             }
         }
+    }
 
+    private boolean isOwnersPet(EntityLivingBase living) {
+        return this.isTamed() && this.getOwner() != null && living instanceof EntityTameable && ((EntityTameable) living).getOwner() != null && this.getOwner().isEntityEqual(((EntityTameable) living).getOwner());
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
