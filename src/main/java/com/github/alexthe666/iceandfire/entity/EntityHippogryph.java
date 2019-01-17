@@ -826,7 +826,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		} else if (!flying && flyProgress > 0.0F) {
 			flyProgress -= 0.5F;
 		}
-		if ((flying || hovering) && ticksExisted % 20 == 0) {
+		if ((flying || hovering) && ticksExisted % 20 == 0 && !this.onGround) {
 			this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IceAndFire.CONFIG.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
 		}
 		if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
