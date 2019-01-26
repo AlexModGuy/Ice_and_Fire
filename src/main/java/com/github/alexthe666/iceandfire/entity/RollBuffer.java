@@ -61,4 +61,11 @@ public class RollBuffer {
 			box.rotateAngleZ += rotateAmount;
 		}
 	}
+
+	public void applyChainFlapBufferReverse(ModelRenderer... boxes) {
+		float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+		for (ModelRenderer box : boxes) {
+			box.rotateAngleZ -= rotateAmount;
+		}
+	}
 }
