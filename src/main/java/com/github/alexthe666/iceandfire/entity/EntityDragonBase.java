@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -41,7 +42,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -116,7 +116,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public BlockPos homePos;
     public boolean hasHomePosition = false;
     @SideOnly(Side.CLIENT)
-    public RollBuffer roll_buffer;
+    public IFChainBuffer roll_buffer;
     @SideOnly(Side.CLIENT)
     public ReversedBuffer turn_buffer;
     @SideOnly(Side.CLIENT)
@@ -168,7 +168,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         updateAttributes();
         initDragonInv();
         if (FMLCommonHandler.instance().getSide().isClient()) {
-            roll_buffer = new RollBuffer();
+            roll_buffer = new IFChainBuffer();
             turn_buffer = new ReversedBuffer();
             tail_buffer = new ChainBuffer();
         }

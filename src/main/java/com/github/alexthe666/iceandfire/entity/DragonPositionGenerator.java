@@ -12,9 +12,9 @@ import java.util.Random;
 
 public class DragonPositionGenerator {
 
-    @Nullable
     public static Vec3d findRandomTargetBlock(EntityCreature entitycreatureIn, int xz, int y, @Nullable Vec3d targetVec3) {
-        return generateRandomPos(entitycreatureIn, xz, y, targetVec3, false);
+        Vec3d vec = generateRandomPos(entitycreatureIn, xz, y, targetVec3, false);
+        return vec == null ? entitycreatureIn.getPositionVector() : vec;
     }
 
     @Nullable

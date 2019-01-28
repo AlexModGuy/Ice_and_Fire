@@ -660,7 +660,8 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
             }
         }
         if (!this.isInSand()) {
-            this.noClip = this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+            this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+            this.noClip = false;
         } else {
             this.noClip = true;
             IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());

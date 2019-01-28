@@ -8,8 +8,9 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
-public class ModelAmphithere extends AdvancedModelBase {
+public class ModelAmphithere extends ModelDragonBase {
     public AdvancedModelRenderer BodyUpper;
     public AdvancedModelRenderer BodyLower;
     public AdvancedModelRenderer Neck1;
@@ -315,20 +316,44 @@ public class ModelAmphithere extends AdvancedModelBase {
         float degree_walk = 0.5F;
         float degree_idle = 0.5F;
         float degree_flap = 0.5F * (amphithere.flapProgress / 10F);
-
+        AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{Tail1, Tail2, Tail3, Tail4};
         this.flap(WingL, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
         this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, entity.ticksExisted, 1);
         this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
         this.flap(WingR2, speed_fly, -degree_flap, false, 0, 0, entity.ticksExisted, 1);
+        {
+            float sitProgress = amphithere.diveProgress;
+            progressRotation(FingerR4, sitProgress, 0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(WingL2, sitProgress, -0.3490658503988659F, 0.0F, 0.3490658503988659F);
+            progressRotation(FingerR1, sitProgress, 0.03490658503988659F, 0.0F, 0.0F);
+            progressRotation(FingerL3, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(WingR21, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(FingerL1, sitProgress, 0.03490658503988659F, 0.0F, 0.0F);
+            progressRotation(WingR, sitProgress, 0.5585053606381855F, 0.0F, 1.6580627893946132F);
+            progressRotation(FingerL4, sitProgress, 0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(WingR3, sitProgress, 1.48352986419518F, 0.0F, 0.0F);
+            progressRotation(WingR2, sitProgress, -0.3490658503988659F, 0.0F, -0.3490658503988659F);
+            progressRotation(WingL3, sitProgress, 1.48352986419518F, 0.0F, 0.0F);
+            progressRotation(FingerL2, sitProgress, 0.06981317007977318F, 0.0F, 0.0F);
+            progressRotation(FingerR3, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(FingerR2, sitProgress, 0.06981317007977318F, 0.0F, 0.0F);
+            progressRotation(WingL, sitProgress, 0.5585053606381855F, 0.0F, -1.6580627893946132F);
+        }
         amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
-        amphithere.roll_buffer.applyChainFlapBufferReverse(Tail1);
-        amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);
-        amphithere.tail_buffer.applyChainSwingBuffer(BodyLower, Tail1, Tail2, Tail3, Tail4);
+        amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper, BodyLower, Tail1);
+        amphithere.tail_buffer.applyChainSwingBuffer(TAIL);
     }
 
     public void setRotateAngle(AdvancedModelRenderer AdvancedModelRenderer, float x, float y, float z) {
         AdvancedModelRenderer.rotateAngleX = x;
         AdvancedModelRenderer.rotateAngleY = y;
         AdvancedModelRenderer.rotateAngleZ = z;
+    }
+
+
+    @Override
+    public void renderStatue() {
+        this.resetToDefaultPose();
+        this.BodyUpper.render(0.0625F);
     }
 }

@@ -11,6 +11,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -29,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -42,6 +44,7 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -60,6 +63,21 @@ public class EventLiving {
 			return entity != null && entity instanceof IVillagerFear;
 		}
 	};
+
+	@SubscribeEvent
+	public void onGatherCollisionBoxes(GetCollisionBoxesEvent event) {
+		if(event.getEntity() != null && event.getEntity() instanceof IPhasesThroughBlock){
+			Iterator<AxisAlignedBB> itr = event.getCollisionBoxesList().iterator();
+			while (itr.hasNext()) {
+				AxisAlignedBB aabb = (AxisAlignedBB)itr.next();
+				BlockPos pos = new BlockPos(aabb.minX, aabb.minY, aabb.minZ);
+				if(((IPhasesThroughBlock) event.getEntity()).canPhaseThroughBlock(event.getWorld(), pos)){
+					itr.remove();
+				}
+			}
+		}
+	}
+
 	@SubscribeEvent
 	public void onEntityFall(LivingFallEvent event) {
 		if(event.getEntityLiving() instanceof EntityPlayer){

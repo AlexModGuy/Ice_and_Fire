@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -68,7 +69,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	public static Animation ANIMATION_BITE;
 	public HippogryphInventory hippogryphInventory;
 	@SideOnly(Side.CLIENT)
-	public RollBuffer roll_buffer;
+	public IFChainBuffer roll_buffer;
 	public float sitProgress;
 	public float hoverProgress;
 	public float flyProgress;
@@ -94,7 +95,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		ANIMATION_BITE = Animation.create(20);
 		initHippogryphInv();
 		if (FMLCommonHandler.instance().getSide().isClient()) {
-			roll_buffer = new RollBuffer();
+			roll_buffer = new IFChainBuffer();
 		}
 		this.setSize(1.7F, 1.6F);
 		this.stepHeight = 1;
