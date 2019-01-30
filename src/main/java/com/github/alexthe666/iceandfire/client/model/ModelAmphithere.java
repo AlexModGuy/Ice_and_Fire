@@ -433,7 +433,7 @@ public class ModelAmphithere extends ModelDragonBase {
         AdvancedModelRenderer[] ENTIRE_BODY = new AdvancedModelRenderer[]{BodyUpper, BodyLower, Tail1, Tail2, Tail3, Tail4};
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3};
         if(amphithere.groundProgress >= 10) {
-            this.chainSwing(ENTIRE_BODY, speed_walk, degree_walk, 4, f, f1);
+            this.chainSwing(ENTIRE_BODY, speed_walk, 0.125F, 2, f, f1);
             this.chainSwing(NECK, speed_walk, -degree_walk, 4, f, f1);
         }
         this.flap(WingL, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
@@ -554,6 +554,7 @@ public class ModelAmphithere extends ModelDragonBase {
             progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
             progressPosition(BodyUpper, sitProgress, 0, 18, 0);
         }
+
         if(amphithere.groundProgress <= 0){
             amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
             amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);

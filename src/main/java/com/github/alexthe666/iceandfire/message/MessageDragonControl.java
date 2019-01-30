@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.entity.*;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
@@ -84,6 +81,12 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 			EntityDeathWorm deathworm = (EntityDeathWorm) entity;
 			deathworm.setControlState(message.controlState);
 			deathworm.setPosition(message.posX, message.posY, message.posZ);
+		} else if (entity instanceof EntityAmphithere) {
+			EntityAmphithere amphi = (EntityAmphithere) entity;
+			if (amphi.isOwner(player)) {
+				amphi.setControlState(message.controlState);
+			}
+			amphi.setPosition(message.posX, message.posY, message.posZ);
 		}
 	}
 
