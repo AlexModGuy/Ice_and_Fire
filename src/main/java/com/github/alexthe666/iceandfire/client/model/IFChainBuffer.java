@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.IFlapable;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.util.ClientUtils;
 import net.minecraft.client.model.ModelRenderer;
@@ -33,7 +34,7 @@ public class IFChainBuffer {
 
     private boolean compareDouble(double a, double b){
         double c = a-b;
-        return Math.abs(c-1.0) <= 1;
+        return Math.abs(c-1.0) <= 0.01D;
     }
 
     /**
@@ -50,7 +51,7 @@ public class IFChainBuffer {
         if (!compareDouble(entity.renderYawOffset, entity.prevRenderYawOffset) && MathHelper.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += MathHelper.clamp((entity.prevRenderYawOffset - entity.renderYawOffset) / divisor, -maxAngle, maxAngle);
         }
-        if (this.yawVariation > 1 * angleDecrement) {
+        if (this.yawVariation > 1F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {
@@ -60,7 +61,7 @@ public class IFChainBuffer {
             } else {
                 this.yawTimer++;
             }
-        } else if (this.yawVariation < -1 * angleDecrement) {
+        } else if (this.yawVariation < -1F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation += angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {
@@ -87,7 +88,7 @@ public class IFChainBuffer {
         if (!compareDouble(entity.rotationPitch, entity.prevRotationPitch) && MathHelper.abs(this.pitchVariation) < maxAngle) {
             this.pitchVariation += MathHelper.clamp((entity.prevRotationPitch - entity.rotationPitch) / divisor, -maxAngle, maxAngle);
         }
-        if (this.pitchVariation > 1 * angleDecrement) {
+        if (this.pitchVariation > 1F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
                 this.pitchVariation -= angleDecrement;
                 if (MathHelper.abs(this.pitchVariation) < angleDecrement) {
@@ -97,7 +98,7 @@ public class IFChainBuffer {
             } else {
                 this.pitchTimer++;
             }
-        } else if (this.pitchVariation < -1 * angleDecrement) {
+        } else if (this.pitchVariation < -1F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
                 this.pitchVariation += angleDecrement;
                 if (MathHelper.abs(this.pitchVariation) < angleDecrement) {
@@ -124,8 +125,11 @@ public class IFChainBuffer {
 
         if (!compareDouble(entity.renderYawOffset, entity.prevRenderYawOffset) && MathHelper.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += MathHelper.clamp((entity.prevRenderYawOffset - entity.renderYawOffset) / divisor, -maxAngle, maxAngle);
+            if(entity instanceof IFlapable && Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 15D){
+                ((IFlapable) entity).flapWings();
+            }
         }
-        if (this.yawVariation > 0.7F * angleDecrement) {
+        if (this.yawVariation > 1F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {
@@ -135,7 +139,7 @@ public class IFChainBuffer {
             } else {
                 this.yawTimer++;
             }
-        } else if (this.yawVariation < -0.7F * angleDecrement) {
+        } else if (this.yawVariation < -1F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation += angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {

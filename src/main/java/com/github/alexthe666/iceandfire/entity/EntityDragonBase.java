@@ -1349,6 +1349,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.hoverTicks = 0;
             this.flyTicks = 0;
         }
+        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 > this.posY && (properties == null || properties != null && !properties.isStone) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
+            this.setHovering(true);
+            this.setSleeping(false);
+            this.setSitting(false);
+            this.flyHovering = 0;
+            this.hoverTicks = 0;
+            this.flyTicks = 0;
+        }
         if (getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
             this.setAttackTarget(null);
         }
@@ -1363,6 +1371,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (this.getHunger() > 0) {
                 this.setHunger(this.getHunger() - 1);
             }
+        }
+        if(this.attackDecision && this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) > Math.min(this.getEntityBoundingBox().getAverageEdgeLength() * 5, 25) && !this.isChild()){
+            this.attackDecision = false;
         }
         if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2) {
             this.attackDecision = this.getRNG().nextBoolean();

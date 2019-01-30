@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
@@ -303,8 +304,120 @@ public class ModelAmphithere extends ModelDragonBase {
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
+
         setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
         animator.update(entity);
+        animator.setAnimation(EntityAmphithere.ANIMATION_BITE);
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, -39, 0, 0);
+        this.rotate(animator, Neck2, -18, 0, 0);
+        this.rotate(animator, Neck3, -11, 0, 0);
+        this.rotate(animator, Head, 60, 0, 0);
+        this.rotate(animator, Jaw, 41, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, -19, 0, 0);
+        this.rotate(animator, Neck2, 23, 0, 0);
+        this.rotate(animator, Neck3, 7, 0, 0);
+        this.rotate(animator, Head, 20, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityAmphithere.ANIMATION_BITE_RIDER);
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, 8, 0, 63);
+        this.rotate(animator, Neck2, -5, 35, 13);
+        this.rotate(animator, Neck3, -10, 70, 0);
+        this.rotate(animator, Head, 20, 30, 95);
+        this.rotate(animator, Jaw, 40, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, 8, 0, 63);
+        this.rotate(animator, Neck2, -5, 35, 13);
+        this.rotate(animator, Neck3, -10, 70, 0);
+        this.rotate(animator, Head, 50, 40, 95);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+        animator.setAnimation(EntityAmphithere.ANIMATION_WING_BLAST);
+        animator.startKeyframe(5);
+        wingBlastPose();
+        this.rotateMinus(animator, WingR, 32, 0, 170);
+        this.rotateMinus(animator, WingL, 32, 0, -170);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        wingBlastPose();
+        this.rotateMinus(animator, WingR, 15, 0, 45);
+        this.rotateMinus(animator, WingL, 15, 0, -45);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        wingBlastPose();
+        this.rotateMinus(animator, WingR, 32, 0, 170);
+        this.rotateMinus(animator, WingL, 32, 0, -170);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        wingBlastPose();
+        this.rotateMinus(animator, WingR, 15, 0, 45);
+        this.rotateMinus(animator, WingL, 15, 0, -45);
+        animator.endKeyframe();
+        animator.resetKeyframe(10);
+        animator.setAnimation(EntityAmphithere.ANIMATION_TAIL_WHIP);
+        animator.startKeyframe(10);
+        this.rotate(animator, BodyUpper, 0, 30, 0);
+        this.rotate(animator, BodyLower, 0, 10, 0);
+        this.rotate(animator, Tail1, 0, 15, 0);
+        this.rotate(animator, Tail2, 0, 10, 0);
+        this.rotate(animator, Tail2, 0, 10, 0);
+        this.rotate(animator, Tail3, 0, 20, 0);
+        this.rotate(animator, Tail4, 0, 15, -20);
+        this.rotate(animator, Neck1, 0, -18, -20);
+        this.rotate(animator, Neck2, 0, -29, 0);
+        this.rotate(animator, Neck3, 0, -44, 0);
+        this.rotate(animator, Head, 31, -28, 0);
+        this.rotate(animator, WingL, 0, 18, 0);
+        this.rotate(animator, WingR, 0, -18, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, BodyUpper, 0, -214, 0);
+        this.rotate(animator, BodyLower, 0, -10, 0);
+        this.rotate(animator, Tail1, 0, -15, 0);
+        this.rotate(animator, Tail2, 0, -7, 0);
+        this.rotate(animator, Tail2, 0, -7, 0);
+        this.rotate(animator, Tail3, 0, -7, 0);
+        this.rotate(animator, Tail4, 0, -15, -20);
+        this.rotate(animator, Neck1, 0, 18, -20);
+        this.rotate(animator, Neck2, 0, 29, 0);
+        this.rotate(animator, Neck3, 0, 44, 0);
+        this.rotate(animator, Head, 31, -28, 0);
+        this.rotate(animator, WingL, 0, 18, 0);
+        this.rotate(animator, WingR, 0, -18, 0);
+        animator.endKeyframe();
+        animator.setStaticKeyframe(3);
+        animator.resetKeyframe(7);
+        animator.endKeyframe();
+        animator.setAnimation(EntityAmphithere.ANIMATION_SPEAK);
+        animator.startKeyframe(5);
+        this.rotate(animator, Jaw, 31, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
+    }
+
+    private void wingBlastPose(){
+        this.rotateMinus(animator, BodyUpper, -80, 0, 0);
+        this.rotateMinus(animator, BodyLower, -10, 0, 0);
+        this.rotateMinus(animator, Tail1, -10, 0, 0);
+        this.rotateMinus(animator, Tail1, -10, 0, 0);
+        this.rotateMinus(animator, Tail2, -10, 0, 0);
+        this.rotateMinus(animator, Tail3, -10, 0, 0);
+        this.rotateMinus(animator, Tail4, -10, 0, 0);
+        this.rotateMinus(animator, Club, -25, 0, 0);
+        this.rotate(animator, Neck1, 20, 0, 0);
+        this.rotate(animator, Neck2, 32, 0, 0);
+        this.rotate(animator, Neck3, 2, 0, 0);
+        this.rotate(animator, Head, 80, 0, 0);
+        this.rotateMinus(animator, WingR2, -20, 0, -20);
+        this.rotateMinus(animator, WingL2, -20, 0, 20);
+        this.rotateMinus(animator, WingR3, 16, 0, 0);
+        this.rotateMinus(animator, WingL3, 16, 0, 0);
+        animator.move(BodyUpper, 0, -36F, 20);
     }
 
     @Override
@@ -317,6 +430,12 @@ public class ModelAmphithere extends ModelDragonBase {
         float degree_idle = 0.5F;
         float degree_flap = 0.5F * (amphithere.flapProgress / 10F);
         AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{Tail1, Tail2, Tail3, Tail4};
+        AdvancedModelRenderer[] ENTIRE_BODY = new AdvancedModelRenderer[]{BodyUpper, BodyLower, Tail1, Tail2, Tail3, Tail4};
+        AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3};
+        if(amphithere.groundProgress >= 10) {
+            this.chainSwing(ENTIRE_BODY, speed_walk, degree_walk, 4, f, f1);
+            this.chainSwing(NECK, speed_walk, -degree_walk, 4, f, f1);
+        }
         this.flap(WingL, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
         this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, entity.ticksExisted, 1);
         this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
@@ -339,10 +458,109 @@ public class ModelAmphithere extends ModelDragonBase {
             progressRotation(FingerR2, sitProgress, 0.06981317007977318F, 0.0F, 0.0F);
             progressRotation(WingL, sitProgress, 0.5585053606381855F, 0.0F, -1.6580627893946132F);
         }
-        amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
-        amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper, BodyLower, Tail1);
-        amphithere.tail_buffer.applyChainSwingBuffer(TAIL);
-    }
+        {
+            float sitProgress = amphithere.groundProgress;
+            progressRotation(Tail1, sitProgress, -0.045553093477052F, 0.0F, 0.0F);
+            progressRotation(CrestR2, sitProgress, 1.7453292519943295F, -0.6108652381980153F, -0.3141592653589793F);
+            progressRotation(FingerR4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(TailL1, sitProgress, 1.3962634015954636F, -0.06981317007977318F, 0.0F);
+            progressRotation(Neck2, sitProgress, -0.4553564018453205F, -0.0F, 0.0F);
+            progressRotation(FingerR3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(FingerL1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(WingR, sitProgress, 0.08726646259971647F, 0.0F, 1.1344640137963142F);
+            progressRotation(FingerL4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(Teeth2, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(FingerR2, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(Beak, sitProgress, 0.6981317007977318F, -0.0F, 0.0F);
+            progressRotation(BodyUpper, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(Club, sitProgress, 0.18203784098300857F, 0.0F, 0.0F);
+            progressRotation(CrestLB, sitProgress, 1.7453292519943295F, 0.27314402793711257F, 0.0F);
+            progressRotation(FingerR1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(HeadFront, sitProgress, -0.22759093446006054F, -0.0F, 0.0F);
+            progressRotation(Neck1, sitProgress, -0.18203784098300857F, -0.0F, -0.045553093477052F);
+            progressRotation(FingerL2, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(WingR3, sitProgress, 0.12217304763960307F, -0.17453292519943295F, -0.12217304763960307F);
+            progressRotation(Teeth1, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(Tail4, sitProgress, -0.045553093477052F, 0.0F, 0.0F);
+            progressRotation(WingL3, sitProgress, 0.12217304763960307F, 0.17453292519943295F, 0.12217304763960307F);
+            progressRotation(Jaw, sitProgress, -0.31869712141416456F, -0.0F, 0.0F);
+            progressRotation(Tail2, sitProgress, 0.091106186954104F, 0.0F, 0.0F);
+            progressRotation(CrestRB, sitProgress, 1.7453292519943295F, -0.27314402793711257F, 0.0F);
+            progressRotation(BodyLower, sitProgress, -0.136659280431156F, 0.0F, 0.0F);
+            progressRotation(CrestR3, sitProgress, 1.7453292519943295F, -0.8726646259971648F, -0.7285004297824331F);
+            progressRotation(WingL21, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
+            progressRotation(TailL2, sitProgress, 1.3962634015954636F, 0.31869712141416456F, 0.0F);
+            progressRotation(FingerL3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(CrestL3, sitProgress, 1.7453292519943295F, 0.8726646259971648F, 0.7853981633974483F);
+            progressRotation(CrestL2, sitProgress, 1.7453292519943295F, 0.6108652381980153F, 0.3141592653589793F);
+            progressRotation(WingR21, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(TailR1, sitProgress, 1.3962634015954636F, 0.06981317007977318F, 0.0F);
+            progressRotation(Head, sitProgress, 0.8196066167365371F, -0.0F, 0.0F);
+            progressRotation(WingR2, sitProgress, 1.48352986419518F, 0.0F, 0.17453292519943295F);
+            progressRotation(WingL, sitProgress, 0.08726646259971647F, 0.0F, -1.1344640137963142F);
+            progressRotation(CrestR1, sitProgress, 1.7453292519943295F, -0.08726646259971647F, 0.0F);
+            progressRotation(WingL2, sitProgress, 1.48352986419518F, 0.0F, -0.17453292519943295F);
+            progressRotation(Tail3, sitProgress, 0.045553093477052F, 0.0F, 0.0F);
+            progressRotation(TailR2, sitProgress, 1.3962634015954636F, -0.31869712141416456F, 0.0F);
+            progressRotation(CrestL1, sitProgress, 1.7453292519943295F, 0.08726646259971647F, 0.0F);
+            progressPosition(BodyUpper, sitProgress, 0, 18, 0);
+        }
+        {
+            float sitProgress = amphithere.sitProgress;
+            progressRotation(FingerL4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(CrestLB, sitProgress, 1.7453292519943295F, 0.27314402793711257F, 0.0F);
+            progressRotation(FingerL2, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(WingR, sitProgress, 0.08726646259971647F, 0.0F, 1.1344640137963142F);
+            progressRotation(WingR21, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(CrestR1, sitProgress, 1.7453292519943295F, -0.08726646259971647F, 0.0F);
+            progressRotation(FingerL3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(TailL1, sitProgress, 1.3962634015954636F, -0.06981317007977318F, 0.0F);
+            progressRotation(HeadFront, sitProgress, -0.22759093446006054F, -0.0F, 0.0F);
+            progressRotation(FingerR4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
+            progressRotation(BodyUpper, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(CrestL1, sitProgress, 1.7453292519943295F, 0.08726646259971647F, 0.0F);
+            progressRotation(CrestR3, sitProgress, 1.7453292519943295F, -0.8726646259971648F, -0.7285004297824331F);
+            progressRotation(TailR2, sitProgress, 1.3962634015954636F, -0.31869712141416456F, 0.0F);
+            progressRotation(WingL21, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(WingR3, sitProgress, 0.12217304763960307F, -0.17453292519943295F, -0.12217304763960307F);
+            progressRotation(WingL, sitProgress, 0.08726646259971647F, 0.0F, -1.1344640137963142F);
+            progressRotation(Neck2, sitProgress, -0.4553564018453205F, -0.0F, 0.0F);
+            progressRotation(Head, sitProgress, 1.3658946726107624F, -0.0F, 0.0F);
+            progressRotation(Tail1, sitProgress, 0.0F, 0.7285004297824331F, 0.045553093477052F);
+            progressRotation(CrestRB, sitProgress, 1.7453292519943295F, -0.27314402793711257F, 0.0F);
+            progressRotation(Jaw, sitProgress, -0.31869712141416456F, -0.0F, 0.0F);
+            progressRotation(Tail2, sitProgress, 0.091106186954104F, 0.36425021489121656F, 0.0F);
+            progressRotation(Tail3, sitProgress, 0.045553093477052F, 0.36425021489121656F, 0.0F);
+            progressRotation(WingR2, sitProgress, 1.48352986419518F, 0.0F, 0.17453292519943295F);
+            progressRotation(BodyLower, sitProgress, -0.136659280431156F, 0.0F, 0.136659280431156F);
+            progressRotation(WingL2, sitProgress, 1.48352986419518F, 0.0F, -0.17453292519943295F);
+            progressRotation(FingerR1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(Teeth1, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(Teeth2, sitProgress, 0.0F, -0.0F, 0.0F);
+            progressRotation(CrestR2, sitProgress, 1.7453292519943295F, -0.6108652381980153F, -0.3141592653589793F);
+            progressRotation(TailR1, sitProgress, 1.3962634015954636F, 0.06981317007977318F, 0.0F);
+            progressRotation(Club, sitProgress, 0.2678394951282524F, 0.7285004297824331F, 0.08580165414524381F);
+            progressRotation(FingerR3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(TailL2, sitProgress, 1.3962634015954636F, 0.31869712141416456F, 0.0F);
+            progressRotation(WingL3, sitProgress, 0.12217304763960307F, 0.17453292519943295F, 0.12217304763960307F);
+            progressRotation(FingerL1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
+            progressRotation(CrestL3, sitProgress, 1.7453292519943295F, 0.8726646259971648F, 0.7853981633974483F);
+            progressRotation(Beak, sitProgress, 0.6981317007977318F, -0.0F, 0.0F);
+            progressRotation(CrestL2, sitProgress, 1.7453292519943295F, 0.6108652381980153F, 0.3141592653589793F);
+            progressRotation(Neck1, sitProgress, -0.5462880558742251F, -0.0F, -0.045553093477052F);
+            progressRotation(FingerR2, sitProgress, 0.0F, 0.0F, 0.0F);
+            progressRotation(Tail4, sitProgress, -0.045553093477052F, 0.5009094953223726F, 0.0F);
+            progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
+            progressPosition(BodyUpper, sitProgress, 0, 18, 0);
+        }
+        if(amphithere.groundProgress <= 0){
+            amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
+            amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);
+            amphithere.tail_buffer.applyChainSwingBuffer(TAIL);
+
+        }
+   }
 
     public void setRotateAngle(AdvancedModelRenderer AdvancedModelRenderer, float x, float y, float z) {
         AdvancedModelRenderer.rotateAngleX = x;
