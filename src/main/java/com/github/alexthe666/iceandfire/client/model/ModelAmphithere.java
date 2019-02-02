@@ -229,7 +229,7 @@ public class ModelAmphithere extends ModelDragonBase {
         this.setRotateAngle(Tail2, -0.091106186954104F, 0.0F, 0.0F);
         this.Neck3 = new AdvancedModelRenderer(this, 25, 64);
         this.Neck3.setRotationPoint(0.0F, 0.0F, -5.1F);
-        this.Neck3.addBox(-1.52F, -1.1F, -7.0F, 3, 4, 8, 0.0F);
+        this.Neck3.addBox(-1.5F, -1.1F, -7.0F, 3, 4, 8, 0.0F);
         this.setRotateAngle(Neck3, -0.18203784098300857F, -0.0F, 0.0F);
         this.Tail4 = new AdvancedModelRenderer(this, 70, 22);
         this.Tail4.setRotationPoint(0.0F, 0.3F, 9.0F);
@@ -291,6 +291,7 @@ public class ModelAmphithere extends ModelDragonBase {
         this.Head.addChild(this.CrestRB);
         this.WingR2.addChild(this.WingR3);
         this.Jaw.setScale(0.99F, 0.99F, 0.99F);
+        this.Neck3.setScale(0.99F, 0.99F, 0.99F);
         animator = ModelAnimator.create();
         this.updateDefaultPose();
     }
@@ -510,23 +511,13 @@ public class ModelAmphithere extends ModelDragonBase {
         }
         {
             float sitProgress = amphithere.sitProgress;
-            progressRotation(FingerL4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
             progressRotation(CrestLB, sitProgress, 1.7453292519943295F, 0.27314402793711257F, 0.0F);
-            progressRotation(FingerL2, sitProgress, 0.0F, 0.0F, 0.0F);
-            progressRotation(WingR, sitProgress, 0.08726646259971647F, 0.0F, 1.1344640137963142F);
-            progressRotation(WingR21, sitProgress, 0.0F, 0.0F, 0.0F);
             progressRotation(CrestR1, sitProgress, 1.7453292519943295F, -0.08726646259971647F, 0.0F);
-            progressRotation(FingerL3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
             progressRotation(TailL1, sitProgress, 1.3962634015954636F, -0.06981317007977318F, 0.0F);
             progressRotation(HeadFront, sitProgress, -0.22759093446006054F, -0.0F, 0.0F);
-            progressRotation(FingerR4, sitProgress, -0.2617993877991494F, 0.0F, 0.0F);
-            progressRotation(BodyUpper, sitProgress, 0.0F, -0.0F, 0.0F);
             progressRotation(CrestL1, sitProgress, 1.7453292519943295F, 0.08726646259971647F, 0.0F);
             progressRotation(CrestR3, sitProgress, 1.7453292519943295F, -0.8726646259971648F, -0.7285004297824331F);
             progressRotation(TailR2, sitProgress, 1.3962634015954636F, -0.31869712141416456F, 0.0F);
-            progressRotation(WingL21, sitProgress, 0.0F, 0.0F, 0.0F);
-            progressRotation(WingR3, sitProgress, 0.12217304763960307F, -0.17453292519943295F, -0.12217304763960307F);
-            progressRotation(WingL, sitProgress, 0.08726646259971647F, 0.0F, -1.1344640137963142F);
             progressRotation(Neck2, sitProgress, -0.4553564018453205F, -0.0F, 0.0F);
             progressRotation(Head, sitProgress, 1.3658946726107624F, -0.0F, 0.0F);
             progressRotation(Tail1, sitProgress, 0.0F, 0.7285004297824331F, 0.045553093477052F);
@@ -534,27 +525,15 @@ public class ModelAmphithere extends ModelDragonBase {
             progressRotation(Jaw, sitProgress, -0.31869712141416456F, -0.0F, 0.0F);
             progressRotation(Tail2, sitProgress, 0.091106186954104F, 0.36425021489121656F, 0.0F);
             progressRotation(Tail3, sitProgress, 0.045553093477052F, 0.36425021489121656F, 0.0F);
-            progressRotation(WingR2, sitProgress, 1.48352986419518F, 0.0F, 0.17453292519943295F);
             progressRotation(BodyLower, sitProgress, -0.136659280431156F, 0.0F, 0.136659280431156F);
-            progressRotation(WingL2, sitProgress, 1.48352986419518F, 0.0F, -0.17453292519943295F);
-            progressRotation(FingerR1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
-            progressRotation(Teeth1, sitProgress, 0.0F, -0.0F, 0.0F);
-            progressRotation(Teeth2, sitProgress, 0.0F, -0.0F, 0.0F);
-            progressRotation(CrestR2, sitProgress, 1.7453292519943295F, -0.6108652381980153F, -0.3141592653589793F);
             progressRotation(TailR1, sitProgress, 1.3962634015954636F, 0.06981317007977318F, 0.0F);
             progressRotation(Club, sitProgress, 0.2678394951282524F, 0.7285004297824331F, 0.08580165414524381F);
-            progressRotation(FingerR3, sitProgress, -0.13962634015954636F, 0.0F, 0.0F);
             progressRotation(TailL2, sitProgress, 1.3962634015954636F, 0.31869712141416456F, 0.0F);
-            progressRotation(WingL3, sitProgress, 0.12217304763960307F, 0.17453292519943295F, 0.12217304763960307F);
-            progressRotation(FingerL1, sitProgress, 0.13962634015954636F, 0.0F, 0.0F);
             progressRotation(CrestL3, sitProgress, 1.7453292519943295F, 0.8726646259971648F, 0.7853981633974483F);
-            progressRotation(Beak, sitProgress, 0.6981317007977318F, -0.0F, 0.0F);
             progressRotation(CrestL2, sitProgress, 1.7453292519943295F, 0.6108652381980153F, 0.3141592653589793F);
             progressRotation(Neck1, sitProgress, -0.5462880558742251F, -0.0F, -0.045553093477052F);
-            progressRotation(FingerR2, sitProgress, 0.0F, 0.0F, 0.0F);
             progressRotation(Tail4, sitProgress, -0.045553093477052F, 0.5009094953223726F, 0.0F);
             progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
-            progressPosition(BodyUpper, sitProgress, 0, 18, 0);
         }
 
         if(amphithere.groundProgress <= 0){
