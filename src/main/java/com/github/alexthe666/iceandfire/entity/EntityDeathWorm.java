@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock {
 
     private int animationTick;
     private boolean willExplode = false;
@@ -558,7 +558,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         if (this.getControllingPassenger() != null) {
             if (this.isEntityInsideOpaqueBlock()) {
                 this.motionY = 2;
-                this.noClip = true;
+                //this.noClip = true;
             } else {
                 this.noClip = false;
             }
@@ -660,10 +660,8 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
             }
         }
         if (!this.isInSand()) {
-            this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
             this.noClip = false;
         } else {
-            this.noClip = true;
             IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
             int blockId = Block.getStateId(state);
             if (state.isOpaqueCube()) {
@@ -873,6 +871,11 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
 
     public boolean canBeTurnedToStone(){
         return false;
+    }
+
+    @Override
+    public boolean canPhaseThroughBlock(World world, BlockPos pos) {
+        return world.getBlockState(pos).getMaterial() == Material.SAND;
     }
 
     public class SandMoveHelper extends EntityMoveHelper {
