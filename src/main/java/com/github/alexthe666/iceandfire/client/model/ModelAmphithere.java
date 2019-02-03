@@ -300,14 +300,29 @@ public class ModelAmphithere extends ModelDragonBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.BodyUpper.render(f5);
+        if (this.isChild) {
+            this.BodyUpper.setShouldScaleChildren(true);
+            this.HeadFront.setShouldScaleChildren(true);
+            this.Jaw.setShouldScaleChildren(true);
+            this.BodyUpper.setScale(0.5F, 0.5F, 0.5F);
+            this.Head.setScale(1.5F, 1.5F, 1.5F);
+            this.BodyUpper.rotationPointY = 18.8F;
+            this.HeadFront.setScale(0.75F, 0.75F, 0.75F);
+            this.Jaw.setScale(0.75F, 0.75F, 0.75F);
+        }else{
+            this.BodyUpper.setScale(1F, 1F, 1F);
+            this.Head.setScale(1F, 1F, 1F);
+            this.HeadFront.setScale(1F, 1F, 1F);
+            this.Jaw.setScale(1F, 1F, 1F);
+            this.BodyUpper.rotationPointY = 15.8F;
 
+        }
+        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+        this.BodyUpper.render(f5);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-
-        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
         animator.update(entity);
         animator.setAnimation(EntityAmphithere.ANIMATION_BITE);
         animator.startKeyframe(5);

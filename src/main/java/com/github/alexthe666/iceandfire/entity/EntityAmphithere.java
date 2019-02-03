@@ -123,6 +123,17 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             itemstack.interactWithEntity(player, this, hand);
             return true;
         }
+        if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
+            if(this.getGrowingAge() == 0 && !isInLove()) {
+                this.setSitting(false);
+                this.setInLove(player);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                if (!player.isCreative()) {
+                    itemstack.shrink(1);
+                }
+            }
+            return true;
+        }
         if (!super.processInteract(player, hand)) {
             if (itemstack != null && itemstack.getItem() == ModItems.dragon_stick) {
                 if (player.isSneaking()) {
@@ -169,6 +180,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         this.tasks.addTask(3, new AIFlyCircle());
         this.tasks.addTask(3, new AILandWander(this, 1.0D));
         this.tasks.addTask(4, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
@@ -230,9 +242,17 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     }
 
+    public boolean isBreedingItem(ItemStack stack) {
+        return stack.getItem() == Items.COOKIE;
+    }
+
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isInLove()){
+            this.setFlying(false);
+        }
         /*if (!world.isRemote) {
             System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
         }*/
@@ -284,7 +304,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         } else {
             this.ticksStill = 0;
         }
-        if (!this.isFlying() && this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) {
+        if (!this.isFlying() && !this.isChild() && this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) {
             this.motionY += 0.5F;
             this.setFlying(true);
         }
@@ -727,8 +747,15 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
-        return null;
+        EntityAmphithere amphithere = new EntityAmphithere(world);
+        amphithere.setVariant(this.getRNG().nextInt(5));
+        return amphithere;
     }
+
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 15 + this.world.rand.nextInt(10);
+    }
+
 
     @Override
     @Nullable
