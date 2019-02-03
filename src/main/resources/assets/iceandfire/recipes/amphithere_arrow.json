@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "X": {
+      "item": "minecraft:flint"
+    },
+    "Y": {
+      "item": "iceandfire:amphithere_feather"
+    }
+  },
+  "result": {
+    "item": "iceandfire:amphithere_arrow",
+    "count": 4
+  }
+}

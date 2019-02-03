@@ -206,6 +206,9 @@ item.iceandfire.myrmex_jungle_helmet.name=Jungle Myrmex Chitin Helmet
 item.iceandfire.myrmex_jungle_chestplate.name=Jungle Myrmex Chitin Chestplate
 item.iceandfire.myrmex_jungle_leggings.name=Jungle Myrmex Chitin Leggings
 item.iceandfire.myrmex_jungle_boots.name=Jungle Myrmex Chitin Boots
+item.iceandfire.amphithere_feather.name=Amphithere Feather
+item.iceandfire.amphithere_arrow.name=Amphithere Arrow
+item.iceandfire.amphithere_arrow.desc=Knocks all mobs back with the power of an ampithere's wings!
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -376,7 +379,6 @@ amphithere.command.new_home=This amphithere's home position has been set to %d, 
 amphithere.command.0=This amphithere is wandering.
 amphithere.command.1=This amphithere is sitting.
 amphithere.command.2=This amphithere is following.
-
 
 bestiary.contains=Contains:
 bestiary.introduction=Introduction

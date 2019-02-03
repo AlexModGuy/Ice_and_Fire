@@ -281,6 +281,10 @@ public class ModItems {
 	public static Item myrmex_jungle_leggings = new ItemModArmor(myrmexJungle, 2, EntityEquipmentSlot.LEGS, "myrmex_jungle_leggings", "iceandfire.myrmex_jungle_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_boots")
 	public static Item myrmex_jungle_boots = new ItemModArmor(myrmexJungle, 3, EntityEquipmentSlot.FEET, "myrmex_jungle_boots", "iceandfire.myrmex_jungle_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_feather")
+	public static Item amphithere_feather = new ItemGeneric("amphithere_feather", "iceandfire.amphithere_feather");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_arrow")
+	public static Item amphithere_arrow = new ItemAmphithereArrow();
 
 	static {
 		EnumDragonArmor.initArmors();

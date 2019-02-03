@@ -9,6 +9,7 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelAmphithere extends ModelDragonBase {
@@ -536,7 +537,7 @@ public class ModelAmphithere extends ModelDragonBase {
             progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
         }
 
-        if(amphithere.groundProgress <= 0){
+        if(amphithere.groundProgress <= 0 && amphithere.getAnimation() != EntityAmphithere.ANIMATION_WING_BLAST){
             amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
             amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);
             amphithere.tail_buffer.applyChainSwingBuffer(TAIL);

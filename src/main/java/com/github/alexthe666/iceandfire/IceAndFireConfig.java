@@ -104,6 +104,9 @@ public class IceAndFireConfig {
 	public int myrmexColonyGenChance = 150;
 	public int myrmexColonySize = 80;
 	public boolean experimentalPathFinder;
+    public float amphithereVillagerSearchLength = 64;
+	public int amphithereTameTime = 400;
+	public float amphithereFlightSpeed = 1.75F;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -219,6 +222,10 @@ public class IceAndFireConfig {
 		this.myrmexColonySize = config.getInt("Myrmex Colony Max Size", "all", 80, 10, 10000, "How many maximum individuals a myrmex colony can have.");
 
 		this.experimentalPathFinder = config.getBoolean("Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
+
+		this.amphithereVillagerSearchLength = config.getInt("Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
+		this.amphithereTameTime = config.getInt("Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
+		this.amphithereFlightSpeed = config.getFloat("Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");
 
 	}
 }

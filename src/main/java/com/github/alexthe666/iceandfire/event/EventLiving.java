@@ -174,6 +174,9 @@ public class EventLiving {
 			if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
 				signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
 			}
+			if(DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof EntityLivingBase){
+				signalAmphithereAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+			}
 		}
 	}
 
@@ -183,6 +186,9 @@ public class EventLiving {
 			EntityLivingBase attacker = event.getEntityLiving();
 			if (isAnimaniaChicken(event.getTarget())) {
 				signalChickenAlarm(event.getTarget(), attacker);
+			}
+			if(DragonUtils.isVillager(event.getTarget())){
+				signalAmphithereAlarm(event.getTarget(), attacker);
 			}
 		}
 	}
@@ -205,6 +211,31 @@ public class EventLiving {
 							}
 						} else {
 							cockatrice.setAttackTarget((EntityLivingBase) attacker);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker){
+		float d0 = IceAndFire.CONFIG.amphithereVillagerSearchLength;
+		List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
+		Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+		if (!list.isEmpty()) {
+			Iterator<Entity> itr = list.iterator();
+			while (itr.hasNext()) {
+				Entity entity = itr.next();
+				if (entity instanceof EntityAmphithere && !(attacker instanceof EntityAmphithere)) {
+					EntityAmphithere amphithere = (EntityAmphithere) entity;
+					if(!DragonUtils.hasSameOwner(amphithere, attacker)) {
+						if (attacker instanceof EntityPlayer) {
+							EntityPlayer player = (EntityPlayer) attacker;
+							if (!player.isCreative() && !amphithere.isOwner(player)) {
+								amphithere.setAttackTarget(player);
+							}
+						} else {
+							amphithere.setAttackTarget((EntityLivingBase) attacker);
 						}
 					}
 				}
