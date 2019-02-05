@@ -237,4 +237,12 @@ public class IFChainBuffer {
             box.rotateAngleZ -= rotateAmount * 0.5F;
         }
     }
+
+    public void applyChainSwingBufferReverse(ModelRenderer... boxes) {
+        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        for (ModelRenderer box : boxes) {
+            box.rotateAngleY -= rotateAmount;
+        }
+    }
+
 }

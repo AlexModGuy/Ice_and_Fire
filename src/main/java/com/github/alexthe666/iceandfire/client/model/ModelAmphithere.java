@@ -308,7 +308,7 @@ public class ModelAmphithere extends ModelDragonBase {
             this.Head.setScale(1.5F, 1.5F, 1.5F);
             this.BodyUpper.rotationPointY = 18.8F;
             this.HeadFront.setScale(0.75F, 0.75F, 0.75F);
-            this.Jaw.setScale(0.75F, 0.75F, 0.75F);
+            this.Jaw.setScale(0.75F, 1F, 0.75F);
         }else{
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);
@@ -559,13 +559,6 @@ public class ModelAmphithere extends ModelDragonBase {
 
         }
    }
-
-    public void setRotateAngle(AdvancedModelRenderer AdvancedModelRenderer, float x, float y, float z) {
-        AdvancedModelRenderer.rotateAngleX = x;
-        AdvancedModelRenderer.rotateAngleY = y;
-        AdvancedModelRenderer.rotateAngleZ = z;
-    }
-
 
     @Override
     public void renderStatue() {

@@ -111,7 +111,6 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         for (Entity entity : segments) {
             if (entity != null) {
                 entity.onUpdate();
-
             }
         }
     }

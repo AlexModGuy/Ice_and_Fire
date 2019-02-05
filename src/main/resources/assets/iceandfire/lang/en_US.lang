@@ -295,6 +295,7 @@ entity.myrmex_sentinel.name=Myrmex Sentinel
 entity.myrmex_royal.name=Myrmex Royal
 entity.myrmex_egg.name=Myrmex Egg
 entity.amphithere.name=Amphithere
+entity.seaserpent.name=Sea Serpent
 
 dragon.red=Red
 dragon.green=Emerald

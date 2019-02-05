@@ -657,7 +657,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     }
 
     public int getVariant() {
-
         return Integer.valueOf(this.dataManager.get(VARIANT).intValue());
     }
 
