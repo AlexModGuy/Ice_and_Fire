@@ -248,7 +248,24 @@ public class ModelSeaSerpent extends ModelDragonBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+        AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{Tail1, Tail2, Tail3, Tail4, Tail5, Tail6};
+        AdvancedModelRenderer[] TAIL_END = new AdvancedModelRenderer[]{Tail5, Tail6};
+        AdvancedModelRenderer[] ENTIRE_BODY = new AdvancedModelRenderer[]{Neck3, Neck2, Neck3, BodyUpper, BodyLower, Tail1, Tail2, Tail3, Tail4, Tail5, Tail6};
+        AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3, Head};
         EntitySeaSerpent serpent = (EntitySeaSerpent) entity;
+
+        this.chainSwing(ENTIRE_BODY, 0.35F, 0.2F, 4.5F, f, f1);
+        //this.chainSwing(TAIL_END, 0.35F, 0.15F, 0, f, f1);
+        this.swing(Tail6, 0.35F, 0.15F, false, 0, 0, f, f1);
+        this.Head.rotateAngleY -= this.Neck3.rotateAngleY;
+        this.Head.rotateAngleY -= this.Neck2.rotateAngleY;
+        this.Head.rotateAngleY -= this.Neck1.rotateAngleY;
+        this.Head.rotateAngleY -= this.BodyUpper.rotateAngleY;
+        //this.chainSwing(NECK, 0.35F, 0.15F, 2, f, f1);
+        serpent.roll_buffer.applyChainFlapBuffer(BodyUpper);
+        serpent.pitch_buffer.applyChainWaveBuffer(BodyUpper);
+        serpent.tail_buffer.applyChainSwingBuffer(TAIL);
+        serpent.head_buffer.applyChainSwingBufferReverse(NECK);
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -69,13 +70,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(0, new EntitySeaSerpent.AISwimWander());
+        this.tasks.addTask(0, new  EntitySeaSerpent.AISwimCircle());
         this.tasks.addTask(1, new SeaSerpentAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(2, new EntitySeaSerpent.AISwimWander());
-        this.tasks.addTask(2, new  EntitySeaSerpent.AISwimCircle());
-        this.tasks.addTask(3, new AquaticAIGetInWater(this, 1.0D));
-        this.tasks.addTask(4, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+         this.tasks.addTask(2, new AquaticAIGetInWater(this, 1.0D));
+        this.tasks.addTask(3, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
     }
 
     private void switchNavigator(boolean onLand) {
@@ -144,6 +144,20 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         super.onUpdate();
         this.setScaleForAge(true);
         onUpdateParts();
+        spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, this, (int)this.getSeaSerpentScale());
+        for (Entity entity : segments) {
+            spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, entity, (int)this.getSeaSerpentScale());
+        }
+    }
+
+    private void spawnParticlesAroundEntity(EnumParticleTypes type, Entity entity, int count){
+        for(int i = 0; i < count; i++){
+            float d0 = 0;
+            float d1 = 0;
+            float d2 = 0;
+            this.world.spawnParticle(type, entity.posX + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, entity.posY + 0.5D + (double) (this.rand.nextFloat() * entity.height), entity.posZ + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, d0, d1, d2);
+
+        }
     }
 
     @Override
@@ -202,7 +216,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         renderYawOffset = rotationYaw;
         if (world.isRemote) {
             if (this.isInWater()) {
-                roll_buffer.calculateChainFlapBuffer(this.isBeingRidden() ? 55 : 90, 3, 10F, 0.5F, this);
+                roll_buffer.calculateChainFlapBuffer(55, 3, 10F, 0.5F, this);
                 pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
@@ -287,6 +301,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         BlockPos pos;
         for(int tries = 0; tries < 5; tries++){
             int y = rand.nextInt(8) - 4;
+            if(!isWaterBlock(world, new BlockPos(entity).down())){
+                y = 4 + rand.nextInt(4)  ;
+            }
             pos = new BlockPos(x, entity.posY + y, z);
             if(isWaterBlock(world, pos)){
                 return pos;
@@ -297,7 +314,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     public static BlockPos getPositionInOrbit(EntitySeaSerpent entity, World world, BlockPos orbit, Random rand) {
         float possibleOrbitRadius = (entity.orbitRadius + 10.0F);
-        float radius = 10;
+        float radius = 10 * entity.getSeaSerpentScale();
         float angle = (0.01745329251F * possibleOrbitRadius);
         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
         double extraZ = (double) (radius * MathHelper.cos(angle));
@@ -327,7 +344,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
         @Override
         public void onUpdateMoveHelper() {
-            if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.serpent.getNavigator().noPath() && !this.serpent.isBeingRidden()) {
+            if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntitySeaSerpent.this.posX;
                 double d1 = this.posY - EntitySeaSerpent.this.posY;
                 double d2 = this.posZ - EntitySeaSerpent.this.posZ;
@@ -338,13 +355,13 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                         EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.CIRCLE;
                         EntitySeaSerpent.this.changedSwimBehavior = true;
                     }
-                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE && EntitySeaSerpent.this.rand.nextInt(10) == 0 && ticksCircling > 150) {
+                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE && EntitySeaSerpent.this.rand.nextInt(5) == 0 && ticksCircling > 150) {
                         EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.WANDER;
                         EntitySeaSerpent.this.changedSwimBehavior = true;
                     }
                 }
                 if (d3 < 1 && EntitySeaSerpent.this.getAttackTarget() == null) {
-                    //this.action = EntityMoveHelper.Action.WAIT;
+                    this.action = EntityMoveHelper.Action.WAIT;
                     EntitySeaSerpent.this.motionX *= 0.5D;
                     EntitySeaSerpent.this.motionY *= 0.5D;
                     EntitySeaSerpent.this.motionZ *= 0.5D;
