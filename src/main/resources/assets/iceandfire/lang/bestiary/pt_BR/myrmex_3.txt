@@ -1,0 +1,40 @@
+All Myrmex Chitin weapons are
+weak against arthropods, but
+do extra damage to non-arthropods
+and death worms.
+
+
+
+
+Myrmex Stingers are used to create
+poisonous swords that are more
+poweful than normal myrmex weapons.
+
+
+
+Myrmex Resin Chunks are dropped by
+myrmex of all castes. Myrmex
+produce this strange material
+by themselves, yet they still
+will seek out any of it, if
+
+they can find it. By throwing
+resin chunks on the ground near
+Myrmex Workers, one can raise
+their reputation with the hive.
+
+Reputation is an important
+concept to consider when dealing
+with Myrmex colonies. Reputation
+can be raised by gifting and
+trading, and can be lowered by
+attacking or killing any colony
+members.
+
+The default reputation towards
+humans for every colony is 0.
+At 25, Myrmex will become neutral.
+At 50, they will open up to trade.
+At 75, they will allow one to use
+myrmex staffs on the colony as a
+whole.
