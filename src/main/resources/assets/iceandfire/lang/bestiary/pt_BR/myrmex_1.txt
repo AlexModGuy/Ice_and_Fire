@@ -28,10 +28,11 @@ morre e a fêmea se torna rainha.
 
 
 §nSentinelas
-As sentinelas são a casta de operações
-secretas da colônia. Elas observam rotas
-próximas de forrageamento, se escondem
-e esperam, para emboscar presas em potencial
-e possiveis predadores da colônia. Elas
-pertencem à mais mortal casta, além 
-da rainha.
+As sentinelas são a casta de 
+operações secretas da colônia. 
+Elas observam rotas próximas de 
+forrageamento, se escondem e 
+esperam, para emboscar presas em 
+potencial e possiveis predadores 
+da colônia. Elas pertencem à mais 
+mortal casta, além da rainha.

@@ -15,8 +15,9 @@ minhoca.
 
 
 Ela pode ser transformada em uma 
-armadura que tem uma resistência extra, 
-em comparação com conjuntos semelhantes.
+armadura que tem uma resistência 
+extra, em comparação com conjuntos 
+semelhantes.
 
 
 
@@ -24,7 +25,8 @@ em comparação com conjuntos semelhantes.
 
 
 Algo ainda mais valoroso que a quitina
-que a minhoca produz é seu precioso ovo.
+que a minhoca produz é seu precioso 
+ovo.
 
 
 
@@ -33,7 +35,8 @@ que a minhoca produz é seu precioso ovo.
 
 Semelhante a um ovo de galinha, o
 ovo da minhoca mortífera irá produzir
-uma minhoca patética quando for jogado.
-Essa minhoca não é selvagem, em vez disso
-irá procurar proteger tanto seu dono 
-quanto seus locais de caça.
+uma minhoca patética quando for 
+jogado. Essa minhoca não é selvagem, 
+em vez disso irá procurar proteger 
+tanto seu dono quanto seus locais de 
+caça.

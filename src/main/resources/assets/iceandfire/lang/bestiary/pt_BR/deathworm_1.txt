@@ -1,9 +1,9 @@
-﻿Minhocas Mortíferas tem dois grandes
-ataques. O primeiro e mais comum é a 
-agarrão de língua. A Minhoca vai jogar 
-sua língua retrátil pra frente para 
-prender e ferir a presa.
-
+﻿Minhocas Mortíferas tem dois 
+grandes ataques. O primeiro e 
+mais comum é a agarrão de língua. 
+A Minhoca vai jogar sua língua 
+retrátil pra frente para prender 
+e ferir a presa.
 
 
 
@@ -14,8 +14,8 @@ prender e ferir a presa.
 
 O segundo e mais raro ataque ocorre 
 quando a minhoca lança blocos próximos 
-pro ar. Estes blocos empurrarão quem 
-estiver neles pra cima
+pro ar. Estes blocos empurrarão 
+quem estiver neles pra cima
 
 
 

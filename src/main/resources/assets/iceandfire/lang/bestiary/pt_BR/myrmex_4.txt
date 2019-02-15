@@ -1,37 +1,37 @@
-Myrmex Stingers are used to create
-Trading with myrmex is a lucrative
-bussiness. Worker trades are
-usually low quality, yet they are
-willing to trade some resin for
-sediment and the ocasional gem.
-Soldiers will trade for common
-mob drops, and Sentinels for
-rarer ones and poisonous items.
-Royals will trade for artifacts
-and alchemical ingredients.
-Queens trade exclusively eggs.
+Trocar com um myrmex é um negócio
+lucrativo. Operárias geralmente 
+trocam itens de baixa qualidade, mas 
+estão dispostas a trocar alguma resina
+por sendimentos e ocasionalmente 
+gemas. Soldados irão trocar por 
+itens de mobs comuns, as Sentinelas 
+por itens mais raros ou venenosos. 
+Monarcas irão trocar por artefatos e 
+ingredientes alquímicos. Rainhas
+exclusivamente oferecem ovos pelas 
+trocas.
 
 
 
 
-Myrmex Staffs can be used to
-modify the structure of Myrmex
-colonies. interacting with a
+Báculos Myrmex podem ser usados
+para modificar a estrutura das
+colônias. Ao interagir com um
 
-myrmex with one in hand will
-bind it to their colony. By
-using it, one can delete certain
-rooms of the colony and disable
-reproduction of the queen. By
-using it while sneaking, one can
-add a new room at their position.
-One can only use this staff if
-they have a reputation of 75 or
-higher.
+myrmex enquanto segura um báculo
+irá vinculá-lo à sua colônia.  
+Enquanto usa-lo, você poderá 
+deletar certas salas da colônia e
+interromper a reprodução da rainha. 
+Usando o báculo enquanto se esgueira, 
+você poderá adicionar novas salas na
+sua posição. Só é possível utilizar
+esse báculo se sua reputação for
+igual ou maior que 75.
 
-Myrmex Eggs only hatch when
-underground. A queen egg, when
-hatched near a player underground,
-will bind to them, and the follwing
-colony that will form will have a
-permanent opinion of 100.
+Ovos de myrmex só podem eclodir no
+subterrâneo. Um ovo de rainha, quando
+chocado no subsolo próximo do jogador,
+se unirá à ele, e a colônia que se
+formará a seguir terá um opinião 
+permanente de valor 100.

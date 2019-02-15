@@ -1,4 +1,15 @@
-Também é possível criar armaduras 
+Chifres de dragão podem ser usados 
+para invocar ou armazenar dragões 
+domesticados. Quando você tocar um 
+dragão com o chifre ele ficará seguro 
+dentro do chifre, e ao assopra-lo o 
+dragão irá retornar.
+
+
+
+
+
+Também é possível criar armaduras
 de dragão. As mais comuns são
 feitas de ferro, ouro e diamante. 
 Armaduras de dragão seguem o mesmo 
@@ -8,8 +19,15 @@ barras.
 
 
 
-Pode-se também criar uma flauta de
-osso de dragão com uma barra de ferro
-e dois ossos de dragão. Este instrumento
-pode acalmar um dragão manso e traze-lo
-de volta pro chão.
+
+
+
+
+
+
+Pode-se também criar uma flauta
+de osso de dragão com uma barra 
+de ferro e dois ossos de dragão. 
+Este instrumento pode acalmar um 
+dragão domado e traze-lo de volta 
+pro chão.

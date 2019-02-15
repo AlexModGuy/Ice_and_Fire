@@ -1,25 +1,26 @@
 
 
 
-Ossos queimados podem ser transformados
-em fragmentos, que substituem a
-pederneira na confecção de flechas de
-dragão.
+Ossos queimados podem ser 
+transformados em fragmentos, 
+que substituem a pederneira na 
+confecção de flechas de dragão.
 
 
 
 
 
 
-A carne de dragão também pode ser obtida
-de cadáveres. Esta carne não pode ser
-cozida e tem diferentes efeitos com
-base em que tipo de carne ela é.
-A carne de Dragão de Fogo vai matar
-quem a consumiu em chamas, e a carne 
-do Dragão de gelo poderá retarda-lo  
-um pouco. Ambas carnes saciam a fome
-assim como os bifes normais.
+A carne de dragão também pode ser 
+obtida de cadáveres. Esta carne não 
+pode ser cozida e tem diferentes 
+efeitos com base em que tipo de carne
+ela é. A carne de Dragão de Fogo vai
+matar quem a consumiu em chamas, e  
+a carne do Dragão de gelo poderá 
+
+retarda-lo um pouco. Ambas carnes 
+possuem formatos de bifes.
 
 
 
@@ -28,7 +29,7 @@ assim como os bifes normais.
 
 
 
-
-Os corações de dragão apenas estão presentes
-em cadáveres. Eu atualmente
-não estou ciente de seu propósito ...
+Os corações de dragão apenas estão 
+presentes em cadáveres. Eu nesse
+momento não estou ciente de seu 
+propósito ...

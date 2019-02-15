@@ -6,7 +6,8 @@ Estas armas algumas vezes são
 largadas por tróis após serem mortos.
 Apesar de serem um fardo de socos,
 elas são extremamente pesadas e tem
-um grande tempo de espera entre os ataque.
+um grande tempo de espera entre os 
+ataque.
 
 Quando empunhadas, os tróis são 
 capazes de quebrar blocos que estão
@@ -29,11 +30,12 @@ e também o couro de suas vestimentas.
 
 
 
-Elas podem ser usadas para a confecção
-de armaduras que tem uma vantagem muito 
-especial. Assim como os tróis na qual
-as armaduras foram originadas, elas são
-resistentes à dano vindo de projéteis.
-Um conjunto completo oferece uma
-redução de 75% de dano recebidos
-por projéteis.
+Elas podem ser usadas para a 
+confecção de armaduras que tem uma 
+vantagem muito especial. Assim como 
+os tróis na qual as armaduras foram 
+originadas, elas são resistentes à 
+dano vindo de projéteis. Um conjunto 
+completo oferece uma redução de 
+75% de dano recebidos por 
+projéteis.
