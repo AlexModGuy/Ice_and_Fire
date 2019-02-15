@@ -4,7 +4,11 @@ import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
+import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderAmphithereArrow;
@@ -221,12 +225,15 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	private void renderEntities() {
 		EnumDragonAnimations.initializeDragonModels();
+		EnumSeaSerpentAnimations.initializeDragonModels();
 		ModelBase firedragon_model = null;
 		ModelBase icedragon_model = null;
+		ModelBase seaserpent_model = null;
 
 		try {
 			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
 			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
+			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -264,7 +271,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMyrmexRoyal.class, new RenderMyrmexBase(Minecraft.getMinecraft().getRenderManager(), new ModelMyrmexRoyal(), 0.75F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAmphithere.class, new RenderAmphithere(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAmphithereArrow.class, new RenderAmphithereArrow(Minecraft.getMinecraft().getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeaSerpent.class, new RenderSeaSerpent(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeaSerpent.class, new RenderSeaSerpent(Minecraft.getMinecraft().getRenderManager(), seaserpent_model));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());

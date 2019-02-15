@@ -35,6 +35,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntitySeaSerpent.class, DataSerializers.VARINT);
     private static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntitySeaSerpent.class, DataSerializers.FLOAT);
+    public int swimCycle;
     private int animationTick;
     private Animation currentAnimation;
     private EntityMutlipartPart[] segments = new EntityMutlipartPart[9];
@@ -44,6 +45,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private boolean changedSwimBehavior = false;
     private int ticksCircling;
     public float orbitRadius = 0.0F;
+    public float breathProgress = 0.0F;
     @SideOnly(Side.CLIENT)
     public IFChainBuffer roll_buffer;
     @SideOnly(Side.CLIENT)
@@ -144,9 +146,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         super.onUpdate();
         this.setScaleForAge(true);
         onUpdateParts();
-        spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, this, (int)this.getSeaSerpentScale());
-        for (Entity entity : segments) {
-            spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, entity, (int)this.getSeaSerpentScale());
+        if(this.isInWater()) {
+            spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, this, (int) this.getSeaSerpentScale());
+            for (Entity entity : segments) {
+                spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, entity, (int) this.getSeaSerpentScale());
+            }
         }
     }
 
@@ -207,6 +211,18 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     public void onLivingUpdate(){
         super.onLivingUpdate();
+        boolean breathing = true;
+
+        if (this.swimCycle < 38) {
+            this.swimCycle += 2;
+        } else {
+            this.swimCycle = 0;
+        }
+        if (breathing && breathProgress < 20.0F) {
+            breathProgress += 0.5F;
+        } else if (!breathing && breathProgress > 0.0F) {
+            breathProgress -= 0.5F;
+        }
         if (this.isInWater() && this.isLandNavigator) {
             switchNavigator(false);
         }
@@ -216,7 +232,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         renderYawOffset = rotationYaw;
         if (world.isRemote) {
             if (this.isInWater()) {
-                roll_buffer.calculateChainFlapBuffer(55, 3, 10F, 0.5F, this);
                 pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
@@ -299,12 +314,17 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     public static BlockPos getPositionRelativeToSeafloor(Entity entity, World world, double x, double z, Random rand) {
         BlockPos pos;
+        BlockPos topY = new BlockPos(x, entity.posY, z);
+        BlockPos bottomY = new BlockPos(x, entity.posY, z);
+        while(isWaterBlock(world, topY) && topY.getY() < world.getHeight()){
+            topY = topY.up();
+        }
+        while(isWaterBlock(world, bottomY) && bottomY.getY() > 0){
+            bottomY = bottomY.down();
+        }
+
         for(int tries = 0; tries < 5; tries++){
-            int y = rand.nextInt(8) - 4;
-            if(!isWaterBlock(world, new BlockPos(entity).down())){
-                y = 4 + rand.nextInt(4)  ;
-            }
-            pos = new BlockPos(x, entity.posY + y, z);
+            pos = new BlockPos(x, bottomY.getY() + 1 + rand.nextInt(Math.max(1, topY.getY() - bottomY.getY() - 2)), z);
             if(isWaterBlock(world, pos)){
                 return pos;
             }

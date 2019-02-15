@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelSeaSerpent;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -27,8 +28,8 @@ public class RenderSeaSerpent extends RenderLiving<EntitySeaSerpent> {
 	public static final ResourceLocation TEXTURE_TEAL = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal.png");
 	public static final ResourceLocation TEXTURE_TEAL_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal_blink.png");
 
-	public RenderSeaSerpent(RenderManager renderManager) {
-		super(renderManager, new ModelSeaSerpent(), 1.6F);
+	public RenderSeaSerpent(RenderManager renderManager, ModelBase model) {
+		super(renderManager, model, 1.6F);
 	}
 
 	@Override
