@@ -13,6 +13,12 @@ public enum EnumSeaSerpentAnimations {
     SWIM4("Swim4"),
     SWIM5("Swim5"),
     SWIM6("Swim6"),
+    BITE1("Bite1"),
+    BITE2("Bite2"),
+    BITE3("Bite3"),
+    ROAR1("Roar1"),
+    ROAR2("Roar2"),
+    ROAR3("Roar3"),
     DEAD("Dead");
 
     @SideOnly(Side.CLIENT)

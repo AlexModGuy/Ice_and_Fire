@@ -1,11 +1,19 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.client.model.ModelBase;
 
 public class IceAndFireTabulaModelAnimator {
+
+    private IceAndFireTabulaModel baseModel;
+
+    public IceAndFireTabulaModelAnimator(IceAndFireTabulaModel baseModel){
+        this.baseModel = baseModel;
+    }
 
     public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
         model.rotateAngleX += distance(model.rotateAngleX, x);
@@ -56,7 +64,7 @@ public class IceAndFireTabulaModelAnimator {
 
     public void moveToPose(IceAndFireTabulaModel model, IceAndFireTabulaModel modelTo){
         for (AdvancedModelRenderer cube : model.getCubes().values()) {
-            if (!isPartEqual(EnumDragonAnimations.GROUND_POSE.firedragon_model.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
+            if (!isPartEqual(baseModel.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
                 float toX = modelTo.getCube(cube.boxName).rotateAngleX;
                 float toY = modelTo.getCube(cube.boxName).rotateAngleY;
                 float toZ = modelTo.getCube(cube.boxName).rotateAngleZ;
