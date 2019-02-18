@@ -40,13 +40,20 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
             this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
-
-
+            if (entity.jumpProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING.seaserpent_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumSeaSerpentAnimations.JUMPING.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 10, false);
+                }
+            }
         }
         if (entity.breathProgress > 0.0F) {
             progressRotation(model.getCube("Head"), entity.breathProgress, (float)Math.toRadians(-15F), 0, 0);
             progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float)Math.toRadians(-28F), 0, 0);
             progressRotation(model.getCube("Jaw"), entity.breathProgress, (float)Math.toRadians(80F), 0, 0);
+        }
+        if(entity.jumpProgress > 0.0F){
+            float turn = 45F * (float)entity.motionY * -1.5F;
+            model.getCube("BodyUpper").rotateAngleX += (float)Math.toRadians(turn);
         }
         entity.tail_buffer.applyChainSwingBuffer(tailParts);
         entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));

@@ -19,7 +19,8 @@ public enum EnumSeaSerpentAnimations {
     ROAR1("Roar1"),
     ROAR2("Roar2"),
     ROAR3("Roar3"),
-    DEAD("Dead");
+    DEAD("Dead"),
+    JUMPING("Jumping");
 
     @SideOnly(Side.CLIENT)
     public IceAndFireTabulaModel seaserpent_model;
