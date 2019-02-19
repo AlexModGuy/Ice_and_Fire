@@ -33,6 +33,16 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         AdvancedModelRenderer[] neckParts = { model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
+              if (entity.jumpProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 5, false);
+                }
+            }
+            if (entity.wantJumpProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING1.seaserpent_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumSeaSerpentAnimations.JUMPING1.seaserpent_model.getCube(cube.boxName), entity.wantJumpProgress, 10, false);
+                }
+            }
             float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
             float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
             float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
@@ -40,20 +50,21 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
             this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
-            if (entity.jumpProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING.seaserpent_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumSeaSerpentAnimations.JUMPING.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 10, false);
-                }
-            }
+
         }
         if (entity.breathProgress > 0.0F) {
             progressRotation(model.getCube("Head"), entity.breathProgress, (float)Math.toRadians(-15F), 0, 0);
             progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float)Math.toRadians(-28F), 0, 0);
             progressRotation(model.getCube("Jaw"), entity.breathProgress, (float)Math.toRadians(80F), 0, 0);
         }
-        if(entity.jumpProgress > 0.0F){
-            float turn = 45F * (float)entity.motionY * -1.5F;
-            model.getCube("BodyUpper").rotateAngleX += (float)Math.toRadians(turn);
+        if(entity.jumpRot > 0.0F){
+
+            float turn = (float)entity.motionY * -4F;
+            model.getCube("BodyUpper").rotateAngleX += (float)Math.toRadians(22.5F * turn) * entity.jumpRot;
+            model.getCube("Tail1").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail2").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail3").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail4").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
         }
         entity.tail_buffer.applyChainSwingBuffer(tailParts);
         entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
