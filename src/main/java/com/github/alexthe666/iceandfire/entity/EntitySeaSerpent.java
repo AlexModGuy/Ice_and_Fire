@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -43,6 +45,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntitySeaSerpent.class, DataSerializers.VARINT);
     private static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntitySeaSerpent.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> JUMPING = EntityDataManager.<Boolean>createKey(EntitySeaSerpent.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> BREATHING = EntityDataManager.<Boolean>createKey(EntitySeaSerpent.class, DataSerializers.BOOLEAN);
     public int swimCycle;
     private int animationTick;
     private Animation currentAnimation;
@@ -81,6 +84,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             return entity instanceof EntityLivingBase && !(entity instanceof EntitySeaSerpent) && DragonUtils.isAlive((EntityLivingBase) entity);
         }
     };
+    //true  = melee, false = ranged
+    public boolean attackDecision = false;
+    private boolean isBreathing;
 
     public EntitySeaSerpent(World worldIn) {
         super(worldIn);
@@ -226,6 +232,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(SCALE, Float.valueOf(0F));
         this.dataManager.register(JUMPING, false);
+        this.dataManager.register(BREATHING, false);
     }
 
     @Override
@@ -235,6 +242,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         compound.setInteger("TicksSinceRoar", ticksSinceRoar);
         compound.setFloat("Scale", this.getSeaSerpentScale());
         compound.setBoolean("JumpingOutOfWater", this.isJumpingOutOfWater());
+        compound.setBoolean("Breathing", this.isBreathing());
     }
 
     @Override
@@ -244,6 +252,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         ticksSinceRoar = compound.getInteger("TicksSinceRoar");
         this.setSeaSerpentScale(compound.getFloat("Scale"));
         this.setJumpingOutOfWater(compound.getBoolean("JumpingOutOfWater"));
+        this.setBreathing(compound.getBoolean("Breathing"));
     }
 
     private void setSeaSerpentScale(float scale) {
@@ -270,6 +279,15 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return this.dataManager.get(JUMPING).booleanValue();
     }
 
+    public boolean isBreathing() {
+        if (world.isRemote) {
+            boolean breathing = this.dataManager.get(BREATHING).booleanValue();
+            this.isBreathing = breathing;
+            return breathing;
+        }
+        return isBreathing;
+    }
+
     public void setVariant(int variant) {
         this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
@@ -278,11 +296,18 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.dataManager.set(JUMPING, jump);
     }
 
+    public void setBreathing(boolean breathing) {
+        this.dataManager.set(BREATHING, breathing);
+        if (!world.isRemote) {
+            this.isBreathing = breathing;
+        }
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        boolean breathing = false && this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_ROAR;
+        boolean breathing = isBreathing() && this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_ROAR;
         boolean jumping = !this.isInWater() && !this.onGround && this.motionY >= 0;
-        boolean wantJumping = (ticksSinceJump > TIME_BETWEEN_JUMPS) && this.isInWater();
+        boolean wantJumping = false; //(ticksSinceJump > TIME_BETWEEN_JUMPS) && this.isInWater();
         boolean ground = !isInWater() && this.onGround;
         boolean prevJumping = this.isJumpingOutOfWater();
         this.ticksSinceRoar++;
@@ -356,17 +381,33 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             changedSwimBehavior = false;
         }
         if (!world.isRemote) {
+            if (this.getAttackTarget() != null && this.getAnimation() != ANIMATION_ROAR) {
+                if (!attackDecision) {
+                    shoot(this.getAttackTarget());
+                } else {
+                    if (this.getEntityBoundingBox().expand(this.getSeaSerpentScale() / 3, this.getSeaSerpentScale() / 3, this.getSeaSerpentScale() / 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+                        attackDecision = true;
+                    }
+                }
+            } else {
+                this.setBreathing(false);
+            }
             if (this.swimBehavior == SwimBehavior.CIRCLE) {
                 ticksCircling++;
             } else {
                 ticksCircling = 0;
             }
             if (this.getAttackTarget() != null) {
-                if (isPreyAtSurface()) {
-                    this.swimBehavior = SwimBehavior.JUMP;
-                } else {
+                if(this.attackDecision){
+                    if (isPreyAtSurface()) {
+                        this.swimBehavior = SwimBehavior.JUMP;
+                    } else {
+                        this.swimBehavior = SwimBehavior.ATTACK;
+                    }
+                }else{
                     this.swimBehavior = SwimBehavior.ATTACK;
                 }
+
             }
             if (this.swimBehavior == SwimBehavior.ATTACK && (this.getAttackTarget() == null || this.getAttackTarget().getDistance(this) > 200)) {
                 this.swimBehavior = SwimBehavior.WANDER;
@@ -381,7 +422,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (swimBehavior != SwimBehavior.ATTACK) {
                 arcingYAdditive = 0;
             }
+
         }
+
     }
 
     private void doSplashDamage() {
@@ -397,11 +440,10 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 float strength = 0.3F * this.getSeaSerpentScale();
                 entity.motionX /= 2.0D;
                 entity.motionZ /= 2.0D;
-                entity.motionX -= xRatio / (double)f * (double)strength;
-                entity.motionZ -= zRatio / (double)f * (double)strength;
-                entity.motionY += (double)strength;
-                if (this.motionY > 0.4000000059604645D)
-                {
+                entity.motionX -= xRatio / (double) f * (double) strength;
+                entity.motionZ -= zRatio / (double) f * (double) strength;
+                entity.motionY += (double) strength;
+                if (this.motionY > 0.4000000059604645D) {
                     this.motionY = 0.4000000059604645D;
                 }
             }
@@ -409,7 +451,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     }
 
-    public void destroyBoat(Entity sailor){
+    public void destroyBoat(Entity sailor) {
         if (sailor.getRidingEntity() != null && sailor.getRidingEntity() instanceof EntityBoat && !world.isRemote) {
             EntityBoat boat = (EntityBoat) sailor.getRidingEntity();
             boat.setDead();
@@ -427,7 +469,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private boolean isPreyAtSurface() {
         if (this.getAttackTarget() != null) {
             BlockPos pos = new BlockPos(this.getAttackTarget());
-            return !isWaterBlock(world, pos.up((int)Math.ceil(this.getAttackTarget().height)));
+            return !isWaterBlock(world, pos.up((int) Math.ceil(this.getAttackTarget().height)));
         }
         return false;
     }
@@ -435,6 +477,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private void hurtMob(EntityLivingBase entity) {
         if (this.getAnimation() == ANIMATION_BITE && entity != null && this.getAnimationTick() > 5 && this.getAnimationTick() < 12) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+            EntitySeaSerpent.this.attackDecision = this.getRNG().nextBoolean();
         }
     }
 
@@ -602,6 +645,44 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         super.travel(strafe, vertical, forward);
     }
 
+    private void shoot(EntityLivingBase entity) {
+        if (!this.attackDecision) {
+            if(!this.isInWater()){
+                this.setBreathing(false);
+                this.attackDecision = true;
+            }
+            if (this.isBreathing()) {
+                if (this.breathProgress > 10F && this.ticksExisted % 3 == 0) {
+                    rotationYaw = renderYawOffset;
+                    float f1 = (rand.nextFloat() - 0.5F) * 0.5F;
+                    float f2 = (rand.nextFloat() - 0.5F) * 0.5F;
+                    float f3 = (rand.nextFloat() - 0.5F) * 0.5F;
+                    float headPosX = f1 + (float) (this.segments[0].posX + 0.3F * getSeaSerpentScale() * Math.cos((rotationYaw + 90) * Math.PI / 180));
+                    float headPosZ = f2 + (float) (this.segments[0].posZ + 0.3F * getSeaSerpentScale() * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                    float headPosY = f3 + (float) (this.segments[0].posY + 0.2F * getSeaSerpentScale());
+                    double d2 = entity.posX - headPosX;
+                    double d3 = entity.posY - headPosY;
+                    double d4 = entity.posZ - headPosZ;
+                      this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                    EntitySeaSerpentBubbles entitylargefireball = new EntitySeaSerpentBubbles(world, this, d2, d3, d4);
+                    float size = 0.8F;
+                    entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+                    if (!world.isRemote && !entity.isDead) {
+                        world.spawnEntity(entitylargefireball);
+                    }
+                    entitylargefireball.setSizes(size, size);
+                    if (entity.isDead || entity == null) {
+                        this.setBreathing(false);
+                        this.attackDecision = this.getRNG().nextBoolean();
+                    }
+                }
+            } else {
+                this.setBreathing(true);
+            }
+        }
+        this.faceEntity(entity, 360, 360);
+    }
+
     enum SwimBehavior {
         CIRCLE,
         WANDER,
@@ -622,7 +703,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntitySeaSerpent.this.posX;
-                double d1 = this.posY + arcingYAdditive - EntitySeaSerpent.this.posY;
+                double d1 = this.posY - EntitySeaSerpent.this.posY;
                 double d2 = this.posZ - EntitySeaSerpent.this.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
@@ -642,7 +723,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     }
                     this.action = EntityMoveHelper.Action.WAIT;
                     EntitySeaSerpent.this.motionX *= 0.5D;
-                   // EntitySeaSerpent.this.motionY *= 0.5D;
+                    // EntitySeaSerpent.this.motionY *= 0.5D;
                     EntitySeaSerpent.this.motionZ *= 0.5D;
                 } else {
                     EntitySeaSerpent.this.motionX += d0 / d3 * 0.5D * this.speed;
@@ -654,7 +735,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                         if (EntitySeaSerpent.this.getAttackTarget() == null) {
                             EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.motionX, EntitySeaSerpent.this.motionZ)) * (180F / (float) Math.PI);
                             EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
-                        } else if(EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP){
+                        } else if (EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP) {
                             double d4 = EntitySeaSerpent.this.getAttackTarget().posX - EntitySeaSerpent.this.posX;
                             double d5 = EntitySeaSerpent.this.getAttackTarget().posZ - EntitySeaSerpent.this.posZ;
                             EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
@@ -664,6 +745,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 }
             }
         }
+    }
+
+    @Override
+    public void onKillEntity(EntityLivingBase entity) {
+        super.onKillEntity(entity);
+        this.attackDecision = this.getRNG().nextBoolean();
     }
 
     public class AISwimWander extends EntityAIBase {
@@ -805,11 +892,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
         public void updateTask() {
             if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
-                if(EntitySeaSerpent.this.getAttackTarget() != null) {
+                if (EntitySeaSerpent.this.getAttackTarget() != null) {
                     if (EntitySeaSerpent.this.isInWater()) {
                         target = new BlockPos(EntitySeaSerpent.this.getAttackTarget()).up((int) Math.ceil(3 * EntitySeaSerpent.this.getSeaSerpentScale()));
                     }
-                    if(EntitySeaSerpent.this.posY > EntitySeaSerpent.this.getAttackTarget().posY + 2 * EntitySeaSerpent.this.getSeaSerpentScale()){
+                    if (EntitySeaSerpent.this.posY > EntitySeaSerpent.this.getAttackTarget().posY + 2 * EntitySeaSerpent.this.getSeaSerpentScale()) {
                         target = new BlockPos(EntitySeaSerpent.this.getAttackTarget());
                     }
                 }
@@ -825,15 +912,25 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 }
                 if (!secondPhase) {
                     target = new BlockPos(EntitySeaSerpent.this.getAttackTarget());
-                    if (EntitySeaSerpent.this.getAttackTarget() != null && EntitySeaSerpent.this.getDistanceSq(target) < 50 * EntitySeaSerpent.this.getSeaSerpentScale()) {
-                        EntitySeaSerpent.this.setAnimation(ANIMATION_BITE);
-                        if (EntitySeaSerpent.this.getDistanceSq(target) < 25 * EntitySeaSerpent.this.getSeaSerpentScale() && EntitySeaSerpent.this.getAnimation() == ANIMATION_BITE) {
-                            EntitySeaSerpent.this.hurtMob(EntitySeaSerpent.this.getAttackTarget());
+                    if (!EntitySeaSerpent.this.attackDecision) {
+                        if (EntitySeaSerpent.this.getAttackTarget() != null) {
+                            if (EntitySeaSerpent.this.getDistanceSq(target) > 10 * EntitySeaSerpent.this.getSeaSerpentScale()) {
+                                EntitySeaSerpent.this.setBreathing(true);
+                            } else {
+                                EntitySeaSerpent.this.attackDecision = true;
+                            }
                         }
-                    }
-                    if (EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.getDistanceSq(target) < 30 * EntitySeaSerpent.this.getSeaSerpentScale()) {
-                        target = null;
-                        secondPhase = true;
+                    } else {
+                        if (EntitySeaSerpent.this.getAttackTarget() != null && EntitySeaSerpent.this.getDistanceSq(target) < 50 * EntitySeaSerpent.this.getSeaSerpentScale()) {
+                            EntitySeaSerpent.this.setAnimation(ANIMATION_BITE);
+                            if (EntitySeaSerpent.this.getDistanceSq(target) < 20 * EntitySeaSerpent.this.getSeaSerpentScale() && EntitySeaSerpent.this.getAnimation() == ANIMATION_BITE) {
+                                EntitySeaSerpent.this.hurtMob(EntitySeaSerpent.this.getAttackTarget());
+                            }
+                        }
+                        if (EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.getDistanceSq(target) < 30 * EntitySeaSerpent.this.getSeaSerpentScale()) {
+                            target = null;
+                            secondPhase = true;
+                        }
                     }
                 }
                 if (secondPhase) {

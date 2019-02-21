@@ -197,6 +197,20 @@ public class DragonUtils {
 		return target.getPosition();
 	}
 
+	public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, EntityLivingBase target) {
+		float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
+		float neg = serpent.getRNG().nextBoolean() ? 1 : -1;
+		float angle = (0.01745329251F * target.rotationYawHead);
+		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+		double extraZ = (double) (radius * MathHelper.cos(angle));
+		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);
+		BlockPos ground = target.world.getHeight(radialPos);
+		if (serpent.getDistanceSqToCenter(ground) > 30) {
+			return ground;
+		}
+		return target.getPosition();
+	}
+
 	public static boolean canTameDragonAttack(EntityTameable dragon, Entity entity){
 		String className = entity.getClass().getSimpleName();
 		if(className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")){

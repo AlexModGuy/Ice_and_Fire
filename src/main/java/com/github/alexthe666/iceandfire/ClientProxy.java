@@ -272,6 +272,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityAmphithere.class, new RenderAmphithere(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAmphithereArrow.class, new RenderAmphithereArrow(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySeaSerpent.class, new RenderSeaSerpent(Minecraft.getMinecraft().getRenderManager(), seaserpent_model));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeaSerpentBubbles.class, new RenderNothing(Minecraft.getMinecraft().getRenderManager()));
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
@@ -307,6 +308,9 @@ public class ClientProxy extends CommonProxy {
 		}
 		if (name.equals("siren_music")) {
 			particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
+		}
+		if (name.equals("serpent_bubble")) {
+			particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
 		}
 		if (particle != null) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);

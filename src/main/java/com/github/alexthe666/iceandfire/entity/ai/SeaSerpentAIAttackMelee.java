@@ -51,7 +51,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null) {
+        if (entitylivingbase == null || !this.attacker.onGround) {
             return false;
         } else if (!entitylivingbase.isEntityAlive()) {
             return false;
