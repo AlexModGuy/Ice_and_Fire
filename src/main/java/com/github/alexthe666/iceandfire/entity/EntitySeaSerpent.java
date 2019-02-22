@@ -542,7 +542,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setVariant(this.getRNG().nextInt(7));
-        boolean ancient = this.getRNG().nextInt(3) == 1;
+        boolean ancient = this.getRNG().nextInt(16) == 1;
         if(ancient){
             this.setAncient(true);
             this.setSeaSerpentScale(6.0F + this.getRNG().nextFloat() * 3.0F);
