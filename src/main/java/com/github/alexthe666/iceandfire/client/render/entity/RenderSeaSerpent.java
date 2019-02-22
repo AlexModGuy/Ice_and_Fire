@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelAmphithere;
 import com.github.alexthe666.iceandfire.client.model.ModelSeaSerpent;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
@@ -30,6 +32,8 @@ public class RenderSeaSerpent extends RenderLiving<EntitySeaSerpent> {
 
 	public RenderSeaSerpent(RenderManager renderManager, ModelBase model) {
 		super(renderManager, model, 1.6F);
+		this.layerRenderers.add(new LayerSeaSerpentAncient(this));
+
 	}
 
 	@Override

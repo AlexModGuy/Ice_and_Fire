@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -24,6 +25,13 @@ public class FlyingAITarget extends EntityAINearestAttackableTarget {
         @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
         return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+    }
+
+    public boolean shouldExecute(){
+        if(taskOwner instanceof EntitySeaSerpent && ((EntitySeaSerpent) taskOwner).isJumpingOutOfWater()){
+            return false;
+        }
+        return super.shouldExecute();
     }
 
 }

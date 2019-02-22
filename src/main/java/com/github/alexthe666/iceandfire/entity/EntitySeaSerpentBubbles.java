@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -43,10 +44,8 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
 
     public void onUpdate() {
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
+            autoTarget();
             super.onUpdate();
-            for (int i = 0; i < 6; ++i) {
-                IceAndFire.PROXY.spawnParticle("serpent_bubble", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-            }
             RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, false, this.shootingEntity);
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onImpact(raytraceresult);
@@ -59,9 +58,8 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             float f = this.getMotionFactor();
 
             if (this.isInWater()) {
-                for (int i = 0; i < 4; ++i) {
-                    float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                for (int i = 0; i < 6; ++i) {
+                    IceAndFire.PROXY.spawnParticle("serpent_bubble", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                 }
             } else {
                 this.setDead();
@@ -73,10 +71,22 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             this.motionX *= (double) f;
             this.motionY *= (double) f;
             this.motionZ *= (double) f;
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
         } else {
             this.setDead();
+        }
+    }
+
+    public void autoTarget() {
+        if(this.shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) this.shootingEntity).getAttackTarget() != null){
+            Entity target = ((EntitySeaSerpent) this.shootingEntity).getAttackTarget();
+            double d2 = target.posX - posX;
+            double d3 = target.posY - posY;
+            double d4 = target.posZ - posZ;
+            double d0 = (double) MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
+            this.accelerationX = d2 / d0 * 0.1D;
+            this.accelerationY = d3 / d0 * 0.1D;
+            this.accelerationZ = d4 / d0 * 0.1D;
         }
     }
 
@@ -88,10 +98,16 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         return true;
     }
 
+    protected EnumParticleTypes getParticleType(){
+        return EnumParticleTypes.WATER_SPLASH;
+    }
+
+
     @Override
     protected void onImpact(RayTraceResult result) {
         if(result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity)){
             result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 1F);
+            this.setDead();
         }
     }
 
