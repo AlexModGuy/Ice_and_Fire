@@ -107,6 +107,7 @@ public class IceAndFireConfig {
     public float amphithereVillagerSearchLength = 64;
 	public int amphithereTameTime = 400;
 	public float amphithereFlightSpeed = 1.75F;
+	public boolean seaSerpentGriefing = true;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -226,6 +227,9 @@ public class IceAndFireConfig {
 		this.amphithereVillagerSearchLength = config.getInt("Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
 		this.amphithereTameTime = config.getInt("Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
 		this.amphithereFlightSpeed = config.getFloat("Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");
+
+		this.seaSerpentGriefing = config.getBoolean("Sea Serpent Griefing", "all", true, "Whether or not sea serpents can break weak blocks in their way");
+
 
 	}
 }

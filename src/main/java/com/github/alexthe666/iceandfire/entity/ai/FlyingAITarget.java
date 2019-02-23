@@ -28,7 +28,7 @@ public class FlyingAITarget extends EntityAINearestAttackableTarget {
     }
 
     public boolean shouldExecute(){
-        if(taskOwner instanceof EntitySeaSerpent && ((EntitySeaSerpent) taskOwner).isJumpingOutOfWater()){
+        if(taskOwner instanceof EntitySeaSerpent && (((EntitySeaSerpent) taskOwner).isJumpingOutOfWater() || !taskOwner.isInWater())){
             return false;
         }
         return super.shouldExecute();

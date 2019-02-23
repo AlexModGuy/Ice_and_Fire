@@ -27,8 +27,12 @@ public class AquaticAIGetInWater extends EntityAIBase {
         this.setMutexBits(1);
     }
 
+    protected boolean isAttackerInWater(){
+        return creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater();
+    }
+
     public boolean shouldExecute() {
-        if (creature.isBeingRidden()  || creature instanceof EntityTameable && ((EntityTameable) creature).isTamed() || creature.isInWater() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
+        if (creature.isBeingRidden()  || creature instanceof EntityTameable && ((EntityTameable) creature).isTamed() || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
             Vec3d vec3d = this.findPossibleShelter();

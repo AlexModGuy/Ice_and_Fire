@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -62,6 +63,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
                     IceAndFire.PROXY.spawnParticle("serpent_bubble", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                 }
             } else {
+                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());
                 this.setDead();
             }
 
@@ -73,6 +75,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             this.motionZ *= (double) f;
             this.setPosition(this.posX, this.posY, this.posZ);
         } else {
+            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());
             this.setDead();
         }
     }
@@ -107,6 +110,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     protected void onImpact(RayTraceResult result) {
         if(result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity)){
             result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 1F);
+            this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());
             this.setDead();
         }
     }
