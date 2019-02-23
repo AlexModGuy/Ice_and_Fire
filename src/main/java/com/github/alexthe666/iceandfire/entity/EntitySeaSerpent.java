@@ -127,6 +127,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
+    public boolean isDirectPathBetweenPoints(BlockPos pos) {
+        RayTraceResult movingobjectposition = world.rayTraceBlocks(this.getPositionVector().add(0, this.height * 0.5, 0), new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ()  + 0.5), false, true, false);
+        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
+    }
+
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -402,7 +407,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (this.getAttackTarget() != null && this.getAnimation() != ANIMATION_ROAR) {
                 if (!attackDecision) {
                     shoot(this.getAttackTarget());
-                    if (this.getEntityBoundingBox().expand(this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+                    if (this.getAttackTarget().isInWater() != this.isInWater() || !this.isDirectPathBetweenPoints(this.getAttackTarget().getPosition()) || this.getEntityBoundingBox().expand(this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                         attackDecision = true;
                     }
                 } else {
@@ -695,7 +700,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     double d2 = entity.posX - headPosX;
                     double d3 = entity.posY - headPosY;
                     double d4 = entity.posZ - headPosZ;
-                      this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                    this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
                     EntitySeaSerpentBubbles entitylargefireball = new EntitySeaSerpentBubbles(world, this, d2, d3, d4);
                     float size = 0.8F;
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -863,7 +868,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         public void updateTask() {
             target = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.posX + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.posZ + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.rand);
 
-            if (EntitySeaSerpent.isWaterBlock(world, target) || EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.JUMP) {
+            if (EntitySeaSerpent.isWaterBlock(world, target) || EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.JUMP && EntitySeaSerpent.this.isDirectPathBetweenPoints(target)) {
                 EntitySeaSerpent.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntitySeaSerpent.this.getAttackTarget() == null) {
                     EntitySeaSerpent.this.getLookHelper().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
@@ -893,11 +898,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             }
         }
 
-        protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
-            RayTraceResult raytraceresult = EntitySeaSerpent.this.world.rayTraceBlocks(new Vec3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vec3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntitySeaSerpent.this.height * 0.5D, posVec32.getZ() + 0.5D), false, true, false);
-            return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
-        }
-
         public boolean shouldContinueExecuting() {
             return EntitySeaSerpent.this.getAttackTarget() == null && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE;
         }
@@ -906,7 +906,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (EntitySeaSerpent.this.getDistance(target.getX(), target.getY(), target.getZ()) < 5) {
                 target = EntitySeaSerpent.getPositionInOrbit(EntitySeaSerpent.this, world, EntitySeaSerpent.this.orbitPos, EntitySeaSerpent.this.rand);
             }
-            if (EntitySeaSerpent.isWaterBlock(world, target)) {
+            if (EntitySeaSerpent.isWaterBlock(world, target) && EntitySeaSerpent.this.isDirectPathBetweenPoints(target)) {
                 EntitySeaSerpent.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntitySeaSerpent.this.getAttackTarget() == null) {
                     EntitySeaSerpent.this.getLookHelper().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
