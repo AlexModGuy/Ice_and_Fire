@@ -38,7 +38,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -331,10 +330,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
+    public void fall(float distance, float damageMultiplier) {
+    }
+
     public void onLivingUpdate() {
         if (!world.isRemote) {
-            //System.out.println(this.swimBehavior);
-            if(isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER){
+            if(isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()){
                 motionY -= 0.25D;
                 if(this.isInWater()){
                     this.setJumpingOutOfWater(false);
@@ -392,11 +393,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             jumpRot -= 0.1F;
         }
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
-            this.playSound(SoundEvents.ENTITY_PLAYER_SPLASH, 5F, 0.75F);
-            spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
-            spawnSlamParticles(EnumParticleTypes.WATER_SPLASH);
-            spawnSlamParticles(EnumParticleTypes.WATER_SPLASH);
-            spawnSlamParticles(EnumParticleTypes.WATER_SPLASH);
+            this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5F, 0.75F);
+            spawnSlamParticles(EnumParticleTypes.FIREWORKS_SPARK);
+            spawnSlamParticles(EnumParticleTypes.FLAME);
+            spawnSlamParticles(EnumParticleTypes.FLAME);
+            spawnSlamParticles(EnumParticleTypes.FLAME);
             this.doSplashDamage();
         }
         if (!ground && this.isLandNavigator) {
@@ -808,7 +809,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && !EntitySeaSerpent.this.isInWater() && !onGround) {
                     EntitySeaSerpent.this.ticksSinceJump = 0;
                 }
-                if (d3 < 3 && EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && EntitySeaSerpent.this.shouldStopJumping()) {
+                int dist = EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP ? 10 : 3;
+                if (d3 < dist && EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && EntitySeaSerpent.this.shouldStopJumping() && EntitySeaSerpent.this.getAttackTarget() == null) {
                     this.action = EntityMoveHelper.Action.WAIT;
                     EntitySeaSerpent.this.motionX *= 0.5D;
                     EntitySeaSerpent.this.motionZ *= 0.5D;
@@ -1074,14 +1076,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
                 if (EntitySeaSerpent.this.getAttackTarget() != null) {
                     if (EntitySeaSerpent.this.isInWater()) {
-                        if (EntitySeaSerpent.this.getDistanceSq(EntitySeaSerpent.this.getAttackTarget()) > 10 * EntitySeaSerpent.this.getSeaSerpentScale()) {
-                            target = new BlockPos(EntitySeaSerpent.this.getAttackTarget()).up((int) Math.ceil(3 * EntitySeaSerpent.this.getSeaSerpentScale()));
-                        } else {
-                            target = new BlockPos(EntitySeaSerpent.this.getAttackTarget());
-                        }
-                    }
-                    if (EntitySeaSerpent.this.posY > EntitySeaSerpent.this.getAttackTarget().posY + 2 * EntitySeaSerpent.this.getSeaSerpentScale()) {
-                        target = new BlockPos(EntitySeaSerpent.this.getAttackTarget());
+                        target = new BlockPos(EntitySeaSerpent.this.getAttackTarget()).up((int) Math.ceil(3 * EntitySeaSerpent.this.getSeaSerpentScale()));
                     }
                 }
             } else {

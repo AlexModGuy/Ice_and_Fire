@@ -3,12 +3,14 @@ package com.github.alexthe666.iceandfire.core;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.item.*;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -285,8 +287,13 @@ public class ModItems {
 	public static Item amphithere_feather = new ItemGeneric("amphithere_feather", "iceandfire.amphithere_feather");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_arrow")
 	public static Item amphithere_arrow = new ItemAmphithereArrow();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_fang")
+	public static Item sea_serpent_fang = new ItemGeneric("sea_serpent_fang", "iceandfire.sea_serpent_fang");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_arrow")
+	public static Item sea_serpent_arrow = new ItemSeaSerpentArrow();
 
 	static {
 		EnumDragonArmor.initArmors();
+		EnumSeaSerpent.initArmors();
 	}
 }

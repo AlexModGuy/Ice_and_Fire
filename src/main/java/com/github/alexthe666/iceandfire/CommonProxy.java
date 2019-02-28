@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
@@ -185,6 +186,7 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityAmphithereArrow>create(), event, EntityAmphithereArrow.class, "amphitherearrow", 35);
         registerSpawnable(EntityEntryBuilder.<EntitySeaSerpent>create(), event, EntitySeaSerpent.class, "seaserpent", 36, 0X008299, 0XC5E6E7);
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentBubbles>create(), event, EntitySeaSerpentBubbles.class, "seaserpentbubble", 37);
+        registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 38);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
@@ -256,6 +258,13 @@ public class CommonProxy {
             throw new RuntimeException(e);
         }
         for (EnumDragonArmor armor : EnumDragonArmor.values()) {
+            event.getRegistry().register(armor.helmet);
+            event.getRegistry().register(armor.chestplate);
+            event.getRegistry().register(armor.leggings);
+            event.getRegistry().register(armor.boots);
+        }
+        for (EnumSeaSerpent armor : EnumSeaSerpent.values()) {
+            event.getRegistry().register(armor.scale);
             event.getRegistry().register(armor.helmet);
             event.getRegistry().register(armor.chestplate);
             event.getRegistry().register(armor.leggings);

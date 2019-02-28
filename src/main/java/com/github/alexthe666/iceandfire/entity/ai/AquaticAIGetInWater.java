@@ -63,12 +63,17 @@ public class AquaticAIGetInWater extends EntityAIBase {
     }
 
     @Nullable
-    private Vec3d findPossibleShelter() {
+    public Vec3d findPossibleShelter() {
+        return findPossibleShelter(10, 3);
+    }
+
+    @Nullable
+    protected Vec3d findPossibleShelter(int xz, int y) {
         Random random = this.creature.getRNG();
         BlockPos blockpos = new BlockPos(this.creature.posX, this.creature.getEntityBoundingBox().minY, this.creature.posZ);
 
         for (int i = 0; i < 10; ++i) {
-            BlockPos blockpos1 = blockpos.add(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
+            BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y, random.nextInt(xz * 2) - xz);
 
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
                 return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
