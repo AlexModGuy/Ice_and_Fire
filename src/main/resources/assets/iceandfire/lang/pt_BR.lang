@@ -208,8 +208,20 @@ item.iceandfire.myrmex_jungle_boots.name=Botas de Quitina de Myrmex da Selva
 item.iceandfire.amphithere_feather.name=Pena de Amphithere 
 item.iceandfire.amphithere_arrow.name=Flecha de Amphithere 
 item.iceandfire.amphithere_arrow.desc=Empurra todos os mobs para trás com todo poder das asas do ampithere!
-
-
+item.iceandfire.sea_serpent_fang.name=Presa de Serpente Marinha
+item.iceandfire.sea_serpent_scales_blue.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_bronze.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_deepblue.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_green.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_purple.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_red.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_scales_teal.name=Escamas de Serpente Marinha
+item.iceandfire.sea_serpent_helmet.name=Capacete do Guardião da Maré
+item.iceandfire.sea_serpent_chestplate.name=Peitoral do Guardião da Maré
+item.iceandfire.sea_serpent_leggings.name=Calças do Guardião da Maré
+item.iceandfire.sea_serpent_boots.name=Botas do Guardião da Maré
+item.iceandfire.sea_serpent_arrow.name=Flecha do Guardião da Maré
+item.iceandfire.sea_serpent_arrow.desc=Não é inundada pela água!
 
 item.banner.firedragon.white=Figura de Dragão de Fogo Branco
 item.banner.firedragon.orange=Figura de Dragão de Fogo Laranja
@@ -298,6 +310,13 @@ entity.myrmex_egg.name=Ovo de Myrmex
 entity.amphithere.name=Amphithere
 entity.seaserpent.name=Serpente Marinha
 
+sea_serpent.blue=Azul
+sea_serpent.bronze=Bronze
+sea_serpent.deepblue=Azul Naval
+sea_serpent.green=Verde
+sea_serpent.purple=Roxa
+sea_serpent.red=Vermelha
+sea_serpent.teal=Verde-azulada
 dragon.red=Vermelho
 dragon.green=Esmeralda
 dragon.bronze=Bronze
