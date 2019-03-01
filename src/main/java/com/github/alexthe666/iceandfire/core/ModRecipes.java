@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.core;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
@@ -72,7 +73,9 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
         OreDictionary.registerOre("boneDragon", ModItems.dragonbone);
-
+        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()){
+            OreDictionary.registerOre("seaSerpentScales", serpent.scale);
+        }
         OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));

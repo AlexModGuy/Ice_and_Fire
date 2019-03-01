@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "H H",
+    "SSS",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:sea_serpent_scales_blue",
+      "data": 0
+    },
+    "H": {
+      "item": "iceandfire:shiny_scales",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:tide_blue_helmet",
+    "data": 0
+  }
+}
