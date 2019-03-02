@@ -400,9 +400,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
             this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5F, 0.75F);
             spawnSlamParticles(EnumParticleTypes.FIREWORKS_SPARK);
-            spawnSlamParticles(EnumParticleTypes.FLAME);
-            spawnSlamParticles(EnumParticleTypes.FLAME);
-            spawnSlamParticles(EnumParticleTypes.FLAME);
+            spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
+            spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
+            spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
             this.doSplashDamage();
         }
         if (!ground && this.isLandNavigator) {
@@ -415,6 +415,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         rotationPitch = (float) motionY * 20F;
         if (world.isRemote) {
             pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
+
             if (!jumping) {
                 tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
                 head_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
@@ -429,7 +430,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             }
             if (this.getAttackTarget() != null && this.getAnimation() != ANIMATION_ROAR) {
                 if (!attackDecision) {
-                    if (this.getAttackTarget().isInWater() != this.isInWater() || !this.isDirectPathBetweenPoints(this.getAttackTarget().getPosition()) || this.getDistanceSq(this.getAttackTarget()) < 60 * this.getSeaSerpentScale()) {
+                    if (!this.getAttackTarget().isInWater() || !this.isDirectPathBetweenPoints(this.getAttackTarget().getPosition()) || this.getDistanceSq(this.getAttackTarget()) < 60 * this.getSeaSerpentScale()) {
                         attackDecision = true;
                     }
                     if (!attackDecision) {
