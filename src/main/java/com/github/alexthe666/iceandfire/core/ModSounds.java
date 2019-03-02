@@ -268,6 +268,23 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("myrmex_sting")
 	public static final SoundEvent MYRMEX_STING = createSoundEvent("myrmex_sting");
 
+	@GameRegistry.ObjectHolder("amphithere_die")
+	public static final SoundEvent AMPHITHERE_DIE = createSoundEvent("amphithere_die");
+
+	@GameRegistry.ObjectHolder("amphithere_idle")
+	public static final SoundEvent AMPHITHERE_IDLE = createSoundEvent("amphithere_idle");
+
+	@GameRegistry.ObjectHolder("amphithere_hurt")
+	public static final SoundEvent AMPHITHERE_HURT = createSoundEvent("amphithere_hurt");
+
+	@GameRegistry.ObjectHolder("amphithere_bite")
+	public static final SoundEvent AMPHITHERE_BITE = createSoundEvent("amphithere_bite");
+
+	@GameRegistry.ObjectHolder("amphithere_gust")
+	public static final SoundEvent AMPHITHERE_GUST = createSoundEvent("amphithere_gust");
+
+
+
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);

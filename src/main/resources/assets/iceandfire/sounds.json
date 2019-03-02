@@ -1,4 +1,41 @@
 {
+  "amphithere_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:amphithere_idle_0",
+      "iceandfire:amphithere_idle_1",
+      "iceandfire:amphithere_idle_2",
+      "iceandfire:amphithere_idle_3",
+      "iceandfire:amphithere_idle_4"
+    ]
+  },
+  "amphithere_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:amphithere_hurt_0",
+      "iceandfire:amphithere_hurt_1",
+      "iceandfire:amphithere_hurt_2"
+    ]
+  },
+  "amphithere_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:amphithere_die_0",
+      "iceandfire:amphithere_die_1"
+    ]
+  },
+  "amphithere_gust": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:amphithere_gust"
+    ]
+  },
+  "amphithere_bite": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:amphithere_bite"
+    ]
+  },
   "myrmex_bite": {
     "category": "neutral",
     "sounds": [

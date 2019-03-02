@@ -928,6 +928,7 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0){
 					GL11.glPushMatrix();
 					GL11.glScalef(0.75F, 0.75F, 0.75F);
+					drawImage(DRAWINGS_1, 70, 97, 257, 163, 136, 93, 512F);
 					drawImage(DRAWINGS_1, 270, 50, 148, 267, 120, 51, 512F);
 					drawImage(DRAWINGS_1, 380, 50, 148, 318, 120, 51, 512F);
 					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51, 512F);
@@ -936,6 +937,21 @@ public class GuiBestiary extends GuiScreen {
 					//drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
 					//drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
 					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					drawItemStack(new ItemStack(ModItems.amphithere_feather), 30, 20, 2.5F);
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 70, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.FLINT), 40, 80, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 40, 97, 1.5F);
+					drawItemStack(new ItemStack(ModItems.amphithere_feather), 40, 117, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.amphithere_arrow), 60, 65, 2F);
 				}
 				writeFromTxt();
 				break;

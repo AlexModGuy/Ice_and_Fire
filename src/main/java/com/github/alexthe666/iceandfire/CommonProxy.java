@@ -126,7 +126,12 @@ public class CommonProxy {
                 ModSounds.MYRMEX_DIE,
                 ModSounds.MYRMEX_WALK,
                 ModSounds.MYRMEX_BITE,
-                ModSounds.MYRMEX_STING
+                ModSounds.MYRMEX_STING,
+                ModSounds.AMPHITHERE_IDLE,
+                ModSounds.AMPHITHERE_HURT,
+                ModSounds.AMPHITHERE_DIE,
+                ModSounds.AMPHITHERE_BITE,
+                ModSounds.AMPHITHERE_GUST
         );
     }
 

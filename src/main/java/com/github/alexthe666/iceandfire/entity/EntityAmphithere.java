@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.google.common.base.Predicate;
@@ -30,10 +31,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -530,6 +528,12 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
+        if(this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5){
+            this.playSound(ModSounds.AMPHITHERE_GUST, 1, 1);
+        }
+        if((this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_BITE_RIDER) && this.getAnimationTick() == 1){
+            this.playSound(ModSounds.AMPHITHERE_BITE, 1, 1);
+        }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAttackTarget() != null && this.getAnimationTick() > 5 && this.getAnimationTick() < 22) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 25) {
@@ -713,6 +717,20 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         dataManager.set(CONTROL_STATE, Byte.valueOf(state));
     }
 
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.AMPHITHERE_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.AMPHITHERE_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.AMPHITHERE_DIE;
+    }
 
     @Override
     public int getAnimationTick() {
@@ -737,6 +755,20 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_BITE, ANIMATION_BITE_RIDER, ANIMATION_WING_BLAST, ANIMATION_TAIL_WHIP, ANIMATION_SPEAK};
+    }
+
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
     }
 
     public boolean isBlinking() {

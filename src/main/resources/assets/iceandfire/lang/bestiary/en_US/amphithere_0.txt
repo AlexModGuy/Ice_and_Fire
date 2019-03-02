@@ -9,6 +9,8 @@ amphitheres.
 
 
 
+
+
 Amphitheres are legendary beasts
 rooted in mythology. Said to be
 the protectors of jungles,
@@ -16,8 +18,6 @@ Amphitheres are usually peaceful,
 but will attack anything that
 hurts villagers or others living
 in their home land.
-
-
 Amphitheres come in many different
 beautiful feather colorations.
 

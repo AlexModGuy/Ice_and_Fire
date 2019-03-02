@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +34,9 @@ public class EntityAmphithereArrow extends EntityArrow {
 
     public void onUpdate() {
         super.onUpdate();
+        if((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround){
+            this.playSound(ModSounds.AMPHITHERE_GUST, 1, 1);
+        }
         if(world.isRemote && !this.inGround){
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
