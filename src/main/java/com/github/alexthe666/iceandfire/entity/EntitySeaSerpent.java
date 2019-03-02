@@ -5,7 +5,9 @@ import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.google.common.base.Predicate;
+import com.sun.org.apache.regexp.internal.RE;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -32,9 +34,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -91,6 +95,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     //true  = melee, false = ranged
     public boolean attackDecision = false;
     private boolean isBreathing;
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "sea_serpent"));
 
     public EntitySeaSerpent(World worldIn) {
         super(worldIn);
@@ -771,6 +776,30 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             }
         }
         this.faceEntity(entity, 360, 360);
+    }
+
+    public EnumSeaSerpent getEnum() {
+        switch(this.getVariant()){
+            default:
+                return EnumSeaSerpent.BLUE;
+            case 1:
+                return EnumSeaSerpent.BRONZE;
+            case 2:
+                return EnumSeaSerpent.DEEPBLUE;
+            case 3:
+                return EnumSeaSerpent.GREEN;
+            case 4:
+                return EnumSeaSerpent.PURPLE;
+            case 5:
+                return EnumSeaSerpent.RED;
+            case 6:
+                return EnumSeaSerpent.TEAL;
+        }
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 
     enum SwimBehavior {

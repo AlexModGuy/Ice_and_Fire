@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
+import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
@@ -63,6 +65,17 @@ public class EventLiving {
 			return entity != null && entity instanceof IVillagerFear;
 		}
 	};
+
+	@SubscribeEvent
+	public void onPlayerAttackMob(AttackEntityEvent event){
+		if(event.getTarget() instanceof EntityMutlipartPart && event.getEntity() instanceof EntityPlayer){
+			event.setCanceled(true);
+			EntityLivingBase parent = ((EntityMutlipartPart)event.getTarget()).getParent();
+			((EntityPlayer)event.getEntity()).attackTargetEntityWithCurrentItem(parent);
+			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId()));
+
+		}
+	}
 
 	@SubscribeEvent
 	public void onGatherCollisionBoxes(GetCollisionBoxesEvent event) {

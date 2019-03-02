@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -27,6 +28,10 @@ public class EntityMutlipartPart extends PartEntity {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
         }
         return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
+    }
+
+    public EntityLivingBase getParent(){
+        return this.parent;
     }
 
     public void resize(float width, float height){
