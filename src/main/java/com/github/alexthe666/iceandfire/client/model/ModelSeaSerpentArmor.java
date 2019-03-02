@@ -57,9 +57,9 @@ public class ModelSeaSerpentArmor extends ModelBiped {
         this.bipedHead.addChild(this.headFin2);
         this.bipedRightArm.addChild(this.armFinR);
         this.bipedHead.addChild(this.headFin);
-        this.bipedRightLeg.addChild(this.legFinR);
+        this.bipedLeftLeg.addChild(this.legFinR);
         this.bipedLeftArm.addChild(this.shoulderL);
-        this.bipedLeftLeg.addChild(this.legFinR_1);
+        this.bipedRightLeg.addChild(this.legFinR_1);
         this.bipedRightArm.addChild(this.shoulderR);
         this.bipedLeftArm.addChild(this.armFinL);
     }

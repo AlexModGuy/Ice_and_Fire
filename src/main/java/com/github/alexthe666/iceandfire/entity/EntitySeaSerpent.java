@@ -483,6 +483,10 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 this.ticksSinceJump = 0;
                 setJumpingOutOfWater(false);
             }
+            if (this.swimBehavior == SwimBehavior.ATTACK && this.getAttackTarget() != null && !this.getAttackTarget().isInWater()){
+                this.swimBehavior = SwimBehavior.WANDER;
+                this.faceEntity(this.getAttackTarget(), 360, 360);
+            }
             if (this.swimBehavior == SwimBehavior.ATTACK && (this.getAttackTarget() == null || !isDirectPathBetweenPoints(new BlockPos(this.getAttackTarget())))) {
                 this.swimBehavior = SwimBehavior.WANDER;
             }

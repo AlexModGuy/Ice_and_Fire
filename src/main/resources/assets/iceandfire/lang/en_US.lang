@@ -223,7 +223,8 @@ item.iceandfire.sea_serpent_leggings.name=Tide Guardian Leggings
 item.iceandfire.sea_serpent_boots.name=Tide Guardian Boots
 item.iceandfire.sea_serpent_arrow.name=Tide Arrow
 item.iceandfire.sea_serpent_arrow.desc=Not Inundated by water!
-
+item.iceandfire.sea_serpent_armor.desc_0=Provides Water Breathing
+item.iceandfire.sea_serpent_armor.desc_1=Provides Strength when wet, increasing levels with full set
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
 item.banner.firedragon.magenta=Magenta Fire Dragon Charge
@@ -423,6 +424,8 @@ bestiary.cockatrice=Cockatrices
 bestiary.stymphalianbird=Stymphalian Birds
 bestiary.troll=Trolls
 bestiary.myrmex=Myrmex
+bestiary.amphithere=Amphitheres
+bestiary.seaserpent=Sea Serpents
 
 lectern.nopages=No new information can be added.
 silvertools.hurt=+2 damage against undead

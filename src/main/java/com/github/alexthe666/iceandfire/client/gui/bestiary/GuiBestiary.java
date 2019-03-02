@@ -924,6 +924,21 @@ public class GuiBestiary extends GuiScreen {
 				}
 				writeFromTxt();
 				break;
+			case AMPHITHERE:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					GL11.glScalef(0.75F, 0.75F, 0.75F);
+					drawImage(DRAWINGS_1, 270, 50, 148, 267, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 380, 50, 148, 318, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 380, 100, 148, 420, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 330, 150, 268, 267, 120, 51, 512F);
+					//drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
+					//drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
 		}
 	}
 

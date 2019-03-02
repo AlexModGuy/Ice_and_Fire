@@ -41,5 +41,7 @@ public class ItemSeaSerpentArmor extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(armor_type.color + StatCollector.translateToLocal("sea_serpent." + armor_type.resourceName));
+		tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_0"));
+		tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_1"));
 	}
 }
