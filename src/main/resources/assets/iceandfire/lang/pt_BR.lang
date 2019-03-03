@@ -222,6 +222,8 @@ item.iceandfire.sea_serpent_leggings.name=Calças do Guardião da Maré
 item.iceandfire.sea_serpent_boots.name=Botas do Guardião da Maré
 item.iceandfire.sea_serpent_arrow.name=Flecha do Guardião da Maré
 item.iceandfire.sea_serpent_arrow.desc=Não é inundada pela água!
+item.iceandfire.sea_serpent_armor.desc_0=Fornece Respiração Aquática
+item.iceandfire.sea_serpent_armor.desc_1=Concede Força quando você estiver molhado, níveis maiores com o conjunto completo
 
 item.banner.firedragon.white=Figura de Dragão de Fogo Branco
 item.banner.firedragon.orange=Figura de Dragão de Fogo Laranja
