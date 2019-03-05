@@ -399,9 +399,9 @@ myrmex.caste_queen.name=Rainha
 myrmex.caste_royal.name=Monarca
 myrmex.caste_sentinel.name=Sentinela
 amphithere.command.new_home=O habitat deste amphithere foi definido para a posição %d, %d, %d.
-amphithere.command.0=Este Amphithere vagando livremente.
-amphithere.command.1=Este Amphithere está sentado.
-amphithere.command.2=Este Amphithere está lhe seguindo.
+amphithere.command.0=Esse Amphithere está vagando livremente.
+amphithere.command.1=Esse Amphithere está sentado.
+amphithere.command.2=Esse Amphithere está lhe seguindo.
 
 bestiary.contains=Contém: 
 bestiary.introduction=Introdução
