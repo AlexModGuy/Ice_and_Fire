@@ -103,7 +103,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     }
 
-
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    {
+    }
 
     public float getBlockPathWeight(BlockPos pos) {
         if (this.isFlying()) {

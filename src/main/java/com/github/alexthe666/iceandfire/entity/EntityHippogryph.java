@@ -15,6 +15,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -141,6 +142,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		this.dataManager.register(FLYING, Boolean.valueOf(false));
 		this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
 
+	}
+
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+	{
 	}
 
 	public boolean canBeSteered() {

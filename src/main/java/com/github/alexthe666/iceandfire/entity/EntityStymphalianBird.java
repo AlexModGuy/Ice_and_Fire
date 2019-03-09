@@ -12,6 +12,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -72,6 +73,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public EntityStymphalianBird(World worldIn) {
         super(worldIn);
         this.setSize(1.3F, 1.2F);
+    }
+
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    {
     }
 
     @Nullable

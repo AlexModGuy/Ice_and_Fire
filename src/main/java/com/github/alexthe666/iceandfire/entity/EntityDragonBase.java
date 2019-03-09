@@ -1721,6 +1721,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         lastScale = scale;
     }
 
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    {
+    }
+
     public float getRenderSize() {
         float step = (growth_stages[this.getDragonStage() - 1][1] - growth_stages[this.getDragonStage() - 1][0]) / 25;
         if (this.getAgeInDays() > 125) {
