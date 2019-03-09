@@ -32,6 +32,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -390,6 +391,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         if(this.isSitting() && this.getCommand() != 1){
             this.setSitting(false);
         }
