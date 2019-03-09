@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.Random;
 
 public class TileEntityLectern extends TileEntity implements ITickable, ISidedInventory {
@@ -150,7 +151,8 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 			}
 
 			if (itemstack.getItem() == ModItems.bestiary) {
-				if (EnumBestiaryPages.possiblePages(itemstack).isEmpty()) {
+				List list = EnumBestiaryPages.possiblePages(itemstack);
+				if (list == null || list.isEmpty()) {
 					return false;
 				}
 			}

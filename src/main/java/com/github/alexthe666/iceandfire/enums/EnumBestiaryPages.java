@@ -96,8 +96,9 @@ public enum EnumBestiaryPages {
 
 	public static void addRandomPage(ItemStack book) {
 		if (book.getItem() instanceof ItemBestiary) {
-			if (!possiblePages(book).isEmpty()) {
-				addPage(possiblePages(book).get(new Random().nextInt(possiblePages(book).size())), book);
+			List<EnumBestiaryPages> list = EnumBestiaryPages.possiblePages(book);
+			if (list != null && !list.isEmpty()) {
+				addPage(list.get(new Random().nextInt(list.size())), book);
 			}
 		}
 	}
