@@ -161,7 +161,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 			this.setHasSubtypes(true);
 		}
 
-		public String getUnlocalizedName(ItemStack stack) {
+		public String getTranslationKey(ItemStack stack) {
 			int i = stack.getMetadata();
 			return "tile.iceandfire.pixie_house_" + i;
 		}

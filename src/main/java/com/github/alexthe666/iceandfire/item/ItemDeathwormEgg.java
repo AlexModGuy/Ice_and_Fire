@@ -23,7 +23,7 @@ public class ItemDeathwormEgg extends Item implements  ICustomRendered{
     }
 
 
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         return stack.getMetadata() == 1 ? "item.iceandfire.deathworm_egg_giant" :"item.iceandfire.deathworm_egg";
     }
 
