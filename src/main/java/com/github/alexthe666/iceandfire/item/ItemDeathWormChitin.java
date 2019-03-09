@@ -15,7 +15,7 @@ public class ItemDeathWormChitin extends Item implements ICustomRendered{
         this.setRegistryName(IceAndFire.MODID, "deathworm_chitin");
     }
 
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         return stack.getMetadata() == 2 ? "item.iceandfire.deathworm_chitin_red" : stack.getMetadata() == 1 ? "item.iceandfire.deathworm_chitin_white" :"item.iceandfire.deathworm_chitin_yellow";
     }
 
