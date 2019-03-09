@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -23,10 +22,15 @@ public enum EnumHippogryphTypes {
 
 	public boolean developer;
 	public BiomeDictionary.Type[] spawnBiomes;
+	public ResourceLocation TEXTURE;
+	public ResourceLocation TEXTURE_BLINK;
 
 	private EnumHippogryphTypes(boolean developer, BiomeDictionary.Type... biomes) {
 		this.spawnBiomes = biomes;
 		this.developer = developer;
+		this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + ".png");
+		this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + "_blink.png");
+
 	}
 
 	public static EnumHippogryphTypes[] getWildTypes() {

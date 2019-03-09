@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "RS",
+    "SR"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    },
+    "R": {
+      "item": "iceandfire:myrmex_desert_resin",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_resin",
+    "data": 0
+  }
+}

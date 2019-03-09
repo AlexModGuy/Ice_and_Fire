@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -16,7 +17,7 @@ public class EventNewMenu {
 
 	@SubscribeEvent
 	public void openMainMenu(GuiOpenEvent event) {
-		if (event.getGui() instanceof GuiMainMenu) {
+		if (event.getGui() instanceof GuiMainMenu && IceAndFire.CONFIG.customMainMenu) {
 			GuiMainMenu mainMenu = (GuiMainMenu) event.getGui();
 			Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), new String[]{"TITLE_PANORAMA_PATHS", "field_73978_o"}));
 			try {

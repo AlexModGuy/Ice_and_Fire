@@ -13,19 +13,26 @@ public enum EnumBestiaryPages {
 
 	INTRODUCTION(2),
 	FIREDRAGON(4),
-
 	FIREDRAGONEGG(1),
 	ICEDRAGON(4),
 	ICEDRAGONEGG(1),
 	TAMEDDRAGONS(3),
 	MATERIALS(2),
-
 	ALCHEMY(0),
 	VILLAGERS(0),
 	HIPPOGRYPH(1),
 	GORGON(1),
 	PIXIE(1),
-	CYCLOPS(2);
+	CYCLOPS(2),
+	SIREN(2),
+	HIPPOCAMPUS(2),
+	DEATHWORM(3),
+	COCKATRICE(2),
+	STYMPHALIANBIRD(1),
+	TROLL(2),
+	MYRMEX(4),
+	AMPHITHERE(2),
+	SEASERPENT(2);
 
 	public int pages;
 
@@ -89,8 +96,9 @@ public enum EnumBestiaryPages {
 
 	public static void addRandomPage(ItemStack book) {
 		if (book.getItem() instanceof ItemBestiary) {
-			if (!possiblePages(book).isEmpty()) {
-				addPage(possiblePages(book).get(new Random().nextInt(possiblePages(book).size())), book);
+			List<EnumBestiaryPages> list = EnumBestiaryPages.possiblePages(book);
+			if (list != null && !list.isEmpty()) {
+				addPage(list.get(new Random().nextInt(list.size())), book);
 			}
 		}
 	}

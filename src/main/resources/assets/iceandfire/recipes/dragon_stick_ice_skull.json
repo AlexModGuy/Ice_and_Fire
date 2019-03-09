@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "S",
+    "T",
+    " "
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragon_skull",
+      "data": 1
+    },
+    "T": {
+      "item": "minecraft:stick",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragon_stick",
+    "data": 0
+  }
+}

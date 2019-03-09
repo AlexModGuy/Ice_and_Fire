@@ -14,7 +14,7 @@ public class BlockFallingGeneric extends BlockFalling {
 
 	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
 		super(materialIn);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setHarvestLevel(toolUsed, toolStrength);
 		this.setHardness(hardness);
 		this.setResistance(resistance);
@@ -27,7 +27,7 @@ public class BlockFallingGeneric extends BlockFalling {
 	@SuppressWarnings("deprecation")
 	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
 		super(materialIn);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setHarvestLevel(toolUsed, toolStrength);

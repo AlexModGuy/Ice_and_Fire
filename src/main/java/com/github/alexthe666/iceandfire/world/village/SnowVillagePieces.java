@@ -975,7 +975,6 @@ public class SnowVillagePieces {
 						EntityZombieVillager entityzombie = new EntityZombieVillager(worldIn);
 						entityzombie.setLocationAndAngles((double) j + 0.5D, (double) k, (double) l + 0.5D, 0.0F, 0.0F);
 						entityzombie.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityzombie)), (IEntityLivingData) null);
-						entityzombie.setForgeProfession(chooseForgeProfession(i, net.minecraftforge.fml.common.registry.ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new net.minecraft.util.ResourceLocation("minecraft:farmer"))));
 						entityzombie.enablePersistence();
 						worldIn.spawnEntity(entityzombie);
 					} else {

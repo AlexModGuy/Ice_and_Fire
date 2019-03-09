@@ -1,0 +1,45 @@
+{
+  "__comment": "Dragon skull, blood and heart drops are handled differently and can be disabled in ice_and_fire.cfg. The customize_to_dragon tag changes items to appear like the dragon(ex. red dragon scales -> blue dragon scales), and scales the stack size to the dragon's as well.",
+  "pools": [
+    {
+      "name": "ice_dragon_male",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "iceandfire:dragonscales_blue",
+          "weight": 60,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "iceandfire:customize_to_dragon"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "iceandfire:ice_dragon_flesh",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "iceandfire:customize_to_dragon"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

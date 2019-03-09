@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.entity.*;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
@@ -60,7 +59,7 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.dragonId);
-		if (entity instanceof EntityDragonBase) {
+		if (entity != null && entity instanceof EntityDragonBase) {
 			EntityDragonBase dragon = (EntityDragonBase) entity;
 			if (dragon.isOwner(player)) {
 				dragon.setControlState(message.controlState);
@@ -72,6 +71,22 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
 				hippo.setControlState(message.controlState);
 			}
 			hippo.setPosition(message.posX, message.posY, message.posZ);
+		} else if (entity instanceof EntityHippocampus) {
+			EntityHippocampus hippo = (EntityHippocampus) entity;
+			if (hippo.isOwner(player)) {
+				hippo.setControlState(message.controlState);
+			}
+			hippo.setPosition(message.posX, message.posY, message.posZ);
+		} else if (entity instanceof EntityDeathWorm) {
+			EntityDeathWorm deathworm = (EntityDeathWorm) entity;
+			deathworm.setControlState(message.controlState);
+			deathworm.setPosition(message.posX, message.posY, message.posZ);
+		} else if (entity instanceof EntityAmphithere) {
+			EntityAmphithere amphi = (EntityAmphithere) entity;
+			if (amphi.isOwner(player)) {
+				amphi.setControlState(message.controlState);
+			}
+			amphi.setPosition(message.posX, message.posY, message.posZ);
 		}
 	}
 

@@ -28,7 +28,7 @@ public class DragonAIMate extends EntityAIBase {
 		this.dragon = dragon;
 		this.theWorld = dragon.world;
 		this.moveSpeed = speedIn;
-		this.setMutexBits(3);
+		this.setMutexBits(1);
 	}
 
 	public boolean shouldExecute() {
@@ -60,9 +60,11 @@ public class DragonAIMate extends EntityAIBase {
 	 */
 	public void updateTask() {
 		this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
-		this.dragon.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
+		this.dragon.getNavigator().tryMoveToXYZ(targetMate.posX, targetMate.posY, targetMate.posZ, this.moveSpeed);
+		this.dragon.setFlying(false);
+		this.dragon.setHovering(false);
 		++this.spawnBabyDelay;
-		if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSq(this.targetMate) < 18) {
+		if (this.spawnBabyDelay >= 60 && this.dragon.getDistance(this.targetMate) < 35) {
 			this.spawnBaby();
 		}
 	}
@@ -72,7 +74,7 @@ public class DragonAIMate extends EntityAIBase {
 	 * valid mate found.
 	 */
 	private EntityDragonBase getNearbyMate() {
-		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().expand(18.0D, 18.0D, 18.0D));
+		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D));
 		double d0 = Double.MAX_VALUE;
 		EntityDragonBase mate = null;
 		for (EntityDragonBase partner : list) {

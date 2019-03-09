@@ -92,7 +92,7 @@ public class FireChargeExplosion extends Explosion {
 								f -= (f2 + 0.3F) * 0.3F;
 							}
 
-							if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f))) {
+							if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f)) && iblockstate.getBlock().canEntityDestroy(iblockstate, this.worldObj, blockpos, this.exploder)) {
 								set.add(blockpos);
 							}
 
@@ -120,7 +120,7 @@ public class FireChargeExplosion extends Explosion {
 		for (int k2 = 0; k2 < list.size(); ++k2) {
 			Entity entity = (Entity) list.get(k2);
 
-			if (!entity.isImmuneToExplosions()) {
+			if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 				double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / (double) f3;
 
 				if (d12 <= 1.0D) {
@@ -136,7 +136,7 @@ public class FireChargeExplosion extends Explosion {
 						double d14 = (double) this.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
 						double d10 = (1.0D - d12) * d14;
 
-						if (exploder instanceof EntityDragonBase) {
+						if (exploder != null && exploder instanceof EntityDragonBase) {
 							if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 								return;
 							}

@@ -7,7 +7,7 @@ public class ItemDragonBone extends Item {
 
 	public ItemDragonBone() {
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.dragonbone");
+		this.setTranslationKey("iceandfire.dragonbone");
 		this.maxStackSize = 8;
 		this.setRegistryName(IceAndFire.MODID, "dragonbone");
 	}

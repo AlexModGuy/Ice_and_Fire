@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -20,7 +18,7 @@ public class WorldGenSirenIsland extends WorldGenerator {
         int layer = 0;
         int sirens = 0;
         int sirensMax = 1 + rand.nextInt(3);
-        while(!worldIn.getBlockState(center).isOpaqueCube()){
+        while(!worldIn.getBlockState(center).isOpaqueCube() && center.getY() >= 0){
             layer++;
             for(float i = 0; i < getRadius(layer, up); i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
@@ -39,7 +37,7 @@ public class WorldGenSirenIsland extends WorldGenerator {
         for(float i = 0; i < getRadius(layer, up); i += 0.5) {
             for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
                 BlockPos stonePos = new BlockPos(Math.floor(center.getX() + Math.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Math.cos(j) * i + rand.nextInt(2)));
-                while(!worldIn.getBlockState(stonePos).isOpaqueCube()){
+                while(!worldIn.getBlockState(stonePos).isOpaqueCube() && stonePos.getY() >= 0){
                     worldIn.setBlockState(stonePos, getStone(rand), 3);
                     stonePos = stonePos.down();
                 }

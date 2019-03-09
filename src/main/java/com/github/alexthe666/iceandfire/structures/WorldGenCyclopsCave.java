@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.structures;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.minecraft.block.BlockBone;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntitySheep;
@@ -29,12 +28,19 @@ public class WorldGenCyclopsCave extends WorldGenerator {
         int i1 = 16;
         int i2 = i1 - 2;
         int sheepPenCount = 0;
+        int dist = 6;
+        if(worldIn.isAirBlock(position.add(i1 - dist, -3, -i1 + dist)) || worldIn.isAirBlock(position.add(i1 - dist, -3, i1 - dist)) || worldIn.isAirBlock(position.add(-i1 + dist, -3, -i1 + dist)) || worldIn.isAirBlock(position.add(-i1 + dist, -3, i1 - dist))){
+            return false;
+        }
+
         {
             int ySize = rand.nextInt(2);
             int j = i1 + rand.nextInt(2);
             int k = 12 + ySize;
             int l = i1 + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
+
+
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
@@ -52,6 +58,8 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                     }
                 }
             }
+
+
         }
         {
             int ySize = rand.nextInt(2);
@@ -105,6 +113,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
             }
         }
         EntityCyclops cyclops = new EntityCyclops(worldIn);
+        cyclops.setVariant(rand.nextInt(3));
         cyclops.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         worldIn.spawnEntity(cyclops);
         return true;
@@ -122,6 +131,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                     worldIn.setBlockState(end.offset(direction, side), Blocks.OAK_FENCE.getDefaultState());
                     if(worldIn.isAirBlock(end.offset(direction, side).offset(direction.rotateY())) && sheepsSpawned < sheeps){
                         BlockPos sheepPos = end.offset(direction, side).offset(direction.rotateY());
+
                         EntitySheep entitySheep = new EntitySheep(worldIn);
                         entitySheep.setPosition(sheepPos.getX() + 0.5F, sheepPos.getY() + 0.5F, sheepPos.getZ() + 0.5F);
                         entitySheep.setFleeceColor(rand.nextInt(4) == 0 ? EnumDyeColor.YELLOW : EnumDyeColor.WHITE);

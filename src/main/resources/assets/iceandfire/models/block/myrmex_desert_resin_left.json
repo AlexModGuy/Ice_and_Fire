@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "iceandfire:blocks/myrmex_desert_resin_all",
+    "down": "iceandfire:blocks/myrmex_desert_resin_left",
+    "up": "iceandfire:blocks/myrmex_desert_resin_left",
+    "north": "iceandfire:blocks/myrmex_desert_resin_right",
+    "east": "iceandfire:blocks/myrmex_desert_resin_blank",
+    "south": "iceandfire:blocks/myrmex_desert_resin_left",
+    "west": "iceandfire:blocks/myrmex_desert_resin_blank"
+  }
+}
+

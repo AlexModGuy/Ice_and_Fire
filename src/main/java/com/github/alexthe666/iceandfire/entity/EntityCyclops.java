@@ -9,17 +9,25 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -31,17 +39,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends EntityMob implements IAnimatedEntity {
+public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;
     public PartEntity eyeEntity;
     private static final DataParameter<Boolean> BLINDED = EntityDataManager.<Boolean>createKey(EntityCyclops.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityCyclops.class, DataSerializers.VARINT);
     public static Animation ANIMATION_STOMP;
     public static Animation ANIMATION_EATPLAYER;
     public static Animation ANIMATION_KICK;
@@ -63,6 +73,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
 
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 20 + this.world.rand.nextInt(15);
+    }
+
     protected void initEntityAI() {
         this.tasks.addTask(2, new EntityAIRestrictSun(this));
         this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
@@ -74,7 +88,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
         this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {
@@ -116,42 +130,51 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.cyclopsAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.cyclopsMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
 
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(BLINDED, false);
+        this.dataManager.register(BLINDED, Boolean.valueOf(false));
+        this.dataManager.register(VARIANT, Integer.valueOf(0));
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Blind", this.isBlinded());
+        compound.setInteger("Variant", this.getVariant());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.setBlinded(compound.getBoolean("Blind"));
+        this.setVariant(compound.getInteger("Variant"));
     }
 
+    public int getVariant() {
+        return Integer.valueOf(this.dataManager.get(VARIANT).intValue());
+    }
+
+    public void setVariant(int variant) {
+        this.dataManager.set(VARIANT, Integer.valueOf(variant));
+    }
+
+
     public void setBlinded(boolean blind) {
-        this.dataManager.set(BLINDED, blind);
+        this.dataManager.set(BLINDED, Boolean.valueOf(blind));
     }
 
     public boolean isBlinded() {
-        return this.dataManager.get(BLINDED);
+        return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
 
     protected boolean canDespawn() {
         return false;
-    }
-
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEAD;
     }
 
     public void updatePassenger(Entity passenger) {
@@ -248,6 +271,38 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
         eyeEntity.onUpdate();
+        breakBlock();
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        this.setVariant(this.getRNG().nextInt(4));
+        return livingdata;
+    }
+
+    public void breakBlock() {
+        if (IceAndFire.CONFIG.cyclopsGriefing) {
+            for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
+                for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
+                    for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
+                        BlockPos pos = new BlockPos(a, b, c);
+                        IBlockState state = world.getBlockState(pos);
+                        Block block = state.getBlock();
+                        if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && (state.getBlock().isLeaves(state, world, pos) || state.getBlock().canSustainLeaves(state, world, pos))) {
+                            this.motionX *= 0.6D;
+                            this.motionZ *= 0.6D;
+                            if (block != Blocks.AIR) {
+                                if (!world.isRemote) {
+                                    world.destroyBlock(pos, true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     @Override
     public int getAnimationTick() {
@@ -257,6 +312,13 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     @Override
     public void setAnimationTick(int tick) {
         animationTick = tick;
+    }
+
+    public void setDead() {
+        if(eyeEntity != null){
+            world.removeEntityDangerously(eyeEntity);
+        }
+        super.setDead();
     }
 
     @Override
@@ -307,5 +369,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity {
     @Nullable
     protected SoundEvent getDeathSound() {
         return ModSounds.CYCLOPS_DIE;
+    }
+
+    @Override
+    public boolean canBeTurnedToStone() {
+        return !this.isBlinded();
     }
 }

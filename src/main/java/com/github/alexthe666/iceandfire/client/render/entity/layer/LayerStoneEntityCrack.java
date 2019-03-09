@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
+import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,7 +39,9 @@ public class LayerStoneEntityCrack implements LayerRenderer {
 				GlStateManager.enableAlpha();
 				GlStateManager.depthMask(true);
 				this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
-				if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
+				if (this.renderer.getMainModel() instanceof ModelTroll) {
+					this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+				} else if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
 					((ICustomStatueModel) this.renderer.getMainModel()).renderStatue();
 				} else if (entitylivingbaseIn instanceof AbstractHorse && !(entitylivingbaseIn instanceof EntityLlama)) {
 					HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);

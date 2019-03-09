@@ -11,6 +11,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -19,16 +20,17 @@ public class ItemDragonFlute extends Item {
 
 	public ItemDragonFlute() {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire.dragon_flute");
+		this.setTranslationKey("iceandfire.dragon_flute");
 		this.setRegistryName(IceAndFire.MODID, "dragon_flute");
 		this.setCreativeTab(IceAndFire.TAB);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
 		ItemStack itemStackIn = player.getHeldItem(hand);
+		player.getCooldownTracker().setCooldown(this, 60);
 
 		float chunksize = 16 * IceAndFire.CONFIG.dragonFluteDistance;
-		List<Entity> list = worldIn.<Entity>getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(chunksize, 256, chunksize));
+		List<Entity> list = worldIn.<Entity>getEntitiesWithinAABBExcludingEntity(player, (new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)).grow(chunksize, 256, chunksize));
 		Collections.sort(list, new Sorter(player));
 		List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();
 		Iterator<Entity> itr_entities = list.iterator();

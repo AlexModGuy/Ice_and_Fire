@@ -9,7 +9,7 @@ public class ItemModArmor extends ItemArmor {
 	public ItemModArmor(ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot, String gameName, String name) {
 		super(material, renderIndex, slot);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
 }

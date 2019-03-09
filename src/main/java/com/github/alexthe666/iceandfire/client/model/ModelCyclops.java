@@ -2,8 +2,6 @@ package com.github.alexthe666.iceandfire.client.model;
 
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -183,7 +181,7 @@ public class ModelCyclops extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityCyclops) entity);
-               animator.update(entity);
+        animator.update(entity);
         animator.setAnimation(EntityCyclops.ANIMATION_STOMP);
         animator.startKeyframe(7);
         this.rotate(animator, rightleg, -62, 0, 0);

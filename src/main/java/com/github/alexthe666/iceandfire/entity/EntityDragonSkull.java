@@ -16,7 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues {
+public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues, IDeadMob {
 
 	private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonSkull.class, DataSerializers.VARINT);
@@ -28,7 +28,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 
 	public EntityDragonSkull(World worldIn) {
 		super(worldIn);
-		this.setSize(1.45F, 0.65F);
+		this.setSize(0.9F, 0.65F);
 		this.ignoreFrustumCheck = true;
 		// setScale(this.getDragonAge());
 	}
@@ -50,17 +50,28 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		return true;
 	}
 
+	public boolean isOnWall(){
+		return this.world.isAirBlock(this.getPosition().down());
+	}
+
+	public void onUpdate(){
+		this.prevRenderYawOffset = 0;
+		this.prevRotationYawHead = 0;
+		this.renderYawOffset = 0;
+		this.rotationYawHead = 0;
+	}
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(DRAGON_TYPE, 0);
-		this.getDataManager().register(DRAGON_AGE, 0);
-		this.getDataManager().register(DRAGON_STAGE, 0);
-		this.getDataManager().register(DRAGON_DIRECTION, 0.0f);
+		this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
+		this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
+		this.getDataManager().register(DRAGON_STAGE, Integer.valueOf(0));
+		this.getDataManager().register(DRAGON_DIRECTION, Float.valueOf(0F));
 	}
 
 	public float getYaw() {
-		return this.getDataManager().get(DRAGON_DIRECTION);
+		return this.getDataManager().get(DRAGON_DIRECTION).floatValue();
 	}
 
 	public void setYaw(float var1) {
@@ -68,7 +79,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	public int getType() {
-		return this.getDataManager().get(DRAGON_TYPE);
+		return this.getDataManager().get(DRAGON_TYPE).intValue();
 	}
 
 	public void setType(int var1) {
@@ -76,7 +87,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	public int getStage() {
-		return this.getDataManager().get(DRAGON_STAGE);
+		return this.getDataManager().get(DRAGON_STAGE).intValue();
 	}
 
 	public void setStage(int var1) {
@@ -84,7 +95,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	public int getDragonAge() {
-		return this.getDataManager().get(DRAGON_AGE);
+		return this.getDataManager().get(DRAGON_AGE).intValue();
 	}
 
 	public void setDragonAge(int var1) {
@@ -103,6 +114,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	public void turnIntoItem() {
+		if (isDead)
+			return;
 		this.setDead();
 		ItemStack stack = new ItemStack(ModItems.dragon_skull, 1, getType());
 		stack.setTagCompound(new NBTTagCompound());
@@ -169,4 +182,13 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		return null;
 	}
 
+	@Override
+	public boolean canBeTurnedToStone() {
+		return false;
+	}
+
+	@Override
+	public boolean isMobDead() {
+		return true;
+	}
 }

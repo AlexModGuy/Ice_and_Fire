@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
+import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -102,7 +105,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
-		return index != 0 ? true : stack.getItem() instanceof ItemDragonEgg;
+		return index != 0 || (stack.getItem() instanceof ItemDragonEgg || stack.getItem() instanceof ItemMyrmexEgg);
 	}
 
 	@Override
@@ -166,11 +169,17 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
+		if (!world.isRemote) {
+			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePodium(pos.toLong(), this.getStackInSlot(0)));
+		}
 	}
-
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return ItemStack.EMPTY;

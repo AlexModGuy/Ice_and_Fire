@@ -8,22 +8,24 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.*;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDragonBow extends Item {
+public class ItemDragonBow extends ItemBow implements ICustomRendered {
 
 	public ItemDragonBow() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(584);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.dragonbone_bow");
+		this.setTranslationKey("iceandfire.dragonbone_bow");
 		this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
@@ -46,8 +48,8 @@ public class ItemDragonBow extends Item {
 		});
 	}
 
-	public static float getArrowVelocity(int p_185059_0_) {
-		float f = p_185059_0_ / 20.0F;
+	public static float getArrowVelocity(int i) {
+		float f = i / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 
 		if (f > 1.0F) {
@@ -79,10 +81,6 @@ public class ItemDragonBow extends Item {
 		return !stack.isEmpty() && stack.getItem() == ModItems.dragonbone_arrow;
 	}
 
-	/**
-	 * Called when the player stops using an Item (stops holding the right mouse
-	 * button).
-	 */
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if (entityLiving instanceof EntityPlayer) {
@@ -96,13 +94,13 @@ public class ItemDragonBow extends Item {
 
 			if (!itemstack.isEmpty() || flag) {
 				if (itemstack.isEmpty()) {
-					itemstack = new ItemStack(Items.ARROW);
+					itemstack = new ItemStack(ModItems.dragonbone_arrow);
 				}
 
 				float f = getArrowVelocity(i);
 
 				if ((double) f >= 0.1D) {
-					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+					boolean flag1 = entityplayer.capabilities.isCreativeMode || this.isInfinite(itemstack, stack, entityplayer);
 
 					if (!worldIn.isRemote) {
 						EntityArrow entityarrow = createArrow(worldIn, itemstack, entityplayer);
@@ -151,6 +149,11 @@ public class ItemDragonBow extends Item {
 				}
 			}
 		}
+	}
+
+	public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player) {
+		int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.INFINITY, bow);
+		return enchant > 0 && stack.getItem() == ModItems.dragonbone_arrow;
 	}
 
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

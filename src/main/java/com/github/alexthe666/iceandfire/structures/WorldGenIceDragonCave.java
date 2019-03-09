@@ -43,6 +43,10 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 	}
 
 	public static void setOres(World world, BlockPos pos) {
+		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
+		if(hardness == -1.0F || world.isAirBlock(pos)){
+			return;
+		}
 		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
 		if (vien_chance) {
 			int chance = new Random().nextInt(199) + 1;
@@ -93,7 +97,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
 						worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
 					}
 				}
@@ -137,12 +141,14 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 		EntityIceDragon dragon = new EntityIceDragon(worldIn);
 		dragon.setGender(dragon.getRNG().nextBoolean());
 		dragon.growDragon(dragonAge);
+		dragon.setAgingDisabled(true);
 		dragon.setHealth(dragon.getMaxHealth());
 		dragon.setVariant(new Random().nextInt(4));
 		dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
 		dragon.setSleeping(true);
 		dragon.setHunger(50);
-		dragon.homeArea = position;
+		dragon.homePos = position;
+		dragon.hasHomePosition = true;
 		worldIn.spawnEntity(dragon);
 		return true;
 	}

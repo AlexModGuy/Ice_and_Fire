@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
@@ -10,23 +9,25 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityGorgon extends EntityMob implements IAnimatedEntity {
+public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
 	public static Animation ANIMATION_SCARE;
 	public static Animation ANIMATION_HIT;
@@ -34,6 +35,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	private Animation currentAnimation;
 	private GorgonAIStareAttack aiStare;
 	private EntityAIAttackMelee aiMelee;
+	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
 
 	public EntityGorgon(World worldIn) {
 		super(worldIn);
@@ -43,12 +45,18 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	}
 
 	public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
+		degree *= 1 + (looker.getDistance(seen) * 0.1);
 		Vec3d vec3d = looker.getLook(1.0F).normalize();
 		Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
-		double d0 = vec3d1.lengthVector();
+		double d0 = vec3d1.length();
 		vec3d1 = vec3d1.normalize();
 		double d1 = vec3d.dotProduct(vec3d1);
 		return d1 > 1.0D - degree / d0 ? looker.canEntityBeSeen(seen) && !isStoneMob(seen) : false;
+	}
+
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LOOT;
 	}
 
 	public static boolean isStoneMob(EntityLivingBase mob) {
@@ -92,7 +100,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
 				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && !(entity instanceof IBlacklistedFromStatues) && (properties == null || properties != null && !properties.isStone);
+				return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
@@ -105,8 +113,8 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	}
 
 	public boolean attackEntityAsMob(Entity entityIn) {
-		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || (entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isPotionActive(MobEffects.BLINDNESS));
-		if (blindness) {
+		boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
+		if (blindness && this.deathTime == 0) {
 			if (this.getAnimation() != ANIMATION_HIT) {
 				this.setAnimation(ANIMATION_HIT);
 			}
@@ -123,9 +131,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 
 	public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
 		super.setAttackTarget(entitylivingbaseIn);
-		if (entitylivingbaseIn != null) {
-			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS);
-			if (blindness) {
+		if (entitylivingbaseIn != null && !world.isRemote) {
+			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entitylivingbaseIn).canBeTurnedToStone();
+			if (blindness && this.deathTime == 0) {
 				this.tasks.removeTask(aiStare);
 				this.tasks.addTask(3, aiMelee);
 			} else {
@@ -135,10 +143,11 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		}
 	}
 
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 20 + this.world.rand.nextInt(15);
+	}
+
 	protected void onDeathUpdate() {
-		if (deathTime == 20 && !world.isRemote) {
-			this.entityDropItem(new ItemStack(ModItems.gorgon_head), 0);
-		}
 		++this.deathTime;
 		this.livingSoundTime = 20;
 		for (int k = 0; k < 5; ++k) {
@@ -170,17 +179,21 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		//Temp fix for messed up structure spawn
+		if(this.getHealth() == 50 && this.ticksExisted == 1){
+			this.heal((float)IceAndFire.CONFIG.gorgonMaxHealth);
+		}
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-			if (!blindness && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
+			if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
 				forcePreyToLook((EntityLiving) this.getAttackTarget());
 			}
 		}
 
 		if (this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
-			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
-			if (!blindness) {
+			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
+			if (!blindness && this.deathTime == 0) {
 				if (this.getAnimation() != ANIMATION_SCARE) {
 					this.playSound(ModSounds.GORGON_ATTACK, 1, 1);
 					this.setAnimation(ANIMATION_SCARE);
@@ -193,6 +206,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.smallArms = true;
 							if (!world.isRemote) {
 								world.spawnEntity(statue);
+								this.getAttackTarget().setDead();
 							}
 							statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
 							statue.rotationYaw = this.getAttackTarget().rotationYaw;
@@ -201,7 +215,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 							statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
-							if (this.getAttackTarget() instanceof EntityLiving) {
+							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
 								if (properties != null || !properties.isStone) {
@@ -227,8 +241,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 									dragon.setHovering(false);
 									dragon.airTarget = null;
 								}
-							} else {
-								this.getAttackTarget().setDead();
 							}
 						}
 					}
@@ -263,6 +275,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.gorgonMaxHealth);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
 	}
 
 	@Override
@@ -303,5 +316,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity {
 	@Nullable
 	protected SoundEvent getDeathSound() {
 		return ModSounds.GORGON_DIE;
+	}
+
+	@Override
+	public boolean shouldAnimalsFear(Entity entity) {
+		return true;
 	}
 }

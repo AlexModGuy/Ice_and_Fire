@@ -68,9 +68,9 @@ public class BiomeGlacier extends BiomeSnow {
 						--j;
 						chunkPrimerIn.setBlockState(i1, j1, l, iblockstate1);
 
-						if (j == 0 && iblockstate1.getBlock() == Blocks.SAND && k > 1) {
+						if (j == 0 && (iblockstate1.getBlock() == Blocks.ICE || iblockstate1.getBlock() == this.fillerBlock.getBlock()) && k > 1) {
 							j = rand.nextInt(4) + Math.max(0, j1 - 63);
-							iblockstate1 = iblockstate1.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ? RED_SANDSTONE : SANDSTONE;
+							//iblockstate1 = iblockstate1;
 						}
 					}
 				}

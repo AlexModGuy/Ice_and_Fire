@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -67,17 +68,39 @@ public class ModBlocks {
 	public static Block dragon_ice_spikes = new BlockIceSpikes();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":nest")
 	public static Block nest = new BlockGeneric(Material.GRASS, "nest", "iceandfire.nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
-
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
 	public static Block pixieHouse = new BlockPixieHouse();
-	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar")
-	public static Block jar = new BlockJar();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_empty")
+	public static Block jar_empty = new BlockJar(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_pixie")
+	public static Block jar_pixie = new BlockJar(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin")
+	public static Block myrmex_resin = new BlockMyrmexResin(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin_sticky")
+	public static Block myrmex_resin_sticky = new BlockMyrmexResin(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":desert_myrmex_cocoon")
+	public static Block desert_myrmex_cocoon = new BlockMyrmexCocoon(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":jungle_myrmex_cocoon")
+	public static Block jungle_myrmex_cocoon = new BlockMyrmexCocoon(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_biolight")
+	public static Block myrmex_desert_biolight = new BlockMyrmexBiolight(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_biolight")
+	public static Block myrmex_jungle_biolight = new BlockMyrmexBiolight(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_block")
+	public static Block myrmex_desert_resin_block = new BlockMyrmexConnectedResin(false, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_block")
+	public static Block myrmex_jungle_resin_block = new BlockMyrmexConnectedResin(true, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_glass")
+	public static Block myrmex_desert_resin_glass = new BlockMyrmexConnectedResin(false, true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_glass")
+	public static Block myrmex_jungle_resin_glass = new BlockMyrmexConnectedResin(true, true);
 
 	static {
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
+		GameRegistry.registerTileEntity(TileEntityMyrmexCocoon.class, "myrmexCocoon");
 	}
 
 }

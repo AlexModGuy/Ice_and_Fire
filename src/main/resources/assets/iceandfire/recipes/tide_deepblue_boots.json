@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "H H",
+    "S S",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:sea_serpent_scales_deepblue",
+      "data": 0
+    },
+    "H": {
+      "item": "iceandfire:shiny_scales",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:tide_deepblue_boots",
+    "data": 0
+  }
+}

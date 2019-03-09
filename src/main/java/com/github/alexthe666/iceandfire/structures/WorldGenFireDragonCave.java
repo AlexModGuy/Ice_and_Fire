@@ -43,6 +43,10 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 	}
 
 	public static void setOres(World world, BlockPos pos) {
+		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
+		if(hardness == -1.0F || world.isAirBlock(pos)){
+			return;
+		}
 		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
 		if (vien_chance) {
 			int chance = new Random().nextInt(199) + 1;
@@ -53,7 +57,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 				world.setBlockState(pos, Blocks.GOLD_ORE.getDefaultState(), 3);
 			}
 			if (chance > 40 && chance < 50) {
-				world.setBlockState(pos, ModBlocks.silverOre.getDefaultState(), 3);
+				world.setBlockState(pos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : ModBlocks.charedStone.getDefaultState(), 3);
 			}
 			if (chance > 50 && chance < 60) {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -106,7 +110,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
 				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
 						worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
@@ -118,7 +122,8 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			int l = i2 + rand.nextInt(2);
 			float f = (float) (j + k + l) * 0.333F + 0.5F;
 			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f) && worldIn.getBlockState(blockpos).getMaterial() == Material.ROCK && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+				float hardness = worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position);
+				if (blockpos.distanceSq(position) <= (double) (f * f) &&  hardness >= 0 && hardness != -1) {
 					this.setOres(worldIn, blockpos);
 				}
 			}
@@ -137,11 +142,12 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 		EntityFireDragon dragon = new EntityFireDragon(worldIn);
 		dragon.setGender(dragon.getRNG().nextBoolean());
 		dragon.growDragon(dragonAge);
+		dragon.setAgingDisabled(true);
 		dragon.setHealth(dragon.getMaxHealth());
 		dragon.setVariant(new Random().nextInt(4));
 		dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
 		dragon.setSleeping(true);
-		dragon.homeArea = position;
+		dragon.homePos = position;
 		dragon.setHunger(50);
 		worldIn.spawnEntity(dragon);
 		return true;

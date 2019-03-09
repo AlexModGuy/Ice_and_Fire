@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "TTT",
+    "U U"
+  ],
+  "key": {
+    "T": {
+      "item": "iceandfire:troll_leather_mountain",
+      "data": 0
+    },
+    "U": {
+      "item": "iceandfire:troll_tusk",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:mountain_troll_leather_helmet",
+    "data": 0
+  }
+}

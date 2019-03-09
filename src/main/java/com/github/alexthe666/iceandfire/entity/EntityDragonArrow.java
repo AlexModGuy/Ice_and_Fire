@@ -16,6 +16,7 @@ public class EntityDragonArrow extends EntityArrow {
 
 	public EntityDragonArrow(World worldIn, double x, double y, double z) {
 		super(worldIn, x, y, z);
+		this.setDamage(10);
 	}
 
 	public EntityDragonArrow(World worldIn, EntityLivingBase shooter) {

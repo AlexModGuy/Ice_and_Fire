@@ -19,6 +19,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -104,6 +105,7 @@ public class EntityPixie extends EntityTameable {
 		if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
 			this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+			return true;
 		}
 		if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())) {
 			return false;
@@ -112,11 +114,11 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY) {
+		if (!this.world.isRemote && !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
 			this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 		}
+		super.onDeath(cause);
 		//if (cause.getTrueSource() instanceof EntityPlayer) {
 		//	((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killPixie);
 		//}
@@ -125,7 +127,7 @@ public class EntityPixie extends EntityTameable {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(COLOR, 0);
+		this.getDataManager().register(COLOR, Integer.valueOf(0));
 	}
 
 	protected void collideWithEntity(Entity entityIn) {
@@ -151,15 +153,30 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (this.isOwner(player)) {
-			this.setSitting(!this.isSitting());
+		boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
+		if (flag) {
+			player.getHeldItem(hand).interactWithEntity(player, this, hand);
 			return true;
-		} else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(ModBlocks.jar) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
+		}
+		if (this.isOwner(player)) {
+			if(player.getHeldItem(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()){
+				this.heal(5);
+				player.getHeldItem(hand).shrink(1);
+				this.playSound(ModSounds.PIXIE_TAUNT, 1F, 1F);
+				return true;
+			}else{
+				this.setSitting(!this.isSitting());
+				return true;
+			}
+		} else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(ModBlocks.jar_empty) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
 			if (!player.isCreative()) {
 				player.getHeldItem(hand).shrink(1);
 			}
-			ItemStack stack = new ItemStack(ModBlocks.jar, 1, this.getColor() + 1);
+			ItemStack stack = new ItemStack(ModBlocks.jar_pixie, 1, this.getColor());
 			if (!world.isRemote) {
+				if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
+					this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);
+				}
 				this.entityDropItem(stack, 0.0F);
 			}
 			//player.addStat(ModAchievements.jarPixie);
@@ -217,8 +234,9 @@ public class EntityPixie extends EntityTameable {
 		} else {
 			this.moveHelper.action = EntityMoveHelper.Action.WAIT;
 		}
-		IceAndFire.PROXY.spawnParticle("if_pixie", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
-
+		if(world.isRemote){
+			IceAndFire.PROXY.spawnParticle("if_pixie", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
+		}
 		if (ticksUntilHouseAI > 0) {
 			ticksUntilHouseAI--;
 		}
@@ -247,7 +265,7 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public int getColor() {
-		return this.getDataManager().get(COLOR);
+		return this.getDataManager().get(COLOR).intValue();
 	}
 
 	public void setColor(int color) {
@@ -382,9 +400,12 @@ public class EntityPixie extends EntityTameable {
 		}
 
 		public boolean shouldExecute() {
-			BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+			if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.isSitting() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
+				return false;
+			}
 
-			return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.isSitting() && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(20) == 0 && EntityPixie.this.ticksUntilHouseAI == 0 && !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
+			BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
+			return !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
 		}
 
 		public boolean shouldContinueExecuting() {

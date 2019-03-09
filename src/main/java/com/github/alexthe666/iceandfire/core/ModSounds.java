@@ -157,6 +157,154 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("cyclops_blinded")
 	public static final SoundEvent CYCLOPS_BLINDED = createSoundEvent("cyclops_blinded");
 
+	@GameRegistry.ObjectHolder("hippocampus_idle")
+	public static final SoundEvent HIPPOCAMPUS_IDLE = createSoundEvent("hippocampus_idle");
+
+	@GameRegistry.ObjectHolder("hippocampus_hurt")
+	public static final SoundEvent HIPPOCAMPUS_HURT = createSoundEvent("hippocampus_hurt");
+
+	@GameRegistry.ObjectHolder("hippocampus_die")
+	public static final SoundEvent HIPPOCAMPUS_DIE = createSoundEvent("hippocampus_die");
+
+	@GameRegistry.ObjectHolder("deathworm_idle")
+	public static final SoundEvent DEATHWORM_IDLE = createSoundEvent("deathworm_idle");
+
+	@GameRegistry.ObjectHolder("deathworm_attack")
+	public static final SoundEvent DEATHWORM_ATTACK = createSoundEvent("deathworm_attack");
+
+	@GameRegistry.ObjectHolder("deathworm_hurt")
+	public static final SoundEvent DEATHWORM_HURT = createSoundEvent("deathworm_hurt");
+
+	@GameRegistry.ObjectHolder("deathworm_die")
+	public static final SoundEvent DEATHWORM_DIE = createSoundEvent("deathworm_die");
+	
+	@GameRegistry.ObjectHolder("deathworm_giant_idle")
+	public static final SoundEvent DEATHWORM_GIANT_IDLE = createSoundEvent("deathworm_giant_idle");
+
+	@GameRegistry.ObjectHolder("deathworm_giant_attack")
+	public static final SoundEvent DEATHWORM_GIANT_ATTACK = createSoundEvent("deathworm_giant_attack");
+
+	@GameRegistry.ObjectHolder("deathworm_giant_hurt")
+	public static final SoundEvent DEATHWORM_GIANT_HURT = createSoundEvent("deathworm_giant_hurt");
+
+	@GameRegistry.ObjectHolder("deathworm_giant_die")
+	public static final SoundEvent DEATHWORM_GIANT_DIE = createSoundEvent("deathworm_giant_die");
+
+	@GameRegistry.ObjectHolder("naga_idle")
+	public static final SoundEvent NAGA_IDLE = createSoundEvent("naga_idle");
+
+	@GameRegistry.ObjectHolder("naga_attack")
+	public static final SoundEvent NAGA_ATTACK = createSoundEvent("naga_attack");
+
+	@GameRegistry.ObjectHolder("naga_hurt")
+	public static final SoundEvent NAGA_HURT = createSoundEvent("naga_hurt");
+
+	@GameRegistry.ObjectHolder("naga_die")
+	public static final SoundEvent NAGA_DIE = createSoundEvent("naga_die");
+
+	@GameRegistry.ObjectHolder("mermaid_idle")
+	public static final SoundEvent MERMAID_IDLE = createSoundEvent("mermaid_idle");
+
+	@GameRegistry.ObjectHolder("mermaid_hurt")
+	public static final SoundEvent MERMAID_HURT = createSoundEvent("mermaid_hurt");
+
+	@GameRegistry.ObjectHolder("mermaid_die")
+	public static final SoundEvent MERMAID_DIE = createSoundEvent("mermaid_die");
+
+	@GameRegistry.ObjectHolder("siren_song")
+	public static final SoundEvent SIREN_SONG = createSoundEvent("siren_song");
+
+	@GameRegistry.ObjectHolder("troll_die")
+	public static final SoundEvent TROLL_DIE = createSoundEvent("troll_die");
+
+	@GameRegistry.ObjectHolder("troll_idle")
+	public static final SoundEvent TROLL_IDLE = createSoundEvent("troll_idle");
+
+	@GameRegistry.ObjectHolder("troll_hurt")
+	public static final SoundEvent TROLL_HURT = createSoundEvent("troll_hurt");
+
+	@GameRegistry.ObjectHolder("troll_roar")
+	public static final SoundEvent TROLL_ROAR = createSoundEvent("troll_roar");
+
+	@GameRegistry.ObjectHolder("cockatrice_die")
+	public static final SoundEvent COCKATRICE_DIE = createSoundEvent("cockatrice_die");
+
+	@GameRegistry.ObjectHolder("cockatrice_idle")
+	public static final SoundEvent COCKATRICE_IDLE = createSoundEvent("cockatrice_idle");
+
+	@GameRegistry.ObjectHolder("cockatrice_hurt")
+	public static final SoundEvent COCKATRICE_HURT = createSoundEvent("cockatrice_hurt");
+
+	@GameRegistry.ObjectHolder("cockatrice_cry")
+	public static final SoundEvent COCKATRICE_CRY = createSoundEvent("cockatrice_cry");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_die")
+	public static final SoundEvent STYMPHALIAN_BIRD_DIE = createSoundEvent("stymphalian_bird_die");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_idle")
+	public static final SoundEvent STYMPHALIAN_BIRD_IDLE = createSoundEvent("stymphalian_bird_idle");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_hurt")
+	public static final SoundEvent STYMPHALIAN_BIRD_HURT = createSoundEvent("stymphalian_bird_hurt");
+
+	@GameRegistry.ObjectHolder("stymphalian_bird_attack")
+	public static final SoundEvent STYMPHALIAN_BIRD_ATTACK = createSoundEvent("stymphalian_bird_attack");
+
+	@GameRegistry.ObjectHolder("myrmex_die")
+	public static final SoundEvent MYRMEX_DIE = createSoundEvent("myrmex_die");
+
+	@GameRegistry.ObjectHolder("myrmex_idle")
+	public static final SoundEvent MYRMEX_IDLE = createSoundEvent("myrmex_idle");
+
+	@GameRegistry.ObjectHolder("myrmex_hurt")
+	public static final SoundEvent MYRMEX_HURT = createSoundEvent("myrmex_hurt");
+
+	@GameRegistry.ObjectHolder("myrmex_walk")
+	public static final SoundEvent MYRMEX_WALK = createSoundEvent("myrmex_walk");
+
+	@GameRegistry.ObjectHolder("myrmex_bite")
+	public static final SoundEvent MYRMEX_BITE = createSoundEvent("myrmex_bite");
+
+	@GameRegistry.ObjectHolder("myrmex_sting")
+	public static final SoundEvent MYRMEX_STING = createSoundEvent("myrmex_sting");
+
+	@GameRegistry.ObjectHolder("amphithere_die")
+	public static final SoundEvent AMPHITHERE_DIE = createSoundEvent("amphithere_die");
+
+	@GameRegistry.ObjectHolder("amphithere_idle")
+	public static final SoundEvent AMPHITHERE_IDLE = createSoundEvent("amphithere_idle");
+
+	@GameRegistry.ObjectHolder("amphithere_hurt")
+	public static final SoundEvent AMPHITHERE_HURT = createSoundEvent("amphithere_hurt");
+
+	@GameRegistry.ObjectHolder("amphithere_bite")
+	public static final SoundEvent AMPHITHERE_BITE = createSoundEvent("amphithere_bite");
+
+	@GameRegistry.ObjectHolder("amphithere_gust")
+	public static final SoundEvent AMPHITHERE_GUST = createSoundEvent("amphithere_gust");
+
+	@GameRegistry.ObjectHolder("sea_serpent_die")
+	public static final SoundEvent SEA_SERPENT_DIE = createSoundEvent("sea_serpent_die");
+
+	@GameRegistry.ObjectHolder("sea_serpent_idle")
+	public static final SoundEvent SEA_SERPENT_IDLE = createSoundEvent("sea_serpent_idle");
+
+	@GameRegistry.ObjectHolder("sea_serpent_hurt")
+	public static final SoundEvent SEA_SERPENT_HURT = createSoundEvent("sea_serpent_hurt");
+
+	@GameRegistry.ObjectHolder("sea_serpent_bite")
+	public static final SoundEvent SEA_SERPENT_BITE = createSoundEvent("sea_serpent_bite");
+
+	@GameRegistry.ObjectHolder("sea_serpent_roar")
+	public static final SoundEvent SEA_SERPENT_ROAR = createSoundEvent("sea_serpent_roar");
+
+	@GameRegistry.ObjectHolder("sea_serpent_breath")
+	public static final SoundEvent SEA_SERPENT_BREATH = createSoundEvent("sea_serpent_breath");
+
+	@GameRegistry.ObjectHolder("sea_serpent_splash")
+	public static final SoundEvent SEA_SERPENT_SPLASH = createSoundEvent("sea_serpent_splash");
+
+
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);

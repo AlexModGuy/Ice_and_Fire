@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CCC",
+    "C C"
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:myrmex_desert_chitin"
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_desert_helmet",
+    "data": 0
+  }
+}

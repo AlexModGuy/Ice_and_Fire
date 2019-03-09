@@ -22,6 +22,7 @@ public class WorldGenAnimalFarm extends WorldGenerator {
 		}
 
 		Biome biome = worldIn.getBiome(position);
+		boolean sandy = BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
 		Block fence = Blocks.OAK_FENCE;
 		Block fence_gate = Blocks.OAK_FENCE_GATE;
 		if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)) {
@@ -72,7 +73,7 @@ public class WorldGenAnimalFarm extends WorldGenerator {
 		for (int x = -4; x < +5; x++) {
 			for (int z = -4; z < +5; z++) {
 				if (((x % 4 == 0 || z % 4 == 0) || (x % -4 == 0 || z % -4 == 0)) && Math.abs(x) != 0 && Math.abs(z) != 0) {
-					worldIn.setBlockState(position.add(x, 0, z), Blocks.GRASS.getDefaultState());
+					worldIn.setBlockState(position.add(x, 0, z), sandy ? Blocks.SAND.getDefaultState() : Blocks.GRASS.getDefaultState());
 					worldIn.setBlockState(position.add(x, 1, z), fence.getDefaultState());
 				} else {
 					worldIn.setBlockState(position.add(x, 0, z), Blocks.GRASS_PATH.getDefaultState());

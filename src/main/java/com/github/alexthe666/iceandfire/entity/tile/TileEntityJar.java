@@ -38,6 +38,12 @@ public class TileEntityJar extends TileEntity implements ITickable {
 
 	public TileEntityJar() {
 		this.rand = new Random();
+		this.hasPixie = true;
+	}
+
+	public TileEntityJar(boolean empty) {
+		this.rand = new Random();
+		this.hasPixie = !empty;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {

@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "X": {
+      "item": "iceandfire:sea_serpent_fang"
+    },
+    "Y": {
+      "type": "forge:ore_dict",
+      "ore": "seaSerpentScales"
+    }
+  },
+  "result": {
+    "item": "iceandfire:sea_serpent_arrow",
+    "count": 4
+  }
+}

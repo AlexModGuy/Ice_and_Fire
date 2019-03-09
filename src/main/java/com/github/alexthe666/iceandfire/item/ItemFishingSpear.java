@@ -25,7 +25,7 @@ public class ItemFishingSpear extends Item {
 
 	public ItemFishingSpear() {
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setUnlocalizedName("iceandfire.fishing_spear");
+		this.setTranslationKey("iceandfire.fishing_spear");
 		this.maxStackSize = 1;
 		this.setMaxDamage(64);
 		this.setRegistryName(IceAndFire.MODID, "fishing_spear");
@@ -55,7 +55,7 @@ public class ItemFishingSpear extends Item {
 			float f6 = MathHelper.sin(-f1 * 0.017453292F);
 			float f7 = f4 * f5;
 			float f8 = f3 * f5;
-			Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+			Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 			RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 			if (raytraceresult == null) {
 				return;
@@ -105,7 +105,7 @@ public class ItemFishingSpear extends Item {
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		entityplayer.setActiveHand(hand);
-		Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+		Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 		RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 		if (raytraceresult == null) {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);

@@ -14,7 +14,7 @@ public class ItemBlockPodium extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
+	public String getTranslationKey(ItemStack itemstack) {
 		int i = itemstack.getItemDamage();
 		if (i < 0 || i >= subBlocks.length) {
 			i = 0;

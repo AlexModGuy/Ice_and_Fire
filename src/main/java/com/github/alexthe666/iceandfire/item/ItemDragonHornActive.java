@@ -33,7 +33,7 @@ public class ItemDragonHornActive extends Item {
 
 	public ItemDragonHornActive(String name) {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire." + name);
+		this.setTranslationKey("iceandfire." + name);
 		this.setRegistryName(IceAndFire.MODID, name);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
@@ -65,6 +65,11 @@ public class ItemDragonHornActive extends Item {
 	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
+		}else if(stack.getTagCompound().getBoolean("Released")){
+			stack.shrink(1);
+			if(entity instanceof EntityPlayer){
+				((EntityPlayer) entity).inventory.setInventorySlotContents(f, new ItemStack(ModItems.dragon_horn));
+			}
 		}
 	}
 
@@ -92,7 +97,7 @@ public class ItemDragonHornActive extends Item {
 			float f6 = MathHelper.sin(-f1 * 0.017453292F);
 			float f7 = f4 * f5;
 			float f8 = f3 * f5;
-			Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+			Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 			RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 			if (raytraceresult == null) {
 				return;
@@ -110,11 +115,10 @@ public class ItemDragonHornActive extends Item {
 					}
 					dragon.setFlying(false);
 					dragon.setHovering(false);
+					stack.getTagCompound().setBoolean("Released", true);
 					if (!worldIn.isRemote) {
 						worldIn.spawnEntity(dragon);
 					}
-					entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
-
 				}
 				if (this == ModItems.dragon_horn_ice) {
 					EntityIceDragon dragon = new EntityIceDragon(worldIn);
@@ -122,10 +126,12 @@ public class ItemDragonHornActive extends Item {
 					if (stack.getTagCompound() != null) {
 						dragon.readEntityFromNBT(stack.getTagCompound());
 					}
+					dragon.setFlying(false);
+					dragon.setHovering(false);
+					stack.getTagCompound().setBoolean("Released", true);
 					if (!worldIn.isRemote) {
 						worldIn.spawnEntity(dragon);
 					}
-					entityplayer.setHeldItem(entityplayer.getActiveHand(), new ItemStack(ModItems.dragon_horn));
 				}
 				stack = new ItemStack(ModItems.dragon_horn);
 				entityplayer.addStat(StatList.getObjectUseStats(this));
@@ -155,7 +161,7 @@ public class ItemDragonHornActive extends Item {
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		entityplayer.setActiveHand(hand);
-		Vec3d vec3d1 = vec3d.addVector((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
+		Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
 		RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}

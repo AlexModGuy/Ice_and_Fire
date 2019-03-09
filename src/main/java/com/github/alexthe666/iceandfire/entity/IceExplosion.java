@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +40,7 @@ public class IceExplosion extends Explosion {
 	private final List<BlockPos> affectedBlockPositions;
 	private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
 	private final Vec3d position;
+	private boolean mobGreifing;
 
 	public IceExplosion(World world, Entity entity, double x, double y, double z, float size, boolean smoke) {
 		super(world, entity, x, y, z, size, true, smoke);
@@ -53,6 +55,7 @@ public class IceExplosion extends Explosion {
 		this.explosionZ = z;
 		this.isSmoking = smoke;
 		this.position = new Vec3d(explosionX, explosionY, explosionZ);
+		this.mobGreifing = worldObj.getGameRules().getBoolean("mobGriefing");
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class IceExplosion extends Explosion {
 								f -= (f2 + 0.3F) * 0.3F;
 							}
 
-							if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f))) {
+							if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f)) && iblockstate.getBlock().canEntityDestroy(iblockstate, this.worldObj, blockpos, this.exploder)) {
 								set.add(blockpos);
 							}
 
@@ -114,8 +117,8 @@ public class IceExplosion extends Explosion {
 		Vec3d Vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
 
 		for (Entity entity : list) {
-			if (!(entity instanceof EntityDragonFire)) {
-				if (!entity.isImmuneToExplosions()) {
+			if (!(entity instanceof EntityDragonIceProjectile)) {
+				if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 					double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;
 
 					if (d12 <= 1.0D) {
@@ -131,7 +134,7 @@ public class IceExplosion extends Explosion {
 							double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
 							double d10 = (1.0D - d12) * d14;
 							if (exploder instanceof EntityDragonBase) {
-								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
+								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isTamed() && ((EntityDragonBase) exploder).isTamed() && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
 									return;
 								}
 								if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
@@ -140,12 +143,17 @@ public class IceExplosion extends Explosion {
 										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
 									}
 								} else {
-									entity.attackEntityFrom(IceAndFire.dragonIce, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-									if (entity.isDead && entity instanceof EntityPlayer) {
-										//((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+									if(!entity.isEntityEqual(exploder)) {
+										entity.attackEntityFrom(IceAndFire.dragonIce, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
+										if (entity instanceof EntityLivingBase) {
+											FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
+											if (frozenProps != null) {
+												frozenProps.setFrozenFor(200);
+											}
+										}
 									}
 								}
-								if (entity.isDead) {
+								if (entity.isDead && this.exploder != null && this.exploder instanceof EntityDragonBase) {
 									((EntityDragonBase) this.exploder).attackDecision = true;
 								}
 							}
@@ -198,10 +206,10 @@ public class IceExplosion extends Explosion {
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
-				if (block == Blocks.GRASS_PATH) {
-					worldObj.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
-				}
-				if (state.getMaterial() != Material.AIR) {
+				if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
+					if (block == Blocks.GRASS_PATH) {
+						worldObj.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
+					}
 					if (block instanceof BlockGrass) {
 						worldObj.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
 					}
@@ -232,7 +240,7 @@ public class IceExplosion extends Explosion {
 		}
 
 		for (BlockPos blockpos1 : this.affectedBlockPositions) {
-			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
+			if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0 && mobGreifing) {
 				this.worldObj.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, explosionRNG.nextInt(7) + 1));
 			}
 		}

@@ -59,7 +59,7 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
 				if (vec3d == null) {
 					return false;
 				} else {
-					vec3d = vec3d.addVector(0, 3, 0);
+					vec3d = vec3d.add(0, 3, 0);
 					this.pixie.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1D);
 					this.pixie.getLookHelper().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
 					hidePlace = vec3d;

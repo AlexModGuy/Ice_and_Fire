@@ -20,7 +20,7 @@ public class ItemDragonScales extends Item {
 		this.setHasSubtypes(true);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.type = type;
-		this.setUnlocalizedName("iceandfire.dragonscales");
+		this.setTranslationKey("iceandfire.dragonscales");
 		this.setRegistryName(IceAndFire.MODID, name);
 	}
 

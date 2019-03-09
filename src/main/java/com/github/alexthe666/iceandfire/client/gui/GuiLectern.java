@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 @SideOnly(Side.CLIENT)
 public class GuiLectern extends GuiContainer {
 	private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("iceandfire:textures/gui/lectern.png");
@@ -39,7 +41,8 @@ public class GuiLectern extends GuiContainer {
 	public boolean hasAllPages() {
 		if (!tileFurnace.getStackInSlot(0).isEmpty()) {
 			if (tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
-				return EnumBestiaryPages.possiblePages(tileFurnace.getStackInSlot(0)).isEmpty();
+				List list = EnumBestiaryPages.possiblePages(tileFurnace.getStackInSlot(0));
+				return list == null || list.isEmpty();
 			}
 		}
 		return false;
@@ -63,4 +66,11 @@ public class GuiLectern extends GuiContainer {
 		return k != 0 && j != 0 ? j * p_175381_1_ / k : 0;
 	}
 
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 }

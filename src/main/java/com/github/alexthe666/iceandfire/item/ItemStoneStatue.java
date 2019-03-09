@@ -20,6 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ItemStoneStatue extends Item {
 
 	public ItemStoneStatue() {
 		this.maxStackSize = 1;
-		this.setUnlocalizedName("iceandfire.stone_statue");
+		this.setTranslationKey("iceandfire.stone_statue");
 		this.setRegistryName(IceAndFire.MODID, "stone_statue");
 	}
 
@@ -38,8 +39,8 @@ public class ItemStoneStatue extends Item {
 			boolean isPlayer = stack.getTagCompound().getBoolean("IAFStoneStatueEntityPlayer");
 			int id = stack.getTagCompound().getInteger("IAFStoneStatueEntityID");
 			if (EntityList.getKey(EntityList.getClassFromID(id)) != null) {
-				String mobName = isPlayer ? I18n.format("entity.player.name") : net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName();
-				tooltip.add(mobName);
+			    String untranslated = isPlayer ? "entity.player.name" : "entity." + net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName() + ".name";
+				tooltip.add(I18n.format(untranslated));
 			}
 		}
 	}
@@ -79,7 +80,8 @@ public class ItemStoneStatue extends Item {
 					}
 					return EnumActionResult.SUCCESS;
 				} else {
-					Class classFromEntity = EntityList.getClassFromID(stack.getTagCompound().getInteger("IAFStoneStatueEntityID"));
+					EntityEntry entry = net.minecraftforge.registries.GameData.getEntityRegistry().getValue((stack.getTagCompound().getInteger("IAFStoneStatueEntityID")));
+					Class classFromEntity = entry.getEntityClass();
 					Entity entity = null;
 					if (classFromEntity == null) {
 						return EnumActionResult.SUCCESS;

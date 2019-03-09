@@ -5,8 +5,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
-
 @SideOnly(Side.CLIENT)
 public enum EnumDragonAnimations {
     T_POSE(""),
@@ -40,12 +38,12 @@ public enum EnumDragonAnimations {
     WALK2("Walk2", 1),
     WALK3("Walk3", 1),
     WALK4("Walk4", 1),
-    FLIGHT1("Flight1", 1),
-    FLIGHT2("Flight2", 1),
-    FLIGHT3("Flight3", 1),
-    FLIGHT4("Flight4", 1),
-    FLIGHT5("Flight5", 1),
-    FLIGHT6("Flight6", 1),
+    FLIGHT1("Flight1"),
+    FLIGHT2("Flight2"),
+    FLIGHT3("Flight3"),
+    FLIGHT4("Flight4"),
+    FLIGHT5("Flight5"),
+    FLIGHT6("Flight6"),
     TACKLE("Tackle"),
     SIT_ON_PLAYER_POSE("SittingOnPlayer", 1);
 

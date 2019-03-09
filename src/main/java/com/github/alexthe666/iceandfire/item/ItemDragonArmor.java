@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonArmor extends Item {
+public class ItemDragonArmor extends Item implements ICustomRendered{
 
 	public int type;
 	public String name;
@@ -22,7 +22,8 @@ public class ItemDragonArmor extends Item {
 	public ItemDragonArmor(int type, String name) {
 		this.type = type;
 		this.name = name;
-		this.setUnlocalizedName("iceandfire." + name);
+		this.setHasSubtypes(true);
+		this.setTranslationKey("iceandfire." + name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, name);

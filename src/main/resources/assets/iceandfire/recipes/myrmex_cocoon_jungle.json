@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "RSR",
+    "S S",
+    "RSR"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:myrmex_resin_sticky",
+      "data": 1
+    },
+    "R": {
+      "item": "iceandfire:myrmex_resin",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "iceandfire:jungle_myrmex_cocoon",
+    "data": 0
+  }
+}

@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 
 public class EntityCyclopsEye extends PartEntity {
 
@@ -15,12 +13,12 @@ public class EntityCyclopsEye extends PartEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if(this.parent instanceof EntityCyclops){
+        if(this.parent instanceof EntityCyclops && source.isProjectile()){
             ((EntityCyclops)this.parent).onHitEye(source, damage);
             return true;
 
         }else {
-            return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
+            return this.parent.attackEntityFrom(source, damage);
         }
     }
 }

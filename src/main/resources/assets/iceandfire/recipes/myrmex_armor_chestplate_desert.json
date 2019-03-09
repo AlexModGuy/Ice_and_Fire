@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "C C",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:myrmex_desert_chitin"
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_desert_chestplate",
+    "data": 0
+  }
+}

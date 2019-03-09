@@ -6,15 +6,19 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +39,7 @@ public class GuiBestiary extends GuiScreen {
 	protected static final int Y = 245;
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
 	private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
+	private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
 	public List<EnumBestiaryPages> allPageTypes = new ArrayList<EnumBestiaryPages>();
 	public EnumBestiaryPages pageType;
 	public List<IndexPageButton> indexButtons = new ArrayList<IndexPageButton>();
@@ -45,16 +51,29 @@ public class GuiBestiary extends GuiScreen {
 	public int indexPagesTotal = 1;
 	protected ItemStack book;
 	protected boolean index;
-	protected FontRenderer font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+	protected FontRenderer font;
+
+	private FontRenderer getFont(){
+		FontRenderer font;
+		if(IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")){
+			font = Minecraft.getMinecraft().fontRenderer;
+		}else{
+			font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+		}
+		font.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+		font.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		return font;
+	}
 
 	public GuiBestiary(ItemStack book) {
+		font = getFont();
 		this.book = book;
 		int indexPageTotal = 0;
 		if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
 			if (book.getTagCompound() != null) {
 				List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
 				allPageTypes.addAll(pages);
-				indexPagesTotal = 1 + (pages.size() / 10);
+				indexPagesTotal = (int)Math.ceil(pages.size() / 10D);
 			}
 		}
 		index = true;
@@ -64,8 +83,8 @@ public class GuiBestiary extends GuiScreen {
 		super.initGui();
 		int centerX = (this.width - this.X) / 2;
 		int centerY = (this.height - this.Y) / 2;
-		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages));
-		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages));
+		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages, 0));
+		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages, 0));
 		if (!allPageTypes.isEmpty()) {
 			for (int i = 0; i < allPageTypes.size(); i++) {
 				int xIndex = i % -2;
@@ -86,7 +105,7 @@ public class GuiBestiary extends GuiScreen {
 			}
 		}
 		for (int i = 0; i < this.indexButtons.size(); i++) {
-			if (i <= 9 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index) {
+			if (i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index) {
 				this.indexButtons.get(i).visible = true;
 			} else {
 				this.indexButtons.get(i).visible = false;
@@ -543,7 +562,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Blocks.GLASS), 160, 150, 1.5F);
 					drawItemStack(new ItemStack(Blocks.GLASS), 199, 150, 1.5F);
 					GL11.glPopMatrix();
-					drawItemStack(new ItemStack(ModBlocks.jar), 171, 85, 2F);
+					drawItemStack(new ItemStack(ModBlocks.jar_empty), 171, 85, 2F);
 					GL11.glPopMatrix();
 					GL11.glPopMatrix();
 
@@ -662,6 +681,313 @@ public class GuiBestiary extends GuiScreen {
 				}
 					writeFromTxt();
 				break;
+			case SIREN:
+				if (bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.25F, 1.25F, 1.25F);
+					drawImage(DRAWINGS_1, 190, 25, 0, 0, 25, 42, 512F);
+					drawImage(DRAWINGS_1, 220, 15, 25, 0, 25, 42, 512F);
+					drawImage(DRAWINGS_1, 255, 25, 50, 0, 25, 42, 512F);
+
+					drawImage(DRAWINGS_1, 190, 135, 0, 42, 26, 28, 512F);
+					drawImage(DRAWINGS_1, 220, 125, 26, 42, 26, 28, 512F);
+					drawImage(DRAWINGS_1, 255, 135, 52, 42, 26, 28, 512F);
+					GL11.glPopMatrix();
+				}
+				if (bookPages == 1) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.earplugs), 18, 40, 2.5F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					GL11.glPushMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 180, 20, 1.5F);
+					drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 215, 20, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.earplugs), 170, 10, 2F);
+					GL11.glPopMatrix();
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 123, 75, 1.5F);
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
+			case HIPPOCAMPUS:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 210, 25, 0, 70, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 265, 25, 57, 70, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 320, 25, 0, 119, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 210, 80, 57, 119, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 265, 80, 0, 168, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 320, 80, 57, 168, 57, 49, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(Blocks.SPONGE), 37, 33, 1.5F);
+					drawItemStack(new ItemStack(Items.PRISMARINE_CRYSTALS), 37, 73, 1.5F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(Items.STICK), 35, 25, 1.5F);
+					drawItemStack(new ItemStack(ModItems.shiny_scales), 35, 75, 1.5F);
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
+			case DEATHWORM:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 230, 25, 0, 217, 133, 16, 512F);
+					drawImage(DRAWINGS_1, 230, 50, 0, 233, 133, 16, 512F);
+					drawImage(DRAWINGS_1, 230, 75, 0, 249, 133, 16, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					drawImage(DRAWINGS_1, 25, 95, 0, 265, 148, 44, 512F);
+					drawImage(DRAWINGS_1, 250, 5, 0, 309, 81, 162, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					int drawType = Minecraft.getMinecraft().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getMinecraft().player.ticksExisted % 60 > 20 ? 1 : 0;
+					GL11.glPushMatrix();
+					GL11.glScalef(2.5F, 2.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.deathworm_chitin, 1, drawType), 17, 30, 1.5F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_helmet : drawType == 1 ? ModItems.deathworm_white_helmet : ModItems.deathworm_yellow_helmet), 92, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_chestplate : drawType == 1 ? ModItems.deathworm_white_chestplate : ModItems.deathworm_yellow_chestplate), 112, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_leggings : drawType == 1 ? ModItems.deathworm_white_leggings : ModItems.deathworm_yellow_leggings), 132, 8, 1.5F);
+					drawItemStack(new ItemStack(drawType == 2 ? ModItems.deathworm_red_boots : drawType == 1 ? ModItems.deathworm_white_boots : ModItems.deathworm_yellow_boots), 152, 8, 1.5F);
+					drawItemStack(new ItemStack(ModItems.deathworm_egg), 125, 42, 1.5F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 3){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawItemStack(new ItemStack(ModItems.deathworm_egg, 1, 1), 125, 4, 1.5F);
+					drawItemStack(new ItemStack(Items.FISHING_ROD), 115, 55, 1.5F);
+					drawItemStack(new ItemStack(Items.FISHING_ROD), 135, 55, 1.5F);
+
+					GL11.glPopMatrix();
+				}
+				writeFromTxt();
+				break;
+			case COCKATRICE:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
+					drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.STRING), 20, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.LEATHER), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(Items.STRING), 59, 30, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.blindfold), 60, 18, 2F);
+					drawItemStack(new ItemStack(ModItems.witherbone), 30, 58, 2.5F);
+					drawItemStack(new ItemStack(ModItems.rotten_egg), 109, 18, 2.5F);
+				}
+				writeFromTxt();
+				break;
+			case STYMPHALIANBIRD:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 34, 46, 114, 72, 59, 37, 512F);
+					drawImage(DRAWINGS_1, 155, 35, 114, 109, 67, 35, 512F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 109, 60, 2.5F);
+				}
+				if(bookPages == 1){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					GL11.glPopMatrix();
+
+					GL11.glPushMatrix();
+					GL11.glScalef(0.9F, 0.9F, 1F);
+					drawItemStack(new ItemStack(Items.FLINT), 40, 13, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 40, 30, 1.5F);
+					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 40, 49, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.stymphalian_arrow), 60, 18, 2F);
+
+				}
+				writeFromTxt();
+				break;
+			case TROLL:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_1, 15, 60, 156, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 50, 55, 181, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 85, 60, 206, 211, 25, 58, 512F);
+					drawImage(DRAWINGS_1, 155, 22, 114, 145, 24, 66, 512F);
+					drawImage(DRAWINGS_1, 190, 19, 188, 142, 47, 69, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1){
+					int i = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.Weapon.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.Weapon.values()[i].item), 30, 7, 2.5F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leather), 100, 30, 2.5F);
+					drawItemStack(new ItemStack(ModItems.troll_tusk), 120, 30, 2.5F);
+				}
+				if(bookPages == 2){
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumTroll.values()[j].helmet), 27, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
+					drawItemStack(new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
+				}
+				writeFromTxt();
+				break;
+			case MYRMEX:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 137, 10, 202, 16, 57, 21, 512F);
+					drawImage(DRAWINGS_1, 195, 10, 278, 16, 57, 21, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 7, 17, 202, 37, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 65, 17, 278, 37, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 7, 77, 202, 58, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 65, 77, 278, 58, 59, 21, 512F);
+					drawImage(DRAWINGS_1, 145, 20, 278, 103, 43, 45, 512F);
+					drawImage(DRAWINGS_1, 195, 20, 321, 103, 43, 45, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2) {
+					GL11.glPushMatrix();
+					GL11.glScalef(1.51F, 1.51F, 1F);
+					drawImage(DRAWINGS_1, 25, 13, 202, 79, 76, 24, 512F);
+					drawImage(DRAWINGS_1, 25, 40, 278, 79, 76, 24, 512F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_chitin), 125, 43, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_chitin), 155, 43, 2F);
+					int i = 133;
+					boolean jungle = Minecraft.getMinecraft().player.ticksExisted % 60 > 30;
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_shovel : ModItems.myrmex_desert_shovel), i += 16, 100, 1.51F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_pickaxe : ModItems.myrmex_desert_pickaxe), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_axe : ModItems.myrmex_desert_axe), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_sword : ModItems.myrmex_desert_sword), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_sword_venom : ModItems.myrmex_desert_sword_venom), i += 16, 100, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_hoe : ModItems.myrmex_desert_hoe), i += 16, 100, 1.5F);
+					int j = 148;
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_helmet : ModItems.myrmex_desert_helmet), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_chestplate : ModItems.myrmex_desert_chestplate), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_leggings : ModItems.myrmex_desert_leggings), j += 16, 115, 1.5F);
+					drawItemStack(new ItemStack(jungle ? ModItems.myrmex_jungle_boots : ModItems.myrmex_desert_boots), j += 16, 115, 1.5F);
+				}
+				if(bookPages == 3) {
+					drawItemStack(new ItemStack(ModItems.myrmex_stinger), 35, 22, 2.5F);
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_resin), 25, 64, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_resin), 55, 64, 2F);
+				}
+				if(bookPages == 4) {
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_staff), 25, 73, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_staff), 55, 73, 2F);
+
+					drawItemStack(new ItemStack(ModItems.myrmex_desert_egg), 125, 90, 2F);
+					drawItemStack(new ItemStack(ModItems.myrmex_jungle_egg), 155, 90, 2F);
+				}
+				writeFromTxt();
+				break;
+			case AMPHITHERE:
+				if(bookPages == 0){
+					GL11.glPushMatrix();
+					GL11.glScalef(0.75F, 0.75F, 0.75F);
+					drawImage(DRAWINGS_1, 70, 97, 257, 163, 136, 93, 512F);
+					drawImage(DRAWINGS_1, 270, 50, 148, 267, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 380, 50, 148, 318, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 380, 100, 148, 420, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 330, 150, 268, 267, 120, 51, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 2){
+					drawItemStack(new ItemStack(ModItems.amphithere_feather), 30, 20, 2.5F);
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 70, 389, 1, 50, 50, 512F);
+					GL11.glScalef(0.65F, 0.65F, 0.65F);
+					drawItemStack(new ItemStack(Items.FLINT), 36, 73, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 36, 89, 1.5F);
+					drawItemStack(new ItemStack(ModItems.amphithere_feather), 36, 106, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.amphithere_arrow), 60, 65, 2F);
+				}
+				writeFromTxt();
+				break;
+			case SEASERPENT:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(0.75F, 0.75F, 0.75F);
+					drawImage(DRAWINGS_1, 290, 5, 422, 0, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 5, 422, 64, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 290, 70, 422, 128, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 70, 422, 192, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 290, 140, 422, 256, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 140, 422, 320, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 345, 210, 422, 384, 90, 64, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1) {
+					drawImage(DRAWINGS_1, 60, 90, 337, 0, 70, 83, 512F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 130, 40, 2.5F);
+					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 90, 40, 2.5F);
+				}
+				if(bookPages == 2){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 30, 389, 1, 50, 50, 512F);
+					GL11.glScalef(0.65F, 0.65F, 0.65F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 36, 32, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 36, 48, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 36, 66, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].helmet), 34, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].chestplate), 50, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].leggings), 66, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].boots), 82, 125, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sea_serpent_arrow), 60, 33, 2F);
+				}
+				writeFromTxt();
+				break;
 		}
 	}
 
@@ -678,6 +1004,10 @@ public class GuiBestiary extends GuiScreen {
 			int linenumber = 0;
 			while ((line = bufferedReader.readLine()) != null) {
 				GL11.glPushMatrix();
+				if(usingVanillaFont()) {
+					GL11.glScalef(0.945F, 0.945F, 0.945F);
+					GL11.glTranslatef(0, 5.5F, 0);
+				}
 				if (linenumber <= 19) {
 					font.drawString(line, 15, 20 + linenumber * 10, 0X303030, false);
 				} else {
@@ -694,6 +1024,9 @@ public class GuiBestiary extends GuiScreen {
 		GL11.glScalef(2, 2, 2);
 		font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A, false);
 		GL11.glPopMatrix();
+	}
+	private boolean usingVanillaFont(){
+		return font == Minecraft.getMinecraft().fontRenderer;
 	}
 
 	public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
@@ -726,7 +1059,7 @@ public class GuiBestiary extends GuiScreen {
 				this.bookPages--;
 			}
 		}
-		if (button.id == 1 && (this.index ? this.indexPages + 1 < this.indexPagesTotal : this.pageType != null && this.bookPages < this.pageType.pages)) {
+		if (button.id == 1 && (this.index ? this.indexPages < this.indexPagesTotal  - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
 			if (this.index) {
 				this.indexPages++;
 			} else {
