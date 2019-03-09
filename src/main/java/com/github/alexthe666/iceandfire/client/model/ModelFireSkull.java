@@ -45,7 +45,7 @@ public class ModelFireSkull extends AdvancedModelBase {
 		this.Teeth1.addBox(-1.6F, 0.1F, -8.9F, 2, 1, 5, 0.0F);
 		this.Head = new AdvancedModelRenderer(this, 6, 54);
 		this.Head.setRotationPoint(0.0F, 23.0F, 2.5F);
-		this.Head.addBox(-2F, -3.0F, -4.0F, 4, 4, 4, 0.0F);
+		this.Head.addBox(-1.5F, -3.0F, -4.0F, 4, 4, 4, 0.0F);
 		this.Teeth2 = new AdvancedModelRenderer(this, 6, 16);
 		this.Teeth2.mirror = true;
 		this.Teeth2.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -82,6 +82,7 @@ public class ModelFireSkull extends AdvancedModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		this.resetToDefaultPose();
 		if (entity instanceof EntityDragonSkull && ((EntityDragonSkull) entity).getType() == 1) {
 			RenderDragonSkull.ICE_SKULL_MODEL.render(entity, f, f1, f2, f3, f4, f5);
 		}else{
