@@ -193,33 +193,43 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void removeParts() {
         if (headPart != null) {
             world.removeEntityDangerously(headPart);
+            headPart = null;
         }
         if (neckPart != null) {
             world.removeEntityDangerously(neckPart);
+            neckPart = null;
         }
         if (rightWingUpperPart != null) {
             world.removeEntityDangerously(rightWingUpperPart);
+            rightWingUpperPart = null;
         }
         if (rightWingLowerPart != null) {
             world.removeEntityDangerously(rightWingLowerPart);
+            rightWingLowerPart = null;
         }
         if (leftWingUpperPart != null) {
             world.removeEntityDangerously(leftWingUpperPart);
+            leftWingUpperPart = null;
         }
         if (leftWingLowerPart != null) {
             world.removeEntityDangerously(leftWingLowerPart);
+            leftWingLowerPart = null;
         }
         if (tail1Part != null) {
             world.removeEntityDangerously(tail1Part);
+            tail1Part = null;
         }
         if (tail2Part != null) {
             world.removeEntityDangerously(tail2Part);
+            tail2Part = null;
         }
         if (tail3Part != null) {
             world.removeEntityDangerously(tail3Part);
+            tail3Part = null;
         }
         if (tail4Part != null) {
             world.removeEntityDangerously(tail4Part);
+            tail4Part = null;
         }
     }
 

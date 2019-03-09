@@ -52,13 +52,30 @@ public class LayerStoneEntity implements LayerRenderer {
 	public String getStoneType(ModelBase model, int size) {
 		int x = model.textureWidth;
 		int y = model.textureHeight;
-		int sizeX = Math.min(128, x * size);
-		int sizeY = Math.min(128, y * size);
+
+		int sizeX = clampToMultipleOfFour(Math.min(128, x * size));
+		int sizeY = clampToMultipleOfFour(Math.min(128, y * size));
 		String str = "iceandfire:textures/models/gorgon/stone" + sizeX + "x" + sizeY + ".png";
 		if (sizeX <= 16 && sizeY <= 16) {
 			return "textures/blocks/stone.png";
 		} else {
 			return str;
+		}
+	}
+
+	public int clampToMultipleOfFour(int i){
+		if(i % 4 != 0){//usually 86
+			if(i > 128){
+				return 128;
+			} else if(i > 64){
+				return 64;
+			}else if(i > 32){
+				return 32;
+			}else{
+				return 16;
+			}
+		}else{
+			return i;
 		}
 	}
 
