@@ -41,98 +41,20 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().registerAll(
-                ModSounds.DRAGON_HATCH,
-                ModSounds.FIREDRAGON_BREATH,
-                ModSounds.ICEDRAGON_BREATH,
-                ModSounds.FIREDRAGON_CHILD_IDLE,
-                ModSounds.FIREDRAGON_CHILD_HURT,
-                ModSounds.FIREDRAGON_CHILD_DEATH,
-                ModSounds.FIREDRAGON_CHILD_ROAR,
-                ModSounds.FIREDRAGON_TEEN_ROAR,
-                ModSounds.FIREDRAGON_TEEN_IDLE,
-                ModSounds.FIREDRAGON_TEEN_HURT,
-                ModSounds.FIREDRAGON_TEEN_DEATH,
-                ModSounds.FIREDRAGON_ADULT_ROAR,
-                ModSounds.FIREDRAGON_ADULT_IDLE,
-                ModSounds.FIREDRAGON_ADULT_HURT,
-                ModSounds.FIREDRAGON_ADULT_DEATH,
-                ModSounds.ICEDRAGON_CHILD_IDLE,
-                ModSounds.ICEDRAGON_CHILD_HURT,
-                ModSounds.ICEDRAGON_CHILD_DEATH,
-                ModSounds.ICEDRAGON_CHILD_ROAR,
-                ModSounds.ICEDRAGON_TEEN_ROAR,
-                ModSounds.ICEDRAGON_TEEN_IDLE,
-                ModSounds.ICEDRAGON_TEEN_HURT,
-                ModSounds.ICEDRAGON_TEEN_DEATH,
-                ModSounds.ICEDRAGON_ADULT_ROAR,
-                ModSounds.ICEDRAGON_ADULT_IDLE,
-                ModSounds.ICEDRAGON_ADULT_HURT,
-                ModSounds.ICEDRAGON_ADULT_DEATH,
-                ModSounds.DRAGONFLUTE,
-                ModSounds.HIPPOGRYPH_DIE,
-                ModSounds.HIPPOGRYPH_IDLE,
-                ModSounds.HIPPOGRYPH_HURT,
-                ModSounds.GORGON_DIE,
-                ModSounds.GORGON_IDLE,
-                ModSounds.GORGON_HURT,
-                ModSounds.GORGON_ATTACK,
-                ModSounds.GORGON_TURN_STONE,
-                ModSounds.GORGON_PETRIFY,
-                ModSounds.PIXIE_DIE,
-                ModSounds.PIXIE_HURT,
-                ModSounds.PIXIE_IDLE,
-                ModSounds.PIXIE_TAUNT,
-                ModSounds.CYCLOPS_BITE,
-                ModSounds.CYCLOPS_BLINDED,
-                ModSounds.CYCLOPS_HURT,
-                ModSounds.CYCLOPS_IDLE,
-                ModSounds.GOLD_PILE_STEP,
-                ModSounds.GOLD_PILE_BREAK,
-                ModSounds.DRAGON_FLIGHT,
-                ModSounds.HIPPOCAMPUS_IDLE,
-                ModSounds.HIPPOCAMPUS_HURT,
-                ModSounds.HIPPOCAMPUS_DIE,
-                ModSounds.DEATHWORM_IDLE,
-                ModSounds.DEATHWORM_ATTACK,
-                ModSounds.DEATHWORM_HURT,
-                ModSounds.DEATHWORM_DIE,
-                ModSounds.DEATHWORM_GIANT_IDLE,
-                ModSounds.DEATHWORM_GIANT_ATTACK,
-                ModSounds.DEATHWORM_GIANT_HURT,
-                ModSounds.DEATHWORM_GIANT_DIE,
-                ModSounds.NAGA_IDLE,
-                ModSounds.NAGA_ATTACK,
-                ModSounds.NAGA_HURT,
-                ModSounds.NAGA_DIE,
-                ModSounds.MERMAID_IDLE,
-                ModSounds.MERMAID_HURT,
-                ModSounds.MERMAID_DIE,
-                ModSounds.SIREN_SONG,
-                ModSounds.TROLL_IDLE,
-                ModSounds.TROLL_HURT,
-                ModSounds.TROLL_DIE,
-                ModSounds.TROLL_ROAR,
-                ModSounds.COCKATRICE_IDLE,
-                ModSounds.COCKATRICE_HURT,
-                ModSounds.COCKATRICE_DIE,
-                ModSounds.COCKATRICE_CRY,
-                ModSounds.STYMPHALIAN_BIRD_IDLE,
-                ModSounds.STYMPHALIAN_BIRD_HURT,
-                ModSounds.STYMPHALIAN_BIRD_DIE,
-                ModSounds.STYMPHALIAN_BIRD_ATTACK,
-                ModSounds.MYRMEX_IDLE,
-                ModSounds.MYRMEX_HURT,
-                ModSounds.MYRMEX_DIE,
-                ModSounds.MYRMEX_WALK,
-                ModSounds.MYRMEX_BITE,
-                ModSounds.MYRMEX_STING,
-                ModSounds.AMPHITHERE_IDLE,
-                ModSounds.AMPHITHERE_HURT,
-                ModSounds.AMPHITHERE_DIE,
-                ModSounds.AMPHITHERE_BITE,
-                ModSounds.AMPHITHERE_GUST
-        );
+        try {
+            for (Field f : ModSounds.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof SoundEvent) {
+                    event.getRegistry().register((SoundEvent) obj);
+                } else if (obj instanceof SoundEvent[]) {
+                    for (SoundEvent soundEvent : (SoundEvent[]) obj) {
+                        event.getRegistry().register(soundEvent);
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SubscribeEvent

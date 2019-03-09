@@ -1,4 +1,49 @@
 {
+  "sea_serpent_breath": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_breath"
+    ]
+  },
+  "sea_serpent_bite": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_bite"
+    ]
+  },
+  "sea_serpent_splash": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_splash"
+    ]
+  },
+  "sea_serpent_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_roar"
+    ]
+  },
+  "sea_serpent_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_idle_0",
+      "iceandfire:sea_serpent_idle_1"
+    ]
+  },
+  "sea_serpent_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_hurt_0",
+      "iceandfire:sea_serpent_hurt_1",
+      "iceandfire:sea_serpent_hurt_2"
+    ]
+  },
+  "sea_serpent_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:sea_serpent_die"
+    ]
+  },
   "amphithere_idle": {
     "category": "neutral",
     "sounds": [

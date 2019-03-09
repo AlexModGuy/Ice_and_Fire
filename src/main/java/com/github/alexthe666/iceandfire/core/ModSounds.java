@@ -283,6 +283,26 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("amphithere_gust")
 	public static final SoundEvent AMPHITHERE_GUST = createSoundEvent("amphithere_gust");
 
+	@GameRegistry.ObjectHolder("sea_serpent_die")
+	public static final SoundEvent SEA_SERPENT_DIE = createSoundEvent("sea_serpent_die");
+
+	@GameRegistry.ObjectHolder("sea_serpent_idle")
+	public static final SoundEvent SEA_SERPENT_IDLE = createSoundEvent("sea_serpent_idle");
+
+	@GameRegistry.ObjectHolder("sea_serpent_hurt")
+	public static final SoundEvent SEA_SERPENT_HURT = createSoundEvent("sea_serpent_hurt");
+
+	@GameRegistry.ObjectHolder("sea_serpent_bite")
+	public static final SoundEvent SEA_SERPENT_BITE = createSoundEvent("sea_serpent_bite");
+
+	@GameRegistry.ObjectHolder("sea_serpent_roar")
+	public static final SoundEvent SEA_SERPENT_ROAR = createSoundEvent("sea_serpent_roar");
+
+	@GameRegistry.ObjectHolder("sea_serpent_breath")
+	public static final SoundEvent SEA_SERPENT_BREATH = createSoundEvent("sea_serpent_breath");
+
+	@GameRegistry.ObjectHolder("sea_serpent_splash")
+	public static final SoundEvent SEA_SERPENT_SPLASH = createSoundEvent("sea_serpent_splash");
 
 
 	private static SoundEvent createSoundEvent(final String soundName) {

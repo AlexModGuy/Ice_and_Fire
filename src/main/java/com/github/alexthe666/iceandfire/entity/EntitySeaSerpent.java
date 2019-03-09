@@ -35,6 +35,7 @@ import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -75,6 +76,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     @Nullable
     public BlockPos orbitPos = null;
     public static final Animation ANIMATION_BITE = Animation.create(15);
+    public static final Animation ANIMATION_SPEAK = Animation.create(15);
     public static final Animation ANIMATION_ROAR = Animation.create(40);
     private boolean isArcing = false;
     private float arcingYAdditive = 0F;
@@ -360,6 +362,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.setAnimation(ANIMATION_ROAR);
             this.ticksSinceRoar = 0;
         }
+        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 1){
+            this.playSound(ModSounds.SEA_SERPENT_ROAR, this.getSoundVolume() + 1, 1);
+        }
+        if(this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5){
+            this.playSound(ModSounds.SEA_SERPENT_BITE, this.getSoundVolume(), 1);
+        }
         if (isJumpingOutOfWater()) {
             ticksJumping++;
         } else {
@@ -398,7 +406,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             jumpRot -= 0.1F;
         }
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
-            this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5F, 0.75F);
+            this.playSound(ModSounds.SEA_SERPENT_SPLASH, 5F, 0.75F);
             spawnSlamParticles(EnumParticleTypes.FIREWORKS_SPARK);
             spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
             spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
@@ -651,7 +659,36 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{ANIMATION_BITE, ANIMATION_ROAR};
+        return new Animation[]{ANIMATION_BITE, ANIMATION_ROAR, ANIMATION_SPEAK};
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.SEA_SERPENT_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.SEA_SERPENT_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.SEA_SERPENT_DIE;
+    }
+
+    public void playLivingSound() {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playLivingSound();
+    }
+
+    protected void playHurtSound(DamageSource source) {
+        if (this.getAnimation() == this.NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SPEAK);
+        }
+        super.playHurtSound(source);
     }
 
     @Override
@@ -752,6 +789,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 this.attackDecision = true;
             }
             if (this.isBreathing()) {
+                if(this.ticksExisted % 40 == 0){
+                    this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
+                }
                 if (this.ticksExisted % 3 == 0) {
                     rotationYaw = renderYawOffset;
                     float f1 = 0;
@@ -763,7 +803,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     double d2 = entity.posX - headPosX;
                     double d3 = entity.posY - headPosY;
                     double d4 = entity.posZ - headPosZ;
-                    //this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
                     EntitySeaSerpentBubbles entitylargefireball = new EntitySeaSerpentBubbles(world, this, d2, d3, d4);
                     float size = 0.8F;
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -878,7 +917,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     @Override
     public void travel(float strafe, float vertical, float forward) {
         if (this.swimBehavior == SwimBehavior.JUMP && this.isJumpingOutOfWater() && this.getAttackTarget() == null) {
-            moveJumping();
+           // moveJumping();
         }
         float f4;
         if (this.isServerWorld()) {

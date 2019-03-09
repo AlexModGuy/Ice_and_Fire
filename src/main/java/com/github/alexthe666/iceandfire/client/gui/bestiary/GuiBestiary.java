@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -934,8 +935,6 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51, 512F);
 					drawImage(DRAWINGS_1, 380, 100, 148, 420, 120, 51, 512F);
 					drawImage(DRAWINGS_1, 330, 150, 268, 267, 120, 51, 512F);
-					//drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
-					//drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 2){
@@ -943,15 +942,49 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
 					drawImage(DRAWINGS_0, 18, 70, 389, 1, 50, 50, 512F);
-					GL11.glPopMatrix();
-
-					GL11.glPushMatrix();
-					GL11.glScalef(0.9F, 0.9F, 1F);
-					drawItemStack(new ItemStack(Items.FLINT), 40, 80, 1.5F);
-					drawItemStack(new ItemStack(Items.STICK), 40, 97, 1.5F);
-					drawItemStack(new ItemStack(ModItems.amphithere_feather), 40, 117, 1.5F);
+					GL11.glScalef(0.65F, 0.65F, 0.65F);
+					drawItemStack(new ItemStack(Items.FLINT), 36, 73, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 36, 89, 1.5F);
+					drawItemStack(new ItemStack(ModItems.amphithere_feather), 36, 106, 1.5F);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.amphithere_arrow), 60, 65, 2F);
+				}
+				writeFromTxt();
+				break;
+			case SEASERPENT:
+				if(bookPages == 0) {
+					GL11.glPushMatrix();
+					GL11.glScalef(0.75F, 0.75F, 0.75F);
+					drawImage(DRAWINGS_1, 290, 5, 422, 0, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 5, 422, 64, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 290, 70, 422, 128, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 70, 422, 192, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 290, 140, 422, 256, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 380, 140, 422, 320, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 345, 210, 422, 384, 90, 64, 512F);
+					GL11.glPopMatrix();
+				}
+				if(bookPages == 1) {
+					drawImage(DRAWINGS_1, 60, 90, 337, 0, 70, 83, 512F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 130, 40, 2.5F);
+					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 90, 40, 2.5F);
+				}
+				if(bookPages == 2){
+					GL11.glPushMatrix();
+					GL11.glScalef(1.5F, 1.5F, 1F);
+					drawImage(DRAWINGS_0, 18, 30, 389, 1, 50, 50, 512F);
+					GL11.glScalef(0.65F, 0.65F, 0.65F);
+					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
+					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 36, 32, 1.5F);
+					drawItemStack(new ItemStack(Items.STICK), 36, 48, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 36, 66, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].helmet), 34, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].chestplate), 50, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].leggings), 66, 125, 1.5F);
+					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].boots), 82, 125, 1.5F);
+					GL11.glPopMatrix();
+					drawItemStack(new ItemStack(ModItems.sea_serpent_arrow), 60, 33, 2F);
 				}
 				writeFromTxt();
 				break;

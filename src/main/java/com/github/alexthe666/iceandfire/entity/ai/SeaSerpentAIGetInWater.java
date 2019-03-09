@@ -18,7 +18,7 @@ public class SeaSerpentAIGetInWater extends AquaticAIGetInWater {
 
     @Nullable
     public Vec3d findPossibleShelter() {
-        return findPossibleShelter(10, 10);
+        return findPossibleShelter(30, 20);
     }
 
 }

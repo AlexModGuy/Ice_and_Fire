@@ -31,7 +31,8 @@ public enum EnumBestiaryPages {
 	STYMPHALIANBIRD(1),
 	TROLL(2),
 	MYRMEX(4),
-	AMPHITHERE(2);
+	AMPHITHERE(2),
+	SEASERPENT(2);
 
 	public int pages;
 
