@@ -91,5 +91,13 @@ public class ModEntities {
 				}
 			}
 		}
+		if (IceAndFire.CONFIG.spawnAmphitheres) {
+			for (Biome biome : Biome.REGISTRY) {
+				if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)) {
+					List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.CREATURE);
+					spawnList.add(new Biome.SpawnListEntry(EntityAmphithere.class, IceAndFire.CONFIG.amphithereSpawnRate, 1, 3));
+				}
+			}
+		}
 	}
 }

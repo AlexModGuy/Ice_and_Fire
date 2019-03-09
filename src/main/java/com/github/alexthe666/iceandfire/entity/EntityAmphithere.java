@@ -100,7 +100,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             tail_buffer = new IFChainBuffer();
         }
         switchNavigator(true);
+
     }
+
+
 
     public float getBlockPathWeight(BlockPos pos) {
         if (this.isFlying()) {
@@ -458,9 +461,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.amphithereMaxHealth);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.amphithereAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
     }
 
@@ -516,7 +519,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         int k = MathHelper.floor(this.posZ);
         BlockPos blockpos = new BlockPos(i, j, k);
         Block block = this.world.getBlockState(blockpos.down()).getBlock();
-        return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLog || block == Blocks.AIR && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
+        return this.world.canBlockSeeSky(blockpos.up());
     }
 
     @Override

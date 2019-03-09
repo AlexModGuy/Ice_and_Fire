@@ -284,8 +284,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     private void updateAttributes() {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, 4 * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, 10 * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IceAndFire.CONFIG.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IceAndFire.CONFIG.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.heal(30F * this.getSeaSerpentScale());
     }
 
@@ -631,6 +631,17 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return livingdata;
     }
 
+    public void onWorldSpawn(Random random){
+        this.setVariant(random.nextInt(6));
+        boolean ancient = random.nextInt(15) == 1;
+        if (ancient) {
+            this.setAncient(true);
+            this.setSeaSerpentScale(6.0F + random.nextFloat() * 3.0F);
+
+        } else {
+            this.setSeaSerpentScale(1.5F + random.nextFloat() * 4.0F);
+        }
+    }
     @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {

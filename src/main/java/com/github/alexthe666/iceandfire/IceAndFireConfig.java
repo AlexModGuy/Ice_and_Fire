@@ -104,10 +104,20 @@ public class IceAndFireConfig {
 	public int myrmexColonyGenChance = 150;
 	public int myrmexColonySize = 80;
 	public boolean experimentalPathFinder;
-    public float amphithereVillagerSearchLength = 64;
+
+	public boolean spawnAmphitheres = true;
+	public int amphithereSpawnRate = 9;
+	public float amphithereVillagerSearchLength = 64;
 	public int amphithereTameTime = 400;
 	public float amphithereFlightSpeed = 1.75F;
+	public double amphithereMaxHealth = 50D;
+	public double amphithereAttackStrength = 7D;
+
+	public boolean spawnSeaSerpents = true;
+	public int seaSerpentSpawnChance = 200;
 	public boolean seaSerpentGriefing = true;
+	public double seaSerpentBaseHealth = 20D;
+	public double seaSerpentAttackStrength = 4D;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -224,11 +234,19 @@ public class IceAndFireConfig {
 
 		this.experimentalPathFinder = config.getBoolean("Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
 
+		this.spawnAmphitheres = config.getBoolean("Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
+		this.amphithereSpawnRate = config.getInt("Amphithere Spawn Weight", "all", 9, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
 		this.amphithereVillagerSearchLength = config.getInt("Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
 		this.amphithereTameTime = config.getInt("Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
 		this.amphithereFlightSpeed = config.getFloat("Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");
+		this.amphithereMaxHealth = (double)config.getFloat("Amphithere Max Health", "all", 50, 1, 10000, "Maximum amphithere health");
+		this.amphithereAttackStrength = (double)config.getFloat("Amphithere Attack Strength", "all", 7, 1, 10000, "Amphithere attack strength");
 
+		this.spawnSeaSerpents = config.getBoolean("Spawn Sea Serpents", "all", true, "True if sea serpents are allowed to spawn");
+		this.seaSerpentSpawnChance = config.getInt("Spawn Sea Serpent Chance", "all", 200, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.seaSerpentGriefing = config.getBoolean("Sea Serpent Griefing", "all", true, "Whether or not sea serpents can break weak blocks in their way");
+		this.seaSerpentBaseHealth = (double)config.getFloat("Sea Serpent Base Health", "all", 20, 1, 10000, "Default sea serpent health, this is scaled to the sea serpent's particular size");
+		this.seaSerpentAttackStrength = (double)config.getFloat("Sea Serpent Base Attack Strength", "all", 4, 1, 10000, "Default sea serpent attack strength, this is scaled to the sea serpent's particular size");
 
 
 	}
