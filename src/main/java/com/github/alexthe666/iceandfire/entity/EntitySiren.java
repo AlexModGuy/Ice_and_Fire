@@ -319,7 +319,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
             for(EntityLivingBase entity : entities){
                 SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
-                if(sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)){
+                if(!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)){
                     sirenProps.isCharmed = true;
                     sirenProps.sirenID = this.getEntityId();
                 }
