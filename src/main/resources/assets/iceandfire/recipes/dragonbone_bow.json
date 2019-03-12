@@ -7,8 +7,8 @@
   ],
   "key": {
     "W": {
-      "item": "iceandfire:witherbone",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "boneWither"
     },
     "D": {
       "item": "iceandfire:dragonbone",

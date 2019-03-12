@@ -11,8 +11,8 @@
       "data": 0
     },
     "T": {
-      "item": "iceandfire:witherbone",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "boneWither"
     }
   },
   "result": {
