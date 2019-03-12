@@ -14,6 +14,9 @@ public class ParticlePixieDust extends ParticleRedstone {
 	}
 
 	public int getBrightnessForRender(float f) {
-		return 6000;
+		int i = super.getBrightnessForRender(f);
+		int j = 240;
+		int k = i >> 16 & 255;
+		return 240 | k << 16;
 	}
 }

@@ -227,9 +227,18 @@ public class EntityPixie extends EntityTameable {
 		return livingdata;
 	}
 
+	private boolean isBeyondHeight(){
+		if(this.posY > this.world.getHeight()){
+			return true;
+		}
+		BlockPos height = this.world.getHeight(new BlockPos(this));
+		int maxY = 20 + height.getY();
+		return this.posY > maxY;
+	}
+
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (!this.isSitting()) {
+		if (!this.isSitting() && !this.isBeyondHeight()) {
 			this.motionY += 0.08D;
 		} else {
 			this.moveHelper.action = EntityMoveHelper.Action.WAIT;
