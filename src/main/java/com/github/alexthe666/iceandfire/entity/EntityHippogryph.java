@@ -647,9 +647,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.isRidingPlayer(mc.player)) {
 			byte previousState = getControlState();
 			up(mc.gameSettings.keyBindJump.isKeyDown());
-			down(mc.gameSettings.keyBindSneak.isKeyDown());
+			down(ModKeys.dragon_down.isKeyDown());
 			attack(ModKeys.dragon_strike.isKeyDown());
-			dismount(ModKeys.dragon_down.isKeyDown());
+			dismount(mc.gameSettings.keyBindSneak.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
@@ -657,7 +657,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 		if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
 			byte previousState = getControlState();
-			dismount(ModKeys.dragon_down.isKeyDown());
+			dismount(mc.gameSettings.keyBindSneak.isKeyDown());
 			byte controlState = getControlState();
 			if (controlState != previousState) {
 				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
