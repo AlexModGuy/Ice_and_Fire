@@ -931,11 +931,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		} else if (this.dismount()) {
 			if (this.isFlying() || this.isHovering()) {
 				this.motionY -= 0.4D;
-				if (this.onGround) {
-					this.setFlying(false);
-					this.setHovering(false);
-				}
+				this.setFlying(false);
+				this.setHovering(false);
 			}
+		}
+		if(this.down() && (this.isFlying() || this.isHovering())){
+			this.motionY -= 0.4D;
 		}
 		if (!this.dismount() && (this.isFlying() || this.isHovering())) {
 			this.motionY += 0.01D;

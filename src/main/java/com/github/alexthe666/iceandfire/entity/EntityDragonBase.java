@@ -1099,6 +1099,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (!world.isRemote) {
+            if(this.isBeyondHeight()){
+                this.motionY -= 0.1F;
+            }
             if(this.isInLove()){
                 this.world.setEntityState(this, (byte)18);
             }
@@ -1294,7 +1297,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (this.doesWantToLand() && !this.onGround) {
                 this.motionY -= 0.25D;
             } else {
-                if (this.getControllingPassenger() == null) {
+                if (this.getControllingPassenger() == null && !this.isBeyondHeight()) {
                     this.motionY += 0.08;
                 }
                 if (this.hoverTicks > 40) {
@@ -1420,9 +1423,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.attackEntityAsMob(this.getAttackTarget());
         }
         this.breakBlock();
-        if(this.posY > IceAndFire.CONFIG.maxDragonFlight){
-            this.setPosition(this.posX, IceAndFire.CONFIG.maxDragonFlight, this.posZ);
+    }
+
+    private boolean isBeyondHeight(){
+        if(this.posY > this.world.getHeight()){
+            return true;
         }
+        return this.posY > IceAndFire.CONFIG.maxDragonFlight;
     }
 
     public void breakBlock() {
@@ -1643,11 +1650,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else if (this.dismount()) {
             if (this.isFlying() || this.isHovering()) {
                 this.motionY -= 0.4D;
-                if (this.onGround) {
-                    this.setFlying(false);
-                    this.setHovering(false);
-                }
+                this.setFlying(false);
+                this.setHovering(false);
             }
+        }
+        if(this.down() && (this.isFlying() || this.isHovering())){
+            this.motionY -= 0.4D;
         }
         if (!this.dismount() && (this.isFlying() || this.isHovering())) {
             this.motionY += 0.01D;
