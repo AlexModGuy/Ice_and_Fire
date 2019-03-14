@@ -30,6 +30,7 @@ public class ItemMyrmexStaff extends Item {
             this.setTranslationKey("iceandfire.myrmex_desert_staff");
             this.setRegistryName(IceAndFire.MODID, "myrmex_desert_staff");
         }
+        this.maxStackSize = 1;
     }
 
     @Override

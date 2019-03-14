@@ -150,7 +150,7 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_blood")
 	public static Item ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_stick")
-	public static Item dragon_stick = new ItemGeneric("dragon_stick", "iceandfire.dragon_stick");
+	public static Item dragon_stick = new ItemDragonStaff();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn")
 	public static Item dragon_horn = new ItemDragonHornStatic();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn_fire")
