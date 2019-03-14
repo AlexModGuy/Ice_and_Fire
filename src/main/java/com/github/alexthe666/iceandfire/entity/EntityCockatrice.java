@@ -472,6 +472,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                     this.setStaring(true);
                 } else {
                     int attackStrength = this.getFriendsCount(this.getAttackTarget());
+                    if(this.world.getDifficulty() == EnumDifficulty.HARD){
+                        attackStrength++;
+                    }
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.WITHER, 10, 2 + Math.min(1, attackStrength)));
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, Math.min(4, attackStrength)));
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20, 0));
