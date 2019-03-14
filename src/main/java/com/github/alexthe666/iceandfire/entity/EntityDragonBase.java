@@ -84,6 +84,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BYTE);
     private static final DataParameter<Boolean> TACKLE = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> AGINGDISABLED = EntityDataManager.<Boolean>createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> COMMAND = EntityDataManager.<Integer>createKey(EntityDragonBase.class, DataSerializers.VARINT);
     public static Animation ANIMATION_EAT;
     public static Animation ANIMATION_SPEAK;
     public static Animation ANIMATION_BITE;
@@ -427,7 +428,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
         this.dataManager.register(TACKLE, Boolean.valueOf(false));
         this.dataManager.register(AGINGDISABLED, Boolean.valueOf(false));
-
+        this.dataManager.register(COMMAND, Integer.valueOf(0));
     }
 
     public boolean up() {
@@ -487,6 +488,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         dataManager.set(CONTROL_STATE, (byte) state);
     }
 
+    public void setCommand(int command) {
+        this.dataManager.set(COMMAND, Integer.valueOf(command));
+        if (command == 1) {
+            this.setSitting(true);
+        } else {
+            this.setSitting(false);
+        }
+    }
+
+    public int getCommand() {
+        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
+    }
+
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
@@ -530,6 +544,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             compound.setInteger("HomeAreaZ", homePos.getZ());
         }
         compound.setBoolean("AgingDisabled", this.isAgingDisabled());
+        compound.setInteger("Command", this.getCommand());
     }
 
     @Override
@@ -589,7 +604,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         this.setTackling(compound.getBoolean("Tackle"));
         this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
-
+        this.setCommand(compound.getInteger("Command"));
     }
 
     @Nullable
@@ -788,9 +803,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     @Override
     public void setSitting(boolean sitting) {
-        super.setSitting(sitting);
         if (!world.isRemote) {
             this.isSitting = sitting;
+        }
+        byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
+        if (sitting) {
+            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
@@ -971,8 +991,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                                 return true;
                             } else {
                                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                                this.setSitting(!this.isSitting());
-                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + (this.isSitting() ? "sit" : "stand")), true);
+                                this.setCommand(this.getCommand() + 1);
+                                if (this.getCommand() > 1) {
+                                    this.setCommand(0);
+                                }
+                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
                                 return true;
                             }
 
@@ -1099,6 +1122,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (!world.isRemote) {
+            if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
+                this.setSitting(false);
+            }
+            if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
+                this.setSitting(true);
+            }
             if(this.isBeyondHeight()){
                 this.motionY -= 0.1F;
             }
