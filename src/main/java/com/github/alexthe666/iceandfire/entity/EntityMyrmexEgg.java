@@ -166,7 +166,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             return false;
         }
         if (!world.isRemote && !dmg.canHarmInCreative()) {
-            this.dropItem(this.getItem().getItem(), 1);
+            this.entityDropItem(this.getItem(), 0);
         }
         this.setDead();
         return super.attackEntityFrom(dmg, var2);
