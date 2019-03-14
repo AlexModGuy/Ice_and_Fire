@@ -22,6 +22,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
@@ -44,6 +45,7 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -67,6 +69,21 @@ public class EventLiving {
 			return entity != null && entity instanceof IVillagerFear;
 		}
 	};
+
+	@SubscribeEvent
+	public void onArrowCollide(ProjectileImpactEvent event){
+		if(event.getEntity() instanceof EntityArrow && ((EntityArrow) event.getEntity()).shootingEntity != null){
+			if(event.getRayTraceResult() != null && event.getRayTraceResult().entityHit != null){
+				Entity shootingEntity = ((EntityArrow) event.getEntity()).shootingEntity;
+				Entity shotEntity = event.getRayTraceResult().entityHit;
+				if(shootingEntity instanceof EntityLivingBase && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)){
+					if(shotEntity instanceof EntityTameable && ((EntityTameable) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)){
+						event.setCanceled(true);
+					}
+				}
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public void onPlayerAttackMob(AttackEntityEvent event){
