@@ -15,8 +15,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,6 +34,20 @@ public class ItemModAxe extends ItemTool {
 		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
+	}
+
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
+		ItemStack mat = this.toolMaterial.getRepairItemStack();
+		if(this.toolMaterial == ModItems.silverTools){
+			NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
+			for(ItemStack ingot : silverItems){
+				if(OreDictionary.itemMatches(repair, ingot, false)){
+					return true;
+				}
+			}
+		}
+		if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
+		return super.getIsRepairable(toRepair, repair);
 	}
 
 	@Override
