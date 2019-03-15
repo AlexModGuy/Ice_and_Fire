@@ -36,13 +36,13 @@ public class GuiMyrmexAddRoom extends GuiScreen {
         super.initGui();
         this.buttonList.clear();
         int i = (this.width - 248) / 2;
-        int j = 20;
+        int j = (this.height - 166) / 2;
         if (ClientProxy.getReferedClientHive() != null) {
-            this.buttonList.add(new GuiButton(0, i + 50, j + 50, 150, 20, I18n.format("myrmex.message.establishroom_food")));
-            this.buttonList.add(new GuiButton(1, i + 50, j + 75, 150, 20, I18n.format("myrmex.message.establishroom_nursery")));
-            this.buttonList.add(new GuiButton(2, i + 50, j + 100, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface")));
-            this.buttonList.add(new GuiButton(3, i + 50, j + 125, 150, 20, I18n.format("myrmex.message.establishroom_enterance_bottom")));
-            this.buttonList.add(new GuiButton(4, i + 50, j + 150, 150, 20, I18n.format("myrmex.message.establishroom_misc")));
+            this.buttonList.add(new GuiButton(0, i + 50, j + 35, 150, 20, I18n.format("myrmex.message.establishroom_food")));
+            this.buttonList.add(new GuiButton(1, i + 50, j + 60, 150, 20, I18n.format("myrmex.message.establishroom_nursery")));
+            this.buttonList.add(new GuiButton(2, i + 50, j + 85, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface")));
+            this.buttonList.add(new GuiButton(3, i + 50, j + 110, 150, 20, I18n.format("myrmex.message.establishroom_enterance_bottom")));
+            this.buttonList.add(new GuiButton(4, i + 50, j + 135, 150, 20, I18n.format("myrmex.message.establishroom_misc")));
         }
 
     }
