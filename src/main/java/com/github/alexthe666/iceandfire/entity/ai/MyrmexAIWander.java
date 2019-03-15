@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 
 public class MyrmexAIWander extends EntityAIWanderAvoidWater {
 
-    private EntityMyrmexBase myrmex;
+    protected EntityMyrmexBase myrmex;
 
     public MyrmexAIWander(EntityMyrmexBase myrmex, double speed) {
         super(myrmex, speed);
