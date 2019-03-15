@@ -139,9 +139,9 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
         this.readFromNBT(packet.getNbtCompound());
     }
 
-    public boolean isFull() {
+    public boolean isFull(ItemStack heldStack) {
         for (ItemStack itemstack : chestContents) {
-            if (itemstack.isEmpty()) {
+            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.isItemEqual(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
                 return false;
             }
         }

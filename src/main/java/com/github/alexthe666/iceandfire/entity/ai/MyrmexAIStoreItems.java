@@ -106,7 +106,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
         List<BlockPos> closeCocoons = new ArrayList<BlockPos>();
         for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ))) {
             if (this.myrmex.world.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.world.getTileEntity(blockpos) != null && this.myrmex.world.getTileEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-                if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull()) {
+                if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND))) {
                     closeCocoons.add(blockpos);
                 }
             }
@@ -119,7 +119,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
 
     public boolean isUseableCocoon(BlockPos blockpos) {
         if (this.myrmex.world.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.world.getTileEntity(blockpos) != null && this.myrmex.world.getTileEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-            if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull()) {
+            if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND)))) {
                 return true;
             }
         }
