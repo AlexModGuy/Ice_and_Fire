@@ -1,4 +1,3 @@
-Myrmex Stingers are used to create
 Trading with myrmex is a lucrative
 bussiness. Worker trades are
 usually low quality, yet they are
@@ -10,6 +9,7 @@ rarer ones and poisonous items.
 Royals will trade for artifacts
 and alchemical ingredients.
 Queens trade exclusively eggs.
+
 
 
 
