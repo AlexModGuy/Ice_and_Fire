@@ -726,13 +726,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 		if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
 			double dist = this.getDistanceSq(this.getAttackTarget());
-			if (dist < 4) {
+			if (dist < 8) {
 				this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 			}
 		}
 		if (this.getAnimation() == ANIMATION_SCRATCH && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
 			double dist = this.getDistanceSq(this.getAttackTarget());
-			if (dist < 4) {
+			if (dist < 8) {
 				this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 				this.getAttackTarget().isAirBorne = true;
 				float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);

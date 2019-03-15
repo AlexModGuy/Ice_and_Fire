@@ -409,7 +409,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 4) {
+            if (dist < 8) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
@@ -425,7 +425,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 }
                 this.motionY = 0.5F;
             }
-            if (dist < 3 && this.getAnimationTick() > 10) {
+            if (dist < 4 && this.getAnimationTick() > 10) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                 if ((double) leap >= 1.0E-4D) {
                     this.getAttackTarget().motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D;
