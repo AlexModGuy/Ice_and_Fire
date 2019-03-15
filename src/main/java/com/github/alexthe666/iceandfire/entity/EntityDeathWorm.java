@@ -583,7 +583,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
                 this.motionY = 0.5F;
                 this.setAnimation(ANIMATION_BITE);
             }
-            if (dist < Math.max(2, 2D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE) {
+            if (dist <  Math.min(4, 4D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE) {
                 float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
                 this.motionY /= 2.0D;
