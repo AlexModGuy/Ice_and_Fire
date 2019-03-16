@@ -744,6 +744,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
 				this.setSitting(true);
 			}
+			if(this.isSitting()){
+				this.getNavigator().clearPath();
+			}
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
 				this.heal(1.0F);
 			}

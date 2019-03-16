@@ -115,6 +115,7 @@ public class ItemDragonHornActive extends Item {
 					}
 					dragon.setFlying(false);
 					dragon.setHovering(false);
+					dragon.getNavigator().clearPath();
 					stack.getTagCompound().setBoolean("Released", true);
 					if (!worldIn.isRemote) {
 						worldIn.spawnEntity(dragon);
@@ -128,6 +129,7 @@ public class ItemDragonHornActive extends Item {
 					}
 					dragon.setFlying(false);
 					dragon.setHovering(false);
+					dragon.getNavigator().clearPath();
 					stack.getTagCompound().setBoolean("Released", true);
 					if (!worldIn.isRemote) {
 						worldIn.spawnEntity(dragon);
