@@ -231,7 +231,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             passenger.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
         }
         float pitch_forward = 0;
-        if (this.rotationPitch > 0) {
+        if (this.rotationPitch > 0 && this.isFlying()) {
             pitch_forward = (rotationPitch / 45F) * 0.45F;
         } else {
             pitch_forward = 0;
