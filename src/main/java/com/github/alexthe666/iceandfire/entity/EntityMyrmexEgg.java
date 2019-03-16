@@ -125,12 +125,14 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
             if(myrmex instanceof EntityMyrmexQueen){
-                EntityPlayer player = world.getClosestPlayerToEntity(this, 15);
                 MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
-                hive.hasOwner = true;
-                hive.ownerUUID = player.getUniqueID();
-                if(!world.isRemote){
-                    hive.modifyPlayerReputation(player.getUniqueID(), 100);
+                EntityPlayer player = world.getClosestPlayerToEntity(this, 30);
+                if(player != null){
+                    hive.hasOwner = true;
+                    hive.ownerUUID = player.getUniqueID();
+                    if(!world.isRemote){
+                        hive.modifyPlayerReputation(player.getUniqueID(), 100);
+                    }
                 }
                 MyrmexWorldData.addHive(world, hive);
                 myrmex.setHive(hive);
