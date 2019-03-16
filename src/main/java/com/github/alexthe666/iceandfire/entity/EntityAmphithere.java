@@ -137,7 +137,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
             return true;
         }
-        if (!super.processInteract(player, hand)) {
+        if (!super.processInteract(player, hand) && this.isOwner(player)) {
             if (itemstack != null && itemstack.getItem() == ModItems.dragon_stick) {
                 if (player.isSneaking()) {
                     BlockPos pos = new BlockPos(this);
@@ -260,7 +260,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
         }*/
         boolean flapping = this.isFlapping();
-        boolean flying = this.isFlying() && (!this.onGround || onLeaves());
+        boolean flying = this.isFlying() || (!this.onGround && !onLeaves());
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;
         boolean sitting = isSitting() && !isFlying();
         boolean notGrounded = flying || this.getAnimation() == ANIMATION_WING_BLAST;
@@ -901,7 +901,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     @Override
     public void onHearFlute(EntityPlayer player) {
-        if (!this.onGround) {
+        if (!this.onGround && this.isTamed()) {
             this.isFallen = true;
         }
     }
