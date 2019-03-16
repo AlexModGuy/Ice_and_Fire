@@ -451,11 +451,10 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     public void setRevengeTarget(@Nullable EntityLivingBase livingBase) {
         if(this.getHive() == null || livingBase == null || livingBase instanceof EntityPlayer && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
             super.setRevengeTarget(livingBase);
-            if (this.getHive() != null && livingBase != null) {
-                this.getHive().addOrRenewAgressor(livingBase, this.getImportance());
-            }
         }
-
+        if (this.getHive() != null && livingBase != null) {
+            this.getHive().addOrRenewAgressor(livingBase, this.getImportance());
+        }
         if (this.getHive() != null && livingBase != null) {
             if (livingBase instanceof EntityPlayer) {
                 int i = -5 * this.getCasteImportance();
