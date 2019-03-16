@@ -266,7 +266,7 @@ public class ModelHippogryph extends ModelDragonBase {
 		this.StirrupIronR.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.StirrupIronR.addBox(-0.5F, 6.0F, -1.0F, 1, 2, 2, 0.0F);
 		this.HindThighR = new AdvancedModelRenderer(this, 96, 29);
-		this.HindThighR.setRotationPoint(-4.0F, -2.0F, 2.0F);
+		this.HindThighR.setRotationPoint(-4.0F, -1.0F, 2.0F);
 		this.HindThighR.addBox(-1.5F, -2.0F, -2.5F, 4, 9, 5, 0.0F);
 		this.NoseBand = new AdvancedModelRenderer(this, 85, 60);
 		this.NoseBand.setRotationPoint(0.0F, 6.5F, -2.2F);
@@ -307,7 +307,7 @@ public class ModelHippogryph extends ModelDragonBase {
 		this.setRotateAngle(BackLegR2, -0.31869712141416456F, 0.0F, 0.0F);
 		this.HindThighL = new AdvancedModelRenderer(this, 96, 29);
 		this.HindThighL.mirror = true;
-		this.HindThighL.setRotationPoint(4.0F, -2.0F, 2.0F);
+		this.HindThighL.setRotationPoint(4.0F, -1.0F, 2.0F);
 		this.HindThighL.addBox(-2.5F, -2.0F, -2.5F, 4, 9, 5, 0.0F);
 		this.Neck2 = new AdvancedModelRenderer(this, 36, 108);
 		this.Neck2.setRotationPoint(0.0F, -6.8F, 0.2F);
@@ -552,6 +552,7 @@ public class ModelHippogryph extends ModelDragonBase {
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		EntityHippogryph hippo = (EntityHippogryph) entity;
+
 		if (this.isChild) {
 			this.progressPosition(Body, hippo.sitProgress, 0, 16, 0);
 		} else {
@@ -620,6 +621,8 @@ public class ModelHippogryph extends ModelDragonBase {
 			progressRotation(HeadPivot, sitProgress, -0.136659280431156F, 0.0F, 0.0F);
 			progressRotation(Quill_L, sitProgress, -1.1838568316277536F, 0.17453292519943295F, 0.0F);
 			progressRotation(HindFootL, sitProgress, 0.0F, 0.0F, 0.0F);
+			progressPositionPrev(HindThighL, sitProgress, 0, -0.75F, 0);
+			progressPositionPrev(HindThighR, sitProgress, 0, -0.75F, 0);
 		}
 		{
 			float sitProgress = hippo.sitProgress;
@@ -685,6 +688,8 @@ public class ModelHippogryph extends ModelDragonBase {
 			progressRotation(HindFootL, sitProgress, 0.0F, 0.0F, 0.0F);
 			progressRotation(HindThighR, sitProgress, 0.0F, 0.0F, 0.0F);
 			progressRotation(ToeR2, sitProgress, -0.22689280275926282F, -0.22689280275926282F, -0.3490658503988659F);
+			progressPositionPrev(HindThighL, sitProgress, 0, -0.75F, 0);
+			progressPositionPrev(HindThighR, sitProgress, 0, -0.75F, 0);
 
 		}
 
