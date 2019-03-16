@@ -137,8 +137,8 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
             return true;
         }
-        if (!super.processInteract(player, hand) && this.isOwner(player)) {
-            if (itemstack != null && itemstack.getItem() == ModItems.dragon_stick) {
+        if (!super.processInteract(player, hand)) {
+            if (itemstack != null && itemstack.getItem() == ModItems.dragon_stick && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = new BlockPos(this);
                     this.homePos = pos;
@@ -148,7 +148,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 }
                 return true;
             }
-            if (player.isSneaking()) {
+            if (player.isSneaking() && this.isOwner(player)) {
                 if (player.getHeldItem(hand).isEmpty()) {
                     this.setCommand(this.getCommand() + 1);
                     if (this.getCommand() > 2) {
