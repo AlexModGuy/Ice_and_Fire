@@ -86,6 +86,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 				hippo.setTamed(true);
 				hippo.setOwnerId(owner.getUniqueID());
 				hippo.setAttackTarget(null);
+				hippo.setCommand(1);
 				//owner.addStat(ModAchievements.tameHippogryph);
 				hippo.setSitting(true);
 			}

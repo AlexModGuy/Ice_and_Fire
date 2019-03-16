@@ -65,6 +65,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	private static final DataParameter<Boolean> HOVERING = EntityDataManager.<Boolean>createKey(EntityHippogryph.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityHippogryph.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.BYTE);
+	private static final DataParameter<Integer> COMMAND = EntityDataManager.<Integer>createKey(EntityHippogryph.class, DataSerializers.VARINT);
 	public static Animation ANIMATION_EAT;
 	public static Animation ANIMATION_SPEAK;
 	public static Animation ANIMATION_SCRATCH;
@@ -142,6 +143,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		this.dataManager.register(HOVERING, Boolean.valueOf(false));
 		this.dataManager.register(FLYING, Boolean.valueOf(false));
 		this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte)0));
+		this.dataManager.register(COMMAND, Integer.valueOf(0));
 
 	}
 
@@ -159,8 +161,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			renderYawOffset = rotationYaw;
 			this.rotationYaw = passenger.rotationYaw;
 		}
-		double ymod1 = this.hoverProgress * 0.02;
-		passenger.setPosition(this.posX, this.posY + 1.05F + ymod1, this.posZ);
+		passenger.setPosition(this.posX, this.posY + 1.05F, this.posZ);
 	}
 
 	private void initHippogryphInv() {
@@ -244,7 +245,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				return true;
 			}
 			if (itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getGrowingAge() == 0 && !isInLove()) {
-				this.setSitting(false);
 				this.setInLove(player);
 				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 				if (!player.isCreative()) {
@@ -260,7 +260,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
 					return true;
 				}else{
-					this.setSitting(!this.isSitting());
+					this.setCommand(this.getCommand() + 1);
+					if (this.getCommand() > 1) {
+						this.setCommand(0);
+					}
+					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
 
 				}
 				return true;
@@ -293,7 +297,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					return true;
 				} else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
 					player.startRiding(this, true);
-					this.setSitting(false);
 					return true;
 				}
 			}
@@ -357,6 +360,19 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		dataManager.set(CONTROL_STATE, Byte.valueOf(state));
 	}
 
+	public void setCommand(int command) {
+		this.dataManager.set(COMMAND, Integer.valueOf(command));
+		if (command == 1) {
+			this.setSitting(true);
+		} else {
+			this.setSitting(false);
+		}
+	}
+
+	public int getCommand() {
+		return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
+	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
@@ -388,6 +404,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			compound.setInteger("HomeAreaY", homePos.getY());
 			compound.setInteger("HomeAreaZ", homePos.getZ());
 		}
+		compound.setInteger("Command", this.getCommand());
 	}
 
 	@Override
@@ -429,6 +446,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (hasHomePosition && compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
 			homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
 		}
+		this.setCommand(compound.getInteger("Command"));
 	}
 
 	public int getVariant() {
@@ -720,6 +738,12 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (!this.world.isRemote) {
+			if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
+				this.setSitting(false);
+			}
+			if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
+				this.setSitting(true);
+			}
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
 				this.heal(1.0F);
 			}
@@ -752,7 +776,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 		if(!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()){
 			this.setHovering(true);
-			this.setSitting(false);
 			this.hoverTicks = 0;
 			this.flyTicks = 0;
 		}
@@ -780,12 +803,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (!this.onGround && this.airTarget != null) {
 			this.setFlying(true);
 		}
-		if (this.getControllingPassenger() != null && this.isSitting()) {
-			this.setSitting(false);
-		}
 		if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSitting()) {
 			this.setFlying(true);
-			this.setSitting(false);
 		}
 		if (!this.canMove() && this.getAttackTarget() != null) {
 			this.setAttackTarget(null);
@@ -899,7 +918,6 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 		if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
 			this.setHovering(true);
-			this.setSitting(false);
 			this.hoverTicks = 0;
 			this.flyTicks = 0;
 		}
