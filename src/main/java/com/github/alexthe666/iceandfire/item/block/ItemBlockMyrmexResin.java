@@ -10,6 +10,7 @@ public class ItemBlockMyrmexResin extends ItemBlock {
     public ItemBlockMyrmexResin(Block block) {
         super(block);
         sticky = block == ModBlocks.myrmex_resin_sticky;
+        this.setHasSubtypes(true);
     }
 
     @Override
