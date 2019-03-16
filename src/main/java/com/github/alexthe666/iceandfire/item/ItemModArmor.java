@@ -46,6 +46,7 @@ public class ItemModArmor extends ItemArmor {
 				tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("item.iceandfire.air_pods.desc"));
 			}
 		}
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
 
