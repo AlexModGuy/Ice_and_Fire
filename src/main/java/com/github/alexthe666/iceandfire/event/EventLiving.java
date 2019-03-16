@@ -358,17 +358,20 @@ public class EventLiving {
 
 			}
 		}
-		if(!event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
+		if(IceAndFire.CONFIG.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal){
 			ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
 			if(chickenProps != null){
-				if(chickenProps.timeUntilNextEgg == 0 && event.getEntityLiving().ticksExisted > 30) {
-					if (event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance) == 0) {
+				if(chickenProps.timeUntilNextEgg < 0){
+					chickenProps.timeUntilNextEgg = 0;
+				}
+				if(chickenProps.timeUntilNextEgg == 0) {
+					if (event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
 						event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 						event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 						event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
 					}
 					chickenProps.timeUntilNextEgg = chickenProps.generateTime();
-				}else{
+				}else if(chickenProps.timeUntilNextEgg > 0){
 					chickenProps.timeUntilNextEgg--;
 				}
 			}
