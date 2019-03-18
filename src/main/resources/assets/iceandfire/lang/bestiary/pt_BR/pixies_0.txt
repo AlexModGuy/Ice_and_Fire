@@ -1,7 +1,7 @@
-As fadas são seres mágicos e
+As fadas sÃ£o seres mÃ¡gicos e
 misteriosos que habitam o interior
-de biomas de florestas escuras ou de
-florestas mágicas.
+de biomas de florestas escuras ou 
+de florestas mÃ¡gicas.
 
 
 
@@ -9,27 +9,27 @@ florestas mágicas.
 
 
 
-Fadas geralmente não atacam pessoas
-diretamente, no entanto elas são
-criaturas muito vãs e 
-tentarão roubar seus itens 
-quando você não estiver
-olhando diretamente para elas.
-Uma fada que roubou algum de 
-seus itens irá largá-los ao ser atacada.
+Fadas geralmente nÃ£o atacam pessoas
+diretamente, no entanto elas sÃ£o
+criaturas muito vÃ£s e tentarÃ£o roubar 
+seus itens quando vocÃª nÃ£o estiver
+olhando diretamente para elas. Uma 
+fada que roubou algum de seus itens 
+rÃ¡ largÃ¡-los ao ser atacada.
 
-A maioria das fadas vivem em pequenos casebres, e
-se reunem em aldeias estranhas sob a cobertura
-de alguma árvore grande e pesada.
-
-
+A maioria das fadas vivem em pequenos 
+casebres, e se reunem em aldeias 
+estranhas sob a cobertura de alguma 
+Ã¡rvore grande e pesada.
 
 
 
 
-Fadas naturalmente produzem pó de
-fada. Esse pó pode ser colhido em
-grandes quantidades ao matar uma fada ou
-as aprisionando numa jarra.
-Fadas enjarradas produzem uma única
-unidade de pó de fada a cada três dias.
+
+
+Fadas naturalmente produzem pÃ³ de
+fada. Esse pÃ³ pode ser colhido em
+grandes quantidades ao matar uma 
+fada ou as aprisionando numa jarra.
+Fadas enjarradas produzem uma Ãºnica
+unidade de pÃ³ de fada a cada trÃªs dias.
