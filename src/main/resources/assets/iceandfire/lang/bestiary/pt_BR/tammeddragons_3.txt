@@ -1,15 +1,38 @@
-TambÈm È possÌvel criar
-armaduras de drag„o. As mais comuns s„o
-feitas de ferro, ouro e
-diamante. Armaduras de drag„o
-seguem o mesmo esquema das
-armaduras, exceto pelo fato de usarem
-blocos em vez de barras.
+Chifres de drag√£o podem ser usados 
+para invocar ou armazenar drag√µes 
+domesticados. Quando voc√™ tocar um 
+drag√£o com o chifre ele ficar√° seguro 
+dentro do chifre, e ao assopra-lo o 
+drag√£o ir√° retornar.
 
 
 
-Pode-se tambÈm criar uma flauta
-de osso de drag„o com uma barra de ferro
-e dois ossos de drag„o. Este instrumento
-pode acalmar um drag„o manso e 
-traze-lo de volta pro ch„o.
+
+
+Tamb√©m √© poss√≠vel criar armaduras
+de drag√£o. As mais comuns s√£o
+feitas de ferro, ouro e diamante. 
+Armaduras de drag√£o seguem o mesmo 
+esquema das armaduras, exceto pelo 
+fato de usarem blocos em vez de 
+barras.
+
+
+
+
+
+
+
+
+
+
+Pode-se tamb√©m criar uma flauta
+de osso de drag√£o com uma barra 
+de ferro e dois ossos de drag√£o. 
+Este instrumento pode acalmar um 
+drag√£o domado e traze-lo de volta 
+pro ch√£o.
+
+Essas flautas tamb√©m s√£o eficazes
+em outras criaturas voadoras domadas, 
+como hipogrifos e amphitheres.
