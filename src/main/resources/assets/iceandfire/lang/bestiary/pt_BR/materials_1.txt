@@ -1,7 +1,26 @@
-Ossos queimados podem ser transformados
-em fragmentos, que substituem a
-pederneira na confecÁ„o de flechas de
-drag„o.
+
+
+
+Ossos queimados podem ser 
+transformados em fragmentos, 
+que substituem a pederneira na 
+confec√ß√£o de flechas de drag√£o.
+
+
+
+
+
+
+A carne de drag√£o tamb√©m pode ser 
+obtida de cad√°veres. Esta carne n√£o 
+pode ser cozida e tem diferentes 
+efeitos com base em que tipo de carne
+ela √©. A carne de Drag√£o de Fogo vai
+matar quem a consumiu em chamas, e  
+a carne do Drag√£o de gelo poder√° 
+
+retarda-lo um pouco. Ambas carnes 
+possuem formatos de bifes.
 
 
 
@@ -9,23 +28,8 @@ drag„o.
 
 
 
-A carne de drag„o tambÈm pode ser obtida
-de cad·veres. Esta carne n„o pode ser
-cozida e tem diferentes efeitos
-com base em que tipo de carne
-ela.A carne de Drag„o de Fogo vai
 
-matar quem a consumiu em chamas, e a carne do Drag„o
-de gelo poder· retarda-lo  
-um pouco. Ambas carnes pode ser
-cozidas em bifes.
-
-
-
-
-
-
-
-Os coraÁıes de drag„o apenas est„o presentes
-em cad·veres. Eu atualmente
-n„o estou ciente de seu propÛsito ...
+Os cora√ß√µes de drag√£o apenas est√£o 
+presentes em cad√°veres. Eu nesse
+momento n√£o estou ciente de seu 
+prop√≥sito ...
