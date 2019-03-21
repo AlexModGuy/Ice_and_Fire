@@ -58,7 +58,7 @@ public class ModRecipes {
         OreDictionary.registerOre("blockSilver", ModBlocks.silverBlock);
         OreDictionary.registerOre("gemSapphire", ModItems.sapphireGem);
         OreDictionary.registerOre("oreSapphire", ModBlocks.sapphireOre);
-        OreDictionary.registerOre("blockSilver", ModBlocks.silverBlock);
+        OreDictionary.registerOre("blockSapphire", ModBlocks.sapphireBlock);
         OreDictionary.registerOre("boneWither", ModItems.witherbone);
         OreDictionary.registerOre("woolBlock", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodMeat", Items.CHICKEN);
