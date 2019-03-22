@@ -126,6 +126,7 @@ item.iceandfire.sheep_leggings.name=Calças de Disfarçe de Ovelha
 item.iceandfire.sheep_boots.name=Botas de Disfarçe de Ovelha
 item.iceandfire.shiny_scales.name=Escamas Brilhantes
 item.iceandfire.earplugs.name=Tampões de Ouvido
+item.iceandfire.air_pods.name=Fones de Ouvido da Apple
 item.iceandfire.deathworm_chitin_yellow.name=Quitina da Minhoca Mortífera Bronzeada
 item.iceandfire.deathworm_chitin_white.name=Quitina da Minhoca Mortífera Branca
 item.iceandfire.deathworm_chitin_red.name=Quitina da Minhoca Mortífera Vermelha
@@ -424,6 +425,8 @@ bestiary.cockatrice=Cocatrices
 bestiary.stymphalianbird=Aves do Lago Estínfalo
 bestiary.troll=Tróis
 bestiary.myrmex=Myrmex
+bestiary.amphithere=Amphitheres
+bestiary.seaserpent=Serpentes Marinhas
 
 lectern.nopages=Não é possível adicionar novas informações.
 silvertools.hurt=+2 de dano contra o Morto-Vivo

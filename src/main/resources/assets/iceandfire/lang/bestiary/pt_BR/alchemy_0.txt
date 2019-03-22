@@ -1,8 +1,8 @@
- Quando eu consegui coletar sangue
-do cad·ver de um drag„o usando um
+  Quando eu consegui coletar sangue
+do cad√°ver de um drag√£o usando um
 frasco de vidro, Eu finalmente
-descobri como us·-lo
-para criar uma arma eficaz.
+descobri como us√°-lo para criar 
+uma arma eficaz.
 
 
 
@@ -12,12 +12,11 @@ para criar uma arma eficaz.
 
 
 
-Ao combinar o sangue de fogo
-ou o de gelo com uma espada de osso
-de drag„o, Eu consegui fundir
-os dois itens e criar
-armas potentes para o
-drag„o oposto ao elemento da espada.
+Ao combinar o sangue de fogo ou o
+de gelo com uma espada de osso de
+drag√£o, Eu consegui fundir os dois 
+itens e criar armas potentes para o
+drag√£o oposto ao elemento da espada.
 
 
 
@@ -25,11 +24,13 @@ drag„o oposto ao elemento da espada.
 
 
 
-Espadas flamejantes consomem
-os inimigos em chamas, e
-fornecem um dano adicional contra
-Dragıes de Gelo. Espadas gÈlidas
-desaceleram oponentes, e aplicam
-um dano extra contra Dragıes de Fogo.
+
+Espadas flamejantes consomem os
+inimigos em chamas e fornecem um 
+dano adicional contra Drag√µes 
+de Gelo. Espadas g√©lidas desaceleram 
+oponentes, e aplicam um dano extra 
+contra Drag√µes de Fogo.
+
 Ambas espadas tem um grande
-efeito de empurr„o.
+efeito de empurr√£o.

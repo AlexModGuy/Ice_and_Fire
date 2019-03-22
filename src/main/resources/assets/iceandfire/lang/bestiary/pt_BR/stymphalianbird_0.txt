@@ -16,11 +16,11 @@ presas através de uma rajada de
 penas metálicas afiadas.
 
 Em um confronto com espaço reduzido,
-as aves tentarão perfurar suas presas
-com seus bicos metálicos. Quando elas
+as aves tentarão perfurar suas 
+presas com seus bicos metálicos. 
 
-estiverem longe de suas presas,
-as aves lançarão quatro penas
+Quando elas estiverem longe de suas 
+presas, as aves lançarão quatro penas
 afiadas em seus alvos.
 
 
@@ -36,5 +36,7 @@ ou quando o pássaro for abatido.
 
 
 
+
 Essa penas podem ser usadar para
-a confecção de flechas poderosíssímas.
+a confecção de flechas 
+poderosíssímas.
