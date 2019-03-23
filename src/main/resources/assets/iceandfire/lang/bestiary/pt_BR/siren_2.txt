@@ -1,0 +1,14 @@
+Se alguém conseguir matar uma
+sirena, esse alguem poderá obter 
+cristais e fragmentos de prismarinho, 
+juntamente com algumas Escamas 
+Brilhantes.
+    
+    Essas escamas brilhantes 
+podem ser usadas para criar 
+poções misteriosas que irão
+concedem respiração aquática.
+
+    Quanto mais escamas usar 
+nesse processo, maior será a 
+duração do efeito da poção.
