@@ -63,7 +63,6 @@ import java.util.Random;
 
 public class EventLiving {
 
-	private boolean stepHeightSwitched = false;
 	private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>(){
 		public boolean apply(@Nullable EntityLivingBase entity) {
 			return entity != null && entity instanceof IVillagerFear;
@@ -422,7 +421,6 @@ public class EventLiving {
 			if (sirenProps != null && sirenProps.sirenID != 0) {
 				EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
 				if (closestSiren != null && closestSiren.isActuallySinging()) {
-					stepHeightSwitched = false;
 					if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IceAndFire.CONFIG.sirenMaxSingTime) {
 						sirenProps.isCharmed = false;
 						sirenProps.sirenID = 0;
@@ -437,32 +435,22 @@ public class EventLiving {
 							}
 						}
 						EntityLivingBase entity = event.getEntityLiving();
+						if(entity.collidedHorizontally){
+							if(entity instanceof EntityLiving){
+								((EntityLiving) entity).getJumpHelper().setJumping();
+							}else if(entity.onGround){
+								entity.motionY = 0.42F;
+							}
+						}
 						entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
 						entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
 						entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
 						float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
-						entity.stepHeight = 1;
 						double d0 = closestSiren.posX - entity.posX;
 						double d2 = closestSiren.posZ - entity.posZ;
 						double d1 = closestSiren.posY - 1 - entity.posY;
 						if (entity.isRiding()) {
 							entity.dismountRidingEntity();
-						}
-						if (entity.onGround && entity.collidedHorizontally) {
-							entity.motionY = 0.42F;
-
-							if (entity.isPotionActive(MobEffects.JUMP_BOOST)) {
-								entity.motionY += (double) ((float) (entity.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
-							}
-
-							if (entity.isSprinting()) {
-								float f = entity.rotationYaw * 0.017453292F;
-								entity.motionX -= (double) (MathHelper.sin(f) * 0.2F);
-								entity.motionZ += (double) (MathHelper.cos(f) * 0.2F);
-							}
-
-							entity.isAirBorne = true;
-							net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 						}
 						double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 						float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
@@ -485,9 +473,6 @@ public class EventLiving {
 							sirenProps.singTime = 0;
 						}
 					}
-				} else if (!sirenProps.isCharmed && !stepHeightSwitched) {
-					event.getEntityLiving().stepHeight = 0.6F;
-					stepHeightSwitched = true;
 				}
 			}
 		}
