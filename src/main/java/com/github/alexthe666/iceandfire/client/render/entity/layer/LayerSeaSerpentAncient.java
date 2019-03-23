@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 public class LayerSeaSerpentAncient implements LayerRenderer<EntitySeaSerpent> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/seaserpent/ancient_overlay.png");
+	private static final ResourceLocation TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/ancient_overlay_blink.png");
 	private RenderLivingBase renderer;
 
 	public LayerSeaSerpentAncient(RenderLivingBase renderer) {
@@ -23,7 +24,11 @@ public class LayerSeaSerpentAncient implements LayerRenderer<EntitySeaSerpent> {
 			GlStateManager.enableNormalize();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			this.renderer.bindTexture(TEXTURE);
+			if(serpent.isBlinking()){
+				this.renderer.bindTexture(TEXTURE_BLINK);
+			}else{
+				this.renderer.bindTexture(TEXTURE);
+			}
 			this.renderer.getMainModel().render(serpent, f, f1, f2, f3, f4, f5);
 			GlStateManager.disableBlend();
 			GlStateManager.disableNormalize();
