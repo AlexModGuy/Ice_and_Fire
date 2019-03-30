@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -134,6 +135,14 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
+            }
+            return true;
+        }
+        if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage()) {
+            this.heal(5);
+            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            if (!player.isCreative()) {
+                itemstack.shrink(1);
             }
             return true;
         }
