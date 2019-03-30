@@ -252,6 +252,10 @@ public class EntityFireDragon extends EntityDragonBase {
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
 				double d4 = controller.getLookVec().z;
+				float inaccuracy = 1.0F;
+				d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 				EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
 				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
@@ -271,6 +275,10 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = controller.getLookVec().x;
 					double d3 = controller.getLookVec().y;
 					double d4 = controller.getLookVec().z;
+					float inaccuracy = 1.0F;
+					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+					d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
 					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
@@ -307,6 +315,10 @@ public class EntityFireDragon extends EntityDragonBase {
 					double d2 = entity.posX - headPosX;
 					double d3 = entity.posY - headPosY;
 					double d4 = entity.posZ - headPosZ;
+					float inaccuracy = 1.0F;
+					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+					d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 					EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
@@ -330,6 +342,10 @@ public class EntityFireDragon extends EntityDragonBase {
 						double d2 = entity.posX - headPosX;
 						double d3 = entity.posY - headPosY;
 						double d4 = entity.posZ - headPosZ;
+						float inaccuracy = 1.0F;
+						d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+						d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+						d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 						this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
 						EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
