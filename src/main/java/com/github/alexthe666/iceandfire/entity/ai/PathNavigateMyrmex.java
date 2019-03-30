@@ -13,6 +13,10 @@ public class PathNavigateMyrmex extends PathNavigateGround {
         super(myrmex, worldIn);
     }
 
+    protected boolean canNavigate(){
+        return true;
+    }
+
     protected void pathFollow() {
         Vec3d vec3d = this.getEntityPosition();
         int i = this.currentPath.getCurrentPathLength();

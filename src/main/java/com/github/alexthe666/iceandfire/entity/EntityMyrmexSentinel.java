@@ -61,7 +61,6 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
         if(visibleTicks > 0){
             visibleTicks--;
         }else{

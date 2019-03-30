@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import com.github.alexthe666.iceandfire.entity.MyrmexHive;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
@@ -26,10 +23,16 @@ public class MyrmexAILeaveHive extends EntityAIBase {
         if(this.myrmex instanceof EntityMyrmexQueen){
             return false;
         }
-        if(!this.myrmex.canMove() || !this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.canSeeSky() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()  || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || this.myrmex.isEnteringHive){
+        if(this.myrmex.isChild()){
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 100);
+
+        if(this.myrmex instanceof EntityMyrmexSentinel){
+        }
+        if(!this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.canSeeSky() || this.myrmex instanceof EntityMyrmexWorker && (((EntityMyrmexWorker)this.myrmex).holdingBaby() || !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) || this.myrmex.isEnteringHive){
+            return false;
+        }
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 1000);
         if (village == null) {
             return false;
         } else {
