@@ -105,8 +105,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-    {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
     public float getBlockPathWeight(BlockPos pos) {
@@ -129,7 +128,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             return true;
         }
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
-            if(this.getGrowingAge() == 0 && !isInLove()) {
+            if (this.getGrowingAge() == 0 && !isInLove()) {
                 this.setSitting(false);
                 this.setInLove(player);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -263,7 +262,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.isInLove()){
+        if (this.isInLove()) {
             this.setFlying(false);
         }
         /*if (!world.isRemote) {
@@ -274,10 +273,13 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;
         boolean sitting = isSitting() && !isFlying();
         boolean notGrounded = flying || this.getAnimation() == ANIMATION_WING_BLAST;
-        if (this.isSitting() && this.getCommand() != 1) {
-            this.setSitting(false);
-        }
         if (!world.isRemote) {
+            if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
+                this.setSitting(false);
+            }
+            if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
+                this.setSitting(true);
+            }
             if (flying) {
                 ticksFlying++;
             } else {
@@ -543,10 +545,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
-        if(this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5){
+        if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5) {
             this.playSound(ModSounds.AMPHITHERE_GUST, 1, 1);
         }
-        if((this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_BITE_RIDER) && this.getAnimationTick() == 1){
+        if ((this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_BITE_RIDER) && this.getAnimationTick() == 1) {
             this.playSound(ModSounds.AMPHITHERE_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAttackTarget() != null && this.getAnimationTick() > 5 && this.getAnimationTick() < 22) {
@@ -612,7 +614,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getUntamedRider() != null && this.getUntamedRider().isSneaking()) {
             MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getUntamedRider(), MiscPlayerProperties.class);
-            if(properties != null) {
+            if (properties != null) {
                 properties.hasDismountedDragon = true;
             }
             this.getUntamedRider().dismountRidingEntity();
@@ -626,7 +628,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
-        if(this.getAttackTarget() != null && this.isOwner(this.getAttackTarget())){
+        if (this.getAttackTarget() != null && this.isOwner(this.getAttackTarget())) {
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && this.onGround && this.isFlying() && ticksFlying > 40) {
