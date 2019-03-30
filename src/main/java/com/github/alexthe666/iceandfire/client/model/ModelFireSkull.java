@@ -90,6 +90,7 @@ public class ModelFireSkull extends AdvancedModelBase {
 				EntityDragonSkull skull = (EntityDragonSkull)entity;
 				this.Head.rotateAngleX = skull.isOnWall() ? (float)Math.toRadians(50F) : 0;
 				this.Head.rotationPointZ = skull.isOnWall() ? 1.2F : 2.5F;
+				this.Head.rotationPointX = -0.5F;
 			}
 			this.Head.render(f5);
 
