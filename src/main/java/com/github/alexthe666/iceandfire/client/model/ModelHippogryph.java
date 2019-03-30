@@ -398,6 +398,8 @@ public class ModelHippogryph extends ModelDragonBase {
 		} else {
 			this.Body.setScale(1, 1, 1);
 			this.Head.setScale(1, 1, 1);
+			this.Quill_L.setScale(1, 1, 1);
+			this.Quill_R.setScale(1, 1, 1);
 		}
 		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
 		this.Body.render(f5);

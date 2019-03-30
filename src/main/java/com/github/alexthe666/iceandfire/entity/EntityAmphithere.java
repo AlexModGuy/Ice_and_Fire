@@ -1037,11 +1037,11 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
                 if (d3 < 6 && EntityAmphithere.this.getAttackTarget() == null) {
-                    if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.WANDER && EntityAmphithere.this.rand.nextInt(20) == 0) {
+                    if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.WANDER && EntityAmphithere.this.rand.nextInt(30) == 0) {
                         EntityAmphithere.this.flightBehavior = FlightBehavior.CIRCLE;
                         EntityAmphithere.this.changedFlightBehavior = true;
                     }
-                    if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.CIRCLE && EntityAmphithere.this.rand.nextInt(10) == 0 && ticksCircling > 150) {
+                    if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.CIRCLE && EntityAmphithere.this.rand.nextInt(5) == 0 && ticksCircling > 150) {
                         EntityAmphithere.this.flightBehavior = FlightBehavior.WANDER;
                         EntityAmphithere.this.changedFlightBehavior = true;
                     }
