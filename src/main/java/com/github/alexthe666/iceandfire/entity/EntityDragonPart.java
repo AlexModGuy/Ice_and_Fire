@@ -10,8 +10,5 @@ public class EntityDragonPart extends EntityMutlipartPart {
     }
 
     public void collideWithNearbyEntities() {
-        if(!dragon.isModelDead()){
-            super.collideWithNearbyEntities();
-        }
     }
 }
