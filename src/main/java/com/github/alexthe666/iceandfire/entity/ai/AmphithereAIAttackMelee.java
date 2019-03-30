@@ -50,7 +50,9 @@ public class AmphithereAIAttackMelee extends EntityAIBase {
      */
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
-
+        if(!attacker.canMove()){
+            return false;
+        }
         if (entitylivingbase == null) {
             return false;
         } else if (!entitylivingbase.isEntityAlive()) {

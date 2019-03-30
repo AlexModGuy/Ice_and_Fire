@@ -168,7 +168,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     return true;
                 }
                 return true;
-            } else {
+            } else if(!this.isTamed() || this.isOwner(player)){
                 player.startRiding(this);
                 return true;
             }
@@ -183,10 +183,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(1, new AmphithereAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(2, new AmphithereAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, new AmphithereAIFleePlayer(this, 32.0F, 0.8D, 1.8D));
         this.tasks.addTask(3, new AIFlyWander());
         this.tasks.addTask(3, new AIFlyCircle());
@@ -265,6 +265,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (this.isInLove()) {
             this.setFlying(false);
         }
+        if(this.isSitting() && this.getAttackTarget() != null){
+            this.setAttackTarget(null);
+        }
         /*if (!world.isRemote) {
             System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
         }*/
@@ -279,6 +282,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
             if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
                 this.setSitting(true);
+            }
+            if(this.isSitting()){
+                this.getNavigator().clearPath();
+                this.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
             }
             if (flying) {
                 ticksFlying++;
@@ -842,7 +849,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         float radius = 10;
         if (entity.getCommand() == 2) {
             if (entity.getOwner() != null) {
-                orbit = entity.getOwner().getPosition().up(4);
+                orbit = entity.getOwner().getPosition().up(7);
                 radius = 5;
             }
         } else if (entity.hasHomePosition) {
@@ -897,7 +904,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         super.travel(strafe, forward, vertical);
     }
 
-    private boolean canMove() {
+    public boolean canMove() {
         return this.getControllingPassenger() == null && sitProgress == 0 && !this.isSitting();
     }
 
@@ -1055,7 +1062,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                         EntityAmphithere.this.flightBehavior = FlightBehavior.WANDER;
                         EntityAmphithere.this.changedFlightBehavior = true;
                     }
-                    if (EntityAmphithere.this.hasHomePosition && EntityAmphithere.this.flightBehavior != FlightBehavior.NONE) {
+                    if (EntityAmphithere.this.hasHomePosition && EntityAmphithere.this.flightBehavior != FlightBehavior.NONE || EntityAmphithere.this.getCommand() == 2) {
                         EntityAmphithere.this.flightBehavior = FlightBehavior.CIRCLE;
                     }
                 }
