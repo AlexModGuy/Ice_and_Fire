@@ -102,8 +102,9 @@ public class FireExplosion extends Explosion {
 				}
 			}
 		}
-
-		this.affectedBlockPositions.addAll(set);
+		if(DragonUtils.canGrief(false)){
+			this.affectedBlockPositions.addAll(set);
+		}
 		float f3 = this.explosionSize * 2.0F;
 		int k1 = MathHelper.floor(this.explosionX - f3 - 1.0D);
 		int l1 = MathHelper.floor(this.explosionX + f3 + 1.0D);

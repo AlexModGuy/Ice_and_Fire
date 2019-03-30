@@ -277,4 +277,12 @@ public class DragonUtils {
     }
 
 
+    public static boolean canGrief(boolean weak) {
+		if(weak){
+			return IceAndFire.CONFIG.dragonGriefing == 0;
+
+		}else{
+			return IceAndFire.CONFIG.dragonGriefing < 2;
+		}
+    }
 }
