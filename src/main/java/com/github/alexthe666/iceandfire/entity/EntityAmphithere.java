@@ -11,6 +11,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
@@ -608,6 +609,13 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     this.setFlying(false);
                 }
             }
+        }
+        if (this.getUntamedRider() != null && this.getUntamedRider().isSneaking()) {
+            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getUntamedRider(), MiscPlayerProperties.class);
+            if(properties != null) {
+                properties.hasDismountedDragon = true;
+            }
+            this.getUntamedRider().dismountRidingEntity();
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
             EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 2.5D);
