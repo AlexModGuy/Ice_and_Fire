@@ -310,12 +310,10 @@ public class ModelAmphithere extends ModelDragonBase {
             this.HeadFront.setScale(1, 1, 1);
             this.HeadFront.rotationPointZ = -2F;
             this.Jaw.rotationPointZ = -4.5F;
-            this.Jaw.setScale(1, 1F, 1);
         }else{
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);
             this.HeadFront.setScale(1F, 1F, 1F);
-            this.Jaw.setScale(1F, 1F, 1F);
             this.BodyUpper.rotationPointY = 15.8F;
 
         }
