@@ -38,6 +38,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -211,6 +212,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, entity, (int) this.getSeaSerpentScale());
             }
         }
+        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+            this.setDead();
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
@@ -342,9 +346,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     public void onLivingUpdate() {
         if (!world.isRemote) {
-            if(isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()){
+            if (isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()) {
                 motionY -= 0.25D;
-                if(this.isInWater()){
+                if (this.isInWater()) {
                     this.setJumpingOutOfWater(false);
                     this.ticksSinceJump = 0;
                 }
@@ -362,10 +366,10 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.setAnimation(ANIMATION_ROAR);
             this.ticksSinceRoar = 0;
         }
-        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 1){
+        if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 1) {
             this.playSound(ModSounds.SEA_SERPENT_ROAR, this.getSoundVolume() + 1, 1);
         }
-        if(this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5){
+        if (this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5) {
             this.playSound(ModSounds.SEA_SERPENT_BITE, this.getSoundVolume(), 1);
         }
         if (isJumpingOutOfWater()) {
@@ -470,7 +474,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     }
                 } else if (this.onGround) {
                     this.swimBehavior = SwimBehavior.ATTACK;
-                }else{
+                } else {
                     this.swimBehavior = SwimBehavior.WANDER;
                 }
             } else {
@@ -491,7 +495,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 this.ticksSinceJump = 0;
                 setJumpingOutOfWater(false);
             }
-            if (this.swimBehavior == SwimBehavior.ATTACK && this.getAttackTarget() != null && !this.getAttackTarget().isInWater()){
+            if (this.swimBehavior == SwimBehavior.ATTACK && this.getAttackTarget() != null && !this.getAttackTarget().isInWater()) {
                 this.swimBehavior = SwimBehavior.WANDER;
                 this.faceEntity(this.getAttackTarget(), 360, 360);
             }
@@ -631,7 +635,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return livingdata;
     }
 
-    public void onWorldSpawn(Random random){
+    public void onWorldSpawn(Random random) {
         this.setVariant(random.nextInt(6));
         boolean ancient = random.nextInt(15) == 1;
         if (ancient) {
@@ -642,6 +646,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.setSeaSerpentScale(1.5F + random.nextFloat() * 4.0F);
         }
     }
+
     @Nullable
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
@@ -800,7 +805,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 this.attackDecision = true;
             }
             if (this.isBreathing()) {
-                if(this.ticksExisted % 40 == 0){
+                if (this.ticksExisted % 40 == 0) {
                     this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
                 }
                 if (this.ticksExisted % 3 == 0) {
@@ -834,7 +839,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     public EnumSeaSerpent getEnum() {
-        switch(this.getVariant()){
+        switch (this.getVariant()) {
             default:
                 return EnumSeaSerpent.BLUE;
             case 1:
@@ -898,7 +903,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     this.action = EntityMoveHelper.Action.WAIT;
                     EntitySeaSerpent.this.motionX *= 0.5D;
                     EntitySeaSerpent.this.motionZ *= 0.5D;
-                    if(EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP){
+                    if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
                         EntitySeaSerpent.this.swimBehavior = SwimBehavior.WANDER;
                         EntitySeaSerpent.this.ticksSinceJump = 0;
                         EntitySeaSerpent.this.setJumpingOutOfWater(false);
@@ -928,7 +933,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     @Override
     public void travel(float strafe, float vertical, float forward) {
         if (this.swimBehavior == SwimBehavior.JUMP && this.isJumpingOutOfWater() && this.getAttackTarget() == null) {
-           // moveJumping();
+            // moveJumping();
         }
         float f4;
         if (this.isServerWorld()) {
@@ -1044,7 +1049,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (EntitySeaSerpent.this.swimBehavior != EntitySeaSerpent.SwimBehavior.CIRCLE || !EntitySeaSerpent.this.canMove()) {
                 return false;
             }
-            if(!EntitySeaSerpent.this.getMoveHelper().isUpdating()){
+            if (!EntitySeaSerpent.this.getMoveHelper().isUpdating()) {
                 EntitySeaSerpent.this.swimBehavior = SwimBehavior.WANDER;
                 return false;
             }
