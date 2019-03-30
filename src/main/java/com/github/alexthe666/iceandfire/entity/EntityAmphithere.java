@@ -224,10 +224,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             this.rotationYaw = passenger.rotationYaw;
             //renderYawOffset = rotationYaw;
         }
-        if (!this.isTamed() && passenger instanceof EntityPlayer && this.getAnimation() == NO_ANIMATION && rand.nextInt(15) == 0) {
+        if (!this.world.isRemote && !this.isTamed() && passenger instanceof EntityPlayer && this.getAnimation() == NO_ANIMATION && rand.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
         }
-        if (this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6) {
+        if (!this.world.isRemote && this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6 && !this.isTamed()) {
             passenger.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
         }
         float pitch_forward = 0;
@@ -608,6 +608,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             if (target != null) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
+        }
+        if(this.getAttackTarget() != null && this.isOwner(this.getAttackTarget())){
+            this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && this.onGround && this.isFlying() && ticksFlying > 40) {
             this.setFlying(false);
