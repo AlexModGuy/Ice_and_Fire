@@ -221,7 +221,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (!this.isTamed() && this.isFlying() && !onGround && source.isProjectile()) {
+        if (!this.isTamed() && this.isFlying() && !onGround && source.isProjectile() && !world.isRemote) {
             this.isFallen = true;
         }
         return super.attackEntityFrom(source, damage);
@@ -272,7 +272,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
         }*/
         boolean flapping = this.isFlapping();
-        boolean flying = this.isFlying() || (!this.onGround && !onLeaves());
+        boolean flying = this.isFlying() && !this.onGround || (!this.onGround && !onLeaves());
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;
         boolean sitting = isSitting() && !isFlying();
         boolean notGrounded = flying || this.getAnimation() == ANIMATION_WING_BLAST;
@@ -566,8 +566,8 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 float f = MathHelper.sqrt(this.motionX * this.motionX * 0.20000000298023224D + this.motionY * this.motionY + this.motionZ * this.motionZ * 0.20000000298023224D);
                 this.getAttackTarget().motionX /= 2.0D;
                 this.getAttackTarget().motionZ /= 2.0D;
-                this.getAttackTarget().motionX -= 0.5 / (double) f * 4;
-                this.getAttackTarget().motionZ -= 0.5 / (double) f * 4;
+                this.getAttackTarget().motionX -= 0.5 / (double) f;
+                this.getAttackTarget().motionZ -= 0.5 / (double) f;
 
                 if (this.getAttackTarget().onGround) {
                     this.getAttackTarget().motionY /= 2.0D;
