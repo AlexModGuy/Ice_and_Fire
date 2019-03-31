@@ -291,6 +291,11 @@ public class ModItems {
 	public static Item sea_serpent_fang = new ItemGeneric("sea_serpent_fang", "iceandfire.sea_serpent_fang");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_arrow")
 	public static Item sea_serpent_arrow = new ItemSeaSerpentArrow();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_link")
+	public static Item chain_link = new ItemGeneric("chain_link", "iceandfire.chain_link");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain")
+	public static Item chain = new ItemChain();
+
 
 	static {
 		EnumDragonArmor.initArmors();

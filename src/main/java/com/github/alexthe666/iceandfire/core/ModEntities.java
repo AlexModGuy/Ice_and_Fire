@@ -27,6 +27,7 @@ public class ModEntities {
 		EntityPropertiesHandler.INSTANCE.registerProperties(FrozenEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
 		EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
+		EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
 		/*registerUnspawnable(EntityDragonEgg.class, "dragonegg", 1);
 		registerUnspawnable(EntityDragonArrow.class, "dragonarrow", 2);
 		registerUnspawnable(EntityDragonSkull.class, "dragonskull", 3);

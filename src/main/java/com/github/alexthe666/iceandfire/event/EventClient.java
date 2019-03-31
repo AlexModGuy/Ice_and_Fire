@@ -2,28 +2,26 @@ package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerChainedEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -46,6 +44,7 @@ public class EventClient {
 			if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
 				((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
 				((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
+				((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
 			}
 		}
 
@@ -81,6 +80,7 @@ public class EventClient {
 							LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
 							((RenderLivingBase) render).addLayer(stoneLayer);
 							((RenderLivingBase) render).addLayer(crackLayer);
+							((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
 						}
 						}catch(NullPointerException exp){
 							System.out.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
@@ -97,6 +97,7 @@ public class EventClient {
 						LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer)render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
 						((RenderLivingBase) render).addLayer(stoneLayer);
 						((RenderLivingBase) render).addLayer(crackLayer);
+						((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
 					}
 				}
 			}
@@ -180,9 +181,92 @@ public class EventClient {
 	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/blocks/frosted_ice_1.png");
 	private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/blocks/frosted_ice_2.png");
 	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/blocks/frosted_ice_3.png");
+	private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
 
 	@SubscribeEvent
 	public void onPostRenderLiving(RenderLivingEvent.Post event){
+		EntityLivingBase entity = event.getEntity();
+		ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
+		if (properties != null) {
+			if(!properties.connectedEntities.isEmpty()){
+				if(!properties.alreadyIgnoresCamera){
+					entity.ignoreFrustumCheck = true;
+				}
+				GlStateManager.pushMatrix();
+				GlStateManager.disableCull();
+				GlStateManager.enableNormalize();
+				GlStateManager.depthMask(true);
+				GlStateManager.disableLighting();
+				int light = entity.world.getCombinedLight(new BlockPos(entity), 0);
+				int i1 = light % 65536;
+				int j1 = light / 65536;
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)i1, (float)j1);
+				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+				for(Entity chainer : properties.connectedEntities){
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder bufferbuilder = tessellator.getBuffer();
+					event.getRenderer().bindTexture(CHAIN_TEXTURE);
+					GlStateManager.pushMatrix();
+					double posX = Minecraft.getMinecraft().player.prevPosX + (Minecraft.getMinecraft().player.posX - Minecraft.getMinecraft().player.prevPosX) * (double) event.getPartialRenderTick();
+					double posY = Minecraft.getMinecraft().player.prevPosY + (Minecraft.getMinecraft().player.posY - Minecraft.getMinecraft().player.prevPosY) * (double) event.getPartialRenderTick();
+					double posZ = Minecraft.getMinecraft().player.prevPosZ + (Minecraft.getMinecraft().player.posZ - Minecraft.getMinecraft().player.prevPosZ) * (double) event.getPartialRenderTick();
+					double chainPosX = chainer.prevPosX + (chainer.posX - chainer.prevPosX) * (double) event.getPartialRenderTick();
+					double chainPosY = chainer.prevPosY + (chainer.posY - chainer.prevPosY) * (double) event.getPartialRenderTick();
+					double chainPosZ = chainer.prevPosZ + (chainer.posZ - chainer.prevPosZ) * (double) event.getPartialRenderTick();
+					GlStateManager.translate(chainPosX - posX, chainPosY - posY, chainPosZ - posZ);
+					GlStateManager.translate(0, 0.75, 0);
+					double height = (double)chainer.getEyeHeight() * 0.75F;
+					Vec3d vec3d = this.getChainPosition(entity, height, event.getPartialRenderTick());
+					Vec3d vec3d1 = this.getChainPosition(chainer, height, event.getPartialRenderTick());
+					Vec3d vec3d2 = vec3d.subtract(vec3d1);
+					double d0 = vec3d2.length();
+					vec3d2 = vec3d2.normalize();
+					float f5 = (float) Math.acos(vec3d2.y);
+					float f6 = -(float) Math.atan2(vec3d2.z, vec3d2.x);
+					GlStateManager.rotate((((float) Math.PI / 2F) + f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+					GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+					double d1 = (double)0D;
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+					int j = 225;
+					int k = 225;
+					int l = 225;
+					float texture_scale = 0.3F;
+					double d12 = 0.0D + Math.cos(d1 + Math.PI) * texture_scale;
+					double d13 = 0.0D + Math.sin(d1 + Math.PI) * texture_scale;
+					double d14 = 0.0D + Math.cos(d1 + 0.0D) * texture_scale;
+					double d15 = 0.0D + Math.sin(d1 + 0.0D) * texture_scale;
+
+					double d16 = 0.0D + Math.cos(d1 + (Math.PI / 2D)) * texture_scale;
+					double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * texture_scale;
+					double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * texture_scale;
+					double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * texture_scale;
+					double d22 = (double) (0.0F);
+					double d23 = d0 * 1 - texture_scale + d22;
+					bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d14, 0.0D, d15).tex(0.0D, d22).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d14, d0, d15).tex(0.0D, d23).color(j, k, l, 255).endVertex();
+
+					bufferbuilder.pos(d16, d0, d17).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d16, 0.0D, d17).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d18, 0.0D, d19).tex(0.0D, d22).color(j, k, l, 255).endVertex();
+					bufferbuilder.pos(d18, d0, d19).tex(0.0D, d23).color(j, k, l, 255).endVertex();
+					tessellator.draw();
+					GlStateManager.popMatrix();
+				}
+				GlStateManager.disableBlend();
+				GlStateManager.enableCull();
+				GlStateManager.enableLighting();
+				GlStateManager.disableNormalize();
+				GlStateManager.popMatrix();
+
+			}else{
+				if(!properties.alreadyIgnoresCamera && entity.ignoreFrustumCheck){
+					entity.ignoreFrustumCheck = false;
+				}
+			}
+		}
 		FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), FrozenEntityProperties.class);
 		if(frozenProps != null && frozenProps.isFrozen){
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -196,6 +280,14 @@ public class EventClient {
 			GlStateManager.disableBlend();
 			GlStateManager.disableNormalize();
 		}
+
+	}
+
+	private Vec3d getChainPosition(Entity entityLivingBaseIn, double p_177110_2_, float p_177110_4_) {
+		double d0 = entityLivingBaseIn.lastTickPosX + (entityLivingBaseIn.posX - entityLivingBaseIn.lastTickPosX) * (double) p_177110_4_;
+		double d1 = p_177110_2_ + entityLivingBaseIn.lastTickPosY + (entityLivingBaseIn.posY - entityLivingBaseIn.lastTickPosY) * (double) p_177110_4_;
+		double d2 = entityLivingBaseIn.lastTickPosZ + (entityLivingBaseIn.posZ - entityLivingBaseIn.lastTickPosZ) * (double) p_177110_4_;
+		return new Vec3d(d0, d1, d2);
 	}
 
 	private static ResourceLocation getIceTexture(int ticksFrozen){
