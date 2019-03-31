@@ -371,7 +371,11 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         }
         if (this.isFallen && this.onGround) {
             this.setFlying(false);
-            flightCooldown = 12000;
+            if(this.isTamed()){
+                flightCooldown = 50;
+            }else{
+                flightCooldown = 12000;
+            }
             this.isFallen = false;
         }
         if (flying && this.isLandNavigator) {
