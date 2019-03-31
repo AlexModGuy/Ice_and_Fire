@@ -236,16 +236,36 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void updateParts() {
-        headPart.onUpdate();
-        neckPart.onUpdate();
-        rightWingUpperPart.onUpdate();
-        rightWingLowerPart.onUpdate();
-        leftWingUpperPart.onUpdate();
-        leftWingLowerPart.onUpdate();
-        tail1Part.onUpdate();
-        tail2Part.onUpdate();
-        tail3Part.onUpdate();
-        tail4Part.onUpdate();
+        if(headPart != null){
+            headPart.onUpdate();
+        }
+        if(neckPart != null){
+            neckPart.onUpdate();
+        }
+        if(rightWingUpperPart != null) {
+            rightWingUpperPart.onUpdate();
+        }
+        if(rightWingLowerPart != null) {
+            rightWingLowerPart.onUpdate();
+        }
+        if(leftWingUpperPart != null) {
+            leftWingUpperPart.onUpdate();
+        }
+        if(leftWingLowerPart != null) {
+            leftWingLowerPart.onUpdate();
+        }
+        if(tail1Part != null) {
+            tail1Part.onUpdate();
+        }
+        if(tail2Part != null) {
+            tail2Part.onUpdate();
+        }
+        if(tail3Part != null) {
+            tail3Part.onUpdate();
+        }
+        if(tail4Part != null) {
+            tail4Part.onUpdate();
+        }
     }
 
     protected PathNavigate createNavigator(World worldIn) {
@@ -1442,7 +1462,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (this.isBreathingFire()) {
             this.fireTicks++;
-            if (fireTicks > this.getDragonStage() * 12 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+            if (fireTicks > this.getDragonStage() * 25 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
                 this.attackDecision = this.getRNG().nextBoolean();
                 fireTicks = 0;

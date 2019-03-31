@@ -14,10 +14,14 @@ public class ParticleDragonFire extends ParticleFlame {
 
 	public ParticleDragonFire(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+		this.particleMaxAge = 3;
 	}
 
 	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		particleScale = 0.3F * (this.particleMaxAge - (this.particleAge));
+		if(particleAge > 3){
+			this.setExpired();
+		}
+		particleScale = 2.6F * (this.particleMaxAge - (this.particleAge));
 		float f = (float) this.particleTextureIndexX / 16.0F;
 		float f1 = f + 0.0624375F;
 		float f2 = (float) this.particleTextureIndexY / 16.0F;

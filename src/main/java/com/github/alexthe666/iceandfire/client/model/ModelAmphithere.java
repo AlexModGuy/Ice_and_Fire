@@ -11,6 +11,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class ModelAmphithere extends ModelDragonBase {
     public AdvancedModelRenderer BodyUpper;
@@ -306,15 +307,14 @@ public class ModelAmphithere extends ModelDragonBase {
             this.Jaw.setShouldScaleChildren(true);
             this.BodyUpper.setScale(0.5F, 0.5F, 0.5F);
             this.Head.setScale(1.5F, 1.5F, 1.5F);
-            this.BodyUpper.rotationPointY = 18.8F;
             this.HeadFront.setScale(1, 1, 1);
             this.HeadFront.rotationPointZ = -2F;
             this.Jaw.rotationPointZ = -4.5F;
+            GL11.glTranslatef(0, 0.2F, 0);
         }else{
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);
             this.HeadFront.setScale(1F, 1F, 1F);
-            this.BodyUpper.rotationPointY = 15.8F;
 
         }
         setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
@@ -418,6 +418,7 @@ public class ModelAmphithere extends ModelDragonBase {
     }
 
     private void wingBlastPose(){
+        animator.move(BodyUpper, 0, -36, 20);
         this.rotateMinus(animator, BodyUpper, -80, 0, 0);
         this.rotateMinus(animator, BodyLower, -10, 0, 0);
         this.rotateMinus(animator, Tail1, -10, 0, 0);
@@ -434,7 +435,6 @@ public class ModelAmphithere extends ModelDragonBase {
         this.rotateMinus(animator, WingL2, -20, 0, 20);
         this.rotateMinus(animator, WingR3, 16, 0, 0);
         this.rotateMinus(animator, WingL3, 16, 0, 0);
-        animator.move(BodyUpper, 0, -36F, 20);
     }
 
     @Override
