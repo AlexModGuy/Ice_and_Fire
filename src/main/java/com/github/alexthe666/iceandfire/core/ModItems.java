@@ -294,7 +294,9 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_link")
 	public static Item chain_link = new ItemGeneric("chain_link", "iceandfire.chain_link");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain")
-	public static Item chain = new ItemChain();
+	public static Item chain = new ItemChain(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_sticky")
+	public static Item chain_sticky = new ItemChain(true);
 
 
 	static {

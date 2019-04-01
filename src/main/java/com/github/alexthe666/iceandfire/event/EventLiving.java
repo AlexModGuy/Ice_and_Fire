@@ -356,7 +356,13 @@ public class EventLiving {
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
+        if(!event.getEntityLiving().world.isRemote){
+            chainProperties.updateConnectedEntities();
+        }
         if (chainProperties != null && chainProperties.isChained()) {
+            if(chainProperties.wasJustDisconnected){
+                chainProperties.wasJustDisconnected = false;
+            }
             for (Entity chainer : chainProperties.connectedEntities) {
                 //TODO: update chain distance
                 float f = event.getEntityLiving().getDistance(chainer);
@@ -560,6 +566,17 @@ public class EventLiving {
                 event.setCanceled(true);
             }
         }
+        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
+        if(chainProperties != null){
+            //chainProperties.debug();
+            chainProperties.updateConnectedEntities();
+            if(chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getEntityPlayer())){
+                chainProperties.removeChain(event.getEntityPlayer());
+                if(!event.getWorld().isRemote) {
+                    event.getTarget().dropItem(ModItems.chain, 1);
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -570,6 +587,7 @@ public class EventLiving {
                 event.setCanceled(true);
             }
         }
+
     }
 
     @SubscribeEvent

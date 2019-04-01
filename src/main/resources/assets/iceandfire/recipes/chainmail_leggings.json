@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CCC",
+    "C C",
+    "C C"
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:chain_link"
+    }
+  },
+  "result": {
+    "item": "minecraft:chainmail_leggings",
+    "data": 0
+  }
+}

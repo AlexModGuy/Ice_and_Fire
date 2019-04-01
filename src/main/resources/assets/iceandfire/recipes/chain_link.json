@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " N ",
+    "N N",
+    " N "
+  ],
+  "key": {
+    "N": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    }
+  },
+  "result": {
+    "item": "iceandfire:chain_link",
+    "data": 0
+  }
+}

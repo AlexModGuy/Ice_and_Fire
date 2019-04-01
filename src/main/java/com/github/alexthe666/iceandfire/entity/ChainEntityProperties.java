@@ -12,17 +12,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	private List<UUID> connectedEntityUUID = new ArrayList<UUID>();
 	public List<Entity> connectedEntities = new ArrayList<>();
 	public boolean alreadyIgnoresCamera = false;
+	public boolean wasJustDisconnected = false;
 
 	@Override
 	public int getTrackingTime() {
@@ -42,15 +41,16 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		NBTTagList nbttaglist = compound.getTagList("ConnectedEntities", 0);
+		NBTTagList nbttaglist = compound.getTagList("ConnectedEntities", Constants.NBT.TAG_COMPOUND);
+		this.connectedEntityUUID = new ArrayList<UUID>();
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			connectedEntityUUID.add(nbttagcompound.getUniqueId("UUID"));
 		}
+		updateConnectedEntities();
 	}
 
 	public void clearChained(){
-		this.connectedEntityUUID.clear();
 		this.connectedEntities.clear();
 	}
 
@@ -69,20 +69,21 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 	}
 
 	public void addChain(Entity entity){
-		if(!connectedEntityUUID.contains(entity.getPersistentID())) {
-			connectedEntityUUID.add(entity.getPersistentID());
+		minimizeLists();
+		if(!connectedEntityUUID.contains(entity.getUniqueID())) {
+			connectedEntityUUID.add(entity.getUniqueID());
 		}
 		updateConnectedEntities();
 	}
 
 	public void removeChain(Entity entity){
-		connectedEntityUUID.remove(entity.getPersistentID());
+		minimizeLists();
+		connectedEntityUUID.remove(entity.getUniqueID());
 		connectedEntities.remove(entity);
 		if(!entity.world.isRemote){
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageRemoveChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
-
 		}
-		updateConnectedEntities();
+		wasJustDisconnected = true;
 	}
 
 
@@ -90,18 +91,46 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		return connectedEntities;
 	}
 
+	private void minimizeLists(){
+		List<UUID> noDupesUUID = new ArrayList();
+		for(UUID uuid : connectedEntityUUID){
+			if(!noDupesUUID.contains(uuid)){
+				noDupesUUID.add(uuid);
+			}
+		}
+		connectedEntityUUID = noDupesUUID;
+		List<Entity> noDupesEntity = new ArrayList();
+		for(Entity entity : connectedEntities){
+			if(!noDupesEntity.contains(entity)){
+				noDupesEntity.add(entity);
+			}
+		}
+		connectedEntities = noDupesEntity;
+	}
+
 	public void updateConnectedEntities(){
-		if(!connectedEntityUUID.isEmpty() && getWorld() != null && !getWorld().isRemote) {
-			for (UUID uuid : connectedEntityUUID) {
-				if(getWorld() != null && getWorld().getMinecraftServer() != null) {
-					Entity entity = getWorld().getMinecraftServer().getEntityFromUuid(uuid);
-					if (entity != null && !connectedEntities.contains(entity)) {
-						connectedEntities.add(entity);
-						IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
+		connectedEntities.clear();
+		if(getEntity() != null) {
+			World world = getEntity().world;
+			if (!connectedEntityUUID.isEmpty() && world != null && !world.isRemote) {
+				minimizeLists();
+				for (UUID uuid : connectedEntityUUID) {
+					if (world.getMinecraftServer() != null) {
+						Entity entity = world.getMinecraftServer().getEntityFromUuid(uuid);
+						if (entity != null) {
+							IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
+							if (!connectedEntities.contains(entity)) {
+								connectedEntities.add(entity);
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+
+	public void updateClients(){
+		updateConnectedEntities();
 	}
 
 	@Override

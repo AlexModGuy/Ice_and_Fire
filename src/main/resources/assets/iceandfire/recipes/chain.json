@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " CC",
+    " C ",
+    "CC "
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:chain_link"
+    }
+  },
+  "result": {
+    "item": "iceandfire:chain",
+    "data": 0
+  }
+}

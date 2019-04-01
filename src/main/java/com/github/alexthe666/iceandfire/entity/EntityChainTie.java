@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockWall;
@@ -7,8 +8,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -26,17 +29,13 @@ public class EntityChainTie extends EntityHanging {
 
     public EntityChainTie(World worldIn) {
         super(worldIn);
-        // this.setEntityBoundingBox(new AxisAlignedBB(this.posX - 0.1875D, this.posY - 0.25D + 0.125D, this.posZ - 0.1875D, this.posX + 0.1875D, this.posY + 0.25D + 0.125D, this.posZ + 0.1875D));
         this.setSize(0.8F, 0.9F);
+        this.facingDirection = EnumFacing.NORTH;
     }
 
     public EntityChainTie(World worldIn, BlockPos hangingPositionIn) {
         super(worldIn, hangingPositionIn);
         this.setPosition((double) hangingPositionIn.getX() + 0.5D, (double) hangingPositionIn.getY(), (double) hangingPositionIn.getZ() + 0.5D);
-        float f = 0.125F;
-        float f1 = 0.1875F;
-        float f2 = 0.25F;
-        //this.setEntityBoundingBox(new AxisAlignedBB(this.posX - 0.1875D, this.posY - 0.25D + 0.125D, this.posZ - 0.1875D, this.posX + 0.1875D, this.posY + 0.25D + 0.125D, this.posZ + 0.1875D));
         this.setSize(0.8F, 0.9F);
         this.forceSpawn = true;
     }
@@ -53,11 +52,22 @@ public class EntityChainTie extends EntityHanging {
     }
 
     public int getWidthPixels() {
-        return 9;
+        return 0;
     }
 
     public int getHeightPixels() {
-        return 9;
+        return 0;
+    }
+
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        BlockPos blockpos = this.getHangingPosition();
+        compound.setInteger("TileX", blockpos.getX());
+        compound.setInteger("TileY", blockpos.getY());
+        compound.setInteger("TileZ", blockpos.getZ());
+    }
+
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        this.hangingPosition = new BlockPos(compound.getInteger("TileX"), compound.getInteger("TileY"), compound.getInteger("TileZ"));
     }
 
     public float getEyeHeight() {
@@ -73,16 +83,6 @@ public class EntityChainTie extends EntityHanging {
         this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 1.0F, 1.0F);
     }
 
-    public boolean writeToNBTOptional(NBTTagCompound compound) {
-        return false;
-    }
-
-    public void writeEntityToNBT(NBTTagCompound compound) {
-    }
-
-    public void readEntityFromNBT(NBTTagCompound compound) {
-    }
-
     public void setDead() {
         this.isDead = true;
         double d0 = 30D;
@@ -91,6 +91,9 @@ public class EntityChainTie extends EntityHanging {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(this)) {
                 chainProperties.removeChain(this);
+                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
+                entityitem.setDefaultPickupDelay();
+                this.world.spawnEntity(entityitem);
             }
         }
     }
@@ -120,6 +123,9 @@ public class EntityChainTie extends EntityHanging {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(this)) {
                             chainProperties.removeChain(this);
+                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
+                            entityitem.setDefaultPickupDelay();
+                            this.world.spawnEntity(entityitem);
                         }
                     }
                 }
