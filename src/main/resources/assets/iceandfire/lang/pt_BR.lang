@@ -48,6 +48,9 @@ tile.iceandfire.jar_2.name=Jarra com Fada Azul
 tile.iceandfire.jar_3.name=Jarra com Fada Verde
 tile.iceandfire.jar_4.name=Jarra com Fada Amarela
 tile.iceandfire.nest.name=Ninho de Dragão
+tile.iceandfire.dragonscale_block.name=Bloco de Escamas de Dragão
+tile.iceandfire.dragon_bone_block.name=Bloco de Ossos de Dragão
+tile.iceandfire.sea_serpent_scale_block.name=Bloco de Escamas da Serpente Marinha
 tile.iceandfire.desert_myrmex_resin.name=Resina de Myrmex do Deserto
 tile.iceandfire.desert_myrmex_resin_sticky.name=Resina Grudenta de Myrmex do Deserto
 tile.iceandfire.jungle_myrmex_resin.name=Resina de Myrmex da Selva
@@ -321,6 +324,7 @@ entity.myrmex_royal.name=Myrmex Monarca
 entity.myrmex_egg.name=Ovo de Myrmex 
 entity.amphithere.name=Amphithere
 entity.seaserpent.name=Serpente Marinha
+entity.chaintie.name=Corrente
 
 sea_serpent.blue=Azul
 sea_serpent.bronze=Bronze
