@@ -1,0 +1,14 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragonscale_gray",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonscales_gray",
+    "data": 0,
+    "count": 9
+  }
+}

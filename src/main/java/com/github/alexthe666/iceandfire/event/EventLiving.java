@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
+import com.github.alexthe666.iceandfire.item.ItemChain;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
@@ -14,6 +15,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockWall;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -339,7 +341,7 @@ public class EventLiving {
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event){
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-        if(chainProperties != null && chainProperties.isChained()){
+        if(chainProperties != null){
             chainProperties.clearChained();
         }
     }
@@ -610,6 +612,9 @@ public class EventLiving {
                     }
                 }
             }
+        }
+        if(event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockWall){
+            ItemChain.attachToFence(event.getEntityPlayer(), event.getWorld(), event.getPos());
         }
     }
 

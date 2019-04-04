@@ -1,0 +1,14 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragon_bone_block",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonbone",
+    "data": 0,
+    "count": 9
+  }
+}

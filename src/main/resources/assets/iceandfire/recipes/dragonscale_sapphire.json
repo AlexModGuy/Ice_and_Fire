@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragonscales_sapphire",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonscale_sapphire",
+    "data": 0
+  }
+}

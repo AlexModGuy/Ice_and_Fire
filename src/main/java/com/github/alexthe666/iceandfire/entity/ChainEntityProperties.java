@@ -52,6 +52,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	public void clearChained(){
 		this.connectedEntities.clear();
+		this.connectedEntityUUID.clear();
 	}
 
 	public boolean isChained(){

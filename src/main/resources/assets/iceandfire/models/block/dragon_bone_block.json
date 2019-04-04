@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "iceandfire:blocks/dragon_bone_block",
+    "side": "iceandfire:blocks/dragon_bone_block_side"
+  }
+}

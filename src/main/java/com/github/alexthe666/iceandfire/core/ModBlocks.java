@@ -5,9 +5,12 @@ import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.item.ItemDragonScales;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
@@ -68,6 +71,26 @@ public class ModBlocks {
 	public static Block dragon_ice_spikes = new BlockIceSpikes();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":nest")
 	public static Block nest = new BlockGeneric(Material.GRASS, "nest", "iceandfire.nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
+
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_red")
+	public static Block dragonscale_red = new BlockDragonScales("dragonscale_red", EnumDragonEgg.RED);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_green")
+	public static Block dragonscale_green = new BlockDragonScales("dragonscale_green", EnumDragonEgg.GREEN);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_bronze")
+	public static Block dragonscale_bronze = new BlockDragonScales("dragonscale_bronze", EnumDragonEgg.BRONZE);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_gray")
+	public static Block dragonscale_gray = new BlockDragonScales("dragonscale_gray", EnumDragonEgg.GRAY);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_blue")
+	public static Block dragonscale_blue = new BlockDragonScales("dragonscale_blue", EnumDragonEgg.BLUE);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_white")
+	public static Block dragonscale_white = new BlockDragonScales("dragonscale_white", EnumDragonEgg.WHITE);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_sapphire")
+	public static Block dragonscale_sapphire = new BlockDragonScales("dragonscale_sapphire", EnumDragonEgg.SAPPHIRE);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_silver")
+	public static Block dragonscale_silver = new BlockDragonScales("dragonscale_silver", EnumDragonEgg.SILVER);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_bone_block")
+	public static Block dragon_bone_block = new BlockDragonBone();
+
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
