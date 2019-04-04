@@ -153,7 +153,7 @@ public class EntityChainTie extends EntityHanging {
         int k = pos.getZ();
 
         for (EntityChainTie entityleashknot : worldIn.getEntitiesWithinAABB(EntityChainTie.class, new AxisAlignedBB((double) i - 1.0D, (double) j - 1.0D, (double) k - 1.0D, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D))) {
-            if (entityleashknot.getHangingPosition().equals(pos)) {
+            if (entityleashknot != null && entityleashknot.getHangingPosition() != null && entityleashknot.getHangingPosition().equals(pos)) {
                 return entityleashknot;
             }
         }

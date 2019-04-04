@@ -157,6 +157,9 @@ public class ClientProxy extends CommonProxy {
 			ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_desert_egg, i, new ModelResourceLocation("iceandfire:myrmex_desert_egg", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.myrmex_jungle_egg, i, new ModelResourceLocation("iceandfire:myrmex_jungle_egg", "inventory"));
 		}
+		for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(color.scaleBlock), 0, new ModelResourceLocation("iceandfire:" + color.scaleBlock.getRegistryName().getPath(), "inventory"));
+		}
 		try {
 			for (Field f : ModItems.class.getDeclaredFields()) {
 				Object obj = f.get(null);

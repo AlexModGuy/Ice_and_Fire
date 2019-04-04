@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
+import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -34,6 +36,8 @@ public enum EnumSeaSerpent {
     public Item leggings;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_boots")
     public Item boots;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpet_scale_block")
+    public Block scaleBlock;
     EnumSeaSerpent(TextFormatting color){
         this.resourceName = this.name().toLowerCase();
         this.color = color;
@@ -52,6 +56,7 @@ public enum EnumSeaSerpent {
             color.chestplate.setRegistryName("tide_" + color.resourceName + "_chestplate");
             color.leggings.setRegistryName("tide_" + color.resourceName + "_leggings");
             color.boots.setRegistryName("tide_" + color.resourceName + "_boots");
+            color.scaleBlock = new BlockSeaSerpentScales(color.resourceName, color.color);
         }
     }
 }

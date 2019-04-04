@@ -73,6 +73,9 @@ public class CommonProxy {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+        for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+            event.getRegistry().register(color.scaleBlock);
+        }
     }
 
     @SubscribeEvent
@@ -166,6 +169,11 @@ public class CommonProxy {
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+        for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+            ItemBlock itemBlock = new ItemBlock(color.scaleBlock);
+            itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
+            event.getRegistry().register(itemBlock);
         }
     }
 
