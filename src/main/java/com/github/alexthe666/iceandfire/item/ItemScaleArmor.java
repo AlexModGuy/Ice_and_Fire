@@ -27,7 +27,7 @@ public class ItemScaleArmor extends ItemArmor {
 		super(material, renderIndex, slot);
 		this.armor_type = armorType;
 		this.eggType = eggType;
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 	}
 
 	@SideOnly(Side.CLIENT)

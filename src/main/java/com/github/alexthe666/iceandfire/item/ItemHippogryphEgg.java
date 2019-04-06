@@ -26,7 +26,7 @@ import java.util.Random;
 public class ItemHippogryphEgg extends Item implements ICustomRendered{
 
 	public ItemHippogryphEgg() {
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.hippogryph_egg");
 		this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
 		this.setHasSubtypes(true);

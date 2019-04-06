@@ -8,7 +8,7 @@ public class ItemTrollLeather extends Item {
 
     public ItemTrollLeather(EnumTroll troll) {
         this.setTranslationKey("iceandfire.troll_leather_" + troll.name().toLowerCase());
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "troll_leather_" + troll.name().toLowerCase());
     }
 }

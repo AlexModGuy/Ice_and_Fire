@@ -11,6 +11,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,7 +25,7 @@ public class BlockGeneric extends Block {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		setRegistryName(IceAndFire.MODID, gameName);
 	}
 
@@ -36,7 +37,7 @@ public class BlockGeneric extends Block {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		if (slippery) {
 			this.slipperiness = 0.98F;
 		}
@@ -49,7 +50,7 @@ public class BlockGeneric extends Block {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		setRegistryName(IceAndFire.MODID, gameName);
 	}
 
@@ -88,5 +89,9 @@ public class BlockGeneric extends Block {
 
 	public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon){
 		return this == ModBlocks.silverBlock || this == ModBlocks.sapphireBlock;
+	}
+
+	public boolean isFireSource(World world, BlockPos pos, EnumFacing side){
+		return this == ModBlocks.dragonforge_fire_brick;
 	}
 }

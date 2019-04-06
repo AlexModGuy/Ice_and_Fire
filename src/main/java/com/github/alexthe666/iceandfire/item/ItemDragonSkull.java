@@ -27,7 +27,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     public ItemDragonSkull() {
         this.maxStackSize = 1;
         this.setHasSubtypes(true);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.dragon_skull");
         this.setRegistryName(IceAndFire.MODID, "dragon_skull");
     }

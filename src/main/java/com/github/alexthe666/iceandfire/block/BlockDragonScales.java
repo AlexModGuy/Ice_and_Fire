@@ -20,7 +20,7 @@ public class BlockDragonScales extends Block {
 
     public BlockDragonScales(String name, EnumDragonEgg type) {
         super(Material.ROCK);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.type = type;
         this.setTranslationKey("iceandfire.dragonscale_block");
         this.setRegistryName(IceAndFire.MODID, name);
@@ -28,7 +28,7 @@ public class BlockDragonScales extends Block {
         this.setHardness(30F);
         this.setResistance(500F);
         this.setSoundType(SoundType.STONE);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
     }
 
     @Override

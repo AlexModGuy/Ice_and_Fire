@@ -27,7 +27,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered{
 
     public ItemMyrmexEgg(boolean isJungle) {
         this.setHasSubtypes(true);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.isJungle = isJungle;
         this.setTranslationKey(isJungle ? "iceandfire.myrmex_jungle_egg" : "iceandfire.myrmex_desert_egg");
         this.maxStackSize = 1;

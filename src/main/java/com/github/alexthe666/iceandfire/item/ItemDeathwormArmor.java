@@ -15,7 +15,7 @@ public class ItemDeathwormArmor extends ItemArmor {
 
 	public ItemDeathwormArmor(ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot, String gameName, String name) {
 		super(material, renderIndex, slot);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey(name);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}

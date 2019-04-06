@@ -24,7 +24,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered{
 		this.name = name;
 		this.setHasSubtypes(true);
 		this.setTranslationKey("iceandfire." + name);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, name);
 

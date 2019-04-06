@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,7 +25,7 @@ public class ItemTrollArmor extends ItemArmor {
     public ItemTrollArmor(EnumTroll troll, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
         super(material, renderIndex, slot);
         this.troll = troll;
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire." + troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
         this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
     }

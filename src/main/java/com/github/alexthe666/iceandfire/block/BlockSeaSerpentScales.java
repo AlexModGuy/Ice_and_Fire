@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -22,7 +21,6 @@ public class BlockSeaSerpentScales extends Block {
 
     public BlockSeaSerpentScales(String name, TextFormatting color) {
         super(Material.ROCK);
-        this.setCreativeTab(IceAndFire.TAB);
         this.color = color;
         this.name = name;
         this.setTranslationKey("iceandfire.sea_serpent_scale_block");
@@ -31,7 +29,7 @@ public class BlockSeaSerpentScales extends Block {
         this.setHardness(30F);
         this.setResistance(500F);
         this.setSoundType(SoundType.STONE);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
     }
 
     @Override

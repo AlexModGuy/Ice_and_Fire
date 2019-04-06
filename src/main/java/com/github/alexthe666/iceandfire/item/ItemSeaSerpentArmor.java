@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -25,7 +24,7 @@ public class ItemSeaSerpentArmor extends ItemArmor {
 	public ItemSeaSerpentArmor(EnumSeaSerpent armorType, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
 		super(material, renderIndex, slot);
 		this.armor_type = armorType;
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 	}
 
 	@SideOnly(Side.CLIENT)

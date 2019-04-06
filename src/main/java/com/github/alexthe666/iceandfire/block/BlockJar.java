@@ -40,7 +40,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 		this.setHardness(1.0F);
 		this.setResistance(2.0F);
 		this.setSoundType(SoundType.GLASS);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		this.setTranslationKey("iceandfire.jar" + (empty ? "_empty" : "_pixie"));
 		this.setRegistryName(IceAndFire.MODID, "jar" + (empty ? "_empty" : "_pixie"));
 		if(!empty){
@@ -167,7 +167,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 
 		@SideOnly(Side.CLIENT)
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			if(tab == IceAndFire.TAB){
+			if(tab == IceAndFire.TAB_BLOCKS){
 				for (int i = 0; i < 5; i++) {
 					subItems.add(new ItemStack(this, 1, i));
 				}

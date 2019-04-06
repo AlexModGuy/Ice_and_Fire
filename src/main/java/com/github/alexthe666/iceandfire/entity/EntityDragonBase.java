@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -155,6 +156,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private EntityDragonPart tail2Part;
     private EntityDragonPart tail3Part;
     private EntityDragonPart tail4Part;
+    public BlockPos burningTarget;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -265,6 +267,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if(tail4Part != null) {
             tail4Part.onUpdate();
+        }
+    }
+
+    protected void updateBurnTarget(){
+        if(burningTarget != null){
+            if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput){
+                //this.setBreathingFire(true);
+            }else{
+                burningTarget = null;
+            }
         }
     }
 
@@ -1135,13 +1147,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     private boolean isStuck() {
-        return !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15) || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
+        return !this.isChained() && !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15) || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
     }
 
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (!world.isRemote) {
+            updateBurnTarget();
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
             }
@@ -2235,5 +2248,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
             }
         }
+    }
+
+    protected boolean isChained(){
+        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(this, ChainEntityProperties.class);
+        return chainProperties == null ? false : chainProperties.isChained();
     }
 }

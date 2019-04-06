@@ -37,7 +37,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
         this.setHardness(2.0F);
         this.setSoundType(SoundType.WOOD);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.podium");
         this.setRegistryName(IceAndFire.MODID, "podium");
         GameRegistry.registerTileEntity(TileEntityPodium.class, "podium");

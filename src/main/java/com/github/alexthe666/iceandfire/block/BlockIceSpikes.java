@@ -18,8 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-
 public class BlockIceSpikes extends Block {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625, 0.0D, 0.0625D, 0.9375D, 0.6875, 0.9375D);
 	public Item itemBlock;
@@ -28,7 +26,7 @@ public class BlockIceSpikes extends Block {
 		super(Material.PACKED_ICE);
 		this.setHardness(2.5F);
 		this.setTranslationKey("iceandfire.dragon_ice_spikes");
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		this.setSoundType(SoundType.GLASS);
 		this.setHarvestLevel("pickaxe", 1);
 		this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
@@ -45,11 +43,6 @@ public class BlockIceSpikes extends Block {
 
 	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
-	}
-
-	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return AABB;
 	}
 

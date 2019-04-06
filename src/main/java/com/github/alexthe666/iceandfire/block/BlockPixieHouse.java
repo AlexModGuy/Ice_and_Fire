@@ -40,7 +40,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 		this.setResistance(5.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setSoundType(SoundType.WOOD);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		this.setTranslationKey("iceandfire.pixie_house");
 		this.setRegistryName(IceAndFire.MODID, "pixie_house");
 		GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");

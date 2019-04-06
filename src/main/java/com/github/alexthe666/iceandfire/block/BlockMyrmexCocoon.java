@@ -31,7 +31,7 @@ public class BlockMyrmexCocoon extends BlockContainer {
         this.setHardness(2.5F);
         this.setSoundType(SoundType.METAL);
         this.setTranslationKey(jungle ? "iceandfire.jungle_myrmex_cocoon" : "iceandfire.desert_myrmex_cocoon");
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setSoundType(SoundType.SLIME);
         this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
 

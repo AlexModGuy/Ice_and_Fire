@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithereArrow;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpentArrow;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -20,7 +18,7 @@ import java.util.List;
 public class ItemSeaSerpentArrow extends ItemArrow {
 
     public ItemSeaSerpentArrow() {
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.sea_serpent_arrow");
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_arrow");
     }

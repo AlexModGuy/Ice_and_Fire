@@ -30,7 +30,7 @@ public class BlockCharedPath extends BlockGrassPath {
         this.setHarvestLevel("shovel", 0);
         this.setHardness(0.6F);
         this.setSoundType(isFire ? SoundType.GROUND : SoundType.GLASS);
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         if (!isFire) {
             this.slipperiness = 0.98F;
         }

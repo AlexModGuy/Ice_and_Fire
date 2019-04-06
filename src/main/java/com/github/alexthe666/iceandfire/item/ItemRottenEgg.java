@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemRottenEgg extends Item {
 
 	public ItemRottenEgg() {
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.rotten_egg");
 		this.setRegistryName(IceAndFire.MODID, "rotten_egg");
 	}

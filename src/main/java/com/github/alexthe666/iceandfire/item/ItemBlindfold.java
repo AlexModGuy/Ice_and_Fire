@@ -14,7 +14,7 @@ public class ItemBlindfold extends ItemArmor {
 
 	public ItemBlindfold() {
 		super(ModItems.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.blindfold");
 		this.setRegistryName(IceAndFire.MODID, "blindfold");
 	}

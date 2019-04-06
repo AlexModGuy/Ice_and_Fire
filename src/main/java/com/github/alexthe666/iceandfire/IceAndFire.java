@@ -16,7 +16,6 @@ import com.github.alexthe666.iceandfire.world.village.VillageAnimalFarmCreator;
 import net.ilexiconn.llibrary.server.network.NetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -61,13 +60,13 @@ public class IceAndFire {
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
-    public static CreativeTabs TAB;
+    public static CreativeTabs TAB_ITEMS;
+    public static CreativeTabs TAB_BLOCKS;
     public static DamageSource dragon;
     public static DamageSource dragonFire;
     public static DamageSource dragonIce;
     public static DamageSource gorgon;
     public static Biome GLACIER;
-    public static Potion FROZEN_POTION;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
 
@@ -76,7 +75,8 @@ public class IceAndFire {
         loadConfig();
         syncConfig();
         MinecraftForge.EVENT_BUS.register(new EventLiving());
-        TAB = new CreativeTab(MODID);
+        TAB_ITEMS = new CreativeTab(MODID + "_items");
+        TAB_BLOCKS = new CreativeTab(MODID + "_blocks");
         ModEntities.init();
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");

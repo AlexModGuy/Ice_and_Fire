@@ -27,7 +27,7 @@ public class ItemBestiary extends Item {
 
 	public ItemBestiary() {
 		this.maxStackSize = 1;
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.bestiary");
 		this.setRegistryName(IceAndFire.MODID, "bestiary");
 	}

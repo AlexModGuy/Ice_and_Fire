@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -49,6 +50,13 @@ public class EntityChainTie extends EntityHanging {
         float f = this.width / 2.0F;
         float f1 = this.height;
         this.setEntityBoundingBox(new AxisAlignedBB(x - (double) f, y, z - (double) f, x + (double) f, y + (double) f1, z + (double) f));
+    }
+
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
+            return super.attackEntityFrom(source, amount);
+        }
+        return false;
     }
 
     public int getWidthPixels() {

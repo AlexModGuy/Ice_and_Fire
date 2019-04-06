@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ItemMyrmexStaff extends Item {
 
     public ItemMyrmexStaff(boolean jungle) {
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         if(jungle){
             this.setTranslationKey("iceandfire.myrmex_jungle_staff");
             this.setRegistryName(IceAndFire.MODID, "myrmex_jungle_staff");

@@ -1,4 +1,5 @@
-itemGroup.iceandfire=Ice And Fire
+itemGroup.iceandfire_items=Ice And Fire Items
+itemGroup.iceandfire_blocks=Ice And Fire Blocks
 iceandfire.empty =Empty
 
 tile.iceandfire.lectern.name=Lectern
@@ -50,7 +51,15 @@ tile.iceandfire.jar_4.name=Yellow Pixie Jar
 tile.iceandfire.nest.name=Dragon Nest
 tile.iceandfire.dragonscale_block.name=Block of Dragon Scales
 tile.iceandfire.dragon_bone_block.name=Block of Dragon Bones
+tile.iceandfire.dragon_bone_wall.name=Dragon Bone Wall
 tile.iceandfire.sea_serpent_scale_block.name=Block of Sea Serpent Scales
+tile.iceandfire.dragonforge_fire_brick.name=Dragonforge Fire Brick
+tile.iceandfire.dragonforge_fire_core.name=Dragonforge Fire Core
+tile.iceandfire.dragonforge_fire_input.name=Dragonforge Fire Aperture
+tile.iceandfire.dragonforge_ice_brick.name=Dragonforge Ice Brick
+tile.iceandfire.dragonforge_ice_core.name=Dragonforge Ice Core
+tile.iceandfire.dragonforge_ice_input.name=Dragonforge Ice Aperture
+
 tile.iceandfire.desert_myrmex_resin.name=Desert Myrmex Resin
 tile.iceandfire.desert_myrmex_resin_sticky.name=Sticky Desert Myrmex Resin
 tile.iceandfire.jungle_myrmex_resin.name=Jungle Myrmex Resin

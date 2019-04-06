@@ -90,7 +90,25 @@ public class ModBlocks {
 	public static Block dragonscale_silver = new BlockDragonScales("dragonscale_silver", EnumDragonEgg.SILVER);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_bone_block")
 	public static Block dragon_bone_block = new BlockDragonBone();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_bone_wall")
+	public static Block dragon_bone_block_wall = new BlockDragonBoneWall();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_brick")
+	public static Block dragonforge_fire_brick = new BlockDragonforgeBricks(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_brick")
+	public static Block dragonforge_ice_brick = new BlockDragonforgeBricks(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_input")
+	public static Block dragonforge_fire_input = new BlockDragonforgeInput(true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_input")
+	public static Block dragonforge_ice_input = new BlockDragonforgeInput(false);
 
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core_disabled")
+	public static Block dragonforge_fire_core = new BlockDragonforgeCore(true, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core_disabled")
+	public static Block dragonforge_ice_core = new BlockDragonforgeCore(false, false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core")
+	public static Block dragonforge_fire_core_disabled = new BlockDragonforgeCore(true, true);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core")
+	public static Block dragonforge_ice_core_disabled = new BlockDragonforgeCore(false, true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")

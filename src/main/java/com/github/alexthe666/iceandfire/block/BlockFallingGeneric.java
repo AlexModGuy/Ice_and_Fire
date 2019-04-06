@@ -19,7 +19,7 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setHardness(hardness);
 		this.setResistance(resistance);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		setRegistryName(IceAndFire.MODID, gameName);
 
 	}
@@ -32,7 +32,7 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setResistance(resistance);
 		this.setHarvestLevel(toolUsed, toolStrength);
 		this.setSoundType(sound);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		setRegistryName(IceAndFire.MODID, gameName);
 		if (slippery) {
 			this.slipperiness = 0.98F;

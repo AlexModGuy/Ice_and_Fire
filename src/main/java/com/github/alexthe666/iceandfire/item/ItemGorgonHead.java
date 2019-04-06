@@ -31,7 +31,7 @@ import java.util.List;
 public class ItemGorgonHead extends Item implements ICustomRendered {
 
 	public ItemGorgonHead() {
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.gorgon_head");
 		this.maxStackSize = 1;
 		this.setRegistryName(IceAndFire.MODID, "gorgon_head");

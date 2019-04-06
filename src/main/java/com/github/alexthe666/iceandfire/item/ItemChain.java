@@ -2,15 +2,12 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockWall;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +31,7 @@ public class ItemChain extends Item {
     public ItemChain(boolean sticky) {
         this.sticky = sticky;
         
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey(sticky ? "iceandfire.chain" : "iceandfire.chain_sticky");
         this.setRegistryName(IceAndFire.MODID, sticky ? "chain" : "chain_sticky");
     }

@@ -18,7 +18,7 @@ import java.util.List;
 public class ItemStymphalianArrow extends ItemArrow {
 
     public ItemStymphalianArrow() {
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.stymphalian_arrow");
         this.setRegistryName(IceAndFire.MODID, "stymphalian_arrow");
     }

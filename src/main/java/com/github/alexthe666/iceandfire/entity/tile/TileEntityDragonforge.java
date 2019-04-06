@@ -1,0 +1,333 @@
+package com.github.alexthe666.iceandfire.entity.tile;
+
+import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
+import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
+import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class TileEntityDragonforge extends TileEntity implements ITickable, ISidedInventory {
+    public boolean isFire;
+    private static final int[] SLOTS_TOP = new int[]{0};
+    private static final int[] SLOTS_BOTTOM = new int[]{2, 1};
+    private static final int[] SLOTS_SIDES = new int[]{1};
+    private NonNullList<ItemStack> forgeItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
+    private int cookTime;
+
+    public TileEntityDragonforge(boolean isFire) {
+        this.isFire = isFire;
+    }
+
+    public int getSizeInventory() {
+        return this.forgeItemStacks.size();
+    }
+
+    public boolean isEmpty() {
+        for (ItemStack itemstack : this.forgeItemStacks) {
+            if (!itemstack.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void updateGrills(){
+        for(EnumFacing facing : EnumFacing.HORIZONTALS){
+            BlockPos grillPos = this.getPos().offset(facing);
+            if(isFire && world.getBlockState(grillPos).getBlock() == ModBlocks.dragonforge_fire_brick || !isFire && world.getBlockState(grillPos).getBlock() == ModBlocks.dragonforge_ice_brick){
+                IBlockState grillState = isFire ? ModBlocks.dragonforge_fire_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, true) : ModBlocks.dragonforge_ice_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, true);
+                if(world.getBlockState(grillPos) != grillState){
+                    world.setBlockState(grillPos, grillState);
+                }
+            }
+        }
+    }
+
+    public ItemStack getStackInSlot(int index) {
+        return this.forgeItemStacks.get(index);
+    }
+
+    public ItemStack decrStackSize(int index, int count) {
+        return ItemStackHelper.getAndSplit(this.forgeItemStacks, index, count);
+    }
+
+    public ItemStack removeStackFromSlot(int index) {
+        return ItemStackHelper.getAndRemove(this.forgeItemStacks, index);
+    }
+
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        ItemStack itemstack = this.forgeItemStacks.get(index);
+        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        this.forgeItemStacks.set(index, stack);
+
+        if (stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
+        }
+
+        if (index == 0 && !flag) {
+            this.cookTime = 0;
+            this.markDirty();
+        }
+    }
+
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        this.forgeItemStacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.forgeItemStacks);
+        this.cookTime = compound.getInteger("CookTime");
+    }
+
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
+        compound.setInteger("CookTime", (short) this.cookTime);
+        ItemStackHelper.saveAllItems(compound, this.forgeItemStacks);
+        return compound;
+    }
+
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    public boolean isBurning() {
+        return this.cookTime > 0;
+    }
+
+    public void update() {
+        boolean flag = this.isBurning();
+        boolean flag1 = false;
+        updateGrills();
+        if (this.canSmelt()) {
+            this.cookTime++;
+        }
+
+        if (!this.world.isRemote) {
+            ItemStack itemstack = this.forgeItemStacks.get(1);
+
+            if (this.isBurning()) {
+                if (this.canSmelt()) {
+                    flag1 = true;
+                    if (!itemstack.isEmpty()) {
+                        Item item = itemstack.getItem();
+                        itemstack.shrink(1);
+
+                        if (itemstack.isEmpty()) {
+                            ItemStack item1 = item.getContainerItem(itemstack);
+                            this.forgeItemStacks.set(1, item1);
+                        }
+                    }
+                }
+
+                if (this.isBurning() && this.canSmelt()) {
+                    ++this.cookTime;
+
+                    if (this.cookTime == 5000) {
+                        this.cookTime = 0;
+                        this.smeltItem();
+                        flag1 = true;
+                    }
+                } else {
+                    this.cookTime = 0;
+                }
+            } else if (!this.isBurning() && this.cookTime > 0) {
+                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, 5000);
+            }
+
+            if (flag != this.isBurning()) {
+                flag1 = true;
+            }
+        }
+
+        if (flag1) {
+            this.markDirty();
+        }
+    }
+
+    private boolean canSmelt() {
+        if (((ItemStack) this.forgeItemStacks.get(0)).isEmpty()) {
+            return false;
+        } else {
+            ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(this.forgeItemStacks.get(0));
+
+            if (itemstack.isEmpty()) {
+                return false;
+            } else {
+                ItemStack itemstack1 = this.forgeItemStacks.get(2);
+
+                if (itemstack1.isEmpty()) {
+                    return true;
+                } else if (!itemstack1.isItemEqual(itemstack)) {
+                    return false;
+                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize())  // Forge fix: make furnace respect stack sizes in furnace recipes
+                {
+                    return true;
+                } else {
+                    return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
+                }
+            }
+        }
+    }
+
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        if (this.world.getTileEntity(this.pos) != this) {
+            return false;
+        } else {
+            return player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
+        }
+    }
+
+    public void smeltItem() {
+        if (this.canSmelt()) {
+            ItemStack itemstack = this.forgeItemStacks.get(0);
+            ItemStack itemstack1 = FurnaceRecipes.instance().getSmeltingResult(itemstack);
+            ItemStack itemstack2 = this.forgeItemStacks.get(2);
+
+            if (itemstack2.isEmpty()) {
+                this.forgeItemStacks.set(2, itemstack1.copy());
+            } else if (itemstack2.getItem() == itemstack1.getItem()) {
+                itemstack2.grow(itemstack1.getCount());
+            }
+            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 1 && !((ItemStack) this.forgeItemStacks.get(1)).isEmpty() && ((ItemStack) this.forgeItemStacks.get(1)).getItem() == Items.BUCKET) {
+                this.forgeItemStacks.set(1, new ItemStack(Items.WATER_BUCKET));
+            }
+            itemstack.shrink(1);
+        }
+    }
+
+    public void openInventory(EntityPlayer player)
+    {
+    }
+
+    public void closeInventory(EntityPlayer player)
+    {
+    }
+
+    public boolean isItemValidForSlot(int index, ItemStack stack)
+    {
+        if (index == 2)
+        {
+            return false;
+        }
+        else if (index != 1)
+        {
+            return true;
+        }
+        else
+        {
+            ItemStack itemstack = this.forgeItemStacks.get(1);
+            return true;
+        }
+    }
+
+    public int[] getSlotsForFace(EnumFacing side)
+    {
+        if (side == EnumFacing.DOWN)
+        {
+            return SLOTS_BOTTOM;
+        }
+        else
+        {
+            return side == EnumFacing.UP ? SLOTS_TOP : SLOTS_SIDES;
+        }
+    }
+
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+    {
+        return this.isItemValidForSlot(index, itemStackIn);
+    }
+
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+    {
+        if (direction == EnumFacing.DOWN && index == 1)
+        {
+            Item item = stack.getItem();
+
+            if (item != Items.WATER_BUCKET && item != Items.BUCKET)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+    {
+        return new ContainerDragonForge(playerInventory, this);
+    }
+
+    public int getField(int id)
+    {
+        return cookTime;
+    }
+
+    public void setField(int id, int value)
+    {
+        cookTime = value;
+    }
+
+    public int getFieldCount()
+    {
+        return 1;
+    }
+
+    public void clear()
+    {
+        this.forgeItemStacks.clear();
+    }
+
+    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
+    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
+    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.WEST);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @javax.annotation.Nullable
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing)
+    {
+        if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            if (facing == EnumFacing.DOWN)
+                return (T) handlerBottom;
+            else if (facing == EnumFacing.UP)
+                return (T) handlerTop;
+            else
+                return (T) handlerSide;
+        return super.getCapability(capability, facing);
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    public static boolean isBurning(IInventory inventory) {
+        return inventory.getField(0) > 0;
+    }
+
+    public String getName() {
+        return isFire ? "container.dragonforge_fire" : "container.dragonforge_ice";
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+
+}

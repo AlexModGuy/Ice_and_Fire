@@ -22,7 +22,7 @@ public class ItemDragonFlute extends Item {
 		this.maxStackSize = 1;
 		this.setTranslationKey("iceandfire.dragon_flute");
 		this.setRegistryName(IceAndFire.MODID, "dragon_flute");
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {

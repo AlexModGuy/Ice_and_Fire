@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "grill=true": {
+      "model": "iceandfire:dragonforge_ice_brick_grill"
+    },
+    "grill=false": {
+      "model": "iceandfire:dragonforge_ice_brick"
+    }
+  }
+}

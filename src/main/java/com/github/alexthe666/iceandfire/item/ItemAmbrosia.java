@@ -14,7 +14,7 @@ public class ItemAmbrosia extends ItemFood {
 
 	public ItemAmbrosia() {
 		super(5, 0.6F, false);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setTranslationKey("iceandfire.ambrosia");
 		this.setRegistryName(IceAndFire.MODID, "ambrosia");
 		this.setMaxStackSize(1);

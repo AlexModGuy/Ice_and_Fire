@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=true": {
+      "model": "iceandfire:dragonforge_ice_input_active"
+    },
+    "active=false": {
+      "model": "iceandfire:dragonforge_ice_input"
+    }
+  }
+}

@@ -25,7 +25,7 @@ public class ItemDragonEgg extends Item {
 
 	public ItemDragonEgg(String name, EnumDragonEgg type) {
 		this.setHasSubtypes(true);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.type = type;
 		this.setTranslationKey("iceandfire.dragonegg");
 		this.maxStackSize = 1;

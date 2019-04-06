@@ -23,7 +23,7 @@ public class ItemModHoe extends ItemHoe {
 	public ItemModHoe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
 		this.setTranslationKey(name);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
 

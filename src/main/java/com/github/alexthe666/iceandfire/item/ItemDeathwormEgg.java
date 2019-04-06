@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class ItemDeathwormEgg extends Item implements  ICustomRendered{
 
     public ItemDeathwormEgg() {
-        this.setCreativeTab(IceAndFire.TAB);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setTranslationKey("deathworm_egg");

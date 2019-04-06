@@ -18,7 +18,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 
 	public BlockElementalFlower(boolean isFire) {
 		this.setTickRandomly(true);
-		this.setCreativeTab(IceAndFire.TAB);
+		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		this.setTranslationKey(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
 		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
 	}
