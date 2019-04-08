@@ -50,7 +50,6 @@ public class EntityIceDragon extends EntityDragonBase {
 	public EntityIceDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
-		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
 		ANIMATION_BITE = Animation.create(35);
 		ANIMATION_SHAKEPREY = Animation.create(65);
@@ -494,5 +493,33 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public boolean isBreedingItem(@Nullable ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.frost_stew;
+	}
+
+	@Override
+	protected void breathFireAtPos(BlockPos burningTarget) {
+		if (this.isBreathingFire()) {
+			if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+				rotationYaw = renderYawOffset;
+				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+				double d2 = burningTarget.getX() + 0.5F - headPosX;
+				double d3 = burningTarget.getY() + 0.5F - headPosY;
+				double d4 = burningTarget.getZ() + 0.5F - headPosZ;
+				float inaccuracy = 1.0F;
+				d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
+				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+				if (!world.isRemote) {
+					world.spawnEntity(entitylargefireball);
+				}
+			}
+		} else {
+			this.setBreathingFire(true);
+		}
 	}
 }

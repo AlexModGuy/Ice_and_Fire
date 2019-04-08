@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -24,6 +25,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -271,14 +273,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected void updateBurnTarget(){
-        if(burningTarget != null){
-            if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput){
-                //this.setBreathingFire(true);
+        if(!world.isRemote && burningTarget != null){
+            if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget) < 300){
+                this.getLookHelper().setLookPosition(burningTarget.getX()  + 0.5D, burningTarget.getY()  + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
+                this.breathFireAtPos(burningTarget);
+                this.setBreathingFire(true);
+                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), true));
             }else{
+                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), false));
                 burningTarget = null;
             }
         }
     }
+
+    protected abstract void breathFireAtPos(BlockPos burningTarget);
 
     protected PathNavigate createNavigator(World worldIn) {
         return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
@@ -1475,7 +1483,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (this.isBreathingFire()) {
             this.fireTicks++;
-            if (fireTicks > this.getDragonStage() * 25 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+            if (!world.isRemote && fireTicks > this.getDragonStage() * 25 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
                 this.attackDecision = this.getRNG().nextBoolean();
                 fireTicks = 0;
@@ -1554,7 +1562,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone;
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100;
     }
 
     public abstract String getVariantName(int variant);
@@ -2250,8 +2258,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    protected boolean isChained(){
+    public boolean isChained(){
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(this, ChainEntityProperties.class);
         return chainProperties == null ? false : chainProperties.isChained();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRender(ICamera camera) {
+        boolean render = false;
+        return camera.isBoundingBoxInFrustum(headPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(neckPart.getEntityBoundingBox()) ||
+                camera.isBoundingBoxInFrustum(leftWingLowerPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
+                camera.isBoundingBoxInFrustum(rightWingUpperPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
+                camera.isBoundingBoxInFrustum(tail1Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail2Part.getEntityBoundingBox()) ||
+                camera.isBoundingBoxInFrustum(tail3Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail4Part.getEntityBoundingBox());
     }
 }

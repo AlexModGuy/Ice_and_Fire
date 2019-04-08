@@ -82,7 +82,6 @@ public class BlockDragonforgeCore extends BlockContainer {
 
 
     public static void setState(boolean fire, boolean active, World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         keepInventory = true;
 

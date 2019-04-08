@@ -17,6 +17,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -44,7 +45,6 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.LAVA, 8.0F);
 		this.isImmuneToFire = true;
-		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
 		ANIMATION_BITE = Animation.create(35);
 		ANIMATION_SHAKEPREY = Animation.create(65);
@@ -233,10 +233,38 @@ public class EntityFireDragon extends EntityDragonBase {
 
 				}
 			} else {
-				this.setBreathingFire(false);
+				//this.setBreathingFire(false);
 			}
 		}
 
+	}
+
+	@Override
+	protected void breathFireAtPos(BlockPos burningTarget) {
+		if (this.isBreathingFire()) {
+			if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+				rotationYaw = renderYawOffset;
+				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+				double d2 = burningTarget.getX() + 0.5F - headPosX;
+				double d3 = burningTarget.getY() + 0.5F - headPosY;
+				double d4 = burningTarget.getZ() + 0.5F - headPosZ;
+				float inaccuracy = 1.0F;
+				d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+				EntityDragonFire entitylargefireball = new EntityDragonFire(world, this, d2, d3, d4);
+				this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+				if (!world.isRemote) {
+					world.spawnEntity(entitylargefireball);
+				}
+			}
+		} else {
+			this.setBreathingFire(true);
+		}
 	}
 
 	public void riderShootFire(Entity controller) {

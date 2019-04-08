@@ -70,17 +70,18 @@ public class BlockDragonforgeBricks extends Block {
 
     private void checkGrill(World worldIn, BlockPos pos) {
         IBlockState state = worldIn.getBlockState(pos);
-        if (((Boolean) state.getValue(GRILL)).booleanValue()) {
-            if(getConnectedTileEntity(worldIn, pos) == null){
-                worldIn.setBlockState(pos, state.withProperty(GRILL, false));
-            }
-        }
+        boolean missingFurnace = getConnectedTileEntity(worldIn, pos) == null;
+        worldIn.setBlockState(pos, state.withProperty(GRILL, !missingFurnace));
+
     }
 
     private TileEntityDragonforge getConnectedTileEntity(World worldIn, BlockPos pos) {
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             if (worldIn.getTileEntity(pos.offset(facing)) != null && worldIn.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
-                return (TileEntityDragonforge) worldIn.getTileEntity(pos.offset(facing));
+                TileEntityDragonforge forge = (TileEntityDragonforge) worldIn.getTileEntity(pos.offset(facing));
+                if(forge != null && forge.assembled()){
+                    return forge;
+                }
             }
         }
         return null;

@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.*;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHead;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDummyGorgonHeadActive;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
+import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemDragonScales;
 import net.minecraft.block.Block;
@@ -102,13 +100,13 @@ public class ModBlocks {
 	public static Block dragonforge_ice_input = new BlockDragonforgeInput(false);
 
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core_disabled")
-	public static Block dragonforge_fire_core = new BlockDragonforgeCore(true, false);
+	public static Block dragonforge_fire_core = new BlockDragonforgeCore(true, true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core_disabled")
-	public static Block dragonforge_ice_core = new BlockDragonforgeCore(false, false);
+	public static Block dragonforge_ice_core = new BlockDragonforgeCore(false, true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core")
-	public static Block dragonforge_fire_core_disabled = new BlockDragonforgeCore(true, true);
+	public static Block dragonforge_fire_core_disabled = new BlockDragonforgeCore(true, false);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core")
-	public static Block dragonforge_ice_core_disabled = new BlockDragonforgeCore(false, true);
+	public static Block dragonforge_ice_core_disabled = new BlockDragonforgeCore(false, false);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
 	public static Block eggInIce = new BlockEggInIce();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
@@ -142,6 +140,8 @@ public class ModBlocks {
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
 		GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
 		GameRegistry.registerTileEntity(TileEntityMyrmexCocoon.class, "myrmexCocoon");
+		GameRegistry.registerTileEntity(TileEntityDragonforge.class, "dragonforge");
+		GameRegistry.registerTileEntity(TileEntityDragonforgeInput.class, "dragonforgeInput");
 	}
 
 }
