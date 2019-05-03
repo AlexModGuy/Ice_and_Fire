@@ -42,4 +42,19 @@ public class EntityMutlipartPart extends PartEntity {
     public void onUpdate() {
         super.onUpdate();
     }
+
+    @Override
+    public String getName() {
+        return parent.getName();
+    }
+
+    @Override
+    public String getCustomNameTag() {
+        return parent.getCustomNameTag();
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return parent.hasCustomName();
+    }
 }
