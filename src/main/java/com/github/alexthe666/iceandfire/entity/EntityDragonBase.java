@@ -970,6 +970,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
             return true;
         } else if (!this.isModelDead()) {
+            setOwnerId(player.getUniqueID());
             if (this.isOwner(player)) {
                 if (!stack.isEmpty()) {
                     if (this.isBreedingItem(stack) && this.isAdult()) {
@@ -1928,9 +1929,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public boolean canMateWith(EntityAnimal otherAnimal) {
         if (otherAnimal instanceof EntityDragonBase && otherAnimal != this && otherAnimal.getClass() == this.getClass()) {
             EntityDragonBase dragon = (EntityDragonBase) otherAnimal;
-            if (this.isMale() && !dragon.isMale() || !this.isMale() && dragon.isMale()) {
-                return true;
-            }
+            return (this.isMale() ^ dragon.isMale()) && isInLove() && dragon.isInLove();
         }
         return false;
     }
@@ -2266,10 +2265,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @SideOnly(Side.CLIENT)
     public boolean shouldRender(ICamera camera) {
         boolean render = false;
-        return camera.isBoundingBoxInFrustum(headPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(neckPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(leftWingLowerPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(rightWingUpperPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(tail1Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail2Part.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(tail3Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail4Part.getEntityBoundingBox());
+        return isBoundingBoxInFrustum(camera, headPart)
+                || isBoundingBoxInFrustum(camera, neckPart)
+                || isBoundingBoxInFrustum(camera, leftWingLowerPart)
+                || isBoundingBoxInFrustum(camera, rightWingLowerPart)
+                || isBoundingBoxInFrustum(camera, rightWingUpperPart)
+                || isBoundingBoxInFrustum(camera, rightWingLowerPart)
+                || isBoundingBoxInFrustum(camera, tail1Part)
+                || isBoundingBoxInFrustum(camera, tail2Part)
+                || isBoundingBoxInFrustum(camera, tail3Part)
+                || isBoundingBoxInFrustum(camera, tail4Part);
+    }
+
+    private boolean isBoundingBoxInFrustum(ICamera camera, EntityDragonPart entityDragonPart) {
+        return entityDragonPart != null && camera.isBoundingBoxInFrustum(entityDragonPart.getEntityBoundingBox());
     }
 }

@@ -13,11 +13,16 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
+import static com.github.alexthe666.iceandfire.IceAndFire.NAME;
+
 public class DragonAIMate extends EntityAIBase {
+
 	private final EntityDragonBase dragon;
 	World theWorld;
 	int spawnBabyDelay;
@@ -31,6 +36,7 @@ public class DragonAIMate extends EntityAIBase {
 		this.setMutexBits(1);
 	}
 
+	@Override
 	public boolean shouldExecute() {
 		if (!this.dragon.isInLove()) {
 			return false;
@@ -50,6 +56,7 @@ public class DragonAIMate extends EntityAIBase {
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask() {
 		this.targetMate = null;
 		this.spawnBabyDelay = 0;
@@ -58,13 +65,16 @@ public class DragonAIMate extends EntityAIBase {
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask() {
 		this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
 		this.dragon.getNavigator().tryMoveToXYZ(targetMate.posX, targetMate.posY, targetMate.posZ, this.moveSpeed);
 		this.dragon.setFlying(false);
 		this.dragon.setHovering(false);
 		++this.spawnBabyDelay;
-		if (this.spawnBabyDelay >= 60 && this.dragon.getDistance(this.targetMate) < 35) {
+
+		float distance = this.dragon.getDistance(this.targetMate);
+		if (this.spawnBabyDelay >= 60 && distance < 35) {
 			this.spawnBaby();
 		}
 	}
@@ -78,12 +88,12 @@ public class DragonAIMate extends EntityAIBase {
 		double d0 = Double.MAX_VALUE;
 		EntityDragonBase mate = null;
 		for (EntityDragonBase partner : list) {
-			if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSq(partner) < d0) {
+			double d1;
+			if (this.dragon.canMateWith(partner)  && (d1 = this.dragon.getDistanceSq(partner)) < d0) {
 				mate = partner;
-				break;
+				d0 = d1;
 			}
 		}
-
 		return mate;
 	}
 

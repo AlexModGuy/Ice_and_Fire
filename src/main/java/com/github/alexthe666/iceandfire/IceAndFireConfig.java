@@ -147,6 +147,7 @@ public class IceAndFireConfig {
 		this.dangerousWorldGenDistanceLimit = config.getInt("Dangerous World Gen Distance From Spawn", "all", 200, 0, Integer.MAX_VALUE, "How many blocks away does dangerous(dragons, cyclops, etc.) world gen have to generate from spawn");
 
 		this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
+		this.dragonEggTime = 1;
 		this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
 		this.tamedDragonGriefing = config.getBoolean("Tamed Dragon Griefing", "all", true, "True if tamed dragons can follow the griefing rules.");
 		this.dragonFlapNoiseDistance = config.getInt("Dragon Flap Noise Distance", "all", 4, 0, 10000, "Dragon Flap Noise Distance - Larger number, further away you can hear it");
