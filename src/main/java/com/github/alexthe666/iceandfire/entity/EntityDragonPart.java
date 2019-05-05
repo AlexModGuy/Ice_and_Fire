@@ -1,8 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
-
 public class EntityDragonPart extends EntityMutlipartPart {
     private EntityDragonBase dragon;
 

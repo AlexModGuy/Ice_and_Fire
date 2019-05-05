@@ -970,7 +970,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
             return true;
         } else if (!this.isModelDead()) {
-            setOwnerId(player.getUniqueID());
             if (this.isOwner(player)) {
                 if (!stack.isEmpty()) {
                     if (this.isBreedingItem(stack) && this.isAdult()) {
