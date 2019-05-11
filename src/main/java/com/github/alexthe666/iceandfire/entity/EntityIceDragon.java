@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,9 +22,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -321,23 +320,8 @@ public class EntityIceDragon extends EntityDragonBase {
 			if (this.isBreathingFire()) {
 				if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-					double d2 = controller.getLookVec().x;
-					double d3 = controller.getLookVec().y;
-					double d4 = controller.getLookVec().z;
-					float inaccuracy = 1.0F;
-					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-					d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
 					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
-					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-					if (!world.isRemote) {
-						world.spawnEntity(entitylargefireball);
-					}
+					stimulateIce(controller.getLookVec().x, controller.getLookVec().y, controller.getLookVec().z);
 				}
 			} else {
 				this.setBreathingFire(true);
@@ -419,24 +403,8 @@ public class EntityIceDragon extends EntityDragonBase {
 				if (this.isBreathingFire()) {
 					if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 						rotationYaw = renderYawOffset;
-						float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-						float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-						float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-						double d2 = entity.posX - headPosX;
-						double d3 = entity.posY - headPosY;
-						double d4 = entity.posZ - headPosZ;
-						float inaccuracy = 1.0F;
-						d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-						d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-						d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 						this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
-						EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
-						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-						if (!world.isRemote && !entity.isDead) {
-							world.spawnEntity(entitylargefireball);
-						}
-						entitylargefireball.setSizes(size, size);
+						stimulateIce(entity.posX, entity.posY, entity.posZ);
 						if (entity.isDead || entity == null) {
 							this.setBreathingFire(false);
 							this.attackDecision = true;
@@ -448,6 +416,69 @@ public class EntityIceDragon extends EntityDragonBase {
 			}
 		}
 		this.faceEntity(entity, 360, 360);
+	}
+
+	public void stimulateIce(double burnX, double burnY, double burnZ) {
+		this.getNavigator().clearPath();
+		float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+		float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+		float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+		double d2 = burnX - headPosX;
+		double d3 = burnY - headPosY;
+		double d4 = burnZ - headPosZ;
+		float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
+		double distance = 5 * this.getDistance(burnX, burnY, burnZ);
+		double conqueredDistance = burnProgress / 30D * distance;
+		float inaccuracy = 0.5F;
+		d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		for (int i = 0; i < conqueredDistance; i++) {
+			double progressX = headPosX + d2 * (i / (float) distance);
+			double progressY = headPosY + d3 * (i / (float) distance);
+			double progressZ = headPosZ + d4 * (i / (float) distance);
+			if(canPositionBeSeen(progressX, progressY, progressZ)){
+				for (int j = 0; j < 3; j++) {
+					IceAndFire.PROXY.spawnParticle("dragonice", world, progressX, progressY, progressZ, 0, -0.1F, 0, particleScale);
+				}
+				for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
+					if (!this.isOnSameTeam(entity) && entity != this) {
+						entity.attackEntityFrom(IceAndFire.dragonIce, 1F);
+						FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
+						if(frozenProps != null) {
+							frozenProps.setFrozenFor(200);
+						}
+					}
+				}
+			}else{
+				RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
+				BlockPos pos = result.getBlockPos();
+				if(pos != null) {
+					IceExplosion explosion = new IceExplosion(world, this, pos.getX(), pos.getY(), pos.getZ(), Math.max(0.15F, this.getDragonStage() * 0.25F), true);
+					explosion.doExplosionA();
+					explosion.doExplosionB(true);
+					double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
+					double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
+					double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
+					for (int k = 0; k < 10; k++) {
+						IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 1.75F);
+					}
+				}
+			}
+
+		}
+		if (burnProgress >= 30D && canPositionBeSeen(burnX, burnY, burnZ)) {
+			double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
+			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
+			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
+			for (int j = 0; j < 10; j++) {
+				IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 1.75F);
+			}
+			IceExplosion explosion = new IceExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.15F, this.getDragonStage() * 0.25F), true);
+			explosion.doExplosionA();
+			explosion.doExplosionB(true);
+
+		}
 	}
 
 	public boolean isSwimming() {
@@ -500,23 +531,8 @@ public class EntityIceDragon extends EntityDragonBase {
 		if (this.isBreathingFire()) {
 			if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 				rotationYaw = renderYawOffset;
-				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-				double d2 = burningTarget.getX() + 0.5F - headPosX;
-				double d3 = burningTarget.getY() + 0.5F - headPosY;
-				double d4 = burningTarget.getZ() + 0.5F - headPosZ;
-				float inaccuracy = 1.0F;
-				d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-				d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-				d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-				EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
 				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
-				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-				if (!world.isRemote) {
-					world.spawnEntity(entitylargefireball);
-				}
+				stimulateIce(burningTarget.getX(), burningTarget.getY(), burningTarget.getZ());
 			}
 		} else {
 			this.setBreathingFire(true);

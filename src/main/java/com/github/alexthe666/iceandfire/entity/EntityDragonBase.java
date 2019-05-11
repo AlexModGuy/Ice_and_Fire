@@ -159,6 +159,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private EntityDragonPart tail3Part;
     private EntityDragonPart tail4Part;
     public BlockPos burningTarget;
+    public int burnProgress;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -1087,6 +1088,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return stack;
     }
 
+    public boolean canPositionBeSeen(double x, double y, double z) {
+        return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false) == null;
+    }
+
     public abstract ResourceLocation getDeadLootTable();
 
     public ItemStack getItemFromLootTable() {
@@ -1161,6 +1166,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if (this.isBreathingFire() && burnProgress < 30) {
+            burnProgress++;
+        } else if (!this.isBreathingFire()) {
+            burnProgress = 0;
+        }
         if (!world.isRemote) {
             updateBurnTarget();
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
@@ -2266,10 +2276,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @SideOnly(Side.CLIENT)
     public boolean shouldRender(ICamera camera) {
         boolean render = false;
-        return camera.isBoundingBoxInFrustum(headPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(neckPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(leftWingLowerPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(rightWingUpperPart.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(rightWingLowerPart.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(tail1Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail2Part.getEntityBoundingBox()) ||
-                camera.isBoundingBoxInFrustum(tail3Part.getEntityBoundingBox()) || camera.isBoundingBoxInFrustum(tail4Part.getEntityBoundingBox());
+        return  inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
+                inFrustrum(camera, leftWingLowerPart) || inFrustrum(camera, rightWingLowerPart) ||
+                inFrustrum(camera, leftWingUpperPart) || inFrustrum(camera, rightWingUpperPart) ||
+                inFrustrum(camera, tail1Part) || inFrustrum(camera, tail2Part) ||
+                inFrustrum(camera, tail3Part) || inFrustrum(camera, tail4Part);
+    }
+
+    private boolean inFrustrum(ICamera camera, Entity entity){
+        return camera!= null && entity != null && camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox());
     }
 }

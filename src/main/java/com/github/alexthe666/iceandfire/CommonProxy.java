@@ -241,6 +241,10 @@ public class CommonProxy {
     }
 
     public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+        spawnParticle(name, world, x, y, z, motX, motY, motZ, 1.0F);
+    }
+
+    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
     }
 
     public void openBestiaryGui(ItemStack book) {

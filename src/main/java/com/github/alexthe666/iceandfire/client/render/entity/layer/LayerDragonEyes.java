@@ -25,7 +25,7 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
 			if (dragon.shouldRenderEyes()) {
 				this.render.bindTexture(EnumDragonTextures.getEyeTextureFromDragon(dragon));
 				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.ONE);
 				GlStateManager.disableLighting();
 				GlStateManager.depthMask(!dragon.isInvisible());
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);

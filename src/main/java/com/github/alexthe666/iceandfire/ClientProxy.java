@@ -31,6 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.particle.ParticleSmokeLarge;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -311,13 +312,19 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
+	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
 		net.minecraft.client.particle.Particle particle = null;
 		if (name.equals("dragonfire")) {
-			particle = new ParticleDragonFire(world, x, y, z, motX, motY, motZ);
+			particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, size);
+			if (world.rand.nextFloat() > 0.95F) {
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonEmber(world, x, y, z, motX, motY, motZ));
+			}
 		}
 		if (name.equals("dragonice")) {
-			particle = new ParticleDragonIce(world, x, y, z, motX, motY, motZ);
+			particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, size);
+			if (world.rand.nextFloat() > 0.75F) {
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonSnowflake(world, x, y, z, motX, motY, motZ));
+			}
 		}
 		if (name.equals("blood")) {
 			particle = new ParticleBlood(world, x, y, z);

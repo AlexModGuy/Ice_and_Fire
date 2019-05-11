@@ -25,7 +25,6 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
 
     @Override
     public void update() {
-        System.out.println(ticksSinceDragonFire);
         if (ticksSinceDragonFire > 0) {
             TileEntityDragonforge forge = getConnectedTileEntity();
             if(forge != null){
