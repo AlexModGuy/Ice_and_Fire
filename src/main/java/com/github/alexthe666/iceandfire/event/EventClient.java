@@ -129,7 +129,7 @@ public class EventClient {
 					}else if(currentView == 2){
 						GL11.glTranslatef(scale  * 1.2F, 0F, 5);
 					}else if(currentView == 3){
-						GL11.glTranslatef(scale * -1.5F, 0F, scale * 1.5F);
+						GL11.glTranslatef(0, 0F, scale * 3F);
 					}
 				}
 			}

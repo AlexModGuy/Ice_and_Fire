@@ -2286,4 +2286,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private boolean inFrustrum(ICamera camera, Entity entity){
         return camera!= null && entity != null && camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox());
     }
+
+    public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks){
+        Vec3d vec3d = rider.getPositionEyes(partialTicks);
+        Vec3d vec3d1 = rider.getLook(partialTicks);
+        Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
+        return this.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+    }
 }
