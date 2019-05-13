@@ -242,9 +242,11 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected void breathFireAtPos(BlockPos burningTarget) {
         if (this.isBreathingFire()) {
-            if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+            if (this.isActuallyBreathingFire()) {
                 rotationYaw = renderYawOffset;
-                this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                if(this.ticksExisted % 5 == 0){
+                    this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                }
                 stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 0);
             }
         } else {
@@ -279,9 +281,11 @@ public class EntityFireDragon extends EntityDragonBase {
             }
         } else {
             if (this.isBreathingFire()) {
-                if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+                if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
-                    this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                    if(this.ticksExisted % 5 == 0){
+                        this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                    }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if(mop != null){
                         stimulateFire( mop.hitVec.x,  mop.hitVec.y,  mop.hitVec.z, 0);
@@ -334,9 +338,11 @@ public class EntityFireDragon extends EntityDragonBase {
                 }
             } else {
                 if (this.isBreathingFire()) {
-                    if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+                    if (this.isActuallyBreathingFire()) {
                         rotationYaw = renderYawOffset;
-                        this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                        if(this.ticksExisted % 5 == 0){
+                            this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                        }
                         stimulateFire(entity.posX, entity.posY, entity.posZ, 0);
                         if (entity.isDead || entity == null) {
                             this.setBreathingFire(false);
@@ -371,7 +377,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double progressY = headPosY + d3 * (i / (float) distance);
             double progressZ = headPosZ + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
-                for (int j = 0; j < 3; j++) {
+                if(world.isRemote && ticksExisted % 3 == 0){
                     IceAndFire.PROXY.spawnParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, particleScale);
                 }
                 for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
@@ -386,11 +392,11 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (pos != null) {
                     FireExplosion explosion = new FireExplosion(world, this, pos.getX(), pos.getY(), pos.getZ(), Math.max(0.35F, this.getDragonStage() * 0.35F), true);
                     explosion.doExplosionA();
-                    explosion.doExplosionB(true);
+                    explosion.doExplosionB(false);
                     double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
                     double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
                     double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-                    for (int k = 0; k < 20; k++) {
+                    for (int k = 0; k < 7; k++) {
                         IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
                     }
                 }
@@ -401,12 +407,12 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            for (int j = 0; j < 20; j++) {
+            for (int j = 0; j < 7; j++) {
                 IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
             }
             FireExplosion explosion = new FireExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
             explosion.doExplosionA();
-            explosion.doExplosionB(true);
+            explosion.doExplosionB(false);
 
         }
     }

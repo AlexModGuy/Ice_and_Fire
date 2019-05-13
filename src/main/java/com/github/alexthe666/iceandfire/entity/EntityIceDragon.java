@@ -318,9 +318,11 @@ public class EntityIceDragon extends EntityDragonBase {
 			}
 		} else {
 			if (this.isBreathingFire()) {
-				if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+				if (this.isActuallyBreathingFire()) {
 					rotationYaw = renderYawOffset;
-					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+					if(this.ticksExisted % 5 == 0){
+						this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+					}
 					RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
 					if(mop != null){
 						stimulateIce( mop.hitVec.x,  mop.hitVec.y,  mop.hitVec.z, 0);
@@ -404,9 +406,11 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 			} else {
 				if (this.isBreathingFire()) {
-					if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+					if (this.isActuallyBreathingFire()) {
 						rotationYaw = renderYawOffset;
-						this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+						if(this.ticksExisted % 5 == 0){
+							this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+						}
 						stimulateIce(entity.posX, entity.posY, entity.posZ, 0);
 						if (entity.isDead || entity == null) {
 							this.setBreathingFire(false);
@@ -441,8 +445,8 @@ public class EntityIceDragon extends EntityDragonBase {
 			double progressY = headPosY + d3 * (i / (float) distance);
 			double progressZ = headPosZ + d4 * (i / (float) distance);
 			if(canPositionBeSeen(progressX, progressY, progressZ)){
-				for (int j = 0; j < 3; j++) {
-					IceAndFire.PROXY.spawnParticle("dragonice", world, progressX, progressY, progressZ, 0, -0.1F, 0, particleScale);
+				if(world.isRemote && ticksExisted % 3 == 0){
+					IceAndFire.PROXY.spawnParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, particleScale);
 				}
 				for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
 					if (!this.isOnSameTeam(entity) && entity != this) {
@@ -463,7 +467,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
 					double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 					double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-					for (int k = 0; k < 10; k++) {
+					for (int k = 0; k < 7; k++) {
 						IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
 					}
 				}
@@ -474,7 +478,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-			for (int j = 0; j < 10; j++) {
+			for (int j = 0; j < 7; j++) {
 				IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
 			}
 			IceExplosion explosion = new IceExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
@@ -532,9 +536,11 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void breathFireAtPos(BlockPos burningTarget) {
 		if (this.isBreathingFire()) {
-			if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
+			if (this.isActuallyBreathingFire()) {
 				rotationYaw = renderYawOffset;
-				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+				if(this.ticksExisted % 5 == 0){
+					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+				}
 				stimulateIce(burningTarget.getX(), burningTarget.getY(), burningTarget.getZ(), 0);
 			}
 		} else {
