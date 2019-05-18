@@ -160,6 +160,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private EntityDragonPart tail4Part;
     public BlockPos burningTarget;
     public int burnProgress;
+    public double burnParticleX;
+    public double burnParticleY;
+    public double burnParticleZ;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);

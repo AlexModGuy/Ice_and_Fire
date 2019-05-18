@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ParticleDragonFlame extends ParticleFlame {
@@ -27,6 +29,8 @@ public class ParticleDragonFlame extends ParticleFlame {
     private double initialX;
     private double initialY;
     private double initialZ;
+    @Nullable
+    private EntityDragonBase dragon;
 
     @SideOnly(Side.CLIENT)
     public ParticleDragonFlame(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float dragonSize) {
@@ -40,6 +44,12 @@ public class ParticleDragonFlame extends ParticleFlame {
         this.posZ = this.initialZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.dragonSize = dragonSize;
+    }
+
+    public ParticleDragonFlame(World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
+        this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
+        this.dragon = entityDragonBase;
+        this.particleAge = startingAge;
     }
 
     public void setParticleTextureIndex(int particleTextureIndex) {
@@ -62,7 +72,6 @@ public class ParticleDragonFlame extends ParticleFlame {
         float f5 = (float) (this.posZ - interpPosZ);
         float distX = (float) (this.initialX - this.posX);
         float distZ = (float) (this.initialZ - this.posZ);
-        float ageOrDist = Math.max(particleAge, Math.max(distX * 10, distZ * 10));
         float r = 1F;
         float g = 0.9F * (30 - particleAge) / 30F;
         float b = 0.3F * (30 - particleAge) / 30F;
@@ -87,9 +96,6 @@ public class ParticleDragonFlame extends ParticleFlame {
         float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
         Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
 
-        for (int l = 0; l < 4; ++l) {
-            avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
-        }
         Minecraft.getMinecraft().getTextureManager().bindTexture(DRAGONFLAME);
         GlStateManager.disableLighting();
         double currentMinU = 0.25D * particleTextureIndexX;
@@ -118,11 +124,23 @@ public class ParticleDragonFlame extends ParticleFlame {
 
     public void onUpdate() {
         super.onUpdate();
-        float distX = (float) (this.initialX - this.posX);
-        float distZ = (float) (this.initialZ - this.posZ);
-        this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
-        this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
-        this.motionY += 0.015F * rand.nextFloat();
+        if(dragon == null){
+            float distX = (float) (this.initialX - this.posX);
+            float distZ = (float) (this.initialZ - this.posZ);
+            this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
+            this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
+            this.motionY += 0.015F * rand.nextFloat();
+        }else{
+            float headPosX = (float) (posX + 1.8F * dragon.getRenderSize() * 0.3F * Math.cos((dragon.rotationYaw + 90) * Math.PI / 180));
+            float headPosY = (float) (posY + 0.5 * dragon.getRenderSize() * 0.3F);
+            float headPosZ = (float) (posZ + 1.8F * dragon.getRenderSize() * 0.3F * Math.sin((dragon.rotationYaw + 90) * Math.PI / 180));
+            double d2 = this.initialX - headPosX;
+            double d3 = this.initialY - headPosY;
+            double d4 = this.initialZ - headPosZ;
+            this.motionX += d2 * 0.1F * dragonSize * rand.nextFloat();
+            this.motionZ += d4 * 0.1F * dragonSize * rand.nextFloat();
+            this.motionY += d3 * 0.15F * rand.nextFloat();
+        }
     }
 
     public void move(double x, double y, double z) {

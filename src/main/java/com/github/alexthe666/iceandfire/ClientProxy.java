@@ -312,6 +312,18 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SideOnly(Side.CLIENT)
+	public void spawnDragonParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
+		if (name.equals("dragonfire")) {
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 0));
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 5));
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 10));
+			if (world.rand.nextFloat() > 0.95F) {
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonEmber(world, x, y, z, motX, motY, motZ));
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
 	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
 		net.minecraft.client.particle.Particle particle = null;
 		if (name.equals("dragonfire")) {

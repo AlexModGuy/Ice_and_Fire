@@ -60,10 +60,6 @@ public class ParticleDragonEmber extends ParticleFlame {
         int j = i >> 16 & 65535;
         int k = i & 65535;
         Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (-rotationYZ * width - rotationXZ * width)), new Vec3d((double) (-rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (-rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (rotationYZ * width - rotationXZ * width))};
-        GlStateManager.enableBlend();
-        GlStateManager.enableNormalize();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.depthMask(false);
         float f8 = (float)Math.PI / 2 + this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
         float f9 = MathHelper.cos(f8 * 0.5F);
         float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
@@ -75,7 +71,6 @@ public class ParticleDragonEmber extends ParticleFlame {
             avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
         }
         Minecraft.getMinecraft().getTextureManager().bindTexture(EMBER);
-        GlStateManager.disableLighting();
         double currentMinU = 0.25D * particleTextureIndexX;
         double currentMaxU = currentMinU + 0.25D;
         double currentMinV = 0.25D * particleTextureIndexY;
@@ -89,7 +84,6 @@ public class ParticleDragonEmber extends ParticleFlame {
         buffer.pos((double)f3 + avec3d[3].x, (double)f4 + avec3d[3].y, (double)f5 + avec3d[3].z).tex(0, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
         Tessellator.getInstance().draw();
         GL11.glPopMatrix();
-        GlStateManager.disableBlend();
     }
 
     public int getBrightnessForRender(float partialTick) {

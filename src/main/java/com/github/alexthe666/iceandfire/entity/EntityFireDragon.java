@@ -357,8 +357,14 @@ public class EntityFireDragon extends EntityDragonBase {
         this.faceEntity(entity, 360, 360);
     }
 
+
+
+
     public void stimulateFire(double burnX, double burnY, double burnZ, float overrideDistance) {
         this.getNavigator().clearPath();
+        this.burnParticleX = burnX;
+        this.burnParticleY = burnY;
+        this.burnParticleZ = burnZ;
         float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
         float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
@@ -368,17 +374,17 @@ public class EntityFireDragon extends EntityDragonBase {
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), overrideDistance);
         double conqueredDistance = burnProgress / 30D * distance;
-        float inaccuracy = 0.5F;
-        d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+        //float inaccuracy = 0.5F;
+        //d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+        //d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+        //d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
         for (int i = 0; i < conqueredDistance; i++) {
             double progressX = headPosX + d2 * (i / (float) distance);
             double progressY = headPosY + d3 * (i / (float) distance);
             double progressZ = headPosZ + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
                 if(world.isRemote && ticksExisted % 3 == 0){
-                    IceAndFire.PROXY.spawnParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, particleScale);
+                    IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, this);
                 }
                 for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
                     if (!this.isOnSameTeam(entity) && entity != this) {
