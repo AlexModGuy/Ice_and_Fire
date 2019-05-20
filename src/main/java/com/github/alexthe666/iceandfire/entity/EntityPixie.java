@@ -244,7 +244,7 @@ public class EntityPixie extends EntityTameable {
 			this.moveHelper.action = EntityMoveHelper.Action.WAIT;
 		}
 		if(world.isRemote){
-			IceAndFire.PROXY.spawnParticle("if_pixie", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
+			IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
 		}
 		if (ticksUntilHouseAI > 0) {
 			ticksUntilHouseAI--;

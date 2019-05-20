@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.SoundEvents;
@@ -60,7 +59,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
 
             if (this.isInWater()) {
                 for (int i = 0; i < 6; ++i) {
-                    IceAndFire.PROXY.spawnParticle("serpent_bubble", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                    IceAndFire.PROXY.spawnParticle("serpent_bubble", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                 }
             } else {
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());

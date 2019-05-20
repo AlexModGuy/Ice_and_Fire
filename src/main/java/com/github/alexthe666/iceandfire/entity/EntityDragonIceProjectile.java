@@ -48,7 +48,7 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 	public void onUpdate() {
 		super.onUpdate();
 		for (int i = 0; i < 6; ++i) {
-			IceAndFire.PROXY.spawnParticle("dragonice", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+			IceAndFire.PROXY.spawnParticle("dragonice", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 		}
 		if (ticksExisted > 160) {
 			setDead();

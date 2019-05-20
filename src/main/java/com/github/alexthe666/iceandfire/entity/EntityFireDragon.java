@@ -403,7 +403,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
                     double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
                     for (int k = 0; k < 7; k++) {
-                        IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
+                        IceAndFire.PROXY.spawnParticle("dragonfire", spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
                     }
                 }
             }
@@ -414,7 +414,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
             for (int j = 0; j < 7; j++) {
-                IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
+                IceAndFire.PROXY.spawnParticle("dragonfire", spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
             }
             FireExplosion explosion = new FireExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
             explosion.doExplosionA();

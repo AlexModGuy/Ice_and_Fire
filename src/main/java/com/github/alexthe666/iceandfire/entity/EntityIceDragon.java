@@ -446,7 +446,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			double progressZ = headPosZ + d4 * (i / (float) distance);
 			if(canPositionBeSeen(progressX, progressY, progressZ)){
 				if(world.isRemote && ticksExisted % 3 == 0){
-					IceAndFire.PROXY.spawnParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, particleScale);
+					IceAndFire.PROXY.spawnParticle("dragonfire", progressX, progressY, progressZ, 0, 0.15F, 0, particleScale);
 				}
 				for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
 					if (!this.isOnSameTeam(entity) && entity != this) {
@@ -468,7 +468,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 					double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
 					for (int k = 0; k < 7; k++) {
-						IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
+						IceAndFire.PROXY.spawnParticle("dragonice", spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
 					}
 				}
 			}
@@ -479,7 +479,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
 			for (int j = 0; j < 7; j++) {
-				IceAndFire.PROXY.spawnParticle("dragonice", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
+				IceAndFire.PROXY.spawnParticle("dragonice", spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
 			}
 			IceExplosion explosion = new IceExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
 			explosion.doExplosionA();

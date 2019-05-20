@@ -162,7 +162,7 @@ public class EventClient {
 				}
 				if (sirenProps.isCharmed) {
 					if (rand.nextInt(40) == 0) {
-						IceAndFire.PROXY.spawnParticle("siren_appearance", player.world, player.posX, player.posY, player.posZ, 0, 0, 0);
+						IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
 					}
 
 					if (IceAndFire.CONFIG.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {

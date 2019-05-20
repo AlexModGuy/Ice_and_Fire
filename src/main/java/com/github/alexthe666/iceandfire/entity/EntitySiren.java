@@ -20,7 +20,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -276,7 +275,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraY = 1.2F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                IceAndFire.PROXY.spawnParticle("siren_music", this.world, this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                IceAndFire.PROXY.spawnParticle("siren_music", this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
             }
 
         }
