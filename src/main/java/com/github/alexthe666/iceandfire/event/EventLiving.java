@@ -6,7 +6,9 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
+import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemChain;
+import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
@@ -379,18 +381,44 @@ public class EventLiving {
 
             }
         }
-        if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
+
+        // armor buff
+        Item headItem = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
+        Item chestItem = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
+        Item legsItem = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem();
+        Item feetItem = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem();
+
+        if (headItem instanceof ItemSeaSerpentArmor
+                || chestItem instanceof ItemSeaSerpentArmor
+                || legsItem instanceof ItemSeaSerpentArmor
+                || feetItem instanceof ItemSeaSerpentArmor) {
             event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 50, 0, false, false));
             if (event.getEntityLiving().isWet()) {
-                int headMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int chestMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int legMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int footMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int headMod = headItem instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int chestMod = chestItem instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int legMod = legsItem instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int footMod = feetItem instanceof ItemSeaSerpentArmor ? 1 : 0;
                 event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
-
-
             }
         }
+
+        if (headItem instanceof ItemScaleArmor
+                && chestItem instanceof ItemScaleArmor
+                && legsItem instanceof ItemScaleArmor
+                && feetItem instanceof ItemScaleArmor) {
+            if(((ItemScaleArmor)headItem).eggType.isFire
+                    &&((ItemScaleArmor)chestItem).eggType.isFire
+                    &&((ItemScaleArmor)legsItem).eggType.isFire
+                    &&((ItemScaleArmor)feetItem).eggType.isFire) {
+                event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 50, 0, false, false));
+            } else if(!((ItemScaleArmor)headItem).eggType.isFire
+                    &&!((ItemScaleArmor)chestItem).eggType.isFire
+                    &&!((ItemScaleArmor)legsItem).eggType.isFire
+                    &&!((ItemScaleArmor)feetItem).eggType.isFire) {
+                event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 50, 0, false, false));
+            }
+        }
+
         if (IceAndFire.CONFIG.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal) {
             ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
             if (chickenProps != null) {
