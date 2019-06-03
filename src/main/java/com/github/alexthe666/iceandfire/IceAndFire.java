@@ -109,7 +109,7 @@ public class IceAndFire {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
+        ModRecipes.init();
         ModVillagers.INSTANCE.init();
         logger.info("The watcher waits on the northern wall");
         logger.info("A daughter picks up a warrior's sword");

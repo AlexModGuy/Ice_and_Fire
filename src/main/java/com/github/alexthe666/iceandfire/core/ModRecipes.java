@@ -25,7 +25,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ModRecipes {
 
     public static void preInit() {
-
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
         {
             /**
@@ -51,6 +50,9 @@ public class ModRecipes {
             }
         });
 
+    }
+
+    public static void init() {
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
         OreDictionary.registerOre("oreSilver", ModBlocks.silverOre);
