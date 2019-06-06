@@ -4,16 +4,24 @@ import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nullable;
+
 public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
 	private EntityDragonBase dragon;
 
-	public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
-		super(entityIn, classTarget, 0, checkSight, false, targetSelector);
+	public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight) {
+		super(entityIn, classTarget, 0, checkSight, false, new Predicate<Entity>() {
+			@Override
+			public boolean apply(@Nullable Entity entity) {
+				return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase)entity);
+			}
+		});
 		this.dragon = entityIn;
 	}
 
@@ -33,7 +41,8 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 					return false;
 				} else {
 
-					if (!dragon.isOwner(this.targetEntity) && FoodUtils.getFoodPoints(this.targetEntity) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
+					if (!dragon.isOwner(this.targetEntity) && FoodUtils.getFoodPoints(this.targetEntity) > 0 && dragon.canMove()
+							&& (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
 						if(dragon.isTamed()){
 							return DragonUtils.canTameDragonAttack(dragon, this.targetEntity);
 						}else{
@@ -46,6 +55,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 		return false;
 	}
 
+	@Override
 	protected AxisAlignedBB getTargetableArea(double targetDistance) {
 		return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
 	}

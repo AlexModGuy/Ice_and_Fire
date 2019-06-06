@@ -2140,7 +2140,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void updateCheckPlayer() {
-        double checklength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
+        double checklength = getMaxAttackPlayerDistance();
         EntityPlayer player = world.getClosestPlayerToEntity(this, checklength);
         if (!this.isTamed() && this.isSleeping()) {
             if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
@@ -2149,10 +2149,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.setAttackTarget(player);
             }
         }
-        EntityPlayer player1 = world.getClosestPlayerToEntity(this, (this.getRenderSize() / 2) + 15);
+        //EntityPlayer player1 = world.getClosestPlayerToEntity(this, (this.getRenderSize() / 2) + 15);
         //if (player1 != null) {
         //	player1.addStat(ModAchievements.dragonEncounter, 1);
         //}
+    }
+
+    protected double getMaxAttackPlayerDistance() {
+        return this.getEntityBoundingBox().getAverageEdgeLength() * 3;
     }
 
     public boolean shouldDismountInWater(Entity rider) {

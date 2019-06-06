@@ -61,7 +61,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
 		this.tasks.addTask(2, new EntityAISwimming(this));
 		this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
-		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.5D, false));
+		this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
 		this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
 		this.tasks.addTask(6, new DragonAIAirTarget(this));
 		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
@@ -69,13 +69,8 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.tasks.addTask(8, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
-		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
-			@Override
-			public boolean apply(@Nullable Entity entity) {
-				return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase)entity);
-			}
-		}));
+		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
+		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true));
 		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
 	}
 
@@ -129,8 +124,8 @@ public class EntityFireDragon extends EntityDragonBase {
 		}
 		switch (new Random().nextInt(4)) {
 		case 0:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -140,15 +135,15 @@ public class EntityFireDragon extends EntityDragonBase {
 				break;
 			case 1:
 				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
-						this.setAnimation(this.ANIMATION_SHAKEPREY);
+					if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+						this.setAnimation(ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
 						this.attackDecision = this.getRNG().nextBoolean();
 						return true;
 					}
 				} else {
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -158,8 +153,8 @@ public class EntityFireDragon extends EntityDragonBase {
 				}
 				break;
 			case 2:
-				if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
-					this.setAnimation(this.ANIMATION_TAILWHACK);
+				if (this.getAnimation() != ANIMATION_TAILWHACK) {
+					this.setAnimation(ANIMATION_TAILWHACK);
 					return false;
 				} else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
 					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -172,13 +167,13 @@ public class EntityFireDragon extends EntityDragonBase {
 				break;
 			case 3:
 				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
-					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
-						this.setAnimation(this.ANIMATION_WINGBLAST);
+					if (this.getAnimation() != ANIMATION_WINGBLAST) {
+						this.setAnimation(ANIMATION_WINGBLAST);
 						return true;
 					}
 				}else{
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -189,8 +184,8 @@ public class EntityFireDragon extends EntityDragonBase {
 
 				break;
 			default:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -269,8 +264,8 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	public void riderShootFire(Entity controller) {
 		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
-			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-				this.setAnimation(this.ANIMATION_FIRECHARGE);
+			if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+				this.setAnimation(ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
@@ -333,8 +328,8 @@ public class EntityFireDragon extends EntityDragonBase {
 	private void shootFireAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if (this.getRNG().nextInt(5) == 0) {
-				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-					this.setAnimation(this.ANIMATION_FIRECHARGE);
+				if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+					this.setAnimation(ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
 					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
