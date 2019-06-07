@@ -373,18 +373,14 @@ public class EntityFireDragon extends EntityDragonBase {
         double d4 = burnZ - headPosZ;
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), overrideDistance);
-        double conqueredDistance = burnProgress / 30D * distance;
-        //float inaccuracy = 0.5F;
-        //d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        //d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        //d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+        double conqueredDistance = burnProgress / 40D * distance;
         for (int i = 0; i < conqueredDistance; i++) {
             double progressX = headPosX + d2 * (i / (float) distance);
             double progressY = headPosY + d3 * (i / (float) distance);
             double progressZ = headPosZ + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
-                if(world.isRemote && ticksExisted % 3 == 0){
-                    IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, progressX, progressY, progressZ, 0, 0.15F, 0, this);
+                if(world.isRemote && rand.nextInt(5) == 0){
+                    IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, headPosX, headPosY, headPosZ, 0, 0, 0, this);
                 }
                 for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
                     if (!this.isOnSameTeam(entity) && entity != this) {
@@ -399,23 +395,14 @@ public class EntityFireDragon extends EntityDragonBase {
                     FireExplosion explosion = new FireExplosion(world, this, pos.getX(), pos.getY(), pos.getZ(), Math.max(0.35F, this.getDragonStage() * 0.35F), true);
                     explosion.doExplosionA();
                     explosion.doExplosionB(false);
-                    double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
-                    double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
-                    double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-                    for (int k = 0; k < 7; k++) {
-                        IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
-                    }
                 }
             }
 
         }
-        if (burnProgress >= 30D && canPositionBeSeen(burnX, burnY, burnZ)) {
+        if (burnProgress >= 40D && canPositionBeSeen(burnX, burnY, burnZ)) {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            for (int j = 0; j < 7; j++) {
-                IceAndFire.PROXY.spawnParticle("dragonfire", world, spawnX, spawnY, spawnZ, 0, -0.1F, 0, particleScale * 2.75F);
-            }
             FireExplosion explosion = new FireExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
             explosion.doExplosionA();
             explosion.doExplosionB(false);

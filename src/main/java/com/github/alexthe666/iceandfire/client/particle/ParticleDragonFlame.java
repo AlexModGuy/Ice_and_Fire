@@ -39,9 +39,9 @@ public class ParticleDragonFlame extends ParticleFlame {
         this.initialX = xCoordIn;
         this.initialY = yCoordIn;
         this.initialZ = zCoordIn;
-        this.posX = this.initialX + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
-        this.posY = this.initialY + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
-        this.posZ = this.initialZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
+        this.posX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
+        this.posY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
+        this.posZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.dragonSize = dragonSize;
     }
@@ -49,77 +49,58 @@ public class ParticleDragonFlame extends ParticleFlame {
     public ParticleDragonFlame(World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
         this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
         this.dragon = entityDragonBase;
+        this.initialX = dragon.burnParticleX  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
+        this.initialY = dragon.burnParticleY  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
+        this.initialZ = dragon.burnParticleZ  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
         this.particleAge = startingAge;
     }
 
-    public void setParticleTextureIndex(int particleTextureIndex) {
-        this.particleTextureIndexX = particleTextureIndex % 4;
-        this.particleTextureIndexY = particleTextureIndex / 4;
-    }
 
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        this.setParticleTextureIndex(particleAge / 2);
-        if (particleAge > 30) {
+        if (particleAge > (dragon == null ? 10 : 30)) {
             this.setExpired();
         }
-        particleScale = 0.175F * (this.particleMaxAge - (this.particleAge));
-        if (particleAge <= 2) {
-            particleScale = 5F;
+        particleScale = 5F * dragonSize;
+        float f = (float) this.particleTextureIndexX / 16.0F;
+        float f1 = f + 0.0624375F;
+        float f2 = (float) this.particleTextureIndexY / 16.0F;
+        float f3 = f2 + 0.0624375F;
+        float f4 = 0.1F * this.particleScale;
+
+        if (this.particleTexture != null) {
+            f = this.particleTexture.getMinU();
+            f1 = this.particleTexture.getMaxU();
+            f2 = this.particleTexture.getMinV();
+            f3 = this.particleTexture.getMaxV();
         }
-        particleScale *= dragonSize;
-        float f3 = (float) (this.posX - interpPosX);
-        float f4 = (float) (this.posY - interpPosY);
-        float f5 = (float) (this.posZ - interpPosZ);
-        float distX = (float) (this.initialX - this.posX);
-        float distZ = (float) (this.initialZ - this.posZ);
-        float r = 1F;
-        float g = 0.9F * (30 - particleAge) / 30F;
-        float b = 0.3F * (30 - particleAge) / 30F;
-        if (particleAge <= 2) {
-            r = 1F;
-            g = 1F;
-            b = 1F;
-        }
-        float width = particleScale * 0.09F;
+
+        float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
+        float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
+        float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (-rotationYZ * width - rotationXZ * width)), new Vec3d((double) (-rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (-rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (rotationYZ * width - rotationXZ * width))};
-        GlStateManager.enableBlend();
-        GlStateManager.enableNormalize();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.depthMask(false);
-        float f8 = (float) Math.PI / 2 + this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
-        float f9 = MathHelper.cos(f8 * 0.5F);
-        float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
-        float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
-        float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
-        Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
+        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double) (-rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (rotationYZ * f4 - rotationXZ * f4))};
+        if (this.particleAngle != 0.0F) {
+            float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
+            float f9 = MathHelper.cos(f8 * 0.5F);
+            float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
+            float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
+            float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
+            Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(DRAGONFLAME);
-        GlStateManager.disableLighting();
-        double currentMinU = 0.25D * particleTextureIndexX;
-        double currentMaxU = currentMinU + 0.25D;
-        double currentMinV = 0.25D * particleTextureIndexY;
-        double currentMaxV = currentMinV + 0.25D;
-        float alpha = (this.particleMaxAge - this.particleAge) / (float) this.particleMaxAge;
-        GL11.glPushMatrix();
-        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        buffer.pos((double) f3 + avec3d[0].x, (double) f4 + avec3d[0].y, (double) f5 + avec3d[0].z).tex(currentMinU, currentMaxV).color(r, g, b, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[1].x, (double) f4 + avec3d[1].y, (double) f5 + avec3d[1].z).tex(currentMaxU, currentMaxV).color(r, g, b, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[2].x, (double) f4 + avec3d[2].y, (double) f5 + avec3d[2].z).tex(currentMaxU, currentMinV).color(r, g, b, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[3].x, (double) f4 + avec3d[3].y, (double) f5 + avec3d[3].z).tex(currentMinU, currentMinV).color(r, g, b, alpha).lightmap(j, k).endVertex();
-        Tessellator.getInstance().draw();
-        GL11.glPopMatrix();
-        GlStateManager.disableBlend();
+            for (int l = 0; l < 4; ++l) {
+                avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
+            }
+        }
+        buffer.pos((double) f5 + avec3d[0].x, (double) f6 + avec3d[0].y, (double) f7 + avec3d[0].z).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f5 + avec3d[1].x, (double) f6 + avec3d[1].y, (double) f7 + avec3d[1].z).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f5 + avec3d[2].x, (double) f6 + avec3d[2].y, (double) f7 + avec3d[2].z).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
     }
 
     public int getBrightnessForRender(float partialTick) {
         return 240;
-    }
-
-    public int getFXLayer() {
-        return 3;
     }
 
     public void onUpdate() {
@@ -131,15 +112,16 @@ public class ParticleDragonFlame extends ParticleFlame {
             this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
             this.motionY += 0.015F * rand.nextFloat();
         }else{
-            float headPosX = (float) (posX + 1.8F * dragon.getRenderSize() * 0.3F * Math.cos((dragon.rotationYaw + 90) * Math.PI / 180));
-            float headPosY = (float) (posY + 0.5 * dragon.getRenderSize() * 0.3F);
-            float headPosZ = (float) (posZ + 1.8F * dragon.getRenderSize() * 0.3F * Math.sin((dragon.rotationYaw + 90) * Math.PI / 180));
-            double d2 = this.initialX - headPosX;
-            double d3 = this.initialY - headPosY;
-            double d4 = this.initialZ - headPosZ;
-            this.motionX += d2 * 0.1F * dragonSize * rand.nextFloat();
-            this.motionZ += d4 * 0.1F * dragonSize * rand.nextFloat();
-            this.motionY += d3 * 0.15F * rand.nextFloat();
+            double d2 = this.initialX - posX;
+            double d3 = this.initialY - posY;
+            double d4 = this.initialZ - posZ;
+            float speed = 0.02F + rand.nextFloat() * 0.02F;
+            this.motionX += d2 * speed;
+            this.motionY += d3 * speed;
+            this.motionZ += d4 * speed;
+            if(Math.abs(d2) + Math.abs(d3) + Math.abs(d4) < 5D){
+                this.setExpired();
+            }
         }
     }
 

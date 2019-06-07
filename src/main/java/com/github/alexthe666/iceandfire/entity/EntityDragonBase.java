@@ -1169,7 +1169,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (this.isBreathingFire() && burnProgress < 30) {
+        if (this.isBreathingFire() && burnProgress < 40) {
             burnProgress++;
         } else if (!this.isBreathingFire()) {
             burnProgress = 0;
