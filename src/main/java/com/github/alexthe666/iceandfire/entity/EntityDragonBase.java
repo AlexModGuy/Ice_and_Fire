@@ -417,6 +417,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
+    @Override
     public void setDead() {
         removeParts();
         super.setDead();

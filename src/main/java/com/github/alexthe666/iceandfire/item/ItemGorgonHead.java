@@ -69,7 +69,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		}));
 		double d2 = d1;
 		for (int j = 0; j < list.size(); ++j) {
-			Entity entity1 = (Entity) list.get(j);
+			Entity entity1 = list.get(j);
 			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
 			RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
@@ -133,9 +133,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 					entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 				}
 				SoundEvent deathSound = null;
-				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR", null);
+				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR");
 				try {
-					deathSound = (SoundEvent) deathSoundMethod.invoke((EntityLivingBase) pointedEntity, null);
+					deathSound = (SoundEvent) deathSoundMethod.invoke(pointedEntity, (Object[]) null);
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (IllegalArgumentException e) {
