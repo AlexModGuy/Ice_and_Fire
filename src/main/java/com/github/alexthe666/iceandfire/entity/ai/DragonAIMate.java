@@ -24,9 +24,9 @@ import static com.github.alexthe666.iceandfire.IceAndFire.NAME;
 public class DragonAIMate extends EntityAIBase {
 
 	private final EntityDragonBase dragon;
-	World theWorld;
-	int spawnBabyDelay;
-	double moveSpeed;
+	private World theWorld;
+	private int spawnBabyDelay;
+	private double moveSpeed;
 	private EntityDragonBase targetMate;
 	private static final IBlockState NEST = ModBlocks.nest.getDefaultState();
 	public DragonAIMate(EntityDragonBase dragon, double speedIn) {
@@ -49,7 +49,8 @@ public class DragonAIMate extends EntityAIBase {
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean continueExecuting() {
+	@Override
+	public boolean shouldContinueExecuting() {
 		return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
 	}
 

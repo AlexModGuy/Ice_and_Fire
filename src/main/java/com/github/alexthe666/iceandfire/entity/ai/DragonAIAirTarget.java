@@ -53,7 +53,8 @@ public class DragonAIAirTarget extends EntityAIBase {
 		return false;
 	}
 
-	public boolean continueExecuting() {
+	@Override
+	public boolean shouldContinueExecuting() {
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
 		if (!dragon.isFlying() && !dragon.isHovering()) {
 			return false;

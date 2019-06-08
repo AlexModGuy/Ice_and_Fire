@@ -431,13 +431,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_iron) {
+        if (!stack.isEmpty() && stack.getItem() == ModItems.dragon_armor_iron) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_gold) {
+        if (!stack.isEmpty() && stack.getItem() == ModItems.dragon_armor_gold) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
+        if (!stack.isEmpty() && stack.getItem() == ModItems.dragon_armor_diamond) {
             return 3;
         }
         return 0;
@@ -452,24 +452,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(HUNGER, Integer.valueOf(0));
-        this.dataManager.register(AGE_TICKS, Integer.valueOf(0));
-        this.dataManager.register(GENDER, Boolean.valueOf(false));
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(SLEEPING, Boolean.valueOf(false));
-        this.dataManager.register(FIREBREATHING, Boolean.valueOf(false));
-        this.dataManager.register(HOVERING, Boolean.valueOf(false));
-        this.dataManager.register(FLYING, Boolean.valueOf(false));
-        this.dataManager.register(HEAD_ARMOR, Integer.valueOf(0));
-        this.dataManager.register(NECK_ARMOR, Integer.valueOf(0));
-        this.dataManager.register(BODY_ARMOR, Integer.valueOf(0));
-        this.dataManager.register(TAIL_ARMOR, Integer.valueOf(0));
-        this.dataManager.register(DEATH_STAGE, Integer.valueOf(0));
-        this.dataManager.register(MODEL_DEAD, Boolean.valueOf(false));
-        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
-        this.dataManager.register(TACKLE, Boolean.valueOf(false));
-        this.dataManager.register(AGINGDISABLED, Boolean.valueOf(false));
-        this.dataManager.register(COMMAND, Integer.valueOf(0));
+        this.dataManager.register(HUNGER, 0);
+        this.dataManager.register(AGE_TICKS, 0);
+        this.dataManager.register(GENDER, Boolean.FALSE);
+        this.dataManager.register(VARIANT, 0);
+        this.dataManager.register(SLEEPING, Boolean.FALSE);
+        this.dataManager.register(FIREBREATHING, Boolean.FALSE);
+        this.dataManager.register(HOVERING, Boolean.FALSE);
+        this.dataManager.register(FLYING, Boolean.FALSE);
+        this.dataManager.register(HEAD_ARMOR, 0);
+        this.dataManager.register(NECK_ARMOR, 0);
+        this.dataManager.register(BODY_ARMOR, 0);
+        this.dataManager.register(TAIL_ARMOR, 0);
+        this.dataManager.register(DEATH_STAGE, 0);
+        this.dataManager.register(MODEL_DEAD, Boolean.FALSE);
+        this.dataManager.register(CONTROL_STATE, (byte) 0);
+        this.dataManager.register(TACKLE, Boolean.FALSE);
+        this.dataManager.register(AGINGDISABLED, Boolean.FALSE);
+        this.dataManager.register(COMMAND, 0);
     }
 
     public boolean up() {
@@ -513,7 +513,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
+        byte prevState = dataManager.get(CONTROL_STATE);
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -522,7 +522,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE).byteValue();
+        return dataManager.get(CONTROL_STATE);
     }
 
     public void setControlState(byte state) {
@@ -530,7 +530,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void setCommand(int command) {
-        this.dataManager.set(COMMAND, Integer.valueOf(command));
+        this.dataManager.set(COMMAND, command);
         if (command == 1) {
             this.setSitting(true);
         } else {
@@ -783,7 +783,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean isSleeping() {
         if (world.isRemote) {
-            boolean isSleeping = this.dataManager.get(SLEEPING).booleanValue();
+            boolean isSleeping = this.dataManager.get(SLEEPING);
             this.isSleeping = isSleeping;
             return isSleeping;
         }
@@ -803,7 +803,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean isBreathingFire() {
         if (world.isRemote) {
-            boolean breathing = this.dataManager.get(FIREBREATHING).booleanValue();
+            boolean breathing = this.dataManager.get(FIREBREATHING);
             this.isBreathingFire = breathing;
             return breathing;
         }
@@ -835,7 +835,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public boolean isSitting() {
         if (world.isRemote) {
-            boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
+            boolean isSitting = (this.dataManager.get(TAMED) & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -847,24 +847,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
-        byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
+        byte b0 = (Byte) this.dataManager.get(TAMED);
         if (sitting) {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+            this.dataManager.set(TAMED, (byte) (b0 | 1));
         } else {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
+            this.dataManager.set(TAMED, (byte) (b0 & -2));
         }
     }
 
     public int getArmorInSlot(int i) {
         switch (i) {
             default:
-                return this.dataManager.get(HEAD_ARMOR).intValue();
+                return this.dataManager.get(HEAD_ARMOR);
             case 1:
-                return this.dataManager.get(NECK_ARMOR).intValue();
+                return this.dataManager.get(NECK_ARMOR);
             case 2:
-                return this.dataManager.get(BODY_ARMOR).intValue();
+                return this.dataManager.get(BODY_ARMOR);
             case 3:
-                return this.dataManager.get(TAIL_ARMOR).intValue();
+                return this.dataManager.get(TAIL_ARMOR);
         }
     }
 
@@ -932,7 +932,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage && player.capabilities.allowEdit) {
             //player.addStat(ModAchievements.dragonHarvest, 1);
-            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFire.CONFIG.dragonDropBlood) {
+            if (!world.isRemote && !stack.isEmpty() && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFire.CONFIG.dragonDropBlood) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }

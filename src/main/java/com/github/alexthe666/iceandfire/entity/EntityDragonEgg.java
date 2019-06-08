@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -82,8 +83,8 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
-        this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
+        this.getDataManager().register(DRAGON_TYPE, 0);
+        this.getDataManager().register(DRAGON_AGE, 0);
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
     }
 
@@ -97,7 +98,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     public EnumDragonEgg getType() {
-        return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE).intValue()];
+        return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE)];
     }
 
     public void setType(EnumDragonEgg newtype) {
@@ -110,7 +111,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     public int getDragonAge() {
-        return this.getDataManager().get(DRAGON_AGE).intValue();
+        return this.getDataManager().get(DRAGON_AGE);
     }
 
     public void setDragonAge(int i) {
@@ -130,8 +131,11 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
             world.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
             this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
             if (world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
-                ((TileEntityEggInIce) world.getTileEntity(pos)).type = this.getType();
-                ((TileEntityEggInIce) world.getTileEntity(pos)).ownerUUID = this.getOwnerId();
+                TileEntity tileEntity = world.getTileEntity(pos);
+                if (tileEntity instanceof TileEntityEggInIce) {
+                    ((TileEntityEggInIce) tileEntity).type = this.getType();
+                    ((TileEntityEggInIce) tileEntity).ownerUUID = this.getOwnerId();
+                }
             }
         }
         if (this.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {

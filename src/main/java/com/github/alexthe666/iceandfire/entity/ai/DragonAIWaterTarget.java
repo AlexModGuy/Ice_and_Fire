@@ -48,7 +48,8 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		return false;
 	}
 
-	public boolean continueExecuting() {
+	@Override
+	public boolean shouldContinueExecuting() {
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
 		if (!dragon.isInWater()) {
 			return false;

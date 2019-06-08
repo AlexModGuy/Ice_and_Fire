@@ -15,6 +15,7 @@ public class EntityMutlipartPart extends PartEntity {
         super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
+    @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if(world.isRemote){
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));

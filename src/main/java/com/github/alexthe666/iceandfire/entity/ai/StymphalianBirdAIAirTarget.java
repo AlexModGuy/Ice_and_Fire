@@ -50,7 +50,8 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
         return false;
     }
 
-    public boolean continueExecuting() {
+    @Override
+    public boolean shouldContinueExecuting() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(bird, StoneEntityProperties.class);
         if (!bird.isFlying()) {
             return false;
