@@ -63,7 +63,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 			this.resetTask();
 			return false;
 		}
-		return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (!this.longMemory ? (!dragon.isFlying() && !dragon.isHovering() ? !this.dragon.getNavigator().noPath() : true) : (!this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative())));
+		return entitylivingbase != null && (entitylivingbase.isEntityAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) && (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative()))));
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	public void resetTask() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
 		if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
-			this.dragon.setAttackTarget((EntityLivingBase) null);
+			this.dragon.setAttackTarget(null);
 		}
 		this.dragon.getNavigator().clearPath();
 	}

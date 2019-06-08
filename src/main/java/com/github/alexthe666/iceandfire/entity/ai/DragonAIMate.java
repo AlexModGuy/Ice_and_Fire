@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -29,6 +31,7 @@ public class DragonAIMate extends EntityAIBase {
 	private double moveSpeed;
 	private EntityDragonBase targetMate;
 	private static final IBlockState NEST = ModBlocks.nest.getDefaultState();
+
 	public DragonAIMate(EntityDragonBase dragon, double speedIn) {
 		this.dragon = dragon;
 		this.theWorld = dragon.world;
@@ -38,11 +41,11 @@ public class DragonAIMate extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.dragon.isInLove()) {
-			return false;
-		} else {
+		if (this.dragon.isInLove()) {
 			this.targetMate = this.getNearbyMate();
 			return this.targetMate != null;
+		} else {
+			return false;
 		}
 	}
 
@@ -85,7 +88,10 @@ public class DragonAIMate extends EntityAIBase {
 	 * valid mate found.
 	 */
 	private EntityDragonBase getNearbyMate() {
-		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D));
+		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(
+				this.dragon.getClass(),
+				this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D)
+		);
 		double d0 = Double.MAX_VALUE;
 		EntityDragonBase mate = null;
 		for (EntityDragonBase partner : list) {

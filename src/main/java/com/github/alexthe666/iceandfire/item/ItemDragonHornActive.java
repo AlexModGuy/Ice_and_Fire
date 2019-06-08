@@ -171,8 +171,8 @@ public class ItemDragonHornActive extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
-			String fire = new TextComponentTranslation("entity.firedragon.name", new Object[0]).getUnformattedText();
-			String ice = new TextComponentTranslation("entity.icedragon.name", new Object[0]).getUnformattedText();
+			String fire = new TextComponentTranslation("entity.firedragon.name").getUnformattedText();
+			String ice = new TextComponentTranslation("entity.icedragon.name").getUnformattedText();
 			tooltip.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
 			String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
 			tooltip.add("" + name);

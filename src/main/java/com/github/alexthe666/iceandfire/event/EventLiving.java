@@ -361,7 +361,9 @@ public class EventLiving {
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
         if(!event.getEntityLiving().world.isRemote){
-            chainProperties.updateConnectedEntities();
+            if(chainProperties!=null) {
+                chainProperties.updateConnectedEntities();
+            }
         }
         if (chainProperties != null && chainProperties.isChained()) {
             if(chainProperties.wasJustDisconnected){
