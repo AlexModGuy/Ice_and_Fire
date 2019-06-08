@@ -114,16 +114,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 					return;
 				}
 				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-					int explodeSize = 2;
-					if(this.shootingEntity instanceof EntityDragonBase){
-						explodeSize = 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage();
-					}
-					FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, explodeSize, flag);
-					explosion.doExplosionA();
-					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), true, flag);
-					explosion2.doExplosionA();
-					explosion2.doExplosionB(true);
+					DragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
 				}
 				this.setDead();
 			}
@@ -138,17 +129,8 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 					}
 				}
 				movingObject.entityHit.setFire(5);
-				if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-					//((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
-				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-				FireExplosion explosion = new FireExplosion(world, null, this.posX, this.posY, this.posZ, 2, flag);
-				if (shootingEntity != null) {
-					explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2, flag);
-				}
-				explosion.doExplosionA();
-				explosion.doExplosionB(true);
-				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, flag);
+				DragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
 				this.setDead();
 			}
 		}

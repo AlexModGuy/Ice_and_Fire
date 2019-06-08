@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,10 +17,16 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
 
     public int dragonId;
     public boolean breathingFire;
+    public int posX;
+    public int posY;
+    public int posZ;
 
-    public MessageDragonSetBurnBlock(int dragonId, boolean breathingFire) {
+    public MessageDragonSetBurnBlock(int dragonId, boolean breathingFire, BlockPos pos) {
         this.dragonId = dragonId;
         this.breathingFire = breathingFire;
+        posX = pos.getX();
+        posY = pos.getY();
+        posZ = pos.getZ();
     }
 
     public MessageDragonSetBurnBlock() {
@@ -29,6 +36,9 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     public void fromBytes(ByteBuf buf) {
         dragonId = buf.readInt();
         breathingFire = buf.readBoolean();
+        posX = buf.readInt();
+        posY = buf.readInt();
+        posZ = buf.readInt();
 
     }
 
@@ -36,6 +46,9 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     public void toBytes(ByteBuf buf) {
         buf.writeInt(dragonId);
         buf.writeBoolean(breathingFire);
+        buf.writeInt(posX);
+        buf.writeInt(posY);
+        buf.writeInt(posZ);
     }
 
     @Override
@@ -45,6 +58,7 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
         if (entity != null && entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             dragon.setBreathingFire(message.breathingFire);
+            dragon.burningTarget = new BlockPos(posX, posY, posZ);
         }
     }
 
@@ -54,6 +68,7 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
         if (entity != null && entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             dragon.setBreathingFire(message.breathingFire);
+            dragon.burningTarget = new BlockPos(posX, posY, posZ);
         }
     }
 }

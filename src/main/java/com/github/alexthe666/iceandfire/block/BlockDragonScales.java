@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockDragonScales extends Block {
+public class BlockDragonScales extends Block implements IDragonProof {
     EnumDragonEgg type;
 
     public BlockDragonScales(String name, EnumDragonEgg type) {

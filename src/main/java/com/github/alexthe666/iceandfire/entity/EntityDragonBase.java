@@ -277,14 +277,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected void updateBurnTarget(){
-        if(!world.isRemote && burningTarget != null){
+        if(burningTarget != null){
             if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget) < 300){
                 this.getLookHelper().setLookPosition(burningTarget.getX()  + 0.5D, burningTarget.getY()  + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);
                 this.setBreathingFire(true);
-                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), true));
+
             }else{
-                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), false));
+                if(!world.isRemote){
+                    IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), true, burningTarget));
+                }
                 burningTarget = null;
             }
         }
@@ -1174,8 +1176,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else if (!this.isBreathingFire()) {
             burnProgress = 0;
         }
+        updateBurnTarget();
         if (!world.isRemote) {
-            updateBurnTarget();
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
             }

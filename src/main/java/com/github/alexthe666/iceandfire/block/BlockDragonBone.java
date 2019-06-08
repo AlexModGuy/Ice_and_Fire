@@ -5,7 +5,7 @@ import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockDragonBone extends BlockRotatedPillar {
+public class BlockDragonBone extends BlockRotatedPillar implements IDragonProof {
 
     public BlockDragonBone() {
         super(Material.ROCK);

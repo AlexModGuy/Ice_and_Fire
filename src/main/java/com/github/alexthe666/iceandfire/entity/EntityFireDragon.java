@@ -382,20 +382,10 @@ public class EntityFireDragon extends EntityDragonBase {
                 if(world.isRemote && rand.nextInt(5) == 0){
                     IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, headPosX, headPosY, headPosZ, 0, 0, 0, this);
                 }
-                for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
-                    if (!this.isOnSameTeam(entity) && entity != this) {
-                        entity.attackEntityFrom(IceAndFire.dragonFire, 0.5F);
-                        entity.setFire(5);
-                    }
-                }
             } else {
                 RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
                 BlockPos pos = result.getBlockPos();
-                if (pos != null) {
-                    FireExplosion explosion = new FireExplosion(world, this, pos.getX(), pos.getY(), pos.getZ(), Math.max(0.35F, this.getDragonStage() * 0.35F), true);
-                    explosion.doExplosionA();
-                    explosion.doExplosionB(false);
-                }
+                DragonDestructionManager.destroyAreaFire(world, pos, this);
             }
 
         }
@@ -403,9 +393,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            FireExplosion explosion = new FireExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
-            explosion.doExplosionA();
-            explosion.doExplosionB(false);
+            DragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
 
         }
     }

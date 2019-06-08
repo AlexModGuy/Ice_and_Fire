@@ -134,7 +134,7 @@ public class ParticleDragonFrost extends ParticleFlame {
             this.motionX += d2 * speed;
             this.motionY += d3 * speed;
             this.motionZ += d4 * speed;
-            if(Math.abs(d2) + Math.abs(d3) + Math.abs(d4) < 5D){
+            if(Math.abs(d2) + Math.abs(d3) + Math.abs(d4) < 1.5D){
                 this.setExpired();
             }
         }

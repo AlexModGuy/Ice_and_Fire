@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockDragonforgeBricks extends Block {
+public class BlockDragonforgeBricks extends Block implements IDragonProof {
 
     private final boolean isFire;
     public static final PropertyBool GRILL = PropertyBool.create("grill");

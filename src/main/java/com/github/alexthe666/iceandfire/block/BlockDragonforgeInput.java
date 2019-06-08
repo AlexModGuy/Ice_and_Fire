@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockDragonforgeInput extends BlockContainer {
+public class BlockDragonforgeInput extends BlockContainer implements IDragonProof {
     private boolean isFire;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
 

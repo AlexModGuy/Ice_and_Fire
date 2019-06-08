@@ -451,26 +451,10 @@ public class EntityIceDragon extends EntityDragonBase {
 				if(world.isRemote && rand.nextInt(5) == 0){
 					IceAndFire.PROXY.spawnDragonParticle("dragonice", world, headPosX, headPosY, headPosZ, 0, 0, 0, this);
 				}
-				for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(progressX - 0.75D, progressY - 0.75D, progressZ - 0.75D, progressX + 0.75D, progressY + 0.75D, progressZ + 0.75D))) {
-					if (!this.isOnSameTeam(entity) && entity != this) {
-						entity.attackEntityFrom(IceAndFire.dragonIce, 1F);
-						FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
-						if(frozenProps != null) {
-							frozenProps.setFrozenFor(200);
-						}
-					}
-				}
 			}else{
 				RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
 				BlockPos pos = result.getBlockPos();
-				if(pos != null) {
-					IceExplosion explosion = new IceExplosion(world, this, pos.getX(), pos.getY(), pos.getZ(), Math.max(0.35F, this.getDragonStage() * 0.35F), true);
-					explosion.doExplosionA();
-					explosion.doExplosionB(true);
-					double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
-					double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
-					double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-				}
+				DragonDestructionManager.destroyAreaIce(world, pos, this);
 			}
 
 		}
@@ -478,9 +462,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-			IceExplosion explosion = new IceExplosion(world, this, spawnX, spawnY, spawnZ, Math.max(0.35F, this.getDragonStage() * 0.35F), true);
-			explosion.doExplosionA();
-			explosion.doExplosionB(true);
+			DragonDestructionManager.destroyAreaIce(world, new BlockPos(spawnX, spawnY, spawnZ), this);
 
 		}
 	}

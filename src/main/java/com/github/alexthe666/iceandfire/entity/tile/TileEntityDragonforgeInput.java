@@ -3,12 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityDragonFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonIceProjectile;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +12,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class TileEntityDragonforgeInput extends TileEntity implements ITickable {
     private int ticksSinceDragonFire;
@@ -53,18 +47,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     }
 
     protected void lureDragonsBreath(){
-        for (EntityFireball fireball : world.getEntitiesWithinAABB(EntityFireball.class, new AxisAlignedBB((double) pos.getX() - 1, (double) pos.getY() - 1, (double) pos.getZ() - 1, (double) pos.getX() + 1, (double) pos.getY() + 1, (double) pos.getZ() + 1))) {
-            if(isFire() && fireball instanceof EntityDragonFire){
-                fireball.setDead();
-            }
-            if(!isFire() && fireball instanceof EntityDragonIceProjectile){
-                fireball.setDead();
-            }
-            if(!isActive()){
-                setActive();
-            }
-            ticksSinceDragonFire = 30;
-        }
+
     }
 
     private boolean canSeeInput(EntityDragonBase dragon, Vec3d target) {

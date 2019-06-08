@@ -55,7 +55,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 
 	public void onUpdate() {
 		for (int i = 0; i < 14; ++i) {
-			IceAndFire.PROXY.spawnParticle("snowflake", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+			IceAndFire.PROXY.spawnParticle("dragonice", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
 		}
 		if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
 			super.onUpdate();
@@ -115,16 +115,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 					return;
 				}
 				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-					int explodeSize = 2;
-					if(this.shootingEntity instanceof EntityDragonBase){
-						explodeSize = 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage();
-					}
-					IceExplosion explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, explodeSize, flag);
-					explosion.doExplosionA();
-					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), false, flag);
-					explosion2.doExplosionA();
-					explosion2.doExplosionB(true);
+					DragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
 				}
 				this.setDead();
 			}
@@ -148,13 +139,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 					//((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
 				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-				IceExplosion explosion = new IceExplosion(world, null, this.posX, this.posY, this.posZ, 2, flag);
-				if (shootingEntity != null) {
-					explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2, flag);
-				}
-				explosion.doExplosionA();
-				explosion.doExplosionB(true);
-				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, true);
+				DragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
 				this.setDead();
 			}
 		}

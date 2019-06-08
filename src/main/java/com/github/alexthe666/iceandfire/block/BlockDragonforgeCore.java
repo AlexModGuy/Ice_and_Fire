@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockDragonforgeCore extends BlockContainer {
+public class BlockDragonforgeCore extends BlockContainer implements IDragonProof {
     private boolean isFire;
     private boolean activated;
     private static boolean keepInventory;
