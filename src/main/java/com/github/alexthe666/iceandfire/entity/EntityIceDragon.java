@@ -32,7 +32,7 @@ import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 
-	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
 	public static Animation ANIMATION_FIRECHARGE;
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -73,7 +73,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.tasks.addTask(7, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true));
 		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
 	}
@@ -81,7 +81,7 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(SWIMMING, Boolean.valueOf(false));
+		this.dataManager.register(SWIMMING, Boolean.FALSE);
 	}
 
 	public String getVariantName(int variant) {
@@ -157,8 +157,8 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 		switch (new Random().nextInt(4)) {
 			case 0:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -168,15 +168,15 @@ public class EntityIceDragon extends EntityDragonBase {
 				break;
 			case 1:
 				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
-						this.setAnimation(this.ANIMATION_SHAKEPREY);
+					if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+						this.setAnimation(ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
 						this.attackDecision = this.getRNG().nextBoolean();
 						return true;
 					}
 				} else {
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -186,8 +186,8 @@ public class EntityIceDragon extends EntityDragonBase {
 				}
 				break;
 			case 2:
-				if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
-					this.setAnimation(this.ANIMATION_TAILWHACK);
+				if (this.getAnimation() != ANIMATION_TAILWHACK) {
+					this.setAnimation(ANIMATION_TAILWHACK);
 					return false;
 				} else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
 					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -200,13 +200,13 @@ public class EntityIceDragon extends EntityDragonBase {
 				break;
 			case 3:
 				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
-					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
-						this.setAnimation(this.ANIMATION_WINGBLAST);
+					if (this.getAnimation() != ANIMATION_WINGBLAST) {
+						this.setAnimation(ANIMATION_WINGBLAST);
 						return false;
 					}
 				}else{
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -217,8 +217,8 @@ public class EntityIceDragon extends EntityDragonBase {
 
 				break;
 			default:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -287,8 +287,8 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public void riderShootFire(Entity controller) {
 		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
-			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-				this.setAnimation(this.ANIMATION_FIRECHARGE);
+			if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+				this.setAnimation(ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
 				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
@@ -382,8 +382,8 @@ public class EntityIceDragon extends EntityDragonBase {
 	private void shootIceAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if (this.getRNG().nextInt(5) == 0) {
-				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-					this.setAnimation(this.ANIMATION_FIRECHARGE);
+				if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+					this.setAnimation(ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
 					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
@@ -404,7 +404,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
-					if (entity.isDead || entity == null) {
+					if (entity.isDead) {
 						this.setBreathingFire(false);
 						this.attackDecision = true;
 					}
@@ -431,7 +431,7 @@ public class EntityIceDragon extends EntityDragonBase {
 							world.spawnEntity(entitylargefireball);
 						}
 						entitylargefireball.setSizes(size, size);
-						if (entity.isDead || entity == null) {
+						if (entity.isDead) {
 							this.setBreathingFire(false);
 							this.attackDecision = true;
 						}
@@ -446,7 +446,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	public boolean isSwimming() {
 		if (world.isRemote) {
-			boolean swimming = this.dataManager.get(SWIMMING).booleanValue();
+			boolean swimming = this.dataManager.get(SWIMMING);
 			this.isSwimming = swimming;
 			return swimming;
 		}
@@ -485,8 +485,9 @@ public class EntityIceDragon extends EntityDragonBase {
 		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityIceDragon.ANIMATION_TAILWHACK, EntityIceDragon.ANIMATION_FIRECHARGE, EntityIceDragon.ANIMATION_WINGBLAST, EntityIceDragon.ANIMATION_ROAR};
 	}
 
+	@Override
 	public boolean isBreedingItem(@Nullable ItemStack stack) {
-		return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.frost_stew;
+		return stack != null && !stack.isEmpty() && stack.getItem() == ModItems.frost_stew;
 	}
 
 	@Override
