@@ -126,7 +126,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
         if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
             this.setDragonAge(this.getDragonAge() + 1);
         }
-        if (world.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
+        if (world.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire) {
             this.setDead();
             world.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
             this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
