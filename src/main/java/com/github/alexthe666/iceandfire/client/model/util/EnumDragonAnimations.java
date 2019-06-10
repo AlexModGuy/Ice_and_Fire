@@ -6,6 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
+@Deprecated
 public enum EnumDragonAnimations {
     T_POSE(""),
     FLYING_POSE("Flying"),

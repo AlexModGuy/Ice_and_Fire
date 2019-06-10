@@ -32,7 +32,7 @@ public enum EnumSeaSerpentAnimations {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void initializeDragonModels(){
+    public static void initializeSerpentModels(){
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
             for(EnumSeaSerpentAnimations animation : values()){
                 try {

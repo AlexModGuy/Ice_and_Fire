@@ -4,10 +4,12 @@ import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
+import com.github.alexthe666.iceandfire.client.model.animator.FireDragonRemodelTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
@@ -31,11 +33,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.particle.ParticleSmokeLarge;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -246,13 +245,14 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	private void renderEntities() {
 		EnumDragonAnimations.initializeDragonModels();
-		EnumSeaSerpentAnimations.initializeDragonModels();
+		EnumRemodelDragonAnimations.initializeDragonModels();
+		EnumSeaSerpentAnimations.initializeSerpentModels();
 		ModelBase firedragon_model = null;
 		ModelBase icedragon_model = null;
 		ModelBase seaserpent_model = null;
 
 		try {
-			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
+			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFireGround"), new FireDragonRemodelTabulaModelAnimator());
 			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
 			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
 		} catch (IOException e) {
