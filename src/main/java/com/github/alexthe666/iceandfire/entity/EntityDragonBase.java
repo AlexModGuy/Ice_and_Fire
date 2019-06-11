@@ -124,6 +124,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @SideOnly(Side.CLIENT)
     public IFChainBuffer roll_buffer;
     @SideOnly(Side.CLIENT)
+    public IFChainBuffer pitch_buffer;
+    @SideOnly(Side.CLIENT)
+    public IFChainBuffer pitch_buffer_body;
+    @SideOnly(Side.CLIENT)
     public ReversedBuffer turn_buffer;
     @SideOnly(Side.CLIENT)
     public ChainBuffer tail_buffer;
@@ -180,13 +184,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         initDragonInv();
         if (FMLCommonHandler.instance().getSide().isClient()) {
             roll_buffer = new IFChainBuffer();
+            pitch_buffer = new IFChainBuffer();
+            pitch_buffer_body = new IFChainBuffer();
             turn_buffer = new ReversedBuffer();
             tail_buffer = new ChainBuffer();
         }
-        legSolver = new LegSolverQuadruped(0.2F, 1.2F, 1.0F);
+        legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
         resetParts(1);
-    }// /entitydata @e {NoAI:1}
-
+    }
     public void resetParts(float scale) {
         removeParts();
         headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
@@ -1152,11 +1157,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             double motionX = getRNG().nextGaussian() * 0.07D;
             double motionY = getRNG().nextGaussian() * 0.07D;
             double motionZ = getRNG().nextGaussian() * 0.07D;
-            float headPosX = (float) (posX + 1.9F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-            float headPosZ = (float) (posZ + 1.9F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-            float headPosY = (float) (posY + (getRenderSize() * 0.2F));
+            Vec3d headVec = this.getHeadPosition();
             if (world.isRemote) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, headPosX, headPosY, headPosZ, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, headVec.x, headVec.y, headVec.z, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
             }
         }
     }
@@ -1297,7 +1300,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         this.updateCheckPlayer();
         AnimationHandler.INSTANCE.updateAnimations(this);
-        this.legSolver.update(this);
+        this.legSolver.update(this, getRenderSize() / 3);
         if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
             if (flightCycle < 58) {
                 flightCycle += 2;
@@ -1605,7 +1608,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             } else {
                 if (this.isModelDead()) {
                     passenger.dismountRidingEntity();
-                }renderYawOffset = rotationYaw;
+                }
+                renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
                 float flyAddition = Math.max(flyProgress, hoverProgress) * 1.8F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
@@ -1785,10 +1789,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setHovering(true);
         }
         if (world.isRemote && !this.isModelDead()) {
-            roll_buffer.calculateChainFlapBuffer(50, 10, 4, this);
             turn_buffer.calculateChainSwingBuffer(50, 0, 4, this);
-            tail_buffer.calculateChainSwingBuffer(90, 10, 2.5F, this);
-
+            tail_buffer.calculateChainSwingBuffer(90, 20, 5F, this);
+            if (!onGround) {
+                roll_buffer.calculateChainFlapBuffer(55, 1, 2F, 0.5F, this);
+                pitch_buffer.calculateChainWaveBuffer(90, 10, 6F, 0.5F, this);
+                pitch_buffer_body.calculateChainWaveBuffer(60, 10, 2F, 0.5F, this);
+            }
+        }
+        if(!this.onGround){
+            double ydist = prevPosY - this.posY;
+            this.rotationPitch += (float)ydist * 5;
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
@@ -1825,7 +1836,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.getAgeInDays() > 125) {
             return growth_stages[this.getDragonStage() - 1][0] + ((step * 25));
         }
-        return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
+       return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
     }
 
     private int getAgeFactor() {
@@ -2003,7 +2014,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            this.rotationPitch = this.updateRotation(this.rotationPitch, f1, 30F);
+            //this.rotationPitch = this.updateRotation(this.rotationPitch, f1, 30F);
             this.rotationYaw = this.updateRotation(this.rotationYaw, f, 30F);
 
             if (!this.isFlying()) {
@@ -2132,8 +2143,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (controller != null && controller != this.getAttackTarget()) {
                 this.rotationYaw = controller.rotationYaw;
                 this.prevRotationYaw = this.rotationYaw;
-                this.rotationPitch = controller.rotationPitch * 0.5F;
-                this.setRotation(this.rotationYaw, this.rotationPitch);
+                this.setRotation(this.rotationYaw, 0);
                 this.renderYawOffset = this.rotationYaw;
                 this.rotationYawHead = this.renderYawOffset;
                 strafe = controller.moveStrafing * 0.5F;
@@ -2306,5 +2316,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg) * getRenderSize() * 0.3F * Math.sin((rotationPitch + 90) * Math.PI / 180));
         float headPosZ = (float) (posZ + 1.9F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
+    }
+
+    public double getWingPosY(boolean left) {
+        return posY;
+    }
+
+    public boolean isBlockAboveGround() {
+        if(onGround){
+            return true;
+        }else{
+            return !this.world.isAirBlock(new BlockPos(this).down());
+        }
     }
 }

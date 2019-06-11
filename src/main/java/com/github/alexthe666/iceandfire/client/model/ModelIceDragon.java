@@ -1053,11 +1053,11 @@ public class ModelIceDragon extends ModelDragonBase {
 			return;
 		}
 		if (dragon.width >= 2 && dragon.onGround) {
-			LegArticulator.articulateQuadruped(dragon, dragon.legSolver, BodyLower, Neck1,
+			/*LegArticulator.articulateQuadruped(dragon, dragon.legSolver, BodyLower, Neck1,
 					ThighL, LegL, ThighR, LegR, ArmL1, ArmL2, ArmR1, ArmR2,
 					0.25F, 0.1F, 0.15F, -0.10F,
 					Minecraft.getMinecraft().getRenderPartialTicks()
-			);
+			);*/
 		}
 		if (dragon.isHovering() || dragon.isFlying()) {
 			dragon.roll_buffer.applyChainFlapBuffer(new AdvancedModelRenderer[]{BodyLower});

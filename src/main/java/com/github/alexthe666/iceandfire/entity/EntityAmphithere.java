@@ -399,7 +399,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (world.isRemote) {
             if (!onGround) {
                 roll_buffer.calculateChainFlapBuffer(this.isBeingRidden() ? 55 : 90, 3, 10F, 0.5F, this);
-                pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
+                pitch_buffer.calculateChainPitchBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
         }

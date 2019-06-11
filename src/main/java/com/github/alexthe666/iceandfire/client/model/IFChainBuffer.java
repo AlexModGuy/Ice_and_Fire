@@ -55,7 +55,7 @@ public class IFChainBuffer {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {
-                    this.yawVariation = 0.0F;
+                    this.yawVariation = angleDecrement;
                     this.yawTimer = 0;
                 }
             } else {
@@ -65,13 +65,18 @@ public class IFChainBuffer {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation += angleDecrement;
                 if (MathHelper.abs(this.yawVariation) < angleDecrement) {
-                    this.yawVariation = 0.0F;
+                    this.yawVariation = angleDecrement;
                     this.yawTimer = 0;
                 }
             } else {
                 this.yawTimer++;
             }
         }
+    }
+
+    public void calculateChainPitchBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, EntityLivingBase entity) {
+        this.prevPitchVariation = entity.prevRotationPitch;
+        this.pitchVariation = entity.rotationPitch;
     }
 
     /**
@@ -85,9 +90,10 @@ public class IFChainBuffer {
      */
     public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, EntityLivingBase entity) {
         this.prevPitchVariation = this.pitchVariation;
-        this.pitchVariation = entity.rotationPitch;
-
-        /*if (!compareDouble(entity.rotationPitch, entity.prevRotationPitch) && MathHelper.abs(this.pitchVariation) < maxAngle) {
+        if(Math.abs(entity.rotationPitch) > maxAngle){
+            return;
+        }
+        if (!compareDouble(entity.rotationPitch, entity.prevRotationPitch) && MathHelper.abs(this.pitchVariation) < maxAngle) {
             this.pitchVariation += MathHelper.clamp((entity.prevRotationPitch - entity.rotationPitch) / divisor, -maxAngle, maxAngle);
         }
         if (this.pitchVariation > 1F * angleDecrement) {
@@ -110,8 +116,9 @@ public class IFChainBuffer {
             } else {
                 this.pitchTimer++;
             }
-        }*/
+        }
     }
+
 
     /**
      * Calculates the flap amounts for the given entity (Z axis)
@@ -242,6 +249,13 @@ public class IFChainBuffer {
         float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY -= rotateAmount;
+        }
+    }
+
+    public void applyChainWaveBufferReverse(ModelRenderer... boxes) {
+        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevPitchVariation, this.pitchVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        for (ModelRenderer box : boxes) {
+            box.rotateAngleX -= rotateAmount;
         }
     }
 

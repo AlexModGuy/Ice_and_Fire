@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
+import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
+import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,8 +30,8 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 EnumRemodelDragonAnimations.FLIGHT2.firedragon_model,
                 EnumRemodelDragonAnimations.FLIGHT3.firedragon_model,
                 EnumRemodelDragonAnimations.FLIGHT4.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT5.firedragon_model
-                , EnumRemodelDragonAnimations.FLIGHT6.firedragon_model};
+                EnumRemodelDragonAnimations.FLIGHT5.firedragon_model,
+                EnumRemodelDragonAnimations.FLIGHT6.firedragon_model};
         boolean walking = !(entity.isFlying() || entity.isHovering()) && (entity.hoverProgress <= 0 || entity.flyProgress <= 0);
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
@@ -46,6 +46,8 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         AdvancedModelRenderer[] tailPartsWBody = { model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
         AdvancedModelRenderer[] toesPartsL = { model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
         AdvancedModelRenderer[] toesPartsR = { model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
+        AdvancedModelRenderer[] clawL = { model.getCube("ClawL")};
+        AdvancedModelRenderer[] clawR = { model.getCube("ClawR")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
             if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
@@ -168,6 +170,22 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         if(!entity.isModelDead()){
             entity.turn_buffer.applyChainSwingBuffer(neckParts);
             entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
+            if(entity.flyProgress > 2 && entity.getAnimation() != EntityDragonBase.ANIMATION_WINGBLAST){
+                entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
+                entity.pitch_buffer_body.applyChainWaveBuffer(model.getCube("BodyUpper"));
+                entity.pitch_buffer.applyChainWaveBufferReverse(tailPartsWBody);
+            }
+
+        }
+        if (entity.width >= 2 && entity.flyProgress == 0 && entity.hoverProgress == 0) {
+            LegArticulator.articulateQuadruped(entity, entity.legSolver, model.getCube("BodyUpper"), model.getCube("BodyLower"), model.getCube("Neck1"),
+                    model.getCube("ThighL"), model.getCube("LegL"), toesPartsL,
+                    model.getCube("ThighR"), model.getCube("LegR"), toesPartsR,
+                    model.getCube("armL1"), model.getCube("armL2"), clawL,
+                    model.getCube("armR1"), model.getCube("armR2"), clawR,
+                    1.0F, 0.5F, 0.5F, -0.15F, -0.15F, 0F,
+                    Minecraft.getMinecraft().getRenderPartialTicks()
+            );
         }
     }
 

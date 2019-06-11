@@ -10,6 +10,7 @@ public enum EnumRemodelDragonAnimations {
     MALE("BaseMale"),
     FEMALE("BaseFemale"),
     FLYING_POSE("Flying"),
+    DIVING_POSE("Diving"),
     GROUND_POSE("Ground"),
     HOVERING_POSE("Hovering"),
     SITTING_POSE("Sitting"),
