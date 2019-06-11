@@ -108,6 +108,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public float hoverProgress;
     public float flyProgress;
     public float fireBreathProgress;
+    public float prevFireBreathProgress;
     public int fireStopTicks;
     public int flyTicks;
     public float modelDeadProgress;
@@ -1331,7 +1332,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             sleepProgress -= 0.5F;
         }
         boolean fireBreathing = isBreathingFire();
-        if (fireBreathing && fireBreathProgress < 5.0F) {
+        prevFireBreathProgress = fireBreathProgress;
+
+        if (fireBreathing && fireBreathProgress < 10.0F) {
             fireBreathProgress += 0.5F;
         } else if (!fireBreathing && fireBreathProgress > 0.0F) {
             fireBreathProgress -= 0.5F;
@@ -1589,6 +1592,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public abstract String getVariantName(int variant);
 
+    public boolean shouldRiderSit(){
+        return this.getControllingPassenger() != null;
+    }
+
+
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -1626,7 +1634,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 17F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
             prey.dismountRidingEntity();
-
         }
         renderYawOffset = rotationYaw;
         float modTick_0 = this.getAnimationTick() - 25;

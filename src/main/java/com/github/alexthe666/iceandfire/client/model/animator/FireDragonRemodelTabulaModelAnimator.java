@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -98,11 +99,6 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                     transitionTo(cube, EnumRemodelDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }
-            if(entity.fireBreathProgress > 0.0F){
-                if(!isPartEqual(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")){
-                    transitionTo(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), entity.fireBreathProgress, 5, false);
-                }
-            }
             if(!walking){
                 AdvancedModelRenderer flightPart = EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
@@ -115,12 +111,15 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                     this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
             }
-            /*
-            transitionTo(cube, walkPoses[0].getCube(cube.boxName), MathHelper.clamp(cos, 0, 10), 10);
-            transitionTo(cube, walkPoses[1].getCube(cube.boxName), MathHelper.clamp(cos, 10, 20) - 10, 10);
-            transitionTo(cube, walkPoses[2].getCube(cube.boxName), MathHelper.clamp(cos, 20, 30) - 20, 10);
-            transitionTo(cube, walkPoses[3].getCube(cube.boxName), MathHelper.clamp(cos, 30, 40) - 30, 10);
-            */
+            if(entity.fireBreathProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")) {
+                    if (entity.prevFireBreathProgress <= entity.fireBreathProgress) {
+                        transitionTo(cube, EnumRemodelDragonAnimations.BLAST_CHARGE3.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress, 0, 5), 5, false);
+                    }
+                    transitionTo(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress - 5, 0, 5), 5, false);
+
+                }
+            }
         }
         float speed_walk = 0.2F;
         float speed_idle = 0.05F;
