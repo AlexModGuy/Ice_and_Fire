@@ -1556,8 +1556,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraY = 0.8F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-
-                IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                IBlockState iblockstate = this.world.getBlockState(new BlockPos(ground));
                 if (iblockstate.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
                         world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
@@ -1565,6 +1565,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
             }
         }
+    }
+
+    private BlockPos getGround(BlockPos blockPos) {
+        while(world.isAirBlock(blockPos) && blockPos.getY() > 1){
+            blockPos = blockPos.down();
+        }
+        return blockPos;
     }
 
     public void fall(float distance, float damageMultiplier) {
@@ -1590,31 +1597,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             } else {
                 if (this.isModelDead()) {
                     passenger.dismountRidingEntity();
-                }
-                float speed_walk = 0.2F;
-                float speed_idle = 0.05F;
-                float speed_fly = 0.2F;
-                float degree_walk = 0.5F;
-                float degree_idle = 0.5F;
-                float degree_fly = 0.5F;
-                //this.walk(BodyLower, speed_fly, (float) (degree_fly * 0.15), false, 0, 0, entity.ticksExisted, 1);
-                //this.walk(BodyUpper, speed_fly, (float) (degree_fly * -0.15), false, 0, 0, entity.ticksExisted, 1);
-                renderYawOffset = rotationYaw;
+                }renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float hoverAddition = hoverProgress * -0.001F;
-                float flyAddition = flyProgress * -0.0001F;
+                float flyAddition = Math.max(flyProgress, hoverProgress) * 1.8F;
                 float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
                 float radius = 0.75F * ((0.3F - flyBody) * getRenderSize()) + ((this.getRenderSize() / 3) * flyAddition * 0.0065F);
                 float angle = (0.01745329251F * this.renderYawOffset);
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraZ = (double) (radius * MathHelper.cos(angle));
-                float bob0 = this.isFlying() || this.isHovering() ? (hoverProgress > 0 || flyProgress > 0 ? this.bob(-speed_fly, degree_fly * 5, false, this.ticksExisted, -0.0625F) : 0) : 0;
-                float bob1 = this.bob(speed_walk * 2, degree_walk * 1.7F, false, this.limbSwing, this.limbSwingAmount * -0.0625F);
-                float bob2 = this.bob(speed_idle, degree_idle * 1.3F, false, this.ticksExisted, -0.0625F);
-
-                double extraY_pre = 0.8F;
-                double extraY = ((extraY_pre - (hoverAddition) + (flyAddition)) * (this.getRenderSize() / 3)) - (0.35D * (1 - (this.getRenderSize() / 30))) + bob0 + bob1 + bob2;
-
+                double extraY = getRenderSize() * (0.35F + flyAddition * 0.001F);
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 
                 this.stepHeight = 1;
@@ -2297,5 +2288,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         Vec3d vec3d1 = rider.getLook(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
         return this.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+    }
+
+    public Vec3d getHeadPosition(){
+        float sitProg = this.sitProgress * 0.015F;
+        float deadProg = this.modelDeadProgress * -0.02F;
+        float hoverProg = this.hoverProgress * 0.025F;
+        float sleepProg = this.sleepProgress * -0.025F;
+        float headPosX = (float) (posX + 1.9F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg) * getRenderSize() * 0.3F * Math.sin((rotationPitch + 90) * Math.PI / 180));
+        float headPosZ = (float) (posZ + 1.9F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        return new Vec3d(headPosX, headPosY, headPosZ);
     }
 }

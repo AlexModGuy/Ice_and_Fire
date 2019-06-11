@@ -369,22 +369,20 @@ public class EntityFireDragon extends EntityDragonBase {
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
         this.burnParticleZ = burnZ;
-        float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-        float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-        double d2 = burnX - headPosX;
-        double d3 = burnY - headPosY;
-        double d4 = burnZ - headPosZ;
+        Vec3d headPos = getHeadPosition();
+        double d2 = burnX - headPos.x;
+        double d3 = burnY - headPos.y;
+        double d4 = burnZ - headPos.z;
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), overrideDistance);
         double conqueredDistance = burnProgress / 40D * distance;
         for (int i = 0; i < conqueredDistance; i++) {
-            double progressX = headPosX + d2 * (i / (float) distance);
-            double progressY = headPosY + d3 * (i / (float) distance);
-            double progressZ = headPosZ + d4 * (i / (float) distance);
+            double progressX = headPos.x + d2 * (i / (float) distance);
+            double progressY = headPos.y + d3 * (i / (float) distance);
+            double progressZ = headPos.z + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
                 if(world.isRemote && rand.nextInt(5) == 0){
-                    IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, headPosX, headPosY, headPosZ, 0, 0, 0, this);
+                    IceAndFire.PROXY.spawnDragonParticle("dragonfire", world, headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
                 }
             } else {
                 RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);

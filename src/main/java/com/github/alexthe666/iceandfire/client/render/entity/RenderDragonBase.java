@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonEyes;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonRider;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
@@ -28,11 +29,12 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 		super(renderManager, model, 0.8F);
 		this.addLayer(new LayerDragonEyes(this));
 		this.addLayer(new LayerDragonArmor(this));
+		this.addLayer(new LayerDragonRider(this));
 
 	}
 
 	public boolean shouldRender(EntityDragonBase dragon, ICamera camera, double camX, double camY, double camZ) {
-		return super.shouldRender(dragon, camera, camX, camY, camZ) || dragon.shouldRender(camera);
+		return super.shouldRender(dragon, camera, camX, camY, camZ) || dragon.shouldRender(camera) || Minecraft.getMinecraft().player.isRidingOrBeingRiddenBy(dragon);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerChainedEntity;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -184,6 +186,14 @@ public class EventClient {
 	private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
 
 	@SubscribeEvent
+	public void onPreRenderLiving(RenderLivingEvent.Pre event){
+		if(event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase){
+			if(ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
+				event.setCanceled(true);
+			}
+		}
+	}
+	@SubscribeEvent
 	public void onPostRenderLiving(RenderLivingEvent.Post event){
 		EntityLivingBase entity = event.getEntity();
 		ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
@@ -218,6 +228,9 @@ public class EventClient {
 					GlStateManager.translate(0, 0.75, 0);
 					double height = (double)chainer.getEyeHeight() * 0.75F;
 					Vec3d vec3d = this.getChainPosition(entity, height, event.getPartialRenderTick());
+					if(entity instanceof EntityDragonBase){
+						vec3d = this.getChainPosition(entity, ((EntityDragonBase) entity).getRenderSize() * 0.15F, event.getPartialRenderTick());
+					}
 					Vec3d vec3d1 = this.getChainPosition(chainer, height, event.getPartialRenderTick());
 					Vec3d vec3d2 = vec3d.subtract(vec3d1);
 					double d0 = vec3d2.length();

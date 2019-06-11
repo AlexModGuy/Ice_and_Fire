@@ -25,7 +25,12 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         model.llibAnimator.update(entity);
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         IceAndFireTabulaModel[] walkPoses = {EnumRemodelDragonAnimations.WALK1.firedragon_model, EnumRemodelDragonAnimations.WALK2.firedragon_model, EnumRemodelDragonAnimations.WALK3.firedragon_model, EnumRemodelDragonAnimations.WALK4.firedragon_model};
-        IceAndFireTabulaModel[] flyPoses = {EnumRemodelDragonAnimations.FLIGHT1.firedragon_model, EnumRemodelDragonAnimations.FLIGHT2.firedragon_model, EnumRemodelDragonAnimations.FLIGHT3.firedragon_model, EnumRemodelDragonAnimations.FLIGHT4.firedragon_model, EnumRemodelDragonAnimations.FLIGHT5.firedragon_model, EnumRemodelDragonAnimations.FLIGHT6.firedragon_model};
+        IceAndFireTabulaModel[] flyPoses = {EnumRemodelDragonAnimations.FLIGHT1.firedragon_model,
+                EnumRemodelDragonAnimations.FLIGHT2.firedragon_model,
+                EnumRemodelDragonAnimations.FLIGHT3.firedragon_model,
+                EnumRemodelDragonAnimations.FLIGHT4.firedragon_model,
+                EnumRemodelDragonAnimations.FLIGHT5.firedragon_model
+                , EnumRemodelDragonAnimations.FLIGHT6.firedragon_model};
         boolean walking = !(entity.isFlying() || entity.isHovering()) && (entity.hoverProgress <= 0 || entity.flyProgress <= 0);
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
@@ -51,6 +56,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
                 this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
             }
+
             if (entity.modelDeadProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumRemodelDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumRemodelDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
@@ -105,7 +111,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ){
+                if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ || prevX != flightPart.rotateAngleX || prevY != flightPart.rotateAngleY || prevZ != flightPart.rotateAngleZ){
                     this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
             }
@@ -152,6 +158,12 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
             model.bob(model.getCube("armL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
             if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR){
                 model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
+            }
+            if(entity.isActuallyBreathingFire()){
+                float speed_shake = 0.7F;
+                float degree_shake = 0.1F;
+                model.chainFlap(neckParts, speed_shake, degree_shake, 2, entity.ticksExisted, 1);
+                model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, entity.ticksExisted, 1);
             }
         }
         if(!entity.isModelDead()){

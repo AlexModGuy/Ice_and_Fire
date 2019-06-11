@@ -44,9 +44,9 @@ public class ParticleDragonFlame extends ParticleFlame {
         this.initialX = xCoordIn;
         this.initialY = yCoordIn;
         this.initialZ = zCoordIn;
-        targetX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
-        targetY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
-        targetZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.75F * dragonSize);
+        targetX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
+        targetY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
+        targetZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.dragonSize = dragonSize;
         this.speedBonus = rand.nextFloat() * 0.015F;
@@ -55,9 +55,9 @@ public class ParticleDragonFlame extends ParticleFlame {
     public ParticleDragonFlame(World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
         this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
         this.dragon = entityDragonBase;
-        this.targetX = dragon.burnParticleX  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
-        this.targetY = dragon.burnParticleY  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
-        this.targetZ = dragon.burnParticleZ  + (double) ((this.rand.nextFloat() - this.rand.nextFloat()));
+        this.targetX = dragon.burnParticleX  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetY = dragon.burnParticleY  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetZ = dragon.burnParticleZ  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
         this.posX = x;
         this.posY = y;
         this.posZ = z;
@@ -102,10 +102,12 @@ public class ParticleDragonFlame extends ParticleFlame {
                 avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
             }
         }
+        GL11.glPushMatrix();
         buffer.pos((double) f5 + avec3d[0].x, (double) f6 + avec3d[0].y, (double) f7 + avec3d[0].z).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double) f5 + avec3d[1].x, (double) f6 + avec3d[1].y, (double) f7 + avec3d[1].z).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double) f5 + avec3d[2].x, (double) f6 + avec3d[2].y, (double) f7 + avec3d[2].z).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        GL11.glPopMatrix();
     }
 
     public int getBrightnessForRender(float partialTick) {
@@ -129,7 +131,6 @@ public class ParticleDragonFlame extends ParticleFlame {
             this.motionX += d2 * speed;
             this.motionY += d3 * speed;
             this.motionZ += d4 * speed;
-            System.out.println(dist);
             if(touchedTime > 3){
                 this.setExpired();
             }
