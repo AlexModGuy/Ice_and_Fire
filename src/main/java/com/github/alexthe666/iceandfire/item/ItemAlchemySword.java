@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
@@ -38,7 +39,9 @@ public class ItemAlchemySword extends ItemSword {
 				target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
 			}
 			target.setFire(5);
-			//target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+			if (!(target instanceof EntityDragonBase)) {
+				target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+			}
 		}
 		if (this == ModItems.dragonbone_sword_ice) {
 			if (target instanceof EntityFireDragon) {
@@ -48,7 +51,9 @@ public class ItemAlchemySword extends ItemSword {
 			frozenProps.setFrozenFor(200);
 			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
 			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
-			//target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+			if (!(target instanceof EntityDragonBase)) {
+				target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+			}
 		}
 		return super.hitEntity(stack, target, attacker);
 	}
