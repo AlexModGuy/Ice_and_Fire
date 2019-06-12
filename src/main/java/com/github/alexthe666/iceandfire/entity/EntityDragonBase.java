@@ -1087,6 +1087,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     }
 
+    @Override
     protected void despawnEntity() {
         if (!IceAndFire.CONFIG.canDragonsDespawn) {
             super.despawnEntity();
@@ -1532,6 +1533,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
+    @Override
     public void fall(float distance, float damageMultiplier) {
 
     }
@@ -1547,6 +1549,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public abstract String getVariantName(int variant);
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -1668,12 +1671,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
         Entity trueSource = dmg.getTrueSource();
 
-        if (trueSource != null && getOwner() != null && trueSource.isEntityEqual(getOwner())) {
-            return false;
-        }
-
-        if (this.isBeingRidden() && trueSource != null && this.getControllingPassenger() != null && trueSource == this.getControllingPassenger()) {
-            return false;
+        if (trueSource != null) {
+            if (trueSource.isEntityEqual(this)) {
+                return false;
+            }
+            if (trueSource.isEntityEqual(getOwner())) {
+                return false;
+            }
+            if (this.isBeingRidden() && trueSource.isEntityEqual(this.getControllingPassenger())) {
+                return false;
+            }
         }
 
         if (this.isRiding() && (dmg.damageType.contains("arrow") || getRidingEntity() != null && trueSource != null && trueSource.isEntityEqual(this.getRidingEntity()))) {
