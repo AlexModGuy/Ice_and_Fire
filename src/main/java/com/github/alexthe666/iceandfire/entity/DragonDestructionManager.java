@@ -109,57 +109,59 @@ public class DragonDestructionManager {
     }
 
     public static void destroyAreaFireCharge(World world, BlockPos center, EntityDragonBase destroyer){
-        int stage = destroyer.getDragonStage();
-        if(stage <= 3){
-            for(BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))){
-                if(world.rand.nextFloat() > pos.distanceSq(center)){
-                   world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                }
-            }
-            for(BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))){
-                if(world.rand.nextBoolean()){
-                    IBlockState transformState = transformBlockFire(world.getBlockState(pos));
-                    world.setBlockState(pos, transformState);
-                    if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())){
-                        world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+        if(destroyer != null) {
+            int stage = destroyer.getDragonStage();
+            if (stage <= 3) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
+                    if (world.rand.nextFloat() > pos.distanceSq(center)) {
+                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
-            }
-            for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - 2, (double) center.getY() - 2, (double) center.getZ() - 2, (double) center.getX() + 2, (double) center.getY() + 2, (double) center.getZ() + 2))) {
-                if(!destroyer.isOnSameTeam(entityliving) && !destroyer.isEntityEqual(entityliving)){
-                    entityliving.attackEntityFrom(IceAndFire.dragonFire, Math.max(1, stage - 1) * 2F);
-                    entityliving.setFire(15);
-                }
-            }
-        } else {
-            int radius = stage == 4 ? 2 : 3;
-            int j = radius + world.rand.nextInt(2);
-            int k = (radius + world.rand.nextInt(2));
-            int l = radius + world.rand.nextInt(2);
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
-                if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
-                        world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
+                    if (world.rand.nextBoolean()) {
+                        IBlockState transformState = transformBlockFire(world.getBlockState(pos));
+                        world.setBlockState(pos, transformState);
+                        if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
+                            world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+                        }
                     }
                 }
-            }
-            j++;
-            k++;
-            l++;
-            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
-                if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    IBlockState transformState = transformBlockFire(world.getBlockState(blockpos));
-                    world.setBlockState(blockpos, transformState);
-                    if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())){
-                        world.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
+                for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - 2, (double) center.getY() - 2, (double) center.getZ() - 2, (double) center.getX() + 2, (double) center.getY() + 2, (double) center.getZ() + 2))) {
+                    if (!destroyer.isOnSameTeam(entityliving) && !destroyer.isEntityEqual(entityliving)) {
+                        entityliving.attackEntityFrom(IceAndFire.dragonFire, Math.max(1, stage - 1) * 2F);
+                        entityliving.setFire(15);
                     }
                 }
-            }
-            for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - j, (double) center.getY() - k, (double) center.getZ() - l, (double) center.getX() + j, (double) center.getY() + k, (double) center.getZ() + l))) {
-                if(!destroyer.isOnSameTeam(entityliving) && !destroyer.isEntityEqual(entityliving)){
-                    entityliving.attackEntityFrom(IceAndFire.dragonFire, Math.max(1, stage - 1) * 2F);
-                    entityliving.setFire(15);
+            } else {
+                int radius = stage == 4 ? 2 : 3;
+                int j = radius + world.rand.nextInt(2);
+                int k = (radius + world.rand.nextInt(2));
+                int l = radius + world.rand.nextInt(2);
+                float f = (float) (j + k + l) * 0.333F + 0.5F;
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
+                    if (blockpos.distanceSq(center) <= (double) (f * f)) {
+                        if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
+                            world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+                        }
+                    }
+                }
+                j++;
+                k++;
+                l++;
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
+                    if (blockpos.distanceSq(center) <= (double) (f * f)) {
+                        IBlockState transformState = transformBlockFire(world.getBlockState(blockpos));
+                        world.setBlockState(blockpos, transformState);
+                        if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
+                            world.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
+                        }
+                    }
+                }
+                for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - j, (double) center.getY() - k, (double) center.getZ() - l, (double) center.getX() + j, (double) center.getY() + k, (double) center.getZ() + l))) {
+                    if (!destroyer.isOnSameTeam(entityliving) && !destroyer.isEntityEqual(entityliving)) {
+                        entityliving.attackEntityFrom(IceAndFire.dragonFire, Math.max(1, stage - 1) * 2F);
+                        entityliving.setFire(15);
+                    }
                 }
             }
         }

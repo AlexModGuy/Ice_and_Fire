@@ -169,6 +169,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public double burnParticleX;
     public double burnParticleY;
     public double burnParticleZ;
+    public float dragonPitch;
+    public float prevDragonPitch;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -1744,6 +1746,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void onUpdate() {
         super.onUpdate();
         updateParts();
+        this.prevDragonPitch = dragonPitch;
         this.setScaleForAge(true);
         if (world.isRemote) {
             this.updateClientControls();
@@ -1815,7 +1818,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (!onGround) {
                 roll_buffer.calculateChainFlapBuffer(55, 1, 2F, 0.5F, this);
                 pitch_buffer.calculateChainWaveBuffer(90, 10, 1F, 0.5F, this);
-                pitch_buffer_body.calculateChainWaveBuffer(70, 10, 2F, 0.5F, this);
+                pitch_buffer_body.calculateChainWaveBuffer(80, 10, 1, 0.5F, this);
             }
         }
         if(!this.onGround){
@@ -1824,19 +1827,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             double zdist = prevPosZ - this.posZ;
             double planeDist = Math.abs(xdist) + Math.abs(zdist);
             if(this.isHovering()){
-                if(this.rotationPitch > 0.5F){
-                    this.rotationPitch -= 0.1F;
+                if(this.dragonPitch > 0.5F){
+                    this.dragonPitch -= 0.1F;
                 }
-                if(this.rotationPitch < -0.5F){
-                    this.rotationPitch -= 0.1F;
+                if(this.dragonPitch < -0.5F){
+                    this.dragonPitch -= 0.1F;
                 }
             }else {
                 if (ydist > 0) {
-                    this.rotationPitch += (float) ydist * 5 - planeDist * 0.5;
+                    this.dragonPitch += (float) ydist * 5 - ydist * planeDist * 4;
                     this.motionY -= 0.1D;
                 } else {
-                    this.rotationPitch += (float) ydist * 5 + planeDist * 0.75;
+                    this.dragonPitch += (float) ydist * 5 + ydist * planeDist * 4;
                 }
+                this.dragonPitch = MathHelper.wrapDegrees(this.dragonPitch);
+                System.out.println(dragonPitch);
             }
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
