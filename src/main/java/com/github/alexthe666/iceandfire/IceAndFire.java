@@ -84,7 +84,6 @@ public class IceAndFire {
         ThaumcraftCompatBridge.loadThaumcraftCompat();
         LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
-        ModRecipes.preInit();
     }
 
 
