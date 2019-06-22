@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
@@ -138,7 +139,8 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
+    public static void registerItems(RegistryEvent.Register<Item> event) {
+        // ItemBlocks
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -173,10 +175,8 @@ public class CommonProxy {
             itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
             event.getRegistry().register(itemBlock);
         }
-    }
 
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
+        // Items
         try {
             for (Field f : ModItems.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -214,6 +214,8 @@ public class CommonProxy {
             event.getRegistry().register(troll.leggings);
             event.getRegistry().register(troll.boots);
         }
+
+        ModRecipes.preInit();
     }
 
     @SubscribeEvent
