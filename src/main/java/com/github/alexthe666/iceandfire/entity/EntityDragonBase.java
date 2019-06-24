@@ -1178,7 +1178,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        Vec3d vec = getHeadPosition();
         if (this.isBreathingFire() && burnProgress < 40) {
             burnProgress++;
         } else if (!this.isBreathingFire()) {
@@ -1822,27 +1821,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         if(!this.onGround){
-            double ydist = prevPosY - this.posY;
-            double xdist = prevPosX - this.posX;
-            double zdist = prevPosZ - this.posZ;
-            double planeDist = Math.abs(xdist) + Math.abs(zdist);
-            if(this.isHovering()){
-                if(this.dragonPitch > 0.5F){
-                    this.dragonPitch -= 0.1F;
-                }
-                if(this.dragonPitch < -0.5F){
-                    this.dragonPitch -= 0.1F;
-                }
-            }else {
-                if (ydist > 0) {
-                    this.dragonPitch += (float) ydist * 5 - ydist * planeDist * 4;
-                    this.motionY -= 0.1D;
-                } else {
-                    this.dragonPitch += (float) ydist * 5 + ydist * planeDist * 4;
-                }
-                this.dragonPitch = MathHelper.wrapDegrees(this.dragonPitch);
-                System.out.println(dragonPitch);
+            double ydist = prevPosY - this.posY;//down 0.4 up -0.38
+            double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
+            this.dragonPitch += (float) (ydist) * 10;
+            this.dragonPitch = MathHelper.clamp(this.dragonPitch, -90, 90);
+            float plateau = 2;
+            if(this.dragonPitch > plateau){
+                //down
+                this.motionY -= 0.2D;
+                this.dragonPitch -= planeDist * Math.abs(this.dragonPitch) / 90;
             }
+            if(this.dragonPitch < -plateau){//-2
+                //up
+                this.dragonPitch += planeDist * Math.abs(this.dragonPitch) / 90;
+            }
+            if(this.dragonPitch > 2F){
+                this.dragonPitch -= 1F;
+
+            }else if(this.dragonPitch < -2F){
+                this.dragonPitch += 1F;
+            }
+        }else{
+            this.dragonPitch = 0;
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
             this.setAttackTarget(null);
@@ -2353,16 +2353,34 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public Vec3d getHeadPosition(){
         float sitProg = this.sitProgress * 0.015F;
         float deadProg = this.modelDeadProgress * -0.02F;
-        float hoverProg = this.hoverProgress * 0.025F;
+        float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
         float sleepProg = this.sleepProgress * -0.025F;
-        float add = 0;
-        if(this.isFlying() || this.isHovering()){
-            add = -prevRotationPitch * getRenderSize() * 0.25F;
+        float pitchMulti = 0;
+        float pitchAdjustment = 0;
+        float pitchMinus = 0;
+        float dragonPitch = -this.dragonPitch;
+        if (this.isFlying() || this.isHovering()) {
+            pitchMulti = (float) Math.sin(Math.toRadians(dragonPitch));
+            pitchAdjustment = 1.2F;
+            pitchMulti *= 2.1F * Math.abs(dragonPitch) / 90;
+            if(pitchMulti > 0){
+                pitchMulti *= 1.5F - pitchMulti * 0.5F;
+            }
+            if(pitchMulti < 0){
+                pitchMulti *= 1.3F - pitchMulti * 0.1F;
+            }
+            pitchMinus = 0.3F * Math.abs(dragonPitch / 90);
+            if(dragonPitch >= 0){
+                pitchAdjustment = 0.6F * Math.abs(dragonPitch / 90);
+                pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
+            }
         }
-        float headPosX = (float) (posX + (1.9F * getRenderSize() * 0.3F + -Math.abs(add) * 0.4F) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg) * getRenderSize() * 0.3F) + add;
-        float headPosZ = (float) (posZ + (1.9F * getRenderSize() * 0.3F + -Math.abs(add) * 0.4F) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+
+        float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float)Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
+        float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
+        float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
     }
 

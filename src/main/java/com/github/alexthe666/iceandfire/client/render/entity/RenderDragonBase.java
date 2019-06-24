@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
+import net.ilexiconn.llibrary.LLibrary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.culling.ICamera;
@@ -41,6 +42,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 	protected void preRenderCallback(EntityDragonBase entity, float f) {
 		this.shadowSize = ((EntityDragonBase) entity).getRenderSize() / 3;
 		GL11.glScalef(shadowSize, shadowSize, shadowSize);
+		float f7 = entity.prevDragonPitch + (entity.dragonPitch - entity.prevDragonPitch) * f;
 		GL11.glRotatef(entity.dragonPitch, 1, 0, 0);
 	}
 
