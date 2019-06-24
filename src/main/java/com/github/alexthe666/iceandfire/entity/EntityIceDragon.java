@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -66,7 +65,6 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
 		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
 		this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
-		this.tasks.addTask(5, new DragonAIAirTarget(this));
 		this.tasks.addTask(5, new DragonAIWaterTarget(this));
 		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
 		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
@@ -454,7 +452,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			}else{
 				RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
 				BlockPos pos = result.getBlockPos();
-				DragonDestructionManager.destroyAreaIce(world, pos, this);
+				IaFDragonDestructionManager.destroyAreaIce(world, pos, this);
 			}
 
 		}
@@ -462,7 +460,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-			DragonDestructionManager.destroyAreaIce(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+			IaFDragonDestructionManager.destroyAreaIce(world, new BlockPos(spawnX, spawnY, spawnZ), this);
 
 		}
 	}

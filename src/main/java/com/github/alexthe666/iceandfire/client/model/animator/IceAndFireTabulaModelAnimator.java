@@ -15,10 +15,10 @@ public class IceAndFireTabulaModelAnimator {
         this.baseModel = baseModel;
     }
 
-    public void setRotateAngle(AdvancedModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX += distance(model.rotateAngleX, x);
-        model.rotateAngleY += distance(model.rotateAngleY, y);
-        model.rotateAngleZ += distance(model.rotateAngleZ, z);
+    public void setRotateAngle(AdvancedModelRenderer model, float limbSwingAmount, float x, float y, float z) {
+        model.rotateAngleX += limbSwingAmount * distance(model.rotateAngleX, x);
+        model.rotateAngleY += limbSwingAmount * distance(model.rotateAngleY, y);
+        model.rotateAngleZ += limbSwingAmount * distance(model.rotateAngleZ, z);
     }
 
     public void addToRotateAngle(AdvancedModelRenderer model, float limbSwingAmount, float x, float y, float z) {

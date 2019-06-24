@@ -105,7 +105,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
                 if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ){
-                    this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+                    this.setRotateAngle(cube, 1, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
             }
             /*

@@ -114,7 +114,6 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 						EntityDragonBase dragon = (EntityDragonBase) pointedEntity;
 						dragon.setFlying(false);
 						dragon.setHovering(false);
-						dragon.airTarget = null;
 					}
 					if (pointedEntity instanceof EntityHippogryph) {
 						EntityHippogryph dragon = (EntityHippogryph) pointedEntity;

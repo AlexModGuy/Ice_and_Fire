@@ -131,7 +131,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                     x = (float)Math.toRadians(6.04);
                 }
                 if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ){
-                    this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+                    this.setRotateAngle(cube, 1, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
                 }
             }
         }

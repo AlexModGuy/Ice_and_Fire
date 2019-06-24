@@ -35,11 +35,12 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         boolean walking = !(entity.isFlying() || entity.isHovering()) && (entity.hoverProgress <= 0 || entity.flyProgress <= 0);
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
+        float dive = (10 - entity.diveProgress) * 0.1F;
         if (prevIndex < 0) {
             prevIndex = walking ? 3 : 5;
         }
-        IceAndFireTabulaModel prevPosition = walking ? walkPoses[prevIndex] : flyPoses[prevIndex];
         IceAndFireTabulaModel currentPosition = walking ? walkPoses[currentIndex] : flyPoses[currentIndex];
+        IceAndFireTabulaModel prevPosition = walking ? walkPoses[prevIndex] : flyPoses[prevIndex];
         float delta = ((walking ? entity.walkCycle : entity.flightCycle) / 10.0F) % 1.0F;
         float deltaTicks = delta + (LLibrary.PROXY.getPartialTicks() / 10.0F);
         if(delta == 0){
@@ -54,7 +55,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         AdvancedModelRenderer[] clawR = { model.getCube("ClawR")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
-            if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
+            if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
@@ -104,17 +105,14 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                     transitionTo(cube, EnumRemodelDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }
-            if(!walking && entity.diveProgress < 1.5F){
-                AdvancedModelRenderer flightPart = EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName);
+            if(!walking){
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ || prevX != flightPart.rotateAngleX || prevY != flightPart.rotateAngleY || prevZ != flightPart.rotateAngleZ){
-                    this.setRotateAngle(cube, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
-                }
+                this.setRotateAngle(cube, dive, prevX + deltaTicks * distance(prevX, x), prevY + deltaTicks * distance(prevY, y), prevZ + deltaTicks * distance(prevZ, z));
             }
             if(entity.fireBreathProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")) {
@@ -125,9 +123,9 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
 
                 }
             }
-            if(entity.diveProgress > 0.0F){
-                if(!isPartEqual(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName))){
-                    transitionTo(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName), 10, 10, false);
+            if (entity.diveProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName), entity.diveProgress, 10, false);
                 }
             }
         }

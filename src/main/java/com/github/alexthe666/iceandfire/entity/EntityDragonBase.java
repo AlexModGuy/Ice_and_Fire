@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
+import com.github.alexthe666.iceandfire.entity.ai.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
@@ -27,6 +28,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -45,6 +47,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -109,6 +112,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public float flyProgress;
     public float fireBreathProgress;
     public float diveProgress;
+    public float prevDiveProgress;
     public float prevFireBreathProgress;
     public int fireStopTicks;
     public int flyTicks;
@@ -120,7 +124,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public boolean attackDecision;
     public int flightCycle;
     private int prevFlightCycle;
-    public BlockPos airTarget;
     public BlockPos homePos;
     public boolean hasHomePosition = false;
     @SideOnly(Side.CLIENT)
@@ -171,6 +174,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public double burnParticleZ;
     public float dragonPitch;
     public float prevDragonPitch;
+    protected IaFDragonFlightManager flightManager;
+    private boolean isLandNavigator;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -193,6 +198,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             tail_buffer = new ChainBuffer();
         }
         legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
+        this.flightManager = new IaFDragonFlightManager(this);
+        switchNavigator(true);
         resetParts(1);
     }
     public void resetParts(float scale) {
@@ -305,6 +312,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     protected PathNavigate createNavigator(World worldIn) {
         return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
+    }
+
+    private void switchNavigator(boolean onLand) {
+        if (onLand) {
+            this.moveHelper = new EntityMoveHelper(this);
+            this.navigator = createNavigator(world);
+            this.isLandNavigator = true;
+        } else {
+            this.moveHelper = new IaFDragonFlightManager.FlightMoveHelper(this);
+            this.navigator = new PathNavigateFlyingCreature(this, world);
+            this.isLandNavigator = false;
+        }
     }
 
     public boolean canDestroyBlock(BlockPos pos){
@@ -1172,7 +1191,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     private boolean isStuck() {
-        return !this.isChained() && !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15) || this.airTarget != null) && ticksStill > 80 && !this.isHovering() && canMove();
+        return !this.isChained() && !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15)) && ticksStill > 80 && !this.isHovering() && canMove();
     }
 
     @Override
@@ -1308,7 +1327,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.playSound(SoundEvents.ITEM_ELYTRA_FLYING, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
         }
         if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
-            double ydist = Math.max((this.posY - prevPosY) * 3F + 1, 0);
+            double ydist = 2;// MathHelper.clamp((this.posY - prevPosY) * 3F + 2, 1, 4);
             prevFlightCycle = flightCycle;
             if(isHovering()){
                 ydist = Math.max(2, ydist);
@@ -1324,7 +1343,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
 
             if (flightCycle > 10 && flightCycle < 12) {
-                this.spawnGroundEffects();
+                //this.spawnGroundEffects();
             }
             if (this.isModelDead() && flightCycle != 0) {
                 flightCycle = 0;
@@ -1361,6 +1380,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             hoverProgress -= 2F;
         }
         boolean diving = isDiving();
+        prevDiveProgress = diveProgress;
         if (diving && diveProgress < 10.0F) {
             diveProgress += 1F;
         } else if (!diving && diveProgress > 0.0F) {
@@ -1372,11 +1392,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else if (!tackling && tackleProgress > 0.0F) {
             tackleProgress -= 1.5F;
         }
-        boolean flying = !tackling && this.isFlying() || !this.onGround && !this.isHovering() && this.airTarget != null;
+        boolean flying = !tackling && this.isFlying() || !this.onGround && !this.isHovering();
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 2F;
+        }
+        if (flying && this.isLandNavigator) {
+            switchNavigator(false);
+        }
+        if (!flying && !this.isLandNavigator) {
+            switchNavigator(true);
         }
         boolean modeldead = isModelDead();
         if (modeldead && modelDeadProgress < 20.0F) {
@@ -1436,18 +1462,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isSleeping()) {
             this.getNavigator().clearPath();
         }
-        if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
-            this.airTarget = null;
-        }
-        if (this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null) {
-            this.setFlying(false);
-        }
-
-        if (this.isFlying() && getAttackTarget() == null) {
-            flyAround();
-        } else if (getAttackTarget() != null) {
-            flyTowardsTarget();
-        }
         if (this.onGround && flyTicks != 0) {
             flyTicks = 0;
         }
@@ -1467,7 +1481,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
+        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(10) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1538,7 +1552,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     private boolean isDiving() {
-        return isFlying() && Math.abs(prevFlightCycle - flightCycle) < 0.1D;
+        return isFlying() && motionY < -0.1;
     }
 
     private boolean isBeyondHeight(){
@@ -1744,6 +1758,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if(!isLandNavigator){
+            this.flightManager.update();
+        }
         updateParts();
         this.prevDragonPitch = dragonPitch;
         this.setScaleForAge(true);
@@ -2013,15 +2030,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return dragon;
     }
 
-    public void flyAround() {
-        if (airTarget != null) {
-            if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
-                airTarget = null;
-            }
-            flyTowardsTarget();
-        }
-    }
-
     public boolean isTargetBlocked(Vec3d target) {
         if (target != null) {
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
@@ -2034,43 +2042,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         return false;
-    }
-
-    public void flyTowardsTarget() {
-        if(airTarget != null && airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight){
-            airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
-        }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
-            double y = this.attackDecision ? airTarget.getY() : this.posY;
-
-            double targetX = airTarget.getX() + 0.5D - posX;
-            double targetY = Math.min(y, 256) + 1D - posY;
-            double targetZ = airTarget.getZ() + 0.5D - posZ;
-            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed();
-            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed();
-            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed();
-            float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-            moveForward = 0.5F;
-            double d0 = airTarget.getX() + 0.5D - this.posX;
-            double d2 = airTarget.getZ() + 0.5D - this.posZ;
-            double d1 = y + 0.5D - this.posY;
-            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-            float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-            float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            //this.rotationPitch = this.updateRotation(this.rotationPitch, f1, 30F);
-            this.rotationYaw = this.updateRotation(this.rotationYaw, f, 30F);
-
-            if (!this.isFlying()) {
-                this.setFlying(true);
-            }
-        } else {
-            this.airTarget = null;
-        }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
-            this.setFlying(false);
-            this.setHovering(true);
-            this.flyHovering = 1;
-        }
     }
 
     private double getFlySpeed() {
@@ -2088,24 +2059,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     private boolean isAgingDisabled() {
         return this.dataManager.get(AGINGDISABLED).booleanValue();
-    }
-
-    protected boolean isTargetInAir() {
-        return airTarget != null && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (world.getBlockState(airTarget).getMaterial() == Material.WATER || world.getBlockState(airTarget).getMaterial() == Material.AIR)));
-    }
-
-    private float updateRotation(float angle, float targetAngle, float maxIncrease) {
-        float f = MathHelper.wrapDegrees(targetAngle - angle);
-
-        if (f > maxIncrease) {
-            f = maxIncrease;
-        }
-
-        if (f < -maxIncrease) {
-            f = -maxIncrease;
-        }
-
-        return angle + f;
     }
 
     public float getDistanceSquared(Vec3d vec3d) {
@@ -2376,7 +2329,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
             }
         }
-
         float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float)Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);

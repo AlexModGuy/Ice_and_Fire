@@ -8,7 +8,6 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -16,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
@@ -67,7 +65,6 @@ public class EntityFireDragon extends EntityDragonBase {
         this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.5D, false));
         this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
-        this.tasks.addTask(6, new DragonAIAirTarget(this));
         this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(8, new DragonAILookIdle(this));
@@ -387,7 +384,7 @@ public class EntityFireDragon extends EntityDragonBase {
             } else {
                 RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
                 BlockPos pos = result.getBlockPos();
-                DragonDestructionManager.destroyAreaFire(world, pos, this);
+                IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
             }
 
         }
@@ -395,7 +392,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            DragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+            IaFDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
         }
     }
 

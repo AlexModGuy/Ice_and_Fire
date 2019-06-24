@@ -229,7 +229,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 									EntityDragonBase dragon = (EntityDragonBase) attackTarget;
 									dragon.setFlying(false);
 									dragon.setHovering(false);
-									dragon.airTarget = null;
 								}
 								if (attackTarget instanceof EntityHippogryph) {
 									EntityHippogryph dragon = (EntityHippogryph) attackTarget;
