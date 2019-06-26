@@ -22,7 +22,7 @@ import java.util.List;
 public class DragonUtils {
 
 	public static BlockPos getBlockInView(EntityDragonBase dragon) {
-		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * - 7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
+		float radius = 10 * (0.7F * dragon.getRenderSize() / 3);
 		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
 		float renderYawOffset = dragon.renderYawOffset;
 		if(dragon.hasHomePosition && dragon.homePos != null){

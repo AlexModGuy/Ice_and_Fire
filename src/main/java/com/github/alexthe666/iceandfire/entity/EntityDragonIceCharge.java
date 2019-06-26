@@ -132,7 +132,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 						}
 					}
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
-						((EntityDragonBase) this.shootingEntity).attackDecision = true;
+						((EntityDragonBase) this.shootingEntity).usingGroundAttack = true;
 					}
 				}
 				if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {

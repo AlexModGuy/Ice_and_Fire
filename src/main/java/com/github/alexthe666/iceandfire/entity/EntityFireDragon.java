@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -128,23 +129,23 @@ public class EntityFireDragon extends EntityDragonBase {
         if (this.getAnimation() == ANIMATION_WINGBLAST) {
             return false;
         }
-        switch (new Random().nextInt(4)) {
-            case 0:
+        switch (groundAttack) {
+            case BITE:
                 if (this.getAnimation() != this.ANIMATION_BITE) {
                     this.setAnimation(this.ANIMATION_BITE);
                     return false;
                 } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                     boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.attackDecision = this.getRNG().nextBoolean();
+                    this.usingGroundAttack = this.getRNG().nextBoolean();
                     return flag;
                 }
                 break;
-            case 1:
+            case SHAKE_PREY:
                 if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                     if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
                         this.setAnimation(this.ANIMATION_SHAKEPREY);
                         entityIn.startRiding(this);
-                        this.attackDecision = this.getRNG().nextBoolean();
+                        this.usingGroundAttack = this.getRNG().nextBoolean();
                         return true;
                     }
                 } else {
@@ -153,12 +154,12 @@ public class EntityFireDragon extends EntityDragonBase {
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                         boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.attackDecision = this.getRNG().nextBoolean();
+                        this.usingGroundAttack = this.getRNG().nextBoolean();
                         return flag1;
                     }
                 }
                 break;
-            case 2:
+            case TAIL_WHIP:
                 if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
                     this.setAnimation(this.ANIMATION_TAILWHACK);
                     return false;
@@ -167,11 +168,11 @@ public class EntityFireDragon extends EntityDragonBase {
                     if (entityIn instanceof EntityLivingBase) {
                         ((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
                     }
-                    this.attackDecision = this.getRNG().nextBoolean();
+                    this.usingGroundAttack = this.getRNG().nextBoolean();
                     return flag2;
                 }
                 break;
-            case 3:
+            case WING_BLAST:
                 if (this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2) {
                     if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
                         this.setAnimation(this.ANIMATION_WINGBLAST);
@@ -183,41 +184,15 @@ public class EntityFireDragon extends EntityDragonBase {
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.attackDecision = this.getRNG().nextBoolean();
+                        this.usingGroundAttack = this.getRNG().nextBoolean();
                         return flag;
                     }
                 }
 
                 break;
-            default:
-                if (this.getAnimation() != this.ANIMATION_BITE) {
-                    this.setAnimation(this.ANIMATION_BITE);
-                    return false;
-                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.attackDecision = this.getRNG().nextBoolean();
-                    return flag;
-                }
-                break;
         }
 
         return false;
-    }
-
-    public void moveEntityTowards(Entity entity, double x, double y, double z, float velocity, float inaccuracy) {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
-        x = x / (double) f;
-        y = y / (double) f;
-        z = z / (double) f;
-        x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        x = x * (double) velocity;
-        y = y * (double) velocity;
-        z = z * (double) velocity;
-        entity.motionX = x;
-        entity.motionY = y;
-        entity.motionZ = z;
     }
 
     @Override
@@ -225,16 +200,44 @@ public class EntityFireDragon extends EntityDragonBase {
         super.onLivingUpdate();
         if (!world.isRemote) {
             if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
-                if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
-                    shootFireAtMob(this.getAttackTarget());
+                if (!isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
+                    if(usingGroundAttack){
+                        if(this.groundAttack == IaFDragonAttacks.Ground.FIRE){
+                            shootFireAtMob(this.getAttackTarget());
+                        }
+                    }else{
+                        if(this.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM){
+                            if (this.isBreathingFire()) {
+                                if (this.isActuallyBreathingFire()) {
+                                    rotationYaw = renderYawOffset;
+                                    double targetX = this.posX;
+                                    double targetY = this.getAttackTarget().posY;
+                                    double targetZ = this.posZ;
+                                    if(this.ticksExisted % 5 == 0){
+                                        this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                                    }
+                                    stimulateFire(targetX, targetY, targetZ, 1);
+                                    if (getAttackTarget().isDead || getAttackTarget() == null) {
+                                        this.setBreathingFire(false);
+                                        this.randomizeAttacks();
+                                    }
+                                }
+                            } else {
+                                this.setBreathingFire(true);
+                            }
+                            shootFireAtMob(this.getAttackTarget());
+                        }
+                        if(this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST){
+                            this.setHovering(true);
+                            this.setFlying(false);
+                            shootFireAtMob(this.getAttackTarget());
+                        }
+                    }
                 } else {
                     if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                         attackEntityAsMob(this.getAttackTarget());
                     }
-
                 }
-            } else {
-                //this.setBreathingFire(false);
             }
         }
 
@@ -261,9 +264,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 this.setAnimation(this.ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 15) {
                 rotationYaw = renderYawOffset;
-                float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-                float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-                float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+                Vec3d headVec = this.getHeadPosition();
                 this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
@@ -275,7 +276,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setSizes(size, size);
-                entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+                entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
                 if (!world.isRemote) {
                     world.spawnEntity(entitylargefireball);
                 }
@@ -289,7 +290,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if(mop != null){
-                        stimulateFire( mop.hitVec.x,  mop.hitVec.y,  mop.hitVec.z, 0);
+                        stimulateFire( mop.hitVec.x,  mop.hitVec.y,  mop.hitVec.z, 2);
                     }
                 }
             } else {
@@ -308,18 +309,16 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     private void shootFireAtMob(EntityLivingBase entity) {
-        if (!this.attackDecision) {
-            if (this.getRNG().nextInt(5) == 0) {
+        if (this.usingGroundAttack && this.groundAttack == IaFDragonAttacks.Ground.FIRE || !this.usingGroundAttack && (this.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM || this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST)) {
+            if (this.usingGroundAttack && this.getRNG().nextInt(5) == 0 || !this.usingGroundAttack && this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST) {
                 if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
                     this.setAnimation(this.ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 15) {
                     rotationYaw = renderYawOffset;
-                    float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-                    float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-                    float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-                    double d2 = entity.posX - headPosX;
-                    double d3 = entity.posY - headPosY;
-                    double d4 = entity.posZ - headPosZ;
+                    Vec3d headVec = this.getHeadPosition();
+                    double d2 = entity.posX - headVec.x;
+                    double d3 = entity.posY - headVec.y;
+                    double d4 = entity.posZ - headVec.z;
                     float inaccuracy = 1.0F;
                     d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
@@ -328,14 +327,14 @@ public class EntityFireDragon extends EntityDragonBase {
                     EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setSizes(size, size);
-                    entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+                    entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
                     if (!world.isRemote) {
                         world.spawnEntity(entitylargefireball);
                     }
                     if (entity.isDead || entity == null) {
                         this.setBreathingFire(false);
-                        this.attackDecision = this.getRNG().nextBoolean();
                     }
+                    this.randomizeAttacks();
                 }
             } else {
                 if (this.isBreathingFire()) {
@@ -344,10 +343,10 @@ public class EntityFireDragon extends EntityDragonBase {
                         if(this.ticksExisted % 5 == 0){
                             this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
                         }
-                        stimulateFire(entity.posX, entity.posY, entity.posZ, 0);
+                        stimulateFire(entity.posX, entity.posY, entity.posZ, 1);
                         if (entity.isDead || entity == null) {
                             this.setBreathingFire(false);
-                            this.attackDecision = this.getRNG().nextBoolean();
+                            this.randomizeAttacks();
                         }
                     }
                 } else {
@@ -358,10 +357,15 @@ public class EntityFireDragon extends EntityDragonBase {
         this.faceEntity(entity, 360, 360);
     }
 
-
-
-
-    public void stimulateFire(double burnX, double burnY, double burnZ, float overrideDistance) {
+    public void stimulateFire(double burnX, double burnY, double burnZ, int syncType) {
+        if(syncType == 1 && !world.isRemote){
+            //sync with client
+            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ));
+        }
+        if(syncType == 2 && world.isRemote){
+            //sync with server
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ));
+        }
         this.getNavigator().clearPath();
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
@@ -371,7 +375,7 @@ public class EntityFireDragon extends EntityDragonBase {
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
-        double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), overrideDistance);
+        double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
         for (int i = 0; i < conqueredDistance; i++) {
             double progressX = headPos.x + d2 * (i / (float) distance);

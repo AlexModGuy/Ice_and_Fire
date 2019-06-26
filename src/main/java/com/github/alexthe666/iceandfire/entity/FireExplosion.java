@@ -147,7 +147,7 @@ public class FireExplosion extends Explosion {
                             }
                         }
                         if (entity.isDead && this.exploder != null && this.exploder instanceof EntityDragonBase) {
-                            ((EntityDragonBase) this.exploder).attackDecision = true;
+                            ((EntityDragonBase) this.exploder).usingGroundAttack = true;
                         }
                     }
                     double d11 = 1.0D;

@@ -147,7 +147,7 @@ public class FireChargeExplosion extends Explosion {
 								entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
 							}
 							if (entity.isDead) {
-								((EntityDragonBase) this.exploder).attackDecision = true;
+								((EntityDragonBase) this.exploder).usingGroundAttack = true;
 							}
 						}
 						double d11 = 1.0D;
