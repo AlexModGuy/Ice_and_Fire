@@ -175,7 +175,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private boolean isLandNavigator;
     public IaFDragonAttacks.Air airAttack;
     public IaFDragonAttacks.Ground groundAttack;
-    public boolean usingGroundAttack;
+    public boolean usingGroundAttack = true;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -1203,6 +1203,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             burnProgress = 0;
         }
         updateBurnTarget();
+
         if (!world.isRemote) {
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
@@ -1282,7 +1283,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (!world.isRemote && this.isTackling() && this.getAttackTarget() == null) {
+        if (!world.isRemote && this.isTackling() && (this.getAttackTarget() == null || this.airAttack != IaFDragonAttacks.Air.TACKLE)) {
             this.setTackling(false);
             this.randomizeAttacks();
         }
@@ -1293,8 +1294,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             return;
         }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {
-            this.setFlying(false);
-            this.setFlying(true);
             //this.usingGroundAttack = false;
             this.setSleeping(false);
         }
@@ -1324,33 +1323,24 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         this.updateCheckPlayer();
-        AnimationHandler.INSTANCE.updateAnimations(this);
         this.legSolver.update(this, getRenderSize() / 3);
         if(isDiving()){
             this.playSound(SoundEvents.ITEM_ELYTRA_FLYING, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
         }
-        if ((this.isFlying() || this.isHovering()) && !this.isModelDead()) {
-            double ydist = 2;// MathHelper.clamp((this.posY - prevPosY) * 3F + 2, 1, 4);
-            prevFlightCycle = flightCycle;
-            if(isHovering()){
-                ydist = Math.max(2, ydist);
-            }
-            if (flightCycle < 58) {
-                flightCycle += ydist;
-            } else {
-                flightCycle = 0;
-            }
-            flightCycle = MathHelper.clamp(flightCycle, 0, 59);
-            if (flightCycle == 2 && !this.isDiving()) {
-                this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
-            }
+        if (flightCycle < 58) {
+            flightCycle += 2;
+        } else {
+            flightCycle = 0;
+        }
+        if (flightCycle == 2 && !this.isDiving()) {
+            this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
+        }
 
-            if (flightCycle > 10 && flightCycle < 12) {
-                //this.spawnGroundEffects();
-            }
-            if (this.isModelDead() && flightCycle != 0) {
-                flightCycle = 0;
-            }
+        if (flightCycle > 10 && flightCycle < 12) {
+            this.spawnGroundEffects();
+        }
+        if (this.isModelDead() && flightCycle != 0) {
+            flightCycle = 0;
         }
         if (this.isModelDead() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
@@ -1376,7 +1366,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else if (!fireBreathing && fireBreathProgress > 0.0F) {
             fireBreathProgress -= 0.5F;
         }
-        boolean hovering = isHovering();
+        boolean hovering = isHovering() || isFlying() && this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST && this.getAttackTarget() != null && this.getDistance(this.getAttackTarget().posX, this.posY, this.getAttackTarget().posZ) < 17F;
         if (hovering && hoverProgress < 20.0F) {
             hoverProgress += 0.5F;
         } else if (!hovering && hoverProgress > 0.0F) {
@@ -1474,7 +1464,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && (this.getRNG().nextInt(10) == 0 || !this.usingGroundAttack) && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
+        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 || !this.usingGroundAttack) && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1504,9 +1494,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (this.getHunger() > 0) {
                 this.setHunger(this.getHunger() - 1);
             }
-        }
-        if(this.usingGroundAttack && this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) > Math.min(this.getEntityBoundingBox().getAverageEdgeLength() * 5, 25) && !this.isChild()){
-            this.usingGroundAttack = false;
         }
         if ((this.groundAttack == IaFDragonAttacks.Ground.FIRE) && this.getRNG().nextInt(750) == 0 && this.getDragonStage() < 2) {
             this.usingGroundAttack = true;
@@ -1542,7 +1529,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && this.getAttackTarget() != null && this.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
             this.attackEntityAsMob(this.getAttackTarget());
         }
+        if(this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.onGround){
+            this.usingGroundAttack = true;
+            this.setFlying(false);
+            this.setHovering(false);
+        }
+        if(this.isFlying() && usingGroundAttack){
+            this.airAttack = IaFDragonAttacks.Air.TACKLE;
+        }
+        if(this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null && isTargetBlocked(this.getAttackTarget().getPositionVector())){
+            this.randomizeAttacks();
+        }
+
         this.breakBlock();
+        AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
     private boolean isDiving() {
@@ -1593,10 +1593,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 double extraY = 0.8F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
                 BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
-                IBlockState iblockstate = this.world.getBlockState(new BlockPos(ground));
+                IBlockState iblockstate = this.world.getBlockState(ground);
                 if (iblockstate.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, ground.getY() + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
                     }
                 }
             }
@@ -1620,7 +1620,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100;
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IaFDragonAttacks.Air.TACKLE;
     }
 
     public abstract String getVariantName(int variant);
@@ -1840,7 +1840,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             float plateau = 2;
             if(this.dragonPitch > plateau){
                 //down
-                this.motionY -= 0.2D;
+                //this.motionY -= 0.2D;
                 this.dragonPitch -= planeDist * Math.abs(this.dragonPitch) / 90;
             }
             if(this.dragonPitch < -plateau){//-2
@@ -2029,8 +2029,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (target != null) {
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
+                BlockPos sidePos = rayTrace.getBlockPos();
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && !isFire) {
+                if (!world.isAirBlock(sidePos)) {
+                    return true;
+                } else if (!world.isAirBlock(pos)) {
                     return true;
                 }
                 return rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
@@ -2334,17 +2337,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public abstract void stimulateFire(double burnX, double burnY, double burnZ, int syncType);
 
     public void randomizeAttacks(){
-        this.airAttack = IaFDragonAttacks.Air.values()[rand.nextInt(IaFDragonAttacks.Air.values().length - 1)];
-        this.groundAttack = IaFDragonAttacks.Ground.values()[rand.nextInt(IaFDragonAttacks.Ground.values().length - 1)];
+        this.airAttack = IaFDragonAttacks.Air.values()[getRNG().nextInt(IaFDragonAttacks.Air.values().length)];
+        this.groundAttack = IaFDragonAttacks.Ground.values()[getRNG().nextInt(IaFDragonAttacks.Ground.values().length)];
     }
 
     public void tryScorchTarget(){
-        EntityLivingBase entity = this.getAttackingEntity();
+        EntityLivingBase entity = this.getAttackTarget();
         if(entity != null) {
             float distX = (float) (entity.posX - this.posX);
             float distZ = (float) (entity.posZ - this.posZ);
-            if (this.getAttackTarget() != null) {
-                stimulateFire(this.posY + distX * this.fireTicks / 40, entity.posY, this.posZ + distZ * this.fireTicks / 40, 1);
+            if (this.isBreathingFire()) {
+                if (this.isActuallyBreathingFire()) {
+                    rotationYaw = renderYawOffset;
+                    if(this.ticksExisted % 5 == 0){
+                        this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                    }
+                    stimulateFire(this.posX + distX * this.fireTicks / 40, entity.posY, this.posZ + distZ * this.fireTicks / 40, 1);
+                }
+            }else{
+                this.setBreathingFire(true);
             }
         }
     }
@@ -2352,5 +2363,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
         super.setAttackTarget(entitylivingbaseIn);
         this.flightManager.onSetAttackTarget(entitylivingbaseIn);
+    }
+
+    public boolean isPart(Entity entityHit) {
+        return headPart != null && headPart.isEntityEqual(entityHit) || neckPart != null && neckPart.isEntityEqual(entityHit) ||
+                leftWingLowerPart != null && leftWingLowerPart.isEntityEqual(entityHit) || rightWingLowerPart != null && rightWingLowerPart.isEntityEqual(entityHit) ||
+                leftWingUpperPart != null && leftWingUpperPart.isEntityEqual(entityHit) || rightWingUpperPart != null && rightWingUpperPart.isEntityEqual(entityHit) ||
+                tail1Part != null && tail1Part.isEntityEqual(entityHit) || tail2Part != null && tail2Part.isEntityEqual(entityHit) ||
+                tail3Part != null && tail3Part.isEntityEqual(entityHit) || tail4Part != null && tail4Part.isEntityEqual(entityHit);
+
     }
 }

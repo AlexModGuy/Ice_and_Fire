@@ -106,16 +106,21 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
 				return;
 			}
-			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
-				return;
+			if(movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != null){
+				EntityDragonBase dragon = (EntityDragonBase)this.shootingEntity;
+				if(dragon.isOnSameTeam(movingObject.entityHit) || dragon.isEntityEqual(movingObject.entityHit) || dragon.isPart(movingObject.entityHit)){
+					return;
+				}
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+				EntityDragonBase dragon = (EntityDragonBase)this.shootingEntity;
 				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
 					return;
 				}
 				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-					IaFDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+					IaFDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), dragon);
 				}
+				dragon.randomizeAttacks();
 				this.setDead();
 			}
 			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
@@ -125,7 +130,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
 					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
-						((EntityDragonBase) this.shootingEntity).usingGroundAttack = true;
+						((EntityDragonBase) this.shootingEntity).randomizeAttacks();
 					}
 				}
 				movingObject.entityHit.setFire(5);
@@ -134,7 +139,6 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 				this.setDead();
 			}
 		}
-		this.setDead();
 	}
 
 	public void setAim(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.IaFDragonAttacks;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,10 +32,11 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-		if (!dragon.canMove()) {
+		if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
 			return false;
 		}
-		if (!dragon.isSleeping()) {
+		if(dragon.groundAttack == IaFDragonAttacks.Ground.FIRE && entitylivingbase!= null && !entitylivingbase.isDead && this.dragon.getDistance(entitylivingbase) < 100){
+			dragon.faceEntity(entitylivingbase, dragon.getHorizontalFaceSpeed(), dragon.getVerticalFaceSpeed());
 			return false;
 		}
 		if (entitylivingbase == null) {
