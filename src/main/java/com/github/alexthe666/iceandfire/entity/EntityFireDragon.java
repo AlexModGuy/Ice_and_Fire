@@ -349,7 +349,7 @@ public class EntityFireDragon extends EntityDragonBase {
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
-					if (entity.isDead || entity == null) {
+					if (entity.isDead) {
 						this.setBreathingFire(false);
 						this.attackDecision = this.getRNG().nextBoolean();
 					}
@@ -376,7 +376,7 @@ public class EntityFireDragon extends EntityDragonBase {
 							world.spawnEntity(entitylargefireball);
 						}
 						entitylargefireball.setSizes(size, size);
-						if (entity.isDead || entity == null) {
+						if (entity.isDead) {
 							this.setBreathingFire(false);
 							this.attackDecision = this.getRNG().nextBoolean();
 						}

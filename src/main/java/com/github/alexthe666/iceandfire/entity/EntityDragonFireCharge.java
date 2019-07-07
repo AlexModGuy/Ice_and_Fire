@@ -14,6 +14,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile {
 
 	public int ticksInAir;
@@ -50,7 +53,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 
 	public void onUpdate() {
 		for (int i = 0; i < 4; ++i) {
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D);
 		}
 		if (this.isInWater()) {
 			setDead();
@@ -79,7 +82,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			if (this.isInWater()) {
 				for (int i = 0; i < 4; ++i) {
 					float f1 = 0.25F;
-					this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+					this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
 				}
 
 				f = 0.8F;
@@ -91,7 +94,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			this.motionX *= (double) f;
 			this.motionY *= (double) f;
 			this.motionZ *= (double) f;
-			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		} else {
 			this.setDead();
@@ -99,7 +102,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult movingObject) {
+	protected void onImpact(@Nonnull RayTraceResult movingObject) {
 		boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
 		if (!this.world.isRemote) {

@@ -31,15 +31,13 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-		if (!dragon.canMove()) {
+		if(entitylivingbase == null) {
 			return false;
 		}
-		if (!dragon.isSleeping()) {
+		if (!dragon.canMoveWithoutSleeping()) {
 			return false;
 		}
-		if (entitylivingbase == null) {
-			return false;
-		} else if (!entitylivingbase.isEntityAlive()) {
+		if (!entitylivingbase.isEntityAlive()) {
 			return false;
 		} else {
 			if (canPenalize) {
@@ -63,7 +61,9 @@ public class DragonAIAttackMelee extends EntityAIBase {
 			this.resetTask();
 			return false;
 		}
-		return entitylivingbase != null && (entitylivingbase.isEntityAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) && (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative()))));
+		return entitylivingbase != null
+				&& (entitylivingbase.isEntityAlive()
+				&& (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) && (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative()))));
 	}
 
 	@Override
