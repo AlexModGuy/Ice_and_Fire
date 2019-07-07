@@ -1024,8 +1024,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                         if (stack.getItem() == ModItems.dragon_stick) {
                             if (player.isSneaking()) {
-                                BlockPos pos = new BlockPos(this);
-                                this.homePos = pos;
+                                this.homePos = new BlockPos(this);
                                 this.hasHomePosition = true;
                                 player.sendStatusMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                                 return true;
@@ -1259,7 +1258,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {
             this.setFlying(false);
-            this.setFlying(true);
             this.setSleeping(false);
         }
         if (!this.canMoveWithoutSleeping()
@@ -2061,7 +2059,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected boolean isTargetInAir() {
-        return airTarget != null && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (world.getBlockState(airTarget).getMaterial() == Material.WATER || world.getBlockState(airTarget).getMaterial() == Material.AIR)));
+        return airTarget != null
+                && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (world.getBlockState(airTarget).getMaterial() == Material.WATER || world.getBlockState(airTarget).getMaterial() == Material.AIR)));
     }
 
     private float updateRotation(float angle, float targetAngle, float maxIncrease) {
