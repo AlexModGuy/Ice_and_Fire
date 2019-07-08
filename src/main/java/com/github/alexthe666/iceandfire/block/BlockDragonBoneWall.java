@@ -8,7 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-public class BlockDragonBoneWall extends BlockWall {
+public class BlockDragonBoneWall extends BlockWall implements IDragonProof {
 
     public BlockDragonBoneWall() {
         super(ModBlocks.dragon_bone_block);

@@ -53,12 +53,12 @@ public enum EnumRemodelDragonAnimations {
     WALK2("Walk2", 1),
     WALK3("Walk3", 1),
     WALK4("Walk4", 1),
-    FLIGHT1("Flying1"),
-    FLIGHT2("Flying2"),
-    FLIGHT3("Flying3"),
-    FLIGHT4("Flying4"),
-    FLIGHT5("Flying5"),
-    FLIGHT6("Flying6"),
+    FLIGHT1("Flight1"),
+    FLIGHT2("Flight2"),
+    FLIGHT3("Flight3"),
+    FLIGHT4("Flight4"),
+    FLIGHT5("Flight5"),
+    FLIGHT6("Flight6"),
     TACKLE("AttackTackle"),
     SIT_ON_PLAYER_POSE("SittingShoulder", 1);
 

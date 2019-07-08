@@ -48,7 +48,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 					translateToBody();
 				}
 				if(prey){
-					if(animationTicks == 0 || animationTicks >= 15){
+					if(animationTicks == 0 || animationTicks >= 15 || dragon.isFlying()){
 						translateToHead();
 						Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(passenger);
 						ModelBase modelBase = null;

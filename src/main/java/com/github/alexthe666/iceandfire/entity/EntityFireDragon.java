@@ -55,10 +55,6 @@ public class EntityFireDragon extends EntityDragonBase {
         this.stepHeight = 1;
     }
 
-    public int getVariant() {
-        return 0;//TODO when raptor finishes others textures
-    }
-
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));

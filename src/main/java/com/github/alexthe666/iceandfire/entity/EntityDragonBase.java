@@ -1240,7 +1240,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
 
-        if (this.isTackling() && !this.isFlying() && this.onGround) {
+        if (!world.isRemote && this.isTackling() && !this.isFlying() && this.onGround) {
             tacklingTicks++;
             if (tacklingTicks == 40) {
                 tacklingTicks = 0;
@@ -1272,7 +1272,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.randomizeAttacks();
             }
         }
-        if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.isDirectPathBetweenPoints(this.getPositionVector(), this.getAttackTarget().getPositionVector())) {
+        if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.airAttack == IaFDragonAttacks.Air.TACKLE) {
             this.setTackling(true);
         }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.isTackling() && this.getEntityBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(this.getAttackTarget().getEntityBoundingBox())) {
@@ -1288,7 +1288,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.randomizeAttacks();
         }
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
+        if (!world.isRemote && (properties != null && properties.isStone || this.isRiding())) {
             this.setFlying(false);
             this.setHovering(false);
             return;
@@ -1379,13 +1379,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else if (!diving && diveProgress > 0.0F) {
             diveProgress -= 2F;
         }
-        boolean tackling = isTackling();
+        boolean tackling = isTackling() && !onGround;
         if (tackling && tackleProgress < 5F) {
             tackleProgress += 0.5F;
         } else if (!tackling && tackleProgress > 0.0F) {
             tackleProgress -= 1.5F;
         }
-        boolean flying = !tackling && this.isFlying() || !this.onGround && !this.isHovering();
+        boolean flying = this.isFlying();
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
@@ -1448,7 +1448,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.onGround && flyTicks != 0) {
             flyTicks = 0;
         }
-        if (this.isFlying() && this.doesWantToLand()) {
+        if (!world.isRemote && this.isFlying() && this.doesWantToLand()) {
             this.setFlying(false);
             this.setHovering(!this.onGround);
             if (this.onGround) {
@@ -1460,11 +1460,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying()) {
             this.flyTicks++;
         }
-        if ((this.isHovering() || this.isFlying()) && this.isSleeping()) {
+        if (!world.isRemote && (this.isHovering() || this.isFlying()) && this.isSleeping()) {
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 || !this.usingGroundAttack) && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
+        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0) && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1529,7 +1529,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && this.getAttackTarget() != null && this.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
             this.attackEntityAsMob(this.getAttackTarget());
         }
-        if(this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.onGround){
+        if(!world.isRemote && this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && (this.collided || this.onGround)){
             this.usingGroundAttack = true;
             this.setFlying(false);
             this.setHovering(false);
@@ -1752,7 +1752,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if(!isLandNavigator){
+        if(isFlying() && !world.isRemote){
             this.flightManager.update();
         }
         updateParts();
@@ -2371,6 +2371,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 leftWingUpperPart != null && leftWingUpperPart.isEntityEqual(entityHit) || rightWingUpperPart != null && rightWingUpperPart.isEntityEqual(entityHit) ||
                 tail1Part != null && tail1Part.isEntityEqual(entityHit) || tail2Part != null && tail2Part.isEntityEqual(entityHit) ||
                 tail3Part != null && tail3Part.isEntityEqual(entityHit) || tail4Part != null && tail4Part.isEntityEqual(entityHit);
+    }
 
+    public double getFlightSpeedModifier() {
+        return 1;
     }
 }

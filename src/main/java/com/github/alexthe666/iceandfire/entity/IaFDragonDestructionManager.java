@@ -7,6 +7,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -255,7 +256,7 @@ public class IaFDragonDestructionManager {
     }
 
     public static IBlockState transformBlockIce(IBlockState in){
-        if(in.getBlock() instanceof IDragonProof){
+        if(in.getBlock() instanceof IDragonProof || !canDragonDestroyBlock(in)){
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
@@ -276,5 +277,9 @@ public class IaFDragonDestructionManager {
             return Blocks.AIR.getDefaultState();
         }
         return in;
+    }
+
+    private static boolean canDragonDestroyBlock(IBlockState in) {
+        return EntityWither.canDestroyBlock(in.getBlock());
     }
 }

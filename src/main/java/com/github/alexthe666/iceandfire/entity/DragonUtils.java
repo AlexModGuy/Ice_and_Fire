@@ -46,7 +46,7 @@ public class DragonUtils {
 		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
 		BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
 		if (!dragon.isTargetBlocked(new Vec3d(newPos)) && dragon.getDistanceSqToCenter(newPos) > 6) {
-			return newPos;
+			return pos;
 		}
 		return null;
 	}
