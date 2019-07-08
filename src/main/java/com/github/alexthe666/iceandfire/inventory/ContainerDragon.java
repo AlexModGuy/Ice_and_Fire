@@ -22,7 +22,7 @@ public class ContainerDragon extends Container {
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 0, 8, 18) {
 			public void onSlotChanged() {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
-				drg.setArmorInSlot(0, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
+				drg.setArmorInSlot(0, EntityDragonBase.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
 				this.inventory.markDirty();
 				drg.updateDragonSlots();
 			}
@@ -35,7 +35,7 @@ public class ContainerDragon extends Container {
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 1, 8, 36) {
 			public void onSlotChanged() {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
-				drg.setArmorInSlot(1, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(1)));
+				drg.setArmorInSlot(1, EntityDragonBase.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(1)));
 				this.inventory.markDirty();
 				drg.updateDragonSlots();
 			}
@@ -48,7 +48,7 @@ public class ContainerDragon extends Container {
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 2, 153, 18) {
 			public void onSlotChanged() {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
-				drg.setArmorInSlot(2, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(2)));
+				drg.setArmorInSlot(2, EntityDragonBase.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(2)));
 				this.inventory.markDirty();
 				drg.updateDragonSlots();
 			}
@@ -61,7 +61,7 @@ public class ContainerDragon extends Container {
 		this.addSlotToContainer(new Slot(dragon.dragonInv, 3, 153, 36) {
 			public void onSlotChanged() {
 				EntityDragonBase drg = ContainerDragon.this.dragon;
-				drg.setArmorInSlot(3, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(3)));
+				drg.setArmorInSlot(3, EntityDragonBase.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(3)));
 				this.inventory.markDirty();
 				drg.updateDragonSlots();
 			}
@@ -113,7 +113,7 @@ public class ContainerDragon extends Container {
 				return ItemStack.EMPTY;
 			}
 			if (itemstack1.isEmpty()) {
-				slot.putStack((ItemStack) ItemStack.EMPTY);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
