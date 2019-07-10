@@ -627,11 +627,9 @@ public class EventLiving {
         if (event.getEntityPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
             float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
-            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
+            list.sort(new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
             if (!list.isEmpty()) {
-                Iterator<Entity> itr = list.iterator();
-                while (itr.hasNext()) {
-                    Entity entity = itr.next();
+                for (Entity entity : list) {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getEntityPlayer()) && !event.getEntityPlayer().capabilities.isCreativeMode) {
