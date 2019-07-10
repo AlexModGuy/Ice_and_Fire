@@ -1242,10 +1242,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setHovering(false);
             return;
         }
-        if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSleeping()) {
-            this.setFlying(true);
-            this.setSleeping(false);
-        }
+//        if (this.isFlying() && this.ticksExisted % 40 == 0 && !this.isSleeping()) {
+//            this.setFlying(true);
+//        }
 
         if (!this.canMove()) {
             this.getNavigator().clearPath();
