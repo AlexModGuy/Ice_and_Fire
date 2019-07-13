@@ -10,7 +10,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -134,9 +133,9 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_diamond")
 	public static Item dragon_armor_diamond = new ItemDragonArmor(2, "dragonarmor_diamond");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_meal")
-	public static Item dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
+	public static Item dragon_meal = new ItemDragonMeal();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sickly_dragon_meal")
-	public static Item sickly_dragon_meal = new ItemGenericDesc("sickly_dragon_meal", "iceandfire.sickly_dragon_meal");
+	public static Item sickly_dragon_meal = new ItemSicklyDragonMeal();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_dragon_flesh")
 	public static Item fire_dragon_flesh = new ItemDragonFlesh(true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_flesh")
