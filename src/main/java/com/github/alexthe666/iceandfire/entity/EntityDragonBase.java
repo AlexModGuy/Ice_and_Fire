@@ -1248,7 +1248,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
         if (!this.canMove()) {
             this.getNavigator().clearPath();
-
         }
         if (this.getControllingPassenger() != null) {
             if (motionY > 0.5) {

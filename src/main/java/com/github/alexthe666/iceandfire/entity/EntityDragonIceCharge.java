@@ -116,15 +116,17 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				}
 				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
 					int explodeSize = 2;
-					if(this.shootingEntity instanceof EntityDragonBase){
+					if (this.shootingEntity instanceof EntityDragonBase) {
 						explodeSize = 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage();
 					}
 					IceExplosion explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, explodeSize, flag);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), false, flag);
-					explosion2.doExplosionA();
-					explosion2.doExplosionB(true);
+					if (this.shootingEntity instanceof EntityDragonBase) {
+						FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), false, flag);
+						explosion2.doExplosionA();
+						explosion2.doExplosionB(true);
+					}
 				}
 				this.setDead();
 			}
