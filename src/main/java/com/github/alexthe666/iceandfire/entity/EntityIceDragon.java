@@ -4,14 +4,15 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +34,7 @@ import java.util.Random;
 public class EntityIceDragon extends EntityDragonBase {
 
 	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
-	public static Animation ANIMATION_FIRECHARGE;
+	public static final Animation ANIMATION_FIRECHARGE = Animation.create(25);
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
 	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
@@ -50,13 +51,6 @@ public class EntityIceDragon extends EntityDragonBase {
 	public EntityIceDragon(World worldIn) {
 		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
-		ANIMATION_SPEAK = Animation.create(20);
-		ANIMATION_BITE = Animation.create(35);
-		ANIMATION_SHAKEPREY = Animation.create(65);
-		ANIMATION_TAILWHACK = Animation.create(40);
-		ANIMATION_FIRECHARGE = Animation.create(25);
-		ANIMATION_WINGBLAST = Animation.create(50);
-		ANIMATION_ROAR = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 		this.stepHeight = 1;
 	}

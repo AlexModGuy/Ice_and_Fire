@@ -89,13 +89,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private static final DataParameter<Boolean> TACKLE = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> AGINGDISABLED = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
-    public static Animation ANIMATION_EAT;
-    public static Animation ANIMATION_SPEAK;
-    public static Animation ANIMATION_BITE;
-    public static Animation ANIMATION_SHAKEPREY;
-    public static Animation ANIMATION_WINGBLAST;
-    public static Animation ANIMATION_ROAR;
-    public static Animation ANIMATION_TAILWHACK;
+    public static final Animation ANIMATION_EAT = Animation.create(20);
+    public static final Animation ANIMATION_SPEAK = Animation.create(20);
+    public static final Animation ANIMATION_BITE = Animation.create(35);
+    public static final Animation ANIMATION_SHAKEPREY = Animation.create(65);
+    public static final Animation ANIMATION_WINGBLAST = Animation.create(50);
+    public static final Animation ANIMATION_ROAR = Animation.create(40);
+    public static final Animation ANIMATION_TAILWHACK = Animation.create(40);
+
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -170,7 +171,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.maximumSpeed = maximumSpeed;
         this.minimumArmor = 1D;
         this.maximumArmor = 20D;
-        ANIMATION_EAT = Animation.create(20);
         updateAttributes();
         initDragonInv();
         if (FMLCommonHandler.instance().getSide().isClient()) {
@@ -658,23 +658,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.setTackling(compound.getBoolean("Tackle"));
         this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
         this.setCommand(compound.getInteger("Command"));
-    }
-
-    @Nullable
-    public Entity getControllingPassenger() {
-        for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
-                EntityPlayer player = (EntityPlayer) passenger;
-                if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
-                    return player;
-                }
-            }
-        }
-        return null;
-    }
-
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
     }
 
     @Override
@@ -1541,6 +1524,23 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean doesWantToLand() {
         return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || this.isStoned() || this.isChained() && flyTicks > 100;
+    }
+
+    @Nullable
+    public Entity getControllingPassenger() {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
+                EntityPlayer player = (EntityPlayer) passenger;
+                if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isRidingPlayer(EntityPlayer player) {
+        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
     }
 
     @Override

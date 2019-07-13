@@ -29,7 +29,7 @@ import java.util.Random;
 
 public class EntityFireDragon extends EntityDragonBase {
 
-	public static Animation ANIMATION_FIRECHARGE;
+	public static final Animation ANIMATION_FIRECHARGE = Animation.create(25);
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
 	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
@@ -46,13 +46,6 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
 		this.setPathPriority(PathNodeType.LAVA, 8.0F);
 		this.isImmuneToFire = true;
-		ANIMATION_SPEAK = Animation.create(20);
-		ANIMATION_BITE = Animation.create(35);
-		ANIMATION_SHAKEPREY = Animation.create(65);
-		ANIMATION_TAILWHACK = Animation.create(40);
-		ANIMATION_FIRECHARGE = Animation.create(25);
-		ANIMATION_WINGBLAST = Animation.create(50);
-		ANIMATION_ROAR = Animation.create(40);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 		this.stepHeight = 1;
 	}
