@@ -285,6 +285,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
+    @Nonnull
     @Override
     protected PathNavigate createNavigator(@Nonnull World worldIn) {
         return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
@@ -305,6 +306,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return hasHomePosition;
     }
 
+    @Nonnull
     @Override
     public BlockPos getHomePosition() {
         if (homePos == null) {
@@ -945,7 +947,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
             return true;
         } else if (!this.isModelDead()) {
-
             if (!stack.isEmpty()) {
                 Item item = stack.getItem();
                 if (item instanceof Interactable) {
@@ -953,16 +954,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         return true;
                     }
                 }
-            }
 
-            if (this.isOwner(player)) {
-                if (!stack.isEmpty()) {
+                if (isTamed()) {
                     if (this.isBreedingItem(stack) && this.isAdult()) {
                         this.setGrowingAge(0);
                         this.consumeItemFromStack(player, stack);
                         this.setInLove(player);
                         return true;
                     }
+
                     int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                         //this.growDragon(1);
@@ -976,7 +976,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                         return true;
                     }
-                } else {
+                }
+            } else {
+                if (this.isOwner(player)) {
                     if (!player.isSneaking()) {
                         if (this.isChild()) {
                             getNavigator().clearPath();

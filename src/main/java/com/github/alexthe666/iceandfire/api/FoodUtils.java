@@ -25,7 +25,7 @@ public class FoodUtils {
     }
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish){
-        if(item != null && item != ItemStack.EMPTY && item.getItem() instanceof ItemFood){
+        if(item != null && !item.isEmpty() && item.getItem() instanceof ItemFood){
             int food = ((ItemFood)item.getItem()).getHealAmount(item) * 10;
             if(!meatOnly){
                 return food;
