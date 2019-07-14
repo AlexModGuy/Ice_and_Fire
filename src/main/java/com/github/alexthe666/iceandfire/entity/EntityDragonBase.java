@@ -970,7 +970,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
                         this.playEatSound();
                         this.spawnItemCrackParticles(stack.getItem());
-                        this.eatFoodBonus(stack);
                         if (!player.isCreative()) {
                             stack.shrink(1);
                         }
@@ -1023,10 +1022,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else {
             return loot.get(0);
         }
-    }
-
-    public void eatFoodBonus(ItemStack stack) {
-
     }
 
     @Override
@@ -1102,12 +1097,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     this.setAnimation(ANIMATION_TAILWHACK);
                 }
                 if (this.getAnimation() == ANIMATION_TAILWHACK && this.getAnimationTick() == 10) {
-                    IBlockState state = world.getBlockState(new BlockPos(this));
                     BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, this.posX, this.posY, this.posZ, (4) * this.getDragonStage() - 2);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
                     this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1, 1);
-
                 }
             }
         }
