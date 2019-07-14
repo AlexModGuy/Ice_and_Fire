@@ -116,7 +116,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public float ridingProgress;
     public float tackleProgress;
     public ContainerHorseChest dragonInv;
-    public boolean isDaytime;
     public boolean attackDecision;
     public int flightCycle;
     public BlockPos airTarget;
@@ -551,7 +550,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean isSittingCommand() {
-        return  getCommand() == 1;
+        return getCommand() == 1;
     }
 
     @Override
@@ -838,9 +837,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             case 3:
                 return this.dataManager.get(TAIL_ARMOR);
         }
-    }
-
-    public void riderShootFire(Entity controller) {
     }
 
     @Override
@@ -1309,16 +1305,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     this.flyTicks = 0;
                 }
             }
-
-            if (flyHovering == 0) {
-                // move upwards
-            }
-            if (flyHovering == 1) {
-                // move down
-            }
-            if (flyHovering == 2) {
-                // stay still
-            }
+// look like unused code
+//            if (flyHovering == 0) {
+//                // move upwards
+//            }
+//            if (flyHovering == 1) {
+//                // move down
+//            }
+//            if (flyHovering == 2) {
+//                // stay still
+//            }
         }
         if (this.isSleeping()) {
             this.getNavigator().clearPath();
@@ -1343,7 +1339,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setHovering(!this.onGround);
             if (this.onGround) {
                 flyTicks = 0;
-                this.setFlying(false);
             }
             //this.motionY -= 0.26D;
         }
@@ -1441,7 +1436,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         } else {
             if (!this.isTamed() && this.isSleeping()) {
-                double checkLength = getMaxAttackPlayerDistance();
+                double checkLength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
                 EntityPlayer player = world.getClosestPlayerToEntity(this, checkLength);
                 if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
                     this.setSleeping(false);
@@ -1523,7 +1518,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || this.isStoned() || this.isChained() && flyTicks > 100;
+        return this.flyTicks > 6000
+                || down()
+                || flyTicks > 40 && this.flyProgress == 0
+                || this.isStoned()
+                || this.isChained() && flyTicks > 100
+                || !this.isDaytime() && getAttackTarget() == null && this.getPassengers().isEmpty();
     }
 
     @Nullable
@@ -1768,15 +1768,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
         }
         if (!world.isRemote
-                && !this.isInWater()
                 && !this.isSleeping()
+                && !this.isInWater()
                 && this.onGround
                 && !this.isFlying()
                 && !this.isHovering()
                 && this.getAttackTarget() == null
                 && !this.isDaytime()
                 && this.getRNG().nextInt(250) == 0
-                && this.getAttackTarget() == null
                 && this.getPassengers().isEmpty()) {
             this.setSleeping(true);
         }
@@ -1965,20 +1964,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && !isFire) {
-                    return true;
-                }
-                return rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
+                return isTargetInAir(pos) || rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
             }
         }
         return false;
     }
 
     private void flyAround() {
-        if (airTarget != null) {
-            if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
-                airTarget = null;
-            }
+        if (!isTargetInAir(airTarget) || flyTicks > 6000 || !this.isFlying()) {
+            airTarget = null;
+        } else {
             flyTowardsTarget();
         }
     }
@@ -1987,7 +1982,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (airTarget != null && airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight) {
             airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
         }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+        if (isTargetInAir(airTarget) && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double y = this.attackDecision ? airTarget.getY() : this.posY;
 
             double targetX = airTarget.getX() + 0.5D - posX;
@@ -2006,14 +2001,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
             this.rotationPitch = this.updateRotation(this.rotationPitch, f1, 30F);
             this.rotationYaw = this.updateRotation(this.rotationYaw, f, 30F);
-
-            if (!this.isFlying()) {
-                this.setFlying(true);
-            }
         } else {
             this.airTarget = null;
         }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+        if (isTargetInAir(airTarget) && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
             this.setFlying(false);
             this.setHovering(true);
             this.flyHovering = 1;
@@ -2037,9 +2028,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return this.dataManager.get(AGINGDISABLED);
     }
 
-    private boolean isTargetInAir() {
-        return airTarget != null
-                && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || (this instanceof EntityIceDragon && (world.getBlockState(airTarget).getMaterial() == Material.WATER || world.getBlockState(airTarget).getMaterial() == Material.AIR)));
+    public boolean isTargetInAir(@Nullable BlockPos target) {
+        if (target != null) {
+            Material material = world.getBlockState(target).getMaterial();
+            return material == Material.AIR || (this instanceof EntityIceDragon && material == Material.WATER);
+        }
+        return false;
     }
 
     private float updateRotation(float angle, float targetAngle, float maxIncrease) {
@@ -2145,10 +2139,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         super.travel(strafe, forward, vertical);
-    }
-
-    private double getMaxAttackPlayerDistance() {
-        return this.getEntityBoundingBox().getAverageEdgeLength() * 3;
     }
 
     @Override
@@ -2275,6 +2265,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) this.height * 0.5D, vec2.z), false, true, false);
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
+
+    protected abstract void riderShootFire(Entity controller);
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 

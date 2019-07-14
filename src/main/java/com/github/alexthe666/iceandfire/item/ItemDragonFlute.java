@@ -25,37 +25,27 @@ public class ItemDragonFlute extends Item {
 		this.setCreativeTab(IceAndFire.TAB_ITEMS);
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
 		ItemStack itemStackIn = player.getHeldItem(hand);
 		player.getCooldownTracker().setCooldown(this, 60);
 
 		float chunksize = 16 * IceAndFire.CONFIG.dragonFluteDistance;
 		List<Entity> list = worldIn.<Entity>getEntitiesWithinAABBExcludingEntity(player, (new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)).grow(chunksize, 256, chunksize));
-		Collections.sort(list, new Sorter(player));
+		list.sort(new Sorter(player));
 		List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();
-		Iterator<Entity> itr_entities = list.iterator();
-		while (itr_entities.hasNext()) {
-			Entity entity = itr_entities.next();
+		for (Entity entity : list) {
 			if (entity instanceof IDragonFlute) {
 				dragons.add((IDragonFlute) entity);
 			}
 		}
 
-		Iterator<IDragonFlute> itr_dragons = dragons.iterator();
-		while (itr_dragons.hasNext()) {
-			IDragonFlute dragon = itr_dragons.next();
+		for (IDragonFlute dragon : dragons) {
 			dragon.onHearFlute(player);
-			/*
-			if(dragon.isTamed() && dragon.isOwner(player)) {
-                if (dragon.isFlying() || dragon.isHovering()) {
-                    dragon.setFlying(false);
-                    dragon.setHovering(false);
-                }
-            }*/
 		}
 		worldIn.playSound(player, player.getPosition(), ModSounds.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
 
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 	public static class Sorter implements Comparator<Entity> {

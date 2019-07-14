@@ -279,7 +279,8 @@ public class EntityIceDragon extends EntityDragonBase {
 	}
 
 
-	public void riderShootFire(Entity controller) {
+	@Override
+	protected void riderShootFire(Entity controller) {
 		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
 			if (this.getAnimation() != ANIMATION_FIRECHARGE) {
 				this.setAnimation(ANIMATION_FIRECHARGE);
