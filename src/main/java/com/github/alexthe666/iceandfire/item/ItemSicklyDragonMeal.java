@@ -27,7 +27,6 @@ public class ItemSicklyDragonMeal extends ItemGenericDesc implements Interactabl
                     dragon.spawnItemCrackParticles(Items.POISONOUS_POTATO);
                     dragon.spawnItemCrackParticles(Items.POISONOUS_POTATO);
                     dragon.setAgingDisabled(true);
-                    dragon.eatFoodBonus(stack);
                     if (!player.isCreative()) {
                         stack.shrink(1);
                     }

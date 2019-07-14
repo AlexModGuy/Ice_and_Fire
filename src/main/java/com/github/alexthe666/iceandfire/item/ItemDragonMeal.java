@@ -24,7 +24,6 @@ public class ItemDragonMeal extends ItemGeneric implements Interactable {
                 dragon.spawnItemCrackParticles(stack.getItem());
                 dragon.spawnItemCrackParticles(Items.BONE);
                 dragon.spawnItemCrackParticles(Items.DYE);
-                dragon.eatFoodBonus(stack);
                 if (!player.isCreative()) {
                     stack.shrink(1);
                 }

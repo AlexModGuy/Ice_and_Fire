@@ -12,7 +12,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 			this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 			int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
 			((EntityDragonBase) this.taskOwner).setHunger(Math.min(100, ((EntityDragonBase) this.taskOwner).getHunger() + hunger));
-			((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getItem());
+			//TODO ((EntityDragonBase) this.taskOwner).eatFoodBonus(this.targetEntity.getItem());
 			this.taskOwner.setHealth(Math.min(this.taskOwner.getMaxHealth(), (int) (this.taskOwner.getHealth() + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce))));
 			if (EntityDragonBase.ANIMATION_EAT != null) {
 				((EntityDragonBase) this.taskOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
