@@ -25,7 +25,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
 			if (!dragon.isInWater()) {
 				return false;
 			}
-			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+			if (dragon.getControllingPassenger()!=null) {
 				return false;
 			}
 			if (dragon.waterTarget != null && (dragon.isTargetBlocked(new Vec3d(dragon.waterTarget)))) {

@@ -52,7 +52,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -1425,7 +1424,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (attackTarget != null) {
             if (Utils.isEntityDead(attackTarget)
                     || !this.canMoveWithoutSleeping()
-                    || (this.getOwner() != null && this.getPassengers().contains(this.getOwner()))
+                    || this.getControllingPassenger() != null
                     ) {
                 this.setAttackTarget(null);
             }
@@ -1445,12 +1444,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private void updateBreathingFire() {
         if (this.isBreathingFire()) {
             this.fireTicks++;
-            if (!world.isRemote && fireTicks > this.getDragonStage() * 25 || this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && this.fireStopTicks <= 0) {
+            if (!world.isRemote && fireTicks > this.getDragonStage() * 25 || this.getControllingPassenger() != null && this.fireStopTicks <= 0) {
                 this.setBreathingFire(false);
                 this.attackDecision = this.getRNG().nextBoolean();
                 fireTicks = 0;
             }
-            if (fireStopTicks > 0 && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
+            if (fireStopTicks > 0 && this.getControllingPassenger() != null) {
                 fireStopTicks--;
             }
         }
@@ -1753,7 +1752,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.spacebarTicks > 0) {
             this.spacebarTicks--;
         }
-        if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+        if (this.spacebarTicks > 20 && this.getControllingPassenger() != null && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
         if (world.isRemote && !this.isModelDead()) {
@@ -2189,8 +2188,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    private boolean isOwnersPet(EntityLivingBase living) {
-        return this.isTamed() && this.getOwner() != null && living instanceof EntityTameable && ((EntityTameable) living).getOwner() != null && this.getOwner().isEntityEqual(((EntityTameable) living).getOwner());
+    public boolean isOwnersPet(Entity entity) {
+        return this.isTamed()
+                && this.getOwnerId() != null
+                && entity instanceof EntityTameable
+                && ((EntityTameable) entity).getOwnerId() != null
+                && this.getOwnerId().equals(((EntityTameable) entity).getOwnerId());
     }
 
     public boolean isChained() {

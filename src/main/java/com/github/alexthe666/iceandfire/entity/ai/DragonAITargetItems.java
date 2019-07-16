@@ -39,7 +39,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 		this.targetEntitySelector = new Predicate<EntityItem>() {
 			@Override
 			public boolean apply(@Nullable EntityItem item) {
-				return item != null && !item.getItem().isEmpty() && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
+				return item != null && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
 			}
 		};
 	}
@@ -100,6 +100,8 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 				((EntityDragonBase) this.taskOwner).spawnItemCrackParticles(this.targetEntity.getItem().getItem());
 			}
 			resetTask();
+		} else {
+			// TODO move
 		}
 	}
 
