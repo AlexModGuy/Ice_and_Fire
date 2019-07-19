@@ -113,7 +113,10 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 					&& movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
 				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null
+					&& movingObject.entityHit instanceof IDragonProjectile
+					&& movingObject.entityHit != shootingEntity
+					|| movingObject.entityHit == null) {
 				if (this.shootingEntity != null
 						&& (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
 					return;
@@ -132,15 +135,13 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 						explosion2.doExplosionB(true);
 					}
 				}
-				this.setDead();
-			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
+			} else if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
 				if (this.shootingEntity != null && (!movingObject.entityHit.isEntityEqual(shootingEntity)
 						|| (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
 					return;
 				}
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
+					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 10.0F);
 					if (movingObject.entityHit instanceof EntityLivingBase) {
 						FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, FrozenEntityProperties.class);
 						if(frozenProps != null) {
@@ -161,8 +162,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				}
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
-				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, true);
-				this.setDead();
+				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, flag);
 			}
 		}
 		this.setDead();

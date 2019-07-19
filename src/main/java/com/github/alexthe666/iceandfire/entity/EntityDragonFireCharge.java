@@ -107,10 +107,19 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
 				return;
 			}
-			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
+			if (movingObject.entityHit != null
+					&& this.shootingEntity != null
+					&& this.shootingEntity instanceof EntityDragonBase
+					&& ((EntityDragonBase) this.shootingEntity).isTamed()
+					&& movingObject.entityHit instanceof EntityPlayer
+					&& ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
 				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+			if (movingObject.entityHit != null
+					&& movingObject.entityHit instanceof IDragonProjectile
+					&& movingObject.entityHit != shootingEntity
+					|| movingObject.entityHit == null
+					) {
 				if (this.shootingEntity != null
 						&& (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
 					return;
@@ -129,9 +138,10 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 						explosion2.doExplosionB(true);
 					}
 				}
-				this.setDead();
-			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
+			} else if (movingObject.entityHit != null
+					&& !(movingObject.entityHit instanceof IDragonProjectile)
+					&& !movingObject.entityHit.isEntityEqual(shootingEntity)
+					) {
 				if (this.shootingEntity != null && (movingObject.entityHit.isEntityEqual(shootingEntity)
 						||
 						(this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
@@ -155,7 +165,6 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, flag);
-				this.setDead();
 			}
 		}
 		this.setDead();

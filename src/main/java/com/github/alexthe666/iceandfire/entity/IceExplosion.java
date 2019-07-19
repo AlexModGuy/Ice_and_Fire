@@ -136,7 +136,7 @@ public class IceExplosion extends Explosion {
 							double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
 							double d10 = (1.0D - d12) * d14;
 							if (exploder instanceof EntityDragonBase) {
-								if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isTamed() && ((EntityDragonBase) exploder).isTamed() && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
+								if (((EntityDragonBase) exploder).isOwnersPet(entity)) {
 									return;
 								}
 								if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {

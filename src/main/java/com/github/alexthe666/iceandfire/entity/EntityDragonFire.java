@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -71,23 +70,33 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
 				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				if ((movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner())) {
+			if (movingObject.entityHit != null
+					&& movingObject.entityHit instanceof IDragonProjectile
+					&& this.shootingEntity != null
+					&& this.shootingEntity instanceof EntityDragonBase
+					&& movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
+				if (shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)) {
 					return;
 				}
-				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFire.CONFIG.dragonGriefing != 2) {
+				if (this.shootingEntity != null
+						&& this.shootingEntity instanceof EntityDragonBase
+						&& IceAndFire.CONFIG.dragonGriefing != 2
+						) {
 					FireExplosion explosion = new FireExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-				}else{
-					if(movingObject.entityHit != null){
-						movingObject.entityHit.setFire(5);
-					}
 				}
-				this.setDead();
-			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-				if (this.shootingEntity != null && (movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
+//				else {
+//					if (movingObject.entityHit != null) {
+//						movingObject.entityHit.setFire(5);
+//					}
+//				}
+			} else if (movingObject.entityHit != null
+					&& !(movingObject.entityHit instanceof IDragonProjectile)
+					&& !movingObject.entityHit.isEntityEqual(shootingEntity)
+					) {
+				if (this.shootingEntity != null
+						&& (movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
 					return;
 				}
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
@@ -99,11 +108,14 @@ public class EntityDragonFire extends EntityFireball implements IDragonProjectil
 				//if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
 				//	((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
 				//}
-				this.setDead();
+				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 3);
+				if (movingObject.entityHit != null) {
+					movingObject.entityHit.setFire(5);
+				}
 			}
 
 			if (movingObject.typeOfHit != Type.ENTITY || movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile)) {
-				this.setDead();
+				//TODO  why this.setDead();
 			}
 		}
 		this.setDead();

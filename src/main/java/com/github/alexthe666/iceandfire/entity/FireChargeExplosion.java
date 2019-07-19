@@ -138,7 +138,7 @@ public class FireChargeExplosion extends Explosion {
 						double d10 = (1.0D - d12) * d14;
 
 						if (exploder != null && exploder instanceof EntityDragonBase) {
-							if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
+							if (((EntityDragonBase) exploder).isOwnersPet(entity)) {
 								return;
 							}
 							if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {

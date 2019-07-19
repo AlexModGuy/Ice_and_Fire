@@ -2189,11 +2189,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean isOwnersPet(Entity entity) {
-        return this.isTamed()
-                && this.getOwnerId() != null
-                && entity instanceof EntityTameable
-                && ((EntityTameable) entity).getOwnerId() != null
-                && this.getOwnerId().equals(((EntityTameable) entity).getOwnerId());
+        if (this.isTamed() && this.getOwnerId() != null) {
+            if (entity instanceof EntityTameable
+                    && ((EntityTameable) entity).getOwnerId() != null
+                    && this.getOwnerId().equals(((EntityTameable) entity).getOwnerId())) {
+                return true;
+            }
+            if(entity instanceof EntityDragonPart && ((EntityDragonPart) entity).getParent() instanceof EntityDragonBase) {
+                return isOwnersPet(((EntityDragonPart) entity).getParent());
+            }
+        }
+
+        return false;
     }
 
     public boolean isChained() {

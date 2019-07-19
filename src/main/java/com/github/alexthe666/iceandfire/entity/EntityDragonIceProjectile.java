@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -68,8 +67,14 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
 				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
+			if (movingObject.entityHit != null
+					&& movingObject.entityHit instanceof IDragonProjectile
+					&& this.shootingEntity != null
+					&& this.shootingEntity instanceof EntityDragonBase
+					&& movingObject.entityHit != shootingEntity
+					|| movingObject.entityHit == null) {
+				if (this.shootingEntity != null
+						&& (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))) {
 					return;
 				}
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFire.CONFIG.dragonGriefing != 2) {
@@ -77,10 +82,13 @@ public class EntityDragonIceProjectile extends EntityFireball implements IDragon
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
 				}
-				this.setDead();
-			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-				if (this.shootingEntity != null && (movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
+			} else if (movingObject.entityHit != null
+					&& !(movingObject.entityHit instanceof IDragonProjectile)
+					&& !movingObject.entityHit.isEntityEqual(shootingEntity)) {
+				if (this.shootingEntity != null
+						&& (movingObject.entityHit.isEntityEqual(shootingEntity)
+						|| (this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) shootingEntity).isOwnersPet(movingObject.entityHit)))
+						) {
 					return;
 				}
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
