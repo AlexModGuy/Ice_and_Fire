@@ -228,6 +228,9 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(isModelDead()) {
+			return;
+		}
 		if(this.isInLava() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround){
 			this.setHovering(true);
 			this.setSleeping(false);

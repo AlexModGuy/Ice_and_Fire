@@ -54,11 +54,11 @@ public class EntityFireDragon extends EntityDragonBase {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
-		this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
-		this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
-		this.tasks.addTask(6, new DragonAIAirTarget(this));
-		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
-		this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, false));
+		this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
+		this.tasks.addTask(5, new DragonAIAirTarget(this));
+		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
+		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
 		this.tasks.addTask(8, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
@@ -210,6 +210,9 @@ public class EntityFireDragon extends EntityDragonBase {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(isModelDead()) {
+			return;
+		}
 		if(!world.isRemote){
 			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {

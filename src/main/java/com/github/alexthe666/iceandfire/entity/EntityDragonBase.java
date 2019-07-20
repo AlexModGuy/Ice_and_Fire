@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.Utils;
+import com.github.alexthe666.iceandfire.EntityUtils;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
@@ -1422,22 +1422,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private void updateAttackTarget() {
         Entity attackTarget = this.getAttackTarget();
         if (attackTarget != null) {
-            if (Utils.isEntityDead(attackTarget)
+            if (EntityUtils.isEntityDead(attackTarget)
                     || !this.canMoveWithoutSleeping()
                     || this.getControllingPassenger() != null
                     ) {
                 this.setAttackTarget(null);
             }
         } else {
-            if (!this.isTamed() && this.isSleeping()) {
-                double checkLength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
-                EntityPlayer player = world.getClosestPlayerToEntity(this, checkLength);
-                if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
-                    this.setSleeping(false);
-                    this.setSitting(false);
-                    this.setAttackTarget(player);
-                }
-            }
+//            if (!this.isTamed() && this.isSleeping()) {
+//                double checkLength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
+//                EntityPlayer player = world.getClosestPlayerToEntity(this, checkLength);
+//                if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
+//                    this.setSleeping(false);
+//                    this.setSitting(false);
+//                    this.setAttackTarget(player);
+//                }
+//            }
         }
     }
 
@@ -1742,9 +1742,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setHovering(true);
             this.setFlying(false);
         }
-        if ((this.isFlying() || this.isHovering()) && this.isInWater()) {
-            //this.motionY += 0.2;
-        }
+//        if ((this.isFlying() || this.isHovering()) && this.isInWater()) {
+//            //this.motionY += 0.2;
+//        }
         if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
             this.setFlying(true);
             this.setHovering(false);
@@ -1815,10 +1815,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        if (this.isTackling()) {
+        if (this.isModelDead()) {
             return false;
         }
-        if (this.isModelDead()) {
+        if (this.isTackling()) {
             return false;
         }
         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -1833,7 +1833,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void updateRidden() {
         Entity entity = this.getRidingEntity();
-        if (entity != null && Utils.isEntityDead(entity)) {
+        if (entity != null && EntityUtils.isEntityDead(entity)) {
             this.dismountRidingEntity();
         } else {
             this.motionX = 0.0D;

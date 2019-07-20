@@ -1,10 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.EntityUtils;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.google.common.base.Predicate;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,45 +12,57 @@ import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
 
 public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
-	private EntityDragonBase dragon;
+    private EntityDragonBase dragon;
 
-	public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight) {
-		super(entityIn, classTarget, 0, checkSight, false, new Predicate<Entity>() {
-			@Override
-			public boolean apply(@Nullable Entity entity) {
-				return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase)entity);
-			}
-		});
-		this.dragon = entityIn;
-	}
 
-	@Override
-	public boolean shouldExecute() {
-		if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
-			float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
-			if (dragonSize >= this.targetEntity.width) {
-				if(this.targetEntity instanceof EntityDragonBase) {
-					EntityDragonBase dragon = (EntityDragonBase) this.targetEntity;
-					return (dragon.getOwner() == null || this.dragon.getOwner() == null || !this.dragon.isOwner(dragon.getOwner())) && !dragon.isModelDead();
-				}
-				if (this.targetEntity instanceof EntityPlayer && dragon.isTamed()) {
-					return false;
-				} else {
+    public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight) {
+        super(entityIn, classTarget, checkSight, false);
+        this.dragon = entityIn;
+    }
 
-					if (!dragon.isOwner(this.targetEntity)
-							&& FoodUtils.getFoodPoints(this.targetEntity) > 0
-							&& dragon.canMove()
-							&& (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof EntityPlayer)) {
-						return !dragon.isTamed() || DragonUtils.canTameDragonAttack(dragon, this.targetEntity);
-					}
-				}
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean shouldExecute() {
+        if (!dragon.canMoveWithoutSleeping()) {
+            return false;
+        }
+        return super.shouldExecute();
+    }
 
-	@Override
-	protected AxisAlignedBB getTargetableArea(double targetDistance) {
-		return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
-	}
+    @Override
+    protected boolean isSuitableTarget(@Nullable EntityLivingBase target, boolean includeInvincibles) {
+        if (super.isSuitableTarget(target, includeInvincibles)) {
+            if (target != null && EntityUtils.isEntityAlive(target) && !dragon.getClass().equals(target.getClass())) {
+                if (dragon.isOwnersPet(target)) {
+                    return false;
+                }
+                float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
+                if (dragonSize >= target.width) {
+                    if (target instanceof EntityPlayer && dragon.isTamed()) {
+                        return false;
+                    } else {
+                        if (FoodUtils.getFoodPoints(target) > 0
+                                && (dragon.getHunger() < 90 || !dragon.isTamed() && target instanceof EntityPlayer)) {
+                            return !dragon.isTamed() || DragonUtils.canTameDragonAttack(dragon, target);
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+        return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return super.shouldContinueExecuting();
+    }
+
+    @Override
+    public void updateTask() {
+        super.updateTask();
+    }
 }

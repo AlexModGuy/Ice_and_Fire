@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.Utils;
+import com.github.alexthe666.iceandfire.EntityUtils;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.Entity;
@@ -62,7 +62,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 
     private BlockPos findAirTarget() {
         Entity entity = dragon.getAttackTarget();
-        if (entity == null || Utils.isEntityDead(entity)) {
+        if (entity == null || EntityUtils.isEntityDead(entity)) {
             BlockPos pos = DragonUtils.getBlockInView(dragon);
             if (pos != null && dragon.isTargetInAir(pos)) {
                 return pos;

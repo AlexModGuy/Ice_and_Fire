@@ -60,7 +60,7 @@ public class DragonAIWaterTarget extends EntityAIBase {
 		if (properties != null && properties.isStone) {
 			return false;
 		}
-		return dragon.airTarget != null;
+		return dragon.waterTarget != null;
 	}
 
 	public Vec3d findWaterTarget() {

@@ -267,9 +267,7 @@ public class DragonUtils {
 	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
 		if(entity instanceof EntityTameable){
 			EntityTameable tameable = (EntityTameable)entity;
-			if(tameable.getOwnerId() != null && cockatrice.getOwnerId() != null && tameable.getOwnerId().equals(cockatrice.getOwnerId())){
-				return true;
-			}
+			return tameable.getOwnerId() != null && cockatrice.getOwnerId() != null && tameable.getOwnerId().equals(cockatrice.getOwnerId());
 		}
 		return false;
 	}

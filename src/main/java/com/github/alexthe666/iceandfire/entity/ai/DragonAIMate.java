@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -14,14 +13,9 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-
-import static com.github.alexthe666.iceandfire.IceAndFire.NAME;
 
 public class DragonAIMate extends EntityAIBase {
 
@@ -88,7 +82,7 @@ public class DragonAIMate extends EntityAIBase {
 	 * valid mate found.
 	 */
 	private EntityDragonBase getNearbyMate() {
-		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(
+		List<EntityDragonBase> list = this.theWorld.getEntitiesWithinAABB(
 				this.dragon.getClass(),
 				this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D)
 		);
@@ -142,7 +136,7 @@ public class DragonAIMate extends EntityAIBase {
 				double d3 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
 				double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
 				double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
-				this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2, new int[0]);
+				this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2);
 			}
 			BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
 			BlockPos dirtPos = eggPos.add(1, 0, 1);
