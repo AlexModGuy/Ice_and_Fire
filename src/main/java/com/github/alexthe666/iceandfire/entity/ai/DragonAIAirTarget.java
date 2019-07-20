@@ -60,6 +60,12 @@ public class DragonAIAirTarget extends EntityAIBase {
         return dragon.airTarget != null;
     }
 
+    @Override
+    public void resetTask() {
+        super.resetTask();
+        dragon.airTarget = null;
+    }
+
     private BlockPos findAirTarget() {
         Entity entity = dragon.getAttackTarget();
         if (entity == null || EntityUtils.isEntityDead(entity)) {

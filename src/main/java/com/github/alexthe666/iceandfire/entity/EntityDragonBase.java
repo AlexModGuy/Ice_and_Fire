@@ -1323,7 +1323,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && getAttackTarget() == null) {
             flyAround();
         } else if (getAttackTarget() != null) {
-            flyTowardsTarget();
+            flyTowardsTarget(new BlockPos((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ));
         }
         if (this.onGround && flyTicks != 0) {
             flyTicks = 0;
@@ -1967,13 +1967,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     private void flyAround() {
         if (!isTargetInAir(airTarget) || flyTicks > 6000 || !this.isFlying()) {
             airTarget = null;
-        } else {
-            flyTowardsTarget();
+        } else if (airTarget != null) {
+            flyTowardsTarget(airTarget);
         }
     }
 
-    private void flyTowardsTarget() {
-        if (airTarget != null && airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight) {
+    private void flyTowardsTarget(@Nonnull BlockPos airTarget) {
+        if (airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight) {
             airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
         }
         if (isTargetInAir(airTarget) && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
@@ -2195,7 +2195,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     && this.getOwnerId().equals(((EntityTameable) entity).getOwnerId())) {
                 return true;
             }
-            if(entity instanceof EntityDragonPart && ((EntityDragonPart) entity).getParent() instanceof EntityDragonBase) {
+            if (entity instanceof EntityDragonPart && ((EntityDragonPart) entity).getParent() instanceof EntityDragonBase) {
                 return isOwnersPet(((EntityDragonPart) entity).getParent());
             }
         }

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.EntityUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -37,7 +38,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 		if (!dragon.canMoveWithoutSleeping()) {
 			return false;
 		}
-		if (!entitylivingbase.isEntityAlive()) {
+		if (!EntityUtils.isEntityAlive(entitylivingbase)) {
 			return false;
 		} else {
 			if (canPenalize) {
@@ -57,7 +58,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 	@Override
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-		if (entitylivingbase != null && entitylivingbase.isDead) {
+		if (entitylivingbase != null && EntityUtils.isEntityDead(entitylivingbase)) {
 			this.resetTask();
 			return false;
 		}
