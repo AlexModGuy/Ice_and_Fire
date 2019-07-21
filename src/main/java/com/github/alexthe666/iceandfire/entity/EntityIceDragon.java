@@ -58,18 +58,18 @@ public class EntityIceDragon extends EntityDragonBase {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new DragonAIMate(this, 1.0D));
-		this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, false));
-		this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
-		this.tasks.addTask(5, new DragonAIAirTarget(this));
-		this.tasks.addTask(5, new DragonAIWaterTarget(this));
-		this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
-		this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-		this.tasks.addTask(7, new DragonAILookIdle(this));
+		this.tasks.addTask(2, new DragonAIAttackMelee(this, 1.5D, false));
+		this.tasks.addTask(3, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
+		this.tasks.addTask(4, new DragonAIAirTarget(this));
+		this.tasks.addTask(5, new DragonAITargetItems(this, false));
+		this.tasks.addTask(6, new DragonAIWaterTarget(this));
+		this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
+		this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+		this.tasks.addTask(9, new DragonAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true));
-		this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
 	}
 
 	@Override

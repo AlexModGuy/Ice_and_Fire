@@ -98,6 +98,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 			dragon.setTamed(true);
 			dragon.setHunger(50);
 			dragon.setOwnerId(ownerUUID);
+			dragon.setHomePos(pos);
 			if (!world.isRemote) {
 				world.spawnEntity(dragon);
 			}

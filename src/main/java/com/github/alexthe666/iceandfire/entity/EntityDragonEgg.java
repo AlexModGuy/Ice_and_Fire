@@ -151,6 +151,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
                 }
                 dragon.setTamed(true);
                 dragon.setOwnerId(this.getOwnerId());
+                dragon.setHomePos(pos);
                 this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
                 this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
                 this.setDead();
