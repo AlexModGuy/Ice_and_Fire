@@ -216,7 +216,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		if(!world.isRemote){
 			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
 				if ((!attackDecision || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
-					shootFireAtMob(this.getAttackTarget());
+					shootDragonBreathAtMob(this.getAttackTarget());
 				} else {
 					if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
 						attackEntityAsMob(this.getAttackTarget());
@@ -322,7 +322,8 @@ public class EntityFireDragon extends EntityDragonBase {
 		}
 	}
 
-	private void shootFireAtMob(EntityLivingBase entity) {
+	@Override
+	public void shootDragonBreathAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if (this.getRNG().nextInt(5) == 0) {
 				if (this.getAnimation() != ANIMATION_FIRECHARGE) {

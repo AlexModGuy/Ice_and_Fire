@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -40,9 +41,14 @@ public class DragonAITarget extends EntityAINearestAttackableTarget<EntityLiving
                     if (target instanceof EntityPlayer && dragon.isTamed()) {
                         return false;
                     } else {
-                        if (FoodUtils.getFoodPoints(target) > 0
-                                && (dragon.getHunger() < 90 || !dragon.isTamed() && target instanceof EntityPlayer)) {
-                            return !dragon.isTamed() || DragonUtils.canTameDragonAttack(dragon, target);
+                        boolean isTamed = dragon.isTamed();
+                        if(FoodUtils.getFoodPoints(target) > 0 && dragon.getHunger() < 90) {
+                            return !isTamed || DragonUtils.canTameDragonAttack(dragon, target);
+                        }
+                        if(!isTamed && target instanceof EntityPlayer) {
+                            return true;
+                        } else if(isTamed && target instanceof EntityMob) {
+                            return DragonUtils.canTameDragonAttack(dragon, target);
                         }
                     }
                 }

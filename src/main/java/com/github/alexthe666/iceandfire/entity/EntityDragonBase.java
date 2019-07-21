@@ -2275,6 +2275,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 
+    public abstract void shootDragonBreathAtMob(EntityLivingBase entity);
+
     public abstract ResourceLocation getDeadLootTable();
 
     public abstract String getVariantName(int variant);
