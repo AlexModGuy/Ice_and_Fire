@@ -64,7 +64,7 @@ public class EntityFireDragon extends EntityDragonBase {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true));
+		this.targetTasks.addTask(4, new DragonAITarget(this, true));
 	}
 
 	public String getVariantName(int variant) {

@@ -11,12 +11,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
 
-public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
+public class DragonAITarget extends EntityAINearestAttackableTarget<EntityLivingBase> {
     private EntityDragonBase dragon;
 
 
-    public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight) {
-        super(entityIn, classTarget, checkSight, false);
+    public DragonAITarget(EntityDragonBase entityIn, boolean checkSight) {
+        super(entityIn, EntityLivingBase.class, checkSight, false);
         this.dragon = entityIn;
     }
 
@@ -54,15 +54,5 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
     @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
         return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
-    }
-
-    @Override
-    public boolean shouldContinueExecuting() {
-        return super.shouldContinueExecuting();
-    }
-
-    @Override
-    public void updateTask() {
-        super.updateTask();
     }
 }

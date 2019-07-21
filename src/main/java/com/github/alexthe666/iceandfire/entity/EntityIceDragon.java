@@ -35,11 +35,11 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
 	public static final Animation ANIMATION_FIRECHARGE = Animation.create(25);
-	public static final float[] growth_stage_1 = new float[]{1F, 3F};
-	public static final float[] growth_stage_2 = new float[]{3F, 7F};
-	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
-	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
-	public static final float[] growth_stage_5 = new float[]{20F, 30F};
+	private static final float[] growth_stage_1 = new float[]{1F, 3F};
+	private static final float[] growth_stage_2 = new float[]{3F, 7F};
+	private static final float[] growth_stage_3 = new float[]{7F, 12.5F};
+	private static final float[] growth_stage_4 = new float[]{12.5F, 20F};
+	private static final float[] growth_stage_5 = new float[]{20F, 30F};
 	public boolean isSwimming;
 	public float swimProgress;
 	public int ticksSwiming;
@@ -69,7 +69,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true));
+		this.targetTasks.addTask(4, new DragonAITarget(this, true));
 	}
 
 	@Override
