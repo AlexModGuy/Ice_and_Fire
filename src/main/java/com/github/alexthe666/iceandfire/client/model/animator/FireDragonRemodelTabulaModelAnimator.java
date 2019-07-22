@@ -54,6 +54,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         AdvancedModelRenderer[] clawR = { model.getCube("ClawR")};
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
+            this.genderMob(entity, cube);
             if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
                 AdvancedModelRenderer walkPart = EnumRemodelDragonAnimations.GROUND_POSE.firedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
@@ -199,6 +200,19 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                     1.0F, 0.5F, 0.5F, -0.15F, -0.15F, 0F,
                     Minecraft.getMinecraft().getRenderPartialTicks()
             );
+        }
+    }
+
+    private void genderMob(EntityFireDragon entity, AdvancedModelRenderer cube) {
+        if(!entity.isMale()){
+            IceAndFireTabulaModel maleModel = EnumRemodelDragonAnimations.MALE.firedragon_model;
+            IceAndFireTabulaModel femaleModel = EnumRemodelDragonAnimations.FEMALE.firedragon_model;
+            float x = femaleModel.getCube(cube.boxName).rotateAngleX;
+            float y = femaleModel.getCube(cube.boxName).rotateAngleY;
+            float z = femaleModel.getCube(cube.boxName).rotateAngleZ;
+            if(x != maleModel.getCube(cube.boxName).rotateAngleX || y != maleModel.getCube(cube.boxName).rotateAngleY || z != maleModel.getCube(cube.boxName).rotateAngleZ) {
+                this.setRotateAngle(cube, 1F, x, y, z);
+            }
         }
     }
 

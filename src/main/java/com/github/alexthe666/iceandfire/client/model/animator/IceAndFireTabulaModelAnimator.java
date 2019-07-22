@@ -9,7 +9,7 @@ import net.minecraft.client.model.ModelBase;
 
 public class IceAndFireTabulaModelAnimator {
 
-    private IceAndFireTabulaModel baseModel;
+    protected IceAndFireTabulaModel baseModel;
 
     public IceAndFireTabulaModelAnimator(IceAndFireTabulaModel baseModel){
         this.baseModel = baseModel;
