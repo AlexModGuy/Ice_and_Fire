@@ -1004,6 +1004,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
             return true;
         } else if (!this.isModelDead()) {
+            if (stack.getItem() == ModItems.creative_dragon_meal) {
+                this.setTamedBy(player);
+                this.setHunger(this.getHunger() + 20);
+                this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                this.spawnItemCrackParticles(stack.getItem());
+                this.spawnItemCrackParticles(Items.BONE);
+                this.spawnItemCrackParticles(Items.DYE);
+                this.eatFoodBonus(stack);
+                if (!player.isCreative()) {
+                    stack.shrink(1);
+                }
+                return true;
+            }
             if (this.isOwner(player)) {
                 if (!stack.isEmpty()) {
                     if (this.isBreedingItem(stack) && this.isAdult()) {
@@ -1641,14 +1655,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
                 renderYawOffset = rotationYaw;
                 this.rotationYaw = passenger.rotationYaw;
-                float flyAddition = Math.max(flyProgress, hoverProgress) * 1.8F;
-                float flyBody = Math.max(flyProgress, hoverProgress) * 0.0065F;
-                float radius = 0.75F * ((0.3F - flyBody) * getRenderSize()) + ((this.getRenderSize() / 3) * flyAddition * 0.0065F);
-                float angle = (0.01745329251F * this.renderYawOffset);
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                double extraZ = (double) (radius * MathHelper.cos(angle));
-                double extraY = getRenderSize() * (0.35F + flyAddition * 0.001F);
-                passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+                Vec3d riderPos = this.getRiderPosition();
+                passenger.setPosition(riderPos.x, riderPos.y + passenger.height, riderPos.z);
 
                 this.stepHeight = 1;
             }
@@ -2299,6 +2307,29 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         Vec3d vec3d1 = rider.getLook(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
         return this.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+    }
+
+    public Vec3d getRiderPosition(){
+        float sitProg = this.sitProgress * 0.015F;
+        float deadProg = this.modelDeadProgress * -0.02F;
+        float hoverProg = this.hoverProgress * 0.03F;
+        float flyProg = this.flyProgress * 0.01F;
+        float sleepProg = this.sleepProgress * -0.025F;
+        float pitchAdjustment = 0;
+        float pitchMinus = 0;
+        float dragonPitch = 0;
+        float pitchLength = 0;
+        if (this.isFlying() || this.isHovering()) {
+            dragonPitch = this.dragonPitch / 90;
+            pitchLength = dragonPitch > 0 ? dragonPitch * 0.7F : dragonPitch;
+            pitchAdjustment = dragonPitch > 0 ? 1.1F : -1.5F;
+            pitchMinus = dragonPitch > 0 ? 3 : 1;
+        }
+        float xzMod = (0.1F + pitchLength * 0.7F) * getRenderSize();
+        float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + dragonPitch * pitchAdjustment * -0.6F * pitchMinus) * getRenderSize() * 0.3F);
+        float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        return new Vec3d(headPosX, headPosY, headPosZ);
     }
 
     public Vec3d getHeadPosition(){

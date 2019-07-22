@@ -17,9 +17,9 @@ public class ContainerDragonForge extends Container {
 
     public ContainerDragonForge(InventoryPlayer playerInventory, IInventory furnaceInventory) {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 56, 17));
-        this.addSlotToContainer(new SlotFurnaceFuel(furnaceInventory, 1, 74, 17));
-        this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, furnaceInventory, 2, 116, 35));
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 68, 34));
+        this.addSlotToContainer(new SlotFurnaceFuel(furnaceInventory, 1, 86, 34));
+        this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, furnaceInventory, 2, 148, 35));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

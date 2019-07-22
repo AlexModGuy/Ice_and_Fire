@@ -137,6 +137,8 @@ public class ModItems {
 	public static Item dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sickly_dragon_meal")
 	public static Item sickly_dragon_meal = new ItemGenericDesc("sickly_dragon_meal", "iceandfire.sickly_dragon_meal");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":creative_dragon_meal")
+	public static Item creative_dragon_meal = new ItemGeneric("creative_dragon_meal", "iceandfire.creative_dragon_meal", 2);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_dragon_flesh")
 	public static Item fire_dragon_flesh = new ItemDragonFlesh(true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_flesh")

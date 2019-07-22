@@ -144,14 +144,14 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         float degree_fly = 0.5F;
         if(!entity.isAIDisabled()) {
             if (!walking) {
-                model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, entity.ticksExisted, 1);
-                model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
-                model.chainWave(tailPartsWBody, speed_fly, degree_fly * -0.1F, 0, entity.ticksExisted, 1);
-                model.chainWave(neckParts, speed_fly, degree_fly * 0.2F, -4, entity.ticksExisted, 1);
-                model.chainWave(toesPartsL, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
-                model.chainWave(toesPartsR, speed_fly, degree_fly * 0.2F, -2, entity.ticksExisted, 1);
-                model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, entity.ticksExisted, 1);
-                model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, entity.ticksExisted, 1);
+                model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, ageInTicks, 1);
+                model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, ageInTicks, 1);
+                model.chainWave(tailPartsWBody, speed_fly, degree_fly * -0.1F, 0, ageInTicks, 1);
+                model.chainWave(neckParts, speed_fly, degree_fly * 0.2F, -4, ageInTicks, 1);
+                model.chainWave(toesPartsL, speed_fly, degree_fly * 0.2F, -2, ageInTicks, 1);
+                model.chainWave(toesPartsR, speed_fly, degree_fly * 0.2F, -2, ageInTicks, 1);
+                model.walk(model.getCube("ThighR"), -speed_fly, degree_fly * 0.1F, false, 0, 0, ageInTicks, 1);
+                model.walk(model.getCube("ThighL"), -speed_fly, degree_fly * 0.1F, true, 0, 0, ageInTicks, 1);
             } else {
                 model.bob(model.getCube("BodyUpper"), speed_walk * 2, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
                 model.bob(model.getCube("ThighR"), speed_walk, degree_walk * 1.7F, false, limbSwing, limbSwingAmount);
@@ -160,24 +160,24 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 model.chainWave(tailParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
                 model.chainSwing(neckParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
                 model.chainWave(neckParts, speed_walk, degree_walk * 0.05F, -2, limbSwing, limbSwingAmount);
-                model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, entity.ticksExisted, 1);
-                model.chainWave(tailParts, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
-                model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, entity.ticksExisted, 1);
-                model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, entity.ticksExisted, 1);
+                model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, ageInTicks, 1);
+                model.chainWave(tailParts, speed_idle, degree_idle * 0.15F, -2, ageInTicks, 1);
+                model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, ageInTicks, 1);
+                model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, ageInTicks, 1);
             }
-            model.bob(model.getCube("BodyUpper"), speed_idle, degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.bob(model.getCube("ThighR"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.bob(model.getCube("armR1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
-            model.bob(model.getCube("armL1"), speed_idle, -degree_idle * 1.3F, false, entity.ticksExisted, 1);
+            model.bob(model.getCube("BodyUpper"), speed_idle, degree_idle * 1.3F, false, ageInTicks, 1);
+            model.bob(model.getCube("ThighR"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
+            model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
+            model.bob(model.getCube("armR1"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
+            model.bob(model.getCube("armL1"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
             if(entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR){
                 model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
             }
             if(entity.isActuallyBreathingFire()){
                 float speed_shake = 0.7F;
                 float degree_shake = 0.1F;
-                model.chainFlap(neckParts, speed_shake, degree_shake, 2, entity.ticksExisted, 1);
-                model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, entity.ticksExisted, 1);
+                model.chainFlap(neckParts, speed_shake, degree_shake, 2, ageInTicks, 1);
+                model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, ageInTicks, 1);
             }
         }
         if(!entity.isModelDead()){
