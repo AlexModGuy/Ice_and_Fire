@@ -89,6 +89,12 @@ public enum EnumRemodelDragonAnimations {
                             System.out.println("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
+                        try {
+                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIce" + animation.fileSuffix));
+                        } catch (Exception e) {
+                            System.out.println("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
+                            e.printStackTrace();
+                        }
                         break;
                     case 1:
                         try {
@@ -100,6 +106,13 @@ public enum EnumRemodelDragonAnimations {
                         }
                         break;
                     case 2:
+                        try {
+                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIce" + animation.fileSuffix));
+                            animation.firedragon_model = animation.icedragon_model;
+                        } catch (Exception e) {
+                            System.out.println("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
+                            e.printStackTrace();
+                        }
                         break;
                 }
 

@@ -66,7 +66,7 @@ public class IaFDragonDestructionManager {
                 if(world.rand.nextBoolean()){
                     IBlockState transformState = transformBlockIce(world.getBlockState(pos));
                     world.setBlockState(pos, transformState);
-                    if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())){
+                    if(world.rand.nextInt(3) == 0 && transformState.isFullBlock() && world.isAirBlock(pos.up())){
                         world.setBlockState(pos.up(), ModBlocks.dragon_ice_spikes.getDefaultState());
                     }
                 }
@@ -91,7 +91,7 @@ public class IaFDragonDestructionManager {
                     if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
                         IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                         world.setBlockState(blockpos, transformState);
-                        if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())){
+                        if(world.rand.nextInt(3) == 0 && transformState.isFullBlock() && world.isAirBlock(blockpos.up())){
                             world.setBlockState(blockpos.up(), ModBlocks.dragon_ice_spikes.getDefaultState());
                         }
                     }

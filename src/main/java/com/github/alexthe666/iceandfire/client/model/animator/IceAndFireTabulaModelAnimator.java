@@ -31,6 +31,10 @@ public class IceAndFireTabulaModelAnimator {
         return pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
     }
 
+    public boolean isPositionEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
+        return pose.rotationPointX == original.defaultPositionX && pose.rotationPointY == original.defaultPositionY && pose.rotationPointZ == original.defaultPositionZ;
+    }
+
     public void transitionTo(AdvancedModelRenderer from, AdvancedModelRenderer to, float timer, float maxTime, boolean oldFashioned) {
         if(oldFashioned){
             from.rotateAngleX += ((to.rotateAngleX - from.rotateAngleX) / maxTime) * timer;
@@ -69,6 +73,12 @@ public class IceAndFireTabulaModelAnimator {
                 float toY = modelTo.getCube(cube.boxName).rotateAngleY;
                 float toZ = modelTo.getCube(cube.boxName).rotateAngleZ;
                 model.llibAnimator.rotate(cube, distance(cube.rotateAngleX, toX), distance(cube.rotateAngleY, toY), distance(cube.rotateAngleZ, toZ));
+            }
+            if (!isPositionEqual(baseModel.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
+                float toX = modelTo.getCube(cube.boxName).rotationPointX;
+                float toY = modelTo.getCube(cube.boxName).rotationPointY;
+                float toZ = modelTo.getCube(cube.boxName).rotationPointZ;
+                model.llibAnimator.move(cube, distance(cube.rotationPointX, toX), distance(cube.rotationPointY, toY), distance(cube.rotationPointZ, toZ));
             }
         }
     }

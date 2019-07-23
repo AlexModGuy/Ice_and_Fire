@@ -63,7 +63,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                 float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                if(isWing(model, cube) && entity.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST){
+                if(isWing(model, cube) && (entity.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST  || entity.getAnimation() == EntityDragonBase.ANIMATION_EPIC_ROAR)){
                     this.addToRotateAngle(cube, limbSwingAmount, walkPart.rotateAngleX, walkPart.rotateAngleY, walkPart.rotateAngleZ);
                 }else{
                     this.addToRotateAngle(cube, limbSwingAmount, prevX + deltaTicks * distance(prevX, x), prevY + deltaTicks * distance(prevY, y), prevZ + deltaTicks * distance(prevZ, z));
@@ -325,6 +325,29 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
         moveToPose(model, EnumRemodelDragonAnimations.ROAR3.firedragon_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.resetKeyframe(10);
+
+        model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_EPIC_ROAR);
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR1.firedragon_model);
+        model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR2.firedragon_model);
+        model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR3.firedragon_model);
+        model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR2.firedragon_model);
+        model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR3.firedragon_model);
+        model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
     }

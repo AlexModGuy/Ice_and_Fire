@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -55,6 +56,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		ANIMATION_FIRECHARGE = Animation.create(25);
 		ANIMATION_WINGBLAST = Animation.create(50);
 		ANIMATION_ROAR = Animation.create(40);
+		ANIMATION_EPIC_ROAR = Animation.create(60);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 		this.stepHeight = 1;
 	}
@@ -155,26 +157,28 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if(this.getAnimation() == ANIMATION_WINGBLAST){
+		if (this.getAnimation() == ANIMATION_WINGBLAST) {
 			return false;
 		}
-		switch (new Random().nextInt(4)) {
-			case 0:
+		switch (groundAttack) {
+			case BITE:
 				if (this.getAnimation() != this.ANIMATION_BITE) {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 					this.usingGroundAttack = this.getRNG().nextBoolean();
+					this.randomizeAttacks();
 					return flag;
 				}
 				break;
-			case 1:
+			case SHAKE_PREY:
 				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
 					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
 						this.setAnimation(this.ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
 						this.usingGroundAttack = this.getRNG().nextBoolean();
+						this.randomizeAttacks();
 						return true;
 					}
 				} else {
@@ -184,50 +188,43 @@ public class EntityIceDragon extends EntityDragonBase {
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 						this.usingGroundAttack = this.getRNG().nextBoolean();
+						this.randomizeAttacks();
 						return flag1;
 					}
 				}
 				break;
-			case 2:
+			case TAIL_WHIP:
 				if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
 					this.setAnimation(this.ANIMATION_TAILWHACK);
 					return false;
-				} else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
+				} else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
 					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 					if (entityIn instanceof EntityLivingBase) {
-						((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
+						((EntityLivingBase)entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
 					}
 					this.usingGroundAttack = this.getRNG().nextBoolean();
+					this.randomizeAttacks();
 					return flag2;
 				}
 				break;
-			case 3:
-				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
+			case WING_BLAST:
+				if (this.onGround && !this.isHovering() && !this.isFlying()) {
 					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
 						this.setAnimation(this.ANIMATION_WINGBLAST);
-						return false;
+						return true;
 					}
-				}else{
+				} else {
 					if (this.getAnimation() != this.ANIMATION_BITE) {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
 						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 						this.usingGroundAttack = this.getRNG().nextBoolean();
+						this.randomizeAttacks();
 						return flag;
 					}
 				}
 
-				break;
-			default:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
-					return false;
-				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					this.usingGroundAttack = this.getRNG().nextBoolean();
-					return flag;
-				}
 				break;
 		}
 
@@ -244,18 +241,27 @@ public class EntityIceDragon extends EntityDragonBase {
 			this.flyHovering = 0;
 			this.flyTicks = 0;
 		}
-		if(!world.isRemote){
-			if (this.getAttackTarget() != null && !this.isSleeping() && this.getAnimation() != ANIMATION_SHAKEPREY) {
-				if ((!usingGroundAttack || this.isFlying()) && !isTargetBlocked(new Vec3d(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ))) {
-					shootIceAtMob(this.getAttackTarget());
-				} else {
-					if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
-						attackEntityAsMob(this.getAttackTarget());
-					}
-
+		if (!world.isRemote && this.getAttackTarget() != null) {
+			if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+				attackEntityAsMob(this.getAttackTarget());
+			}
+			if(this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack){
+				shootIceAtMob(this.getAttackTarget());
+			}
+			if(this.airAttack == IaFDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100){
+				double difX = this.getAttackTarget().posX - this.posX;
+				double difY = this.getAttackTarget().posY + this.getAttackTarget().height - this.posY;
+				double difZ = this.getAttackTarget().posZ - this.posZ;
+				this.motionX += difX * 0.1D;
+				this.motionY += difY * 0.1D;
+				this.motionZ += difZ * 0.1D;
+				if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+					attackEntityAsMob(this.getAttackTarget());
+					usingGroundAttack = true;
+					randomizeAttacks();
+					setFlying(false);
+					setHovering(false);
 				}
-			} else {
-				this.setBreathingFire(false);
 			}
 		}
 		boolean swimming = isSwimming() && !isHovering() && !isFlying() && ridingProgress == 0;
@@ -294,9 +300,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				this.setAnimation(this.ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
-				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+				Vec3d headVec = this.getHeadPosition();
 				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
@@ -308,7 +312,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
-				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+				entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
 				if (!world.isRemote) {
 					world.spawnEntity(entitylargefireball);
 				}
@@ -379,12 +383,10 @@ public class EntityIceDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-					double d2 = entity.posX - headPosX;
-					double d3 = entity.posY - headPosY;
-					double d4 = entity.posZ - headPosZ;
+					Vec3d headVec = this.getHeadPosition();
+					double d2 = entity.posX - headVec.x;
+					double d3 = entity.posY - headVec.y;
+					double d4 = entity.posZ - headVec.z;
 					float inaccuracy = 1.0F;
 					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
@@ -393,7 +395,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
-					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+					entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
@@ -423,33 +425,67 @@ public class EntityIceDragon extends EntityDragonBase {
 		this.faceEntity(entity, 360, 360);
 	}
 
-	public void stimulateFire(double burnX, double burnY, double burnZ, int sync) {
+	public void stimulateFire(double burnX, double burnY, double burnZ, int syncType) {
+		if (syncType == 1 && !world.isRemote) {
+			//sync with client
+			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ, 0));
+		}
+		if (syncType == 2 && world.isRemote) {
+			//sync with server
+			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ, 0));
+		}
+		if (syncType == 3 && !world.isRemote) {
+			//sync with client, fire bomb
+			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ, 5));
+		}
+		if (syncType == 4 && world.isRemote) {
+			//sync with server, fire bomb
+			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ, 5));
+		}
+		if(syncType > 2 && syncType < 6){
+			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
+				this.setAnimation(this.ANIMATION_FIRECHARGE);
+			} else if (this.getAnimationTick() == 20) {
+				rotationYaw = renderYawOffset;
+				Vec3d headVec = this.getHeadPosition();
+				double d2 = burnX - headVec.x;
+				double d3 = burnY - headVec.y;
+				double d4 = burnZ - headVec.z;
+				float inaccuracy = 1.0F;
+				d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+				d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+				d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+				this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
+				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
+				entitylargefireball.setSizes(size, size);
+				entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
+				if (!world.isRemote) {
+					world.spawnEntity(entitylargefireball);
+				}
+			}
+			return;
+		}
 		this.getNavigator().clearPath();
 		this.burnParticleX = burnX;
 		this.burnParticleY = burnY;
 		this.burnParticleZ = burnZ;
-		float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-		float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-		float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-		double d2 = burnX - headPosX;
-		double d3 = burnY - headPosY;
-		double d4 = burnZ - headPosZ;
+		Vec3d headPos = getHeadPosition();
+		double d2 = burnX - headPos.x;
+		double d3 = burnY - headPos.y;
+		double d4 = burnZ - headPos.z;
 		float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
 		double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), 0);
 		double conqueredDistance = burnProgress / 40D * distance;
-		float inaccuracy = 0.5F;
-		d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
 		for (int i = 0; i < conqueredDistance; i++) {
-			double progressX = headPosX + d2 * (i / (float) distance);
-			double progressY = headPosY + d3 * (i / (float) distance);
-			double progressZ = headPosZ + d4 * (i / (float) distance);
-			if(canPositionBeSeen(progressX, progressY, progressZ)){
-				if(world.isRemote && rand.nextInt(5) == 0){
-					IceAndFire.PROXY.spawnDragonParticle("dragonice", world, headPosX, headPosY, headPosZ, 0, 0, 0, this);
+			double progressX = headPos.x + d2 * (i / (float) distance);
+			double progressY = headPos.y + d3 * (i / (float) distance);
+			double progressZ = headPos.z + d4 * (i / (float) distance);
+			if (canPositionBeSeen(progressX, progressY, progressZ)) {
+				if (world.isRemote && rand.nextInt(5) == 0) {
+					IceAndFire.PROXY.spawnDragonParticle("dragonice", world, headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
 				}
-			}else{
+			} else {
 				RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
 				BlockPos pos = result.getBlockPos();
 				IaFDragonDestructionManager.destroyAreaIce(world, pos, this);
@@ -461,7 +497,6 @@ public class EntityIceDragon extends EntityDragonBase {
 			double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
 			double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
 			IaFDragonDestructionManager.destroyAreaIce(world, new BlockPos(spawnX, spawnY, spawnZ), this);
-
 		}
 	}
 

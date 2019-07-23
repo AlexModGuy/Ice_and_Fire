@@ -292,15 +292,19 @@ public enum EnumDragonTextures {
         ARMORBODY1("armor_body_1"),
         ARMORBODY2("armor_body_2"),
         ARMORBODY3("armor_body_3"),
+        ARMORBODY4("armor_body_4"),
         ARMORHEAD1("armor_head_1"),
         ARMORHEAD2("armor_head_2"),
         ARMORHEAD3("armor_head_3"),
+        ARMORHEAD4("armor_head_4"),
         ARMORNECK1("armor_neck_1"),
         ARMORNECK2("armor_neck_2"),
         ARMORNECK3("armor_neck_3"),
+        ARMORNECK4("armor_neck_4"),
         ARMORTAIL1("armor_tail_1"),
         ARMORTAIL2("armor_tail_2"),
-        ARMORTAIL3("armor_tail_3");
+        ARMORTAIL3("armor_tail_3"),
+        ARMORTAIL4("armor_tail_4");
 
         public final ResourceLocation FIRETEXTURE;
         public final ResourceLocation ICETEXTURE;
@@ -329,6 +333,8 @@ public enum EnumDragonTextures {
                             return ARMORNECK2;
                         case 3:
                             return ARMORNECK3;
+                        case 4:
+                            return ARMORNECK4;
                     }
                 case 2:
                     //body
@@ -341,6 +347,8 @@ public enum EnumDragonTextures {
                             return ARMORBODY2;
                         case 3:
                             return ARMORBODY3;
+                        case 4:
+                            return ARMORBODY4;
                     }
                 case 3:
                     //tail
@@ -353,6 +361,8 @@ public enum EnumDragonTextures {
                             return ARMORTAIL2;
                         case 3:
                             return ARMORTAIL3;
+                        case 4:
+                            return ARMORTAIL4;
                     }
                 default:
                     //head
@@ -365,6 +375,8 @@ public enum EnumDragonTextures {
                             return ARMORHEAD2;
                         case 3:
                             return ARMORHEAD3;
+                        case 4:
+                            return ARMORHEAD4;
                     }
 
             }

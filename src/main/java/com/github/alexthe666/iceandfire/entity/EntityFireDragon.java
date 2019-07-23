@@ -51,6 +51,7 @@ public class EntityFireDragon extends EntityDragonBase {
         ANIMATION_FIRECHARGE = Animation.create(30);
         ANIMATION_WINGBLAST = Animation.create(50);
         ANIMATION_ROAR = Animation.create(40);
+        ANIMATION_EPIC_ROAR = Animation.create(60);
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
         this.stepHeight = 1;
     }
@@ -437,7 +438,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR};
+        return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityFireDragon.ANIMATION_TAILWHACK, EntityFireDragon.ANIMATION_FIRECHARGE, EntityFireDragon.ANIMATION_WINGBLAST, EntityFireDragon.ANIMATION_ROAR, EntityFireDragon.ANIMATION_EPIC_ROAR};
     }
 
     public boolean isBreedingItem(ItemStack stack) {

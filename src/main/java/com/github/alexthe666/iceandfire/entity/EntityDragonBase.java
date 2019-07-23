@@ -95,6 +95,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public static Animation ANIMATION_SHAKEPREY;
     public static Animation ANIMATION_WINGBLAST;
     public static Animation ANIMATION_ROAR;
+    public static Animation ANIMATION_EPIC_ROAR;
     public static Animation ANIMATION_TAILWHACK;
     public double minimumDamage;
     public double maximumDamage;
@@ -472,6 +473,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_diamond) {
             return 3;
+        }
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_silver) {
+            return 4;
         }
         return 0;
     }
@@ -945,6 +949,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     break;
                 case 3:
                     val += 5D;
+                    break;
+                case 4:
+                    val += 3D;
                     break;
             }
         }
@@ -2224,21 +2231,43 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (EntityGorgon.isStoneMob(this)) {
             return;
         }
-        if (this.getAnimation() != ANIMATION_ROAR) {
-            this.setAnimation(ANIMATION_ROAR);
-            this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
-        }
-        if (this.getDragonStage() > 3) {
-            int size = (this.getDragonStage() - 3) * 30;
-            List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
-            for (Entity entity : entities) {
-                boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
-                if (entity instanceof EntityLivingBase && !isStrongerDragon) {
-                    EntityLivingBase living = (EntityLivingBase) entity;
-                    if (this.isOwner(living) || this.isOwnersPet(living)) {
-                        living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * size));
-                    } else {
-                        living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 30 * size));
+        if(rand.nextBoolean()){
+            if (this.getAnimation() != ANIMATION_EPIC_ROAR) {
+                this.setAnimation(ANIMATION_EPIC_ROAR);
+                this.playSound(this.getRoarSound(), this.getSoundVolume() + 3 + Math.max(0, this.getDragonStage() - 2), this.getSoundPitch() * 0.7F);
+            }
+            if (this.getDragonStage() > 3) {
+                int size = (this.getDragonStage() - 3) * 30;
+                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
+                for (Entity entity : entities) {
+                    boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
+                    if (entity instanceof EntityLivingBase && !isStrongerDragon) {
+                        EntityLivingBase living = (EntityLivingBase) entity;
+                        if (this.isOwner(living) || this.isOwnersPet(living)) {
+                            living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50 * size));
+                        } else {
+                            living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
+                        }
+                    }
+                }
+            }
+        }else{
+            if (this.getAnimation() != ANIMATION_ROAR) {
+                this.setAnimation(ANIMATION_ROAR);
+                this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
+            }
+            if (this.getDragonStage() > 3) {
+                int size = (this.getDragonStage() - 3) * 30;
+                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
+                for (Entity entity : entities) {
+                    boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
+                    if (entity instanceof EntityLivingBase && !isStrongerDragon) {
+                        EntityLivingBase living = (EntityLivingBase) entity;
+                        if (this.isOwner(living) || this.isOwnersPet(living)) {
+                            living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * size));
+                        } else {
+                            living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 30 * size));
+                        }
                     }
                 }
             }
@@ -2337,6 +2366,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
+        int animationTick = 0;
+        if(this.getAnimationTick() < 10){
+            animationTick = this.getAnimationTick();
+        }else if(this.getAnimationTick() > 50){
+            animationTick = 60 - this.getAnimationTick();
+        }else{
+            animationTick = 10;
+        }
+        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? animationTick * 0.1F : 0;
         float sleepProg = this.sleepProgress * -0.025F;
         float pitchMulti = 0;
         float pitchAdjustment = 0;
@@ -2360,7 +2398,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float)Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
         float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
     }

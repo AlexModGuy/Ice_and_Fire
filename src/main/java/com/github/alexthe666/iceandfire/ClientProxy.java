@@ -4,10 +4,7 @@ import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
-import com.github.alexthe666.iceandfire.client.model.animator.FireDragonRemodelTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.animator.*;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
@@ -112,6 +109,11 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 1, new ModelResourceLocation("iceandfire:dragonarmor_diamond_neck", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 2, new ModelResourceLocation("iceandfire:dragonarmor_diamond_body", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_diamond, 3, new ModelResourceLocation("iceandfire:dragonarmor_diamond_tail", "inventory"));
+		ModelBakery.registerItemVariants(ModItems.dragon_armor_silver, new ResourceLocation("iceandfire:dragonarmor_diamond_head"), new ResourceLocation("iceandfire:dragonarmor_diamond_neck"), new ResourceLocation("iceandfire:dragonarmor_diamond_body"), new ResourceLocation("iceandfire:dragonarmor_diamond_tail"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_silver, 0, new ModelResourceLocation("iceandfire:dragonarmor_silver_head", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_silver, 1, new ModelResourceLocation("iceandfire:dragonarmor_silver_neck", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_silver, 2, new ModelResourceLocation("iceandfire:dragonarmor_silver_body", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.dragon_armor_silver, 3, new ModelResourceLocation("iceandfire:dragonarmor_silver_tail", "inventory"));
 		for(int i = 0; i < EnumHippogryphTypes.values().length; i++){
 			ModelLoader.setCustomModelResourceLocation(ModItems.hippogryph_egg, i, new ModelResourceLocation("iceandfire:hippogryph_egg", "inventory"));
 		}
@@ -259,7 +261,7 @@ public class ClientProxy extends CommonProxy {
 
 		try {
 			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFireGround"), new FireDragonRemodelTabulaModelAnimator());
-			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
+			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIceGround"), new IceDragonRemodelTabulaModelAnimator());
 			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
