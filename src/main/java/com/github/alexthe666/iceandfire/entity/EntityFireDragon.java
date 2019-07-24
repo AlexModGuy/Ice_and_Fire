@@ -164,18 +164,8 @@ public class EntityFireDragon extends EntityDragonBase {
 						this.setAnimation(ANIMATION_WINGBLAST);
 						return true;
 					}
-				}else{
-					if (this.getAnimation() != ANIMATION_BITE) {
-						this.setAnimation(ANIMATION_BITE);
-						return false;
-					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						this.attackDecision = this.getRNG().nextBoolean();
-						return flag;
-					}
+					break;
 				}
-
-				break;
 			default:
 				if (this.getAnimation() != ANIMATION_BITE) {
 					this.setAnimation(ANIMATION_BITE);

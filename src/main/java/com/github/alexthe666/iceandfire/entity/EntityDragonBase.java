@@ -130,14 +130,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     float[][] growth_stages;
     public boolean isFire = this instanceof EntityFireDragon;
     public LegSolverQuadruped legSolver;
-    protected int flyHovering;
+    public int flyHovering;
     private boolean isSleeping;
     private boolean isHovering;
     private boolean isFlying;
     private boolean isBreathingFire;
     private boolean isTackling;
     private int fireTicks;
-    private int hoverTicks;
+    public int hoverTicks;
     private boolean isModelDead;
     private int animationTick;
     private Animation currentAnimation;
@@ -1480,7 +1480,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    private void spawnGroundEffects() {
+    public void spawnGroundEffects() {
         for (int i = 0; i < this.getRenderSize(); i++) {
             for (int i1 = 0; i1 < 20; i1++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;
@@ -1972,7 +1972,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    private void flyTowardsTarget(@Nonnull BlockPos airTarget) {
+    public void flyTowardsTarget(@Nonnull BlockPos airTarget) {
         if (airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight) {
             airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
         }
@@ -2009,7 +2009,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return (2 + (this.getAgeInDays() / 125) * 2) * (this.isTackling() ? 2 : 1);
     }
 
-    private boolean isTackling() {
+    public boolean isTackling() {
         if (world.isRemote) {
             boolean tackling = this.dataManager.get(TACKLE);
             this.isTackling = tackling;

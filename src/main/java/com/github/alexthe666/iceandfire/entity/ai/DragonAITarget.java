@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -23,7 +22,11 @@ public class DragonAITarget extends EntityAINearestAttackableTarget<EntityLiving
 
     @Override
     public boolean shouldExecute() {
-        if (!dragon.canMoveWithoutSleeping()) {
+        boolean isTamed = dragon.isTamed();
+        if (!isTamed && !dragon.canMoveWithoutSleeping()) {
+            return false;
+        }
+        if (isTamed && !dragon.canMove()) {
             return false;
         }
         return super.shouldExecute();
@@ -47,9 +50,10 @@ public class DragonAITarget extends EntityAINearestAttackableTarget<EntityLiving
                         }
                         if(!isTamed && target instanceof EntityPlayer) {
                             return true;
-                        } else if(isTamed && target instanceof EntityMob) {
-                            return DragonUtils.canTameDragonAttack(dragon, target);
                         }
+//                        else if(isTamed && target instanceof EntityMob) {
+//                            return DragonUtils.canTameDragonAttack(dragon, target);
+//                        }
                     }
                 }
             }
