@@ -112,11 +112,11 @@ public class EntityFireDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if(this.getAnimation() == ANIMATION_WINGBLAST){
+		if (this.getAnimation() == ANIMATION_WINGBLAST) {
 			return false;
 		}
 		switch (new Random().nextInt(4)) {
-		case 0:
+			case 0:
 				if (this.getAnimation() != ANIMATION_BITE) {
 					this.setAnimation(ANIMATION_BITE);
 					return false;
@@ -159,7 +159,7 @@ public class EntityFireDragon extends EntityDragonBase {
 				}
 				break;
 			case 3:
-				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
+				if (this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2) {
 					if (this.getAnimation() != ANIMATION_WINGBLAST) {
 						this.setAnimation(ANIMATION_WINGBLAST);
 						return true;

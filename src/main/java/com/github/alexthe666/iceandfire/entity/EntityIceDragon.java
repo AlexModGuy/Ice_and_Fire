@@ -144,76 +144,76 @@ public class EntityIceDragon extends EntityDragonBase {
 		return true;
 	}
 
-	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		if(this.getAnimation() == ANIMATION_WINGBLAST){
-			return false;
-		}
-		switch (new Random().nextInt(4)) {
-			case 0:
-				if (this.getAnimation() != ANIMATION_BITE) {
-					this.setAnimation(ANIMATION_BITE);
-					return false;
-				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
-				}
-				break;
-			case 1:
-				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-					if (this.getAnimation() != ANIMATION_SHAKEPREY) {
-						this.setAnimation(ANIMATION_SHAKEPREY);
-						entityIn.startRiding(this);
-						this.attackDecision = this.getRNG().nextBoolean();
-						return true;
-					}
-				} else {
-					if (this.getAnimation() != ANIMATION_BITE) {
-						this.setAnimation(ANIMATION_BITE);
-						return false;
-					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						this.attackDecision = this.getRNG().nextBoolean();
-						return flag1;
-					}
-				}
-				break;
-			case 2:
-				if (this.getAnimation() != ANIMATION_TAILWHACK) {
-					this.setAnimation(ANIMATION_TAILWHACK);
-					return false;
-				} else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
-					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					if (entityIn instanceof EntityLivingBase) {
-						((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
-					}
-					this.attackDecision = this.getRNG().nextBoolean();
-					return flag2;
-				}
-				break;
-			case 3:
-				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
-					if (this.getAnimation() != ANIMATION_WINGBLAST) {
-						this.setAnimation(ANIMATION_WINGBLAST);
-						return false;
-					}
-					break;
-				}
-			default:
-				if (this.getAnimation() != ANIMATION_BITE) {
-					this.setAnimation(ANIMATION_BITE);
-					return false;
-				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
-				}
-				break;
-		}
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        if (this.getAnimation() == ANIMATION_WINGBLAST) {
+            return false;
+        }
+        switch (new Random().nextInt(4)) {
+            case 0:
+                if (this.getAnimation() != ANIMATION_BITE) {
+                    this.setAnimation(ANIMATION_BITE);
+                    return false;
+                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    this.attackDecision = this.getRNG().nextBoolean();
+                    return flag;
+                }
+                break;
+            case 1:
+                if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                    if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+                        this.setAnimation(ANIMATION_SHAKEPREY);
+                        entityIn.startRiding(this);
+                        this.attackDecision = this.getRNG().nextBoolean();
+                        return true;
+                    }
+                } else {
+                    if (this.getAnimation() != ANIMATION_BITE) {
+                        this.setAnimation(ANIMATION_BITE);
+                        return false;
+                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+                        boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        this.attackDecision = this.getRNG().nextBoolean();
+                        return flag1;
+                    }
+                }
+                break;
+            case 2:
+                if (this.getAnimation() != ANIMATION_TAILWHACK) {
+                    this.setAnimation(ANIMATION_TAILWHACK);
+                    return false;
+                } else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
+                    boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    if (entityIn instanceof EntityLivingBase) {
+                        ((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
+                    }
+                    this.attackDecision = this.getRNG().nextBoolean();
+                    return flag2;
+                }
+                break;
+            case 3:
+                if (this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2) {
+                    if (this.getAnimation() != ANIMATION_WINGBLAST) {
+                        this.setAnimation(ANIMATION_WINGBLAST);
+                        return false;
+                    }
+                    break;
+                }
+            default:
+                if (this.getAnimation() != ANIMATION_BITE) {
+                    this.setAnimation(ANIMATION_BITE);
+                    return false;
+                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
+                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    this.attackDecision = this.getRNG().nextBoolean();
+                    return flag;
+                }
+                break;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 	@Override
 	public void onLivingUpdate() {
