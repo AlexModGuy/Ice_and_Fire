@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.block.BlockCharedPath;
+import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
+import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
@@ -27,16 +30,21 @@ import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -185,6 +193,18 @@ public class ClientProxy extends CommonProxy {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+		ModelLoader.setCustomStateMapper(ModBlocks.charedDirt, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.charedGrass, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.charedStone, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.charedCobblestone, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.charedGravel, (new StateMap.Builder()).ignore(BlockFallingReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.charedGrassPath, (new StateMap.Builder()).ignore(BlockCharedPath.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenDirt, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenGrass, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenStone, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenCobblestone, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenGravel, (new StateMap.Builder()).ignore(BlockFallingReturningState.REVERTS).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.frozenGrassPath, (new StateMap.Builder()).ignore(BlockCharedPath.REVERTS).build());
 		try {
 			for (Field f : ModBlocks.class.getDeclaredFields()) {
 				Object obj = f.get(null);

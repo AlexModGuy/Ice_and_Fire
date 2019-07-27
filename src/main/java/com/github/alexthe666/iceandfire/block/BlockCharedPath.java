@@ -5,6 +5,9 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -21,6 +24,7 @@ import java.util.Random;
 public class BlockCharedPath extends BlockGrassPath {
     public Item itemBlock;
     boolean isFire;
+    public static final PropertyBool REVERTS = PropertyBool.create("revert");
 
     @SuppressWarnings("deprecation")
     public BlockCharedPath(boolean isFire) {
@@ -36,6 +40,18 @@ public class BlockCharedPath extends BlockGrassPath {
         }
         this.setLightOpacity(0);
         setRegistryName(IceAndFire.MODID, isFire ? "chared_grass_path" : "frozen_grass_path");
+        this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.valueOf(false)));
+        this.setTickRandomly(true);
+    }
+
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        if (!worldIn.isRemote) {
+            if (!worldIn.isAreaLoaded(pos, 3))
+                return;
+            if (state.getValue(REVERTS) && rand.nextInt(3) == 0) {
+                worldIn.setBlockState(pos, Blocks.GRASS_PATH.getDefaultState());
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -75,4 +91,15 @@ public class BlockCharedPath extends BlockGrassPath {
         }
     }
 
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(REVERTS, meta == 1);
+    }
+
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(REVERTS) ? 1 : 0;
+    }
+
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{REVERTS});
+    }
 }

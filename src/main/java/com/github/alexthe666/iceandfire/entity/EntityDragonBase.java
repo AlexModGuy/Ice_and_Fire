@@ -1353,7 +1353,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         } else {
             flightCycle = 0;
         }
-        if (flightCycle == 2 && !this.isDiving()) {
+        if (flightCycle == 2 && !this.isDiving() && (this.isFlying() || this.isHovering())) {
             this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
         }
 
@@ -1441,7 +1441,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.getControllingPassenger() != null && !this.onGround && (this.isFlying() || this.isHovering())) {
             this.motionY *= 0D;
         }
-        if (this.isHovering()) {
+        if (this.isHovering() && !world.isRemote) {
             if (this.isSleeping()) {
                 this.setHovering(false);
             }
@@ -1760,6 +1760,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0) {
             this.roar();
         }
+        if(i > 0){
+            this.setSleeping(false);
+        }
         return super.attackEntityFrom(dmg, i);
 
     }
@@ -1827,7 +1830,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if ((this.isFlying() || this.isHovering()) && this.isInWater()) {
             //this.motionY += 0.2;
         }
-        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
+        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F && !world.isRemote) {
             this.setFlying(true);
             this.usingGroundAttack = false;
             this.setHovering(false);
@@ -1835,7 +1838,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.spacebarTicks > 0) {
             this.spacebarTicks--;
         }
-        if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+        if (!world.isRemote && this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
         if (world.isRemote && !this.isModelDead()) {

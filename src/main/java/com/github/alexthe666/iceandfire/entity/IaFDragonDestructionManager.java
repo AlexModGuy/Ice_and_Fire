@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.block.BlockCharedPath;
+import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
+import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -236,17 +239,17 @@ public class IaFDragonDestructionManager {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return ModBlocks.charedGrass.getDefaultState();
+            return ModBlocks.charedGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT) {
-            return ModBlocks.charedDirt.getDefaultState();
+            return ModBlocks.charedDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.GRAVEL) {
-            return ModBlocks.charedDirt.getDefaultState();
+            return ModBlocks.charedGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return ModBlocks.charedCobblestone.getDefaultState();
+            return ModBlocks.charedCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && in.getBlock() != ModBlocks.charedCobblestone) {
-            return ModBlocks.charedStone.getDefaultState();
+            return ModBlocks.charedStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return ModBlocks.charedGrassPath.getDefaultState();
+            return ModBlocks.charedGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
             return ModBlocks.ash.getDefaultState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW_LAYER) {
@@ -260,17 +263,17 @@ public class IaFDragonDestructionManager {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return ModBlocks.frozenGrass.getDefaultState();
+            return ModBlocks.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return ModBlocks.frozenDirt.getDefaultState();
+            return ModBlocks.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.GRAVEL) {
-            return ModBlocks.frozenGravel.getDefaultState();
+            return ModBlocks.frozenGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return ModBlocks.frozenCobblestone.getDefaultState();
+            return ModBlocks.frozenCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && in.getBlock() != ModBlocks.frozenCobblestone) {
-            return ModBlocks.frozenStone.getDefaultState();
+            return ModBlocks.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return ModBlocks.frozenGrassPath.getDefaultState();
+            return ModBlocks.frozenGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
             return ModBlocks.frozenSplinters.getDefaultState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW_LAYER) {
