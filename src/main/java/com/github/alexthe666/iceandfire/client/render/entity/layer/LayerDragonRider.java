@@ -56,12 +56,12 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 							modelBase = ((RenderLiving) render).getMainModel();
 						}
 						if((passenger.height > passenger.width || modelBase instanceof ModelBiped) && !(modelBase instanceof ModelQuadruped) && !(modelBase instanceof ModelHorse)) {
-							GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.15F * passenger.width, -0.1F * dragonScale - 0.1F * passenger.width);
+							GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.15F * passenger.height, -0.1F * dragonScale - 0.1F * passenger.width);
 							GlStateManager.rotate(90, 0, 0, 1);
 							GlStateManager.rotate(45, 0, 1, 0);
 						}else{
 							boolean horse = modelBase instanceof ModelHorse;
-							GlStateManager.translate((horse ? - 0.08F : -0.15F) * passenger.width, 0.1F * dragonScale , -0.1F * dragonScale - 0.1F * passenger.width);
+							GlStateManager.translate((horse ? - 0.08F : -0.15F) * passenger.width, 0.1F * dragonScale - 0.15F * passenger.width, -0.1F * dragonScale - 0.1F * passenger.width);
 							GlStateManager.rotate(-90, 0, 1, 0);
 						}
 					}else{
@@ -72,7 +72,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 
 				}
 				GlStateManager.rotate(180, 0, 0, 1);
-				GlStateManager.translate(0, 0.05F * passenger.height, -0.025F * dragonScale);
+				GlStateManager.translate(0, 0, -0.025F * dragonScale);
 				GlStateManager.rotate(riderRot + 180, 0, 1, 0);
 				GlStateManager.scale(1/dragonScale, 1/dragonScale, 1/dragonScale);
 				Minecraft.getMinecraft().getRenderManager().setRenderOutlines(false);
