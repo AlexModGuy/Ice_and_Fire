@@ -317,7 +317,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     private void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveHelper = new EntityMoveHelper(this);
+            this.moveHelper = new IaFDragonFlightManager.GroundMoveHelper(this);
             this.navigator = createNavigator(world);
             this.isLandNavigator = true;
         } else {
@@ -808,6 +808,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void setFlying(boolean flying) {
+        if(flying){
+            System.out.println("true");
+        }
         this.dataManager.set(FLYING, flying);
         if (!world.isRemote) {
             this.isFlying = flying;
