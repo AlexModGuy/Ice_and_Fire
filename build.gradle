@@ -22,7 +22,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.7.1"
+version = "1.8.0"
 group= "iceandfire" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "iceandfire"
 sourceCompatibility = targetCompatibility = "1.8"

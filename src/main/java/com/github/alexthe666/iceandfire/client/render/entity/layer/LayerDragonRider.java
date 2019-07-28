@@ -68,9 +68,11 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 						GlStateManager.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
 					}
 
+				}else{
+
 				}
 				GlStateManager.rotate(180, 0, 0, 1);
-				GlStateManager.translate(0, -.008F * dragonScale, -0.025F * dragonScale);
+				GlStateManager.translate(0, 0.05F * passenger.height, -0.025F * dragonScale);
 				GlStateManager.rotate(riderRot + 180, 0, 1, 0);
 				GlStateManager.scale(1/dragonScale, 1/dragonScale, 1/dragonScale);
 				Minecraft.getMinecraft().getRenderManager().setRenderOutlines(false);

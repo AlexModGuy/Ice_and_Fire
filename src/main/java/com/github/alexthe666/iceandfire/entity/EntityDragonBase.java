@@ -1578,20 +1578,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void breakBlock() {
+        BlockPos dragonPos = this.getPosition();
+        float f = (float) (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) * 0.333F;
         if (IceAndFire.CONFIG.dragonGriefing != 2 || this.isTamed() && !IceAndFire.CONFIG.tamedDragonGriefing) {
             float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
             if (!isModelDead() && this.getDragonStage() >= 3 && this.canMove()) {
                 for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
                     for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                         for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
-                            IBlockState state = world.getBlockState(new BlockPos(a, b, c));
-                            Block block = state.getBlock();
-                            if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
-                                this.motionX *= 0.6D;
-                                this.motionZ *= 0.6D;
-                                if (block != Blocks.AIR) {
-                                    if (!world.isRemote) {
-                                        world.destroyBlock(new BlockPos(a, b, c), true);
+                            BlockPos pos = new BlockPos(a, b, c);
+                            if(pos.distanceSq(dragonPos) <= (double) (f * f)) {
+                                IBlockState state = world.getBlockState(new BlockPos(a, b, c));
+                                Block block = state.getBlock();
+                                if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
+                                    this.motionX *= 0.6D;
+                                    this.motionZ *= 0.6D;
+                                    if (block != Blocks.AIR) {
+                                        if (!world.isRemote) {
+                                            world.destroyBlock(new BlockPos(a, b, c), true);
+                                        }
                                     }
                                 }
                             }
@@ -2351,15 +2356,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float pitchMinus = 0;
         float dragonPitch = 0;
         float pitchLength = 0;
+        float extraAgeScale = (Math.max(0, this.getAgeInDays() - 75) / 75F) * 1.65F;
         if (this.isFlying() || this.isHovering()) {
             dragonPitch = this.dragonPitch / 90;
             pitchLength = dragonPitch > 0 ? dragonPitch * 0.7F : dragonPitch;
             pitchAdjustment = dragonPitch > 0 ? 1.1F : -1.5F;
             pitchMinus = dragonPitch > 0 ? 3 : 1;
         }
-        float xzMod = (0.1F + pitchLength * 0.7F) * getRenderSize();
+        float xzMod = (0.15F + pitchLength * 0.7F) * getRenderSize() + extraAgeScale;
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + dragonPitch * pitchAdjustment * -0.6F * pitchMinus) * getRenderSize() * 0.3F);
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + dragonPitch * pitchAdjustment * -0.6F * pitchMinus) * getRenderSize() * 0.3F + extraAgeScale);
         float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
     }
