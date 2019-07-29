@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonEyes;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonMale;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonRider;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -29,6 +30,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 	public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {
 		super(renderManager, model, 0.8F);
 		this.addLayer(new LayerDragonEyes(this));
+		this.addLayer(new LayerDragonMale(this));
 		this.addLayer(new LayerDragonArmor(this));
 		this.addLayer(new LayerDragonRider(this));
 

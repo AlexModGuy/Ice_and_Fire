@@ -51,6 +51,8 @@ public enum EnumDragonTextures {
     public final ResourceLocation ICESTAGE3SKELETONTEXTURE;
     public final ResourceLocation ICESTAGE4SKELETONTEXTURE;
     public final ResourceLocation ICESTAGE5SKELETONTEXTURE;
+    public final ResourceLocation FIRE_MALE_OVERLAY;
+    public final ResourceLocation ICE_MALE_OVERLAY;
 
     private EnumDragonTextures(String fireVariant, String iceVariant) {
         FIRESTAGE1TEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + fireVariant + "1.png");
@@ -93,6 +95,8 @@ public enum EnumDragonTextures {
         ICESTAGE3SKELETONTEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_3.png");
         ICESTAGE4SKELETONTEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_4.png");
         ICESTAGE5SKELETONTEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_5.png");
+        FIRE_MALE_OVERLAY = new ResourceLocation("iceandfire:textures/models/firedragon/male_" + fireVariant.substring(0, fireVariant.length() - 1) + ".png");
+        ICE_MALE_OVERLAY = new ResourceLocation("iceandfire:textures/models/firedragon/male_" + iceVariant.substring(0, iceVariant.length() - 1) + ".png");
     }
 
 
@@ -277,7 +281,7 @@ public enum EnumDragonTextures {
         }
     }
 
-    private static EnumDragonTextures getDragonEnum(EntityDragonBase dragon) {
+    public static EnumDragonTextures getDragonEnum(EntityDragonBase dragon) {
         switch (dragon.getVariant()) {
             default:
                 return VARIANT1;

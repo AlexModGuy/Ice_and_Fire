@@ -18,8 +18,6 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderDragonSkull extends Render<EntityDragonSkull> {
 
-	public static final ResourceLocation SKULL_FIRE = new ResourceLocation("iceandfire:textures/models/firedragon/fire_skeleton_4.png");
-	public static final ResourceLocation SKULL_ICE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_4.png");
 	public static final float[] growth_stage_1 = new float[]{1F, 3F};
 	public static final float[] growth_stage_2 = new float[]{3F, 7F};
 	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
