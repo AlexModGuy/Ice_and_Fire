@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -234,15 +235,14 @@ public class EventClient {
                 int j1 = light / 65536;
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) i1, (float) j1);
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferbuilder = tessellator.getBuffer();
+                event.getRenderer().bindTexture(CHAIN_TEXTURE);
+                double posX = Minecraft.getMinecraft().player.prevPosX + (Minecraft.getMinecraft().player.posX - Minecraft.getMinecraft().player.prevPosX) * (double) event.getPartialRenderTick();
+                double posY = Minecraft.getMinecraft().player.prevPosY + (Minecraft.getMinecraft().player.posY - Minecraft.getMinecraft().player.prevPosY) * (double) event.getPartialRenderTick();
+                double posZ = Minecraft.getMinecraft().player.prevPosZ + (Minecraft.getMinecraft().player.posZ - Minecraft.getMinecraft().player.prevPosZ) * (double) event.getPartialRenderTick();
                 for (Entity chainer : properties.connectedEntities) {
-                    Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferbuilder = tessellator.getBuffer();
-                    event.getRenderer().bindTexture(CHAIN_TEXTURE);
                     GlStateManager.pushMatrix();
-                    double posX = Minecraft.getMinecraft().player.prevPosX + (Minecraft.getMinecraft().player.posX - Minecraft.getMinecraft().player.prevPosX) * (double) event.getPartialRenderTick();
-                    double posY = Minecraft.getMinecraft().player.prevPosY + (Minecraft.getMinecraft().player.posY - Minecraft.getMinecraft().player.prevPosY) * (double) event.getPartialRenderTick();
-                    double posZ = Minecraft.getMinecraft().player.prevPosZ + (Minecraft.getMinecraft().player.posZ - Minecraft.getMinecraft().player.prevPosZ) * (double) event.getPartialRenderTick();
                     double chainPosX = chainer.prevPosX + (chainer.posX - chainer.prevPosX) * (double) event.getPartialRenderTick();
                     double chainPosY = chainer.prevPosY + (chainer.posY - chainer.prevPosY) * (double) event.getPartialRenderTick();
                     double chainPosZ = chainer.prevPosZ + (chainer.posZ - chainer.prevPosZ) * (double) event.getPartialRenderTick();
@@ -257,12 +257,11 @@ public class EventClient {
                     Vec3d vec3d2 = vec3d.subtract(vec3d1);
                     double d0 = vec3d2.length();
                     vec3d2 = vec3d2.normalize();
-                    float f5 = (float) Math.acos(vec3d2.y);
-                    float f6 = -(float) Math.atan2(vec3d2.z, vec3d2.x);
+                    float f5 = (float) acos(vec3d2.y);
+                    float f6 = -(float) MathHelper.atan2(vec3d2.z, vec3d2.x);
                     GlStateManager.rotate((((float) Math.PI / 2F) + f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
                     double d1 = (double) 0D;
-                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     int j = 225;
                     int k = 225;
                     int l = 225;
@@ -278,11 +277,11 @@ public class EventClient {
                     double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * texture_scale;
                     double d22 = (double) (0.0F);
                     double d23 = d0 * 1 - texture_scale + d22;
+                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
                     bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
                     bufferbuilder.pos(d14, 0.0D, d15).tex(0.0D, d22).color(j, k, l, 255).endVertex();
                     bufferbuilder.pos(d14, d0, d15).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-
                     bufferbuilder.pos(d16, d0, d17).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
                     bufferbuilder.pos(d16, 0.0D, d17).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
                     bufferbuilder.pos(d18, 0.0D, d19).tex(0.0D, d22).color(j, k, l, 255).endVertex();
@@ -290,6 +289,7 @@ public class EventClient {
                     tessellator.draw();
                     GlStateManager.popMatrix();
                 }
+
                 GlStateManager.disableBlend();
                 GlStateManager.enableCull();
                 GlStateManager.enableLighting();
@@ -316,6 +316,10 @@ public class EventClient {
             GlStateManager.disableNormalize();
         }
 
+    }
+
+    private double acos(double x) {
+        return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
     }
 
     private Vec3d getChainPosition(Entity entityLivingBaseIn, double p_177110_2_, float p_177110_4_) {

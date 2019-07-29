@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,6 +29,9 @@ public class IaFDragonDestructionManager {
                     if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())){
                         world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
                     }
+                }
+                if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput){
+                    ((TileEntityDragonforgeInput)world.getTileEntity(pos)).onHitWithFlame();
                 }
             }
             for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - 1, (double) center.getY() - 1, (double) center.getZ() - 1, (double) center.getX() + 1, (double) center.getY() + 1, (double) center.getZ() + 1))) {
@@ -52,6 +56,9 @@ public class IaFDragonDestructionManager {
                         }
                     }
                 }
+                if(world.getTileEntity(blockpos) != null && world.getTileEntity(blockpos) instanceof TileEntityDragonforgeInput){
+                    ((TileEntityDragonforgeInput)world.getTileEntity(blockpos)).onHitWithFlame();
+                }
             }
             for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - j, (double) center.getY() - k, (double) center.getZ() - l, (double) center.getX() + j, (double) center.getY() + k, (double) center.getZ() + l))) {
                 if(!destroyer.isOnSameTeam(entityliving) && !destroyer.isEntityEqual(entityliving)){
@@ -72,6 +79,9 @@ public class IaFDragonDestructionManager {
                     if(world.rand.nextInt(3) == 0 && transformState.isFullBlock() && world.isAirBlock(pos.up())){
                         world.setBlockState(pos.up(), ModBlocks.dragon_ice_spikes.getDefaultState());
                     }
+                }
+                if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput){
+                    ((TileEntityDragonforgeInput)world.getTileEntity(pos)).onHitWithFlame();
                 }
             }
             for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - 1, (double) center.getY() - 1, (double) center.getZ() - 1, (double) center.getX() + 1, (double) center.getY() + 1, (double) center.getZ() + 1))) {
@@ -98,6 +108,9 @@ public class IaFDragonDestructionManager {
                             world.setBlockState(blockpos.up(), ModBlocks.dragon_ice_spikes.getDefaultState());
                         }
                     }
+                }
+                if(world.getTileEntity(blockpos) != null && world.getTileEntity(blockpos) instanceof TileEntityDragonforgeInput){
+                    ((TileEntityDragonforgeInput)world.getTileEntity(blockpos)).onHitWithFlame();
                 }
             }
             for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) center.getX() - j, (double) center.getY() - k, (double) center.getZ() - l, (double) center.getX() + j, (double) center.getY() + k, (double) center.getZ() + l))) {

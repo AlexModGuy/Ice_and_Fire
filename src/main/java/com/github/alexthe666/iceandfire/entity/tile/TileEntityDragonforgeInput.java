@@ -17,13 +17,16 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     private int ticksSinceDragonFire;
     private static final int LURE_DISTANCE = 50;
 
+    public void onHitWithFlame(){
+        TileEntityDragonforge forge = getConnectedTileEntity();
+        if(forge != null){
+            forge.transferPower(1);
+        }
+    }
+
     @Override
     public void update() {
         if (ticksSinceDragonFire > 0) {
-            TileEntityDragonforge forge = getConnectedTileEntity();
-            if(forge != null){
-                forge.transferPower(1);
-            }
             ticksSinceDragonFire--;
         }
         if ((ticksSinceDragonFire == 0 || getConnectedTileEntity() == null) && this.isActive()) {
@@ -39,9 +42,19 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     }
 
     protected void lureDragons(){
-        for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-            if(isFire() == dragon.isFire && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))){
-                dragon.burningTarget = this.pos;
+        TileEntityDragonforge forge = getConnectedTileEntity();
+        if(forge != null && forge.canSmelt()) {
+            for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
+                if (isFire() == dragon.isFire && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
+                    dragon.burningTarget = this.pos;
+                }
+            }
+        }else{
+            for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
+                if (dragon.burningTarget == this.pos) {
+                    dragon.burningTarget = null;
+                    dragon.setBreathingFire(false);
+                }
             }
         }
     }

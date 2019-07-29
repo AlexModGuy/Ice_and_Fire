@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -18,7 +20,16 @@ public class ContainerDragonForge extends Container {
     public ContainerDragonForge(InventoryPlayer playerInventory, IInventory furnaceInventory) {
         this.tileFurnace = furnaceInventory;
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 68, 34));
-        this.addSlotToContainer(new SlotFurnaceFuel(furnaceInventory, 1, 86, 34));
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 86, 34){
+            public boolean isItemValid(ItemStack stack) {
+                return (stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood) && !this.getHasStack();
+            }
+
+            @SideOnly(Side.CLIENT)
+            public boolean isEnabled() {
+                return true;
+            }
+        });
         this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, furnaceInventory, 2, 148, 35));
 
         for (int i = 0; i < 3; ++i) {

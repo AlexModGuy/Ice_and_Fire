@@ -20,22 +20,19 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
 	}
 
 	public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
-		if (properties != null && !properties.isStone || properties == null) {
-			if (dragon.shouldRenderEyes()) {
-				this.render.bindTexture(EnumDragonTextures.getEyeTextureFromDragon(dragon));
-				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.ONE);
-				GlStateManager.disableLighting();
-				GlStateManager.depthMask(!dragon.isInvisible());
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
-				GlStateManager.enableLighting();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				this.render.setLightmap(dragon);
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-			}
+		if (dragon.shouldRenderEyes()) {
+			this.render.bindTexture(EnumDragonTextures.getEyeTextureFromDragon(dragon));
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			GlStateManager.disableLighting();
+			GlStateManager.depthMask(!dragon.isInvisible());
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+			GlStateManager.enableLighting();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+			this.render.setLightmap(dragon);
+			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
 		}
 	}
 

@@ -47,7 +47,9 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
         if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            properties.connectedEntities.add(toChain);
+            if(!properties.connectedEntities.contains(toChain)){
+                properties.connectedEntities.add(toChain);
+            }
         }
     }
 
@@ -57,7 +59,9 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
         if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            properties.connectedEntities.add(toChain);
+            if(!properties.connectedEntities.contains(toChain)){
+                properties.connectedEntities.add(toChain);
+            }
         }
     }
 }

@@ -193,6 +193,6 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
     public int getDragonStage() {
-		return this.getDragonAge() / 25;
+		return getStage();
     }
 }

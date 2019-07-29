@@ -1777,6 +1777,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     @Override
     public void onUpdate() {
+        world.profiler.startSection("dragonUpdate");
         super.onUpdate();
         if(isFlying() && !world.isRemote){
             this.flightManager.update();
@@ -1896,6 +1897,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isSitting() && this.getControllingPassenger() != null) {
             this.setSitting(false);
         }
+        world.profiler.endSection();
     }
 
     @Override
@@ -2304,7 +2306,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean shouldRenderEyes() {
-        return !this.isSleeping() && !this.isModelDead() && !this.isBlinking();
+        return !this.isSleeping() && !this.isModelDead() && !this.isBlinking() && !EntityGorgon.isStoneMob(this);
     }
 
     @Override

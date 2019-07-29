@@ -9,14 +9,12 @@ import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.ItemChain;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
-import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockWall;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -31,7 +29,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -339,9 +336,9 @@ public class EventLiving {
     }
 
     @SubscribeEvent
-    public void onEntityDie(LivingDeathEvent event){
+    public void onEntityDie(LivingDeathEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-        if(chainProperties != null){
+        if (chainProperties != null) {
             chainProperties.clearChained();
         }
     }
@@ -358,25 +355,24 @@ public class EventLiving {
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-        if(!event.getEntityLiving().world.isRemote && chainProperties != null){
-            chainProperties.updateConnectedEntities();
-        }
+
         if (chainProperties != null && chainProperties.isChained()) {
-            if(chainProperties.wasJustDisconnected){
+            if (chainProperties.wasJustDisconnected) {
                 chainProperties.wasJustDisconnected = false;
             }
-            for (Entity chainer : chainProperties.connectedEntities) {
-                //TODO: update chain distance
-                float f = event.getEntityLiving().getDistance(chainer);
-                if(f > 7){
-                    double d0 = (chainer.posX - event.getEntityLiving().posX) / (double)f;
-                    double d1 = (chainer.posY - event.getEntityLiving().posY) / (double)f;
-                    double d2 = (chainer.posZ - event.getEntityLiving().posZ) / (double)f;
-                    event.getEntityLiving().motionX += d0 * Math.abs(d0) * 0.4D;
-                    event.getEntityLiving().motionY += d1 * Math.abs(d1) * 0.2D;
-                    event.getEntityLiving().motionZ += d2 * Math.abs(d2) * 0.4D;
+            if (!event.getEntityLiving().world.isRemote) {
+                chainProperties.updateConnectedEntities();
+                for (Entity chainer : chainProperties.connectedEntities) {
+                    float f = event.getEntityLiving().getDistance(chainer);
+                    if (f > 7) {
+                        double d0 = (chainer.posX - event.getEntityLiving().posX) / (double) f;
+                        double d1 = (chainer.posY - event.getEntityLiving().posY) / (double) f;
+                        double d2 = (chainer.posZ - event.getEntityLiving().posZ) / (double) f;
+                        event.getEntityLiving().motionX += d0 * Math.abs(d0) * 0.4D;
+                        event.getEntityLiving().motionY += d1 * Math.abs(d1) * 0.2D;
+                        event.getEntityLiving().motionZ += d2 * Math.abs(d2) * 0.4D;
+                    }
                 }
-
             }
         }
         if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
@@ -569,12 +565,12 @@ public class EventLiving {
             }
         }
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
-        if(chainProperties != null){
+        if (chainProperties != null) {
             //chainProperties.debug();
             chainProperties.updateConnectedEntities();
-            if(chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getEntityPlayer())){
+            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getEntityPlayer())) {
                 chainProperties.removeChain(event.getEntityPlayer());
-                if(!event.getWorld().isRemote) {
+                if (!event.getWorld().isRemote) {
                     event.getTarget().dropItem(ModItems.chain, 1);
                 }
             }
@@ -613,7 +609,7 @@ public class EventLiving {
                 }
             }
         }
-        if(event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockWall){
+        if (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockWall) {
             ItemChain.attachToFence(event.getEntityPlayer(), event.getWorld(), event.getPos());
         }
     }

@@ -31,6 +31,9 @@ public class ModRecipes {
     public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
 
     public static void preInit() {
+        FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.fire_dragon_blood), new ItemStack(ModItems.dragonsteel_fire_ingot)));
+        ICE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.ice_dragon_blood), new ItemStack(ModItems.dragonsteel_ice_ingot)));
+
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
         {
             /**

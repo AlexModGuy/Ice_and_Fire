@@ -51,23 +51,16 @@ public class GuiDragonForge extends GuiContainer {
 		}else{
 			this.mc.getTextureManager().bindTexture(TEXTURE_FIRE);
 		}
-
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-		int i1;
-		if(this.ice){
-			i1 = this.func_175381_h(81);
-			this.drawTexturedModalRect(k + 21, l + 28, 0, 166, i1, 26);
-		}else{
-			i1 = this.func_175381_h(126);
-			this.drawTexturedModalRect(k + 12, l + 23, 0, 166, i1, 38);
-		}
+		int i1 = this.func_175381_h(126);
+		this.drawTexturedModalRect(k + 12, l + 23, 0, 166, i1, 38);
 	}
 
 	private int func_175381_h(int p_175381_1_) {
 		int j = this.tileFurnace.getField(0);
-		return j != 0 ? j * p_175381_1_ / 5000 : 0;
+		return j != 0 ? j * p_175381_1_ / ((TileEntityDragonforge) tileFurnace).getMaxCookTime() : 0;
 	}
 
 	@Override

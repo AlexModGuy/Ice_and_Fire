@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.util.math.MathHelper;
 
 public class IceAndFireTabulaModelAnimator {
 
@@ -59,7 +60,7 @@ public class IceAndFireTabulaModelAnimator {
     }
 
     public float distance(float rotateAngleFrom, float rotateAngleTo) {
-        return (float)Math.atan2(Math.sin(rotateAngleTo - rotateAngleFrom), Math.cos(rotateAngleTo - rotateAngleFrom));
+        return (float)MathHelper.atan2(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
     }
 
     public void rotate(ModelAnimator animator, AdvancedModelRenderer model, float x, float y, float z) {

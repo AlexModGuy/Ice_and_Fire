@@ -92,7 +92,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		return connectedEntities;
 	}
 
-	private void minimizeLists(){
+	public void minimizeLists(){
 		List<UUID> noDupesUUID = new ArrayList();
 		for(UUID uuid : connectedEntityUUID){
 			if(!noDupesUUID.contains(uuid)){
@@ -101,8 +101,10 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		}
 		connectedEntityUUID = noDupesUUID;
 		List<Entity> noDupesEntity = new ArrayList();
+		List<UUID> addedUUIDs = new ArrayList<UUID>();
 		for(Entity entity : connectedEntities){
-			if(!noDupesEntity.contains(entity)){
+			if(!addedUUIDs.contains(entity.getUniqueID())){
+				addedUUIDs.add(entity.getUniqueID());
 				noDupesEntity.add(entity);
 			}
 		}
@@ -111,6 +113,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	public void updateConnectedEntities(){
 		connectedEntities.clear();
+		List<UUID> addedUUIDs = new ArrayList<UUID>();
 		if(getEntity() != null) {
 			World world = getEntity().world;
 			if (!connectedEntityUUID.isEmpty() && world != null && !world.isRemote) {
@@ -119,8 +122,9 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 					if (world.getMinecraftServer() != null) {
 						Entity entity = world.getMinecraftServer().getEntityFromUuid(uuid);
 						if (entity != null) {
-							IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
-							if (!connectedEntities.contains(entity)) {
+							if (!addedUUIDs.contains(entity.getUniqueID())) {
+								addedUUIDs.add(entity.getUniqueID());
+								IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
 								connectedEntities.add(entity);
 							}
 						}

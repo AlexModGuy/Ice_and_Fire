@@ -96,7 +96,7 @@ public enum EnumDragonTextures {
         ICESTAGE4SKELETONTEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_4.png");
         ICESTAGE5SKELETONTEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/ice_skeleton_5.png");
         FIRE_MALE_OVERLAY = new ResourceLocation("iceandfire:textures/models/firedragon/male_" + fireVariant.substring(0, fireVariant.length() - 1) + ".png");
-        ICE_MALE_OVERLAY = new ResourceLocation("iceandfire:textures/models/firedragon/male_" + iceVariant.substring(0, iceVariant.length() - 1) + ".png");
+        ICE_MALE_OVERLAY = new ResourceLocation("iceandfire:textures/models/icedragon/male_" + iceVariant.substring(0, iceVariant.length() - 1) + ".png");
     }
 
 

@@ -3,7 +3,9 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
+import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +35,10 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private static final int[] SLOTS_SIDES = new int[]{1};
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private int cookTime;
+    private int lastDragonFlameTimer = 0;
     private boolean prevAssembled;
+    private boolean canAddFlameAgain = true;
+    public TileEntityDragonforge(){}
 
     public TileEntityDragonforge(boolean isFire) {
         this.isFire = isFire;
@@ -117,6 +122,9 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     public void update() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
+        if(lastDragonFlameTimer > 0){
+            lastDragonFlameTimer--;
+        }
         updateGrills(assembled());
         if(!world.isRemote) {
             if (prevAssembled != assembled()) {
@@ -127,30 +135,16 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
                 return;
             }
         }
-        if (this.canSmelt()) {
-            this.cookTime++;
+        if (this.canSmelt() && cookTime > 0 && lastDragonFlameTimer == 0) {
+            this.cookTime--;
         }
 
         if (!this.world.isRemote) {
-            ItemStack itemstack = this.forgeItemStacks.get(1);
-
             if (this.isBurning()) {
-                if (this.canSmelt()) {
-                    if (!itemstack.isEmpty()) {
-                        Item item = itemstack.getItem();
-                        itemstack.shrink(1);
-
-                        if (itemstack.isEmpty()) {
-                            ItemStack item1 = item.getContainerItem(itemstack);
-                            this.forgeItemStacks.set(1, item1);
-                        }
-                    }
-                }
-
                 if (this.isBurning() && this.canSmelt()) {
                     ++this.cookTime;
 
-                    if (this.cookTime == 5000) {
+                    if (this.cookTime >= getMaxCookTime()) {
                         this.cookTime = 0;
                         this.smeltItem();
                         flag1 = true;
@@ -159,7 +153,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
                     this.cookTime = 0;
                 }
             } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, 5000);
+                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, getMaxCookTime());
             }
 
             if (flag != this.isBurning()) {
@@ -170,14 +164,45 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         if (flag1) {
             this.markDirty();
         }
+        if(!canAddFlameAgain){
+            canAddFlameAgain = true;
+        }
     }
 
-    private boolean canSmelt() {
+    public int getMaxCookTime() {
+        ItemStack stack = getCurrentResult();
+        if(stack.getItem() == Item.getItemFromBlock(ModBlocks.ash) || stack.getItem() == Item.getItemFromBlock(ModBlocks.dragon_ice)){
+            return 100;
+        }
+        return 1000;
+    }
+
+    private ItemStack getCurrentResult(){
+        DragonForgeRecipe forgeRecipe = null;
+        if(this.isFire){
+            forgeRecipe = ModRecipes.getFireForgeRecipe(this.forgeItemStacks.get(0));
+        }else{
+            forgeRecipe = ModRecipes.getIceForgeRecipe(this.forgeItemStacks.get(0));
+        }
+        ItemStack itemstack = ItemStack.EMPTY;
+        if(forgeRecipe != null && this.forgeItemStacks.get(1).isItemEqual(forgeRecipe.getBlood())){
+            itemstack = forgeRecipe.getOutput();
+        }
+        if(itemstack == ItemStack.EMPTY) {
+            if (this.isFire) {
+                itemstack = new ItemStack(ModBlocks.ash);
+            } else {
+                itemstack = new ItemStack(ModBlocks.dragon_ice);
+            }
+        }
+        return itemstack;
+    }
+
+    public boolean canSmelt() {
         if (((ItemStack) this.forgeItemStacks.get(0)).isEmpty()) {
             return false;
         } else {
-            ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(this.forgeItemStacks.get(0));
-
+            ItemStack itemstack = getCurrentResult();
             if (itemstack.isEmpty()) {
                 return false;
             } else {
@@ -208,7 +233,8 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     public void smeltItem() {
         if (this.canSmelt()) {
             ItemStack itemstack = this.forgeItemStacks.get(0);
-            ItemStack itemstack1 = FurnaceRecipes.instance().getSmeltingResult(itemstack);
+            ItemStack bloodStack = this.forgeItemStacks.get(1);
+            ItemStack itemstack1 = getCurrentResult();
             ItemStack itemstack2 = this.forgeItemStacks.get(2);
 
             if (itemstack2.isEmpty()) {
@@ -216,8 +242,8 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
                 itemstack2.grow(itemstack1.getCount());
             }
-            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 1 && !((ItemStack) this.forgeItemStacks.get(1)).isEmpty() && ((ItemStack) this.forgeItemStacks.get(1)).getItem() == Items.BUCKET) {
-                this.forgeItemStacks.set(1, new ItemStack(Items.WATER_BUCKET));
+            if(!bloodStack.isEmpty() && this.cookTime == 0){
+                bloodStack.shrink(1);
             }
             itemstack.shrink(1);
         }
@@ -341,6 +367,15 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
 
 
     public void transferPower(int i) {
+        if(this.canSmelt()){
+            if(canAddFlameAgain){
+                cookTime = Math.min(this.getMaxCookTime() + 1, cookTime + i);
+                canAddFlameAgain = false;
+            }
+        }else {
+            cookTime = 0;
+        }
+        lastDragonFlameTimer = 40;
     }
 
     private boolean checkBoneCorners(BlockPos pos){

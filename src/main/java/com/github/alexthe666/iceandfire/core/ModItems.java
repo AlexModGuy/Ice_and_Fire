@@ -346,7 +346,6 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
 	public static Item dragonsteel_ice_boots = new ItemModArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
 
-	
 	static {
 		EnumDragonArmor.initArmors();
 		EnumSeaSerpent.initArmors();
