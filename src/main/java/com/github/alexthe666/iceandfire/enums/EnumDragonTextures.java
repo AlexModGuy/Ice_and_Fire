@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.util.ResourceLocation;
 
@@ -102,6 +103,8 @@ public enum EnumDragonTextures {
             return getFireDragonTextures(dragon);
         }
     }
+
+
 
     public static ResourceLocation getEyeTextureFromDragon(EntityDragonBase dragon) {
         EnumDragonTextures textures = getDragonEnum(dragon);
@@ -380,6 +383,40 @@ public enum EnumDragonTextures {
                     }
 
             }
+        }
+    }
+
+    public static ResourceLocation getFireDragonSkullTextures(EntityDragonSkull skull){
+        switch (skull.getDragonStage()) {
+            case 1:
+                return VARIANT1.FIRESTAGE1SKELETONTEXTURE;
+            case 2:
+                return VARIANT1.FIRESTAGE2SKELETONTEXTURE;
+            case 3:
+                return VARIANT1.FIRESTAGE3SKELETONTEXTURE;
+            case 4:
+                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
+            case 5:
+                return VARIANT1.FIRESTAGE5SKELETONTEXTURE;
+            default:
+                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
+        }
+    }
+
+    public static ResourceLocation getIceDragonSkullTextures(EntityDragonSkull skull){
+        switch (skull.getDragonStage()) {
+            case 1:
+                return VARIANT1.ICESTAGE1SKELETONTEXTURE;
+            case 2:
+                return VARIANT1.ICESTAGE2SKELETONTEXTURE;
+            case 3:
+                return VARIANT1.ICESTAGE3SKELETONTEXTURE;
+            case 4:
+                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
+            case 5:
+                return VARIANT1.ICESTAGE5SKELETONTEXTURE;
+            default:
+                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
         }
     }
 }

@@ -191,4 +191,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	public boolean isMobDead() {
 		return true;
 	}
+
+    public int getDragonStage() {
+		return this.getDragonAge() / 25;
+    }
 }
