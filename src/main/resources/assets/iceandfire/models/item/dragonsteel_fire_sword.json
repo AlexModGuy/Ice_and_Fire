@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragon_sword_ice"
+    "layer0": "iceandfire:items/dragonsteel_fire_sword"
   },
   "display": {
     "thirdperson_righthand": {
@@ -59,7 +59,7 @@
       "rotation": [
         -20,
         -90,
-        80
+        -80
       ],
       "translation": [
         1.13,

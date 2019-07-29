@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "SBS",
+    "BSB",
+    "SBS"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:stonebrick",
+      "data": 0
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "fireDragonScaleBlock"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonforge_fire_brick",
+    "data": 0,
+    "count": 4
+  }
+}

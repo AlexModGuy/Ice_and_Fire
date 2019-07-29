@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragon_sword_ice"
+    "layer0": "iceandfire:items/dragonsteel_fire_axe"
   },
   "display": {
     "thirdperson_righthand": {
@@ -12,7 +12,7 @@
       ],
       "translation": [
         0,
-        7.0,
+        5.0,
         0
       ],
       "scale": [
@@ -29,7 +29,7 @@
       ],
       "translation": [
         0,
-        7.0,
+        5.0,
         0
       ],
       "scale": [
@@ -59,7 +59,7 @@
       "rotation": [
         -20,
         -90,
-        80
+        -80
       ],
       "translation": [
         1.13,
@@ -79,8 +79,8 @@
         0
       ],
       "translation": [
-        0,
-        0,
+        -1,
+        -1,
         0
       ],
       "scale": [

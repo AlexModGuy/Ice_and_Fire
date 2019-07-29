@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BBB",
+    "BHB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonforge_fire_brick",
+      "data": 0
+    },
+    "H": {
+      "item": "iceandfire:fire_dragon_heart",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonforge_ice_core_disabled",
+    "data": 0
+  }
+}

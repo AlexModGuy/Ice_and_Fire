@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
-import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
@@ -22,10 +22,15 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModRecipes {
 
-    public static void preInit() {
+    public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
+    public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
 
+    public static void preInit() {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
         {
             /**
@@ -34,6 +39,30 @@ public class ModRecipes {
             protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
             {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.amphithere_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(worldIn, position.getX(), position.getY(), position.getZ());
+                entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.sea_serpent_arrow, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -59,6 +88,14 @@ public class ModRecipes {
         OreDictionary.registerOre("oreSapphire", ModBlocks.sapphireOre);
         OreDictionary.registerOre("blockSapphire", ModBlocks.sapphireBlock);
         OreDictionary.registerOre("boneWither", ModItems.witherbone);
+        OreDictionary.registerOre("fireDragonScaleBlock", ModBlocks.dragonscale_red);
+        OreDictionary.registerOre("fireDragonScaleBlock", ModBlocks.dragonscale_bronze);
+        OreDictionary.registerOre("fireDragonScaleBlock", ModBlocks.dragonscale_gray);
+        OreDictionary.registerOre("fireDragonScaleBlock", ModBlocks.dragonscale_green);
+        OreDictionary.registerOre("iceDragonScaleBlock", ModBlocks.dragonscale_blue);
+        OreDictionary.registerOre("iceDragonScaleBlock", ModBlocks.dragonscale_white);
+        OreDictionary.registerOre("iceDragonScaleBlock", ModBlocks.dragonscale_sapphire);
+        OreDictionary.registerOre("iceDragonScaleBlock", ModBlocks.dragonscale_silver);
         OreDictionary.registerOre("woolBlock", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodMeat", Items.CHICKEN);
         OreDictionary.registerOre("foodMeat", Items.COOKED_CHICKEN);
@@ -161,5 +198,23 @@ public class ModRecipes {
                 }
             }
         }
+    }
+
+    public static DragonForgeRecipe getFireForgeRecipe(ItemStack stack) {
+        for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
+            if (OreDictionary.itemMatches(recipe.getInput(), stack, false)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+    public static DragonForgeRecipe getIceForgeRecipe(ItemStack stack) {
+        for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
+            if (OreDictionary.itemMatches(recipe.getInput(), stack, false)) {
+                return recipe;
+            }
+        }
+        return null;
     }
 }

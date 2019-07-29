@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "iceandfire:items/dragonsteel_ice_shovel"
+  }
+}
