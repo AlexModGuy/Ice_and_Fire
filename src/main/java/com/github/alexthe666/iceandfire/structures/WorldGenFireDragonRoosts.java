@@ -17,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import java.util.Random;
 
 public class WorldGenFireDragonRoosts extends WorldGenerator {
+	private static boolean isMale;
 
 	public static void burnGround(World world, Random rand, BlockPos position, int radius) {
 		for (int i = 0; radius >= 0 && i < 3; ++i) {
@@ -54,11 +55,12 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
+		isMale = rand.nextBoolean();
 		int dragonAge = 50 + rand.nextInt(25);
 		burnGround(worldIn, rand, position, dragonAge / 5);
 		generateStructures(worldIn, rand, position, dragonAge / 5);
 		EntityFireDragon dragon = new EntityFireDragon(worldIn);
-		dragon.setGender(dragon.getRNG().nextBoolean());
+		dragon.setGender(isMale);
 		dragon.growDragon(dragonAge);
 		dragon.setAgingDisabled(true);
 		dragon.setHealth(dragon.getMaxHealth());
@@ -102,19 +104,20 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 
 	public void generateGoldPile(World world, Random rand, BlockPos position) {
 		int height = 1 + new Random().nextInt(7);
-		int chance = rand.nextInt(100);
-		if (chance < 20) {
-			world.setBlockState(position, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
-			if (world.getBlockState(position).getBlock() instanceof BlockChest) {
-				TileEntity tileentity1 = world.getTileEntity(position);
-				if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
-					((TileEntityChest) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+		if(rand.nextBoolean() || isMale) {
+			int chance = rand.nextInt(100);
+			if (chance < 20) {
+				world.setBlockState(position, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
+				if (world.getBlockState(position).getBlock() instanceof BlockChest) {
+					TileEntity tileentity1 = world.getTileEntity(position);
+					if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
+						((TileEntityChest) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+					}
 				}
+			} else {
+				world.setBlockState(position, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, height), 3);
 			}
-		} else {
-			world.setBlockState(position, ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, height), 3);
 		}
-
 	}
 
 	public void generateArchNS(World world, Random rand, BlockPos position) {

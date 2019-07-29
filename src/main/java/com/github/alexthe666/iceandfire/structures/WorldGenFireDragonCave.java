@@ -21,6 +21,7 @@ import java.util.Random;
 public class WorldGenFireDragonCave extends WorldGenerator {
 
 	public static final ResourceLocation FIREDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_cave"));
+	private static boolean isMale;
 
 	public static void setGoldPile(World world, BlockPos pos) {
 		int chance = new Random().nextInt(99) + 1;
@@ -29,7 +30,8 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 		}
 
 		if (chance < 60) {
-			boolean generateGold = IceAndFire.CONFIG.dragonDenGoldAmount > 1 ? new Random().nextInt(IceAndFire.CONFIG.dragonDenGoldAmount) == 0 : true;
+			int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
+			boolean generateGold = new Random().nextInt(goldRand) == 0;
 			world.setBlockState(pos, generateGold ? ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
 		} else if (chance > 60 && chance < 62) {
 			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
@@ -86,6 +88,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
+		isMale = rand.nextBoolean();
 		int dragonAge = 75 + rand.nextInt(50);
 		int i1 = dragonAge / 4;
 		int i2 = i1 - 2;
@@ -140,7 +143,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
 			}
 		}
 		EntityFireDragon dragon = new EntityFireDragon(worldIn);
-		dragon.setGender(dragon.getRNG().nextBoolean());
+		dragon.setGender(isMale);
 		dragon.growDragon(dragonAge);
 		dragon.setAgingDisabled(true);
 		dragon.setHealth(dragon.getMaxHealth());
