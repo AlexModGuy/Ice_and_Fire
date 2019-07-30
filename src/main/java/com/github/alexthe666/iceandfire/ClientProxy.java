@@ -81,6 +81,11 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelTrollArmor TROLL_ARMOR_MODEL_LEGS = new ModelTrollArmor(0.35F);
 	private static final ModelSeaSerpentArmor TIDE_ARMOR_MODEL = new ModelSeaSerpentArmor(0.4F);
 	private static final ModelSeaSerpentArmor TIDE_ARMOR_MODEL_LEGS = new ModelSeaSerpentArmor(0.2F);
+	private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL = new ModelDragonsteelFireArmor(0.4F);
+	private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS = new ModelDragonsteelFireArmor(0.2F);
+	private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL = new ModelDragonsteelIceArmor(0.4F);
+	private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
+
 	private FontRenderer bestiaryFontRenderer;
 	@SideOnly(Side.CLIENT)
 	private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
@@ -428,6 +433,14 @@ public class ClientProxy extends CommonProxy {
 				return TIDE_ARMOR_MODEL;
 			case 9:
 				return TIDE_ARMOR_MODEL_LEGS;
+			case 10:
+				return DRAGONSTEEL_FIRE_ARMOR_MODEL;
+			case 11:
+				return DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS;
+			case 12:
+				return DRAGONSTEEL_ICE_ARMOR_MODEL;
+			case 13:
+				return DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS;
 		}
 		return null;
 	}

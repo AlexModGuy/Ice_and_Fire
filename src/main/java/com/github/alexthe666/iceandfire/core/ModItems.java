@@ -322,13 +322,13 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_hoe")
 	public static Item dragonsteel_fire_hoe = new ItemModHoe(dragonsteel_fire_tools, "dragonsteel_fire_hoe", "iceandfire.dragonsteel_fire_hoe");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_helmet")
-	public static Item dragonsteel_fire_helmet = new ItemModArmor(dragonsteel_fire_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_fire_helmet", "iceandfire.dragonsteel_fire_helmet");
+	public static Item dragonsteel_fire_helmet = new ItemDragonsteelArmor(dragonsteel_fire_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_fire_helmet", "iceandfire.dragonsteel_fire_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_chestplate")
-	public static Item dragonsteel_fire_chestplate = new ItemModArmor(dragonsteel_fire_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_fire_chestplate", "iceandfire.dragonsteel_fire_chestplate");
+	public static Item dragonsteel_fire_chestplate = new ItemDragonsteelArmor(dragonsteel_fire_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_fire_chestplate", "iceandfire.dragonsteel_fire_chestplate");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_leggings")
-	public static Item dragonsteel_fire_leggings = new ItemModArmor(dragonsteel_fire_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_fire_leggings", "iceandfire.dragonsteel_fire_leggings");
+	public static Item dragonsteel_fire_leggings = new ItemDragonsteelArmor(dragonsteel_fire_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_fire_leggings", "iceandfire.dragonsteel_fire_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_boots")
-	public static Item dragonsteel_fire_boots = new ItemModArmor(dragonsteel_fire_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_fire_boots", "iceandfire.dragonsteel_fire_boots");
+	public static Item dragonsteel_fire_boots = new ItemDragonsteelArmor(dragonsteel_fire_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_fire_boots", "iceandfire.dragonsteel_fire_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_ingot")
 	public static Item dragonsteel_ice_ingot = new ItemGeneric("dragonsteel_ice_ingot", "iceandfire.dragonsteel_ice_ingot");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_sword")
@@ -342,13 +342,13 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_hoe")
 	public static Item dragonsteel_ice_hoe = new ItemModHoe(dragonsteel_ice_tools, "dragonsteel_ice_hoe", "iceandfire.dragonsteel_ice_hoe");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_helmet")
-	public static Item dragonsteel_ice_helmet = new ItemModArmor(dragonsteel_ice_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_ice_helmet", "iceandfire.dragonsteel_ice_helmet");
+	public static Item dragonsteel_ice_helmet = new ItemDragonsteelArmor(dragonsteel_ice_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_ice_helmet", "iceandfire.dragonsteel_ice_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_chestplate")
-	public static Item dragonsteel_ice_chestplate = new ItemModArmor(dragonsteel_ice_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
+	public static Item dragonsteel_ice_chestplate = new ItemDragonsteelArmor(dragonsteel_ice_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_leggings")
-	public static Item dragonsteel_ice_leggings = new ItemModArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
+	public static Item dragonsteel_ice_leggings = new ItemDragonsteelArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
-	public static Item dragonsteel_ice_boots = new ItemModArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+	public static Item dragonsteel_ice_boots = new ItemDragonsteelArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
 
 	static {
 		EnumDragonArmor.initArmors();

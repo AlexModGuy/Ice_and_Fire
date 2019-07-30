@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.math.MathHelper;
 
 public class IceAndFireTabulaModelAnimator {
@@ -60,7 +58,7 @@ public class IceAndFireTabulaModelAnimator {
     }
 
     public float distance(float rotateAngleFrom, float rotateAngleTo) {
-        return (float)MathHelper.atan2(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
+        return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
     }
 
     public void rotate(ModelAnimator animator, AdvancedModelRenderer model, float x, float y, float z) {
