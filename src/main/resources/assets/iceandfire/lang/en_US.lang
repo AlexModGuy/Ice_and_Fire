@@ -59,7 +59,8 @@ tile.iceandfire.dragonforge_fire_input.name=Dragonforge Fire Aperture
 tile.iceandfire.dragonforge_ice_brick.name=Dragonforge Ice Brick
 tile.iceandfire.dragonforge_ice_core.name=Dragonforge Ice Core
 tile.iceandfire.dragonforge_ice_input.name=Dragonforge Ice Aperture
-
+tile.iceandfire.dragonsteel_fire_block.name=Block of Fire Dragonsteel
+tile.iceandfire.dragonsteel_ice_block.name=Block of Ice Dragonsteel
 tile.iceandfire.desert_myrmex_resin.name=Desert Myrmex Resin
 tile.iceandfire.desert_myrmex_resin_sticky.name=Sticky Desert Myrmex Resin
 tile.iceandfire.jungle_myrmex_resin.name=Jungle Myrmex Resin
