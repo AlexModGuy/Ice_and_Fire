@@ -477,6 +477,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_silver) {
             return 4;
         }
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_dragonsteel_fire) {
+            return 5;
+        }
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.dragon_armor_dragonsteel_ice) {
+            return 6;
+        }
         return 0;
     }
 
@@ -955,6 +961,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     break;
                 case 4:
                     val += 3D;
+                    break;
+                case 5:
+                    val += 10D;
+                    break;
+                case 6:
+                    val += 10D;
                     break;
             }
         }

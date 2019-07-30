@@ -139,6 +139,10 @@ public class ModItems {
 	public static Item dragon_armor_diamond = new ItemDragonArmor(2, "dragonarmor_diamond");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_silver")
 	public static Item dragon_armor_silver = new ItemDragonArmor(3, "dragonarmor_silver");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_dragonsteel_fire")
+	public static Item dragon_armor_dragonsteel_fire = new ItemDragonArmor(4, "dragonarmor_dragonsteel_fire");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_dragonsteel_ice")
+	public static Item dragon_armor_dragonsteel_ice = new ItemDragonArmor(5, "dragonarmor_dragonsteel_ice");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_meal")
 	public static Item dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sickly_dragon_meal")

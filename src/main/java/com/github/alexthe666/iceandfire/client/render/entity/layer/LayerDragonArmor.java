@@ -24,7 +24,6 @@ public class LayerDragonArmor implements LayerRenderer {
 					this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).ICETEXTURE);
 				} else {
 					this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).FIRETEXTURE);
-
 				}
 				this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
 			}

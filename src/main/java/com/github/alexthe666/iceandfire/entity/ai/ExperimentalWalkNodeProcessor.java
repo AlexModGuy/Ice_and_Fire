@@ -40,7 +40,6 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
 
     public PathPoint getStart() {
         int i;
-
         if (this.getCanSwim() && this.entity.isInWater()) {
             i = (int) this.entity.getEntityBoundingBox().minY;
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ));
@@ -53,11 +52,9 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
             i = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
         } else {
             BlockPos blockpos;
-
             for (blockpos = new BlockPos(this.entity); (this.blockaccess.getBlockState(blockpos).getMaterial() == Material.AIR || this.blockaccess.getBlockState(blockpos).getBlock().isPassable(this.blockaccess, blockpos)) && blockpos.getY() > 0; blockpos = blockpos.down()) {
                 ;
             }
-
             i = blockpos.up().getY();
         }
 
