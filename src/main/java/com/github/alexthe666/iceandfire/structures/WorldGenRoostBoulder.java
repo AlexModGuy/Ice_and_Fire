@@ -8,13 +8,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class WorldGenBoulder extends WorldGenerator {
+public class WorldGenRoostBoulder extends WorldGenerator {
 
     private final Block block;
     private final int startRadius;
     private boolean replaceAir;
 
-    public WorldGenBoulder(Block blockIn, int startRadiusIn, boolean replaceAir) {
+    public WorldGenRoostBoulder(Block blockIn, int startRadiusIn, boolean replaceAir) {
         super(false);
         this.block = blockIn;
         this.startRadius = startRadiusIn;

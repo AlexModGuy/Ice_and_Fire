@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
@@ -84,7 +82,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
 					}
 					if(dist > 0.5D && rand.nextInt(1000) == 0){
 						BlockPos height = worldIn.getHeight(blockpos);
-						new WorldGenBoulder(ModBlocks.frozenCobblestone, rand.nextInt(3), true).generate(worldIn, rand, height);
+						new WorldGenRoostBoulder(ModBlocks.frozenCobblestone, rand.nextInt(3), true).generate(worldIn, rand, height);
 					}
 					if(rand.nextInt(1000) == 0){
 						BlockPos height = worldIn.getHeight(blockpos);

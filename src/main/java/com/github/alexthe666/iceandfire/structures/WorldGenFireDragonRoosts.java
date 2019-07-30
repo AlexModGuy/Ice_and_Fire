@@ -82,7 +82,7 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 					}
 					if(dist > 0.5D && rand.nextInt(1000) == 0){
 						BlockPos height = worldIn.getHeight(blockpos);
-						new WorldGenBoulder(ModBlocks.charedCobblestone, rand.nextInt(3), true).generate(worldIn, rand, height);
+						new WorldGenRoostBoulder(ModBlocks.charedCobblestone, rand.nextInt(3), true).generate(worldIn, rand, height);
 					}
 					if(rand.nextInt(1000) == 0){
 						BlockPos height = worldIn.getHeight(blockpos);
