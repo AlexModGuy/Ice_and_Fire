@@ -29,7 +29,7 @@ public class ItemModAxe extends ItemTool {
 
 	public ItemModAxe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial, EFFECTIVE_ON);
-		this.attackDamage = toolmaterial == ModItems.boneTools ? 8 : 6;
+		this.attackDamage = toolmaterial.getAttackDamage() + 5;
 		this.attackSpeed = -3;
 		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB_ITEMS);

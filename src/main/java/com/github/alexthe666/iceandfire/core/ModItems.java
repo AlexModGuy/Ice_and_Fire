@@ -36,9 +36,8 @@ public class ModItems {
 	public static ToolMaterial iceBoneTools = EnumHelper.addToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
 	public static ToolMaterial trollWeapon = EnumHelper.addToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
 	public static ToolMaterial myrmexChitin = EnumHelper.addToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
-	public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, 8000, 10.0F, 20.0F, 10);
-	public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, 8000, 10.0F, 20.0F, 10);
-
+	public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
+	public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
 	public static Item bestiary = new ItemBestiary();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":manuscript")

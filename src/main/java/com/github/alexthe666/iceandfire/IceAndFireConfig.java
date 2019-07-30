@@ -105,7 +105,6 @@ public class IceAndFireConfig {
 	public int myrmexColonyGenChance = 150;
 	public int myrmexColonySize = 80;
 	public boolean experimentalPathFinder;
-
 	public boolean spawnAmphitheres = true;
 	public int amphithereSpawnRate = 10;
 	public float amphithereVillagerSearchLength = 64;
@@ -113,12 +112,12 @@ public class IceAndFireConfig {
 	public float amphithereFlightSpeed = 1.75F;
 	public double amphithereMaxHealth = 50D;
 	public double amphithereAttackStrength = 7D;
-
 	public boolean spawnSeaSerpents = true;
 	public int seaSerpentSpawnChance = 200;
 	public boolean seaSerpentGriefing = true;
 	public double seaSerpentBaseHealth = 20D;
 	public double seaSerpentAttackStrength = 4D;
+	public double dragonsteelBaseDamage = 25F;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -250,6 +249,6 @@ public class IceAndFireConfig {
 		this.seaSerpentBaseHealth = (double)config.getFloat("Sea Serpent Base Health", "all", 20, 1, 10000, "Default sea serpent health, this is scaled to the sea serpent's particular size");
 		this.seaSerpentAttackStrength = (double)config.getFloat("Sea Serpent Base Attack Strength", "all", 4, 1, 10000, "Default sea serpent attack strength, this is scaled to the sea serpent's particular size");
 
-
+		this.dragonsteelBaseDamage = (double)config.getFloat("Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
 	}
 }
