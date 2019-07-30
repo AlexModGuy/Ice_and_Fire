@@ -1,12 +1,24 @@
 {
   "pools": [
     {
-      "name": "ice_dragon_cave",
+      "name": "fire_dragon_cave",
       "rolls": {
         "min": 1,
         "max": 4
       },
       "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:book",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "enchant_with_levels",
+              "levels": 30,
+              "treasure": true
+            }
+          ]
+        },
         {
           "type": "item",
           "name": "minecraft:diamond",
@@ -23,7 +35,7 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:sapphire_gem",
+          "name": "minecraft:emerald",
           "functions": [
             {
               "function": "set_count",
@@ -33,7 +45,7 @@
               }
             }
           ],
-          "weight": 7
+          "weight": 3
         },
         {
           "type": "item",
@@ -43,7 +55,7 @@
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 10
+                "max": 25
               }
             }
           ],
@@ -57,7 +69,7 @@
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 10
+                "max": 25
               }
             }
           ],
@@ -65,17 +77,17 @@
         },
         {
           "type": "item",
-          "name": "minecraft:book",
+          "name": "iceandfire:chain_link",
           "functions": [
             {
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 2
+                "max": 6
               }
             }
           ],
-          "weight": 10
+          "weight": 20
         },
         {
           "type": "item",
@@ -93,21 +105,21 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:silver_ingot",
+          "name": "minecraft:gold_ingot",
           "functions": [
             {
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 10
+                "max": 25
               }
             }
           ],
-          "weight": 10
+          "weight": 20
         },
         {
           "type": "item",
-          "name": "iceandfire:silver_nugget",
+          "name": "minecraft:gold_nugget",
           "functions": [
             {
               "function": "set_count",
@@ -117,7 +129,7 @@
               }
             }
           ],
-          "weight": 15
+          "weight": 30
         },
         {
           "type": "item",
@@ -131,7 +143,7 @@
               }
             }
           ],
-          "weight": 3
+          "weight": 1
         },
         {
           "type": "item",
@@ -145,11 +157,11 @@
               }
             }
           ],
-          "weight": 15
+          "weight": 5
         },
         {
           "type": "item",
-          "name": "iceandfire:silver_sword",
+          "name": "minecraft:diamond_sword",
           "functions": [
             {
               "function": "set_count",
@@ -157,13 +169,18 @@
                 "min": 1,
                 "max": 1
               }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
             }
           ],
           "weight": 5
         },
         {
           "type": "item",
-          "name": "iceandfire:armor_silver_metal_helmet",
+          "name": "minecraft:diamond_helmet",
           "functions": [
             {
               "function": "set_count",
@@ -171,13 +188,18 @@
                 "min": 1,
                 "max": 1
               }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
             }
           ],
           "weight": 5
         },
         {
           "type": "item",
-          "name": "iceandfire:armor_silver_metal_chestplate",
+          "name": "minecraft:diamond_chestplate",
           "functions": [
             {
               "function": "set_count",
@@ -185,13 +207,18 @@
                 "min": 1,
                 "max": 1
               }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
             }
           ],
           "weight": 5
         },
         {
           "type": "item",
-          "name": "iceandfire:armor_silver_metal_leggings",
+          "name": "minecraft:diamond_leggings",
           "functions": [
             {
               "function": "set_count",
@@ -199,13 +226,18 @@
                 "min": 1,
                 "max": 1
               }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
             }
           ],
           "weight": 5
         },
         {
           "type": "item",
-          "name": "iceandfire:armor_silver_metal_boots",
+          "name": "minecraft:diamond_boots",
           "functions": [
             {
               "function": "set_count",
@@ -213,13 +245,113 @@
                 "min": 1,
                 "max": 1
               }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
             }
           ],
           "weight": 5
         },
         {
           "type": "item",
-          "name": "minecraft:packed_ice",
+          "name": "minecraft:iron_sword",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_helmet",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_chestplate",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_leggings",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_boots",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "enchant_with_levels",
+              "levels": 25,
+              "treasure": true
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:obsidian",
           "functions": [
             {
               "function": "set_count",
@@ -230,6 +362,17 @@
             }
           ],
           "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_apple",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "set_data",
+              "data": 1
+            }
+          ]
         },
         {
           "type": "item",

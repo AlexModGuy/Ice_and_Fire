@@ -123,7 +123,6 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        groundAttack = IaFDragonAttacks.Ground.SHAKE_PREY;
         if (this.getAnimation() == ANIMATION_WINGBLAST) {
             return false;
         }

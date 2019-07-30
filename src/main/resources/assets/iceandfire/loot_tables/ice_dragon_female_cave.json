@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "fire_dragon_cave",
+      "name": "ice_dragon_cave",
       "rolls": {
         "min": 1,
         "max": 4
@@ -23,7 +23,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:emerald",
+          "name": "iceandfire:sapphire_gem",
           "functions": [
             {
               "function": "set_count",
@@ -33,7 +33,7 @@
               }
             }
           ],
-          "weight": 3
+          "weight": 7
         },
         {
           "type": "item",
@@ -79,6 +79,20 @@
         },
         {
           "type": "item",
+          "name": "iceandfire:chain_link",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ],
+          "weight": 20
+        },
+        {
+          "type": "item",
           "name": "iceandfire:manuscript",
           "functions": [
             {
@@ -93,7 +107,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:gold_ingot",
+          "name": "iceandfire:silver_ingot",
           "functions": [
             {
               "function": "set_count",
@@ -103,11 +117,11 @@
               }
             }
           ],
-          "weight": 7
+          "weight": 10
         },
         {
           "type": "item",
-          "name": "minecraft:gold_nugget",
+          "name": "iceandfire:silver_nugget",
           "functions": [
             {
               "function": "set_count",
@@ -117,7 +131,7 @@
               }
             }
           ],
-          "weight": 12
+          "weight": 15
         },
         {
           "type": "item",
@@ -149,7 +163,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:iron_sword",
+          "name": "iceandfire:silver_sword",
           "functions": [
             {
               "function": "set_count",
@@ -163,7 +177,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:iron_helmet",
+          "name": "iceandfire:armor_silver_metal_helmet",
           "functions": [
             {
               "function": "set_count",
@@ -177,7 +191,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:iron_chestplate",
+          "name": "iceandfire:armor_silver_metal_chestplate",
           "functions": [
             {
               "function": "set_count",
@@ -191,7 +205,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:iron_leggings",
+          "name": "iceandfire:armor_silver_metal_leggings",
           "functions": [
             {
               "function": "set_count",
@@ -205,7 +219,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:iron_boots",
+          "name": "iceandfire:armor_silver_metal_boots",
           "functions": [
             {
               "function": "set_count",
@@ -219,7 +233,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:obsidian",
+          "name": "minecraft:packed_ice",
           "functions": [
             {
               "function": "set_count",

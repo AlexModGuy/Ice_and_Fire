@@ -12,147 +12,162 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WorldGenFireDragonCave extends WorldGenerator {
-
-	public static final ResourceLocation FIREDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_cave"));
 	private static boolean isMale;
+	public static final ResourceLocation FIREDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_female_cave"));
+	public static final ResourceLocation FIREDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_male_cave"));
+	private List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
+	private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(ModBlocks.charedStone);
 
-	public static void setGoldPile(World world, BlockPos pos) {
-		int chance = new Random().nextInt(99) + 1;
+	@Override
+	public boolean generate(World worldIn, Random rand, BlockPos position) {
+		sphereList.clear();
+		isMale = rand.nextBoolean();
+		int dragonAge = 75 + rand.nextInt(50);
+		int radius = (int)(dragonAge * 0.2F) + rand.nextInt(8);
+		createShell(worldIn, rand, position, radius);
+		for(int i = 0; i < 3 + rand.nextInt(2); i++){
+			EnumFacing direction = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length - 1)];
+			createShell(worldIn, rand, position.offset(direction, radius - 2), 2 * (int)(radius / 3F) + rand.nextInt(8));
+		}
+		for(SphereInfo info : sphereList){
+			hollowOut(worldIn, rand, info.pos, info.radius - 2);
+			decorateCave(worldIn, rand, info.pos, info.radius + 2);
+		}
+		sphereList.clear();
+		EntityFireDragon dragon = new EntityFireDragon(worldIn);
+		dragon.setGender(isMale);
+		dragon.growDragon(dragonAge);
+		dragon.setAgingDisabled(true);
+		dragon.setHealth(dragon.getMaxHealth());
+		dragon.setVariant(rand.nextInt(4));
+		dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+		dragon.setSleeping(true);
+		dragon.homePos = position;
+		dragon.setHunger(50);
+		worldIn.spawnEntity(dragon);
+		return false;
+	}
+
+	private void decorateCave(World worldIn, Random rand, BlockPos pos, int radius) {
+		for(int i = 0; i < 15 + rand.nextInt(10); i++) {
+			CEILING_DECO.generate(worldIn, rand, offsetRandomlyByXZ(pos.up(radius/2 - 1), rand, rand.nextInt(radius) - radius/2, rand.nextInt(radius) - radius/2));
+		}
+		int j = radius;
+		int k = radius / 2;
+		int l = radius;
+		float f = (float) (j + k + l) * 0.333F + 0.5F;
+		for (BlockPos blockpos : BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k/2, l))) {
+			if (blockpos.distanceSq(pos) <= (double) (f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
+				this.setGoldPile(worldIn, blockpos, rand);
+			}
+		}
+
+	}
+
+	private BlockPos offsetRandomlyBy(BlockPos in, Random rand, int offset1, int offset2){
+		return in.offset(EnumFacing.values()[rand.nextInt(EnumFacing.values().length - 1)], offset1).offset(EnumFacing.values()[rand.nextInt(EnumFacing.values().length - 1)], offset2);
+	}
+
+	private BlockPos offsetRandomlyByXZ(BlockPos in, Random rand, int offset1, int offset2){
+		return in.add(offset1, 0, offset2);
+	}
+
+	private void createShell(World worldIn, Random rand, BlockPos position, int radius){
+		int j = radius;
+		int k = radius / 2;
+		int l = radius;
+		float f = (float) (j + k + l) * 0.333F + 0.5F;
+		for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
+			if (blockpos.distanceSq(position) <= (double) (f * f)) {
+				if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+					boolean doOres = rand.nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
+					if (doOres) {
+						int chance = rand.nextInt(199) + 1;
+						if (chance < 30) {
+							worldIn.setBlockState(blockpos, Blocks.IRON_ORE.getDefaultState(), 3);
+						}
+						if (chance > 30 && chance < 40) {
+							worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
+						}
+						if (chance > 40 && chance < 50) {
+							worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : ModBlocks.charedStone.getDefaultState(), 3);
+						}
+						if (chance > 50 && chance < 60) {
+							worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
+						}
+						if (chance > 60 && chance < 70) {
+							worldIn.setBlockState(blockpos, Blocks.REDSTONE_ORE.getDefaultState(), 3);
+						}
+						if (chance > 70 && chance < 80) {
+							worldIn.setBlockState(blockpos, Blocks.LAPIS_ORE.getDefaultState(), 3);
+						}
+						if (chance > 80 && chance < 90) {
+							worldIn.setBlockState(blockpos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
+						}
+						if (chance > 90 && chance < 1000) {
+							worldIn.setBlockState(blockpos, Blocks.EMERALD_ORE.getDefaultState(), 3);
+						}
+					}else{
+						worldIn.setBlockState(blockpos, rand.nextBoolean() ? ModBlocks.charedCobblestone.getDefaultState() : ModBlocks.charedStone.getDefaultState());
+					}
+				}
+			}
+		}
+		sphereList.add(new SphereInfo(radius, position));
+	}
+
+	private void hollowOut(World worldIn, Random rand, BlockPos position, int radius){
+		int j = radius;
+		int k = radius / 2;
+		int l = radius;
+		float f = (float) (j + k + l) * 0.333F + 0.5F;
+		for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
+			if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
+				if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
+					worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+				}
+			}
+		}
+	}
+
+	public static void setGoldPile(World world, BlockPos pos, Random rand) {
+		int chance = rand.nextInt(99) + 1;
 		if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
 			return;
 		}
 
 		if (chance < 60) {
 			int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
-			boolean generateGold = new Random().nextInt(goldRand) == 0;
-			world.setBlockState(pos, generateGold ? ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+			boolean generateGold = rand.nextInt(goldRand) == 0;
+			world.setBlockState(pos, generateGold ? ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
 		} else if (chance > 60 && chance < 62) {
-			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
+			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 3);
 			if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
 				TileEntity tileentity1 = world.getTileEntity(pos);
 				if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
-					((TileEntityChest) tileentity1).setLootTable(FIREDRAGON_CHEST, new Random().nextLong());
+					((TileEntityChest) tileentity1).setLootTable(isMale ? FIREDRAGON_MALE_CHEST : FIREDRAGON_CHEST, rand.nextLong());
 				}
 			}
 		}
 	}
 
-	public static void setOres(World world, BlockPos pos) {
-		float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
-		if(hardness == -1.0F || world.isAirBlock(pos)){
-			return;
-		}
-		boolean vien_chance = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
-		if (vien_chance) {
-			int chance = new Random().nextInt(199) + 1;
-			if (chance < 30) {
-				world.setBlockState(pos, Blocks.IRON_ORE.getDefaultState(), 3);
-			}
-			if (chance > 30 && chance < 40) {
-				world.setBlockState(pos, Blocks.GOLD_ORE.getDefaultState(), 3);
-			}
-			if (chance > 40 && chance < 50) {
-				world.setBlockState(pos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : ModBlocks.charedStone.getDefaultState(), 3);
-			}
-			if (chance > 50 && chance < 60) {
-				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState(), 3);
-			}
-			if (chance > 60 && chance < 70) {
-				world.setBlockState(pos, Blocks.REDSTONE_ORE.getDefaultState(), 3);
-			}
-			if (chance > 70 && chance < 80) {
-				world.setBlockState(pos, Blocks.LAPIS_ORE.getDefaultState(), 3);
-			}
-			if (chance > 80 && chance < 90) {
-				world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
-			}
-			if (chance > 90 && chance < 1000) {
-				world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState(), 3);
-			}
-		} else {
-			int chance = new Random().nextInt(2);
-			if (chance == 0) {
-				world.setBlockState(pos, ModBlocks.charedStone.getDefaultState(), 3);
-			} else {
-				world.setBlockState(pos, ModBlocks.charedCobblestone.getDefaultState(), 3);
-			}
-		}
-	}
+	private class SphereInfo{
+		int radius;
+		BlockPos pos;
 
-	@Override
-	public boolean generate(World worldIn, Random rand, BlockPos position) {
-		isMale = rand.nextBoolean();
-		int dragonAge = 75 + rand.nextInt(50);
-		int i1 = dragonAge / 4;
-		int i2 = i1 - 2;
-		int ySize = rand.nextInt(2);
-		for (int i = 0; i1 >= 0 && i < 3; ++i) {
-			int j = i1 + rand.nextInt(2);
-			int k = i1 / 2 + ySize;
-			int l = i1 + rand.nextInt(2);
-			float f = (float) (j + k + l) * 0.333F + 0.5F;
-			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
-						worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
-					}
-				}
-			}
+		private SphereInfo(int radius, BlockPos pos){
+			this.radius = radius;
+			this.pos = pos;
 		}
-		for (int i = 0; i2 >= 0 && i < 3; ++i) {
-			int j = i2 + rand.nextInt(2);
-			int k = i2 / 2 + ySize;
-			int l = i2 + rand.nextInt(2);
-			float f = (float) (j + k + l) * 0.333F + 0.5F;
-			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f)) {
-					if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
-						worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
-					}
-				}
-			}
-		}
-		for (int i = 0; i2 >= 0 && i < 3; ++i) {
-			int j = i2 + rand.nextInt(2);
-			int k = (i2 + rand.nextInt(2));
-			int l = i2 + rand.nextInt(2);
-			float f = (float) (j + k + l) * 0.333F + 0.5F;
-			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				float hardness = worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position);
-				if (blockpos.distanceSq(position) <= (double) (f * f) &&  hardness >= 0 && hardness != -1) {
-					this.setOres(worldIn, blockpos);
-				}
-			}
-		}
-		for (int i = 0; i2 >= 0 && i < 3; ++i) {
-			int j = i2 + rand.nextInt(2);
-			int k = (i2 + rand.nextInt(2)) / 2;
-			int l = i2 + rand.nextInt(2);
-			float f = (float) (j + k + l) * 0.333F + 0.5F;
-			for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-				if (blockpos.distanceSq(position) <= (double) (f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
-					this.setGoldPile(worldIn, blockpos);
-				}
-			}
-		}
-		EntityFireDragon dragon = new EntityFireDragon(worldIn);
-		dragon.setGender(isMale);
-		dragon.growDragon(dragonAge);
-		dragon.setAgingDisabled(true);
-		dragon.setHealth(dragon.getMaxHealth());
-		dragon.setVariant(new Random().nextInt(4));
-		dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-		dragon.setSleeping(true);
-		dragon.homePos = position;
-		dragon.setHunger(50);
-		worldIn.spawnEntity(dragon);
-		return true;
 	}
 }

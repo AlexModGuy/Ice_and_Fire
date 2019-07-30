@@ -98,7 +98,7 @@ public class WorldGenFireDragonRoosts extends WorldGenerator {
 						if (worldIn.getBlockState(height).getBlock() instanceof BlockChest) {
 							TileEntity tileentity1 = worldIn.getTileEntity(height);
 							if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
-								((TileEntityChest) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+								//((TileEntityChest) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
 							}
 						}
 					}
