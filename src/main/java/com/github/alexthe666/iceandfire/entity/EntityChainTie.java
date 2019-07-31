@@ -97,7 +97,7 @@ public class EntityChainTie extends EntityHanging {
         List<EntityLiving> list = this.world.<EntityLiving>getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
         for (EntityLiving entityliving : list) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(this)) {
+            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
                 chainProperties.removeChain(this);
                 EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
                 entityitem.setDefaultPickupDelay();
@@ -116,8 +116,8 @@ public class EntityChainTie extends EntityHanging {
 
             for (EntityLiving entityliving : list) {
                 ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-                if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(player)) {
-                    chainProperties.addChain(this);
+                if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, player)) {
+                    chainProperties.addChain(entityliving, this);
                     chainProperties.removeChain(player);
                     flag = true;
                 }
@@ -129,7 +129,7 @@ public class EntityChainTie extends EntityHanging {
                 if (player.capabilities.isCreativeMode) {
                     for (EntityLiving entityliving1 : list) {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
-                        if (chainProperties.isChained() && chainProperties.isConnectedToEntity(this)) {
+                        if (chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving1, this)) {
                             chainProperties.removeChain(this);
                             EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
                             entityitem.setDefaultPickupDelay();

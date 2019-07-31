@@ -17,6 +17,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -352,6 +353,12 @@ public class EventLiving {
     public void onEntityDie(LivingDeathEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
         if (chainProperties != null) {
+            chainProperties.minimizeLists();
+            if(!event.getEntity().world.isRemote) {
+                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(ModItems.chain, chainProperties.connectedEntities.size()));
+                entityitem.setDefaultPickupDelay();
+                event.getEntity().world.spawnEntity(entityitem);
+            }
             chainProperties.clearChained();
         }
     }
@@ -374,7 +381,7 @@ public class EventLiving {
                 chainProperties.wasJustDisconnected = false;
             }
             if (!event.getEntityLiving().world.isRemote) {
-                chainProperties.updateConnectedEntities();
+                chainProperties.updateConnectedEntities(event.getEntityLiving());
                 for (Entity chainer : chainProperties.connectedEntities) {
                     float f = event.getEntityLiving().getDistance(chainer);
                     if (f > 7) {
@@ -385,6 +392,7 @@ public class EventLiving {
                         event.getEntityLiving().motionY += d1 * Math.abs(d1) * 0.2D;
                         event.getEntityLiving().motionZ += d2 * Math.abs(d2) * 0.4D;
                     }
+                    System.out.println(f);
                 }
             }
         }
@@ -580,8 +588,8 @@ public class EventLiving {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
         if (chainProperties != null) {
             //chainProperties.debug();
-            chainProperties.updateConnectedEntities();
-            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getEntityPlayer())) {
+            chainProperties.updateConnectedEntities(event.getTarget());
+            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getEntityPlayer())) {
                 chainProperties.removeChain(event.getEntityPlayer());
                 if (!event.getWorld().isRemote) {
                     event.getTarget().dropItem(ModItems.chain, 1);
@@ -677,7 +685,7 @@ public class EventLiving {
         if (event.getEntity() instanceof EntityLivingBase) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
             if (properties != null) {
-                properties.updateConnectedEntities();
+                properties.updateConnectedEntities(event.getEntity());
             }
         }
         if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal) {
@@ -712,39 +720,4 @@ public class EventLiving {
         String className = entity.getClass().getName();
         return className.contains("ferret") || className.contains("polecat");
     }
-
-    //@SubscribeEvent
-    //public void onItemEvent(PlayerEvent.ItemPickupEvent event) {
-    //	if (event.pickedUp.getItem().getItem() == ModItems.manuscript) {
-    //		event.player.addStat(ModAchievements.manuscript, 1);
-    //	}
-    //	if (event.pickedUp.getItem().getItem() == Item.getItemFromBlock((ModBlocks.silverOre))) {
-    //		event.player.addStat(ModAchievements.silver, 1);
-    //	}
-    //	if (event.pickedUp.getItem().getItem() == Item.getItemFromBlock((ModBlocks.sapphireOre))) {
-    //		event.player.addStat(ModAchievements.sapphire, 1);
-    //	}
-    //}
-
-    //@SubscribeEvent
-    //public void onCraftEvent(PlayerEvent.ItemCraftedEvent event) {
-    //	EntityPlayer player = event.player;
-    //	if (event.crafting.getItem() == ModItems.bestiary) {
-    //		player.addStat(ModAchievements.bestiary, 1);
-    //	}
-    //	if (event.crafting.getItem() == ModItems.silver_sword || event.crafting.getItem() == ModItems.silver_pickaxe || event.crafting.getItem() == ModItems.silver_axe || event.crafting.getItem() == ModItems.silver_shovel || event.crafting.getItem() == ModItems.silver_hoe) {
-    //		player.addStat(ModAchievements.silverTool, 1);
-    //	}
-    //	if (event.crafting.getItem() == ModItems.dragon_horn || event.crafting.getItem() == ModItems.dragonbone_bow || event.crafting.getItem() == ModItems.dragonbone_sword || event.crafting.getItem() == ModItems.dragonbone_pickaxe || event.crafting.getItem() == ModItems.dragonbone_axe || event.crafting.getItem() == ModItems.dragonbone_shovel || event.crafting.getItem() == ModItems.dragonbone_hoe) {
-    //		player.addStat(ModAchievements.boneTool, 1);
-    //	}
-    //	if (event.crafting.getItem() instanceof ItemDragonArmor) {
-    //		player.addStat(ModAchievements.dragonArmor, 1);
-    //	}
-    //	if (event.crafting.getItem() == ModItems.dragonbone_sword_fire) {
-    //		player.addStat(ModAchievements.fireSword, 1);
-    //	}
-    //	if (event.crafting.getItem() == ModItems.dragonbone_sword_ice) {
-    //		player.addStat(ModAchievements.iceSword, 1);
-    //	}
 }

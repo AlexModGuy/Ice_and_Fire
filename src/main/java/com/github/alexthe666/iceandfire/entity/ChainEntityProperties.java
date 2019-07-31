@@ -47,7 +47,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			connectedEntityUUID.add(nbttagcompound.getUniqueId("UUID"));
 		}
-		updateConnectedEntities();
+		updateConnectedEntities(getEntity());
 	}
 
 	public void clearChained(){
@@ -61,7 +61,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	@Override
 	public void init() {
-		updateConnectedEntities();
+		updateConnectedEntities(getEntity());
 		if(getEntity().ignoreFrustumCheck){
 			alreadyIgnoresCamera = true;
 		}else{
@@ -69,12 +69,12 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		}
 	}
 
-	public void addChain(Entity entity){
+	public void addChain(Entity parent, Entity entity){
 		minimizeLists();
 		if(!connectedEntityUUID.contains(entity.getUniqueID())) {
 			connectedEntityUUID.add(entity.getUniqueID());
 		}
-		updateConnectedEntities();
+		updateConnectedEntities(parent);
 	}
 
 	public void removeChain(Entity entity){
@@ -111,11 +111,11 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		connectedEntities = noDupesEntity;
 	}
 
-	public void updateConnectedEntities(){
+	public void updateConnectedEntities(Entity toUpdate){
 		connectedEntities.clear();
 		List<UUID> addedUUIDs = new ArrayList<UUID>();
-		if(getEntity() != null) {
-			World world = getEntity().world;
+		if(toUpdate != null) {
+			World world = toUpdate.world;
 			if (!connectedEntityUUID.isEmpty() && world != null && !world.isRemote) {
 				minimizeLists();
 				for (UUID uuid : connectedEntityUUID) {
@@ -124,7 +124,7 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 						if (entity != null) {
 							if (!addedUUIDs.contains(entity.getUniqueID())) {
 								addedUUIDs.add(entity.getUniqueID());
-								IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
+								IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(toUpdate.getEntityId(), entity.getEntityId()));
 								connectedEntities.add(entity);
 							}
 						}
@@ -132,10 +132,6 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 				}
 			}
 		}
-	}
-
-	public void updateClients(){
-		updateConnectedEntities();
 	}
 
 	@Override
@@ -148,8 +144,8 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		return EntityLivingBase.class;
 	}
 
-	public boolean isConnectedToEntity(Entity entity) {
-		updateConnectedEntities();
+	public boolean isConnectedToEntity(Entity parent, Entity entity) {
+		updateConnectedEntities(parent);
 		return this.connectedEntities.contains(entity);
 	}
 }

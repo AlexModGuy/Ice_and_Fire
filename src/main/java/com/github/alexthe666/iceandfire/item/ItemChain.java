@@ -50,7 +50,7 @@ public class ItemChain extends Item {
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(target, ChainEntityProperties.class);
         if (chainProperties != null) {
-            if(chainProperties.isConnectedToEntity(playerIn)|| chainProperties.wasJustDisconnected){
+            if(chainProperties.isConnectedToEntity(target, playerIn)|| chainProperties.wasJustDisconnected){
                 chainProperties.wasJustDisconnected = false;
                 return true;
             }else{
@@ -62,24 +62,24 @@ public class ItemChain extends Item {
                     boolean flag = false;
                     for (EntityLiving entityliving : playerIn.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
                         ChainEntityProperties otherChainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-                        if (otherChainProperties != null && otherChainProperties.isChained() && otherChainProperties.isConnectedToEntity(playerIn)) {
-                            chainProperties.addChain(entityliving);
+                        if (otherChainProperties != null && otherChainProperties.isChained() && otherChainProperties.isConnectedToEntity(entityliving, playerIn)) {
+                            chainProperties.addChain(target, entityliving);
                             chainProperties.removeChain(playerIn);
                             otherChainProperties.removeChain(playerIn);
                             flag = true;
                         }
                     }
                     if(!flag){
-                        chainProperties.addChain(playerIn);
+                        chainProperties.addChain(target, playerIn);
                     }
                 }else{
-                    chainProperties.addChain(playerIn);
+                    chainProperties.addChain(target, playerIn);
                 }
                 if(!playerIn.isCreative()){
                     stack.shrink(1);
                 }
             }
-            chainProperties.updateConnectedEntities();
+            chainProperties.updateConnectedEntities(target);
             return true;
         }
         return false;
@@ -109,11 +109,11 @@ public class ItemChain extends Item {
 
         for (EntityLiving entityliving : worldIn.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(player)) {
+            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, player)) {
                 if (entityleashknot == null) {
                     entityleashknot = EntityChainTie.createKnot(worldIn, fence);
                 }
-                chainProperties.addChain(entityleashknot);
+                chainProperties.addChain(entityliving, entityleashknot);
                 chainProperties.removeChain(player);
                 flag = true;
             }
