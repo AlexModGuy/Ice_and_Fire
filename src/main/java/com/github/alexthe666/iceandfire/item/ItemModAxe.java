@@ -4,7 +4,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
 import com.google.common.collect.Sets;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,8 +14,10 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
@@ -65,6 +69,16 @@ public class ItemModAxe extends ItemTool {
 				target.attackEntityFrom(DamageSource.GENERIC, 4);
 			}
 		}
+		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+			target.setFire(15);
+			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		}
+		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
+			frozenProps.setFrozenFor(300);
+			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
+			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		}
 		return super.hitEntity(stack, target, attacker);
 	}
 
@@ -75,6 +89,18 @@ public class ItemModAxe extends ItemTool {
 		}
 		if (this == ModItems.myrmex_desert_axe || this == ModItems.myrmex_jungle_axe) {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
+		}
+		if (this == ModItems.dragonsteel_fire_sword) {
+			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+		}
+		if (this == ModItems.dragonsteel_ice_sword) {
+			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
+		}
+		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+			tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+		}
+		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
 		}
 	}
 

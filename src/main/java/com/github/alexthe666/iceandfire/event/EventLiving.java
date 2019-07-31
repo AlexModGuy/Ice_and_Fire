@@ -6,9 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.item.ItemChain;
-import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
-import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -170,7 +168,22 @@ public class EventLiving {
             }
             event.setAmount(event.getAmount() * multi);
         }
-
+        if (event.getSource() == IceAndFire.dragonFire || event.getSource() == IceAndFire.dragonIce) {
+            float multi = 1;
+            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor) {
+                multi -= 0.1;
+            }
+            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor) {
+                multi -= 0.3;
+            }
+            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor) {
+                multi -= 0.2;
+            }
+            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemScaleArmor) {
+                multi -= 0.1;
+            }
+            event.setAmount(event.getAmount() * multi);
+        }
     }
 
     @SubscribeEvent

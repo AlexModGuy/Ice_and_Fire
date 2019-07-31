@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class WorldGenIceDragonCave extends WorldGenerator {
 	private static boolean isMale;
-	public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_cave"));
+	public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_female_cave"));
 	public static final ResourceLocation ICEDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_male_cave"));
 	private List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
 	private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(ModBlocks.frozenStone);

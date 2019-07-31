@@ -3,15 +3,21 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDragonsteelArmor extends ItemArmor {
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDragonItem {
 
 	private ArmorMaterial material;
 
@@ -30,6 +36,12 @@ public class ItemDragonsteelArmor extends ItemArmor {
 		}else{
 			return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 13 : 12);
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(I18n.format("item.dragonscales_armor.desc"));
 	}
 
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {

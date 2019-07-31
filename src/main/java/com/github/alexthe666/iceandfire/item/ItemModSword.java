@@ -4,6 +4,10 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -65,6 +69,16 @@ public class ItemModSword extends ItemSword {
 		if (this == ModItems.myrmex_desert_sword_venom || this == ModItems.myrmex_jungle_sword_venom) {
 			target.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
 		}
+		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+			target.setFire(15);
+			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		}
+		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
+			frozenProps.setFrozenFor(300);
+			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
+			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		}
 		return super.hitEntity(stack, target, attacker);
 	}
 
@@ -79,6 +93,12 @@ public class ItemModSword extends ItemSword {
 		}
 		if (this == ModItems.myrmex_desert_sword || this == ModItems.myrmex_jungle_sword) {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
+		}
+		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+			tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+		}
+		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
 		}
 	}
 }

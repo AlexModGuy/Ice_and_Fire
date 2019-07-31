@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemScaleArmor extends ItemArmor {
+public class ItemScaleArmor extends ItemArmor implements IProtectAgainstDragonItem {
 
 	public EnumDragonArmor armor_type;
 	public EnumDragonEgg eggType;
@@ -42,6 +43,7 @@ public class ItemScaleArmor extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(eggType.color + StatCollector.translateToLocal("dragon." + eggType.toString().toLowerCase()));
+		tooltip.add(eggType.color + I18n.format("dragon." + eggType.toString().toLowerCase()));
+		tooltip.add(I18n.format("item.dragonscales_armor.desc"));
 	}
 }
