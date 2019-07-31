@@ -191,7 +191,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 15 + this.world.rand.nextInt(10);
+        return 15;
     }
 
     protected void onDeathUpdate() {

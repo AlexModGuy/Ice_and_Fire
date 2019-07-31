@@ -105,6 +105,8 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     }
 
+
+
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
@@ -822,7 +824,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 15 + this.world.rand.nextInt(10);
+        return 10;
     }
 
 

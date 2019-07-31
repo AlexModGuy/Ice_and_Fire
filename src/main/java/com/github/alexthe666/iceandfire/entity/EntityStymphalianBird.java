@@ -119,7 +119,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 10 + this.world.rand.nextInt(5);
+        return 10;
     }
 
     public void onUpdate() {

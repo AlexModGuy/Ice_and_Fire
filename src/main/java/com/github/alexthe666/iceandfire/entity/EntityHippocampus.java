@@ -86,6 +86,10 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         initHippocampusInv();
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 2;
+    }
+
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
     }

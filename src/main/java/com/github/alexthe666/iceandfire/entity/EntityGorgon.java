@@ -144,7 +144,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	}
 
 	protected int getExperiencePoints(EntityPlayer player) {
-		return 20 + this.world.rand.nextInt(15);
+		return 30;
 	}
 
 	protected void onDeathUpdate() {

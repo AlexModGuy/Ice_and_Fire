@@ -43,6 +43,10 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.setSize(0.99F, 0.95F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 5;
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {

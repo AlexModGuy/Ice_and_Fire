@@ -105,7 +105,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	protected int getExperiencePoints(EntityPlayer player) {
-		return 7 + this.world.rand.nextInt(10);
+		return 10;
 	}
 
 	@Override
@@ -1146,4 +1146,5 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 	}
+
 }

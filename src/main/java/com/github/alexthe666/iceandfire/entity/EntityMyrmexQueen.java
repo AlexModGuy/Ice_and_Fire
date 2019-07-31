@@ -58,6 +58,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.setSize(2.9F, 1.86F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 20;
+    }
 
     protected void entityInit() {
         super.entityInit();

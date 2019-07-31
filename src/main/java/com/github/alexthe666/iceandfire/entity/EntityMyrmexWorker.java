@@ -52,6 +52,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.setSize(0.9F, 0.6F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 3;
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {

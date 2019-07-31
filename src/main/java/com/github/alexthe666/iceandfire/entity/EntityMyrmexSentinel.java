@@ -55,6 +55,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.setSize(1.3F, 1.95F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 8;
+    }
+
     public Entity getHeldEntity() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }

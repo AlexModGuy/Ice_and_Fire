@@ -92,6 +92,10 @@ public class EntityPixie extends EntityTameable {
 		return entity.getPosition();
 	}
 
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 3;
+	}
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();

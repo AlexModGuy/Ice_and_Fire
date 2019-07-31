@@ -116,7 +116,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return (int) (this.getScaleForAge() * 5) + this.world.rand.nextInt(10);
+        return this.getScaleForAge() > 3 ? 20 : 10;
     }
 
     public void initSegments(float scale) {

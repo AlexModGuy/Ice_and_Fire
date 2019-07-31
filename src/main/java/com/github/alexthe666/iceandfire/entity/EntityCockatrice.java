@@ -75,7 +75,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 10 + this.world.rand.nextInt(5);
+        return 10;
     }
 
     public boolean getCanSpawnHere() {

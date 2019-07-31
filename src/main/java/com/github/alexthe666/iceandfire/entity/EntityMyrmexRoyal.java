@@ -67,6 +67,10 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.switchNavigator(true);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 10;
+    }
+
     @Override
     protected void entityInit() {
         super.entityInit();

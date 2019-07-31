@@ -458,10 +458,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        if(this.isChild()){
-            return 15;
+        switch(this.getDragonStage()){
+            case 2:
+                return 20;
+            case 3:
+                return 50;
+            case 4:
+                return 100;
+            case 5:
+                return 150;
+            default:
+                return 5;
         }
-        return 15 + this.getDragonStage() * 35;
     }
 
     public int getIntFromArmor(ItemStack stack) {
