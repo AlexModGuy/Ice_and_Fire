@@ -186,6 +186,8 @@ public class ModItems {
 	public static Item blindfold = new ItemBlindfold();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_dust")
 	public static Item pixie_dust = new ItemPixieDust();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wings")
+	public static Item pixie_wings = new ItemGeneric("pixie_wings", "iceandfire.pixie_wings", 1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
 	public static Item ambrosia = new ItemAmbrosia();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
@@ -220,7 +222,7 @@ public class ModItems {
 	public static Item deathworm_white_boots = new ItemDeathwormArmor(white_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_white_boots", "iceandfire.deathworm_white_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_helmet")
 	public static Item deathworm_red_helmet = new ItemDeathwormArmor(red_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_red_helmet", "iceandfire.deathworm_red_helmet");
-	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_chworm_whhestplate")
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_chestplate")
 	public static Item deathworm_red_chestplate = new ItemDeathwormArmor(red_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_red_chestplate", "iceandfire.deathworm_red_chestplate");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_leggings")
 	public static Item deathworm_red_leggings = new ItemDeathwormArmor(red_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_red_leggings", "iceandfire.deathworm_red_leggings");
@@ -228,6 +230,14 @@ public class ModItems {
 	public static Item deathworm_red_boots = new ItemDeathwormArmor(red_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_egg")
 	public static Item deathworm_egg = new ItemDeathwormEgg();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_tounge")
+	public static Item deathworm_tounge = new ItemGeneric("deathworm_tounge", "iceandfire.deathworm_tounge", 1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_yellow")
+	public static Item deathworm_gauntlet_yellow = new ItemDeathwormGauntlet("yellow");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_white")
+	public static Item deathworm_gauntlet_white = new ItemDeathwormGauntlet("white");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_red")
+	public static Item deathworm_gauntlet_red = new ItemDeathwormGauntlet("red");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":rotten_egg")
 	public static Item rotten_egg = new ItemRottenEgg();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_feather")

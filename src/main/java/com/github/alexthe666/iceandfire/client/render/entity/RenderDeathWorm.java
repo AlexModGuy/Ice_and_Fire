@@ -10,8 +10,8 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 
 public class RenderDeathWorm extends RenderLiving<EntityDeathWorm> {
-    public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_red.png");
-    public static final ResourceLocation TEXTURE_RED = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_white.png");
+    public static final ResourceLocation TEXTURE_RED = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_red.png");
+    public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_white.png");
     public static final ResourceLocation TEXTURE_YELLOW = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_yellow.png");
 
     public RenderDeathWorm(RenderManager renderManager) {

@@ -7,6 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 public class MiscPlayerProperties extends EntityProperties<EntityPlayer> {
 
 	public boolean hasDismountedDragon;
+	public int deathwormLungeTicks = 0;
+	public int prevDeathwormLungeTicks = 0;
+	public int gauntletDamage = 0;
+	public boolean deathwormLaunched = false;
+	public boolean deathwormReceded = false;
 
 	@Override
 	public int getTrackingTime() {
@@ -16,11 +21,13 @@ public class MiscPlayerProperties extends EntityProperties<EntityPlayer> {
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		compound.setBoolean("DismountedDragon", hasDismountedDragon);
+		compound.setInteger("GauntletDamage", gauntletDamage);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		this.hasDismountedDragon = compound.getBoolean("DismountedDragon");
+		this.gauntletDamage = compound.getInteger("GauntletDamage");
 	}
 
 	@Override

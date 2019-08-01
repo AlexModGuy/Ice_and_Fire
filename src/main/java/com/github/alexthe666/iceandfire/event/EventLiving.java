@@ -364,6 +364,12 @@ public class EventLiving {
     }
 
     @SubscribeEvent
+    public void onEntityStopUsingItem(LivingEntityUseItemEvent.Tick event){
+        if(event.getItem().getItem() instanceof ItemDeathwormGauntlet){
+            event.setDuration(20);
+        }
+    }
+    @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
             ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((EntityPlayer) event.getEntityLiving(), event.getHand());

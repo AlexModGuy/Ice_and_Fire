@@ -1,0 +1,45 @@
+package com.github.alexthe666.iceandfire.client.render.item;
+
+import com.github.alexthe666.iceandfire.client.model.ModelDeathWormGauntlet;
+import com.github.alexthe666.iceandfire.client.model.ModelTrollWeapon;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
+import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import net.ilexiconn.llibrary.client.util.ItemTESRContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IRenderContextHandler;
+import org.lwjgl.opengl.GL11;
+
+public class RenderDeathWormGauntlet {
+    private static final ModelDeathWormGauntlet MODEL = new ModelDeathWormGauntlet();
+
+    public void renderItem(ItemStack stack, double x, double y, double z, float f, int f1, float alpha) {
+        ResourceLocation texture;
+
+        if(stack.getItem() == ModItems.deathworm_gauntlet_red){
+            texture = RenderDeathWorm.TEXTURE_RED;
+        }else if(stack.getItem() == ModItems.deathworm_gauntlet_white){
+            texture = RenderDeathWorm.TEXTURE_WHITE;
+        }else{
+            texture = RenderDeathWorm.TEXTURE_YELLOW;
+        }
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
+        GL11.glPushMatrix();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        GL11.glPushMatrix();
+        if(ItemTESRContext.INSTANCE.getCurrentTransform() != ItemCameraTransforms.TransformType.GUI){
+            MODEL.animate(stack, Minecraft.getMinecraft().getRenderPartialTicks());
+        }else{
+            MODEL.resetToDefaultPose();
+        }
+        MODEL.render(null, 0,0, 0, 0, 0, 0.0625F);
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
+    }
+}
