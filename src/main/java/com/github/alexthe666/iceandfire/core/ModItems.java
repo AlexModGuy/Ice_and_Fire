@@ -188,6 +188,8 @@ public class ModItems {
 	public static Item pixie_dust = new ItemPixieDust();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wings")
 	public static Item pixie_wings = new ItemGeneric("pixie_wings", "iceandfire.pixie_wings", 1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wand")
+	public static Item pixie_wand = new ItemPixieWand();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
 	public static Item ambrosia = new ItemAmbrosia();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
@@ -304,6 +306,10 @@ public class ModItems {
 	public static Item myrmex_jungle_leggings = new ItemModArmor(myrmexJungle, 2, EntityEquipmentSlot.LEGS, "myrmex_jungle_leggings", "iceandfire.myrmex_jungle_leggings");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_boots")
 	public static Item myrmex_jungle_boots = new ItemModArmor(myrmexJungle, 3, EntityEquipmentSlot.FEET, "myrmex_jungle_boots", "iceandfire.myrmex_jungle_boots");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":mymrex_desert_swarm")
+	public static Item mymrex_desert_swarm = new ItemMyrmexSwarm(false);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":mymrex_jungle_swarm")
+	public static Item mymrex_jungle_swarm = new ItemMyrmexSwarm(true);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_feather")
 	public static Item amphithere_feather = new ItemGeneric("amphithere_feather", "iceandfire.amphithere_feather");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_arrow")

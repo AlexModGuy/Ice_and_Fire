@@ -304,6 +304,8 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("sea_serpent_splash")
 	public static final SoundEvent SEA_SERPENT_SPLASH = createSoundEvent("sea_serpent_splash");
 
+	@GameRegistry.ObjectHolder("pixie_wand")
+	public static final SoundEvent PIXIE_WAND = createSoundEvent("pixie_wand");
 
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);

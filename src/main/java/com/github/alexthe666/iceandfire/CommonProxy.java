@@ -117,6 +117,8 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentBubbles>create(), event, EntitySeaSerpentBubbles.class, "seaserpentbubble", 37);
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 38);
         registerUnspawnable(EntityEntryBuilder.<EntityChainTie>create(), event, EntityChainTie.class, "chaintie", 39);
+        registerUnspawnable(EntityEntryBuilder.<EntityPixieCharge>create(), event, EntityPixieCharge.class, "pixiecharge", 40);
+        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexSwarmer>create(), event,EntityMyrmexSwarmer.class, "myrmex_swarmer", 41);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {

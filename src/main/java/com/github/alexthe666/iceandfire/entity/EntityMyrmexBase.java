@@ -484,6 +484,9 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
+        if(!shouldHaveNormalAI()){
+            return false;
+        }
         boolean flag2 = itemstack.getItem() == ModItems.myrmex_jungle_staff || itemstack.getItem() == ModItems.myrmex_desert_staff;
 
         if (flag2) {
@@ -744,6 +747,9 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return width;
     }
 
+    public boolean shouldHaveNormalAI() {
+        return true;
+    }
 
     public static class BasicTrade implements EntityVillager.ITradeList {
         public ItemStack first;

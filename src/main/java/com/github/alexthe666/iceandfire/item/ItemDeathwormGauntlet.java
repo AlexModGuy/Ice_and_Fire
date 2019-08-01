@@ -122,7 +122,7 @@ public class ItemDeathwormGauntlet extends Item {
                             boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(entityliving);
                             if (canSee) {
                                 properties.gauntletDamage++;
-                                entityliving.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) entity), 2.5F);
+                                entityliving.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) entity), 3F);
                                 entityliving.knockBack(entityliving, 0.5F, entityliving.posX - player.posX, entityliving.posZ - player.posZ);
                             }
                         }

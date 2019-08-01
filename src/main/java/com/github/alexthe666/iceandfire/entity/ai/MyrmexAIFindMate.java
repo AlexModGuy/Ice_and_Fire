@@ -36,6 +36,9 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
+        if(!this.myrmex.shouldHaveNormalAI()){
+            return false;
+        }
         if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.releaseTicks < 400 || this.myrmex.mate != null) {
             return false;
         }

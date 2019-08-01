@@ -1,4 +1,12 @@
 {
+  "pixie_wand": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:pixie_wand_0",
+      "iceandfire:pixie_wand_1",
+      "iceandfire:pixie_wand_2"
+    ]
+  },
   "sea_serpent_breath": {
     "category": "neutral",
     "sounds": [
