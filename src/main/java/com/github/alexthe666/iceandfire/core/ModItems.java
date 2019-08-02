@@ -39,6 +39,7 @@ public class ModItems {
 	public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
 	public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
 	public static ToolMaterial hippogryph_sword_tools = EnumHelper.addToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
+	public static ToolMaterial stymphalian_sword_tools = EnumHelper.addToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
 
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
 	public static Item bestiary = new ItemBestiary();
@@ -264,6 +265,10 @@ public class ModItems {
 	public static Item stymphalian_bird_feather = new ItemGeneric("stymphalian_bird_feather", "iceandfire.stymphalian_bird_feather");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_arrow")
 	public static Item stymphalian_arrow = new ItemStymphalianArrow();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_feather_bundle")
+	public static Item stymphalian_feather_bundle = new ItemStymphalianFeatherBundle();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_dagger")
+	public static Item stymphalian_feather_dagger = new ItemStymphalianDagger();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_tusk")
 	public static Item troll_tusk = new ItemGeneric("troll_tusk", "iceandfire.troll_tusk");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_egg")

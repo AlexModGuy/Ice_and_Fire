@@ -52,6 +52,7 @@ public class ItemMyrmexSwarm extends Item {
                 worldIn.spawnEntity(myrmex);
             }
         }
+        playerIn.getCooldownTracker().setCooldown(this, 1800);
         return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
