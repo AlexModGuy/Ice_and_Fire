@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.MiscPlayerProperties;
+import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -17,7 +17,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -50,12 +49,12 @@ public class ItemCockatriceScepter extends Item {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
-        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscPlayerProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
         if(properties != null && properties.specialWeaponDmg > 0){
             stack.damageItem(properties.specialWeaponDmg, entity);
             properties.specialWeaponDmg = 0;
             for(Entity e : properties.entitiesWeAreGlaringAt){
-                MiscPlayerProperties theirProp = EntityPropertiesHandler.INSTANCE.getProperties(e, MiscPlayerProperties.class);
+                MiscEntityProperties theirProp = EntityPropertiesHandler.INSTANCE.getProperties(e, MiscEntityProperties.class);
                 if(theirProp.glarers.contains(entity)){
                     theirProp.glarers.remove(entity);
                 }
@@ -82,7 +81,7 @@ public class ItemCockatriceScepter extends Item {
     }
 
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscPlayerProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscEntityProperties.class);
         if (properties != null) {
             if (player instanceof EntityPlayer) {
                 double dist = 32;
@@ -125,7 +124,7 @@ public class ItemCockatriceScepter extends Item {
                 }
                 if (pointedEntity != null) {
                     if (pointedEntity instanceof EntityLivingBase) {
-                        MiscPlayerProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscPlayerProperties.class);
+                        MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscEntityProperties.class);
                         theirProperties.isBeingGlaredAt = true;
                         if(!theirProperties.glarers.contains(player) && !properties.entitiesWeAreGlaringAt.contains(pointedEntity)){
                             theirProperties.glarers.add(player);

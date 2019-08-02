@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.github.alexthe666.iceandfire.entity.MiscPlayerProperties;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -98,7 +95,7 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
         this.resetToDefaultPose();
         if(stack.getTagCompound() != null){
             Entity holder = Minecraft.getMinecraft().world.getEntityByID(stack.getTagCompound().getInteger("HolderID"));
-            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscPlayerProperties.class);
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscEntityProperties.class);
             if(properties != null){
                 int lungeTicks = properties.deathwormLungeTicks;
                 int prevLungeTicks = properties.prevDeathwormLungeTicks;

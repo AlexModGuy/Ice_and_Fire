@@ -28,7 +28,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -1846,7 +1845,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
-            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getControllingPassenger(), MiscPlayerProperties.class);
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getControllingPassenger(), MiscEntityProperties.class);
             if(properties != null) {
                 properties.hasDismountedDragon = true;
             }

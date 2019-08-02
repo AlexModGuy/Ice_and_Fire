@@ -303,7 +303,13 @@ item.iceandfire.cockatrice_eye.desc_0=§6Rare drop§r
 item.iceandfire.cockatrice_scepter.name=Cockatrice Scepter
 item.iceandfire.cockatrice_scepter.desc_0=Withers target when used
 item.iceandfire.cockatrice_scepter.desc_1=Can target multiple close entities
-
+item.iceandfire.siren_tear.name=Siren Tear
+item.iceandfire.siren_tear.desc_0=§6Rare drop§r
+item.iceandfire.siren_flute.name=Siren Flute
+item.iceandfire.siren_flute.desc_0=Makes targets fall in love for 10 seconds
+item.iceandfire.siren_flute.desc_1=Mobs in love will not be able to attack
+item.iceandfire.hippocampus_fin.name=Hippocampus Fin
+item.iceandfire.hippocampus_fin.desc_0=§6Rare drop§r
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
 item.banner.firedragon.magenta=Magenta Fire Dragon Charge

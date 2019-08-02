@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiscPlayerProperties extends EntityProperties<EntityLivingBase> {
+public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
 
 	public boolean hasDismountedDragon;
 	public int deathwormLungeTicks = 0;
@@ -19,7 +19,7 @@ public class MiscPlayerProperties extends EntityProperties<EntityLivingBase> {
 	public boolean isBeingGlaredAt = false;
 	public List<Entity> glarers = new ArrayList<>();
 	public List<Entity> entitiesWeAreGlaringAt = new ArrayList<>();
-	public int clientSideAttackTime;
+	public int inLoveTicks;
 
 	@Override
 	public int getTrackingTime() {

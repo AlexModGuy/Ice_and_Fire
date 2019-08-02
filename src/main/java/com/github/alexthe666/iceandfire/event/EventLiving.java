@@ -111,7 +111,7 @@ public class EventLiving {
     @SubscribeEvent
     public void onEntityFall(LivingFallEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
-            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscPlayerProperties.class);
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
             if (properties.hasDismountedDragon) {
                 event.setDamageMultiplier(0);
                 properties.hasDismountedDragon = false;
@@ -217,13 +217,19 @@ public class EventLiving {
     public void onLivingAttacked(LivingAttackEvent event) {
         if (event.getSource().getTrueSource() != null) {
             Entity attacker = event.getSource().getTrueSource();
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(attacker, MiscEntityProperties.class);
+            if(properties != null && properties.inLoveTicks > 0){
+                event.setCanceled(true);
+            }
             if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
                 signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
             }
             if (DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
                 signalAmphithereAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
             }
+
         }
+
     }
 
     @SubscribeEvent
@@ -571,7 +577,7 @@ public class EventLiving {
                 }
             }
         }
-        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscPlayerProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
         if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {
             Iterator<Entity> itr = properties.entitiesWeAreGlaringAt.iterator();
             while(itr.hasNext()){
@@ -604,12 +610,23 @@ public class EventLiving {
             while(itr.hasNext()) {
                 Entity next = itr.next();
                 if(next instanceof EntityLivingBase && !EntityGorgon.isEntityLookingAt((EntityLivingBase)next, event.getEntityLiving(), 0.2F)){
-                    MiscPlayerProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscPlayerProperties.class);
+                    MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscEntityProperties.class);
                     if(theirProperties.entitiesWeAreGlaringAt.contains(event.getEntityLiving())){
                         theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
                     }
                     itr.remove();
 
+                }
+            }
+        }
+        if(properties != null && properties.inLoveTicks > 0){
+            properties.inLoveTicks--;
+            if(event.getEntityLiving() instanceof EntityLiving){
+                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+            }
+            if (rand.nextInt(7) == 0) {
+                for (int i = 0; i < 5; i++) {
+                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                 }
             }
         }

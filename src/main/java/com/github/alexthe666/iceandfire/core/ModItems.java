@@ -196,10 +196,10 @@ public class ModItems {
 	public static Item pixie_wings = new ItemGeneric("pixie_wings", "iceandfire.pixie_wings", 1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wand")
 	public static Item pixie_wand = new ItemPixieWand();
-	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":cyclops_eye")
-	public static Item cyclops_eye = new ItemCyclopsEye();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
 	public static Item ambrosia = new ItemAmbrosia();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":cyclops_eye")
+	public static Item cyclops_eye = new ItemCyclopsEye();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
 	public static Item sheep_helmet = new ItemModArmor(sheep, 0, EntityEquipmentSlot.HEAD, "sheep_helmet", "iceandfire.sheep_helmet");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_chestplate")
@@ -210,6 +210,12 @@ public class ModItems {
 	public static Item sheep_boots = new ItemModArmor(sheep, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":shiny_scales")
 	public static Item shiny_scales = new ItemGeneric("shiny_scales", "iceandfire.shiny_scales");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":siren_tear")
+	public static Item siren_tear = new ItemGeneric("siren_tear", "iceandfire.siren_tear", 1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":siren_flute")
+	public static Item siren_flute = new ItemSirenFlute();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippocampus_fin")
+	public static Item hippocampus_fin = new ItemGeneric("hippocampus_fin", "iceandfire.hippocampus_fin", 1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":earplugs")
 	public static Item earplugs = new ItemModArmor(earplugsArmor, 0, EntityEquipmentSlot.HEAD, "earplugs", "iceandfire.earplugs");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_chitin")

@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.MiscPlayerProperties;
+import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -55,7 +55,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscPlayerProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscEntityProperties.class);
         if (stack.getTagCompound() != null) {
             if (properties.deathwormReceded || properties.deathwormLaunched) {
                 return;
@@ -73,7 +73,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscPlayerProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscEntityProperties.class);
         if(properties != null && properties.specialWeaponDmg > 0){
             stack.damageItem(properties.specialWeaponDmg, entityLiving);
             properties.specialWeaponDmg = 0;
@@ -91,7 +91,7 @@ public class ItemDeathwormGauntlet extends Item {
             stack.setTagCompound(new NBTTagCompound());
         } else {
             stack.getTagCompound().setInteger("HolderID", entity.getEntityId());
-            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscPlayerProperties.class);
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
             if (properties != null) {
                 if (properties.deathwormReceded) {
                     if (properties.deathwormLungeTicks > 0) {

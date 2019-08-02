@@ -42,7 +42,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 0;
     }
 
-    protected void switchNavigator(boolean onLand) { }
+    protected void switchNavigator(boolean onLand) {}
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
@@ -59,7 +59,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new MyrmexAIFollowSummoner(this, 1.0D, 2.0F, 10.0F));
+        this.tasks.addTask(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
         //this.tasks.addTask(2, new AIFlyRandom());
         this.tasks.addTask(2, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
         this.tasks.addTask(3, new MyrmexAIWander(this, 1D));
@@ -155,6 +155,10 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             if(this.moveHelper.getY() > this.posY){
                 this.motionY += 0.08D;
             }
+        }
+        if(this.onGround){
+            this.onGround = false;
+            this.motionY += 0.2F;
         }
         if(this.getAttackTarget() != null){
             this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().posZ, 1.0F);

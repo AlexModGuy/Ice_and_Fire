@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,7 +33,7 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
 
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.tameable.getSummoner();
-        if(tameable.getAttackTarget() != null){
+        if (tameable.getAttackTarget() != null) {
             return false;
         }
         if (entitylivingbase == null) {
@@ -50,7 +49,7 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
+        return this.tameable.getAttackTarget() == null || this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
     }
 
     public void startExecuting() {
@@ -72,10 +71,13 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
 
     @SuppressWarnings("deprecation")
     public void updateTask() {
+        if (this.tameable.getAttackTarget() != null) {
+            return;
+        }
         this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
-        this.tameable.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight(), this.owner.posZ, 0.25D);
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
+            this.tameable.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight(), this.owner.posZ, 0.25D);
             if (!this.tameable.getLeashed()) {
                 if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
                     int i = MathHelper.floor(this.owner.posX) - 2;
