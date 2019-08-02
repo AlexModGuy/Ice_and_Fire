@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "FFF",
+    "FSF",
+    "FFF"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "string"
+    },
+    "F": {
+      "item": "iceandfire:stymphalian_bird_feather"
+    }
+  },
+  "result": {
+    "item": "iceandfire:stymphalian_feather_bundle",
+    "data": 0
+  }
+}

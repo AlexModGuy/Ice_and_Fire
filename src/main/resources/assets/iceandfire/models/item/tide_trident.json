@@ -1,0 +1,59 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "iceandfire:items/tide_trident"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -270,
+        -45
+      ],
+      "translation": [
+        -1,
+        1,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        80,
+        280,
+        40
+      ],
+      "translation": [
+        -1,
+        -2,
+        2.5
+      ],
+      "scale": [
+        1.2,
+        0.9,
+        1.2
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        90,
+        -35
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        -3
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

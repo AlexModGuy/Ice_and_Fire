@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "D",
+    "W",
+    "B"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "W": {
+      "item": "iceandfire:pixie_wings"
+    }
+  },
+  "result": {
+    "item": "iceandfire:pixie_wand"
+  }
+}

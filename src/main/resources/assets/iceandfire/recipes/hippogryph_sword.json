@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " T ",
+    "FIF",
+    " S "
+  ],
+  "key": {
+    "T": {
+      "item": "iceandfire:hippogryph_talon",
+      "data": 0
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "F": {
+      "type": "forge:ore_dict",
+      "ore": "feather"
+    }
+  },
+  "result": {
+    "item": "iceandfire:hippogryph_sword",
+    "data": 0
+  }
+}

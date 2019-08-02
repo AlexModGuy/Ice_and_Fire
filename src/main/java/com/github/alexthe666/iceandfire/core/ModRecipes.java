@@ -82,6 +82,8 @@ public class ModRecipes {
                 return entityarrow;
             }
         });
+        OreDictionary.registerOre("desertMyrmexEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("jungleMyrmexEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
 
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
@@ -135,7 +137,6 @@ public class ModRecipes {
         OreDictionary.registerOre("egg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
-
         OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("objectEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bakingEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));

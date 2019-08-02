@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "STS",
+    "SFS",
+    "SSS"
+  ],
+  "key": {
+    "T": {
+      "item": "iceandfire:siren_tear"
+    },
+    "S": {
+      "item": "iceandfire:shiny_scales"
+    },
+    "F": {
+      "item": "iceandfire:dragon_flute"
+    }
+  },
+  "result": {
+    "item": "iceandfire:siren_flute"
+  }
+}

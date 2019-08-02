@@ -347,6 +347,8 @@ public class ModItems {
 	public static Item sea_serpent_fang = new ItemGeneric("sea_serpent_fang", "iceandfire.sea_serpent_fang");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_arrow")
 	public static Item sea_serpent_arrow = new ItemSeaSerpentArrow();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":tide_trident")
+	public static Item tide_trident = new ItemTideTrident();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_link")
 	public static Item chain_link = new ItemGeneric("chain_link", "iceandfire.chain_link");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain")

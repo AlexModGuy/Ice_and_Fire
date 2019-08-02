@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ItemStymphalianFeatherBundle extends Item {
 
-    public ItemStymphalianFeatherBundle() {
+       public ItemStymphalianFeatherBundle() {
         super();
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.stymphalian_feather_bundle");

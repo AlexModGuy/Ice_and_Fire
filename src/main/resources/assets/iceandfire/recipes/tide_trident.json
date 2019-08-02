@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "TTT",
+    "SDS",
+    " B "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "seaSerpentScales"
+    },
+    "T": {
+      "item": "iceandfire:sea_serpent_fang"
+    },
+    "B": {
+      "item": "iceandfire:dragonbone"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  },
+  "result": {
+    "item": "iceandfire:tide_trident"
+  }
+}

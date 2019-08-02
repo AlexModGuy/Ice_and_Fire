@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "OXO",
+    "FXF",
+    "OSO"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "F": {
+      "item": "iceandfire:amphithere_feather"
+    },
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "O": {
+      "type": "forge:ore_dict",
+      "ore": "obsidian"
+    }
+  },
+  "result": {
+    "item": "iceandfire:amphithere_macuahuitl"
+  }
+}

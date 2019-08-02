@@ -1,0 +1,19 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " T",
+    "S "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "T": {
+      "item": "iceandfire:hippocampus_fin"
+    }
+  },
+  "result": {
+    "item": "iceandfire:hippocampus_slapper"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "S",
+    "E",
+    "W"
+  ],
+  "key": {
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "boneWither"
+    },
+    "S": {
+      "item": "iceandfire:wither_shard"
+    },
+    "E": {
+      "item": "iceandfire:cockatrice_eye"
+    }
+  },
+  "result": {
+    "item": "iceandfire:cockatrice_scepter"
+  }
+}

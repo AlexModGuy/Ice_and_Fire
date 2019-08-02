@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "EEE",
+    "ERE",
+    "RSR"
+  ],
+  "key": {
+    "R": {
+      "item": "iceandfire:myrmex_desert_resin_block"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "desertMyrmexEgg"
+    }
+  },
+  "result": {
+    "item": "iceandfire:myrmex_desert_swarm"
+  }
+}

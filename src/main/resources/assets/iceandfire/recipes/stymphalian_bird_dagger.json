@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "F",
+    "F",
+    "S"
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "F": {
+      "item": "iceandfire:stymphalian_bird_feather"
+    }
+  },
+  "result": {
+    "item": "iceandfire:stymphalian_bird_dagger",
+    "data": 0
+  }
+}

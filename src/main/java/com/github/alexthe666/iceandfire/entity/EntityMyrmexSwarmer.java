@@ -203,6 +203,10 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 0.25F;
     }
 
+    public boolean shouldHaveNormalAI() {
+        return false;
+    }
+
     @Override
     public int getCasteImportance() {
         return 0;
