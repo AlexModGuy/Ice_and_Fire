@@ -105,7 +105,7 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
                 float lungeProg = ((float)prevLungeTicks + (lungeTicks - prevLungeTicks) * partialTick);
                 progressRotation(TopJaw, lungeProg, (float)Math.toRadians(-30), 0, 0);
                 progressRotation(BottomJaw, lungeProg, (float)Math.toRadians(30), 0, 0);
-                progressPosition(JawExtender, lungeProg, 0, 0, -7);
+                progressPosition(JawExtender, lungeProg, 0, 0, -4);
                 progressPosition(JawExtender2, lungeProg, 0, 0, -10);
                 progressPosition(JawExtender3, lungeProg, 0, 0, -10);
                 progressPosition(JawExtender4, lungeProg, 0, 0, -10);

@@ -22,7 +22,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
 
     public static final ResourceLocation TEXTURE_ROOSTER = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0.png");
     public static final ResourceLocation TEXTURE_HEN = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1.png");
-    private static final ResourceLocation TEXTURE_BEAM = new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png");
+    public static final ResourceLocation TEXTURE_BEAM = new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png");
     public static final ResourceLocation TEXTURE_ROOSTER_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0_chick.png");
     public static final ResourceLocation TEXTURE_HEN_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1_chick.png");
 

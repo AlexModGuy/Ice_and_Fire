@@ -31,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -365,7 +366,7 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityStopUsingItem(LivingEntityUseItemEvent.Tick event){
-        if(event.getItem().getItem() instanceof ItemDeathwormGauntlet){
+        if(event.getItem().getItem() instanceof ItemDeathwormGauntlet || event.getItem().getItem() instanceof ItemCockatriceScepter){
             event.setDuration(20);
         }
     }
@@ -567,6 +568,48 @@ public class EventLiving {
                     EntityHorse horse = (EntityHorse) living;
                     horse.tailCounter = 0;
                     horse.setEatingHaystack(false);
+                }
+            }
+        }
+        MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscPlayerProperties.class);
+        if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {
+            Iterator<Entity> itr = properties.entitiesWeAreGlaringAt.iterator();
+            while(itr.hasNext()){
+                Entity next = itr.next();
+                double d5 = 80F;
+                double d0 = next.posX - event.getEntityLiving().posX;
+                double d1 = next.posY + (double) (next.height * 0.5F) - (event.getEntityLiving().posY + (double) event.getEntityLiving().getEyeHeight() * 0.5D);
+                double d2 = next.posZ - event.getEntityLiving().posZ;
+                double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+                d0 = d0 / d3;
+                d1 = d1 / d3;
+                d2 = d2 / d3;
+                double d4 = this.rand.nextDouble();
+                while (d4 < d3) {
+                    d4 += 1.0D;
+                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getEntityLiving().posX + d0 * d4, event.getEntityLiving().posY + d1 * d4 + (double) event.getEntityLiving().getEyeHeight() * 0.5D, event.getEntityLiving().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, new int[]{3484199});
+                }
+                ((EntityLivingBase)next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
+                if(event.getEntityLiving().ticksExisted % 20 == 0){
+                    properties.specialWeaponDmg++;
+                    ((EntityLivingBase)next).attackEntityFrom(DamageSource.WITHER, 2);
+                }
+                if(next == null || !next.isEntityAlive()){
+                    itr.remove();
+                }
+            }
+        }
+        if(properties != null && properties.glarers.size() > 0){
+            Iterator<Entity> itr = properties.glarers.iterator();
+            while(itr.hasNext()) {
+                Entity next = itr.next();
+                if(next instanceof EntityLivingBase && !EntityGorgon.isEntityLookingAt((EntityLivingBase)next, event.getEntityLiving(), 0.2F)){
+                    MiscPlayerProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscPlayerProperties.class);
+                    if(theirProperties.entitiesWeAreGlaringAt.contains(event.getEntityLiving())){
+                        theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
+                    }
+                    itr.remove();
+
                 }
             }
         }

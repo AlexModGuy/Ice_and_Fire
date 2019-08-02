@@ -74,9 +74,9 @@ public class ItemDeathwormGauntlet extends Item {
 
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscPlayerProperties.class);
-        if(properties != null && properties.gauntletDamage > 0){
-            stack.damageItem(properties.gauntletDamage, entityLiving);
-            properties.gauntletDamage = 0;
+        if(properties != null && properties.specialWeaponDmg > 0){
+            stack.damageItem(properties.specialWeaponDmg, entityLiving);
+            properties.specialWeaponDmg = 0;
         }
     }
 
@@ -95,7 +95,7 @@ public class ItemDeathwormGauntlet extends Item {
             if (properties != null) {
                 if (properties.deathwormReceded) {
                     if (properties.deathwormLungeTicks > 0) {
-                        properties.deathwormLungeTicks = properties.deathwormLungeTicks - 2;
+                        properties.deathwormLungeTicks = properties.deathwormLungeTicks - 4;
                     }
                     if (properties.deathwormLungeTicks <= 0) {
                         properties.deathwormLungeTicks = 0;
@@ -103,7 +103,7 @@ public class ItemDeathwormGauntlet extends Item {
                         properties.deathwormLaunched = false;
                     }
                 } else if (properties.deathwormLaunched) {
-                    properties.deathwormLungeTicks = 2 + properties.deathwormLungeTicks;
+                    properties.deathwormLungeTicks = 4 + properties.deathwormLungeTicks;
                     if (properties.deathwormLungeTicks > 20 && !properties.deathwormReceded) {
                         properties.deathwormReceded = true;
                     }
@@ -121,7 +121,7 @@ public class ItemDeathwormGauntlet extends Item {
                             double d1 = vec3d.dotProduct(vec3d1);
                             boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(entityliving);
                             if (canSee) {
-                                properties.gauntletDamage++;
+                                properties.specialWeaponDmg++;
                                 entityliving.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) entity), 3F);
                                 entityliving.knockBack(entityliving, 0.5F, entityliving.posX - player.posX, entityliving.posZ - player.posZ);
                             }

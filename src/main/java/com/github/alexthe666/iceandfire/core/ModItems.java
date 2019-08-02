@@ -38,6 +38,8 @@ public class ModItems {
 	public static ToolMaterial myrmexChitin = EnumHelper.addToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
 	public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
 	public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, 8000, 10.0F, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
+	public static ToolMaterial hippogryph_sword_tools = EnumHelper.addToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
+
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
 	public static Item bestiary = new ItemBestiary();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":manuscript")
@@ -178,6 +180,10 @@ public class ModItems {
 	public static Item gold_hippogryph_armor = new ItemGeneric("gold_hippogryph_armor", "iceandfire.gold_hippogryph_armor").setMaxStackSize(1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":diamond_hippogryph_armor")
 	public static Item diamond_hippogryph_armor = new ItemGeneric("diamond_hippogryph_armor", "iceandfire.diamond_hippogryph_armor").setMaxStackSize(1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_talon")
+	public static Item hippogryph_talon = new ItemGeneric("hippogryph_talon", "iceandfire.hippogryph_talon", 1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_sword")
+	public static Item hippogryph_sword = new ItemHippogryphSword();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":gorgon_head")
 	public static Item gorgon_head = new ItemGorgonHead();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stone_statue")
@@ -190,6 +196,8 @@ public class ModItems {
 	public static Item pixie_wings = new ItemGeneric("pixie_wings", "iceandfire.pixie_wings", 1);
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wand")
 	public static Item pixie_wand = new ItemPixieWand();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":cyclops_eye")
+	public static Item cyclops_eye = new ItemCyclopsEye();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
 	public static Item ambrosia = new ItemAmbrosia();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
@@ -242,6 +250,10 @@ public class ModItems {
 	public static Item deathworm_gauntlet_red = new ItemDeathwormGauntlet("red");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":rotten_egg")
 	public static Item rotten_egg = new ItemRottenEgg();
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":cockatrice_eye")
+	public static Item cockatrice_eye = new ItemGeneric("cockatrice_eye", "iceandfire.cockatrice_eye", 1);
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":cockatrice_scepter")
+	public static Item cockatrice_scepter = new ItemCockatriceScepter();
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_feather")
 	public static Item stymphalian_bird_feather = new ItemGeneric("stymphalian_bird_feather", "iceandfire.stymphalian_bird_feather");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_arrow")
