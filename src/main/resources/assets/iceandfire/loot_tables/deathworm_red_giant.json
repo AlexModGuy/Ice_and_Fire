@@ -76,6 +76,27 @@
           ]
         }
       ]
+    },
+    {
+      "name": "deathworm_red_giant",
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        },
+        {
+          "condition": "random_chance_with_looting",
+          "chance": 0.025,
+          "looting_multiplier": 0.01
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "iceandfire:deathworm_tounge",
+          "weight": 1
+        }
+      ]
     }
   ]
 }
