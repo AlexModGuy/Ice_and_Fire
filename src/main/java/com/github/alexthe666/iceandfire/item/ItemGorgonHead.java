@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -167,5 +169,10 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		if (i > 20 && stack.getMetadata() == 0) {
 			stack.setItemDamage(1);
 		}
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
 	}
 }

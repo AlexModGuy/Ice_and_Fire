@@ -5,6 +5,8 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,6 +16,9 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
 
@@ -59,6 +64,11 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
                 player.swingProgressInt--;
             }
         }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
     }
 
 }
