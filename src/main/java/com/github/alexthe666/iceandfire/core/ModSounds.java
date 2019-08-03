@@ -10,6 +10,9 @@ import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 @GameRegistry.ObjectHolder(MODID)
 public final class ModSounds {
 
+	@GameRegistry.ObjectHolder("bestiary_page")
+	public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");
+
 	@GameRegistry.ObjectHolder("dragon_hatch")
 	public static final SoundEvent DRAGON_HATCH = createSoundEvent("dragon_hatch");
 

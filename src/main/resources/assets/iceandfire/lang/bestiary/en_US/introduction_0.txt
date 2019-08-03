@@ -2,6 +2,7 @@
 the binding of the bestiary. It
 reads:
 
+<item><iceandfire:manuscript 0 38 20 1>
 
 "This manuscript is meant to be a
 guide to those who like to inform
@@ -21,12 +22,25 @@ starting with strange ores.
 An ore with mystical properties,
 Silver ore can be found at the
 same layers gold can be found.
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
 
 
 
 
 It can be smelted into ingots
 which have a variety of uses.
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
+
 
 
 

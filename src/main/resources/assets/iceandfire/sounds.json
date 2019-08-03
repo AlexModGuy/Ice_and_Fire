@@ -1,4 +1,11 @@
 {
+  "bestiary_page": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:bestiary_page_0",
+      "iceandfire:bestiary_page_1"
+    ]
+  },
   "pixie_wand": {
     "category": "neutral",
     "sounds": [

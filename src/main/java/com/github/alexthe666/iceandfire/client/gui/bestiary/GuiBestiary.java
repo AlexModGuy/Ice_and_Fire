@@ -4,11 +4,14 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLanguage;
@@ -18,6 +21,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import scala.Int;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -32,6 +37,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 @SideOnly(Side.CLIENT)
 public class GuiBestiary extends GuiScreen {
@@ -52,7 +59,7 @@ public class GuiBestiary extends GuiScreen {
 	protected ItemStack book;
 	protected boolean index;
 	protected FontRenderer font;
-
+	private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
 	private FontRenderer getFont(){
 		FontRenderer font;
 		if(IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")){
@@ -151,25 +158,9 @@ public class GuiBestiary extends GuiScreen {
 	}
 
 	public void drawPerPage(int bookPages) {
+		imageFromTxt();
 		switch (this.pageType) {
 			case INTRODUCTION:
-				if (bookPages == 0) {
-					drawItemStack(new ItemStack(ModItems.manuscript), 30, 14, 2.5F);
-					drawItemStack(new ItemStack(ModBlocks.silverOre), 110, 15, 2.5F);
-					drawItemStack(new ItemStack(ModItems.silverIngot), 140, 48, 2F);
-					int i = 133;
-					drawItemStack(new ItemStack(ModItems.silver_shovel), i += 16, 85, 1.51F);
-					drawItemStack(new ItemStack(ModItems.silver_pickaxe), i += 16, 85, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_axe), i += 16, 85, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_sword), i += 16, 85, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_hoe), i += 16, 85, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silverNugget), i += 16, 85, 1.5F);
-					int j = 148;
-					drawItemStack(new ItemStack(ModItems.silver_helmet), j += 16, 100, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_chestplate), j += 16, 100, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_leggings), j += 16, 100, 1.5F);
-					drawItemStack(new ItemStack(ModItems.silver_boots), j += 16, 100, 1.5F);
-				}
 				if (bookPages == 1) {
 					drawItemStack(new ItemStack(ModBlocks.sapphireOre), 30, 20, 2.5F);
 					drawItemStack(new ItemStack(ModItems.sapphireGem), 40, 60, 2F);
@@ -189,10 +180,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(Blocks.PLANKS), 161, 107, 1.5F);
 					drawItemStack(new ItemStack(Items.BOOK), 161, 91, 1.5F);
 					drawItemStack(new ItemStack(ModBlocks.lectern), 151, 78, 2F);
-
-
 				}
-				writeFromTxt();
 				break;
 			case FIREDRAGON:
 				if (bookPages == 0) {
@@ -223,7 +211,6 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_0, 245, 130, 300, 0, 88, 62, 512F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case FIREDRAGONEGG:
 				if (bookPages == 0) {
@@ -240,7 +227,6 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_0, 25, 20, 303, 62, 71, 56, 512F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case ICEDRAGON:
 				if (bookPages == 0) {
@@ -271,7 +257,6 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_0, 250, 132, 300, 248, 71, 62, 512F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case ICEDRAGONEGG:
 				if (bookPages == 0) {
@@ -288,7 +273,6 @@ public class GuiBestiary extends GuiScreen {
 					drawImage(DRAWINGS_0, 25, 20, 303, 309, 71, 56, 512F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case TAMEDDRAGONS:
 				if (bookPages == 0) {
@@ -365,7 +349,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.dragon_flute), 151, 18, 2F);
 				}
-				writeFromTxt();
 				break;
 			case MATERIALS:
 				if (bookPages == 0) {
@@ -410,10 +393,8 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.fire_dragon_blood), 18, 24, 2.5F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case ALCHEMY:
-				writeFromTxt();
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
@@ -441,7 +422,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.fishing_spear), 70, 2, 2.5F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case HIPPOGRYPH:
 				if (bookPages == 0) {
@@ -489,7 +469,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 
 				}
-				writeFromTxt();
 				break;
 			case GORGON:
 				if (bookPages == 0) {
@@ -528,7 +507,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 
 				}
-				writeFromTxt();
 				break;
 			case PIXIE:
 				if (bookPages == 0) {
@@ -587,7 +565,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.ambrosia), 171, 85, 2F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case CYCLOPS:
 				if (bookPages == 0) {
@@ -679,7 +656,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.sheep_boots), 64, 73, 2F);
 					GL11.glPopMatrix();
 				}
-					writeFromTxt();
 				break;
 			case SIREN:
 				if (bookPages == 0) {
@@ -721,7 +697,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 123, 75, 1.5F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case HIPPOCAMPUS:
 				if(bookPages == 0){
@@ -748,7 +723,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.shiny_scales), 35, 75, 1.5F);
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case DEATHWORM:
 				if(bookPages == 0){
@@ -789,7 +763,6 @@ public class GuiBestiary extends GuiScreen {
 
 					GL11.glPopMatrix();
 				}
-				writeFromTxt();
 				break;
 			case COCKATRICE:
 				if(bookPages == 0){
@@ -815,7 +788,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.witherbone), 30, 58, 2.5F);
 					drawItemStack(new ItemStack(ModItems.rotten_egg), 109, 18, 2.5F);
 				}
-				writeFromTxt();
 				break;
 			case STYMPHALIANBIRD:
 				if(bookPages == 0) {
@@ -841,7 +813,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.stymphalian_arrow), 60, 18, 2F);
 
 				}
-				writeFromTxt();
 				break;
 			case TROLL:
 				if(bookPages == 0) {
@@ -868,7 +839,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
 					drawItemStack(new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
 				}
-				writeFromTxt();
 				break;
 			case MYRMEX:
 				if(bookPages == 0) {
@@ -923,7 +893,6 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.myrmex_desert_egg), 125, 90, 2F);
 					drawItemStack(new ItemStack(ModItems.myrmex_jungle_egg), 155, 90, 2F);
 				}
-				writeFromTxt();
 				break;
 			case AMPHITHERE:
 				if(bookPages == 0){
@@ -949,7 +918,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.amphithere_arrow), 60, 65, 2F);
 				}
-				writeFromTxt();
 				break;
 			case SEASERPENT:
 				if(bookPages == 0) {
@@ -986,9 +954,82 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.sea_serpent_arrow), 60, 33, 2F);
 				}
-				writeFromTxt();
 				break;
 		}
+		writeFromTxt();
+	}
+
+	public void imageFromTxt() {
+		String filePath = "assets/iceandfire/lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/";
+		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
+			filePath = "assets/iceandfire/lang/bestiary/en_US/";
+		}
+		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
+		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileReader));
+			String line = null;
+			while ((line = bufferedReader.readLine()) != null) {
+				if(line.contains("<") || line.contains(">")){
+					if(line.contains("<image>")){
+						line = line.substring(8, line.length() - 1);
+						String[] split = line.split(" ");
+						String texture = "iceandfire:textures/gui/bestiary/" + split[0];
+						ResourceLocation resourcelocation = PICTURE_LOCATION_CACHE.get(texture);
+						if (resourcelocation == null) {
+							resourcelocation = new ResourceLocation(texture);
+							PICTURE_LOCATION_CACHE.put(texture, resourcelocation);
+						}
+						GL11.glPushMatrix();
+						drawImage(resourcelocation, Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]) * 512F);
+						GL11.glPopMatrix();
+					}
+				}
+				if(line.contains("<item>")){
+					line = line.substring(7, line.length() - 1);
+					String[] split = line.split(" ");
+					RenderHelper.enableGUIStandardItemLighting();
+					drawItemStack(new ItemStack(Item.getByNameOrId(split[0]), 1, Integer.parseInt(split[1])), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F);
+				}
+				if(line.contains("<recipe>")){
+					line = line.substring(9, line.length() - 1);
+					String[] split = line.split(" ");
+					RenderHelper.enableGUIStandardItemLighting();
+					float scale = Float.parseFloat(split[split.length - 1]);
+					int x = Integer.parseInt(split[split.length - 3]);
+					int y = Integer.parseInt(split[split.length - 2]);
+					ItemStack result = new ItemStack(Item.getByNameOrId(split[0]), 1, Integer.parseInt(split[1]));
+					ItemStack[] ingredients = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+					int j = 8;
+					for(int i = split.length - 5; i >= 2; i-=2){
+						ingredients[j] = new ItemStack(Item.getByNameOrId(split[i]), 1, Integer.parseInt(split[i + 1]));
+						j--;
+					}
+					RenderHelper.enableGUIStandardItemLighting();
+					GL11.glPushMatrix();
+					GL11.glTranslatef(x, y, 0);
+					GL11.glScalef(scale, scale, 0);
+					drawRecipe(result, ingredients);
+					GL11.glPopMatrix();
+				}
+			}
+			fileReader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void drawRecipe(ItemStack result, ItemStack[] ingredients) {
+		drawItemStack(result, 62, 17, 2F);
+		for(int i = 0; i < 9; i++){
+			drawItemStack(ingredients[i],  (int)((i % 3) * 22 + 30), (int)((i / 3) * 22 + 10), 1.25F);
+		}
+		GL11.glPushMatrix();
+		GL11.glTranslatef(37F, 13, 1F);
+		GL11.glScalef(1.5F, 1.5F, 1F);
+		drawImage(DRAWINGS_0, 0, 0, 389, 1, 50, 50,512F);
+		GL11.glPopMatrix();
+
 	}
 
 	public void writeFromTxt() {
@@ -1003,6 +1044,9 @@ public class GuiBestiary extends GuiScreen {
 			String line = null;
 			int linenumber = 0;
 			while ((line = bufferedReader.readLine()) != null) {
+				if(line.contains("<") || line.contains(">")){
+					continue;
+				}
 				GL11.glPushMatrix();
 				if(usingVanillaFont()) {
 					GL11.glScalef(0.945F, 0.945F, 0.945F);
@@ -1036,15 +1080,15 @@ public class GuiBestiary extends GuiScreen {
 
 	private void drawItemStack(ItemStack stack, int x, int y, float scale) {
 		GL11.glPushMatrix();
-		GL11.glScalef(scale, scale, scale);
 		GlStateManager.translate(0, 0, 32.0F);
 		this.zLevel = 200.0F;
 		this.itemRender.zLevel = 200.0F;
 		net.minecraft.client.gui.FontRenderer font = null;
 		if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
 		if (font == null) font = fontRenderer;
+		GL11.glScalef(scale, scale, scale);
+		this.itemRender.zLevel = 5;
 		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-		this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, null);
 		this.zLevel = 0.0F;
 		this.itemRender.zLevel = 0.0F;
 		GL11.glPopMatrix();
@@ -1052,21 +1096,30 @@ public class GuiBestiary extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		if (button.id == 0 && (this.index ? this.indexPages > 0 : this.pageType != null && this.bookPages > 0)) {
+		if (button.id == 0 && (this.index ? this.indexPages > 0 : this.pageType != null)) {
 			if (this.index) {
 				this.indexPages--;
+				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.BESTIARY_PAGE, 1.0F));
 			} else {
-				this.bookPages--;
+				if(this.bookPages > 0){
+					this.bookPages--;
+					Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.BESTIARY_PAGE, 1.0F));
+				}else{
+					this.index = true;
+				}
 			}
 		}
 		if (button.id == 1 && (this.index ? this.indexPages < this.indexPagesTotal  - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
 			if (this.index) {
 				this.indexPages++;
+				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.BESTIARY_PAGE, 1.0F));
 			} else {
 				this.bookPages++;
+				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.BESTIARY_PAGE, 1.0F));
 			}
 		}
 		if (button.id >= 2 && this.indexButtons.get(button.id - 2) != null && allPageTypes.get(button.id - 2) != null && button instanceof IndexPageButton) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.BESTIARY_PAGE, 1.0F));
 			this.index = false;
 			this.indexPages = 0;
 			this.bookPages = 0;
