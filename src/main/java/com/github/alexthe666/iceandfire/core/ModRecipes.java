@@ -85,6 +85,10 @@ public class ModRecipes {
         OreDictionary.registerOre("desertMyrmexEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("jungleMyrmexEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
 
+        OreDictionary.registerOre("ingotFireDragonsteel", ModItems.dragonsteel_fire_ingot);
+        OreDictionary.registerOre("blockFireDragonsteel", ModBlocks.dragonsteel_fire_block);
+        OreDictionary.registerOre("ingotIceDragonsteel", ModItems.dragonsteel_ice_ingot);
+        OreDictionary.registerOre("blockIceDragonsteel", ModBlocks.dragonsteel_ice_block);
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
         OreDictionary.registerOre("oreSilver", ModBlocks.silverOre);

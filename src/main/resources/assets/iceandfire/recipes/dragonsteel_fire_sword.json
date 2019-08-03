@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "D",
+    "D",
+    "T"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotFireDragonsteel"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "boneWither"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonsteel_fire_sword",
+    "data": 0
+  }
+}

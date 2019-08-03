@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "   ",
+    "DDD",
+    " DD"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "blockSilver"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonarmor_silver",
+    "data": 1
+  }
+}

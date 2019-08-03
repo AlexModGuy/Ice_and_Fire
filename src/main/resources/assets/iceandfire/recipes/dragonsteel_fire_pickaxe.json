@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "DDD",
+    " T ",
+    " T "
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotFireDragonsteel"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "boneWither"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonsteel_fire_pickaxe",
+    "data": 0
+  }
+}

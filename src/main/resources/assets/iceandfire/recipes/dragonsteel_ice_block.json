@@ -1,0 +1,46 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonsteel_ice_block",
+    "data": 0,
+    "count": 1
+  }
+}

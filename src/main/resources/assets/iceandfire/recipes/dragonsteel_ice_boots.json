@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "D D",
+    "D D"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIceDragonsteel"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonsteel_ice_boots",
+    "data": 0
+  }
+}
