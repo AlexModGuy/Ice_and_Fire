@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BBB",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:ash",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "minecraft:coal",
+    "data": 1
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "charredBlock"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:ash",
+    "data": 0,
+    "count": 1
+  }
+}

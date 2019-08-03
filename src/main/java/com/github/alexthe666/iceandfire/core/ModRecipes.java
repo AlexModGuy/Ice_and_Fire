@@ -84,7 +84,18 @@ public class ModRecipes {
         });
         OreDictionary.registerOre("desertMyrmexEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("jungleMyrmexEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
-
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedDirt);
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedGrass);
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedGrassPath);
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedGravel);
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedCobblestone);
+        OreDictionary.registerOre("charredBlock", ModBlocks.charedStone);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenDirt);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenGrass);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenGrassPath);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenGravel);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenCobblestone);
+        OreDictionary.registerOre("frozenBlock", ModBlocks.frozenStone);
         OreDictionary.registerOre("ingotFireDragonsteel", ModItems.dragonsteel_fire_ingot);
         OreDictionary.registerOre("blockFireDragonsteel", ModBlocks.dragonsteel_fire_block);
         OreDictionary.registerOre("ingotIceDragonsteel", ModItems.dragonsteel_ice_ingot);
@@ -154,6 +165,13 @@ public class ModRecipes {
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_jungle_resin_block, new ItemStack(ModBlocks.myrmex_jungle_resin_glass), 1);
+        GameRegistry.addSmelting(ModBlocks.frozenDirt, new ItemStack(Blocks.DIRT), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenGrass, new ItemStack(Blocks.GRASS), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenGrassPath, new ItemStack(Blocks.GRASS_PATH), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenCobblestone, new ItemStack(Blocks.COBBLESTONE), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenStone, new ItemStack(Blocks.STONE), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenGravel, new ItemStack(Blocks.GRAVEL), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.frozenSplinters, new ItemStack(Items.STICK, 3), 0.1F);
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
         ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));

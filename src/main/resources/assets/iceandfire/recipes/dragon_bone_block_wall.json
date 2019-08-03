@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonbone",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragon_bone_wall",
+    "data": 0
+  }
+}
