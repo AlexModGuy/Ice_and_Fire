@@ -2376,20 +2376,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
         float sleepProg = this.sleepProgress * -0.025F;
-        float pitchAdjustment = 0;
-        float pitchMinus = 0;
-        float dragonPitch = 0;
-        float pitchLength = 0;
         float extraAgeScale = (Math.max(0, this.getAgeInDays() - 75) / 75F) * 1.65F;
-        if (this.isFlying() || this.isHovering()) {
-            dragonPitch = this.dragonPitch / 90;
-            pitchLength = dragonPitch > 0 ? dragonPitch * 0.7F : dragonPitch;
-            pitchAdjustment = dragonPitch > 0 ? 1.1F : -1.5F;
-            pitchMinus = dragonPitch > 0 ? 3 : 1;
+        float pitchX = 0;
+        float pitchY = 0;
+        if(dragonPitch > 0){
+            pitchX = Math.min(dragonPitch/90, 0.3F);
+            pitchY = -(dragonPitch/90) * 2F;
         }
-        float xzMod = (0.15F + pitchLength * 0.7F) * getRenderSize() + extraAgeScale;
+        if(dragonPitch < 0){//going up
+            pitchY = (dragonPitch/90) * 0.1F;
+            pitchX = Math.max(dragonPitch/90, -0.7F);
+        }
+
+        System.out.println(pitchX);
+        float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + dragonPitch * pitchAdjustment * -0.6F * pitchMinus) * getRenderSize() * 0.3F + extraAgeScale);
+        float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
         float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
     }
