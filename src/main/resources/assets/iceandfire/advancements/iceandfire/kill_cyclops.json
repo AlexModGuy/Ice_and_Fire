@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:cyclops_eye"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_cyclops.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_cyclops.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:cyclops"
+        }
+      }
+    }
+  }
+}

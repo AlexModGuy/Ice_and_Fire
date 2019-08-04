@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:stymphalian_arrow"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.stymphalian_arrow.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.stymphalian_arrow.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/kill_stymphalian_bird",
+    "criteria": {
+        "bestiary": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:stymphalian_arrow"
+                    }
+                ]
+            }
+        }
+    }
+}

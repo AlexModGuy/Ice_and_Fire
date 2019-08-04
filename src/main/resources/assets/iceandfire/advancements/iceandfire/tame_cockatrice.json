@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:cockatrice_eye"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.tame_cockatrice.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.tame_cockatrice.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/rotten_egg",
+    "criteria": {
+        "tame_rat": {
+            "trigger": "minecraft:tame_animal",
+            "conditions": {
+                "entity": {
+                    "type": "iceandfire:if_cockatrice"
+                }
+            }
+        }
+    }
+}

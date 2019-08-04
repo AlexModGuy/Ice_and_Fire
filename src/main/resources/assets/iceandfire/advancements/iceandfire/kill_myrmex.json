@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:myrmex_desert_chitin"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_myrmex.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_myrmex.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "desert": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:myrmex_desert_chitin"
+          }
+        ]
+      }
+    },
+    "jungle": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:myrmex_jungle_chitin"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "desert",
+      "jungle"
+    ]
+  ]
+}

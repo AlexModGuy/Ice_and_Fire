@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:bestiary"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.bestiary.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.bestiary.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/root",
+    "criteria": {
+        "bestiary": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:bestiary"
+                    }
+                ]
+            }
+        }
+    }
+}

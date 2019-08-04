@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:pixie_wand"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.pixie_wand.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.pixie_wand.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/tame_pixie",
+    "criteria": {
+        "bestiary": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:pixie_wand"
+                    }
+                ]
+            }
+        }
+    }
+}

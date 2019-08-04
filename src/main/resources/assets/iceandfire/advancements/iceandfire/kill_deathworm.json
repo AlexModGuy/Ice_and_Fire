@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:deathworm_tounge"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_deathworm.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_deathworm.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:deathworm"
+        }
+      }
+    }
+  }
+}

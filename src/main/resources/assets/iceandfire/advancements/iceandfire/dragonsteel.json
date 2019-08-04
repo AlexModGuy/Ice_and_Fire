@@ -1,0 +1,42 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:dragonsteel_fire_ingot"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.dragonsteel.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.dragonsteel.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/dragon_forge_core",
+    "criteria": {
+        "fire": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonsteel_fire_ingot"
+                    }
+                ]
+            }
+        },
+        "ice": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonsteel_ice_ingot"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "ice",
+            "fire"
+        ]
+    ]
+}

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:myrmex_desert_resin"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.myrmex_resin.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.myrmex_resin.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/kill_myrmex",
+  "criteria": {
+    "desert": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:myrmex_desert_resin"
+          }
+        ]
+      }
+    },
+    "jungle": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:myrmex_jungle_resin"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "desert",
+      "jungle"
+    ]
+  ]
+}

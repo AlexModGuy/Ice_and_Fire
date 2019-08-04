@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:jar_pixie"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.jar_pixie.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.jar_pixie.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/tame_pixie",
+    "criteria": {
+        "bestiary": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:jar_pixie"
+                    }
+                ]
+            }
+        }
+    }
+}

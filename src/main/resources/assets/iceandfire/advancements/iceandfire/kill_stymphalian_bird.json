@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:stymphalian_bird_feather"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_stymphalian_bird.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_stymphalian_bird.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:stymphalianbird"
+        }
+      }
+    }
+  }
+}

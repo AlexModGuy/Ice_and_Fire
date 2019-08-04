@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:iceandfire.deathworm_egg"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.deathworm_egg.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.deathworm_egg.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/kill_deathworm",
+    "criteria": {
+        "tame_rat": {
+            "trigger": "minecraft:tame_animal",
+            "conditions": {
+                "entity": {
+                    "type": "iceandfire:deathworm"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:siren_tear"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_siren.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_siren.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:siren"
+        }
+      }
+    }
+  }
+}

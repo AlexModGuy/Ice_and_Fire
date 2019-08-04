@@ -1,0 +1,75 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragonbone_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.dragonbone_tool.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragonbone_tool.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/kill_if_dragon",
+  "criteria": {
+  "sword": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonbone_sword"
+        }
+      ]
+    }
+  },
+  "axe": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonbone_axe"
+        }
+      ]
+    }
+  },
+  "pickaxe": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonbone_pickaxe"
+        }
+      ]
+    }
+  },
+  "shovel": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonbone_shovel"
+        }
+      ]
+    }
+  },
+    "hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonbone_hoe"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sword",
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ]
+  ]
+}

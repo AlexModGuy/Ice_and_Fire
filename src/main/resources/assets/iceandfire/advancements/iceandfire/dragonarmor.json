@@ -1,0 +1,86 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragonarmor_iron"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.dragonarmor.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragonarmor.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/dragon_egg",
+  "criteria": {
+  "iron": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonarmor_iron"
+        }
+      ]
+    }
+  },
+  "gold": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonarmor_gold"
+        }
+      ]
+    }
+  },
+  "diamond": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonarmor_diamond"
+        }
+      ]
+    }
+  },
+  "silver": {
+    "trigger": "minecraft:inventory_changed",
+    "conditions": {
+      "items": [
+        {
+          "item": "iceandfire:dragonarmor_silver"
+        }
+      ]
+    }
+  },
+    "dragonsteel_fire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonarmor_dragonsteel_fire"
+          }
+        ]
+      }
+    },
+    "dragonsteel_ice": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonarmor_dragonsteel_ice"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "iron",
+      "gold",
+      "diamond",
+      "silver",
+      "dragonsteel_fire",
+      "dragonsteel_ice"
+    ]
+  ]
+}

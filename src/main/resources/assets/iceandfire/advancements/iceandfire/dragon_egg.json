@@ -1,0 +1,108 @@
+{
+    "display": {
+        "icon": {
+            "item": "iceandfire:dragonegg_red"
+        },
+        "title": {
+            "translate": "advancements.iceandfire.dragon_egg.title"
+        },
+        "description": {
+            "translate": "advancements.iceandfire.dragon_egg.description"
+        }
+    },
+    "parent": "iceandfire:iceandfire/kill_if_dragon",
+    "criteria": {
+        "red": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_red"
+                    }
+                ]
+            }
+        },
+        "green": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_green"
+                    }
+                ]
+            }
+        },
+        "bronze": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_bronze"
+                    }
+                ]
+            }
+        },
+        "gray": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_gray"
+                    }
+                ]
+            }
+        },
+        "white": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_white"
+                    }
+                ]
+            }
+        },
+        "blue": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_blue"
+                    }
+                ]
+            }
+        },
+        "sapphire": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_sapphire"
+                    }
+                ]
+            }
+        },
+        "silver": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_silver"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "red",
+            "green",
+            "bronze",
+            "gray",
+            "white",
+            "blue",
+            "sapphire",
+            "silver"
+        ]
+    ]
+}

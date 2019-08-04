@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:troll_tusk"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_troll.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_troll.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:if_troll"
+        }
+      }
+    }
+  }
+}
