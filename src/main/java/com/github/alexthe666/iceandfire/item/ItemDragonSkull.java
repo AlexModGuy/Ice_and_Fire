@@ -91,12 +91,6 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
             }
             if (!player.capabilities.isCreativeMode) {
                 stack.shrink(1);
-
-                if (stack.isEmpty()) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack.EMPTY));
-                } else {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
-                }
             }
         }
         return EnumActionResult.SUCCESS;

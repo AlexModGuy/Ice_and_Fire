@@ -155,13 +155,12 @@ public class IceAndFire {
     public void postInit(FMLPostInitializationEvent event) {
         PROXY.postRender();
         ModRecipes.postInit();
-
         logger.info("A brother bound to a love he must hide");
         logger.info("The younger's armor is worn in the mind");
-
         logger.info("A cold iron throne holds a boy barely grown");
         logger.info("And now it is known");
         logger.info("A claim to the prize, a crown laced in lies");
         logger.info("You win or you die");
+        logger.info("Damn season 8 really sucked didnt it");
     }
 }
