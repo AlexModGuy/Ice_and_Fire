@@ -301,7 +301,7 @@ public class ClientProxy extends CommonProxy {
 		try {
 			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFireGround"), new FireDragonRemodelTabulaModelAnimator());
 			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIceGround"), new IceDragonRemodelTabulaModelAnimator());
-			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
+			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaSerpent"), new SeaSerpentTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

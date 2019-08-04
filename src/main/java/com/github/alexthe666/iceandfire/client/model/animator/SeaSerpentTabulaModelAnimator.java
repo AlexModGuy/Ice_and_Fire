@@ -20,6 +20,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
+        model.getCube("BodyUpper").rotationPointY += 9;
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
         if(properties != null && properties.isStone){
             return;
