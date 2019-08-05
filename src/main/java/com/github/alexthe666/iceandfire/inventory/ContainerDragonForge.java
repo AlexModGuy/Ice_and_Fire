@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,9 +17,10 @@ public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
     private int cookTime;
-
+    private boolean isFire;
     public ContainerDragonForge(InventoryPlayer playerInventory, IInventory furnaceInventory) {
         this.tileFurnace = furnaceInventory;
+        isFire = ((TileEntityDragonforge)tileFurnace).isFire;
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 68, 34));
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 86, 34){
             public boolean isItemValid(ItemStack stack) {
@@ -94,11 +96,11 @@ public class ContainerDragonForge extends Container {
 
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (!FurnaceRecipes.instance().getSmeltingResult(itemstack1).isEmpty()) {
+                if(isFire ? ModRecipes.getFireForgeRecipe(itemstack1) != null : ModRecipes.getIceForgeRecipe(itemstack1) != null){
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (TileEntityFurnace.isItemFuel(itemstack1)) {
+                } else if (itemstack1.getItem() == ModItems.fire_dragon_blood || itemstack1.getItem() == ModItems.ice_dragon_blood) {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }

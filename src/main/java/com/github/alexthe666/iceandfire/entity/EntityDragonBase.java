@@ -294,7 +294,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected void updateBurnTarget(){
-        if(burningTarget != null){
+        if(burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isChild()){
             if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget) < 300){
                 this.getLookHelper().setLookPosition(burningTarget.getX()  + 0.5D, burningTarget.getY()  + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);

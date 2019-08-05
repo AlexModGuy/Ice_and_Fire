@@ -146,6 +146,7 @@ public class ModBlocks {
 		GameRegistry.registerTileEntity(TileEntityMyrmexCocoon.class, "myrmexCocoon");
 		GameRegistry.registerTileEntity(TileEntityDragonforge.class, "dragonforge");
 		GameRegistry.registerTileEntity(TileEntityDragonforgeInput.class, "dragonforgeInput");
+		GameRegistry.registerTileEntity(TileEntityDragonforgeBrick.class, "dragonforgeBrick");
 	}
 
 }

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
@@ -28,17 +29,21 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 public class TileEntityDragonforge extends TileEntity implements ITickable, ISidedInventory {
     public boolean isFire;
-    private static final int[] SLOTS_TOP = new int[]{0};
-    private static final int[] SLOTS_BOTTOM = new int[]{2, 1};
-    private static final int[] SLOTS_SIDES = new int[]{1};
+    private static final int[] SLOTS_TOP = new int[]{0, 1};
+    private static final int[] SLOTS_BOTTOM = new int[]{2};
+    private static final int[] SLOTS_SIDES = new int[]{0, 1};
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private int cookTime;
     private int lastDragonFlameTimer = 0;
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
-    public TileEntityDragonforge(){}
+    public TileEntityDragonforge(){
+        isFire = this.getBlockType().getRegistryName().equals(ModBlocks.dragonforge_fire_core.getRegistryName()) ;
+    }
 
     public TileEntityDragonforge(boolean isFire) {
         this.isFire = isFire;
@@ -269,8 +274,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         }
         else
         {
-            ItemStack itemstack = this.forgeItemStacks.get(1);
-            return true;
+            return stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood;
         }
     }
 
@@ -403,6 +407,11 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return checkBoneCorners(pos.down()) && checkBrickSlots(pos.down()) &&
                 checkBrickCorners(pos) && atleastThreeAreBricks(pos) &&
                 checkBoneCorners(pos.up()) && checkBrickSlots(pos.up());
+    }
+
+    @Override
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+        return getCapability(capability, facing) != null;
     }
 
     private Block getBrick(){

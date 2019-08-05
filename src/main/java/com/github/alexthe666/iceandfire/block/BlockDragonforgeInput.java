@@ -41,12 +41,8 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
         if (this.getConnectedTileEntity(worldIn, pos) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, pos);
             if (forge.isFire == isFire) {
-                if (playerIn.isSneaking()) {
-                    return false;
-                } else {
-                    playerIn.openGui(IceAndFire.INSTANCE, 7, worldIn, forge.getPos().getX(), forge.getPos().getY(), forge.getPos().getZ());
-                    return true;
-                }
+                worldIn.scheduleUpdate(forge.getPos(), this, this.tickRate(worldIn));
+                return forge.getBlockType().onBlockActivated(worldIn, forge.getPos(), worldIn.getBlockState(forge.getPos()), playerIn, hand, facing, hitX, hitY, hitZ);
             }
         }
         return false;

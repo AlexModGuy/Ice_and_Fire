@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nullable;
+
 public class TileEntityDragonforgeInput extends TileEntity implements ITickable {
     private int ticksSinceDragonFire;
     private static final int LURE_DISTANCE = 50;
@@ -106,6 +108,11 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+        return getConnectedTileEntity() != null && getConnectedTileEntity().hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")

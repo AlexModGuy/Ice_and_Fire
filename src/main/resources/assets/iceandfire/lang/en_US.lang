@@ -655,3 +655,21 @@ advancements.iceandfire.tide_trident.title=Poseidon, God of the Seas
 advancements.iceandfire.tide_trident.description=Throw a tide trident at a mob
 advancements.iceandfire.dragonarmor.title=Suit Up
 advancements.iceandfire.dragonarmor.description=Obtain dragon armor
+
+iceandfire.fire_dragon_forge=Fire Dragon Forge
+iceandfire.ice_dragon_forge=Ice Dragon Forge
+item.iceandfire.fire_dragon_blood.jei_desc=Obtained by interacting with a dragon corpse while holding an empty bottle.
+item.iceandfire.ice_dragon_blood.jei_desc=Obtained by interacting with a dragon corpse while holding an empty bottle.
+item.iceandfire.dragonegg.jei_desc=Place in an open flame if a fire dragon or underwater if ice dragon and wait a long time. The dragon will bond with the closest player.
+iceandfire.dragon_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.hippogryph_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.cyclops_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.cockatrice_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.stymphalian_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.troll_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.amphithere_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.seaserpent_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
+iceandfire.fire_stew.jei_desc=Used to breed two male and female dragons. The female will create a nest with an egg afterwards.
+iceandfire.frost_stew.jei_desc=Used to breed two male and female dragons. The female will create a nest with an egg afterwards.
+
+
