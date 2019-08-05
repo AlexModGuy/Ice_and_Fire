@@ -19,7 +19,8 @@ public class TileEntityDragonforgeBrick extends TileEntity {
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
         return getConnectedTileEntity() != null && getConnectedTileEntity().hasCapability(capability, facing);
     }
 
