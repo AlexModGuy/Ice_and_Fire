@@ -161,6 +161,6 @@ public class IceAndFire {
         logger.info("And now it is known");
         logger.info("A claim to the prize, a crown laced in lies");
         logger.info("You win or you die");
-        logger.info("Damn season 8 really sucked didnt it");
+        logger.info("Damn season 8 really sucked didn't it");
     }
 }
