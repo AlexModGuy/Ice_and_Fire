@@ -19,6 +19,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import javax.annotation.Nullable;
+
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
 	private static final int[] slotsTop = new int[]{0};
 	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
@@ -200,4 +202,24 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return true;
 	}
 
+	net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
+	net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.DOWN);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@javax.annotation.Nullable
+	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing)
+	{
+		if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			if (facing == EnumFacing.DOWN)
+				return (T) handlerDown;
+			else
+				return (T) handlerUp;
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+		return getCapability(capability, facing) != null;
+	}
 }

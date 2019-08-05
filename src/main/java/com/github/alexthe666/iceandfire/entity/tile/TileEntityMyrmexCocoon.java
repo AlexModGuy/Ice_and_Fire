@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityLockableLoot;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
@@ -82,7 +83,7 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
     @Override
     public String getGuiID() {
-        return "oldworldblues:storage";
+        return "iceandfire:storage";
     }
 
     protected NonNullList<ItemStack> getItems() {
@@ -132,7 +133,6 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
             loottable.fillInventory(this, random, lootcontext$builder.build());
         }
     }
-
 
     @Override
     public void onDataPacket(NetworkManager netManager, SPacketUpdateTileEntity packet) {

@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -388,4 +389,26 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 		}
 		return true;
 	}
+
+	net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
+	net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.DOWN);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@javax.annotation.Nullable
+	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing)
+	{
+		if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			if (facing == EnumFacing.DOWN)
+				return (T) handlerDown;
+			else
+				return (T) handlerUp;
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+		return getCapability(capability, facing) != null;
+	}
+
 }
