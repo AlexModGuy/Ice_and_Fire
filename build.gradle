@@ -55,7 +55,10 @@ repositories {
         name "Jared"
         url "http://maven.blamejared.com/"
   }
-
+    maven { // mcjty
+        name 'tterrag'
+        url "https://maven.tterrag.com/"
+    }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -87,6 +90,7 @@ dependencies {
     compile "baubles:Baubles:1.12:1.5.2"
     compile "thaumcraft:Thaumcraft:1.12.2:6.1.BETA26"
     compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.6.465"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 }
 
 processResources

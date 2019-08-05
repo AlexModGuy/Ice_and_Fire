@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.compat.OneProbeBridge;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
@@ -84,6 +85,7 @@ public class IceAndFire {
         ThaumcraftCompatBridge.loadThaumcraftCompat();
         LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
+        OneProbeBridge.loadPreInit();
     }
 
 
