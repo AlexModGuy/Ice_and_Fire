@@ -143,7 +143,6 @@ public class TileEntityJar extends TileEntity implements ITickable {
 		if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			if (facing == EnumFacing.DOWN)
 				return (T) handlerBottom;
-
 		return null;
 	}
 
