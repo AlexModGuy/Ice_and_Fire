@@ -664,8 +664,8 @@ modifier.antigravity.desc=Onwards!§r\nThe arrow will maintain its height and wi
 material.amphithere_feather.name=Amphithere Feather
 modifier.arrow_knockback.name=Flying Knockback
 modifier.arrow_knockback.desc=Up and At 'Um!§r\nThe arrow will inflict strong knockback when it hits an entity.
-fluid.tconstruct.molten_dragonsteel_fire.name=Molten Fire Dragonsteel
-fluid.tconstruct.molten_dragonsteel_ice.name=Molten Ice Dragonsteel
+fluid.tconstruct.dragonsteel_fire.name=Molten Fire Dragonsteel
+fluid.tconstruct.dragonsteel_ice.name=Molten Ice Dragonsteel
 
 #BANNERS
 item.banner.fire.white=White Fire Dragon

@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.fluid.FluidMolten;
@@ -76,7 +77,6 @@ public class TinkersCompat {
         MATERIAL_DRAGONBONE.addTrait(SPLINTERS_II, SHAFT);
         MATERIAL_DRAGONBONE.addTrait(FRACTURED_II);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONBONE, new ArrowShaftMaterialStats(1.3f, 2));
-
         TinkerMaterials.materials.add(MATERIAL_DESERT_MYRMEX);
         TinkerRegistry.integrate(MATERIAL_DESERT_MYRMEX).preInit();
         MATERIAL_DESERT_MYRMEX.addItem(ModItems.myrmex_desert_chitin, 1, Material.VALUE_Ingot);
@@ -152,13 +152,12 @@ public class TinkersCompat {
     public static void setupFluids() {
         // buuuuckeeeeet
         FluidRegistry.enableUniversalBucket();
-        MOLTEN_FIRE_DRAGONSTEEL = fluidMetal("molten_dragonsteel_fire", 0X594C58);
+        MOLTEN_FIRE_DRAGONSTEEL = fluidMetal("dragonsteel_fire", 0X594C58);
         MOLTEN_FIRE_DRAGONSTEEL.setTemperature(769);
-        MOLTEN_ICE_DRAGONSTEEL = fluidMetal("molten_dragonsteel_ice", 0x8299A7);
+        MOLTEN_ICE_DRAGONSTEEL = fluidMetal("dragonsteel_ice", 0x8299A7);
         MOLTEN_ICE_DRAGONSTEEL.setTemperature(769);
         MATERIAL_DRAGONSTEEL_FIRE.setFluid(MOLTEN_FIRE_DRAGONSTEEL);
         MATERIAL_DRAGONSTEEL_ICE.setFluid(MOLTEN_ICE_DRAGONSTEEL);
-
     }
 
     public static void post() {
