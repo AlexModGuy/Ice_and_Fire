@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.integration;
+package com.github.alexthe666.iceandfire.compat.thaumcraft;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -30,7 +30,7 @@ public class ThaumcraftCompat {
     private static boolean registered = false;
 
     @Deprecated
-    static void register() {
+    public static void register() {
         if (!registered) {
             registered = true;
             MinecraftForge.EVENT_BUS.register(INSTANCE);

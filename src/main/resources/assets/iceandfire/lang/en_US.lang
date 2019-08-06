@@ -671,5 +671,20 @@ iceandfire.amphithere_skull.jei_desc=Can be placed on the ground or on walls as 
 iceandfire.seaserpent_skull.jei_desc=Can be placed on the ground or on walls as a trophy. Also has a unique banner pattern.
 iceandfire.fire_stew.jei_desc=Used to breed two male and female dragons. The female will create a nest with an egg afterwards.
 iceandfire.frost_stew.jei_desc=Used to breed two male and female dragons. The female will create a nest with an egg afterwards.
+material.dragonbone.name=Dragon Bone
+modifier.splintering2.name=Splintering II
+modifier.splintering2.desc=A souvenir for your enemies!§r\nHits them more to deal more damage.
+modifier.fractured2.name=Fractured II
+modifier.fractured2.desc=Hurt!§r\nYour tools damage is increased.
+material.desert_myrmex.name=Desert Myrmex Chitin
+material.jungle_myrmex.name=Jungle Myrmex Chitin
+material.dragonsteel_fire.name=Fire Dragonsteel
+material.dragonsteel_ice.name=Ice Dragonsteel
+modifier.hive_defender.name=Hive Defender
+modifier.hive_defender.desc=For Queen and Colony!§r\nDeals +8 extra damage against death worms and +4 damage against non-arthropods.
+modifier.burn2.name=Inferno II
+modifier.burn2.desc=Burn baby burn!§r\nSets enemies on fire for 15 seconds with added knockback.
+modifier.freeze2.name=Blizzard II
+modifier.freeze2.desc=Ice-ice baby!§r\nFreezes enemies in a block of ice for 15 seconds with added knockback.
 
 

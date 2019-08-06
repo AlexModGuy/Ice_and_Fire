@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.compat.OneProbeBridge;
+import com.github.alexthe666.iceandfire.compat.OneProbeCompatBridge;
+import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
+import com.github.alexthe666.iceandfire.compat.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.message.*;
@@ -85,7 +86,9 @@ public class IceAndFire {
         ThaumcraftCompatBridge.loadThaumcraftCompat();
         LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
-        OneProbeBridge.loadPreInit();
+        OneProbeCompatBridge.loadPreInit();
+        TinkersCompatBridge.loadTinkersCompat();
+        PROXY.preRender();
     }
 
 
@@ -156,6 +159,7 @@ public class IceAndFire {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         PROXY.postRender();
+        TinkersCompatBridge.loadTinkersPostInitCompat();
         ModRecipes.postInit();
         logger.info("A brother bound to a love he must hide");
         logger.info("The younger's armor is worn in the mind");

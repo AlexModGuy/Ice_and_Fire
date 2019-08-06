@@ -31,7 +31,6 @@ public class DragonInfoProvider implements IProbeInfoEntityProvider {
             }
             probeInfo.horizontal().text(I18n.format("dragon.gender") + I18n.format(dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
             probeInfo.horizontal().text(I18n.format("dragon.stage") + dragon.getDragonStage());
-
         }
     }
 }
