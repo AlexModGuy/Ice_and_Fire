@@ -268,14 +268,19 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         {
             return false;
         }
-        else if (index != 1)
+        else if (index == 1)
         {
-            return true;
+            DragonForgeRecipe forgeRecipe = null;
+            if(this.isFire){
+                forgeRecipe = ModRecipes.getFireForgeRecipeForBlood(this.forgeItemStacks.get(0));
+            }else{
+                forgeRecipe = ModRecipes.getIceForgeRecipeForBlood(this.forgeItemStacks.get(0));
+            }
+            if(forgeRecipe != null){
+                return true;
+            }
         }
-        else
-        {
-            return stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood;
-        }
+        return index == 0;
     }
 
     public int[] getSlotsForFace(EnumFacing side)

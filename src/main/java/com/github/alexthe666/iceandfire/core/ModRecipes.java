@@ -243,4 +243,22 @@ public class ModRecipes {
         }
         return null;
     }
+
+    public static DragonForgeRecipe getFireForgeRecipeForBlood(ItemStack stack) {
+        for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
+            if (OreDictionary.itemMatches(recipe.getBlood(), stack, false)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+    public static DragonForgeRecipe getIceForgeRecipeForBlood(ItemStack stack) {
+        for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
+            if (OreDictionary.itemMatches(recipe.getBlood(), stack, false)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 }

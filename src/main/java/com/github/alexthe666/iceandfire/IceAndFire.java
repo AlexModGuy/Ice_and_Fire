@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.compat.CraftTweakerCompatBridge;
 import com.github.alexthe666.iceandfire.compat.OneProbeCompatBridge;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModEntities;
@@ -88,6 +89,7 @@ public class IceAndFire {
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
         OneProbeCompatBridge.loadPreInit();
         TinkersCompatBridge.loadTinkersCompat();
+        CraftTweakerCompatBridge.loadTweakerCompat();
         PROXY.preRender();
     }
 
