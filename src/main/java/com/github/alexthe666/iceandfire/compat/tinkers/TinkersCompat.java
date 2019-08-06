@@ -6,11 +6,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import slimeknights.mantle.util.RecipeMatch;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.TinkerRegistry;
+import slimeknights.tconstruct.library.Util;
+import slimeknights.tconstruct.library.fluid.FluidMolten;
 import slimeknights.tconstruct.library.materials.*;
 import slimeknights.tconstruct.library.traits.AbstractTrait;
 import slimeknights.tconstruct.library.utils.HarvestLevels;
+import slimeknights.tconstruct.shared.TinkerFluids;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerMaterials;
 import slimeknights.tconstruct.tools.traits.TraitBonusDamage;
 import slimeknights.tconstruct.tools.traits.TraitSplintering;
@@ -40,6 +47,8 @@ public class TinkersCompat {
     public static final AbstractTrait ANTIGRAVITY = new TraitAntigravity();
     public static final AbstractTrait ARROW_KNOCKBACK = new TraitArrowKnockback();
     private static boolean registered = false;
+    public static FluidMolten MOLTEN_FIRE_DRAGONSTEEL;
+    public static FluidMolten MOLTEN_ICE_DRAGONSTEEL;
 
     public static void register() {
         if (!registered) {
@@ -93,9 +102,10 @@ public class TinkersCompat {
         TinkerRegistry.addMaterialStats(MATERIAL_JUNGLE_MYRMEX, new BowMaterialStats(0.5f, 0.7F, 2F));
         MATERIAL_JUNGLE_MYRMEX.addTrait(HIVE_DEFENDER, HEAD);
         MATERIAL_JUNGLE_MYRMEX.addTrait(poisonous);
+        setupFluids();
 
         TinkerMaterials.materials.add(MATERIAL_DRAGONSTEEL_FIRE);
-        TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_FIRE).preInit();
+        TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_FIRE, MOLTEN_FIRE_DRAGONSTEEL, "FireDragonsteel").toolforge().preInit();
         MATERIAL_DRAGONSTEEL_FIRE.addItem(ModItems.dragonsteel_fire_ingot, 1, Material.VALUE_Ingot);
         MATERIAL_DRAGONSTEEL_FIRE.setRepresentativeItem(ModItems.dragonsteel_fire_ingot);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE,
@@ -107,7 +117,7 @@ public class TinkersCompat {
         MATERIAL_DRAGONSTEEL_FIRE.addTrait(sharp);
 
         TinkerMaterials.materials.add(MATERIAL_DRAGONSTEEL_ICE);
-        TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_ICE).preInit();
+        TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_ICE, MOLTEN_ICE_DRAGONSTEEL, "IceDragonsteel").toolforge().preInit();
         MATERIAL_DRAGONSTEEL_ICE.addItem(ModItems.dragonsteel_ice_ingot, 1, Material.VALUE_Ingot);
         MATERIAL_DRAGONSTEEL_ICE.setRepresentativeItem(ModItems.dragonsteel_ice_ingot);
         MATERIAL_DRAGONSTEEL_ICE.setCraftable(false);
@@ -119,7 +129,6 @@ public class TinkersCompat {
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE, new BowMaterialStats(0.9f, 3.0F, 6F));
         MATERIAL_DRAGONSTEEL_ICE.addTrait(FREEZE_II, HEAD);
         MATERIAL_DRAGONSTEEL_ICE.addTrait(sharp);
-
         FREEZE_I.addItem(ModItems.ice_dragon_blood);
         FREEZE_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(ModItems.ice_dragon_blood)));
         BURN_I.addItem(ModItems.fire_dragon_blood);
@@ -140,6 +149,34 @@ public class TinkersCompat {
         TinkerRegistry.addMaterialStats(MATERIAL_AMPHITHERE_FEATHER, new FletchingMaterialStats(0.9f, 0.7f));
     }
 
+    public static void setupFluids() {
+        // buuuuckeeeeet
+        FluidRegistry.enableUniversalBucket();
+        MOLTEN_FIRE_DRAGONSTEEL = fluidMetal("molten_dragonsteel_fire", 0X594C58);
+        MOLTEN_FIRE_DRAGONSTEEL.setTemperature(769);
+        MOLTEN_ICE_DRAGONSTEEL = fluidMetal("molten_dragonsteel_ice", 0x8299A7);
+        MOLTEN_ICE_DRAGONSTEEL.setTemperature(769);
+        MATERIAL_DRAGONSTEEL_FIRE.setFluid(MOLTEN_FIRE_DRAGONSTEEL);
+        MATERIAL_DRAGONSTEEL_ICE.setFluid(MOLTEN_ICE_DRAGONSTEEL);
+
+    }
+
     public static void post() {
+    }
+
+    protected static boolean isSmelteryLoaded() {
+        return TConstruct.pulseManager.isPulseLoaded(TinkerSmeltery.PulseId);
+    }
+
+    private static FluidMolten fluidMetal(String name, int color) {
+        FluidMolten fluid = new FluidMolten(name, color);
+        return registerFluid(fluid);
+    }
+
+    protected static <T extends Fluid> T registerFluid(T fluid) {
+        fluid.setUnlocalizedName(Util.prefix(fluid.getName()));
+        FluidRegistry.registerFluid(fluid);
+
+        return fluid;
     }
 }

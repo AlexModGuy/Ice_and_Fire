@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.core;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.BlockDispenser;
@@ -29,11 +30,10 @@ public class ModRecipes {
 
     public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
     public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
-
+    public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
     public static void preInit() {
         FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.fire_dragon_blood), new ItemStack(ModItems.dragonsteel_fire_ingot)));
         ICE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.ice_dragon_blood), new ItemStack(ModItems.dragonsteel_ice_ingot)));
-
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
         {
             /**
@@ -159,8 +159,22 @@ public class ModRecipes {
         OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
 
-        addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
-        addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+        addBanner("fire", new ItemStack(ModItems.fire_dragon_heart));
+        addBanner("ice", new ItemStack(ModItems.ice_dragon_heart));
+        addBanner("fire_head", new ItemStack(ModItems.dragon_skull, 1, 0));
+        addBanner("ice_head", new ItemStack(ModItems.dragon_skull, 1, 1));
+        addBanner("amphithere", new ItemStack(ModItems.amphithere_feather));
+        addBanner("bird", new ItemStack(ModItems.stymphalian_bird_feather));
+        addBanner("eye", new ItemStack(ModItems.cyclops_eye));
+        addBanner("fae", new ItemStack(ModItems.pixie_wings));
+        addBanner("feather", new ItemStack(Items.FEATHER));
+        addBanner("gorgon", new ItemStack(ModItems.gorgon_head));
+        addBanner("hippocampus", new ItemStack(ModItems.hippocampus_fin));
+        addBanner("hippogryph_head", new ItemStack(EnumSkullType.HIPPOGRYPH.skull_item));
+        addBanner("mermaid", new ItemStack(ModItems.siren_tear));
+        addBanner("sea_serpent", new ItemStack(ModItems.sea_serpent_fang));
+        addBanner("troll", new ItemStack(ModItems.troll_tusk));
+
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
@@ -190,6 +204,15 @@ public class ModRecipes {
         ModItems.troll_mountain.setRepairItem(new ItemStack(EnumTroll.MOUNTAIN.leather));
         ModItems.troll_forest.setRepairItem(new ItemStack(EnumTroll.FOREST.leather));
         ModItems.troll_frost.setRepairItem(new ItemStack(EnumTroll.FROST.leather));
+        ModItems.hippogryph_sword_tools.setRepairItem(new ItemStack(ModItems.hippogryph_talon));
+        ModItems.hippocampus_sword_tools.setRepairItem(new ItemStack(ModItems.shiny_scales));
+        ModItems.amphithere_sword_tools.setRepairItem(new ItemStack(ModItems.amphithere_feather));
+        ModItems.dragonsteel_fire_tools.setRepairItem(new ItemStack(ModItems.dragonsteel_fire_ingot));
+        ModItems.dragonsteel_ice_tools.setRepairItem(new ItemStack(ModItems.dragonsteel_ice_ingot));
+        ModItems.stymphalian_sword_tools.setRepairItem(new ItemStack(ModItems.stymphalian_bird_feather));
+        ModItems.myrmexChitin.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
+        ModItems.myrmexDesert.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
+        ModItems.myrmexJungle.setRepairItem(new ItemStack(ModItems.myrmex_jungle_chitin));
         ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("Potion", "water_breathing");
@@ -201,6 +224,7 @@ public class ModRecipes {
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {
         Class<?>[] classes = {String.class, String.class, ItemStack.class};
         Object[] names = {name, "iceandfire." + name, craftingStack};
+        BANNER_ITEMS.add(craftingStack);
         return EnumHelper.addEnum(BannerPattern.class, name.toUpperCase(), classes, names);
     }
 

@@ -27,7 +27,6 @@ public class IceAndFireJEIPlugin implements IModPlugin {
 
     private static void addDescription(IModRegistry registry, ItemStack stack) {
         registry.addIngredientInfo(stack, ItemStack.class, stack.getTranslationKey() + ".jei_desc");
-
     }
 
     @SuppressWarnings("deprecation")
@@ -54,11 +53,15 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         addDescription(registry, new ItemStack(ModItems.dragonegg_sapphire));
         addDescription(registry, new ItemStack(ModItems.dragonegg_silver));
         addDescription(registry, new ItemStack(ModItems.dragon_skull));
+        addDescription(registry, new ItemStack(ModItems.dragon_skull, 1, 1));
         addDescription(registry, new ItemStack(ModItems.fire_stew));
         addDescription(registry, new ItemStack(ModItems.frost_stew));
 
         for(EnumSkullType skull : EnumSkullType.values()){
             addDescription(registry, new ItemStack(skull.skull_item));
+        }
+        for(ItemStack stack : ModRecipes.BANNER_ITEMS){
+            registry.addIngredientInfo(stack, ItemStack.class, "item.iceandfire.custom_banner.jei_desc");
         }
     }
 
