@@ -1,7 +1,12 @@
 package com.github.alexthe666.iceandfire.compat.tinkers;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.*;
 import slimeknights.tconstruct.library.traits.AbstractTrait;
@@ -22,12 +27,18 @@ public class TinkersCompat {
     public static final Material MATERIAL_JUNGLE_MYRMEX = new Material("jungle_myrmex", 0X267A72);
     public static final Material MATERIAL_DRAGONSTEEL_FIRE = new Material("dragonsteel_fire", 0XCCBBC4);
     public static final Material MATERIAL_DRAGONSTEEL_ICE = new Material("dragonsteel_ice", 0XBBE4FD);
+    public static final Material MATERIAL_STYMPH_FEATHER = new Material("stymph_feather", 0X7D5B40);
+    public static final Material MATERIAL_AMPHITHERE_FEATHER = new Material("amphithere_feather", 0X228760);
     public static final AbstractTrait SPLINTERING_II = new TraitSplinteringII();
     public static final AbstractTrait SPLINTERS_II = new TraitSplintersII();
     public static final AbstractTrait FRACTURED_II = new TraitBonusDamage("fractured2", 3f);
     public static final AbstractTrait HIVE_DEFENDER = new TraitHiveDefender();
     public static final AbstractTrait FREEZE_II = new TraitFreeze(2);
     public static final AbstractTrait BURN_II = new TraitBurn(2);
+    public static final AbstractTrait FREEZE_I = new TraitFreeze(1);
+    public static final AbstractTrait BURN_I = new TraitBurn(1);
+    public static final AbstractTrait ANTIGRAVITY = new TraitAntigravity();
+    public static final AbstractTrait ARROW_KNOCKBACK = new TraitArrowKnockback();
     private static boolean registered = false;
 
     public static void register() {
@@ -55,6 +66,7 @@ public class TinkersCompat {
         MATERIAL_DRAGONBONE.addTrait(SPLINTERING_II, HEAD);
         MATERIAL_DRAGONBONE.addTrait(SPLINTERS_II, SHAFT);
         MATERIAL_DRAGONBONE.addTrait(FRACTURED_II);
+        TinkerRegistry.addMaterialStats(MATERIAL_DRAGONBONE, new ArrowShaftMaterialStats(1.3f, 2));
 
         TinkerMaterials.materials.add(MATERIAL_DESERT_MYRMEX);
         TinkerRegistry.integrate(MATERIAL_DESERT_MYRMEX).preInit();
@@ -87,7 +99,7 @@ public class TinkersCompat {
         MATERIAL_DRAGONSTEEL_FIRE.addItem(ModItems.dragonsteel_fire_ingot, 1, Material.VALUE_Ingot);
         MATERIAL_DRAGONSTEEL_FIRE.setRepresentativeItem(ModItems.dragonsteel_fire_ingot);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE,
-                new HeadMaterialStats(1500, 7.00f, 10.0f, HarvestLevels.COBALT),
+                new HeadMaterialStats(1500, 7.00f, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
                 new HandleMaterialStats(0.4F, 400),
                 new ExtraMaterialStats(510));
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE, new BowMaterialStats(0.9f, 3.0F, 6F));
@@ -101,12 +113,31 @@ public class TinkersCompat {
         MATERIAL_DRAGONSTEEL_ICE.setCraftable(false);
         MATERIAL_DRAGONSTEEL_ICE.setCastable(true);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE,
-                new HeadMaterialStats(1500, 7.00f, 10.0f, HarvestLevels.COBALT),
+                new HeadMaterialStats(1500, 7.00f, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
                 new HandleMaterialStats(0.4F, 400),
                 new ExtraMaterialStats(510));
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE, new BowMaterialStats(0.9f, 3.0F, 6F));
         MATERIAL_DRAGONSTEEL_ICE.addTrait(FREEZE_II, HEAD);
         MATERIAL_DRAGONSTEEL_ICE.addTrait(sharp);
+
+        FREEZE_I.addItem(ModItems.ice_dragon_blood);
+        FREEZE_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(ModItems.ice_dragon_blood)));
+        BURN_I.addItem(ModItems.fire_dragon_blood);
+        BURN_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(ModItems.fire_dragon_blood)));
+
+        TinkerMaterials.materials.add(MATERIAL_STYMPH_FEATHER);
+        TinkerRegistry.integrate(MATERIAL_STYMPH_FEATHER).preInit();
+        MATERIAL_STYMPH_FEATHER.addItem(ModItems.stymphalian_bird_feather, 1, Material.VALUE_Ingot);
+        MATERIAL_STYMPH_FEATHER.setRepresentativeItem(ModItems.stymphalian_bird_feather);
+        MATERIAL_STYMPH_FEATHER.addTrait(ANTIGRAVITY);
+        TinkerRegistry.addMaterialStats(MATERIAL_STYMPH_FEATHER, new FletchingMaterialStats(1.0f, 1.1f));
+
+        TinkerMaterials.materials.add(MATERIAL_AMPHITHERE_FEATHER);
+        TinkerRegistry.integrate(MATERIAL_AMPHITHERE_FEATHER).preInit();
+        MATERIAL_AMPHITHERE_FEATHER.addItem(ModItems.amphithere_feather, 1, Material.VALUE_Ingot);
+        MATERIAL_AMPHITHERE_FEATHER.setRepresentativeItem(ModItems.amphithere_feather);
+        MATERIAL_AMPHITHERE_FEATHER.addTrait(ARROW_KNOCKBACK);
+        TinkerRegistry.addMaterialStats(MATERIAL_AMPHITHERE_FEATHER, new FletchingMaterialStats(0.9f, 0.7f));
     }
 
     public static void post() {

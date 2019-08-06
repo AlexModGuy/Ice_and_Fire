@@ -1,0 +1,32 @@
+{
+    "textures": {
+        "arrow": "iceandfire:tinkers/arrow/mod_flame",
+        "battleaxe": "iceandfire:tinkers/battleaxe/mod_flame",
+        "battlesign": "iceandfire:tinkers/battlesign/mod_flame",
+        "bolt": "iceandfire:tinkers/bolt/mod_flame",
+        "broadsword": "iceandfire:tinkers/broadsword/mod_flame",
+        "cleaver": "iceandfire:tinkers/cleaver/mod_flame",
+        "crossbow": "iceandfire:tinkers/crossbow/mod_flame",
+        "excavator": "iceandfire:tinkers/excavator/mod_flame",
+        "frypan": "iceandfire:tinkers/frypan/mod_flame",
+        "hammer": "iceandfire:tinkers/hammer/mod_flame",
+        "hatchet": "iceandfire:tinkers/hatchet/mod_flame",
+        "kama": "iceandfire:tinkers/kama/mod_flame",
+        "longbow": "iceandfire:tinkers/longbow/mod_flame",
+        "longbow1": "iceandfire:tinkers/longbow/mod_flame",
+        "longbow2": "iceandfire:tinkers/longbow/mod_flame_2",
+        "longbow3": "iceandfire:tinkers/longbow/mod_flame_3",
+        "longsword": "iceandfire:tinkers/longsword/mod_flame",
+        "lumberaxe": "iceandfire:tinkers/lumberaxe/mod_flame",
+        "mattock": "iceandfire:tinkers/mattock/mod_flame",
+        "pickaxe": "iceandfire:tinkers/pickaxe/mod_flame",
+        "rapier": "iceandfire:tinkers/rapier/mod_flame",
+        "scythe": "iceandfire:tinkers/scythe/mod_flame",
+        "shortbow": "iceandfire:tinkers/shortbow/mod_flame",
+        "shortbow1": "iceandfire:tinkers/shortbow/mod_flame",
+        "shortbow2": "iceandfire:tinkers/shortbow/mod_flame_2",
+        "shortbow3": "iceandfire:tinkers/shortbow/mod_flame_3",
+        "shovel": "iceandfire:tinkers/shovel/mod_flame",
+        "shuriken": "iceandfire:tinkers/shuriken/mod_flame"
+    }
+}

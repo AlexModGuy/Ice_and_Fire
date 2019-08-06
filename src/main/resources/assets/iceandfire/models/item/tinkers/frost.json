@@ -1,0 +1,32 @@
+{
+    "textures": {
+        "arrow": "iceandfire:tinkers/arrow/mod_frost",
+        "battleaxe": "iceandfire:tinkers/battleaxe/mod_frost",
+        "battlesign": "iceandfire:tinkers/battlesign/mod_frost",
+        "bolt": "iceandfire:tinkers/bolt/mod_frost",
+        "broadsword": "iceandfire:tinkers/broadsword/mod_frost",
+        "cleaver": "iceandfire:tinkers/cleaver/mod_frost",
+        "crossbow": "iceandfire:tinkers/crossbow/mod_frost",
+        "excavator": "iceandfire:tinkers/excavator/mod_frost",
+        "frypan": "iceandfire:tinkers/frypan/mod_frost",
+        "hammer": "iceandfire:tinkers/hammer/mod_frost",
+        "hatchet": "iceandfire:tinkers/hatchet/mod_frost",
+        "kama": "iceandfire:tinkers/kama/mod_frost",
+        "longbow": "iceandfire:tinkers/longbow/mod_frost",
+        "longbow1": "iceandfire:tinkers/longbow/mod_frost",
+        "longbow2": "iceandfire:tinkers/longbow/mod_frost_2",
+        "longbow3": "iceandfire:tinkers/longbow/mod_frost_3",
+        "longsword": "iceandfire:tinkers/longsword/mod_frost",
+        "lumberaxe": "iceandfire:tinkers/lumberaxe/mod_frost",
+        "mattock": "iceandfire:tinkers/mattock/mod_frost",
+        "pickaxe": "iceandfire:tinkers/pickaxe/mod_frost",
+        "rapier": "iceandfire:tinkers/rapier/mod_frost",
+        "scythe": "iceandfire:tinkers/scythe/mod_frost",
+        "shortbow": "iceandfire:tinkers/shortbow/mod_frost",
+        "shortbow1": "iceandfire:tinkers/shortbow/mod_frost",
+        "shortbow2": "iceandfire:tinkers/shortbow/mod_frost_2",
+        "shortbow3": "iceandfire:tinkers/shortbow/mod_frost_3",
+        "shovel": "iceandfire:tinkers/shovel/mod_frost",
+        "shuriken": "iceandfire:tinkers/shuriken/mod_frost"
+    }
+}

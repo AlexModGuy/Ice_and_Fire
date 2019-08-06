@@ -1,0 +1,10 @@
+[
+  {
+    "type": "modifier",
+    "data": "modifiers/flame.json"
+  },
+  {
+    "type": "modifier",
+    "data": "modifiers/frost.json"
+  }
+]
