@@ -543,8 +543,14 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             EntityBoat boat = (EntityBoat) sailor.getRidingEntity();
             boat.setDead();
             if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+                int meta;
+                try{
+                    meta = boat.getBoatType().getMetadata();
+                }catch (Exception e){
+                    meta = 0;
+                }
                 for (int i = 0; i < 3; ++i) {
-                    boat.entityDropItem(new ItemStack(Item.getItemFromBlock(Blocks.PLANKS), 1, boat.getBoatType().getMetadata()), 0.0F);
+                    boat.entityDropItem(new ItemStack(Item.getItemFromBlock(Blocks.PLANKS), 1, meta), 0.0F);
                 }
                 for (int j = 0; j < 2; ++j) {
                     boat.dropItemWithOffset(Items.STICK, 1, 0.0F);
