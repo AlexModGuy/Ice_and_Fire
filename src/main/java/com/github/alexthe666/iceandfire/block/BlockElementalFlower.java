@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -13,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import thaumcraft.api.crafting.IInfusionStabiliser;
 
+import java.util.Random;
+
 @Optional.Interface(iface = "thaumcraft.api.crafting.IInfusionStabiliser", modid = "thaumcraft")
 public class BlockElementalFlower extends BlockBush implements IInfusionStabiliser {
 	public Item itemBlock;
@@ -23,6 +26,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 		this.setTranslationKey(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
 		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
 		this.setSoundType(SoundType.PLANT);
+		this.setTickRandomly(true);
 	}
 
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
@@ -31,6 +35,24 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK);
 		} else {
 			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE);
+		}
+	}
+
+	@Deprecated
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		worldIn.scheduleUpdate(pos, this, 1);
+	}
+
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		this.checkFall(worldIn, pos);
+	}
+
+	private boolean checkFall(World worldIn, BlockPos pos) {
+		if (!this.canPlaceBlockAt(worldIn, pos)) {
+			worldIn.destroyBlock(pos, true);
+			return false;
+		} else {
+			return true;
 		}
 	}
 
