@@ -219,6 +219,9 @@ public class ModRecipes {
         ModItems.myrmexChitin.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexDesert.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexJungle.setRepairItem(new ItemStack(ModItems.myrmex_jungle_chitin));
+        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()){
+            serpent.armorMaterial.setRepairItem(new ItemStack(serpent.scale));
+        }
         ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("Potion", "water_breathing");
