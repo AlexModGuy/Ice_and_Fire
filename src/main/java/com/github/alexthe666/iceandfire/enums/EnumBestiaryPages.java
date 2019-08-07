@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +61,7 @@ public enum EnumBestiaryPages {
 		Iterator<Integer> itr = pages.iterator();
 		List<EnumBestiaryPages> list = new ArrayList<EnumBestiaryPages>();
 		while (itr.hasNext()) {
-			list.add(EnumBestiaryPages.values()[itr.next()]);
+			list.add(EnumBestiaryPages.values()[MathHelper.clamp(itr.next(), 0, EnumBestiaryPages.values().length - 1)]);
 		}
 		return list;
 	}
