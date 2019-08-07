@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -21,6 +22,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 		this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 		this.setTranslationKey(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
 		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
+		this.setSoundType(SoundType.PLANT);
 	}
 
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
