@@ -44,6 +44,9 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     }
 
     public void onUpdate() {
+        if(this.ticksExisted > 150){
+            this.setDead();
+        }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
             autoTarget();
             super.onUpdate();
