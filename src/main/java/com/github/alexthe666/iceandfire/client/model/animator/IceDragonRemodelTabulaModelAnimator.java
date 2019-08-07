@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
-import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
-import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
+import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.ilexiconn.llibrary.LLibrary;
@@ -31,16 +28,27 @@ public class IceDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAn
                 EnumRemodelDragonAnimations.FLIGHT4.icedragon_model,
                 EnumRemodelDragonAnimations.FLIGHT5.icedragon_model,
                 EnumRemodelDragonAnimations.FLIGHT6.icedragon_model};
+        IceAndFireTabulaModel[] swimPoses = {EnumRemodelDragonAnimations.SWIM1.icedragon_model,
+                EnumRemodelDragonAnimations.SWIM2.icedragon_model,
+                EnumRemodelDragonAnimations.SWIM3.icedragon_model,
+                EnumRemodelDragonAnimations.SWIM4.icedragon_model,
+                EnumRemodelDragonAnimations.SWIM5.icedragon_model};
         boolean walking = !entity.isHovering() && !entity.isFlying() && entity.hoverProgress <= 0 && entity.flyProgress <= 0;
+        boolean swimming = entity.isInWater() && entity.swimProgress > 0;
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
-        int prevIndex = currentIndex - 1;
-        float dive = (10 - entity.diveProgress) * 0.1F;
-        if (prevIndex < 0) {
-            prevIndex = walking ? 3 : 5;
+        if(swimming){
+            currentIndex = entity.swimCycle / 10;
         }
-        IceAndFireTabulaModel currentPosition = walking ? walkPoses[currentIndex] : flyPoses[currentIndex];
-        IceAndFireTabulaModel prevPosition = walking ? walkPoses[prevIndex] : flyPoses[prevIndex];
+        int prevIndex = currentIndex - 1;
+        if (prevIndex < 0) {
+            prevIndex = swimming ? 4 : walking ? 3 : 5;
+        }
+        IceAndFireTabulaModel currentPosition = swimming ? swimPoses[currentIndex] : walking ? walkPoses[currentIndex] : flyPoses[currentIndex];
+        IceAndFireTabulaModel prevPosition = swimming ? swimPoses[prevIndex] : walking ? walkPoses[prevIndex] : flyPoses[prevIndex];
         float delta = ((walking ? entity.walkCycle : entity.flightCycle) / 10.0F) % 1.0F;
+        if(swimming){
+            delta = ((entity.swimCycle) / 10.0F) % 1.0F;
+        }
         float deltaTicks = delta + (LLibrary.PROXY.getPartialTicks() / 10.0F);
         if(delta == 0){
             deltaTicks = 0;
@@ -55,7 +63,7 @@ public class IceDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAn
 
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
             this.genderMob(entity, cube);
-            if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
+            if (!swimming && walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
                 AdvancedModelRenderer walkPart = EnumRemodelDragonAnimations.GROUND_POSE.icedragon_model.getCube(cube.boxName);
                 if(prevPosition.getCube(cube.boxName) != null) {
                     float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
@@ -117,6 +125,11 @@ public class IceDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAn
                     transitionTo(cube, EnumRemodelDragonAnimations.DIVING_POSE.icedragon_model.getCube(cube.boxName), entity.diveProgress, 10, false);
                 }
             }
+            if (entity.swimProgress > 0.0F) {
+                if (!isPartEqual(cube, EnumRemodelDragonAnimations.SWIM_POSE.icedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumRemodelDragonAnimations.SWIM_POSE.icedragon_model.getCube(cube.boxName), entity.swimProgress, 20, false);
+                }
+            }
             if(entity.fireBreathProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumRemodelDragonAnimations.STREAM_BREATH.icedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")) {
                     if (entity.prevFireBreathProgress <= entity.fireBreathProgress) {
@@ -126,7 +139,7 @@ public class IceDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAn
 
                 }
             }
-            if(!walking){
+            if(!walking && !swimming){
                 AdvancedModelRenderer flightPart = EnumRemodelDragonAnimations.FLYING_POSE.icedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
@@ -136,6 +149,20 @@ public class IceDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAn
                 float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
                 if(x != flightPart.rotateAngleX || y != flightPart.rotateAngleY || z != flightPart.rotateAngleZ) {
                     this.setRotateAngle(cube, 1F, prevX + deltaTicks * distance(prevX, x), prevY + deltaTicks * distance(prevY, y), prevZ + deltaTicks * distance(prevZ, z));
+                }
+            }
+            if (swimming && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
+                AdvancedModelRenderer walkPart = EnumRemodelDragonAnimations.SWIM_POSE.icedragon_model.getCube(cube.boxName);
+                if(prevPosition.getCube(cube.boxName) != null) {
+                    float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
+                    float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
+                    float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
+                    float x = currentPosition.getCube(cube.boxName).rotateAngleX;
+                    float y = currentPosition.getCube(cube.boxName).rotateAngleY;
+                    float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
+                    if(x != walkPart.rotateAngleX || y != walkPart.rotateAngleY || z != walkPart.rotateAngleZ) {
+                        this.setRotateAngle(cube, limbSwingAmount, prevX + deltaTicks * distance(prevX, x), prevY + deltaTicks * distance(prevY, y), prevZ + deltaTicks * distance(prevZ, z));
+                    }
                 }
             }
         }

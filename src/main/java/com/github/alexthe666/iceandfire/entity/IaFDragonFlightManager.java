@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
@@ -28,6 +29,13 @@ public class IaFDragonFlightManager {
 
     public void update() {
         if (dragon.getAttackTarget() != null && !dragon.getAttackTarget().isDead) {
+            if(dragon instanceof EntityIceDragon && ((EntityIceDragon) dragon).isInWater()){
+                if(dragon.getAttackTarget() == null){
+                    dragon.airAttack = IaFDragonAttacks.Air.SCORCH_STREAM;
+                }else{
+                    dragon.airAttack = IaFDragonAttacks.Air.TACKLE;
+                }
+            }
             EntityLivingBase entity = dragon.getAttackTarget();
             if (dragon.airAttack == IaFDragonAttacks.Air.TACKLE) {
                 target = new Vec3d(entity.posX, entity.posY + entity.height, entity.posZ);
@@ -52,17 +60,25 @@ public class IaFDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2) {
+        } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying())) {
             BlockPos viewBlock = DragonUtils.getBlockInView(dragon);
+            if(dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())){
+                viewBlock = DragonUtils.getWaterBlockInView(dragon);
+            }
             if (viewBlock != null) {
                 target = new Vec3d(viewBlock.getX() + 0.5, viewBlock.getY() + 0.5, viewBlock.getZ() + 0.5);
             }
         }
         if (target != null) {
-            if (target.y >= dragon.posY) {
-                dragon.motionY += 0.4D;
+            if (target.y >= dragon.posY && !dragon.isModelDead()) {
+                if(dragon instanceof EntityIceDragon && ((EntityIceDragon) dragon).isInWater()){
+                    dragon.motionY += 0.1D;
+                }else{
+                    dragon.motionY += 0.4D;
+                }
             }
         }
+
         this.prevAirAttack = dragon.airAttack;
     }
 

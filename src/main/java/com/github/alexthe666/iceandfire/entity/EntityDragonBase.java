@@ -22,6 +22,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -172,7 +173,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public float dragonPitch;
     public float prevDragonPitch;
     protected IaFDragonFlightManager flightManager;
-    private boolean isLandNavigator;
+    protected boolean isLandNavigator;
     public IaFDragonAttacks.Air airAttack;
     public IaFDragonAttacks.Ground groundAttack;
     public boolean usingGroundAttack = true;
@@ -314,7 +315,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
     }
 
-    private void switchNavigator(boolean onLand) {
+    protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveHelper = new IaFDragonFlightManager.GroundMoveHelper(this);
             this.navigator = createNavigator(world);
@@ -1165,6 +1166,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean canPositionBeSeen(double x, double y, double z) {
+        System.out.println(this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false));
         return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false) == null;
     }
 
@@ -1299,7 +1301,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!world.isRemote && this.getRNG().nextInt(500) == 0 && !this.isModelDead() && !this.isSleeping()) {
             this.roar();
         }
-        if (!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying() && !this.isChild()) {
+        if (!world.isRemote && this.onGround && isAllowedToTriggerFlight() && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying() && !this.isChild()) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1488,10 +1490,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isSleeping()) {
             this.getNavigator().clearPath();
         }
-        if (this.onGround && flyTicks != 0) {
+        if ((this.onGround || this.isInWater()) && flyTicks != 0) {
             flyTicks = 0;
         }
-        if (!world.isRemote && this.isFlying() && this.doesWantToLand()) {
+        if (!world.isRemote && isAllowedToTriggerFlight() && this.isFlying() && this.doesWantToLand()) {
             this.setFlying(false);
             this.setHovering(!this.onGround);
             if (this.onGround) {
@@ -1612,7 +1614,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             if(pos.distanceSq(dragonPos) <= (double) (f * f)) {
                                 IBlockState state = world.getBlockState(new BlockPos(a, b, c));
                                 Block block = state.getBlock();
-                                if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
+                                if (state.getMaterial() != Material.AIR && (!(block instanceof BlockBush) || block instanceof BlockLilyPad) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
                                     this.motionX *= 0.6D;
                                     this.motionZ *= 0.6D;
                                     if (block != Blocks.AIR) {
@@ -1668,7 +1670,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IaFDragonAttacks.Air.TACKLE;
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
     }
 
     public abstract String getVariantName(int variant);
@@ -1866,7 +1868,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.spacebarTicks > 0) {
             this.spacebarTicks--;
         }
-        if (!world.isRemote && this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+        if (!world.isRemote && this.spacebarTicks > 20 && isAllowedToTriggerFlight() && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
         if (world.isRemote && !this.isModelDead()) {
@@ -2443,6 +2445,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void randomizeAttacks(){
         this.airAttack = IaFDragonAttacks.Air.values()[getRNG().nextInt(IaFDragonAttacks.Air.values().length)];
         this.groundAttack = IaFDragonAttacks.Ground.values()[getRNG().nextInt(IaFDragonAttacks.Ground.values().length)];
+
     }
 
     public void tryScorchTarget(){
@@ -2479,5 +2482,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public double getFlightSpeedModifier() {
         return 1;
+    }
+
+    public boolean isAllowedToTriggerFlight(){
+        return true;
     }
 }
