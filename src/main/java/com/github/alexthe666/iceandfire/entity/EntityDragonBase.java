@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
@@ -312,7 +313,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 
     protected PathNavigate createNavigator(World worldIn) {
-        return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
+        return new PathNavigateDragon(this, world);
     }
 
     protected void switchNavigator(boolean onLand) {
@@ -1166,7 +1167,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean canPositionBeSeen(double x, double y, double z) {
-        System.out.println(this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false));
         return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false) == null;
     }
 
@@ -1860,7 +1860,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if ((this.isFlying() || this.isHovering()) && this.isInWater()) {
             //this.motionY += 0.2;
         }
-        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F && !world.isRemote) {
+        if (this.isHovering() && !world.isRemote && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
             this.setFlying(true);
             this.usingGroundAttack = false;
             this.setHovering(false);

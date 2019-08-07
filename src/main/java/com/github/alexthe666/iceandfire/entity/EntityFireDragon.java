@@ -201,7 +201,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (!world.isRemote && this.getAttackTarget() != null) {
-            if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
             if(this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack){
@@ -215,7 +215,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 this.motionX += difX * 0.1D;
                 this.motionY += difY * 0.1D;
                 this.motionZ += difZ * 0.1D;
-                if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+                if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                     attackEntityAsMob(this.getAttackTarget());
                     usingGroundAttack = true;
                     randomizeAttacks();

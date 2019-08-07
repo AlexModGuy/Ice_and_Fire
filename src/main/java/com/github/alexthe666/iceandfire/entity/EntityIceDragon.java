@@ -248,7 +248,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
         if (!world.isRemote && this.getAttackTarget() != null) {
             float growSize = this.isInMaterialWater() ? 1.0F : 0.5F;
-            if (this.getEntityBoundingBox().grow(this.getRenderSize() * growSize, this.getRenderSize() * growSize, this.getRenderSize() * growSize).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * growSize, 1 + this.getRenderSize() * growSize, 1 + this.getRenderSize() * growSize).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
             if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack) {
@@ -261,7 +261,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.motionX += difX * 0.1D;
                 this.motionY += difY * 0.1D;
                 this.motionZ += difZ * 0.1D;
-                if (this.getEntityBoundingBox().grow(this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F, this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+                if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                     attackEntityAsMob(this.getAttackTarget());
                     usingGroundAttack = true;
                     randomizeAttacks();

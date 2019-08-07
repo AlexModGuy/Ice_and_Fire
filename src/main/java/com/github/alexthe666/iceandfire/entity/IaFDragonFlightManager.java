@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -107,6 +108,10 @@ public class IaFDragonFlightManager {
             super(entitylivingIn);
         }
 
+        public float distance(float rotateAngleFrom, float rotateAngleTo) {
+            return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
+        }
+
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.STRAFE) {
                 float f = (float) this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
@@ -156,9 +161,10 @@ public class IaFDragonFlightManager {
                 if(dragonBase.width > 2F) {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     maxChange = 5 + ageMod * 10;
-                    System.out.println(ageMod);
                 }
-                this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, f9, maxChange);
+
+                float distance = (float)Math.toDegrees(distance((float)Math.toRadians(this.entity.rotationYaw), (float)Math.toRadians(f9)));
+                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange/2, maxChange/2);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 
                 if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
