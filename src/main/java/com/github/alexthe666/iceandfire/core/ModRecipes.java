@@ -158,6 +158,12 @@ public class ModRecipes {
         OreDictionary.registerOre("egg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("ingredientEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("foodSimpleEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("toolAxe", ModItems.dragonbone_axe);
+        OreDictionary.registerOre("toolAxe", ModItems.myrmex_desert_axe);
+        OreDictionary.registerOre("toolAxe", ModItems.myrmex_jungle_axe);
+        OreDictionary.registerOre("toolAxe", ModItems.silver_axe);
+        OreDictionary.registerOre("toolAxe", ModItems.dragonsteel_fire_axe);
+        OreDictionary.registerOre("toolAxe", ModItems.dragonsteel_ice_axe);
 
         addBanner("fire", new ItemStack(ModItems.fire_dragon_heart));
         addBanner("ice", new ItemStack(ModItems.ice_dragon_heart));
