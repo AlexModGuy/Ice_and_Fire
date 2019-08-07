@@ -34,7 +34,6 @@ public class ItemHippocampusSlapper extends ItemSword {
     public boolean hitEntity(ItemStack stack, EntityLivingBase targetEntity, EntityLivingBase attacker) {
         targetEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
         targetEntity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 2));
-        System.out.println(targetEntity.world.isRemote);
         targetEntity.playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, 3, 1);
 
         return super.hitEntity(stack, targetEntity, attacker);

@@ -247,14 +247,14 @@ public class CommonProxy {
     public void postRender() {
     }
 
-    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-        spawnParticle(name, world, x, y, z, motX, motY, motZ, 1.0F);
+    public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ) {
+        spawnParticle(name, x, y, z, motX, motY, motZ, 1.0F);
     }
 
-    public void spawnDragonParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
+    public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
     }
 
-    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
+    public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
     }
 
     public void openBestiaryGui(ItemStack book) {

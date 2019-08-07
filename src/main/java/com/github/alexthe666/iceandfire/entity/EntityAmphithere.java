@@ -264,9 +264,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if(this.isSitting() && this.getAttackTarget() != null){
             this.setAttackTarget(null);
         }
-        /*if (!world.isRemote) {
-            System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
-        }*/
         boolean flapping = this.isFlapping();
         boolean flying = this.isFlying() && !this.onGround || (!this.onGround && !onLeaves());
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;

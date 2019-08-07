@@ -62,8 +62,6 @@ public class ItemCyclopsEye extends Item {
             }
 
         }
-
-        System.out.println(slot);
     }
 
     @Override

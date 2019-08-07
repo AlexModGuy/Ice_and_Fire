@@ -447,7 +447,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1, new int[0]);
                     }
                 } else {
-                    IceAndFire.PROXY.spawnParticle("snowflake", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
         }
@@ -823,9 +823,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void setFlying(boolean flying) {
-        if(flying){
-            System.out.println("true");
-        }
         this.dataManager.set(FLYING, flying);
         if (!world.isRemote) {
             this.isFlying = flying;
@@ -1558,7 +1555,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 if (this.isFire && world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
                 } else if (world.isRemote) {
-                    IceAndFire.PROXY.spawnParticle("dragonice", this.world, headPosX, headPosY, headPosZ, 0, 0, 0);
+                    IceAndFire.PROXY.spawnParticle("dragonice", headPosX, headPosY, headPosZ, 0, 0, 0);
                 }
             }
             if (this.isFire) {
@@ -2396,8 +2393,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             pitchY = (dragonPitch/90) * 0.1F;
             pitchX = Math.max(dragonPitch/90, -0.7F);
         }
-
-        System.out.println(pitchX);
         float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);

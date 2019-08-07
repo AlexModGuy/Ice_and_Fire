@@ -28,13 +28,11 @@ public class DragonUtils {
 		BlockPos escortPos = dragon.getEscortPosition();
 		BlockPos ground = dragon.world.getHeight(escortPos);
 		int distFromGround = escortPos.getY() - ground.getY();
-		System.out.println(ground);
 		for(int i = 0; i < 10; i++){
 			BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2,
 					(distFromGround > 16 ? escortPos.getY() : escortPos.getY() + 8 + dragon.getRNG().nextInt(16)),
 					(escortPos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2));
 			if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
-				System.out.println(ground);
 				return pos;
 			}
 		}

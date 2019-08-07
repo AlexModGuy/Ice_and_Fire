@@ -405,7 +405,6 @@ public class EventLiving {
                         event.getEntityLiving().motionY += d1 * Math.abs(d1) * 0.2D;
                         event.getEntityLiving().motionZ += d2 * Math.abs(d2) * 0.4D;
                     }
-                    System.out.println(f);
                 }
             }
         }

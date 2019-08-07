@@ -92,7 +92,7 @@ public class EventClient {
                                 ((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
                             }
                         } catch (NullPointerException exp) {
-                            System.out.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
+                            System.err.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
                         }
                     }
 
@@ -186,7 +186,7 @@ public class EventClient {
                 }
                 if (sirenProps.isCharmed) {
                     if (rand.nextInt(40) == 0) {
-                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.world, player.posX, player.posY, player.posZ, 0, 0, 0);
+                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
                     }
 
                     if (IceAndFire.CONFIG.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {

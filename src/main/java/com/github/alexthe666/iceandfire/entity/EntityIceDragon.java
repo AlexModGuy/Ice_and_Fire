@@ -482,7 +482,7 @@ public class EntityIceDragon extends EntityDragonBase {
             double progressZ = headPos.z + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
                 if (world.isRemote && rand.nextInt(5) == 0) {
-                    IceAndFire.PROXY.spawnDragonParticle("dragonice", world, headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
+                    IceAndFire.PROXY.spawnDragonParticle("dragonice", headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
                 }
             } else {
                 RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
