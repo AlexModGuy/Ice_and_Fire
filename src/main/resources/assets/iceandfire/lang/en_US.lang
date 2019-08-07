@@ -424,6 +424,7 @@ dragon.days.front=(
 dragon.days.back=Days)
 dragon.command.sit=This dragon is staying.
 dragon.command.stand=This dragon is wandering.
+dragon.command.escort=This dragon is escorting you.
 dragon.command.new_home=This dragon's home position has been set to %d, %d, %d.
 hippogryph.command.sit=This hippogryph is staying.
 hippogryph.command.stand=This hippogryph is wandering.

@@ -61,10 +61,13 @@ public class IaFDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying())) {
+        } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = DragonUtils.getBlockInView(dragon);
             if(dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())){
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
+            }
+            if(dragon.getCommand() == 2 && dragon.isFlying()){
+                viewBlock = DragonUtils.getBlockInViewEscort(dragon);
             }
             if (viewBlock != null) {
                 target = new Vec3d(viewBlock.getX() + 0.5, viewBlock.getY() + 0.5, viewBlock.getZ() + 0.5);

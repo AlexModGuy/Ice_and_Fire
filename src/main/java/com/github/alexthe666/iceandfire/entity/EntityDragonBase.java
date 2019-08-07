@@ -1111,10 +1111,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             } else {
                                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
                                 this.setCommand(this.getCommand() + 1);
-                                if (this.getCommand() > 1) {
+                                if (this.getCommand() > 2) {
                                     this.setCommand(0);
                                 }
-                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
+                                String commandText = "stand";
+                                if(this.getCommand() == 1){
+                                    commandText = "sit";
+                                }
+                                if(this.getCommand() == 2){
+                                    commandText = "escort";
+                                }
+                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + commandText), true);
                                 return true;
                             }
 
@@ -2486,5 +2493,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean isAllowedToTriggerFlight(){
         return true;
+    }
+
+    public BlockPos getEscortPosition(){
+        return this.getOwner() != null ? this.getOwner().getPosition() : this.getPosition();
+    }
+
+    public boolean shouldTPtoOwner() {
+
+        return this.getOwner() != null && this.getDistance(this.getOwner()) > 10;
     }
 }

@@ -21,6 +21,26 @@ import java.util.List;
 
 public class DragonUtils {
 
+	public static BlockPos getBlockInViewEscort(EntityDragonBase dragon) {
+		float radius = 12 * (0.7F * dragon.getRenderSize() / 3);
+		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
+		float renderYawOffset = dragon.renderYawOffset;
+		BlockPos escortPos = dragon.getEscortPosition();
+		BlockPos ground = dragon.world.getHeight(escortPos);
+		int distFromGround = escortPos.getY() - ground.getY();
+		System.out.println(ground);
+		for(int i = 0; i < 10; i++){
+			BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2,
+					(distFromGround > 16 ? escortPos.getY() : escortPos.getY() + 8 + dragon.getRNG().nextInt(16)),
+					(escortPos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2));
+			if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
+				System.out.println(ground);
+				return pos;
+			}
+		}
+		return null;
+	}
+
 	public static BlockPos getBlockInView(EntityDragonBase dragon) {
 		float radius = 12 * (0.7F * dragon.getRenderSize() / 3);
 		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
@@ -30,14 +50,13 @@ public class DragonUtils {
 			BlockPos ground = dragon.world.getHeight(dragonPos);
 			int distFromGround = (int) dragon.posY - ground.getY();
 			for(int i = 0; i < 10; i++){
-				BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
+				BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
 				if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
 					return pos;
 				}
 			}
 		}
 		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
-
 		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
 		double extraZ = (double) (radius * MathHelper.cos(angle));
 		BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
