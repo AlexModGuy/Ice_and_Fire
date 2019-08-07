@@ -201,6 +201,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
         this.flightManager = new IaFDragonFlightManager(this);
+        this.ignoreFrustumCheck = true;
         switchNavigator(true);
         randomizeAttacks();
         resetParts(1);
