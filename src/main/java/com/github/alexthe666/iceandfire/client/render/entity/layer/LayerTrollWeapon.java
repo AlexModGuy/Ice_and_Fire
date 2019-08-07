@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.render.entity.RenderTroll;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -10,9 +11,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LayerTrollWeapon implements LayerRenderer {
-	private final RenderLiving renderer;
+	private final RenderTroll renderer;
 
-	public LayerTrollWeapon(RenderLiving renderer) {
+	public LayerTrollWeapon(RenderTroll renderer) {
 		this.renderer = renderer;
 	}
 

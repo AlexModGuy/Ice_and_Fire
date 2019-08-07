@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
 	private static final ResourceLocation VARIANT_0 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0.png");

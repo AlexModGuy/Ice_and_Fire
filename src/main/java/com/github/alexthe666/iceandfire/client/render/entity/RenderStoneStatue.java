@@ -10,9 +10,12 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
 	private static final ModelStonePlayer MODEL = new ModelStonePlayer(0, false);

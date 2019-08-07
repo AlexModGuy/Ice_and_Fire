@@ -19,12 +19,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SideOnly(Side.CLIENT)
 public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
 	public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {

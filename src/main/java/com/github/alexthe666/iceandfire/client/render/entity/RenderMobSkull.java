@@ -13,10 +13,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
+@SideOnly(Side.CLIENT)
 public class RenderMobSkull extends Render<EntityMobSkull> {
 
     private ModelHippogryph hippogryphModel;

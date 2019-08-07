@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
 	public RenderHippogryph(RenderManager renderManager) {
