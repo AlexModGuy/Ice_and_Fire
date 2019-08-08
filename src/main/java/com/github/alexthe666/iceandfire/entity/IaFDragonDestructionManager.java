@@ -23,7 +23,7 @@ public class IaFDragonDestructionManager {
         int stage = destroyer.getDragonStage();
         if(stage <= 3){
             for(BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))){
-                if(world.rand.nextBoolean()){
+                if(IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()){
                     IBlockState transformState = transformBlockFire(world.getBlockState(pos));
                     world.setBlockState(pos, transformState);
                     if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())){
@@ -48,7 +48,7 @@ public class IaFDragonDestructionManager {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
+                    if(IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
                         IBlockState transformState = transformBlockFire(world.getBlockState(blockpos));
                         world.setBlockState(blockpos, transformState);
                         if(world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())){
@@ -73,7 +73,7 @@ public class IaFDragonDestructionManager {
         int stage = destroyer.getDragonStage();
         if(stage <= 3){
             for(BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))){
-                if(world.rand.nextBoolean()){
+                if(IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()){
                     IBlockState transformState = transformBlockIce(world.getBlockState(pos));
                     world.setBlockState(pos, transformState);
                     if(world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(pos.up())){
@@ -101,7 +101,7 @@ public class IaFDragonDestructionManager {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
+                    if(IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
                         IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                         world.setBlockState(blockpos, transformState);
                         if(world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(blockpos.up())){
