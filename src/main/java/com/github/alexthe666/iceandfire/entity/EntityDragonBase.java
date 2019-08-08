@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateDragon;
-import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -206,6 +205,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         randomizeAttacks();
         resetParts(1);
     }
+
     public void resetParts(float scale) {
         removeParts();
         headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
@@ -264,46 +264,46 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void updateParts() {
-        if(headPart != null){
+        if (headPart != null) {
             headPart.onUpdate();
         }
-        if(neckPart != null){
+        if (neckPart != null) {
             neckPart.onUpdate();
         }
-        if(rightWingUpperPart != null) {
+        if (rightWingUpperPart != null) {
             rightWingUpperPart.onUpdate();
         }
-        if(rightWingLowerPart != null) {
+        if (rightWingLowerPart != null) {
             rightWingLowerPart.onUpdate();
         }
-        if(leftWingUpperPart != null) {
+        if (leftWingUpperPart != null) {
             leftWingUpperPart.onUpdate();
         }
-        if(leftWingLowerPart != null) {
+        if (leftWingLowerPart != null) {
             leftWingLowerPart.onUpdate();
         }
-        if(tail1Part != null) {
+        if (tail1Part != null) {
             tail1Part.onUpdate();
         }
-        if(tail2Part != null) {
+        if (tail2Part != null) {
             tail2Part.onUpdate();
         }
-        if(tail3Part != null) {
+        if (tail3Part != null) {
             tail3Part.onUpdate();
         }
-        if(tail4Part != null) {
+        if (tail4Part != null) {
             tail4Part.onUpdate();
         }
     }
 
-    protected void updateBurnTarget(){
-        if(burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isChild()){
-            if(world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget) < 300){
-                this.getLookHelper().setLookPosition(burningTarget.getX()  + 0.5D, burningTarget.getY()  + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
+    protected void updateBurnTarget() {
+        if (burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isChild()) {
+            if (world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget) < 300) {
+                this.getLookHelper().setLookPosition(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);
                 this.setBreathingFire(true);
-            }else{
-                if(!world.isRemote){
+            } else {
+                if (!world.isRemote) {
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageDragonSetBurnBlock(this.getEntityId(), true, burningTarget));
                 }
                 burningTarget = null;
@@ -329,7 +329,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    public boolean canDestroyBlock(BlockPos pos){
+    public boolean canDestroyBlock(BlockPos pos) {
         float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
         return world.getBlockState(pos).getBlock().canEntityDestroy(world.getBlockState(pos), world, pos, this) && hardness >= 0;
     }
@@ -416,7 +416,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     protected void onDeathUpdate() {
         this.deathTime = 0;
-        if(!this.isModelDead()){
+        if (!this.isModelDead()) {
             if (!this.world.isRemote && this.recentlyHit > 0) {
                 int i = this.getExperiencePoints(this.attackingPlayer);
                 i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
@@ -460,7 +460,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        switch(this.getDragonStage()){
+        switch (this.getDragonStage()) {
             case 2:
                 return 20;
             case 3:
@@ -982,7 +982,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean canMove() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if(properties != null && properties.isStone){
+        if (properties != null && properties.isStone) {
             return false;
         }
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
@@ -1113,10 +1113,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                                     this.setCommand(0);
                                 }
                                 String commandText = "stand";
-                                if(this.getCommand() == 1){
+                                if (this.getCommand() == 1) {
                                     commandText = "sit";
                                 }
-                                if(this.getCommand() == 2){
+                                if (this.getCommand() == 2) {
                                     commandText = "escort";
                                 }
                                 player.sendStatusMessage(new TextComponentTranslation("dragon.command." + commandText), true);
@@ -1163,9 +1163,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     private ItemStack getRandomDrop() {
         ItemStack stack = getItemFromLootTable();
-        if(stack.getItem() == ModItems.dragonbone){
+        if (stack.getItem() == ModItems.dragonbone) {
             this.playSound(SoundEvents.ENTITY_SKELETON_AMBIENT, 1, 1);
-        }else{
+        } else {
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
         }
         return stack;
@@ -1261,14 +1261,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
                 this.setSitting(true);
             }
-            if(this.isSitting()){
+            if (this.isSitting()) {
                 this.getNavigator().clearPath();
             }
-            if(this.isBeyondHeight() && !world.isRemote && !this.onGround){
+            if (this.isBeyondHeight() && !world.isRemote && !this.onGround) {
                 this.motionY -= 0.1F;
             }
-            if(this.isInLove()){
-                this.world.setEntityState(this, (byte)18);
+            if (this.isInLove()) {
+                this.world.setEntityState(this, (byte) 18);
             }
             if ((int) this.prevPosX == (int) this.posX && (int) this.prevPosZ == (int) this.posZ) {
                 this.ticksStill++;
@@ -1374,7 +1374,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         this.updateCheckPlayer();
         this.legSolver.update(this, getRenderSize() / 3);
-        if(isDiving()){
+        if (isDiving()) {
             this.playSound(SoundEvents.ITEM_ELYTRA_FLYING, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
         }
         if (flightCycle < 58) {
@@ -1522,7 +1522,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.hoverTicks = 0;
             this.flyTicks = 0;
         }
-        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (properties == null || properties != null && !properties.isStone) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
+        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (properties == null || properties != null && !properties.isStone) && (!world.isRemote && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1579,15 +1579,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && this.getAttackTarget() != null && this.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
             this.attackEntityAsMob(this.getAttackTarget());
         }
-        if(!world.isRemote && this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && (this.collided || this.onGround)){
+        if (!world.isRemote && this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && (this.collided || this.onGround)) {
             this.usingGroundAttack = true;
             this.setFlying(false);
             this.setHovering(false);
         }
-        if(this.isFlying() && usingGroundAttack){
+        if (this.isFlying() && usingGroundAttack) {
             this.airAttack = IaFDragonAttacks.Air.TACKLE;
         }
-        if(this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null && isTargetBlocked(this.getAttackTarget().getPositionVector())){
+        if (this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null && isTargetBlocked(this.getAttackTarget().getPositionVector())) {
             this.randomizeAttacks();
         }
 
@@ -1599,8 +1599,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return false;//isFlying() && motionY < -0.2;
     }
 
-    private boolean isBeyondHeight(){
-        if(this.posY > this.world.getHeight()){
+    private boolean isBeyondHeight() {
+        if (this.posY > this.world.getHeight()) {
             return true;
         }
         return this.posY > IceAndFire.CONFIG.maxDragonFlight;
@@ -1616,7 +1616,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                         for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
                             BlockPos pos = new BlockPos(a, b, c);
-                            if(pos.distanceSq(dragonPos) <= (double) (f * f)) {
+                            if (pos.distanceSq(dragonPos) <= (double) (f * f)) {
                                 IBlockState state = world.getBlockState(new BlockPos(a, b, c));
                                 Block block = state.getBlock();
                                 if (state.getMaterial() != Material.AIR && (!(block instanceof BlockBush) || block instanceof BlockLilyPad) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
@@ -1659,7 +1659,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     private BlockPos getGround(BlockPos blockPos) {
-        while(world.isAirBlock(blockPos) && blockPos.getY() > 1){
+        while (world.isAirBlock(blockPos) && blockPos.getY() > 1) {
             blockPos = blockPos.down();
         }
         return blockPos;
@@ -1680,7 +1680,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public abstract String getVariantName(int variant);
 
-    public boolean shouldRiderSit(){
+    public boolean shouldRiderSit() {
         return this.getControllingPassenger() != null;
     }
 
@@ -1794,7 +1794,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0) {
             this.roar();
         }
-        if(i > 0){
+        if (i > 0) {
             this.setSleeping(false);
         }
         return super.attackEntityFrom(dmg, i);
@@ -1805,7 +1805,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void onUpdate() {
         world.profiler.startSection("dragonUpdate");
         super.onUpdate();
-        if(isFlying() && !world.isRemote){
+        if (isFlying() && !world.isRemote) {
             this.flightManager.update();
         }
         updateParts();
@@ -1831,7 +1831,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.setHovering(false);
             }
         }
-        if(this.down() && (this.isFlying() || this.isHovering())){
+        if (this.down() && (this.isFlying() || this.isHovering())) {
             this.motionY -= 0.4D;
         }
         if (!this.dismount() && (this.isFlying() || this.isHovering())) {
@@ -1853,7 +1853,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getControllingPassenger(), MiscEntityProperties.class);
-            if(properties != null) {
+            if (properties != null) {
                 properties.hasDismountedDragon = true;
             }
             this.getControllingPassenger().dismountRidingEntity();
@@ -1885,28 +1885,28 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 pitch_buffer_body.calculateChainWaveBuffer(80, 10, 1, 0.5F, this);
             }
         }
-        if(!this.onGround && !this.isRiding()){
+        if (!this.onGround && !this.isRiding()) {
             double ydist = prevPosY - this.posY;//down 0.4 up -0.38
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
             this.dragonPitch += (float) (ydist) * 10;
             this.dragonPitch = MathHelper.clamp(this.dragonPitch, -90, 90);
             float plateau = 2;
-            if(this.dragonPitch > plateau){
+            if (this.dragonPitch > plateau) {
                 //down
                 //this.motionY -= 0.2D;
                 this.dragonPitch -= planeDist * Math.abs(this.dragonPitch) / 90;
             }
-            if(this.dragonPitch < -plateau){//-2
+            if (this.dragonPitch < -plateau) {//-2
                 //up
                 this.dragonPitch += planeDist * Math.abs(this.dragonPitch) / 90;
             }
-            if(this.dragonPitch > 2F){
+            if (this.dragonPitch > 2F) {
                 this.dragonPitch -= 1F;
 
-            }else if(this.dragonPitch < -2F){
+            } else if (this.dragonPitch < -2F) {
                 this.dragonPitch += 1F;
             }
-        }else{
+        } else {
             this.dragonPitch = 0;
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
@@ -1936,8 +1936,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         lastScale = scale;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-    {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
     public float getRenderSize() {
@@ -1945,7 +1944,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.getAgeInDays() > 125) {
             return growth_stages[this.getDragonStage() - 1][0] + ((step * 25));
         }
-       return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
+        return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
     }
 
     private int getAgeFactor() {
@@ -2270,7 +2269,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (EntityGorgon.isStoneMob(this)) {
             return;
         }
-        if(rand.nextBoolean()){
+        if (rand.nextBoolean()) {
             if (this.getAnimation() != ANIMATION_EPIC_ROAR) {
                 this.setAnimation(ANIMATION_EPIC_ROAR);
                 this.playSound(this.getRoarSound(), this.getSoundVolume() + 3 + Math.max(0, this.getDragonStage() - 2), this.getSoundPitch() * 0.7F);
@@ -2290,7 +2289,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     }
                 }
             }
-        }else{
+        } else {
             if (this.getAnimation() != ANIMATION_ROAR) {
                 this.setAnimation(ANIMATION_ROAR);
                 this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
@@ -2340,7 +2339,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return DragonUtils.canTameDragonAttack(this, entity);
     }
 
-    public void dropArmor(){
+    public void dropArmor() {
         if (dragonInv != null && !this.world.isRemote) {
             for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
                 ItemStack itemstack = dragonInv.getStackInSlot(i);
@@ -2351,7 +2350,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
     }
 
-    public boolean isChained(){
+    public boolean isChained() {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(this, ChainEntityProperties.class);
         return chainProperties == null ? false : chainProperties.isChained();
     }
@@ -2359,25 +2358,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @SideOnly(Side.CLIENT)
     public boolean shouldRender(ICamera camera) {
         boolean render = false;
-        return  inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
+        return inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
                 inFrustrum(camera, leftWingLowerPart) || inFrustrum(camera, rightWingLowerPart) ||
                 inFrustrum(camera, leftWingUpperPart) || inFrustrum(camera, rightWingUpperPart) ||
                 inFrustrum(camera, tail1Part) || inFrustrum(camera, tail2Part) ||
                 inFrustrum(camera, tail3Part) || inFrustrum(camera, tail4Part);
     }
 
-    private boolean inFrustrum(ICamera camera, Entity entity){
-        return camera!= null && entity != null && camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox());
+    private boolean inFrustrum(ICamera camera, Entity entity) {
+        return camera != null && entity != null && camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox());
     }
 
-    public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks){
+    public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks) {
         Vec3d vec3d = rider.getPositionEyes(partialTicks);
         Vec3d vec3d1 = rider.getLook(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
         return this.world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
     }
 
-    public Vec3d getRiderPosition(){
+    public Vec3d getRiderPosition() {
         float sitProg = this.sitProgress * 0.015F;
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
@@ -2386,13 +2385,13 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float extraAgeScale = (Math.max(0, this.getAgeInDays() - 75) / 75F) * 1.65F;
         float pitchX = 0;
         float pitchY = 0;
-        if(dragonPitch > 0){
-            pitchX = Math.min(dragonPitch/90, 0.3F);
-            pitchY = -(dragonPitch/90) * 2F;
+        if (dragonPitch > 0) {
+            pitchX = Math.min(dragonPitch / 90, 0.3F);
+            pitchY = -(dragonPitch / 90) * 2F;
         }
-        if(dragonPitch < 0){//going up
-            pitchY = (dragonPitch/90) * 0.1F;
-            pitchX = Math.max(dragonPitch/90, -0.7F);
+        if (dragonPitch < 0) {//going up
+            pitchY = (dragonPitch / 90) * 0.1F;
+            pitchX = Math.max(dragonPitch / 90, -0.7F);
         }
         float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
@@ -2401,17 +2400,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return new Vec3d(headPosX, headPosY, headPosZ);
     }
 
-    public Vec3d getHeadPosition(){
+    public Vec3d getHeadPosition() {
         float sitProg = this.sitProgress * 0.015F;
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
         int animationTick = 0;
-        if(this.getAnimationTick() < 10){
+        if (this.getAnimationTick() < 10) {
             animationTick = this.getAnimationTick();
-        }else if(this.getAnimationTick() > 50){
+        } else if (this.getAnimationTick() > 50) {
             animationTick = 60 - this.getAnimationTick();
-        }else{
+        } else {
             animationTick = 10;
         }
         float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? animationTick * 0.1F : 0;
@@ -2424,19 +2423,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             pitchMulti = (float) Math.sin(Math.toRadians(dragonPitch));
             pitchAdjustment = 1.2F;
             pitchMulti *= 2.1F * Math.abs(dragonPitch) / 90;
-            if(pitchMulti > 0){
+            if (pitchMulti > 0) {
                 pitchMulti *= 1.5F - pitchMulti * 0.5F;
             }
-            if(pitchMulti < 0){
+            if (pitchMulti < 0) {
                 pitchMulti *= 1.3F - pitchMulti * 0.1F;
             }
             pitchMinus = 0.3F * Math.abs(dragonPitch / 90);
-            if(dragonPitch >= 0){
+            if (dragonPitch >= 0) {
                 pitchAdjustment = 0.6F * Math.abs(dragonPitch / 90);
                 pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
             }
         }
-        float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float)Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
+        float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
         float headPosX = (float) (posX + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
         float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
@@ -2445,26 +2444,26 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public abstract void stimulateFire(double burnX, double burnY, double burnZ, int syncType);
 
-    public void randomizeAttacks(){
+    public void randomizeAttacks() {
         this.airAttack = IaFDragonAttacks.Air.values()[getRNG().nextInt(IaFDragonAttacks.Air.values().length)];
         this.groundAttack = IaFDragonAttacks.Ground.values()[getRNG().nextInt(IaFDragonAttacks.Ground.values().length)];
 
     }
 
-    public void tryScorchTarget(){
+    public void tryScorchTarget() {
         EntityLivingBase entity = this.getAttackTarget();
-        if(entity != null) {
+        if (entity != null) {
             float distX = (float) (entity.posX - this.posX);
             float distZ = (float) (entity.posZ - this.posZ);
             if (this.isBreathingFire()) {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
-                    if(this.ticksExisted % 5 == 0){
+                    if (this.ticksExisted % 5 == 0) {
                         this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
                     }
                     stimulateFire(this.posX + distX * this.fireTicks / 40, entity.posY, this.posZ + distZ * this.fireTicks / 40, 1);
                 }
-            }else{
+            } else {
                 this.setBreathingFire(true);
             }
         }
@@ -2487,11 +2486,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return 1;
     }
 
-    public boolean isAllowedToTriggerFlight(){
+    public boolean isAllowedToTriggerFlight() {
         return true;
     }
 
-    public BlockPos getEscortPosition(){
+    public BlockPos getEscortPosition() {
         return this.getOwner() != null ? this.getOwner().getPosition() : this.getPosition();
     }
 
@@ -2505,12 +2504,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     @Override
-    public boolean isNoDespawnRequired(){
+    public boolean isNoDespawnRequired() {
         return true;
     }
 
     @Override
-    protected boolean canDespawn(){
+    protected boolean canDespawn() {
         return false;
     }
 
@@ -2519,5 +2518,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         compound.setString("id", s);
         this.writeToNBT(compound);
         return true;
+    }
+
+    public void playSound(SoundEvent soundIn, float volume, float pitch) {
+        if(soundIn == SoundEvents.ENTITY_GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()){
+            if (!this.isSilent() && this.headPart != null) {
+                this.world.playSound((EntityPlayer) null, this.headPart.posX, this.headPart.posY, this.headPart.posZ, soundIn, this.getSoundCategory(), volume, pitch);
+            }
+        }else{
+            super.playSound(soundIn, volume, pitch);
+        }
+
     }
 }
