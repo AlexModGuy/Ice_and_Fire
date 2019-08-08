@@ -63,7 +63,7 @@ public class MessageHippogryphArmor extends AbstractMessage<MessageHippogryphArm
 				hippo.setArmor(message.armor_type);
 			}
 		}
-		if (entity instanceof EntityHippocampus) {
+		if (entity != null && entity instanceof EntityHippocampus) {
 			EntityHippocampus hippo = (EntityHippocampus) entity;
 			if (message.slot_index == 0) {
 				hippo.setSaddled(message.armor_type == 1);

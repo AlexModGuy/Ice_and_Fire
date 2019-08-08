@@ -12,12 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerHippogryph extends Container {
+public class ContainerHippogryph extends SyncedFieldContainer {
 	private final IInventory hippogryphInventory;
 	private final EntityHippogryph hippogryph;
 	private final EntityPlayer player;
 
 	public ContainerHippogryph(final EntityHippogryph hippogryph, EntityPlayer player) {
+		super(hippogryph.hippogryphInventory);
 		this.hippogryphInventory = hippogryph.hippogryphInventory;
 		this.hippogryph = hippogryph;
 		this.player = player;
@@ -94,47 +95,6 @@ public class ContainerHippogryph extends Container {
 		return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistance(playerIn) < 8.0F;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = (Slot) this.inventorySlots.get(index);
-
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
-
-			if (index < this.hippogryphInventory.getSizeInventory()) {
-				if (!this.mergeItemStack(itemstack1, this.hippogryphInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (this.getSlot(2).isItemValid(itemstack1)) {
-				if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
-				if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (this.getSlot(0).isItemValid(itemstack1)) {
-				if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (this.hippogryphInventory.getSizeInventory() <= 3 || !this.mergeItemStack(itemstack1, 3, this.hippogryphInventory.getSizeInventory(), false)) {
-				return ItemStack.EMPTY;
-			}
-
-			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
-			} else {
-				slot.onSlotChanged();
-			}
-		}
-
-		return itemstack;
-	}
-
-	/**
-	 * Called when the container is closed.
-	 */
 	public void onContainerClosed(EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
 		this.hippogryphInventory.closeInventory(playerIn);

@@ -130,7 +130,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     private void initHippocampusInv() {
         EntityHippocampus.HippocampusInventory animalchest = this.hippocampusInventory;
-        this.hippocampusInventory = new EntityHippocampus.HippocampusInventory("hippogryphInventory", 18, this);
+        this.hippocampusInventory = new EntityHippocampus.HippocampusInventory("hippocampusInventory", 18, this);
         this.hippocampusInventory.setCustomName(this.getName());
         if (animalchest != null) {
             int i = Math.min(animalchest.getSizeInventory(), this.hippocampusInventory.getSizeInventory());
@@ -174,6 +174,29 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         }
         return 0;
     }
+
+    public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
+        int j = inventorySlot - 500 + 2;
+        if (j >= 0 && j < this.hippocampusInventory.getSizeInventory()) {
+            this.hippocampusInventory.setInventorySlotContents(j, itemStackIn);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void onDeath(DamageSource cause) {
+        super.onDeath(cause);
+        if (hippocampusInventory != null && !this.world.isRemote) {
+            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
+                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
+                if (!itemstack.isEmpty()) {
+                    this.entityDropItem(itemstack, 0.0F);
+                }
+            }
+        }
+    }
+
 
     private void setStateField(int i, boolean newState) {
         byte prevState = dataManager.get(CONTROL_STATE).byteValue();
@@ -270,7 +293,17 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         } else if (!sitting && sitProgress > 0.0F) {
             sitProgress -= 0.5F;
         }
-
+        if (hasChestVarChanged && hippocampusInventory != null && !this.isChested()) {
+            for (int i = 3; i < 18; i++) {
+                if (!hippocampusInventory.getStackInSlot(i).isEmpty()) {
+                    if (!world.isRemote) {
+                        this.entityDropItem(hippocampusInventory.getStackInSlot(i), 1);
+                    }
+                    hippocampusInventory.removeStackFromSlot(i);
+                }
+            }
+            hasChestVarChanged = false;
+        }
     }
 
     public boolean up() {
@@ -637,13 +670,12 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             this.setSitting(!this.isSitting());
             return true;
         }
-        if (isOwner(player) && itemstack.isEmpty()) {
+        if(isOwner(player) && itemstack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
-            } else if (this.isSaddled() && !this.isChild() && !player.isRiding() && !world.isRemote) {
+            } else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
                 player.startRiding(this, true);
-                this.setSitting(false);
                 return true;
             }
         }
@@ -651,7 +683,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public void openGUI(EntityPlayer playerEntity) {
-        if (this.world.isRemote && (!this.isBeingRidden() || !this.isPassenger(playerEntity))) {
+        if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 5, this.world, this.getEntityId(), 0, 0);
         }
     }
@@ -758,9 +790,9 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public class HippocampusInventory extends ContainerHorseChest {
 
-        public HippocampusInventory(String inventoryTitle, int slotCount, EntityHippocampus hippogryph) {
+        public HippocampusInventory(String inventoryTitle, int slotCount, EntityHippocampus hippocampus) {
             super(inventoryTitle, slotCount);
-            this.addInventoryChangeListener(new EntityHippocampus.HippocampusInventoryListener(hippogryph));
+            this.addInventoryChangeListener(new EntityHippocampus.HippocampusInventoryListener(hippocampus));
         }
 
 

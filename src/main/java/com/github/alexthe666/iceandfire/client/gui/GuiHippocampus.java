@@ -16,15 +16,15 @@ public class GuiHippocampus extends GuiContainer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
 	private final IInventory playerInventory;
 	private final IInventory hippogryphInv;
-	private final EntityHippocampus hippogryph;
+	private final EntityHippocampus hippocampus;
 	private float mousePosx;
 	private float mousePosY;
 
-	public GuiHippocampus(IInventory playerInv, EntityHippocampus hippogryph) {
-		super(new ContainerHippocampus(hippogryph, Minecraft.getMinecraft().player));
+	public GuiHippocampus(IInventory playerInv, EntityHippocampus hippocampus) {
+		super(new ContainerHippocampus(hippocampus, Minecraft.getMinecraft().player));
 		this.playerInventory = playerInv;
-		this.hippogryphInv = hippogryph.hippocampusInventory;
-		this.hippogryph = hippogryph;
+		this.hippogryphInv = hippocampus.hippocampusInventory;
+		this.hippocampus = hippocampus;
 		this.allowUserInput = false;
 	}
 
@@ -39,10 +39,10 @@ public class GuiHippocampus extends GuiContainer {
 		int i = (this.width - this.xSize) / 2;
 		int j = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
-		if (hippogryph.isChested()) {
+		if (hippocampus.isChested()) {
 			this.drawTexturedModalRect(i + 79, j + 17, 0, this.ySize, 5 * 18, 54);
 		}
-		GuiInventory.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, this.hippogryph);
+		GuiInventory.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, this.hippocampus);
 	}
 
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
