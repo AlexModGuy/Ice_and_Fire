@@ -107,7 +107,7 @@ public class IceAndFireConfig {
 	public double myrmexBaseAttackStrength = 3.0D;
 	public boolean experimentalPathFinder;
 	public boolean spawnAmphitheres = true;
-	public int amphithereSpawnRate = 10;
+	public int amphithereSpawnRate = 5;
 	public float amphithereVillagerSearchLength = 64;
 	public int amphithereTameTime = 400;
 	public float amphithereFlightSpeed = 1.75F;
@@ -240,7 +240,7 @@ public class IceAndFireConfig {
 		this.experimentalPathFinder = config.getBoolean("Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
 
 		this.spawnAmphitheres = config.getBoolean("Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
-		this.amphithereSpawnRate = config.getInt("Amphithere Spawn Weight", "all", 10, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
+		this.amphithereSpawnRate = config.getInt("Amphithere Spawn Weight", "all", 5, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
 		this.amphithereVillagerSearchLength = config.getInt("Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
 		this.amphithereTameTime = config.getInt("Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
 		this.amphithereFlightSpeed = config.getFloat("Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");
