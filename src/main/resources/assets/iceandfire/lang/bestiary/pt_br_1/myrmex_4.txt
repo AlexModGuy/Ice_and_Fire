@@ -1,0 +1,37 @@
+Trocar com um myrmex é um negócio
+lucrativo. Operárias geralmente 
+trocam itens de baixa qualidade, mas 
+estão dispostas a trocar alguma resina
+por sendimentos e ocasionalmente 
+gemas. Soldados irão trocar por 
+itens de mobs comuns, as Sentinelas 
+por itens mais raros ou venenosos. 
+Monarcas irão trocar por artefatos e 
+ingredientes alquímicos. Rainhas
+exclusivamente oferecem ovos pelas 
+trocas.
+
+
+
+
+Báculos Myrmex podem ser usados
+para modificar a estrutura das
+colônias. Ao interagir com um
+
+myrmex enquanto segura um báculo
+irá vinculá-lo à sua colônia.  
+Enquanto usa-lo, você poderá 
+deletar certas salas da colônia e
+interromper a reprodução da rainha. 
+Usando o báculo enquanto se esgueira, 
+você poderá adicionar novas salas na
+sua posição. Só é possível utilizar
+esse báculo se sua reputação for
+igual ou maior que 75.
+
+Ovos de myrmex só podem eclodir no
+subterrâneo. Um ovo de rainha, quando
+chocado no subsolo próximo do jogador,
+se unirá à ele, e a colônia que se
+formará a seguir terá um opinião 
+permanente de valor 100.
