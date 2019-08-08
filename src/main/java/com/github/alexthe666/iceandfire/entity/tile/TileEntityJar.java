@@ -110,7 +110,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
 			this.rotationYaw = (rand.nextFloat() * 360F) - 180F;
 		}
 
-		if (ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
+		if (this.hasPixie && ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
 			this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, ModSounds.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
 		}
 		prevHasProduced = hasProduced;
