@@ -904,9 +904,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.onGround && flyTicks != 0) {
 			flyTicks = 0;
 		}
-		if (this.isFlying() && this.doesWantToLand()) {
+		if (this.isFlying() && this.doesWantToLand() && this.getControllingPassenger() == null) {
 			this.setFlying(false);
-			this.setHovering(!this.onGround);
+			this.setHovering(false);
 			if (this.onGround) {
 				flyTicks = 0;
 				this.setFlying(false);
@@ -930,7 +930,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean doesWantToLand() {
-		return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0;
+		return this.flyTicks > 2000 || down() || flyTicks > 40 && this.flyProgress == 0;
 	}
 
 	@Override
@@ -1039,9 +1039,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		} else {
 			this.airTarget = null;
 		}
-		if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+		if (airTarget != null && this.isFlying() && this.doesWantToLand()) {
 			this.setFlying(false);
-			this.setHovering(true);
+			this.setHovering(false);
 		}
 	}
 
