@@ -22,8 +22,8 @@ public class IceAndFireConfig {
 	public int[] dragonBlacklistedDimensions = new int[]{1, -1};
 	public int[] dragonWhitelistedDimensions = new int[]{0};
 	public boolean useDimensionBlackList = true;
-	public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
-	public int[] snowVillageWhitelistedDimensions = new int[]{0};
+	public int[] structureBlacklistedDimensions = new int[]{1, -1};
+	public int[] structureWhitelistedDimensions = new int[]{0};
 	public boolean spawnGlaciers = true;
 	public int glacierSpawnChance = 4;
 	public int oreToStoneRatioForDragonCaves = 45;
@@ -140,8 +140,8 @@ public class IceAndFireConfig {
 		this.dragonBlacklistedDimensions = config.get("all", "Blacklisted Dragon Dimensions", new int[]{-1, 1}, "Dragons cannot spawn in these dimensions' IDs").getIntList();
 		this.dragonWhitelistedDimensions = config.get("all", "Whitelisted Dragon Dimensions", new int[]{0}, "Dragons can only spawn in these dimensions' IDs").getIntList();
 		this.useDimensionBlackList = config.getBoolean("use Dimension Blacklist", "all", true, "true to use dimensional blacklist, false to use the whitelist.");
-		this.snowVillageBlacklistedDimensions = config.get("all", "Blacklisted Snow Village Dimensions", new int[]{-1, 1}, "Snow Villages cannot spawn in these dimensions' IDs").getIntList();
-		this.snowVillageWhitelistedDimensions = config.get("all", "Whitelisted Snow Village Dimensions", new int[]{0}, "Snow Villages can only spawn in these dimensions' IDs").getIntList();
+		this.structureBlacklistedDimensions = config.get("all", "Blacklisted Misc. Structure Dimensions", new int[]{-1, 1}, "Misc Structures(Cyclops caves, Gorgon temples, etc) cannot spawn in these dimensions' IDs").getIntList();
+		this.structureWhitelistedDimensions = config.get("all", "Whitelisted Misc. Structure Dimensions", new int[]{0}, "Misc Structures(Cyclops caves, Gorgon temples, etc) can only spawn in these dimensions' IDs").getIntList();
 		this.spawnGlaciers = config.getBoolean("Generate Glaciers", "all", true, "Whether to generate glacier biomes or not");
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
