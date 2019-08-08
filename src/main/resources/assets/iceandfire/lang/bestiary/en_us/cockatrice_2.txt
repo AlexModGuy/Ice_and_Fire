@@ -1,4 +1,3 @@
-If either the cockatrice or its prey
 A tame cockatrice can be made to sit,
 follow or patrol by interacting with
 it with an open palm. Feeding the
