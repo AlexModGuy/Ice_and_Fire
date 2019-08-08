@@ -2499,4 +2499,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
         return this.getOwner() != null && this.getDistance(this.getOwner()) > 10;
     }
+
+    public boolean isSkeletal() {
+        return this.getDeathStage() >= (this.getAgeInDays() / 5) / 2;
+    }
 }

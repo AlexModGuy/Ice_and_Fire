@@ -59,7 +59,7 @@ public class HUDHandlerMultipartMob implements IWailaEntityProvider {
 
             if(part.getParent() instanceof EntityDragonBase){
                 EntityDragonBase dragon = (EntityDragonBase) part.getParent();
-                currenttip.add(String.format(I18n.translateToLocal("dragon.stage") + " " + dragon.getDragonStage()));
+                currenttip.add(String.format(I18n.translateToLocal("dragon.stage") + dragon.getDragonStage()));
                 if(dragon.isMale()){
                     currenttip.add(String.format(I18n.translateToLocal("dragon.gender.male")));
                 }else{

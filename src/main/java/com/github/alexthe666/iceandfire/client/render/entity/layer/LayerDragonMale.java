@@ -19,7 +19,7 @@ public class LayerDragonMale implements LayerRenderer {
 	}
 
 	public void doRenderLayer(EntityDragonBase entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-		if (entity.isMale()) {
+		if (entity.isMale() && !entity.isSkeletal()) {
 			GlStateManager.enableNormalize();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
