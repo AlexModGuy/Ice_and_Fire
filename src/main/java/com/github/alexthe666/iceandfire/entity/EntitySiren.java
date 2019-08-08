@@ -577,4 +577,9 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     protected boolean canDespawn(){
         return false;
     }
+
+    @Override
+    public boolean shouldFear(){
+        return isAgressive();
+    }
 }
