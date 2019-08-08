@@ -78,10 +78,11 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         }
         this.spawnableBlock = Blocks.SAND;
         this.switchNavigator(false);
-        this.tasks.addTask(0, new EntityAIAttackMelee(this, 1.5D, true));
-        this.tasks.addTask(1, new DeathWormAIFindSandTarget(this, 10));
-        this.tasks.addTask(2, new DeathWormAIGetInSand(this, 1.0D));
-        this.tasks.addTask(3, new DeathWormAIWander(this, 1));
+        this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.5D, true));
+        this.tasks.addTask(3, new DeathWormAIFindSandTarget(this, 10));
+        this.tasks.addTask(4, new DeathWormAIGetInSand(this, 1.0D));
+        this.tasks.addTask(5, new DeathWormAIWander(this, 1));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
