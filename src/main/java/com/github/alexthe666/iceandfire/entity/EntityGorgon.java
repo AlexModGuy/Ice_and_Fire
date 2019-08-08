@@ -200,22 +200,24 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 				if (this.getAnimation() == ANIMATION_SCARE) {
 					if (this.getAnimationTick() > 10) {
 						if (this.getAttackTarget() instanceof EntityPlayer) {
-							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
-							this.getAttackTarget().setDead();
-							if(!this.getAttackTarget().isEntityAlive()){
-								EntityStoneStatue statue = new EntityStoneStatue(world);
-								statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
-								statue.smallArms = true;
-								if (!world.isRemote) {
-									world.spawnEntity(statue);
+							if(!world.isRemote) {
+								this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
+								this.getAttackTarget().setDead();
+								if (!this.getAttackTarget().isEntityAlive()) {
+									EntityStoneStatue statue = new EntityStoneStatue(world);
+									statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+									statue.smallArms = true;
+									if (!world.isRemote) {
+										world.spawnEntity(statue);
+									}
+									statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
+									statue.rotationYaw = this.getAttackTarget().rotationYaw;
+									statue.rotationYawHead = this.getAttackTarget().rotationYaw;
+									statue.renderYawOffset = this.getAttackTarget().rotationYaw;
+									statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
 								}
-								statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
-								statue.rotationYaw = this.getAttackTarget().rotationYaw;
-								statue.rotationYawHead = this.getAttackTarget().rotationYaw;
-								statue.renderYawOffset = this.getAttackTarget().rotationYaw;
-								statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+								this.setAttackTarget(null);
 							}
-							this.setAttackTarget(null);
 						} else {
 							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -74,6 +75,9 @@ public class IaFDragonFlightManager {
             }
         }
         if (target != null) {
+            if(target.y > IceAndFire.CONFIG.maxDragonFlight){
+                target = new Vec3d(target.x, IceAndFire.CONFIG.maxDragonFlight, target.z);
+            }
             if (target.y >= dragon.posY && !dragon.isModelDead()) {
                 if(dragon instanceof EntityIceDragon && ((EntityIceDragon) dragon).isInWater()){
                     dragon.motionY += 0.1D;
