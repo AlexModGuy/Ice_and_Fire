@@ -128,11 +128,6 @@ public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStat
     }
 
     @Override
-    protected boolean canDespawn() {
-        return false;
-    }
-
-    @Override
     public boolean canBePushed() {
         return false;
     }
@@ -155,5 +150,15 @@ public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStat
     @Override
     public EntityAgeable createChild(EntityAgeable ageable) {
         return null;
+    }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
     }
 }

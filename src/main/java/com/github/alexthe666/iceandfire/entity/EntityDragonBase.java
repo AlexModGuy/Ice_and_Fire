@@ -2513,7 +2513,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     protected boolean canDespawn(){
         return false;
     }
-    
+
     public boolean writeToNBTOptional(NBTTagCompound compound) {
         String s = this.getEntityString();
         compound.setString("id", s);
