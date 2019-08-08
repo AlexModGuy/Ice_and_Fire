@@ -975,7 +975,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
 				this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
 			}
-			if (target != null) {
+			if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
 				target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 			}
 		}
