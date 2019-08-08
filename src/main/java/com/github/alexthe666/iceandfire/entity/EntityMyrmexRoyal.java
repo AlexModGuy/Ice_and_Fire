@@ -154,15 +154,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < attackDistance()) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < attackDistance()) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
             }

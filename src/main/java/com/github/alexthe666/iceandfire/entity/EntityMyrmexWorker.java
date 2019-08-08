@@ -60,8 +60,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 4) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
@@ -69,8 +68,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 4) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
             }

@@ -162,7 +162,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         }
         if(this.getAttackTarget() != null){
             this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().posZ, 1.0F);
-            if(this.getDistance(this.getAttackTarget()) <= attackDistance()){
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
             if(this.getAttackTarget().isDead){

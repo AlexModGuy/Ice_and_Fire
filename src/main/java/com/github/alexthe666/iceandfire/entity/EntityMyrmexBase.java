@@ -42,6 +42,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -879,4 +880,10 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
 
     }
+
+    public AxisAlignedBB getAttackBounds() {
+        float size = this.getRenderSizeModifier() * 0.25F;
+        return this.getEntityBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
+    }
+
 }
