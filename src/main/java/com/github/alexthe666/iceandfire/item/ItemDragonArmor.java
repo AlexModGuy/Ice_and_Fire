@@ -33,7 +33,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered{
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab()) {
+		if (this.isInCreativeTab(tab)) {
 			items.add(new ItemStack(this, 1, 0));
 			items.add(new ItemStack(this, 1, 1));
 			items.add(new ItemStack(this, 1, 2));

@@ -46,7 +46,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered{
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab()) {
+		if (this.isInCreativeTab(tab)) {
 			for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
 				if (!type.developer) {
 					items.add(new ItemStack(this, 1, type.ordinal()));

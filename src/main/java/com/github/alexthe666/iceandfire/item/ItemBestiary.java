@@ -41,7 +41,7 @@ public class ItemBestiary extends Item {
 
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab()) {
+		if (this.isInCreativeTab(tab)) {
 			items.add(new ItemStack(this));
 			ItemStack stack = new ItemStack(ModItems.bestiary);
 			stack.setTagCompound(new NBTTagCompound());
