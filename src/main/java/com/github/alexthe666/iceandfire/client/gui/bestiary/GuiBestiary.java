@@ -959,7 +959,7 @@ public class GuiBestiary extends GuiScreen {
 	public void imageFromTxt() {
 		String filePath = "assets/iceandfire/lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/";
 		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
-			filePath = "assets/iceandfire/lang/bestiary/en_us_1/";
+			filePath = "assets/iceandfire/lang/bestiary/en_us/";
 		}
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
 		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
@@ -1033,10 +1033,10 @@ public class GuiBestiary extends GuiScreen {
 		String upperCaseLang = Minecraft.getMinecraft().gameSettings.language.substring(0, 2) + Minecraft.getMinecraft().gameSettings.language.substring(2).toUpperCase();
 		String filePath = "assets/iceandfire/lang/bestiary/" + upperCaseLang + "/";
 		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
-			filePath = "assets/iceandfire/lang/bestiary/en_us_1/";
+			filePath = "assets/iceandfire/lang/bestiary/en_us/";
 		}
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + "ru_ru_1" + "/" + fileName);
+		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + "ru_ru" + "/" + fileName);
 		try {
 			IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
 			System.out.println(resource);
