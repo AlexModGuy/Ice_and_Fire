@@ -1545,7 +1545,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.setHunger(this.getHunger() - 1);
             }
         }
-        if ((this.groundAttack == IaFDragonAttacks.Ground.FIRE) && this.getRNG().nextInt(750) == 0 && this.getDragonStage() < 2) {
+        if ((this.groundAttack == IaFDragonAttacks.Ground.FIRE) && this.getDragonStage() < 2) {
             this.usingGroundAttack = true;
             this.randomizeAttacks();
             for (int i = 0; i < 5; i++) {
