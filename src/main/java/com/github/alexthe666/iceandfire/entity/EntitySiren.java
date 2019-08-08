@@ -109,10 +109,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         return 8;
     }
 
-    protected boolean canDespawn() {
-        return false;
-    }
-
     @Nullable
     protected ResourceLocation getLootTable() {
         return LOOT;
@@ -570,5 +566,15 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 this.siren.setAIMoveSpeed(0.0F);
             }
         }
+    }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
     }
 }

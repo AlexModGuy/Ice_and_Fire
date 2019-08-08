@@ -698,4 +698,14 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
 }

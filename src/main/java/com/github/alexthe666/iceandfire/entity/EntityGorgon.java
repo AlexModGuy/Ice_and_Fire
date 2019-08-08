@@ -127,10 +127,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		return super.attackEntityAsMob(entityIn);
 	}
 
-	protected boolean canDespawn() {
-		return false;
-	}
-
 	public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
 		super.setAttackTarget(entitylivingbaseIn);
 		if (entitylivingbaseIn != null && !world.isRemote) {
@@ -328,5 +324,15 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	@Override
 	public boolean shouldAnimalsFear(Entity entity) {
 		return true;
+	}
+
+	@Override
+	public boolean isNoDespawnRequired(){
+		return true;
+	}
+
+	@Override
+	protected boolean canDespawn(){
+		return false;
 	}
 }

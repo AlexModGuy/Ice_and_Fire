@@ -1233,4 +1233,14 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
         }
     }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
 }

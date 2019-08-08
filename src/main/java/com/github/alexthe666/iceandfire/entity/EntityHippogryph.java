@@ -1147,4 +1147,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 	}
 
+	@Override
+	public boolean isNoDespawnRequired(){
+		return true;
+	}
+
+	@Override
+	protected boolean canDespawn(){
+		return false;
+	}
 }

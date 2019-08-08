@@ -916,4 +916,14 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         float hardness = blockStateIn.getBlockHardness(worldIn, pos);
         return hardness != -1.0F && hardness < 1.5F;
     }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
 }
