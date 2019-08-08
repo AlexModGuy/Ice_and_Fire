@@ -403,6 +403,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if(this.isSitting() && this.getAttackTarget() != null){
             this.setAttackTarget(null);
         }
+        if(this.getAttackTarget() != null && this.isOnSameTeam(this.getAttackTarget())){
+            this.setAttackTarget(null);
+        }
         if (!world.isRemote) {
             if (this.getAttackTarget() == null || this.getAttackTarget().isDead) {
                 this.setTargetedEntity(0);
