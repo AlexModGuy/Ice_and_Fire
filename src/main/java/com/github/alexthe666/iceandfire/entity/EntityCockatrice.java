@@ -119,6 +119,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if (source.getTrueSource() != null && EventLiving.isAnimaniaFerret(source.getTrueSource())) {
             damage *= 5;
         }
+        if(source == DamageSource.IN_WALL){
+            return false;
+        }
         return super.attackEntityFrom(source, damage);
     }
 
