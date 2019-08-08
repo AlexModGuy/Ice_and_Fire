@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
@@ -258,7 +259,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.myrmexBaseAttackStrength * 2D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
     }
