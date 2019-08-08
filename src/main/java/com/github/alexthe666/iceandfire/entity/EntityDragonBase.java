@@ -994,7 +994,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage && player.capabilities.allowEdit) {
-            //player.addStat(ModAchievements.dragonHarvest, 1);
             if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFire.CONFIG.dragonDropBlood) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
@@ -1048,114 +1047,112 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
                 return true;
             }
+            if (this.isBreedingItem(stack) && this.isAdult()) {
+                this.setGrowingAge(0);
+                this.consumeItemFromStack(player, stack);
+                this.setInLove(player);
+                return true;
+            }
             if (this.isOwner(player)) {
-                if (!stack.isEmpty()) {
-                    if (this.isBreedingItem(stack) && this.isAdult()) {
-                        this.setGrowingAge(0);
-                        this.consumeItemFromStack(player, stack);
-                        this.setInLove(player);
+                if (stack.getItem() != null) {
+                    int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
+                    if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
+                        //this.growDragon(1);
+                        this.setHunger(this.getHunger() + itemFoodAmount);
+                        this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
+                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                        this.spawnItemCrackParticles(stack.getItem());
+                        this.eatFoodBonus(stack);
+                        if (!player.isCreative()) {
+                            stack.shrink(1);
+                        }
                         return true;
                     }
-                    if (stack.getItem() != null) {
-                        int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
-                        if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
-                            //this.growDragon(1);
-                            this.setHunger(this.getHunger() + itemFoodAmount);
-                            this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
-                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                            this.spawnItemCrackParticles(stack.getItem());
-                            this.eatFoodBonus(stack);
-                            if (!player.isCreative()) {
-                                stack.shrink(1);
-                            }
-                            return true;
+                    if (stack.getItem() == ModItems.dragon_meal) {
+                        this.growDragon(1);
+                        this.setHunger(this.getHunger() + 20);
+                        this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
+                        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+                        this.spawnItemCrackParticles(stack.getItem());
+                        this.spawnItemCrackParticles(Items.BONE);
+                        this.spawnItemCrackParticles(Items.DYE);
+                        this.eatFoodBonus(stack);
+                        if (!player.isCreative()) {
+                            stack.shrink(1);
                         }
-                        if (stack.getItem() == ModItems.dragon_meal) {
-                            this.growDragon(1);
-                            this.setHunger(this.getHunger() + 20);
-                            this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
-                            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                            this.spawnItemCrackParticles(stack.getItem());
-                            this.spawnItemCrackParticles(Items.BONE);
-                            this.spawnItemCrackParticles(Items.DYE);
-                            this.eatFoodBonus(stack);
-                            if (!player.isCreative()) {
-                                stack.shrink(1);
-                            }
-                            return true;
-                        }
-                        if (stack.getItem() == ModItems.sickly_dragon_meal && !this.isAgingDisabled()) {
-                            this.setHunger(this.getHunger() + 20);
-                            this.heal(this.getMaxHealth());
-                            this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
-                            this.spawnItemCrackParticles(stack.getItem());
-                            this.spawnItemCrackParticles(Items.BONE);
-                            this.spawnItemCrackParticles(Items.DYE);
-                            this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
-                            this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
-                            this.setAgingDisabled(true);
-                            this.eatFoodBonus(stack);
-                            if (!player.isCreative()) {
-                                stack.shrink(1);
-                            }
-                            return true;
-                        }
-                        if (stack.getItem() == ModItems.dragon_stick) {
-                            if (player.isSneaking()) {
-                                BlockPos pos = new BlockPos(this);
-                                this.homePos = pos;
-                                this.hasHomePosition = true;
-                                player.sendStatusMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-                                return true;
-                            } else {
-                                this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                                this.setCommand(this.getCommand() + 1);
-                                if (this.getCommand() > 2) {
-                                    this.setCommand(0);
-                                }
-                                String commandText = "stand";
-                                if (this.getCommand() == 1) {
-                                    commandText = "sit";
-                                }
-                                if (this.getCommand() == 2) {
-                                    commandText = "escort";
-                                }
-                                player.sendStatusMessage(new TextComponentTranslation("dragon.command." + commandText), true);
-                                return true;
-                            }
-
-                        }
-                        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                        if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
-                            hasHadHornUse = true;
-                            this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
-                            ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
-                            stack1.setTagCompound(new NBTTagCompound());
-                            this.writeEntityToNBT(stack1.getTagCompound());
-                            player.setHeldItem(hand, stack1);
-                            this.setDead();
-                            return true;
-                        }
+                        return true;
                     }
-                } else {
-                    if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
-                        if (this.getDragonStage() < 2) {
-                            this.startRiding(player, true);
+                    if (stack.getItem() == ModItems.sickly_dragon_meal && !this.isAgingDisabled()) {
+                        this.setHunger(this.getHunger() + 20);
+                        this.heal(this.getMaxHealth());
+                        this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
+                        this.spawnItemCrackParticles(stack.getItem());
+                        this.spawnItemCrackParticles(Items.BONE);
+                        this.spawnItemCrackParticles(Items.DYE);
+                        this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
+                        this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
+                        this.setAgingDisabled(true);
+                        this.eatFoodBonus(stack);
+                        if (!player.isCreative()) {
+                            stack.shrink(1);
                         }
-                        if (this.getDragonStage() > 2 && !player.isRiding()) {
-                            player.setSneaking(false);
-                            player.startRiding(this, true);
-                            this.setSleeping(false);
+                        return true;
+                    }
+                    if (stack.getItem() == ModItems.dragon_stick) {
+                        if (player.isSneaking()) {
+                            BlockPos pos = new BlockPos(this);
+                            this.homePos = pos;
+                            this.hasHomePosition = true;
+                            player.sendStatusMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                            return true;
+                        } else {
+                            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
+                            this.setCommand(this.getCommand() + 1);
+                            if (this.getCommand() > 2) {
+                                this.setCommand(0);
+                            }
+                            String commandText = "stand";
+                            if (this.getCommand() == 1) {
+                                commandText = "sit";
+                            }
+                            if (this.getCommand() == 2) {
+                                commandText = "escort";
+                            }
+                            player.sendStatusMessage(new TextComponentTranslation("dragon.command." + commandText), true);
+                            return true;
                         }
 
-                        if (this.getDragonStage() < 2) {
-                            this.startRiding(player, true);
-                        }
-                        return true;
-                    } else if (stack.isEmpty() && player.isSneaking()) {
-                        this.openGUI(player);
+                    }
+                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
+                        hasHadHornUse = true;
+                        this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
+                        ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
+                        stack1.setTagCompound(new NBTTagCompound());
+                        this.writeEntityToNBT(stack1.getTagCompound());
+                        player.setHeldItem(hand, stack1);
+                        this.setDead();
                         return true;
                     }
+                }
+            } else {
+                if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
+                    if (this.getDragonStage() < 2) {
+                        this.startRiding(player, true);
+                    }
+                    if (this.getDragonStage() > 2 && !player.isRiding()) {
+                        player.setSneaking(false);
+                        player.startRiding(this, true);
+                        this.setSleeping(false);
+                    }
+
+                    if (this.getDragonStage() < 2) {
+                        this.startRiding(player, true);
+                    }
+                    return true;
+                } else if (stack.isEmpty() && player.isSneaking()) {
+                    this.openGUI(player);
+                    return true;
                 }
             }
         }
@@ -1592,7 +1589,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null && isTargetBlocked(this.getAttackTarget().getPositionVector())) {
             this.randomizeAttacks();
         }
-        if(hasHadHornUse){
+        if (hasHadHornUse) {
             hasHadHornUse = false;
         }
         this.breakBlock();
@@ -2525,11 +2522,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
-        if(soundIn == SoundEvents.ENTITY_GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()){
+        if (soundIn == SoundEvents.ENTITY_GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
             if (!this.isSilent() && this.headPart != null) {
                 this.world.playSound((EntityPlayer) null, this.headPart.posX, this.headPart.posY, this.headPart.posZ, soundIn, this.getSoundCategory(), volume, pitch);
             }
-        }else{
+        } else {
             super.playSound(soundIn, volume, pitch);
         }
 
