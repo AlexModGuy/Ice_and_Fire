@@ -100,7 +100,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 if (!isPartEqual(cube, EnumRemodelDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumRemodelDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
                     if(cube.boxName.equals("BodyUpper")){
-                        cube.rotationPointZ -= ((Math.toRadians(-15F) - cube.rotationPointZ) / 20) * entity.ridingProgress;
+                        cube.rotationPointZ += ((-12F - cube.rotationPointZ) / 20) * entity.ridingProgress;
                     }
 
                 }

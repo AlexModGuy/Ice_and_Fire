@@ -1885,7 +1885,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 pitch_buffer_body.calculateChainWaveBuffer(80, 10, 1, 0.5F, this);
             }
         }
-        if(!this.onGround){
+        if(!this.onGround && !this.isRiding()){
             double ydist = prevPosY - this.posY;//down 0.4 up -0.38
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
             this.dragonPitch += (float) (ydist) * 10;
@@ -1987,8 +1987,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void updateRiding(Entity riding) {
         if (riding != null && riding.isPassenger(this) && riding instanceof EntityPlayer) {
             int i = riding.getPassengers().indexOf(this);
-            float radius = (i == 2 ? 0F : 0.4F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
-            float angle = (0.01745329251F * ((EntityPlayer) riding).renderYawOffset) + (i == 1 ? -90 : i == 0 ? 90 : 0);
+            float radius = (i == 2 ? 0F : 0.5F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
+            float angle = (0.01745329251F * ((EntityPlayer) riding).renderYawOffset) + (i == 1 ? 90 : i == 0 ? -90 : 0);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
@@ -2502,5 +2502,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     public boolean isSkeletal() {
         return this.getDeathStage() >= (this.getAgeInDays() / 5) / 2;
+    }
+
+    public boolean writeToNBTOptional(NBTTagCompound compound) {
+        String s = this.getEntityString();
+        compound.setString("id", s);
+        this.writeToNBT(compound);
+        return true;
     }
 }
