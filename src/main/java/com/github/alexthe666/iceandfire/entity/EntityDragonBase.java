@@ -1613,9 +1613,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void breakBlock() {
         BlockPos dragonPos = this.getPosition();
         float f = (float) (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) * 0.333F;
-        if (IceAndFire.CONFIG.dragonGriefing != 2 || this.isTamed() && !IceAndFire.CONFIG.tamedDragonGriefing) {
+        if (IceAndFire.CONFIG.dragonGriefing != 2 || this.isTamed() && IceAndFire.CONFIG.tamedDragonGriefing) {
             float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
-            if (!isModelDead() && this.getDragonStage() >= 3 && this.canMove()) {
+            if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                 for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
                     for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                         for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {
