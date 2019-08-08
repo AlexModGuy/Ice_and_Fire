@@ -660,8 +660,8 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+        if (event.getTarget() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }
@@ -681,9 +681,9 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties stoneEntityProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-            if (stoneEntityProperties != null && stoneEntityProperties.isStone) {
+        if (event.getTarget() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }
         }
