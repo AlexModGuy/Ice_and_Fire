@@ -149,7 +149,6 @@ public class SandExplosion extends Explosion {
         for (BlockPos blockpos : this.affectedBlockPositions) {
             IBlockState state = this.worldObj.getBlockState(blockpos);
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
-
             if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
                 double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
                 double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();

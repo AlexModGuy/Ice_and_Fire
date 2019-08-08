@@ -37,6 +37,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -909,5 +910,10 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
                 this.worm.setAIMoveSpeed(0.0F);
             }
         }
+    }
+
+    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn, float p_174816_5_){
+        float hardness = blockStateIn.getBlockHardness(worldIn, pos);
+        return hardness != -1.0F && hardness < 1.5F;
     }
 }
