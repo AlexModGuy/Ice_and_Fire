@@ -56,10 +56,21 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     public static final ResourceLocation FOREST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_forest"));
     public static final ResourceLocation FROST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_frost"));
     public static final ResourceLocation MOUNTAIN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_mountain"));
-
+    private boolean avoidSun = true;
     public EntityTroll(World worldIn) {
         super(worldIn);
         this.setSize(1.2F, 3.5F);
+    }
+
+    private void setAvoidSun(boolean day){
+        if(day && !avoidSun){
+            ((PathNavigateGround) this.getNavigator()).setAvoidSun(true);
+            avoidSun = true;
+        }
+        if(!day && avoidSun){
+            ((PathNavigateGround) this.getNavigator()).setAvoidSun(false);
+            avoidSun = false;
+        }
     }
 
     @Override
@@ -83,7 +94,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
-        ((PathNavigateGround) this.getNavigator()).setAvoidSun(true);
+        setAvoidSun(true);
     }
 
     protected void applyEntityAttributes() {
@@ -259,6 +270,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
         boolean stone = EntityGorgon.isStoneMob(this);
         if (stone && stoneProgress < 20.0F) {
             stoneProgress += 2F;
@@ -274,6 +286,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
             this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
         }
+        setAvoidSun(this.world.isDaytime());
         if (this.world.isDaytime() && !this.world.isRemote) {
             float f = this.getBrightness();
             BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ);
