@@ -60,7 +60,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
 	}
 
 	protected AxisAlignedBB getTargetableArea(double targetDistance) {
-		return this.taskOwner.getEntityBoundingBox().expand(targetDistance, 4.0D, targetDistance);
+		return this.taskOwner.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
 	}
 
 	@Override
