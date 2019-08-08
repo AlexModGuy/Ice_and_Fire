@@ -177,6 +177,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public IaFDragonAttacks.Air airAttack;
     public IaFDragonAttacks.Ground groundAttack;
     public boolean usingGroundAttack = true;
+    boolean hasHadHornUse = false;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -1126,6 +1127,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                         if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
+                            hasHadHornUse = true;
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
                             ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
                             stack1.setTagCompound(new NBTTagCompound());
@@ -1136,7 +1138,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         }
                     }
                 } else {
-                    if (stack.isEmpty() && !player.isSneaking() && !this.isDead) {
+                    if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
                         if (this.getDragonStage() < 2) {
                             this.startRiding(player, true);
                         }
@@ -1590,7 +1592,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.isFlying() && this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null && isTargetBlocked(this.getAttackTarget().getPositionVector())) {
             this.randomizeAttacks();
         }
-
+        if(hasHadHornUse){
+            hasHadHornUse = false;
+        }
         this.breakBlock();
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
