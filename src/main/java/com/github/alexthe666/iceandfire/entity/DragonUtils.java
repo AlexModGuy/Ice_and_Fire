@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -273,7 +274,8 @@ public class DragonUtils {
 				block != net.minecraft.init.Blocks.REPEATING_COMMAND_BLOCK &&
 				block != net.minecraft.init.Blocks.CHAIN_COMMAND_BLOCK &&
 				block != net.minecraft.init.Blocks.IRON_BARS &&
-				block != net.minecraft.init.Blocks.END_GATEWAY;
+				block != net.minecraft.init.Blocks.END_GATEWAY &&
+				!isBlacklistedBlock(block);
 	}
 
 	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
@@ -302,4 +304,13 @@ public class DragonUtils {
 			return IceAndFire.CONFIG.dragonGriefing < 2;
 		}
     }
+
+    public static boolean isBlacklistedBlock(Block block){
+		for(String name : IceAndFire.CONFIG.blacklistedBreakBlocks){
+			if(name.equalsIgnoreCase(block.getRegistryName().toString())){
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -24,6 +24,7 @@ public class IceAndFireConfig {
 	public boolean useDimensionBlackList = true;
 	public int[] structureBlacklistedDimensions = new int[]{1, -1};
 	public int[] structureWhitelistedDimensions = new int[]{0};
+	public String[] blacklistedBreakBlocks = new String[0];
 	public boolean spawnGlaciers = true;
 	public int glacierSpawnChance = 4;
 	public int oreToStoneRatioForDragonCaves = 45;
@@ -167,6 +168,9 @@ public class IceAndFireConfig {
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
 		this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.animalsFearDragons = config.getBoolean("Animals Fear Dragons", "all", true, "True if animals should run away and hide from dragons and other hostile Ice and Fire mobs.");
+		this.blacklistedBreakBlocks = config.getStringList("Blacklisted Blocks from Dragon", "all", new String[0], "Blacklist for blocks that dragons are not to break or burn. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");
+
+
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
 		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 
