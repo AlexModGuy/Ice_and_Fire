@@ -317,7 +317,7 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
     }
 
     private PathNodeType getPathNodeType(EntityLiving entitylivingIn, int x, int y, int z) {
-        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanOpenDoors(), this.getCanEnterDoors());
+        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, 1, 1, 1, this.getCanOpenDoors(), this.getCanEnterDoors());
     }
 
     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
@@ -395,7 +395,7 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
                 } else if (material == Material.LAVA) {
                     return PathNodeType.LAVA;
                 } else {
-                    return block.isPassable(p_189553_1_, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
+                    return block.isPassable(p_189553_1_, blockpos) ? PathNodeType.WALKABLE : PathNodeType.BLOCKED;
                 }
             } else {
                 return PathNodeType.FENCE;

@@ -6,9 +6,9 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -20,6 +20,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -33,9 +34,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateClimber;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
@@ -90,6 +91,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
         this.stepHeight = 2;
+        this.moveHelper = new GroundMoveHelper(this);
     }
 
     public boolean canMove() {
@@ -163,7 +165,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(256.0D);
     }
 
     public float getBlockPathWeight(BlockPos pos) {
@@ -802,5 +804,79 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     @Override
     protected boolean canDespawn(){
         return false;
+    }
+
+    protected static class GroundMoveHelper extends EntityMoveHelper {
+        public GroundMoveHelper(EntityLiving entitylivingIn) {
+            super(entitylivingIn);
+        }
+
+        public float distance(float rotateAngleFrom, float rotateAngleTo) {
+            return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
+        }
+
+        public void onUpdateMoveHelper() {
+            if (this.action == EntityMoveHelper.Action.STRAFE) {
+                float f = (float) this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+                float f1 = (float) this.speed * f;
+                float f2 = this.moveForward;
+                float f3 = this.moveStrafe;
+                float f4 = MathHelper.sqrt(f2 * f2 + f3 * f3);
+
+                if (f4 < 1.0F) {
+                    f4 = 1.0F;
+                }
+
+                f4 = f1 / f4;
+                f2 = f2 * f4;
+                f3 = f3 * f4;
+                float f5 = MathHelper.sin(this.entity.rotationYaw * 0.017453292F);
+                float f6 = MathHelper.cos(this.entity.rotationYaw * 0.017453292F);
+                float f7 = f2 * f6 - f3 * f5;
+                float f8 = f3 * f6 + f2 * f5;
+                PathNavigate pathnavigate = this.entity.getNavigator();
+                if (pathnavigate != null) {
+                    NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
+                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.entity.world, MathHelper.floor(this.entity.posX + (double) f7), MathHelper.floor(this.entity.posY), MathHelper.floor(this.entity.posZ + (double) f8)) != PathNodeType.WALKABLE) {
+                        this.moveForward = 1.0F;
+                        this.moveStrafe = 0.0F;
+                        f1 = f;
+                    }
+                }
+                this.entity.setAIMoveSpeed(f1);
+                this.entity.setMoveForward(this.moveForward);
+                this.entity.setMoveStrafing(this.moveStrafe);
+                this.action = EntityMoveHelper.Action.WAIT;
+            } else if (this.action == EntityMoveHelper.Action.MOVE_TO) {
+                this.action = EntityMoveHelper.Action.WAIT;
+                double d0 = this.posX - this.entity.posX;
+                double d1 = this.posZ - this.entity.posZ;
+                double d2 = this.posY - this.entity.posY;
+                double d3 = d0 * d0 + d2 * d2 + d1 * d1;
+                if (d3 < 2.500000277905201E-7D) {
+                    this.entity.setMoveForward(0.0F);
+                    return;
+                }
+                float f9 = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
+                float maxChange = 20F;
+                float distance = (float)Math.toDegrees(distance((float)Math.toRadians(this.entity.rotationYaw), (float)Math.toRadians(f9)));
+                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange/2, maxChange/2);
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+
+                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
+                    this.entity.getJumpHelper().setJumping();
+                    this.action = EntityMoveHelper.Action.JUMPING;
+                }
+            } else if (this.action == EntityMoveHelper.Action.JUMPING) {
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+
+                if (this.entity.onGround) {
+                    this.action = EntityMoveHelper.Action.WAIT;
+                }
+            } else {
+                this.entity.setMoveForward(0.0F);
+            }
+        }
+
     }
 }

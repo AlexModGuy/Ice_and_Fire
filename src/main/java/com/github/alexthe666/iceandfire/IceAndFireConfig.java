@@ -154,7 +154,7 @@ public class IceAndFireConfig {
 		this.dragonFluteDistance = config.getInt("Dragon Flute Distance", "all", 4, 0, 10000, "Dragon Flute Distance - how many chunks away is the dragon flute effective?");
 		this.dragonHealth = config.getInt("Dragon Health", "all", 500, 1, 100000, "Max dragon health. Health is scaled to this");
 		this.dragonAttackDamage = config.getInt("Dragon Attack Damage", "all", 17, 1, 10000, "Max dragon attack damage. Attack Damage is scaled to this");
-		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 10, 1000, "How high dragons can fly, in Y height.");
+		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 100, 1000, "How high dragons can fly, in Y height.");
 		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
 		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
 		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");

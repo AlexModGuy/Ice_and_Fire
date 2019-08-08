@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
@@ -105,8 +106,9 @@ public class MyrmexAIStoreItems extends EntityAIBase {
         int RADIUS_Y = 7;
         List<BlockPos> closeCocoons = new ArrayList<BlockPos>();
         for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ))) {
-            if (this.myrmex.world.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.world.getTileEntity(blockpos) != null && this.myrmex.world.getTileEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-                if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND))) {
+            TileEntity te = this.myrmex.world.getTileEntity(blockpos);
+            if (te != null && te instanceof TileEntityMyrmexCocoon) {
+                if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND))) {
                     closeCocoons.add(blockpos);
                 }
             }
