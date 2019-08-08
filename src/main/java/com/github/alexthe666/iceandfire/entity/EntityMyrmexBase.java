@@ -794,4 +794,13 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
     }
 
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
 }

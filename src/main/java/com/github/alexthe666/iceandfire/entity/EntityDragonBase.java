@@ -2504,6 +2504,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return this.getDeathStage() >= (this.getAgeInDays() / 5) / 2;
     }
 
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
+    
     public boolean writeToNBTOptional(NBTTagCompound compound) {
         String s = this.getEntityString();
         compound.setString("id", s);
