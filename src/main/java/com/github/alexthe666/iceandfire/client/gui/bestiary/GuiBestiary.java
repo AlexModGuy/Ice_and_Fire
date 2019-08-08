@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import net.ilexiconn.llibrary.client.lang.LanguageHandler;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -34,8 +36,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -957,16 +961,26 @@ public class GuiBestiary extends GuiScreen {
 	}
 
 	public void imageFromTxt() {
-		String filePath = "assets/iceandfire/lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/";
-		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
-			filePath = "assets/iceandfire/lang/bestiary/en_us/";
-		}
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/" + fileName);
+		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us/" + fileName);
+		IResource resource = null;
+
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileReader));
+			resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
+		} catch (IOException e) {
+			try {
+				resource = Minecraft.getMinecraft().getResourceManager().getResource(backupLoc);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		try {
+			Iterator iterator = IOUtils.readLines(resource.getInputStream(), "UTF-8").iterator();
 			String line = null;
-			while ((line = bufferedReader.readLine()) != null) {
+			int linenumber = 0;
+			while(iterator.hasNext()) {
+				line = ((String) iterator.next()).trim();
 				if(line.contains("<") || line.contains(">")){
 					if(line.contains("<image>")){
 						line = line.substring(8, line.length() - 1);
@@ -1010,7 +1024,6 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 				}
 			}
-			fileReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1030,26 +1043,26 @@ public class GuiBestiary extends GuiScreen {
 	}
 
 	public void writeFromTxt() {
-		String upperCaseLang = Minecraft.getMinecraft().gameSettings.language.substring(0, 2) + Minecraft.getMinecraft().gameSettings.language.substring(2).toUpperCase();
-		String filePath = "assets/iceandfire/lang/bestiary/" + upperCaseLang + "/";
-		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
-			filePath = "assets/iceandfire/lang/bestiary/en_us/";
-		}
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + "ru_ru" + "/" + fileName);
-		try {
-			IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
-			System.out.println(resource);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/" + fileName);
+		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us/" + fileName);
+		IResource resource = null;
 
-		InputStream fileReader = LanguageHandler.class.getResourceAsStream(filePath + fileName);
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileReader, StandardCharsets.UTF_8), 8192);
+			resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
+		} catch (IOException e) {
+			try {
+				resource = Minecraft.getMinecraft().getResourceManager().getResource(backupLoc);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		try {
+			Iterator iterator = IOUtils.readLines(resource.getInputStream(), "UTF-8").iterator();
 			String line = null;
 			int linenumber = 0;
-			while ((line = bufferedReader.readLine()) != null) {
+			while(iterator.hasNext()) {
+				line = ((String) iterator.next()).trim();
 				if(line.contains("<") || line.contains(">")){
 					continue;
 				}
@@ -1066,7 +1079,6 @@ public class GuiBestiary extends GuiScreen {
 				linenumber++;
 				GL11.glPopMatrix();
 			}
-			fileReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
