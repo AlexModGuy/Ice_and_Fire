@@ -254,11 +254,17 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 			if (itemstack != null && itemstack.getItem() == Items.STICK) {
 				if(player.isSneaking()){
-					BlockPos pos = new BlockPos(this);
-					this.homePos = pos;
-					this.hasHomePosition = true;
-					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-					return true;
+					if(this.hasHomePosition){
+						this.hasHomePosition = false;
+						player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.remove_home"), true);
+						return true;
+					}else{
+						BlockPos pos = new BlockPos(this);
+						this.homePos = pos;
+						this.hasHomePosition = true;
+						player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+						return true;
+					}
 				}else{
 					this.setCommand(this.getCommand() + 1);
 					if (this.getCommand() > 1) {

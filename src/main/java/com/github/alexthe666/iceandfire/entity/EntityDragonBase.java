@@ -1100,11 +1100,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     }
                     if (stack.getItem() == ModItems.dragon_stick) {
                         if (player.isSneaking()) {
-                            BlockPos pos = new BlockPos(this);
-                            this.homePos = pos;
-                            this.hasHomePosition = true;
-                            player.sendStatusMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-                            return true;
+                            if(this.hasHomePosition){
+                                this.hasHomePosition = false;
+                                player.sendStatusMessage(new TextComponentTranslation("dragon.command.remove_home"), true);
+                                return true;
+                            }else{
+                                BlockPos pos = new BlockPos(this);
+                                this.homePos = pos;
+                                this.hasHomePosition = true;
+                                player.sendStatusMessage(new TextComponentTranslation("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                                return true;
+                            }
                         } else {
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
                             this.setCommand(this.getCommand() + 1);
