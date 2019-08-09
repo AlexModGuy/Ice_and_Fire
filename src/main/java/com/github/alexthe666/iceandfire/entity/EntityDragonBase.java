@@ -1054,7 +1054,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 return true;
             }
             if (this.isOwner(player)) {
-                if (stack.getItem() != null) {
+                if (stack != ItemStack.EMPTY) {
                     int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                         //this.growDragon(1);
@@ -1127,7 +1127,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             player.sendStatusMessage(new TextComponentTranslation("dragon.command." + commandText), true);
                             return true;
                         }
-
                     }
                     StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                     if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
@@ -1140,25 +1139,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         this.setDead();
                         return true;
                     }
-                }
-            } else {
-                if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
-                    if (this.getDragonStage() < 2) {
-                        this.startRiding(player, true);
-                    }
-                    if (this.getDragonStage() > 2 && !player.isRiding()) {
-                        player.setSneaking(false);
-                        player.startRiding(this, true);
-                        this.setSleeping(false);
-                    }
+                } else {
+                    if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
+                        if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+                        }
+                        if (this.getDragonStage() > 2 && !player.isRiding()) {
+                            player.setSneaking(false);
+                            player.startRiding(this, true);
+                            this.setSleeping(false);
+                        }
 
-                    if (this.getDragonStage() < 2) {
-                        this.startRiding(player, true);
+                        if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+                        }
+                        return true;
+                    } else if (stack.isEmpty() && player.isSneaking()) {
+                        this.openGUI(player);
+                        return true;
                     }
-                    return true;
-                } else if (stack.isEmpty() && player.isSneaking()) {
-                    this.openGUI(player);
-                    return true;
                 }
             }
         }
