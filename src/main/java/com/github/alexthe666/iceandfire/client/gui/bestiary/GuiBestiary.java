@@ -962,8 +962,8 @@ public class GuiBestiary extends GuiScreen {
 
 	public void imageFromTxt() {
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/" + fileName);
-		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us/" + fileName);
+		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "_0/" + fileName);
+		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
 		IResource resource = null;
 
 		try {
@@ -1044,8 +1044,8 @@ public class GuiBestiary extends GuiScreen {
 
 	public void writeFromTxt() {
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/" + fileName);
-		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us/" + fileName);
+		ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "_0/" + fileName);
+		ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
 		IResource resource = null;
 
 		try {
