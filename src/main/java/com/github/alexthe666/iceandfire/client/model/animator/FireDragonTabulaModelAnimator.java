@@ -1,12 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
 import com.github.alexthe666.iceandfire.client.model.util.*;
-import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import net.ilexiconn.llibrary.LLibrary;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
@@ -14,23 +12,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityFireDragon> {
+public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityFireDragon> {
 
-    public FireDragonRemodelTabulaModelAnimator() {
-        super(EnumRemodelDragonAnimations.GROUND_POSE.firedragon_model);
+    public FireDragonTabulaModelAnimator() {
+        super(EnumDragonAnimations.GROUND_POSE.firedragon_model);
     }
 
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
-        IceAndFireTabulaModel[] walkPoses = {EnumRemodelDragonAnimations.WALK1.firedragon_model, EnumRemodelDragonAnimations.WALK2.firedragon_model, EnumRemodelDragonAnimations.WALK3.firedragon_model, EnumRemodelDragonAnimations.WALK4.firedragon_model};
-        IceAndFireTabulaModel[] flyPoses = {EnumRemodelDragonAnimations.FLIGHT1.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT2.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT3.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT4.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT5.firedragon_model,
-                EnumRemodelDragonAnimations.FLIGHT6.firedragon_model};
+        IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
+        IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.firedragon_model,
+                EnumDragonAnimations.FLIGHT2.firedragon_model,
+                EnumDragonAnimations.FLIGHT3.firedragon_model,
+                EnumDragonAnimations.FLIGHT4.firedragon_model,
+                EnumDragonAnimations.FLIGHT5.firedragon_model,
+                EnumDragonAnimations.FLIGHT6.firedragon_model};
         boolean walking = !entity.isHovering() && !entity.isFlying() && entity.hoverProgress <= 0 && entity.flyProgress <= 0;
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
@@ -56,7 +54,7 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         for(AdvancedModelRenderer cube : model.getCubes().values()) {
             this.genderMob(entity, cube);
             if (walking && entity.flyProgress <= 0.0F && entity.hoverProgress <= 0.0F && entity.modelDeadProgress <= 0.0F) {
-                AdvancedModelRenderer walkPart = EnumRemodelDragonAnimations.GROUND_POSE.firedragon_model.getCube(cube.boxName);
+                AdvancedModelRenderer walkPart = EnumDragonAnimations.GROUND_POSE.firedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
@@ -70,35 +68,35 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 }
             }
             if (entity.modelDeadProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
+                if (!isPartEqual(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumDragonAnimations.DEAD.firedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
                 }
             }
             if (entity.sleepProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20, false);
+                if (!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumDragonAnimations.SLEEPING_POSE.firedragon_model.getCube(cube.boxName), entity.sleepProgress, 20, false);
                 }
             }
             if (entity.hoverProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
+                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)) {
+                    transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.firedragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
                 }
             }
             if (entity.flyProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress - entity.diveProgress * 2, 20, false);
+                if (!isPartEqual(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName), entity.flyProgress - entity.diveProgress * 2, 20, false);
                 }
             }
             if (entity.sitProgress > 0.0F) {
                 if (!entity.isRiding()) {
-                    if (!isPartEqual(cube, EnumRemodelDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName))) {
-                        transitionTo(cube, EnumRemodelDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
+                    if (!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName))) {
+                        transitionTo(cube, EnumDragonAnimations.SITTING_POSE.firedragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
                     }
                 }
             }
             if (entity.ridingProgress > 0.0F){
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
+                if (!isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.firedragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
                     if(cube.boxName.equals("BodyUpper")){
                         cube.rotationPointZ += ((-12F - cube.rotationPointZ) / 20) * entity.ridingProgress;
                     }
@@ -106,26 +104,26 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
                 }
             }
             if(entity.tackleProgress > 0.0F){
-                if(!isPartEqual(EnumRemodelDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
-                    transitionTo(cube, EnumRemodelDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
+                if(!isPartEqual(EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube)){
+                    transitionTo(cube, EnumDragonAnimations.TACKLE.firedragon_model.getCube(cube.boxName), entity.tackleProgress, 5, false);
                 }
             }
             if (entity.diveProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumRemodelDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName), entity.diveProgress, 10, false);
+                if (!isPartEqual(cube, EnumDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName))) {
+                    transitionTo(cube, EnumDragonAnimations.DIVING_POSE.firedragon_model.getCube(cube.boxName), entity.diveProgress, 10, false);
                 }
             }
             if(entity.fireBreathProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")) {
+                if (!isPartEqual(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Finger")) {
                     if (entity.prevFireBreathProgress <= entity.fireBreathProgress) {
-                        transitionTo(cube, EnumRemodelDragonAnimations.BLAST_CHARGE3.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress, 0, 5), 5, false);
+                        transitionTo(cube, EnumDragonAnimations.BLAST_CHARGE3.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress, 0, 5), 5, false);
                     }
-                    transitionTo(cube, EnumRemodelDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress - 5, 0, 5), 5, false);
+                    transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.firedragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress - 5, 0, 5), 5, false);
 
                 }
             }
             if(!walking){
-                AdvancedModelRenderer flightPart = EnumRemodelDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName);
+                AdvancedModelRenderer flightPart = EnumDragonAnimations.FLYING_POSE.firedragon_model.getCube(cube.boxName);
                 float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
                 float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
                 float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
@@ -205,8 +203,8 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
 
     private void genderMob(EntityFireDragon entity, AdvancedModelRenderer cube) {
         if(!entity.isMale()){
-            IceAndFireTabulaModel maleModel = EnumRemodelDragonAnimations.MALE.firedragon_model;
-            IceAndFireTabulaModel femaleModel = EnumRemodelDragonAnimations.FEMALE.firedragon_model;
+            IceAndFireTabulaModel maleModel = EnumDragonAnimations.MALE.firedragon_model;
+            IceAndFireTabulaModel femaleModel = EnumDragonAnimations.FEMALE.firedragon_model;
             float x = femaleModel.getCube(cube.boxName).rotateAngleX;
             float y = femaleModel.getCube(cube.boxName).rotateAngleY;
             float z = femaleModel.getCube(cube.boxName).rotateAngleZ;
@@ -225,13 +223,13 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
         model.llibAnimator.update(entity);
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_FIRECHARGE);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.BLAST_CHARGE1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BLAST_CHARGE1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.BLAST_CHARGE2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BLAST_CHARGE2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.BLAST_CHARGE3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BLAST_CHARGE3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(5);
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_SPEAK);
@@ -248,105 +246,105 @@ public class FireDragonRemodelTabulaModelAnimator extends IceAndFireTabulaModelA
 
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_BITE);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.BITE1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BITE1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.BITE2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BITE2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.BITE3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.BITE3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
 
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_SHAKEPREY);
         model.llibAnimator.startKeyframe(15);
-        moveToPose(model, EnumRemodelDragonAnimations.GRAB1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.GRAB1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.GRAB2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.GRAB2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.GRAB_SHAKE1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.GRAB_SHAKE1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.GRAB_SHAKE2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.GRAB_SHAKE2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.GRAB_SHAKE3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.GRAB_SHAKE3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_TAILWHACK);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.TAIL_WHIP1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.TAIL_WHIP1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.TAIL_WHIP2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.TAIL_WHIP2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.TAIL_WHIP3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.TAIL_WHIP3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_WINGBLAST);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST1.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST2.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST3.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST4.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST4.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST5.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST5.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST6.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST6.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumRemodelDragonAnimations.WING_BLAST7.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.WING_BLAST7.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_ROAR);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.ROAR1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.ROAR1.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.ROAR2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.ROAR2.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.ROAR3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.ROAR3.firedragon_model);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);
 
         model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_EPIC_ROAR);
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR1.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.EPIC_ROAR1.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.EPIC_ROAR2.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.EPIC_ROAR3.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR2.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.EPIC_ROAR2.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumRemodelDragonAnimations.EPIC_ROAR3.firedragon_model);
+        moveToPose(model, EnumDragonAnimations.EPIC_ROAR3.firedragon_model);
         model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
         model.llibAnimator.endKeyframe();
         model.llibAnimator.resetKeyframe(10);

@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.animator.*;
-import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
@@ -289,15 +289,15 @@ public class ClientProxy extends CommonProxy {
 	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	private void renderEntities() {
-		EnumRemodelDragonAnimations.initializeDragonModels();
+		EnumDragonAnimations.initializeDragonModels();
 		EnumSeaSerpentAnimations.initializeSerpentModels();
 		ModelBase firedragon_model = null;
 		ModelBase icedragon_model = null;
 		ModelBase seaserpent_model = null;
 
 		try {
-			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFireGround"), new FireDragonRemodelTabulaModelAnimator());
-			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIceGround"), new IceDragonRemodelTabulaModelAnimator());
+			firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
+			icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
 			seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaSerpent"), new SeaSerpentTabulaModelAnimator());
 		} catch (IOException e) {
 			e.printStackTrace();

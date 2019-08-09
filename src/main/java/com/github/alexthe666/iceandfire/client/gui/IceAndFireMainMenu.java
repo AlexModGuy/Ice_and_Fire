@@ -104,7 +104,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
     private void resetDrawnImages() {
         globalAlpha = 0;
         Random random = new Random();
-        drawnPictures = new Picture[2 + random.nextInt(2)];
+        drawnPictures = new Picture[1 + random.nextInt(2)];
         int cornerRight = 32;
         int middle = width / 2;
         int cornerLeft = 32;

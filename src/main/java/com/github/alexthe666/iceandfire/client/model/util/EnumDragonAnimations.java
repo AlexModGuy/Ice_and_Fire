@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum EnumRemodelDragonAnimations {
+public enum EnumDragonAnimations {
     MALE("BaseMale"),
     FEMALE("BaseFemale"),
     FLYING_POSE("Flying"),
@@ -73,11 +73,11 @@ public enum EnumRemodelDragonAnimations {
     public IceAndFireTabulaModel icedragon_model;
     private String fileSuffix;
     private int dragonType;
-    private EnumRemodelDragonAnimations(String fileSuffix){
+    private EnumDragonAnimations(String fileSuffix){
         this.fileSuffix = fileSuffix;
     }
 
-    private EnumRemodelDragonAnimations(String fileSuffix, int iceOrFire){
+    private EnumDragonAnimations(String fileSuffix, int iceOrFire){
         this.fileSuffix = fileSuffix;
         this.dragonType = iceOrFire;
     }
@@ -85,17 +85,17 @@ public enum EnumRemodelDragonAnimations {
     @SideOnly(Side.CLIENT)
     public static void initializeDragonModels(){
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
-            for(EnumRemodelDragonAnimations animation : values()){
+            for(EnumDragonAnimations animation : values()){
                 switch(animation.dragonType){
                     case 0:
                         try {
-                            animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFire" + animation.fileSuffix));
+                            animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
                         } catch (Exception e) {
                             System.out.println("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
                         try {
-                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIce" + animation.fileSuffix));
+                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
                         } catch (Exception e) {
                             System.out.println("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
@@ -103,7 +103,7 @@ public enum EnumRemodelDragonAnimations {
                         break;
                     case 1:
                         try {
-                            animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon_remodel/dragonFire" + animation.fileSuffix));
+                            animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
                             animation.icedragon_model = animation.firedragon_model;
                         } catch (Exception e) {
                             System.out.println("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
@@ -112,7 +112,7 @@ public enum EnumRemodelDragonAnimations {
                         break;
                     case 2:
                         try {
-                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon_remodel/dragonIce" + animation.fileSuffix));
+                            animation.icedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
                             animation.firedragon_model = animation.icedragon_model;
                         } catch (Exception e) {
                             System.out.println("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
