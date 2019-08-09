@@ -1282,7 +1282,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             } else {
                 ticksStill = 0;
             }
-            if (this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
+            /*if (this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
                 if (this.getAnimation() == NO_ANIMATION && this.ticksExisted % 5 == 0) {
                     this.setAnimation(ANIMATION_TAILWHACK);
                 }
@@ -1294,7 +1294,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                     this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1, 1);
 
                 }
-            }
+            }*/
         }
 
         if (!world.isRemote && this.isTackling() && !this.isFlying() && this.onGround) {
