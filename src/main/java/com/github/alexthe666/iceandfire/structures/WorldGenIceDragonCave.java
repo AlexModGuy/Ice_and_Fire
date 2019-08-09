@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -44,7 +45,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 			decorateCave(worldIn, rand, info.pos, info.radius + 2);
 		}
 		sphereList.clear();
-		EntityFireDragon dragon = new EntityFireDragon(worldIn);
+		EntityIceDragon dragon = new EntityIceDragon(worldIn);
 		dragon.setGender(isMale);
 		dragon.growDragon(dragonAge);
 		dragon.setAgingDisabled(true);

@@ -1258,8 +1258,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             burnProgress = 0;
         }
         updateBurnTarget();
-
         if (!world.isRemote) {
+            if(!world.isRemote && !this.onGround && this.isModelDead()){
+                this.motionY -= 0.1D;
+            }
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
             }
