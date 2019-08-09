@@ -7,12 +7,15 @@ import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -100,12 +103,14 @@ public class StructureGenerator implements IWorldGenerator {
 			if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getDefaultTemperature() > -0.5 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER)) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					surface = degradeSurface(world, surface);
 					FIRE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
 			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
 				if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
 					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					surface = degradeSurface(world, surface);
 					ICE_DRAGON_ROOST.generate(world, random, surface);
 				}
 			}
@@ -253,6 +258,22 @@ public class StructureGenerator implements IWorldGenerator {
 		if(!IceAndFire.CONFIG.logCascadingWorldGen) {
 			net.minecraftforge.common.ForgeModContainer.logCascadingWorldGeneration = prevLogCascadingWorldGen;
 		}
+	}
+
+	private static boolean canHeightSkipBlock(BlockPos pos, World world){
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLiquid){
+			return true;
+		}
+		return false;
+	}
+
+
+	public static BlockPos degradeSurface(World world, BlockPos surface) {
+		while ((!world.getBlockState(surface).isOpaqueCube() || canHeightSkipBlock(surface, world)) && surface.getY() > 1){
+			surface = surface.down();
+		}
+		return surface;
 	}
 
 	private boolean isDimensionBlacklisted(int id, boolean dragons) {

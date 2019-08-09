@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -89,11 +90,11 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
 						new WorldGenRoostPile(ModBlocks.dragon_ice).generate(worldIn, rand, height);
 					}
 					if(dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0){
-						BlockPos height = worldIn.getHeight(blockpos);
+						BlockPos height = StructureGenerator.degradeSurface(worldIn, worldIn.getHeight(blockpos));
 						new WorldGenRoostGoldPile(ModBlocks.silverPile).generate(worldIn, rand, height);
 					}
 					if(dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0){
-						BlockPos height = worldIn.getHeight(blockpos);
+						BlockPos height = StructureGenerator.degradeSurface(worldIn, worldIn.getHeight(blockpos));
 						worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
 						if (worldIn.getBlockState(height).getBlock() instanceof BlockChest) {
 							TileEntity tileentity1 = worldIn.getTileEntity(height);
