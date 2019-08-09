@@ -37,6 +37,6 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
 	}
 
 	public boolean shouldCombineTextures() {
-		return false;
+		return true;
 	}
 }

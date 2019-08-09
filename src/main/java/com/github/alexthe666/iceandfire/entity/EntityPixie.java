@@ -342,6 +342,14 @@ public class EntityPixie extends EntityTameable {
 				this.speed = 2F;
 			}
 			if (this.action == EntityMoveHelper.Action.MOVE_TO) {
+				if (EntityPixie.this.collidedHorizontally) {
+					EntityPixie.this.rotationYaw += 180.0F;
+					this.speed = 0.1F;
+					BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+					this.posX = target.getX();
+					this.posY = target.getY();
+					this.posZ = target.getZ();
+				}
 				double d0 = this.posX - EntityPixie.this.posX;
 				double d1 = this.posY - EntityPixie.this.posY;
 				double d2 = this.posZ - EntityPixie.this.posZ;

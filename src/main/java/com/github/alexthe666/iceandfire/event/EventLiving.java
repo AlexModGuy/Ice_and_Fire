@@ -7,7 +7,9 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.message.MessageSyncMountPosition;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
@@ -149,6 +151,9 @@ public class EventLiving {
                 EntityPlayer player = (EntityPlayer) event.getEntityMounting();
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
+        }
+        if(event.getWorldObj().isRemote){
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(event.getEntityBeingMounted().getEntityId(), event.getEntityMounting().posX, event.getEntityMounting().posY, event.getEntityMounting().posZ));
         }
     }
 
@@ -387,6 +392,17 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+        if(event.getEntityLiving() instanceof EntityPlayer){
+            if(event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() != null){
+                Entity mount = event.getEntityLiving().getRidingEntity();
+                if(event.getEntityLiving().getDistance(mount) > 80){
+                    if(event.getEntityLiving().world.isRemote){
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(mount.getEntityId(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ));
+                    }
+                }
+            }
+        }
+
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
 
         if (chainProperties != null && chainProperties.isChained()) {
@@ -644,8 +660,8 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+        if (event.getTarget() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }
@@ -665,9 +681,9 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties stoneEntityProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-            if (stoneEntityProperties != null && stoneEntityProperties.isStone) {
+        if (event.getTarget() instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }
         }

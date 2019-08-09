@@ -114,10 +114,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
-    protected boolean canDespawn() {
-        return false;
-    }
-
     protected int getExperiencePoints(EntityPlayer player) {
         return 10;
     }
@@ -553,5 +549,15 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public boolean shouldAnimalsFear(Entity entity) {
         return IceAndFire.CONFIG.stympahlianBirdAttackAnimals;
+    }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
     }
 }

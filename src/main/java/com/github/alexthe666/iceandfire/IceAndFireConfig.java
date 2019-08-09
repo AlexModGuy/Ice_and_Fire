@@ -22,8 +22,9 @@ public class IceAndFireConfig {
 	public int[] dragonBlacklistedDimensions = new int[]{1, -1};
 	public int[] dragonWhitelistedDimensions = new int[]{0};
 	public boolean useDimensionBlackList = true;
-	public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
-	public int[] snowVillageWhitelistedDimensions = new int[]{0};
+	public int[] structureBlacklistedDimensions = new int[]{1, -1};
+	public int[] structureWhitelistedDimensions = new int[]{0};
+	public String[] blacklistedBreakBlocks = new String[0];
 	public boolean spawnGlaciers = true;
 	public int glacierSpawnChance = 4;
 	public int oreToStoneRatioForDragonCaves = 45;
@@ -104,9 +105,10 @@ public class IceAndFireConfig {
 	public int myrmexLarvaTicks = 35000;
 	public int myrmexColonyGenChance = 150;
 	public int myrmexColonySize = 80;
+	public double myrmexBaseAttackStrength = 3.0D;
 	public boolean experimentalPathFinder;
 	public boolean spawnAmphitheres = true;
-	public int amphithereSpawnRate = 10;
+	public int amphithereSpawnRate = 5;
 	public float amphithereVillagerSearchLength = 64;
 	public int amphithereTameTime = 400;
 	public float amphithereFlightSpeed = 1.75F;
@@ -120,7 +122,7 @@ public class IceAndFireConfig {
 	public double dragonsteelBaseDamage = 25F;
     public boolean spawnStructuresOnSuperflat = true;
 
-    public void init(Configuration config) {
+	public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
 		this.useVanillaFont = config.getBoolean("Use Vanilla Font", "all", false, "Whether to use the vanilla font in the bestiary or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
@@ -139,8 +141,8 @@ public class IceAndFireConfig {
 		this.dragonBlacklistedDimensions = config.get("all", "Blacklisted Dragon Dimensions", new int[]{-1, 1}, "Dragons cannot spawn in these dimensions' IDs").getIntList();
 		this.dragonWhitelistedDimensions = config.get("all", "Whitelisted Dragon Dimensions", new int[]{0}, "Dragons can only spawn in these dimensions' IDs").getIntList();
 		this.useDimensionBlackList = config.getBoolean("use Dimension Blacklist", "all", true, "true to use dimensional blacklist, false to use the whitelist.");
-		this.snowVillageBlacklistedDimensions = config.get("all", "Blacklisted Snow Village Dimensions", new int[]{-1, 1}, "Snow Villages cannot spawn in these dimensions' IDs").getIntList();
-		this.snowVillageWhitelistedDimensions = config.get("all", "Whitelisted Snow Village Dimensions", new int[]{0}, "Snow Villages can only spawn in these dimensions' IDs").getIntList();
+		this.structureBlacklistedDimensions = config.get("all", "Blacklisted Misc. Structure Dimensions", new int[]{-1, 1}, "Misc Structures(Cyclops caves, Gorgon temples, etc) cannot spawn in these dimensions' IDs").getIntList();
+		this.structureWhitelistedDimensions = config.get("all", "Whitelisted Misc. Structure Dimensions", new int[]{0}, "Misc Structures(Cyclops caves, Gorgon temples, etc) can only spawn in these dimensions' IDs").getIntList();
 		this.spawnGlaciers = config.getBoolean("Generate Glaciers", "all", true, "Whether to generate glacier biomes or not");
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
@@ -154,7 +156,7 @@ public class IceAndFireConfig {
 		this.dragonFluteDistance = config.getInt("Dragon Flute Distance", "all", 4, 0, 10000, "Dragon Flute Distance - how many chunks away is the dragon flute effective?");
 		this.dragonHealth = config.getInt("Dragon Health", "all", 500, 1, 100000, "Max dragon health. Health is scaled to this");
 		this.dragonAttackDamage = config.getInt("Dragon Attack Damage", "all", 17, 1, 10000, "Max dragon attack damage. Attack Damage is scaled to this");
-		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 10, 1000, "How high dragons can fly, in Y height.");
+		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 100, 1000, "How high dragons can fly, in Y height.");
 		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
 		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
 		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
@@ -166,6 +168,9 @@ public class IceAndFireConfig {
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
 		this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.animalsFearDragons = config.getBoolean("Animals Fear Dragons", "all", true, "True if animals should run away and hide from dragons and other hostile Ice and Fire mobs.");
+		this.blacklistedBreakBlocks = config.getStringList("Blacklisted Blocks from Dragon", "all", new String[0], "Blacklist for blocks that dragons are not to break or burn. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");
+
+
 		this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
 		this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
 
@@ -234,11 +239,12 @@ public class IceAndFireConfig {
 		this.myrmexLarvaTicks = config.getInt("Myrmex Hatch Length", "all", 35000, 1, 100000, "How many ticks it takes for a Myrmex to move from a larva to a pupa, and from a pupa to an adult.");
 		this.myrmexColonyGenChance = config.getInt("Myrmex Colony Gen Chance", "all", 150, 1, 10000, "One out of this number chance per chunk to generate a myrmex hive.");
 		this.myrmexColonySize = config.getInt("Myrmex Colony Max Size", "all", 80, 10, 10000, "How many maximum individuals a myrmex colony can have.");
+		this.myrmexBaseAttackStrength = (double)config.getFloat("Myrmex Base Attack Strength", "all", 3, 1, 10000, "Base Myrmex(worker) attack strength");
 
 		this.experimentalPathFinder = config.getBoolean("Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
 
 		this.spawnAmphitheres = config.getBoolean("Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
-		this.amphithereSpawnRate = config.getInt("Amphithere Spawn Weight", "all", 10, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
+		this.amphithereSpawnRate = config.getInt("Amphithere Spawn Weight", "all", 5, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
 		this.amphithereVillagerSearchLength = config.getInt("Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
 		this.amphithereTameTime = config.getInt("Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
 		this.amphithereFlightSpeed = config.getFloat("Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Optional;
 import net.minecraft.block.state.IBlockState;
@@ -47,7 +48,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.myrmexBaseAttackStrength - 1.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0D);
     }
@@ -162,7 +163,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         }
         if(this.getAttackTarget() != null){
             this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().posZ, 1.0F);
-            if(this.getDistance(this.getAttackTarget()) <= attackDistance()){
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
             if(this.getAttackTarget().isDead){

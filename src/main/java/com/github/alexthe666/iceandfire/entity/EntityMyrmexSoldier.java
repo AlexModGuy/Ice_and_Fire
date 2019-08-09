@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
@@ -51,8 +52,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 4) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
@@ -60,8 +60,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 4) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
             }
@@ -108,7 +107,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.myrmexBaseAttackStrength * 2);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6.0D);
     }

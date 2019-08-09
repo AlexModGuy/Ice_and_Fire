@@ -1,52 +1,79 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PathNavigateMyrmex extends PathNavigateGround {
+    public BlockPos targetPosition;
 
-    public PathNavigateMyrmex(EntityLiving myrmex, World worldIn) {
-        super(myrmex, worldIn);
+    public PathNavigateMyrmex(EntityLiving entitylivingIn, World worldIn) {
+        super(entitylivingIn, worldIn);
     }
 
-    protected boolean canNavigate(){
-        return true;
+    protected PathFinder getPathFinder() {
+        this.nodeProcessor = new ExperimentalWalkNodeProcessor();
+        this.nodeProcessor.setCanEnterDoors(true);
+        return new PathFinder(this.nodeProcessor);
     }
 
-    protected void pathFollow() {
-        Vec3d vec3d = this.getEntityPosition();
-        int i = this.currentPath.getCurrentPathLength();
+    public Path getPathToPos(BlockPos pos) {
+        this.targetPosition = pos;
+        return super.getPathToPos(pos);
+    }
 
-        for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j) {
-            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y)) {
-                i = j;
-                break;
+    public Path getPathToEntityLiving(Entity entityIn) {
+        this.targetPosition = new BlockPos(entityIn);
+        return super.getPathToEntityLiving(entityIn);
+    }
+
+    public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
+        Path path = this.getPathToEntityLiving(entityIn);
+
+        if (path != null) {
+            return this.setPath(path, speedIn);
+        } else {
+            this.targetPosition = new BlockPos(entityIn);
+            this.speed = speedIn;
+            return true;
+        }
+    }
+
+    public void clearPath() {
+        super.clearPath();
+    }
+
+    public void onUpdateNavigation() {
+        ++this.totalTicks;
+
+        if (this.tryUpdatePath) {
+            this.updatePath();
+        }
+        if (!this.noPath()) {
+            if (this.canNavigate()) {
+                this.pathFollow();
+            } else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
+                Vec3d vec3d = this.getEntityPosition();
+                Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
+
+                if (vec3d.y > vec3d1.y && !this.entity.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
+                    this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
+                }
             }
-        }
-
-        this.maxDistanceToWaypoint = 0.49F ;
-        Vec3d vec3d1 = this.currentPath.getCurrentPos();
-
-        if (MathHelper.abs((float) (this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float) (this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < 1.0D) {
-            this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
-        }
-
-        int k = 1;
-        int l = 1;
-        int i1 = k;
-
-        for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1) {
-            if (this.isDirectPathBetweenPoints(vec3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
-                this.currentPath.setCurrentPathIndex(j1);
-                break;
+            this.world.profiler.endSection();
+            if (!this.noPath()) {
+                Vec3d vec3d2 = this.currentPath.getPosition(this.entity);
+                this.entity.getMoveHelper().setMoveTo(vec3d2.x, vec3d2.y, vec3d2.z, this.speed);
             }
+        } else if (targetPosition != null) {
+            double d0 = 1;
         }
-
-        this.checkForStuck(vec3d);
     }
-
 }

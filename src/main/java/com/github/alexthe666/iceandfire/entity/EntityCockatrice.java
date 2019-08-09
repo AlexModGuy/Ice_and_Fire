@@ -84,14 +84,14 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new CockatriceAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        this.tasks.addTask(2, new CockatriceAIWander(this, 1.0D));
+        this.tasks.addTask(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
+        this.tasks.addTask(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
+        this.tasks.addTask(3, new CockatriceAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
         this.tasks.addTask(3, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(4, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(4, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
-        this.tasks.addTask(6, new CockatriceAIAggroLook(this));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
+        this.tasks.addTask(4, new CockatriceAIWander(this, 1.0D));
+        this.tasks.addTask(5, new CockatriceAIAggroLook(this));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new CockatriceAITargetItems(this, false));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(3, new EntityAIOwnerHurtTarget(this));
@@ -136,13 +136,13 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if (melee) {
             this.tasks.removeTask(aiStare);
             if (aiMelee != null) {
-                this.tasks.addTask(4, aiMelee);
+                this.tasks.addTask(2, aiMelee);
             }
             this.isMeleeMode = true;
         } else {
             this.tasks.removeTask(aiMelee);
             if (aiStare != null) {
-                this.tasks.addTask(4, aiStare);
+                this.tasks.addTask(2, aiStare);
             }
             this.isMeleeMode = false;
         }
@@ -401,6 +401,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             this.setSitting(false);
         }
         if(this.isSitting() && this.getAttackTarget() != null){
+            this.setAttackTarget(null);
+        }
+        if(this.getAttackTarget() != null && this.isOnSameTeam(this.getAttackTarget())){
             this.setAttackTarget(null);
         }
         if (!world.isRemote) {
@@ -697,5 +700,15 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             double d2 = this.rand.nextGaussian() * 0.02D;
             this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
+    }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
     }
 }

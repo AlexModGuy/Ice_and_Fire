@@ -164,11 +164,6 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 	}
 
 	@Override
-	protected boolean canDespawn() {
-		return false;
-	}
-
-	@Override
 	public boolean canBePushed() {
 		return false;
 	}
@@ -195,4 +190,14 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
     public int getDragonStage() {
 		return getStage();
     }
+
+	@Override
+	public boolean isNoDespawnRequired(){
+		return true;
+	}
+
+	@Override
+	protected boolean canDespawn(){
+		return false;
+	}
 }

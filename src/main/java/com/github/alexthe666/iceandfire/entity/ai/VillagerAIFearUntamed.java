@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.IVillagerFear;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +21,9 @@ public class VillagerAIFearUntamed extends EntityAIAvoidEntity<EntityLivingBase>
         boolean should = super.shouldExecute();
         if(should && this.closestLivingEntity != null){
             if(closestLivingEntity instanceof EntityTameable && ((EntityTameable) closestLivingEntity).isTamed()){
+                return false;
+            }
+            if(closestLivingEntity instanceof IVillagerFear && !((IVillagerFear) closestLivingEntity).shouldFear()){
                 return false;
             }
         }

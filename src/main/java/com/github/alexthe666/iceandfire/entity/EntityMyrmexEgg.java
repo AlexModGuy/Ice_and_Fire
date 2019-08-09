@@ -211,4 +211,14 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         }
         return false;
     }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
 }

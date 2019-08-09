@@ -173,11 +173,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
-
-    protected boolean canDespawn() {
-        return false;
-    }
-
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -376,4 +371,15 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     public boolean canBeTurnedToStone() {
         return !this.isBlinded();
     }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
+
 }

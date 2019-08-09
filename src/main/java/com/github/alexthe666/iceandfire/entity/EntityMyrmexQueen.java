@@ -165,8 +165,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 14) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
@@ -174,8 +173,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 14) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
                 this.getAttackTarget().isAirBorne = true;
@@ -234,7 +232,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.myrmexBaseAttackStrength * 3.5D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(120);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(15.0D);
     }

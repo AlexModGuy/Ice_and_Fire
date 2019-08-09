@@ -173,7 +173,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
 
 		@SideOnly(Side.CLIENT)
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-			if(tab == IceAndFire.TAB_BLOCKS){
+			if(this.isInCreativeTab(tab)){
 				for (int i = 0; i < 5; i++) {
 					subItems.add(new ItemStack(this, 1, i));
 				}

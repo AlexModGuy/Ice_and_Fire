@@ -254,11 +254,17 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 			if (itemstack != null && itemstack.getItem() == Items.STICK) {
 				if(player.isSneaking()){
-					BlockPos pos = new BlockPos(this);
-					this.homePos = pos;
-					this.hasHomePosition = true;
-					player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-					return true;
+					if(this.hasHomePosition){
+						this.hasHomePosition = false;
+						player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.remove_home"), true);
+						return true;
+					}else{
+						BlockPos pos = new BlockPos(this);
+						this.homePos = pos;
+						this.hasHomePosition = true;
+						player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+						return true;
+					}
 				}else{
 					this.setCommand(this.getCommand() + 1);
 					if (this.getCommand() > 1) {
@@ -651,7 +657,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean shouldDismountInWater(Entity rider) {
-		return false;
+		return true;
 	}
 
 	public boolean isDirectPathBetweenPoints(Vec3d vec1, Vec3d vec2) {
@@ -904,9 +910,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.onGround && flyTicks != 0) {
 			flyTicks = 0;
 		}
-		if (this.isFlying() && this.doesWantToLand()) {
+		if (this.isFlying() && this.doesWantToLand() && this.getControllingPassenger() == null) {
 			this.setFlying(false);
-			this.setHovering(!this.onGround);
+			this.setHovering(false);
 			if (this.onGround) {
 				flyTicks = 0;
 				this.setFlying(false);
@@ -930,7 +936,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean doesWantToLand() {
-		return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0;
+		return this.flyTicks > 2000 || down() || flyTicks > 40 && this.flyProgress == 0;
 	}
 
 	@Override
@@ -969,7 +975,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
 				this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
 			}
-			if (target != null) {
+			if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
 				target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 			}
 		}
@@ -1039,9 +1045,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		} else {
 			this.airTarget = null;
 		}
-		if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+		if (airTarget != null && this.isFlying() && this.doesWantToLand()) {
 			this.setFlying(false);
-			this.setHovering(true);
+			this.setHovering(false);
 		}
 	}
 
@@ -1147,4 +1153,13 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		}
 	}
 
+	@Override
+	public boolean isNoDespawnRequired(){
+		return true;
+	}
+
+	@Override
+	protected boolean canDespawn(){
+		return false;
+	}
 }

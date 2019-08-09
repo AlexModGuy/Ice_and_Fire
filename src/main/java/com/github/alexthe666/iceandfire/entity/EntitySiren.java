@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntitySiren extends EntityMob implements IAnimatedEntity {
+public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -107,10 +107,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
 
     protected int getExperiencePoints(EntityPlayer player) {
         return 8;
-    }
-
-    protected boolean canDespawn() {
-        return false;
     }
 
     @Nullable
@@ -570,5 +566,20 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 this.siren.setAIMoveSpeed(0.0F);
             }
         }
+    }
+
+    @Override
+    public boolean isNoDespawnRequired(){
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn(){
+        return false;
+    }
+
+    @Override
+    public boolean shouldFear(){
+        return isAgressive();
     }
 }
