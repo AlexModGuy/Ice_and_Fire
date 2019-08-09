@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.animator.*;
-import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumRemodelDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
@@ -290,7 +289,6 @@ public class ClientProxy extends CommonProxy {
 	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	private void renderEntities() {
-		EnumDragonAnimations.initializeDragonModels();
 		EnumRemodelDragonAnimations.initializeDragonModels();
 		EnumSeaSerpentAnimations.initializeSerpentModels();
 		ModelBase firedragon_model = null;
