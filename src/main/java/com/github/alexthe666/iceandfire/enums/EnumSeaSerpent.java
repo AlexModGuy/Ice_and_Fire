@@ -36,7 +36,7 @@ public enum EnumSeaSerpent {
     public Item leggings;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_boots")
     public Item boots;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpet_scale_block")
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_scale_block")
     public Block scaleBlock;
     EnumSeaSerpent(TextFormatting color){
         this.resourceName = this.name().toLowerCase();
@@ -56,7 +56,6 @@ public enum EnumSeaSerpent {
             color.chestplate.setRegistryName("tide_" + color.resourceName + "_chestplate");
             color.leggings.setRegistryName("tide_" + color.resourceName + "_leggings");
             color.boots.setRegistryName("tide_" + color.resourceName + "_boots");
-            color.scaleBlock = new BlockSeaSerpentScales(color.resourceName, color.color);
         }
     }
 }

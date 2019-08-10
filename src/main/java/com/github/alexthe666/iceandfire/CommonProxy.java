@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.block.BlockJar;
-import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
-import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
-import com.github.alexthe666.iceandfire.block.BlockPodium;
+import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
@@ -73,11 +70,12 @@ public class CommonProxy {
                     }
                 }
             }
+            for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+                color.scaleBlock = new BlockSeaSerpentScales(color.resourceName, color.color);
+                event.getRegistry().register(color.scaleBlock);
+            }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        }
-        for(EnumSeaSerpent color : EnumSeaSerpent.values()){
-            event.getRegistry().register(color.scaleBlock);
         }
     }
 
