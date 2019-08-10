@@ -64,8 +64,8 @@ public class ItemChain extends Item {
                         ChainEntityProperties otherChainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
                         if (otherChainProperties != null && otherChainProperties.isChained() && otherChainProperties.isConnectedToEntity(entityliving, playerIn)) {
                             chainProperties.addChain(target, entityliving);
-                            chainProperties.removeChain(playerIn);
-                            otherChainProperties.removeChain(playerIn);
+                            chainProperties.removeChain(target, playerIn);
+                            otherChainProperties.removeChain(target, playerIn);
                             flag = true;
                         }
                     }
@@ -114,7 +114,7 @@ public class ItemChain extends Item {
                     entityleashknot = EntityChainTie.createKnot(worldIn, fence);
                 }
                 chainProperties.addChain(entityliving, entityleashknot);
-                chainProperties.removeChain(player);
+                chainProperties.removeChain(entityliving, player);
                 flag = true;
             }
         }

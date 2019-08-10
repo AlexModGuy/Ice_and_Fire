@@ -98,7 +98,7 @@ public class EntityChainTie extends EntityHanging {
         for (EntityLiving entityliving : list) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
-                chainProperties.removeChain(this);
+                chainProperties.removeChain(entityliving,this);
                 EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
@@ -118,7 +118,7 @@ public class EntityChainTie extends EntityHanging {
                 ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
                 if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, player)) {
                     chainProperties.addChain(entityliving, this);
-                    chainProperties.removeChain(player);
+                    chainProperties.removeChain(entityliving, player);
                     flag = true;
                 }
             }
@@ -130,7 +130,7 @@ public class EntityChainTie extends EntityHanging {
                     for (EntityLiving entityliving1 : list) {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving1, this)) {
-                            chainProperties.removeChain(this);
+                            chainProperties.removeChain(entityliving1, this);
                             EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
                             entityitem.setDefaultPickupDelay();
                             this.world.spawnEntity(entityitem);

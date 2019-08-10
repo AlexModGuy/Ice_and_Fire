@@ -77,12 +77,12 @@ public class ChainEntityProperties extends EntityProperties<EntityLivingBase> {
 		updateConnectedEntities(parent);
 	}
 
-	public void removeChain(Entity entity){
+	public void removeChain(Entity us, Entity entity){
 		minimizeLists();
 		connectedEntityUUID.remove(entity.getUniqueID());
 		connectedEntities.remove(entity);
-		if(!entity.world.isRemote){
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageRemoveChainedEntity(getEntity().getEntityId(), entity.getEntityId()));
+		if(entity != null && !entity.world.isRemote){
+			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageRemoveChainedEntity(us.getEntityId(), entity.getEntityId()));
 		}
 		wasJustDisconnected = true;
 	}
