@@ -671,7 +671,7 @@ public class EventLiving {
             //chainProperties.debug();
             chainProperties.updateConnectedEntities(event.getTarget());
             if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getEntityPlayer())) {
-                chainProperties.removeChain(event.getEntityPlayer());
+                chainProperties.removeChain(event.getTarget(), event.getEntityPlayer());
                 if (!event.getWorld().isRemote) {
                     event.getTarget().dropItem(ModItems.chain, 1);
                 }
