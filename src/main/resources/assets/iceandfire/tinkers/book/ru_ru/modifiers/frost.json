@@ -1,0 +1,35 @@
+{
+  "modifier": "frost",
+  "text": [
+    {
+      "text": "Покрытие кровью огненного дракона наделяет предмет свойством заключать противника в блоке льда."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Неприменимо к вещам из драконостали. Несовместимо с Инферно"
+    },
+    {
+      "text": "\n"
+    }
+  ],
+  "effects": [
+    "На 10 секунд замораживает врага в блоке льда",
+    "Наносит доп. урон драконьим льдом",
+    "Замедляет",
+    "Только один уровень"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword",
+    "tconstruct:cleaver",
+    "tconstruct:hammer",
+    "tconstruct:arrow",
+    "tconstruct:longsword",
+    "tconstruct:shortbow",
+    "tconstruct:frypan",
+    "tconstruct:crossbow",
+    "tconstruct:scythe",
+    "tconstruct:shuriken"
+  ]
+}

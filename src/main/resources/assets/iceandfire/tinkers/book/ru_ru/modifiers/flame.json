@@ -1,0 +1,34 @@
+{
+  "modifier": "flame",
+  "text": [
+    {
+      "text": "A coating of Fire Dragon's blood imbues the tool with the power to set foes aflame."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Cannot be applied to dragonsteel tools. Incompatible with Blizzard"
+    },
+    {
+      "text": "\n"
+    }
+  ],
+  "effects": [
+    "Sets enemies on fire for 10 seconds",
+    "Deals extra dragon flame damage",
+    "Single Level Only"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword",
+    "tconstruct:cleaver",
+    "tconstruct:hammer",
+    "tconstruct:arrow",
+    "tconstruct:longsword",
+    "tconstruct:shortbow",
+    "tconstruct:frypan",
+    "tconstruct:crossbow",
+    "tconstruct:scythe",
+    "tconstruct:shuriken"
+  ]
+}
