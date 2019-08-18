@@ -750,7 +750,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void setHunger(int hunger) {
-        this.dataManager.set(HUNGER, Math.min(100, hunger));
+        this.dataManager.set(HUNGER, MathHelper.clamp(hunger, 0, 100));
     }
 
     public int getVariant() {
