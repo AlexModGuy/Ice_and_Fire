@@ -74,7 +74,7 @@ public class MyrmexAIForage extends EntityAIBase {
     public void updateTask() {
         if(this.myrmex.keepSearching){
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
-            if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 2) {
+            if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 4) {
                 this.resetTask();
             }
         }else if (this.targetBlock != null) {
@@ -83,7 +83,7 @@ public class MyrmexAIForage extends EntityAIBase {
 
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 double distance = this.getDistance(this.targetBlock);
-                if (distance <= 5) {
+                if (distance <= 6) {
                     List<ItemStack> drops =  block.getBlock().getDrops(this.myrmex.world, this.targetBlock, block, 0); // use the old method until it gets removed, for backward compatibility
                     if(!drops.isEmpty()){
                         this.myrmex.world.destroyBlock(this.targetBlock, false);

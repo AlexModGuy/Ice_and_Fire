@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.pathfinding.PathFinderAStar;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;
@@ -21,7 +22,7 @@ public class PathNavigateMyrmex extends PathNavigateGround {
     protected PathFinder getPathFinder() {
         this.nodeProcessor = new ExperimentalWalkNodeProcessor();
         this.nodeProcessor.setCanEnterDoors(true);
-        return new PathFinder(this.nodeProcessor);
+        return new PathFinderAStar(this.nodeProcessor, this.entity);
     }
 
     public Path getPathToPos(BlockPos pos) {
@@ -51,29 +52,6 @@ public class PathNavigateMyrmex extends PathNavigateGround {
     }
 
     public void onUpdateNavigation() {
-        ++this.totalTicks;
-
-        if (this.tryUpdatePath) {
-            this.updatePath();
-        }
-        if (!this.noPath()) {
-            if (this.canNavigate()) {
-                this.pathFollow();
-            } else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
-                Vec3d vec3d = this.getEntityPosition();
-                Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
-
-                if (vec3d.y > vec3d1.y && !this.entity.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
-                    this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
-                }
-            }
-            this.world.profiler.endSection();
-            if (!this.noPath()) {
-                Vec3d vec3d2 = this.currentPath.getPosition(this.entity);
-                this.entity.getMoveHelper().setMoveTo(vec3d2.x, vec3d2.y, vec3d2.z, this.speed);
-            }
-        } else if (targetPosition != null) {
-            double d0 = 1;
-        }
+        super.onUpdateNavigation();
     }
 }

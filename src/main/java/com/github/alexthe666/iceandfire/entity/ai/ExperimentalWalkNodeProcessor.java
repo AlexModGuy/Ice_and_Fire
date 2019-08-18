@@ -34,7 +34,7 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
     }
 
     public void postProcess() {
-        this.entity.setPathPriority(PathNodeType.WATER, this.avoidsWater);
+       // this.entity.setPathPriority(PathNodeType.WATER, this.avoidsWater);
         super.postProcess();
     }
 

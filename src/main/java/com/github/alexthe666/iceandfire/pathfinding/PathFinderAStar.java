@@ -11,6 +11,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
+import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class PathFinderAStar  extends PathFinder {
         if (rayTrace != null && rayTrace.hitVec != null) {
             BlockPos sidePos = rayTrace.getBlockPos();
             BlockPos pos = new BlockPos(rayTrace.hitVec);
-            if (!entity.world.isAirBlock(pos) || !entity.world.isAirBlock(sidePos) || sidePos.distanceSq(target.x, target.y, target.z) < 4 || pos.distanceSq(target.x, target.y, target.z) < 4) {
+            if (sidePos.distanceSq(target.x, target.y, target.z) < 4 || pos.distanceSq(target.x, target.y, target.z) < 4) {
                 return true;
             } else {
                 return rayTrace.typeOfHit == RayTraceResult.Type.MISS;
@@ -75,7 +76,7 @@ public class PathFinderAStar  extends PathFinder {
         BlockPos[] poses = aStar.getPath(worldIn);
         PathPoint[] points = new PathPoint[poses.length];
         for (int i = 0; i < poses.length; i++) {
-            //this.entity.world.setBlockState(poses[i].down(), Blocks.GOLD_BLOCK.getDefaultState());
+           // this.entity.world.setBlockState(poses[i].down(), Blocks.GOLD_BLOCK.getDefaultState());
             points[i] = new PathPoint(poses[i].getX(), poses[i].getY(), poses[i].getZ());
         }
         //this.entity.world.setBlockState(endPos.down(), Blocks.DIAMOND_BLOCK.getDefaultState());
