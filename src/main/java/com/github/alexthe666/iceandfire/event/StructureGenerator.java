@@ -231,27 +231,29 @@ public class StructureGenerator implements IWorldGenerator {
 				DESERT_MYRMEX_HIVE.generate(world, random, new BlockPos(lowestHeight.getX(), down, lowestHeight.getZ()));
 			}
 		}
-		if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
-			if (random.nextInt(15) == 0) {
-				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-				if (ModBlocks.frost_lily.canPlaceBlockAt(world, surface)) {
-					world.setBlockState(surface, ModBlocks.frost_lily.getDefaultState());
-			}
-			}
-		}
-		if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))){
-			if (random.nextInt(15) == 0) {
-				BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-				if (ModBlocks.fire_lily.canPlaceBlockAt(world, surface)) {
-					world.setBlockState(surface, ModBlocks.fire_lily.getDefaultState());
+		if(!isDimensionBlacklisted(world.provider.getDimension(), false)) {
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
+				if (random.nextInt(15) == 0) {
+					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					if (ModBlocks.frost_lily.canPlaceBlockAt(world, surface)) {
+						world.setBlockState(surface, ModBlocks.frost_lily.getDefaultState());
+					}
 				}
 			}
-		}
-		if (BiomeDictionary.hasType(world.getBiome(height), Type.NETHER)){
-			if (random.nextInt(15) == 0) {
-				BlockPos surface = getNetherHeight(world, new BlockPos(x, 0, z));
-				if(surface != null){
-					world.setBlockState(surface.up(), ModBlocks.fire_lily.getDefaultState());
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))) {
+				if (random.nextInt(15) == 0) {
+					BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+					if (ModBlocks.fire_lily.canPlaceBlockAt(world, surface)) {
+						world.setBlockState(surface, ModBlocks.fire_lily.getDefaultState());
+					}
+				}
+			}
+			if (BiomeDictionary.hasType(world.getBiome(height), Type.NETHER)) {
+				if (random.nextInt(15) == 0) {
+					BlockPos surface = getNetherHeight(world, new BlockPos(x, 0, z));
+					if (surface != null) {
+						world.setBlockState(surface.up(), ModBlocks.fire_lily.getDefaultState());
+					}
 				}
 			}
 		}
