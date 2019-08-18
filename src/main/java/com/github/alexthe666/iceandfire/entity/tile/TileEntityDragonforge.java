@@ -42,7 +42,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
     public TileEntityDragonforge(){
-        isFire = this.getBlockType().getRegistryName().equals(ModBlocks.dragonforge_fire_core.getRegistryName()) ;
+        isFire = this.getBlockType().getTranslationKey().equals(ModBlocks.dragonforge_fire_core.getTranslationKey()) ;
     }
 
     public TileEntityDragonforge(boolean isFire) {
