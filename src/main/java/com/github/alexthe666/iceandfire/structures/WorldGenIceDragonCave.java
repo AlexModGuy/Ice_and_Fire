@@ -26,19 +26,18 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 	private static boolean isMale;
 	public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_female_cave"));
 	public static final ResourceLocation ICEDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_male_cave"));
-	private List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
 	private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(ModBlocks.frozenStone);
 
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
-		sphereList.clear();
+		List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
 		isMale = rand.nextBoolean();
 		int dragonAge = 75 + rand.nextInt(50);
 		int radius = (int)(dragonAge * 0.2F) + rand.nextInt(8);
-		createShell(worldIn, rand, position, radius);
+		createShell(worldIn, rand, position, radius, sphereList);
 		for(int i = 0; i < 3 + rand.nextInt(2); i++){
 			EnumFacing direction = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length - 1)];
-			createShell(worldIn, rand, position.offset(direction, radius - 2), 2 * (int)(radius / 3F) + rand.nextInt(8));
+			createShell(worldIn, rand, position.offset(direction, radius - 2), 2 * (int)(radius / 3F) + rand.nextInt(8), sphereList);
 		}
 		for(SphereInfo info : sphereList){
 			hollowOut(worldIn, rand, info.pos, info.radius - 2);
@@ -83,7 +82,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 		return in.add(offset1, 0, offset2);
 	}
 
-	private void createShell(World worldIn, Random rand, BlockPos position, int radius){
+	private void createShell(World worldIn, Random rand, BlockPos position, int radius, List<SphereInfo> sphereList){
 		int j = radius;
 		int k = radius / 2;
 		int l = radius;
