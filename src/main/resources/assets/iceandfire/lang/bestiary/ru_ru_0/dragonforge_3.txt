@@ -1,0 +1,49 @@
+Этот металл известен как 
+драконосталь  -  один из самых
+сильных и разносторонних 
+материалов, известных людям. 
+Из неё можно создать броню, 
+драконью броню и инструменты.
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+Не забывайте, что можно также 
+построить ледяную драконью кузню
+для создания ледяной 
+драконостали.
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+
+
+Огненная драконосталь поджигает
+цель на время до 15 секунд и 
+сильно отталкивает. Ледяная 
+драконосталь замораживает цель в
+огромном блоке льда. Драконосталь
+обоих типов наносит очень большой
+урон и может серьёзно навредить 
+большому дракону. Броня из 
+драконостали также предоставляет 
+усиленную защиту от атак 
+драконьим дыханием.
