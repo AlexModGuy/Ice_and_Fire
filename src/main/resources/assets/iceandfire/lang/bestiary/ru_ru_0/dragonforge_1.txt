@@ -1,0 +1,65 @@
+дракона и 17 блоков кирпичей 
+драконьей кузни, вы можете 
+построить саму кузню.
+
+<item><iceandfire:dragon_bone_block 0 40 30 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<item><iceandfire:dragon_bone_block 0 56 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<item><iceandfire:dragon_bone_block 0 24 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<item><iceandfire:dragon_bone_block 0 40 46 1>
+Слой 1
+
+
+
+
+
+
+
+<item><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<item><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<item><iceandfire:dragonforge_fire_core 0 40 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<item><iceandfire:dragonforge_fire_input 0 32 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 86 1>
+Слой 2
+
+
+
+
+
+
+
+
+<item><iceandfire:dragon_bone_block 0 140 10 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<item><iceandfire:dragon_bone_block 0 156 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<item><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<item><iceandfire:dragon_bone_block 0 124 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<item><iceandfire:dragon_bone_block 0 140 26 1>
+Слой 3
+
+
+
+
+
+
+Постройте кузню, разместив Слой 1
+на земле, Слой 2 на Слое 1 и 
+Слой 3 на Слое 2. Готовая кузня 
+требует некого питания.
+
+Чтобы запитать кузню, нужно 
+дыхание дракона. Для его подачи
+можно построить кузню возле 
+ручного или привязанного
+цепью дикого дракона.

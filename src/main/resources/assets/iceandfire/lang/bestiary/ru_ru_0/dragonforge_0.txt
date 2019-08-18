@@ -1,0 +1,44 @@
+Магическая аура драконьих костей
+и чешуек определённо имеет мощные 
+свойства. Камень, объединённый с 
+ними, становится невозможно 
+повредить драконьим льдом и 
+пламенем.
+<recipe><iceandfire:dragonforge_fire_brick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 5 76 1>
+
+
+
+
+
+
+
+
+
+Похоже, что из этих драконьих
+кирпичей можно создать несколько 
+устройств. Известно, что 
+существуют и их ледяные варианты.
+<recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
+<recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Как только вы собрали сердце 
+драконьей кузни, вход драконьей
+кузни, 8 блоков костей
