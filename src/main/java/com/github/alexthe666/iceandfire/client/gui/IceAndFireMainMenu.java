@@ -300,13 +300,13 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             }
         }
         if(useBackup){
-            if (IceAndFireMainMenu.class.getClassLoader().getResourceAsStream(backupFileLoc) == null) {
-                backupFileLoc = "assets/citadel/backup_text.txt";
-            }
-            try {
-                reader = new BufferedReader(new InputStreamReader(IceAndFireMainMenu.class.getClass().getClassLoader().getResourceAsStream(backupFileLoc), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            InputStream is = IceAndFireMainMenu.class.getClassLoader().getResourceAsStream(backupFileLoc);
+            if (is != null) {
+                try {
+                    reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return reader;
