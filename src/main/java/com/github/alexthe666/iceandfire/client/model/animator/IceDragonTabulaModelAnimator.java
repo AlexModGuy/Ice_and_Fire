@@ -72,7 +72,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                     float x = currentPosition.getCube(cube.boxName).rotateAngleX;
                     float y = currentPosition.getCube(cube.boxName).rotateAngleY;
                     float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-                    if (isWing(model, cube) && (entity.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST || entity.getAnimation() == EntityDragonBase.ANIMATION_EPIC_ROAR)) {
+                    if (isHorn(cube) || isWing(model, cube) && (entity.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST || entity.getAnimation() == EntityDragonBase.ANIMATION_EPIC_ROAR)) {
                         this.addToRotateAngle(cube, limbSwingAmount, walkPart.rotateAngleX, walkPart.rotateAngleY, walkPart.rotateAngleZ);
                     } else {
                         this.addToRotateAngle(cube, limbSwingAmount, prevX + deltaTicks * distance(prevX, x), prevY + deltaTicks * distance(prevY, y), prevZ + deltaTicks * distance(prevZ, z));
@@ -246,8 +246,11 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
     }
 
     private boolean isWing(IceAndFireTabulaModel model, AdvancedModelRenderer modelRenderer){
-
         return model.getCube("armL1") == modelRenderer || model.getCube("armR1") == modelRenderer || model.getCube("armL1").childModels.contains(modelRenderer) || model.getCube("armR1").childModels.contains(modelRenderer);
+    }
+
+    private boolean isHorn(AdvancedModelRenderer modelRenderer){
+        return modelRenderer.boxName.contains("Horn");
     }
 
     public void animate(IceAndFireTabulaModel model, EntityIceDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
