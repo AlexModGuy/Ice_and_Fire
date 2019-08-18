@@ -201,6 +201,8 @@ public class ModRecipes {
         for(EnumDragonArmor armor : EnumDragonArmor.values()){
             armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
         }
+        ModItems.dragonsteel_fire_armor.setRepairItem(new ItemStack(ModItems.dragonsteel_fire_ingot));
+        ModItems.dragonsteel_ice_armor.setRepairItem(new ItemStack(ModItems.dragonsteel_ice_ingot));
         ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
         ModItems.earplugsArmor.setRepairItem(new ItemStack(Blocks.WOODEN_BUTTON));
         ModItems.yellow_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 0));
