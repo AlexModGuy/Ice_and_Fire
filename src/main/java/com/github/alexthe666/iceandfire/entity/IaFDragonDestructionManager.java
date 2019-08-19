@@ -130,7 +130,7 @@ public class IaFDragonDestructionManager {
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
-                    if (world.rand.nextFloat() > pos.distanceSq(center)) {
+                    if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof)) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
@@ -157,7 +157,7 @@ public class IaFDragonDestructionManager {
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
                 for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                        if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
+                        if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f) && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof)) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                         }
                     }
@@ -188,7 +188,7 @@ public class IaFDragonDestructionManager {
         int stage = destroyer.getDragonStage();
         if(stage <= 3){
             for(BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))){
-                if(world.rand.nextFloat() > pos.distanceSq(center)){
+                if(world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof)){
                     world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 }
             }
@@ -218,7 +218,7 @@ public class IaFDragonDestructionManager {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f)){
+                    if(world.rand.nextFloat() > (float)blockpos.distanceSq(center) / (f * f) && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof)){
                         world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                     }
                 }
