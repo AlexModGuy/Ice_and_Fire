@@ -213,7 +213,7 @@ public class EventClient {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
-                if(Loader.isModLoaded("moreplayermodels")){
+                if(Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels")){
                     GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
                 }
             }
