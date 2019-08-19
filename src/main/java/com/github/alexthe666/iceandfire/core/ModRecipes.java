@@ -245,9 +245,7 @@ public class ModRecipes {
         if (!bronzeItems.isEmpty()) {
             for (ItemStack bronzeIngot : bronzeItems) {
                 if (bronzeIngot != ItemStack.EMPTY) {
-                    ItemStack stack = bronzeIngot.copy();
                     GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, bronzeIngot.copy(), 1);
-
                     break;
                 }
             }

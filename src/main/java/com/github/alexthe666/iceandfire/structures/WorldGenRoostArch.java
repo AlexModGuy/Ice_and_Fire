@@ -34,7 +34,7 @@ public class WorldGenRoostArch{
             }
             placedWidths++;
         }
-        while(worldIn.isAirBlock(offsetPos.down())){
+        while(worldIn.isAirBlock(offsetPos.down()) && offsetPos.getY() > 0){
             worldIn.setBlockState(offsetPos.down(), block.getDefaultState());
             offsetPos = offsetPos.down();
         }
