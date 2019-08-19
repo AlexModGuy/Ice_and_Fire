@@ -360,7 +360,6 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
 		World world = Minecraft.getMinecraft().world;
-
 		if (world == null) {
 			return;
 		}
@@ -375,7 +374,6 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
 		World world = Minecraft.getMinecraft().world;
-
 		if (world == null) {
 			return;
 		}
