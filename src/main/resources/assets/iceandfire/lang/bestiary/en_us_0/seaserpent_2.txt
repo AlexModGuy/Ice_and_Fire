@@ -23,7 +23,7 @@ multiple benefits to its wearer.
 
 Each piece of tide guardian
 armor provides water breathing.
-Each additional peice worn provides
+Each additional piece worn provides
 an extra level of Strength when the
 wearer is either in water or rain.
 

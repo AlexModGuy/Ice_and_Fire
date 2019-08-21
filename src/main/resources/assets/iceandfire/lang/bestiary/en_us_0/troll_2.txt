@@ -12,5 +12,5 @@ with a melee weapon, retreat, attack,
 and repeat. Another method would be
 to lead a troll into sunlight, where
 it would instantly petrify into stone.
-However, this would loose any of the
+However, this would lose any of the
 drops a player would  hope to collect.

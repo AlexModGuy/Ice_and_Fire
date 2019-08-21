@@ -34,7 +34,7 @@ drop of an egg.
 
 Similar to a chicken egg, the
 death worm egg will produce a
-pathetic-size worm when tossed.
+pathetic-sized worm when tossed.
 But this worm isn't wild, rather
 it seeks to protect both its
 owner and its hunting grounds.

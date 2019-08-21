@@ -1,8 +1,8 @@
 Trading with myrmex is a lucrative
-bussiness. Worker trades are
+business. Worker trades are
 usually low quality, yet they are
 willing to trade some resin for
-sediment and the ocasional gem.
+sediment and the occasional gem.
 Soldiers will trade for common
 mob drops, and Sentinels for
 rarer ones and poisonous items.
@@ -32,6 +32,6 @@ higher.
 Myrmex Eggs only hatch when
 underground. A queen egg, when
 hatched near a player underground,
-will bind to them, and the follwing
+will bind to them, and the following
 colony that will form will have a
 permanent opinion of 100.

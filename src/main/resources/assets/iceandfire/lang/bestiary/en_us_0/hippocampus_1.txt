@@ -24,7 +24,7 @@ and it can be ridden. Horse armor
 and a chest can also be equipped,
 in order to provide protection
 and allow the animal to carry
-items, respectfully.
+items, respectively.
 
 Riding a hippocampi is similar
 to riding flying creatures,
@@ -35,5 +35,5 @@ it is a perfect mount for
 maritimers, explorers, and pirates.
 
 Some myths even state that riding
-one will allow its owner to breath
+one will allow its owner to breathe
 underwater!

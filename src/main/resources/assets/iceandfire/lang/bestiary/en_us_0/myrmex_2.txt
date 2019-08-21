@@ -8,7 +8,7 @@
 §nQueen
 The queen is the sole reproductive
 member of the entire colony. In
-rare cases, there many be more
+rare cases, there may be more
 than one, but most colonies are
 run by one single queen. This
 results in her being the colony's

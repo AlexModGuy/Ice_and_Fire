@@ -35,6 +35,6 @@ one can make a dragon take off
 and fly. The beast can be made to
 descend its flight by sneaking.
 
-    A dragon can breath fire by
-the pressing of a certian command,
+    A dragon can breathe fire by
+the pressing of a certain command,
 which is different for many people.
