@@ -92,7 +92,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
         this.stepHeight = 2;
-        this.moveHelper = new GroundMoveHelper(this);
+        //this.moveHelper = new GroundMoveHelper(this);
     }
 
     public boolean canMove() {
@@ -859,7 +859,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
                     return;
                 }
                 float f9 = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
-                float maxChange = 30F;
+                float maxChange = 90F;
                 float distance = (float)Math.toDegrees(distance((float)Math.toRadians(this.entity.rotationYaw), (float)Math.toRadians(f9)));
                 this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange/2, maxChange/2);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));

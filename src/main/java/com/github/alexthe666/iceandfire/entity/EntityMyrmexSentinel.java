@@ -133,8 +133,6 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(3, new MyrmexAIReEnterHive(this, 1.0D));
-        this.tasks.addTask(4, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));

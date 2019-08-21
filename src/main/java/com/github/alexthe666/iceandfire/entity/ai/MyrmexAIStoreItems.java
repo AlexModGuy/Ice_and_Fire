@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -19,86 +18,89 @@ import java.util.List;
 public class MyrmexAIStoreItems extends EntityAIBase {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
-    private Path path;
-    private BlockPos nextRoom = BlockPos.ORIGIN;
+    private BlockPos nextRoom = null;
     private BlockPos nextCocoon = null;
+    private BlockPos mainRoom = null;
+    private boolean first = true; //first stage - enter the main hive room then storage room
 
     public MyrmexAIStoreItems(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexBits(0);
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker)this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
             return false;
         } else {
+            first = true;
+            mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
             nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
             nextCocoon = getNearbyCocoon(nextRoom);
-            if (nextCocoon != null) {
-                this.path = this.myrmex.getNavigator().getPathToPos(nextCocoon);
-                return this.path != null;
-            } else {
-                return false;
-            }
+            return nextCocoon != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextCocoon) > 3 && this.myrmex.shouldEnterHive() && nextCocoon != null && isUseableCocoon(nextCocoon);
-    }
-
-    public void startExecuting() {
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
+        return !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon) > 3 && this.myrmex.shouldEnterHive();
     }
 
     @Override
     public void updateTask() {
-        if (nextCocoon != null && this.myrmex.getDistanceSq(nextCocoon) < 4 && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
-            TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
-            ItemStack itemstack = this.myrmex.getHeldItem(EnumHand.MAIN_HAND);
-            if(!itemstack.isEmpty()) {
-                for (int i = 0; i < cocoon.getSizeInventory(); ++i) {
-                    if(!itemstack.isEmpty()) {
-                        ItemStack itemstack1 = cocoon.getStackInSlot(i);
-                        if (itemstack1.isEmpty()) {
-                            cocoon.setInventorySlotContents(i, itemstack);
-                            cocoon.markDirty();
-                            this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-                            this.myrmex.isEnteringHive = false;
-                            return;
-                        }
-                        if (ItemStack.areItemsEqual(itemstack1, itemstack)) {
-                            int j = Math.min(cocoon.getInventoryStackLimit(), itemstack1.getMaxStackSize());
-                            int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
-                            if (k > 0) {
-                                itemstack1.grow(k);
-                                itemstack.shrink(k);
-
-                                if (itemstack.isEmpty()) {
-                                    cocoon.markDirty();
-                                }
+        if (first && mainRoom != null) {
+            this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
+            if (this.myrmex.getDistanceSq(mainRoom) < 8) {
+                first = false;
+                return;
+            }
+        }
+        if (!first && nextCocoon != null) {
+            this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
+            if (this.myrmex.getDistanceSq(nextCocoon) < 4 && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+                TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
+                ItemStack itemstack = this.myrmex.getHeldItem(EnumHand.MAIN_HAND);
+                if (!itemstack.isEmpty()) {
+                    for (int i = 0; i < cocoon.getSizeInventory(); ++i) {
+                        if (!itemstack.isEmpty()) {
+                            ItemStack itemstack1 = cocoon.getStackInSlot(i);
+                            if (itemstack1.isEmpty()) {
+                                cocoon.setInventorySlotContents(i, itemstack);
+                                cocoon.markDirty();
                                 this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                                 this.myrmex.isEnteringHive = false;
                                 return;
                             }
+                            if (ItemStack.areItemsEqual(itemstack1, itemstack)) {
+                                int j = Math.min(cocoon.getInventoryStackLimit(), itemstack1.getMaxStackSize());
+                                int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
+                                if (k > 0) {
+                                    itemstack1.grow(k);
+                                    itemstack.shrink(k);
+
+                                    if (itemstack.isEmpty()) {
+                                        cocoon.markDirty();
+                                    }
+                                    this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                                    this.myrmex.isEnteringHive = false;
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
-            }else{
-                resetTask();
             }
         }
     }
 
     public void resetTask() {
-        nextRoom = BlockPos.ORIGIN;
+        nextRoom = null;
         nextCocoon = null;
-        this.myrmex.getNavigator().setPath(null, this.movementSpeed);
+        mainRoom = null;
+        first = true;
     }
 
     public BlockPos getNearbyCocoon(BlockPos roomCenter) {

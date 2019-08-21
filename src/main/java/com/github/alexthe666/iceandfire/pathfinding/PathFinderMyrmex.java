@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -9,14 +10,12 @@ import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public class PathFinderAStar  extends PathFinder {
+public class PathFinderMyrmex extends PathFinder {
 
     private final PathHeap path = new PathHeap();
     private final Set<PathPoint> closedSet = Sets.<PathPoint>newHashSet();
@@ -24,7 +23,7 @@ public class PathFinderAStar  extends PathFinder {
     private final NodeProcessor nodeProcessor;
     private EntityLivingBase entity;
 
-    public PathFinderAStar(NodeProcessor processor, EntityLivingBase entity) {
+    public PathFinderMyrmex(NodeProcessor processor, EntityLivingBase entity) {
         super(processor);
         this.entity = entity;
         this.nodeProcessor = processor;
@@ -69,17 +68,18 @@ public class PathFinderAStar  extends PathFinder {
     private Path findPath(IBlockAccess worldIn, PathPoint pathFrom, PathPoint pathTo, float maxDistance) {
         BlockPos startPos = new BlockPos(pathFrom.x, pathFrom.y, pathFrom.z);
         BlockPos endPos = new BlockPos(pathTo.x, pathTo.y, pathTo.z);
-        if(isDirectPathBetweenPoints(new Vec3d(startPos), new Vec3d(endPos))){
+        if(isDirectPathBetweenPoints(new Vec3d(startPos), new Vec3d(endPos)) && ((EntityMyrmexBase)entity).canSeeSky()){
             return new Path(new PathPoint[]{pathFrom, pathTo});
         }
-        AStar aStar = new AStar(1, 1,startPos, endPos, (int)(maxDistance * 100), 100, true);
+        AStar aStar = new AStar(entity.width, entity.height, startPos, endPos, (int)(maxDistance * 100), 3, false);
         BlockPos[] poses = aStar.getPath(worldIn);
-        PathPoint[] points = new PathPoint[poses.length];
-        for (int i = 0; i < poses.length; i++) {
-           // this.entity.world.setBlockState(poses[i].down(), Blocks.GOLD_BLOCK.getDefaultState());
-            points[i] = new PathPoint(poses[i].getX(), poses[i].getY(), poses[i].getZ());
+        if(poses.length != 0){
+            PathPoint[] points = new PathPoint[poses.length];
+            for (int i = 0; i < poses.length; i++) {
+                points[i] = new PathPoint(poses[i].getX(), poses[i].getY(), poses[i].getZ());
+            }
+            return new Path(points);
         }
-        //this.entity.world.setBlockState(endPos.down(), Blocks.DIAMOND_BLOCK.getDefaultState());
-        return new Path(points);
+        return null;
     }
 }

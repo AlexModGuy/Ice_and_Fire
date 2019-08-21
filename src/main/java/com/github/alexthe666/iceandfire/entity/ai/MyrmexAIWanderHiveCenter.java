@@ -52,6 +52,6 @@ public class MyrmexAIWanderHiveCenter extends EntityAIBase {
     }
 
     public BlockPos getNearPos(BlockPos pos){
-        return pos.add(this.myrmex.getRNG().nextInt(15) - 7, 0, this.myrmex.getRNG().nextInt(15) - 7);
+        return pos.add(this.myrmex.getRNG().nextInt(8) - 4, 0, this.myrmex.getRNG().nextInt(8) - 4);
     }
 }

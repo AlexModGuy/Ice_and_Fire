@@ -29,6 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 
@@ -49,7 +50,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public EntityMyrmexWorker(World worldIn) {
         super(worldIn);
-        this.setSize(0.9F, 0.6F);
+        this.setSize(0.99F, 0.95F);
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
@@ -124,6 +125,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     }
 
+    public boolean shouldWander() {
+        return super.shouldWander() && this.canSeeSky();
+    }
+
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
@@ -150,6 +155,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return holdingSomething();
     }
 
+    public boolean shouldMoveThroughHive() {
+        return !holdingSomething();
+    }
+
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         if(this.getGrowthStage() < 2){
@@ -172,7 +181,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
 
-    private boolean holdingSomething(){
+    public boolean holdingSomething(){
         return this.getHeldEntity() != null || !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
     }
 

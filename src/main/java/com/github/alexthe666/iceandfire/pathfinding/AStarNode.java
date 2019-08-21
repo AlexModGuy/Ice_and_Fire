@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class AStarNode {
-    private static final float H = 1.5F;
+    private static final float H = 2F;
     private AStar aStar;
 
     public AStarNode start;
@@ -47,7 +47,7 @@ public class AStarNode {
                             travel(down, baseCost + 1.4142);
                         else if (!isBlocked(world, down) && !isBlocked(world, down.add(0, 1, 0))){
                             int currentFall = 1;
-                            while (currentFall <= fallDist && !isBlocked(world, offset.add(0, -currentFall, 0))) {
+                            while (currentFall <= aStar.fallDistance && !isBlocked(world, offset.add(0, -currentFall, 0))) {
                                 BlockPos locF = offset.add(0, -currentFall, 0);
                                 if (canStandAt(world, locF)) {
                                     AStarNode fallNode = new AStarNode(aStar, this, offset, baseCost + 1, end);
@@ -67,7 +67,13 @@ public class AStarNode {
     }
 
     public boolean canStandAt(IBlockAccess world, BlockPos pos) {
-        return !isBlocked(world, pos) && !isBlocked(world, pos.up()) && isBlocked(world, pos.down());
+        boolean clear = true;
+        for(BlockPos entityPos : BlockPos.getAllInBox(pos.add(-aStar.width/2, 0, -aStar.width/2), pos.add(aStar.width/2, aStar.height, aStar.width/2))){
+            if(isBlocked(world, pos)){
+                clear = false;
+            }
+        }
+        return clear && isBlocked(world, pos.down());
     }
 
 

@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
 import java.util.ArrayList;
@@ -18,10 +20,18 @@ public class AStar {
     private int overflowLimit = 0;
     private boolean pathFound = false;
     public static final boolean debugAStar = false;
-    public AStar(BlockPos startPos, BlockPos endPos, int overflowLimit) {
+    public int fallDistance;
+    public int width;
+    public int height;
+    private boolean returnConfirmed;
+    public AStar(double checkWidth, double checkHeight, BlockPos startPos, BlockPos endPos, int overflowLimit, int fallDistance, boolean returnConfirmed) {
         start = new AStarNode(this, null, startPos, 0, endPos);
         end = new AStarNode(this, start, endPos, 0, endPos);
+        this.width = MathHelper.ceil(checkWidth);
+        this.height = MathHelper.ceil(checkHeight);
         this.overflowLimit = overflowLimit;
+        this.fallDistance = fallDistance;
+        this.returnConfirmed = returnConfirmed;
     }
 
     public BlockPos[] getPath(IBlockAccess world) {
@@ -42,7 +52,7 @@ public class AStar {
             shoppingList.remove(n);
             confirmedList.add(n);
         }
-        if (!pathFound) {
+        if (!pathFound && returnConfirmed) {
             int length = confirmedList.size();
             BlockPos[] locations = new BlockPos[length];
             for (int i = 0; i < length; i++) {

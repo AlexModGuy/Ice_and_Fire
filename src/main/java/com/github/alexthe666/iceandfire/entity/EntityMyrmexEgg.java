@@ -164,7 +164,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
 
     @Override
     public boolean attackEntityFrom(DamageSource dmg, float var2) {
-        if(dmg == DamageSource.IN_WALL){
+        if(dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL){
             return false;
         }
         if (!world.isRemote && !dmg.canHarmInCreative()) {

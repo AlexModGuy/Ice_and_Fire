@@ -80,7 +80,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveHelper = new GroundMoveHelper(this);
+            this.moveHelper = new EntityMoveHelper(this);
             this.navigator = new PathNavigateClimber(this, world);
             this.isLandNavigator = true;
         } else {
