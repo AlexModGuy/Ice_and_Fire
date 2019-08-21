@@ -50,7 +50,7 @@ public class IaFDragonFlightManager {
                 }
                 dragon.stimulateFire(entity.posX, entity.posY, entity.posZ, 3);
             }
-            if (dragon.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM) {
+            if (dragon.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM && startPreyVec != null && startAttackVec != null) {
                 float distX = (float) (startPreyVec.x - startAttackVec.x);
                 float distY = 5 + dragon.getDragonStage() * 2;
                 float distZ = (float) (startPreyVec.z - startAttackVec.z);
@@ -104,6 +104,8 @@ public class IaFDragonFlightManager {
         if (prevAttackTarget != entitylivingbaseIn) {
             if (entitylivingbaseIn != null) {
                 startPreyVec = new Vec3d(entitylivingbaseIn.posX, entitylivingbaseIn.posY, entitylivingbaseIn.posZ);
+            }else {
+                startPreyVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
             }
             startAttackVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
         }
