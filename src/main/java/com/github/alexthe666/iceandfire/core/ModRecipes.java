@@ -82,6 +82,39 @@ public class ModRecipes {
                 return entityarrow;
             }
         });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.hippogryph_egg, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityHippogryphEgg entityarrow = new EntityHippogryphEgg(worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.rotten_egg, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityCockatriceEgg entityarrow = new EntityCockatriceEgg(worldIn, position.getX(), position.getY(), position.getZ());
+                return entityarrow;
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.deathworm_egg, new BehaviorProjectileDispense()
+        {
+            /**
+             * Return the projectile entity spawned by this dispense behavior.
+             */
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+            {
+                EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(worldIn, position.getX(), position.getY(), position.getZ(), stackIn.getMetadata() == 1);
+                return entityarrow;
+            }
+        });
         OreDictionary.registerOre("desertMyrmexEgg", new ItemStack(ModItems.myrmex_desert_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("jungleMyrmexEgg", new ItemStack(ModItems.myrmex_jungle_egg, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("charredBlock", ModBlocks.charedDirt);

@@ -28,8 +28,9 @@ public class EntityDeathWormEgg extends EntityThrowable {
         this.giant = giant;
     }
 
-    public EntityDeathWormEgg(World worldIn, double x, double y, double z) {
+    public EntityDeathWormEgg(World worldIn, double x, double y, double z, boolean giant) {
         super(worldIn, x, y, z);
+        this.giant = giant;
     }
 
     public static void registerFixesEgg(DataFixer fixer) {

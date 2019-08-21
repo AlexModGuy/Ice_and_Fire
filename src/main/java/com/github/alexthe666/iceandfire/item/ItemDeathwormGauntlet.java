@@ -61,7 +61,6 @@ public class ItemDeathwormGauntlet extends Item {
                 return;
             } else {
                 if(player instanceof EntityPlayer){
-                    System.out.println(stack.getTagCompound().getInteger("HolderID"));
                     if(stack.getTagCompound().getInteger("HolderID") != player.getEntityId()){
                         stack.getTagCompound().setInteger("HolderID", player.getEntityId());
                     }

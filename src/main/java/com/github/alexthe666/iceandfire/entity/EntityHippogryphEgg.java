@@ -20,6 +20,12 @@ public class EntityHippogryphEgg extends EntityEgg {
 		super(world);
 	}
 
+	public EntityHippogryphEgg(World worldIn, double x, double y, double z, ItemStack itemstack) {
+		super(worldIn, x, y, z);
+		this.itemstack = itemstack;
+	}
+
+
 	public EntityHippogryphEgg(World world, EntityPlayer player, ItemStack itemstack) {
 		super(world, player);
 		this.itemstack = itemstack;
