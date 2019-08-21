@@ -1896,6 +1896,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!this.onGround && !this.isRiding()) {
             double ydist = prevPosY - this.posY;//down 0.4 up -0.38
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
+            if(!this.isHovering())
             this.dragonPitch += (float) (ydist) * 10;
             this.dragonPitch = MathHelper.clamp(this.dragonPitch, -90, 90);
             float plateau = 2;
@@ -1913,6 +1914,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
             } else if (this.dragonPitch < -2F) {
                 this.dragonPitch += 1F;
+            }
+            if(dragonPitch < -45 && planeDist < 3){
+                if(isFlying() && !this.isHovering()){
+                    this.setHovering(true);
+                }
             }
         } else {
             this.dragonPitch = 0;
