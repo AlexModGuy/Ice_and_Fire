@@ -32,7 +32,10 @@ public class RenderDeathWormGauntlet {
         GL11.glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         GL11.glPushMatrix();
-        if(ItemTESRContext.INSTANCE.getCurrentTransform() != ItemCameraTransforms.TransformType.GUI){
+        if(ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND ||
+                ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND ||
+                ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND ||
+                ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND){
             MODEL.animate(stack, Minecraft.getMinecraft().getRenderPartialTicks());
         }else{
             MODEL.resetToDefaultPose();

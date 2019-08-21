@@ -61,6 +61,10 @@ public class ItemDeathwormGauntlet extends Item {
                 return;
             } else {
                 if(player instanceof EntityPlayer){
+                    System.out.println(stack.getTagCompound().getInteger("HolderID"));
+                    if(stack.getTagCompound().getInteger("HolderID") != player.getEntityId()){
+                        stack.getTagCompound().setInteger("HolderID", player.getEntityId());
+                    }
                     if(((EntityPlayer)player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
                         ((EntityPlayer)player).getCooldownTracker().setCooldown(this, 10);
                         player.playSound(ModSounds.DEATHWORM_ATTACK, 1F, 1F);
@@ -78,6 +82,9 @@ public class ItemDeathwormGauntlet extends Item {
             stack.damageItem(properties.specialWeaponDmg, entityLiving);
             properties.specialWeaponDmg = 0;
         }
+        if(stack.getTagCompound().getInteger("HolderID") != -1){
+            stack.getTagCompound().setInteger("HolderID", -1);
+        }
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
@@ -90,7 +97,6 @@ public class ItemDeathwormGauntlet extends Item {
         if (stack.getTagCompound() == null) {
             stack.setTagCompound(new NBTTagCompound());
         } else {
-            stack.getTagCompound().setInteger("HolderID", entity.getEntityId());
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
             if (properties != null) {
                 if (properties.deathwormReceded) {
