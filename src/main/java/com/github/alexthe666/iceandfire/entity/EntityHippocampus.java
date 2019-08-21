@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippocampus extends EntityTameable implements IAnimatedEntity, IDropArmor {
+public class EntityHippocampus extends EntityTameable implements ISyncMount, IAnimatedEntity, IDropArmor {
 
     private int animationTick;
     private Animation currentAnimation;

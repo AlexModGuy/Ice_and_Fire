@@ -152,7 +152,7 @@ public class EventLiving {
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
         }
-        if(event.getWorldObj().isRemote){
+        if(event.getWorldObj().isRemote && event.getEntityBeingMounted() instanceof ISyncMount){
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(event.getEntityBeingMounted().getEntityId(), event.getEntityMounting().posX, event.getEntityMounting().posY, event.getEntityMounting().posZ));
         }
     }
