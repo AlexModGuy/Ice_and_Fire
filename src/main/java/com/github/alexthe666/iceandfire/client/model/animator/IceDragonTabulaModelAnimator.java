@@ -107,10 +107,10 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                 }
             }
             if (entity.ridingProgress > 0.0F){
-                if (!isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName))) {
+                if (!isHorn(cube) && EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName) != null && !isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.icedragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
                     if(cube.boxName.equals("BodyUpper")){
-                        cube.rotationPointZ -= ((Math.toRadians(-15F) - cube.rotationPointZ) / 20) * entity.ridingProgress;
+                        cube.rotationPointZ += ((-12F - cube.rotationPointZ) / 20) * entity.ridingProgress;
                     }
 
                 }

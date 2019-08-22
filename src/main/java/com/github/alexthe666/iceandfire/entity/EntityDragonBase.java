@@ -1032,7 +1032,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 }
             }
             return true;
-        } else if (!this.isModelDead()) {
+        }
+        if (!this.isModelDead()) {
             if (stack.getItem() == ModItems.creative_dragon_meal) {
                 this.setTamedBy(player);
                 this.setHunger(this.getHunger() + 20);
@@ -1054,7 +1055,20 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             }
             if (this.isOwner(player)) {
-                if (stack != ItemStack.EMPTY) {
+                if (stack.isEmpty() && !player.isSneaking()) {
+                    if (this.getDragonStage() < 2) {
+                        this.startRiding(player, false);
+                    }
+                    if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isRiding()) {
+                        player.setSneaking(false);
+                        player.startRiding(this, true);
+                        this.setSleeping(false);
+                    }
+                    return true;
+                } else if (stack.isEmpty() && player.isSneaking()) {
+                    this.openGUI(player);
+                    return true;
+                } else {
                     int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                         //this.growDragon(1);
@@ -1100,11 +1114,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     }
                     if (stack.getItem() == ModItems.dragon_stick) {
                         if (player.isSneaking()) {
-                            if(this.hasHomePosition){
+                            if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
                                 player.sendStatusMessage(new TextComponentTranslation("dragon.command.remove_home"), true);
                                 return true;
-                            }else{
+                            } else {
                                 BlockPos pos = new BlockPos(this);
                                 this.homePos = pos;
                                 this.hasHomePosition = true;
@@ -1137,25 +1151,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         this.writeEntityToNBT(stack1.getTagCompound());
                         player.setHeldItem(hand, stack1);
                         this.setDead();
-                        return true;
-                    }
-                } else {
-                    if (!hasHadHornUse && stack.isEmpty() && !player.isSneaking() && !this.isDead && !world.isRemote) {
-                        if (this.getDragonStage() < 2) {
-                            this.startRiding(player, true);
-                        }
-                        if (this.getDragonStage() > 2 && !player.isRiding()) {
-                            player.setSneaking(false);
-                            player.startRiding(this, true);
-                            this.setSleeping(false);
-                        }
-
-                        if (this.getDragonStage() < 2) {
-                            this.startRiding(player, true);
-                        }
-                        return true;
-                    } else if (stack.isEmpty() && player.isSneaking()) {
-                        this.openGUI(player);
                         return true;
                     }
                 }
@@ -1258,7 +1253,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
         updateBurnTarget();
         if (!world.isRemote) {
-            if(!world.isRemote && !this.onGround && this.isModelDead()){
+            if (!world.isRemote && !this.onGround && this.isModelDead()) {
                 this.motionY -= 0.1D;
             }
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
@@ -1896,8 +1891,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (!this.onGround && !this.isRiding()) {
             double ydist = prevPosY - this.posY;//down 0.4 up -0.38
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
-            if(!this.isHovering())
-            this.dragonPitch += (float) (ydist) * 10;
+            if (!this.isHovering())
+                this.dragonPitch += (float) (ydist) * 10;
             this.dragonPitch = MathHelper.clamp(this.dragonPitch, -90, 90);
             float plateau = 2;
             if (this.dragonPitch > plateau) {
@@ -1915,8 +1910,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             } else if (this.dragonPitch < -2F) {
                 this.dragonPitch += 1F;
             }
-            if(dragonPitch < -45 && planeDist < 3){
-                if(isFlying() && !this.isHovering()){
+            if (dragonPitch < -45 && planeDist < 3) {
+                if (isFlying() && !this.isHovering()) {
                     this.setHovering(true);
                 }
             }
@@ -1983,6 +1978,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public void updateRidden() {
+        super.updateRidden();
         Entity entity = this.getRidingEntity();
         if (this.isRiding() && entity.isDead) {
             this.dismountRidingEntity();
@@ -1990,7 +1986,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
-            this.onUpdate();
             if (this.isRiding()) {
                 this.updateRiding(entity);
             }
@@ -2005,10 +2000,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
-            this.rotationYaw = ((EntityPlayer) riding).rotationYawHead;
             this.rotationYawHead = ((EntityPlayer) riding).rotationYawHead;
             this.prevRotationYaw = ((EntityPlayer) riding).rotationYawHead;
-            this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
+            this.setPositionAndRotation(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ, ((EntityPlayer) riding).rotationYawHead, 0);
             if (this.getControlState() == 1 << 4 || ((EntityPlayer) riding).isElytraFlying()) {
                 this.dismountRidingEntity();
             }

@@ -27,7 +27,7 @@ public class IceAndFireTabulaModelAnimator {
     }
 
     public boolean isPartEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
-        return pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
+        return pose != null && pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
     }
 
     public boolean isPositionEqual(AdvancedModelRenderer original, AdvancedModelRenderer pose){
