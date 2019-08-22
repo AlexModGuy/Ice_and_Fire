@@ -42,7 +42,6 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
     public TileEntityDragonforge(){
-        isFire = this.getBlockType().getTranslationKey().equals(ModBlocks.dragonforge_fire_core.getTranslationKey()) ;
     }
 
     public TileEntityDragonforge(boolean isFire) {
@@ -127,6 +126,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     public void update() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
+        isFire = this.getBlockType().getTranslationKey().equals(ModBlocks.dragonforge_fire_core.getTranslationKey()) ;
         if(lastDragonFlameTimer > 0){
             lastDragonFlameTimer--;
         }
