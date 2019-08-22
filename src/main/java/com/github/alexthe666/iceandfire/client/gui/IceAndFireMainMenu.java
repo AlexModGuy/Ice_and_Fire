@@ -295,7 +295,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
                 InputStream is = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(is));
             } catch (IOException e) {
-                e.printStackTrace();
+                IceAndFire.logger.error("Ice and Fire couldn't download splash texts for main menu");
                 useBackup = true;
             }
         }
@@ -305,7 +305,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
                 try {
                     reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    IceAndFire.logger.error("Ice and Fire couldn't find splash texts files for main menu");
                 }
             }
         }
