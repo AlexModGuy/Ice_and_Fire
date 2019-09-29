@@ -150,8 +150,6 @@ public class TinkersCompat {
     }
 
     public static void setupFluids() {
-        // buuuuckeeeeet
-        FluidRegistry.enableUniversalBucket();
         MOLTEN_FIRE_DRAGONSTEEL = fluidMetal("dragonsteel_fire", 0X594C58);
         MOLTEN_FIRE_DRAGONSTEEL.setTemperature(769);
         MOLTEN_ICE_DRAGONSTEEL = fluidMetal("dragonsteel_ice", 0x8299A7);
