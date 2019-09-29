@@ -52,7 +52,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 	}
 
 	private boolean checkFall(World worldIn, BlockPos pos) {
-		if (!this.canPlaceBlockAt(worldIn, pos)) {
+		if (!this.canStay(worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 			return false;
 		} else {

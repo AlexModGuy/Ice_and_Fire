@@ -183,7 +183,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.damageType.contains("arrow")) {
+        if (source.getDamageType().contains("arrow")) {
             return false;
         }
         return super.attackEntityFrom(source, damage);
@@ -270,7 +270,6 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
         boolean stone = EntityGorgon.isStoneMob(this);
         if (stone && stoneProgress < 20.0F) {
             stoneProgress += 2F;
@@ -312,7 +311,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 double motionY = getRNG().nextGaussian() * 0.07D;
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 if (state.getMaterial().isSolid() && world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, weaponX + (this.getRNG().nextFloat() - 0.5F), weaponY + (this.getRNG().nextFloat() - 0.5F), weaponZ + (this.getRNG().nextFloat() - 0.5F), motionX, motionY, motionZ, new int[]{Block.getIdFromBlock(state.getBlock())});
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, weaponX + (this.getRNG().nextFloat() - 0.5F), weaponY + (this.getRNG().nextFloat() - 0.5F), weaponZ + (this.getRNG().nextFloat() - 0.5F), motionX, motionY, motionZ, Block.getIdFromBlock(state.getBlock()));
                 }
             }
         }

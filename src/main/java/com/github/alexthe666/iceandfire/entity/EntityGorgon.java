@@ -62,9 +62,13 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	}
 
 	public static boolean isStoneMob(EntityLivingBase mob) {
-		if (mob != null && mob instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
-			return properties != null && properties.isStone;
+		if (mob instanceof EntityLiving) {
+			try{
+				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
+				return properties != null && properties.isStone;
+			}catch (Exception e){
+				IceAndFire.logger.warn("stone entity properties do not exist for " + mob.getName());
+			}
 		}
 		return false;
 	}
