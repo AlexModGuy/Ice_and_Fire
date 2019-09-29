@@ -127,14 +127,17 @@ public enum EnumBestiaryPages {
 	}
 
 
-	public static void addPage(EnumBestiaryPages page, ItemStack book) {
+	public static boolean addPage(EnumBestiaryPages page, ItemStack book) {
+		boolean flag = false;
 		if (book.getItem() instanceof ItemBestiary) {
 			NBTTagCompound tag = book.getTagCompound();
 			List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
 			if (!enumlist.contains(page)) {
 				enumlist.add(page);
+				flag = true;
 			}
 			tag.setIntArray("Pages", fromList(enumToInt(enumlist)));
 		}
+		return flag;
 	}
 }

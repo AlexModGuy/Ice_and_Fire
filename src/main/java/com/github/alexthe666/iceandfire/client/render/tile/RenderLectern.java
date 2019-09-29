@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class RenderLectern extends TileEntitySpecialRenderer {
 
-	private static final ResourceLocation bookTex = new ResourceLocation("textures/entity/enchanting_table_book.png");
+	private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation("iceandfire:textures/models/lectern_book.png");
 	private ModelBook book = new ModelBook();
 
 	@Override
@@ -23,8 +23,7 @@ public class RenderLectern extends TileEntitySpecialRenderer {
 		GlStateManager.rotate(this.getRotation(lectern), 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(112.5F, 0.0F, 0.0F, 1.0F);
 		GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
-
-		this.bindTexture(bookTex);
+		this.bindTexture(ENCHANTMENT_TABLE_BOOK_TEXTURE);
 		float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.25F;
 		float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * yee + 0.75F;
 		f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;

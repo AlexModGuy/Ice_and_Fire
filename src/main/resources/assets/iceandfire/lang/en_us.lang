@@ -483,6 +483,8 @@ amphithere.command.0=This amphithere is wandering.
 amphithere.command.1=This amphithere is sitting.
 amphithere.command.2=This amphithere is following.
 
+container.lectern.costs=Costs:
+container.lectern.manuscript.many=%s Manuscripts
 bestiary.contains=Contains:
 bestiary.introduction=Introduction
 bestiary.firedragon=Fire Dragon
