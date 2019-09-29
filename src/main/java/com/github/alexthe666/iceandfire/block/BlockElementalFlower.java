@@ -30,11 +30,15 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 	}
 
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && canStay(worldIn, pos);
+	}
+
+	public boolean canStay(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		if (this == ModBlocks.fire_lily) {
-			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK);
+			return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
 		} else {
-			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE);
+			return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;
 		}
 	}
 
