@@ -764,9 +764,13 @@ public class EventLiving {
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityLivingBase) {
-            ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-            if (properties != null) {
-                properties.updateConnectedEntities(event.getEntity());
+            try{
+                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
+                if (properties != null) {
+                    properties.updateConnectedEntities(event.getEntity());
+                }
+            }catch (Exception e){
+                IceAndFire.logger.warn("could not instantiate chain properties for " + event.getEntity().getName());
             }
         }
         if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal) {
