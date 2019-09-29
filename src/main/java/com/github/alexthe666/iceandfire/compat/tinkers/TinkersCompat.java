@@ -2,27 +2,21 @@ package com.github.alexthe666.iceandfire.compat.tinkers;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.fluid.FluidMolten;
 import slimeknights.tconstruct.library.materials.*;
 import slimeknights.tconstruct.library.traits.AbstractTrait;
 import slimeknights.tconstruct.library.utils.HarvestLevels;
-import slimeknights.tconstruct.shared.TinkerFluids;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerMaterials;
 import slimeknights.tconstruct.tools.traits.TraitBonusDamage;
-import slimeknights.tconstruct.tools.traits.TraitSplintering;
-import slimeknights.tconstruct.tools.traits.TraitSplinters;
 
 import static slimeknights.tconstruct.library.materials.MaterialTypes.HEAD;
 import static slimeknights.tconstruct.library.materials.MaterialTypes.SHAFT;
@@ -38,7 +32,7 @@ public class TinkersCompat {
     public static final Material MATERIAL_STYMPH_FEATHER = new Material("stymph_feather", 0X7D5B40);
     public static final Material MATERIAL_AMPHITHERE_FEATHER = new Material("amphithere_feather", 0X228760);
     public static final AbstractTrait SPLINTERING_II = new TraitSplinteringII();
-    public static final AbstractTrait SPLINTERS_II = new TraitSplintersII();
+    public static final AbstractTrait SPLINTERS_II = new TraitSplitting2();
     public static final AbstractTrait FRACTURED_II = new TraitBonusDamage("fractured2", 3f);
     public static final AbstractTrait HIVE_DEFENDER = new TraitHiveDefender();
     public static final AbstractTrait FREEZE_II = new TraitFreeze(2);
