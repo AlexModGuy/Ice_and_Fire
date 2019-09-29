@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import com.github.alexthe666.iceandfire.api.RenderPodiumItemEvent;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexEgg;
@@ -69,17 +70,18 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }else if(!podium.getStackInSlot(0).isEmpty()){
-                GL11.glPushMatrix();
-                float f2 = ((float)podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * f);
-                float f3 = MathHelper.sin(((float)f2) / 10.0F) * 0.1F + 0.1F;
-                GL11.glTranslatef((float) x + 0.5F, (float) y + 1.55F + f3, (float) z + 0.5F);
-                float f4 = (f2 / 20.0F) * (180F / (float)Math.PI);
-                GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
-                GL11.glPushMatrix();
-                Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, podium.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
-                GL11.glPopMatrix();
-                GL11.glPopMatrix();
-
+                if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPodiumItemEvent(this, podium, f, x, y, z))) {
+                    GL11.glPushMatrix();
+                    float f2 = ((float) podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * f);
+                    float f3 = MathHelper.sin(((float) f2) / 10.0F) * 0.1F + 0.1F;
+                    GL11.glTranslatef((float) x + 0.5F, (float) y + 1.55F + f3, (float) z + 0.5F);
+                    float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
+                    GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
+                    GL11.glPushMatrix();
+                    Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, podium.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
+                    GL11.glPopMatrix();
+                    GL11.glPopMatrix();
+                }
             }
         }
 
