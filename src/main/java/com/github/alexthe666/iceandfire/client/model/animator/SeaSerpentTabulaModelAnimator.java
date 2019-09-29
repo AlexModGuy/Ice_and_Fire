@@ -59,8 +59,8 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         }
         if (entity.breathProgress > 0.0F) {
             progressRotation(model.getCube("Head"), entity.breathProgress, (float)Math.toRadians(-15F), 0, 0);
-            progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float)Math.toRadians(-28F), 0, 0);
-            progressRotation(model.getCube("Jaw"), entity.breathProgress, (float)Math.toRadians(80F), 0, 0);
+            progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float)Math.toRadians(-20F), 0, 0);
+            progressRotation(model.getCube("Jaw"), entity.breathProgress, (float)Math.toRadians(60F), 0, 0);
         }
         if(entity.jumpRot > 0.0F){
 
