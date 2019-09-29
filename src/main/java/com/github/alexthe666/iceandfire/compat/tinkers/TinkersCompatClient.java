@@ -37,7 +37,7 @@ public class TinkersCompatClient {
     }
 
     public static void registerModels(ModelRegistryEvent event) {
-        ModelResourceLocation liquidModel = new ModelResourceLocation(new ResourceLocation("iceandfire:tinkers_fluid"), "fluid");
+        /*ModelResourceLocation liquidModel = new ModelResourceLocation(new ResourceLocation("iceandfire:tinkers_fluid"), "fluid");
         ModelLoader.setCustomStateMapper(TinkersCompat.MOLTEN_FIRE_DRAGONSTEEL.getBlock(), new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -49,7 +49,7 @@ public class TinkersCompatClient {
             protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                 return liquidModel;
             }
-        });
+        });*/
     }
 
 }
