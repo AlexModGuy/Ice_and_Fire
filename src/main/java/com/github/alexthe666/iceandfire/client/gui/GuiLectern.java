@@ -201,11 +201,12 @@ public class GuiLectern extends GuiContainer {
 
             if (this.isPointInRegion(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && k > 0) {
                 List<String> list = Lists.newArrayList();
-                list.add("" + TextFormatting.WHITE + TextFormatting.ITALIC + I18n.format(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase()));
 
-                if (enchantment == null)
-                    java.util.Collections.addAll(list, "", TextFormatting.RED + I18n.format("forge.container.enchant.limitedEnchantability"));
+                if (enchantment == null){
+                    list.add(TextFormatting.RED + I18n.format("container.lectern.no_bestiary"));
+                }
                 else if (!flag) {
+                    list.add("" + TextFormatting.WHITE + TextFormatting.ITALIC + I18n.format(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase()));
                     TextFormatting textformatting = i >= i1 ? TextFormatting.GRAY : TextFormatting.RED;
                     list.add(textformatting + "" + I18n.format("container.lectern.costs"));
                     String s = I18n.format("container.lectern.manuscript.many", i1);

@@ -18,16 +18,26 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
 	private static final int[] slotsTop = new int[]{0};
 	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
+	public int ticksExisted;
+	public int prevTicksExisted;
 
 	@Override
 	public void update() {
+		prevTicksExisted = ticksExisted;
+		ticksExisted++;
+	}
 
+	@SideOnly(Side.CLIENT)
+	public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
+		return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 3, 1));
 	}
 
 	@Override

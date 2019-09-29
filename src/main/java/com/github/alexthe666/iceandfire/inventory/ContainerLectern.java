@@ -161,7 +161,6 @@ public class ContainerLectern extends SyncedFieldContainer {
             return false;
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
-            System.out.println(page);
             if (page != null) {
                 if (itemstack.getItem() == ModItems.bestiary) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
