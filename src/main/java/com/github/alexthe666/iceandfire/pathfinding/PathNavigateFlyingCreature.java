@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import net.minecraft.entity.EntityLiving;

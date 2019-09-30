@@ -1,12 +1,10 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.pathfinding.PathFinderAStar;
+import com.github.alexthe666.iceandfire.entity.ai.ExperimentalWalkNodeProcessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,12 +16,6 @@ public class PathNavigateDragon extends PathNavigateGround {
 
     public PathNavigateDragon(EntityLiving entitylivingIn, World worldIn) {
         super(entitylivingIn, worldIn);
-    }
-
-    protected PathFinder getPathFinder() {
-        this.nodeProcessor = new ExperimentalWalkNodeProcessor();
-        this.nodeProcessor.setCanEnterDoors(true);
-        return new PathFinderAStar(this.nodeProcessor, entity);
     }
 
     public Path getPathToPos(BlockPos pos) {

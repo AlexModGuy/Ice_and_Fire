@@ -1,22 +1,23 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateAmphibious extends PathNavigate {
+public class PathNavigateDeathWormLand extends PathNavigate {
     private boolean shouldAvoidSun;
-
-    public PathNavigateAmphibious(EntityLiving entitylivingIn, World worldIn) {
-        super(entitylivingIn, worldIn);
+    private EntityDeathWorm worm;
+    public PathNavigateDeathWormLand(EntityDeathWorm worm, World worldIn) {
+        super(worm, worldIn);
         this.nodeProcessor.setCanSwim(true);
+        this.worm = worm;
     }
 
     protected PathFinder getPathFinder() {
@@ -30,7 +31,7 @@ public class PathNavigateAmphibious extends PathNavigate {
      * If on ground or swimming and can swim
      */
     protected boolean canNavigate() {
-        return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
+        return this.entity.onGround || this.worm.isInSand() || this.entity.isRiding();
     }
 
     protected Vec3d getEntityPosition() {
@@ -83,14 +84,14 @@ public class PathNavigateAmphibious extends PathNavigate {
      * Gets the safe pathing Y position for the entity depending on if it can path swim or not
      */
     private int getPathablePosY() {
-        if (this.entity.isInWater() && this.getCanSwim()) {
+        if (this.worm.isInSand() ) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
-            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
+            IBlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
             int j = 0;
 
-            while (block == Blocks.FLOWING_WATER || block == Blocks.WATER) {
+            while (blockstate.getMaterial() == Material.SAND) {
                 ++i;
-                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
+                blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
                 ++j;
 
                 if (j > 16) {
@@ -104,9 +105,6 @@ public class PathNavigateAmphibious extends PathNavigate {
         }
     }
 
-    /**
-     * Trims path data from the end to the first sun covered block
-     */
     protected void removeSunnyPath() {
         super.removeSunnyPath();
 
@@ -214,10 +212,6 @@ public class PathNavigateAmphibious extends PathNavigate {
                             return false;
                         }
 
-                        if (pathnodetype == PathNodeType.OPEN) {
-                            return false;
-                        }
-
                         pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         float f = this.entity.getPathPriority(pathnodetype);
 
@@ -247,7 +241,7 @@ public class PathNavigateAmphibious extends PathNavigate {
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.world.getBlockState(blockpos).getBlock();
 
-                if (!block.isPassable(this.world, blockpos)) {
+                if (!block.isPassable(this.world, blockpos) || this.world.getBlockState(blockpos).getMaterial() == Material.SAND) {
                     return false;
                 }
             }

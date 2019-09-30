@@ -1,23 +1,22 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
-import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateDeathWormLand extends PathNavigate {
+public class PathNavigateAmphibious extends PathNavigate {
     private boolean shouldAvoidSun;
-    private EntityDeathWorm worm;
-    public PathNavigateDeathWormLand(EntityDeathWorm worm, World worldIn) {
-        super(worm, worldIn);
+
+    public PathNavigateAmphibious(EntityLiving entitylivingIn, World worldIn) {
+        super(entitylivingIn, worldIn);
         this.nodeProcessor.setCanSwim(true);
-        this.worm = worm;
     }
 
     protected PathFinder getPathFinder() {
@@ -27,20 +26,14 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         return new PathFinder(this.nodeProcessor);
     }
 
-    /**
-     * If on ground or swimming and can swim
-     */
     protected boolean canNavigate() {
-        return this.entity.onGround || this.worm.isInSand() || this.entity.isRiding();
+        return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
     }
 
     protected Vec3d getEntityPosition() {
         return new Vec3d(this.entity.posX, (double) this.getPathablePosY(), this.entity.posZ);
     }
 
-    /**
-     * Returns path to given BlockPos
-     */
     public Path getPathToPos(BlockPos pos) {
         if (this.world.getBlockState(pos).getMaterial() == Material.AIR) {
             BlockPos blockpos;
@@ -73,25 +66,19 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         }
     }
 
-    /**
-     * Returns the path to the given EntityLiving. Args : entity
-     */
     public Path getPathToEntityLiving(Entity entityIn) {
         return this.getPathToPos(new BlockPos(entityIn));
     }
 
-    /**
-     * Gets the safe pathing Y position for the entity depending on if it can path swim or not
-     */
     private int getPathablePosY() {
-        if (this.worm.isInSand() ) {
+        if (this.entity.isInWater() && this.getCanSwim()) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
-            IBlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
+            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
             int j = 0;
 
-            while (blockstate.getMaterial() == Material.SAND) {
+            while (block == Blocks.FLOWING_WATER || block == Blocks.WATER) {
                 ++i;
-                blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
+                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
                 ++j;
 
                 if (j > 16) {
@@ -124,9 +111,6 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         }
     }
 
-    /**
-     * Checks if the specified entity can safely walk to the specified location.
-     */
     protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
         int i = MathHelper.floor(posVec31.x);
         int j = MathHelper.floor(posVec31.z);
@@ -191,9 +175,6 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         }
     }
 
-    /**
-     * Returns true when an entity could stand at a position, including solid blocks under the entire entity.
-     */
     private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d vec31, double p_179683_8_, double p_179683_10_) {
         int i = x - sizeX / 2;
         int j = z - sizeZ / 2;
@@ -209,6 +190,10 @@ public class PathNavigateDeathWormLand extends PathNavigate {
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
                         PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         if (pathnodetype == PathNodeType.LAVA) {
+                            return false;
+                        }
+
+                        if (pathnodetype == PathNodeType.OPEN) {
                             return false;
                         }
 
@@ -241,7 +226,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.world.getBlockState(blockpos).getBlock();
 
-                if (!block.isPassable(this.world, blockpos) || this.world.getBlockState(blockpos).getMaterial() == Material.SAND) {
+                if (!block.isPassable(this.world, blockpos)) {
                     return false;
                 }
             }

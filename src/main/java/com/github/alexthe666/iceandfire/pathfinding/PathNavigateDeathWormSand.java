@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.material.Material;
@@ -18,7 +18,7 @@ public class PathNavigateDeathWormSand extends PathNavigate {
     }
 
     protected PathFinder getPathFinder() {
-        return new PathFinder(new SandNodeProcessor());
+        return new PathFinder(new NodeProcessorDeathWorm());
     }
 
     /**

@@ -360,7 +360,6 @@ public class EventLiving {
             }
         }
     }
-
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);

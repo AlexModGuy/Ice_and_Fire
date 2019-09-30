@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.NodeProcessor;
@@ -10,14 +10,11 @@ import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
 
-public class SandNodeProcessor extends NodeProcessor {
+public class NodeProcessorDeathWorm extends NodeProcessor {
     public PathPoint getStart() {
         return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
     }
 
-    /**
-     * Returns PathPoint for given coordinates
-     */
     public PathPoint getPathPointToCoords(double x, double y, double z) {
         return this.openPoint(MathHelper.floor(x - (double) (0.4)), MathHelper.floor(y + 0.5D), MathHelper.floor(z - (double) (0.4)));
     }
