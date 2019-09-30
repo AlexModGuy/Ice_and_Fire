@@ -165,17 +165,15 @@ public class IaFDragonFlightManager {
                     this.entity.setMoveForward(0.0F);
                     return;
                 }
-                float f9 = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
-                float maxChange = 70F;
+                float targetDegree = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
+                float changeRange = 70F;
                 if(dragonBase.width > 2F) {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
-                    maxChange = 5 + ageMod * 10;
+                    changeRange = 5 + ageMod * 10;
                 }
-
-                float distance = (float)Math.toDegrees(distance((float)Math.toRadians(this.entity.rotationYaw), (float)Math.toRadians(f9)));
-                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange/2, maxChange/2);
+                float change = targetDegree - this.entity.rotationYaw;
+                this.entity.rotationYaw =this.entity.rotationYaw + MathHelper.clamp(change, -changeRange/2, changeRange/2);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
-
                 if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
                     this.entity.getJumpHelper().setJumping();
                     this.action = EntityMoveHelper.Action.JUMPING;
