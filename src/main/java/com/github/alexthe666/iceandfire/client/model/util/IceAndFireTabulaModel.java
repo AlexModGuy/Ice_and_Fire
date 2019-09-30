@@ -86,7 +86,6 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale, entity);
         GlStateManager.pushMatrix();
         GlStateManager.scale(this.scale[0], this.scale[1], this.scale[2]);
         for (AdvancedModelRenderer box : this.rootBoxes) {
