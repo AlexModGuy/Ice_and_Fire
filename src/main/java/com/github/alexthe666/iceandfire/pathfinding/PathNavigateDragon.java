@@ -48,37 +48,4 @@ public class PathNavigateDragon extends PathNavigateGround {
     public void clearPath() {
         super.clearPath();
     }
-
-    public void onUpdateNavigation() {
-        ++this.totalTicks;
-
-        if (this.tryUpdatePath) {
-            this.updatePath();
-        }
-        if (!this.noPath()) {
-            if (this.canNavigate()) {
-                this.pathFollow();
-            } else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
-                Vec3d vec3d = this.getEntityPosition();
-                Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
-
-                if (vec3d.y > vec3d1.y && !this.entity.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
-                    this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
-                }
-            }
-            this.world.profiler.endSection();
-            if (!this.noPath()) {
-                Vec3d vec3d2 = this.currentPath.getPosition(this.entity);
-                this.entity.getMoveHelper().setMoveTo(vec3d2.x, vec3d2.y, vec3d2.z, this.speed);
-
-            }
-        } else if (targetPosition != null) {
-            double d0 = 1;
-            if (this.entity.getDistanceSqToCenter(this.targetPosition) >= d0 && (this.entity.posY <= (double) this.targetPosition.getY() || this.entity.getDistanceSqToCenter(new BlockPos(this.targetPosition.getX(), MathHelper.floor(this.entity.posY), this.targetPosition.getZ())) >= d0)) {
-                this.entity.getMoveHelper().setMoveTo((double) this.targetPosition.getX(), (double) this.targetPosition.getY(), (double) this.targetPosition.getZ(), this.speed);
-            } else {
-                this.targetPosition = null;
-            }
-        }
-    }
 }
