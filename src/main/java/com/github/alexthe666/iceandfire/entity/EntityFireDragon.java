@@ -201,6 +201,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        this.groundAttack = IaFDragonAttacks.Ground.FIRE;
         if (!world.isRemote && this.getAttackTarget() != null) {
             if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
