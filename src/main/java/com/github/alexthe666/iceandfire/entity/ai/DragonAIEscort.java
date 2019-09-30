@@ -25,7 +25,7 @@ public class DragonAIEscort extends EntityAIBase {
     public void updateTask() {
         if(this.dragon.getOwner() != null && (this.dragon.getDistance(this.dragon.getOwner()) > 30)) {
             this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
-            if(this.dragon.getDistance(this.dragon.getOwner()) > 60 && !this.dragon.isFlying() && !this.dragon.isHovering()){
+            if(this.dragon.getDistance(this.dragon.getOwner()) > 60 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()){
                 this.dragon.setHovering(true);
                 this.dragon.flyTicks = 0;
             }

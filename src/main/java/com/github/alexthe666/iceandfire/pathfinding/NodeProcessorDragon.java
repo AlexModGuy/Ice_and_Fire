@@ -43,9 +43,6 @@ public class NodeProcessorDragon extends WalkNodeProcessor {
                 } else if (material == Material.LAVA) {
                     return PathNodeType.LAVA;
                 } else {
-                    if(block.isPassable(world, blockpos)){
-                        System.out.println("passable");
-                    }
                     return block.isPassable(world, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
                 }
             } else {

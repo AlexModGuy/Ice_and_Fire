@@ -240,7 +240,7 @@ public class EntityIceDragon extends EntityDragonBase {
         if(!isFlying() && !isHovering() && isSwimming() && !world.isRemote){
             this.flightManager.update();
         }
-        if (this.isInLava() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround) {
+        if (!world.isRemote && this.isInLava() && this.isAllowedToTriggerFlight()) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -564,6 +564,6 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isAllowedToTriggerFlight(){
-        return !this.isInWater();
+        return super.isAllowedToTriggerFlight() && !this.isInWater();
     }
 }
