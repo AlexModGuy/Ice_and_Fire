@@ -14,8 +14,10 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
+import net.minecraft.world.EnumDifficulty;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -312,5 +314,13 @@ public class DragonUtils {
 			}
 		}
 		return false;
+	}
+
+	public static boolean canHostilesTarget(Entity entity) {
+		if(entity instanceof EntityPlayer && entity.world.getDifficulty() == EnumDifficulty.PEACEFUL){
+			return false;
+		}else{
+			return entity instanceof EntityLivingBase && isAlive((EntityLivingBase)entity);
+		}
 	}
 }
