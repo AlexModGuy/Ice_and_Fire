@@ -97,19 +97,22 @@ public class TileEntityJar extends TileEntity implements ITickable {
 		if (this.hasPixie) {
 			IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
 		}
-		if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie && !this.getWorld().isRemote) {
+		if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie) {
 			this.hasProduced = true;
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), true));
+			if(!this.getWorld().isRemote){
+				IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+			}
 		}
 		if(this.hasPixie && hasProduced != prevHasProduced && ticksExisted > 5){
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+			if(!this.getWorld().isRemote){
+				IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+			}
 			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, ModSounds.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
 		}
 		prevRotationYaw = rotationYaw;
 		if (rand.nextInt(30) == 0) {
 			this.rotationYaw = (rand.nextFloat() * 360F) - 180F;
 		}
-
 		if (this.hasPixie && ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
 			this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, ModSounds.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
 		}
