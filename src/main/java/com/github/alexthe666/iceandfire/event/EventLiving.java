@@ -762,32 +762,51 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if (event.getEntity() instanceof EntityLivingBase) {
-            try{
-                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-                if (properties != null) {
-                    properties.updateConnectedEntities(event.getEntity());
+        try {
+            if (event.getEntity() instanceof EntityLivingBase) {
+                try {
+                    ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
+                    if (properties != null) {
+                        properties.updateConnectedEntities(event.getEntity());
+                    }
+                } catch (Exception e) {
+                    IceAndFire.logger.warn("could not instantiate chain properties for " + event.getEntity().getName());
                 }
-            }catch (Exception e){
-                IceAndFire.logger.warn("could not instantiate chain properties for " + event.getEntity().getName());
             }
+            if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal) {
+                EntityAnimal animal = (EntityAnimal) event.getEntity();
+                animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+            }
+            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons) {
+                EntityCreature villager = (EntityCreature) event.getEntity();
+                villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 12.0F, 0.8D, 0.8D));
+            }
+            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons) {
+                EntityCreature animal = (EntityCreature) event.getEntity();
+                animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
+                    public boolean apply(@Nullable EntityLivingBase entity) {
+                        return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
+                    }
+                }, 12.0F, 1.2D, 1.5D));
+            }
+        }catch(Exception e){
+            IceAndFire.logger.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
         }
-        if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof EntityAnimal) {
-            EntityAnimal animal = (EntityAnimal) event.getEntity();
-            animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
-        }
-        if (event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons) {
-            EntityCreature villager = (EntityCreature) event.getEntity();
-            villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 12.0F, 0.8D, 0.8D));
-        }
-        if (event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons) {
-            EntityCreature animal = (EntityCreature) event.getEntity();
-            animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
-                public boolean apply(@Nullable EntityLivingBase entity) {
-                    return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
-                }
-            }, 12.0F, 1.2D, 1.5D));
-        }
+    }
+
+    public static boolean isLivestock(Entity entity){
+        String className = entity.getClass().getSimpleName();
+        return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
+                || entity instanceof EntityRabbit || entity instanceof AbstractHorse
+                || className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
+                || className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
+                || className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
+                || className.contains("Hog") || className.contains("Hog");
+    }
+
+    public static boolean isVillager(Entity entity){
+        String className = entity.getClass().getSimpleName();
+        return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
     }
 
     public static boolean isAnimaniaSheep(Entity entity) {

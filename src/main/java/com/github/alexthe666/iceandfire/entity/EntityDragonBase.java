@@ -49,10 +49,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -831,9 +828,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public void setFlying(boolean flying) {
-        if(flying){
-            System.out.println("te");
-        }
         this.dataManager.set(FLYING, flying);
         if (!world.isRemote) {
             this.isFlying = flying;
@@ -1926,7 +1920,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public void setScaleForAge(boolean par1) {
         float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
+        double prevX = posX;
+        double prevY = posY;
+        double prevZ = posZ;
+        float localWidth = this.width;
         this.setScale(scale);
+        if (this.width > localWidth && !this.firstUpdate && !this.world.isRemote) {
+            this.setPosition(prevX, prevY, prevZ);
+        }
         if (scale != lastScale) {
             resetParts(this.getRenderSize() / 3);
         }
@@ -2185,13 +2186,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean isMovementBlocked() {
         return this.getHealth() <= 0.0F || isSitting() || this.isModelDead() || this.isBeingRidden();
     }
-
     @Override
     public void travel(float strafe, float forward, float vertical) {
-        if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden()) {
+        if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isSitting()) {
             strafe = 0;
             forward = 0;
             vertical = 0;
+            moveVertical = 0;
+            moveStrafing = 0;
+            moveForward = 0;
             super.travel(strafe, forward, vertical);
             return;
         }
@@ -2549,4 +2552,5 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
         return true;
     }
+
 }
