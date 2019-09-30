@@ -96,6 +96,9 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public boolean isOnSameTeam(Entity entityIn) {
+        if(this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null){
+            return false;
+        }
         return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID()) || entityIn instanceof EntityTameable && ((EntityTameable) entityIn).getOwnerId().equals(this.getSummonerUUID());
     }
 
