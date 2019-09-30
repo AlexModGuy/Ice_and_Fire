@@ -74,7 +74,7 @@ public class ClientProxy extends CommonProxy {
 	private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS = new ModelDragonsteelFireArmor(0.2F);
 	private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL = new ModelDragonsteelIceArmor(0.4F);
 	private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
-
+	private IceAndFireParticleSpawner particleSpawner;
 	private FontRenderer bestiaryFontRenderer;
 	@SideOnly(Side.CLIENT)
 	private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
@@ -261,6 +261,7 @@ public class ClientProxy extends CommonProxy {
 	@SuppressWarnings("deprecation")
 	public void render() {
 		this.bestiaryFontRenderer = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("iceandfire:textures/font/bestiary.png"), Minecraft.getMinecraft().renderEngine, false);
+		this.particleSpawner = new IceAndFireParticleSpawner();
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
 		ModKeys.init();
 		MinecraftForge.EVENT_BUS.register(new RenderModCapes());
@@ -363,11 +364,15 @@ public class ClientProxy extends CommonProxy {
 		if (world == null) {
 			return;
 		}
+		net.minecraft.client.particle.Particle particle = null;
 		if (name.equals("dragonfire")) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 0));
+			particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
 		}
 		if (name.equals("dragonice")) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, entityDragonBase, 0));
+			particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
+		}
+		if (particle != null) {
+			particleSpawner.spawnParticle(particle, true, true,false, x, y, z);
 		}
 	}
 
@@ -400,7 +405,7 @@ public class ClientProxy extends CommonProxy {
 			particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
 		}
 		if (particle != null) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+			particleSpawner.spawnParticle(particle, false, false,false, x, y, z);
 		}
 	}
 
