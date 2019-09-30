@@ -12,7 +12,7 @@ public class DragonAIEscort extends EntityAIBase {
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexBits(0);
     }
 
     public boolean shouldExecute() {
@@ -23,10 +23,16 @@ public class DragonAIEscort extends EntityAIBase {
     }
 
     public void updateTask() {
-        if(this.dragon.getOwner() != null && (this.dragon.getDistance(this.dragon.getOwner()) > 30)) {
-            this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
-            if(this.dragon.getDistance(this.dragon.getOwner()) > 60 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()){
+        if(this.dragon.getOwner() != null) {
+            double dist = this.dragon.getDistance(this.dragon.getOwner());
+            if(dist > 20 && !this.dragon.isFlying() && !this.dragon.isHovering()){
+                this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
+            }
+            System.out.println(!this.dragon.isFlying());
+            if(dist > 45 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()){
                 this.dragon.setHovering(true);
+                this.dragon.setSleeping(false);
+                this.dragon.setSitting(false);
                 this.dragon.flyTicks = 0;
             }
         }
@@ -34,7 +40,7 @@ public class DragonAIEscort extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.dragon.canMove() && this.dragon.getAttackTarget() == null && this.dragon.getOwner() != null && this.dragon.getOwner().isEntityAlive() && (this.dragon.getDistance(this.dragon.getOwner()) < 15 || !this.dragon.getNavigator().noPath());
+        return this.dragon.canMove() && this.dragon.getAttackTarget() == null && this.dragon.getOwner() != null && this.dragon.getOwner().isEntityAlive() && (this.dragon.getDistance(this.dragon.getOwner()) > 15 || !this.dragon.getNavigator().noPath());
     }
 
 }
