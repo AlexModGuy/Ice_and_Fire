@@ -88,7 +88,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
         this.tasks.addTask(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
-        this.tasks.addTask(3, new CockatriceAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
+        this.tasks.addTask(3, new CockatriceAIFollowOwner(this, 1.0D, 7.0F, 2.0F));
         this.tasks.addTask(3, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(4, new CockatriceAIWander(this, 1.0D));
         this.tasks.addTask(5, new CockatriceAIAggroLook(this));
