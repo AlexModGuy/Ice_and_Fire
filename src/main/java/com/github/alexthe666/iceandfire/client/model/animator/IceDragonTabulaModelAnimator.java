@@ -83,6 +83,9 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                 if (!isPartEqual(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
                 }
+                if(cube.boxName.equals("BodyUpper")){
+                    cube.rotationPointY += 0.35F * entity.modelDeadProgress;
+                }
             }
             if (entity.sleepProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumDragonAnimations.SLEEPING_POSE.icedragon_model.getCube(cube.boxName))) {
