@@ -68,6 +68,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     public static final ResourceLocation TAN_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan_giant"));
     public static final ResourceLocation WHITE_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white_giant"));
     public static final ResourceLocation RED_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_red_giant"));
+    private float prevScale = 0.0F;
 
     public EntityDeathWorm(World worldIn) {
         super(worldIn);
@@ -521,7 +522,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFire.CONFIG.deathWormAttackStrength * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFire.CONFIG.deathWormMaxHealth * this.getScaleForAge()));
-        this.heal(30F * this.getScaleForAge());
+        this.setHealth((float)this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
     }
 
     public void onKillEntity(EntityLivingBase entityLivingIn) {
