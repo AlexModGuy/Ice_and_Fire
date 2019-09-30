@@ -59,10 +59,10 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
-        this.tasks.addTask(3, new DragonAIMate(this, 1.0D));
-        this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
+        this.tasks.addTask(1, new DragonAIAttackMelee(this, 1.5D, false));
+        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
+        this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
+        this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
         this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
@@ -164,7 +164,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
                     this.setAnimation(this.ANIMATION_TAILWHACK);
                     return false;
-                } else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
+                } else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 30) {
                     boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                     if (entityIn instanceof EntityLivingBase) {
                         ((EntityLivingBase)entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
@@ -202,7 +202,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (!world.isRemote && this.getAttackTarget() != null) {
-            if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
             if(this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack){

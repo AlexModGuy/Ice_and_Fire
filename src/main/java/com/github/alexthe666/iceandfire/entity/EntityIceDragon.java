@@ -249,7 +249,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
         if (!world.isRemote && this.getAttackTarget() != null) {
             float growSize = this.isInMaterialWater() ? 1.0F : 0.5F;
-            if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * growSize, 1 + this.getRenderSize() * growSize, 1 + this.getRenderSize() * growSize).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
             if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack) {
