@@ -1049,7 +1049,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             if (this.isOwner(player)) {
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (this.getDragonStage() < 2) {
-                        this.startRiding(player, false);
+                        this.startRiding(player, true);
                     }
                     if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isRiding()) {
                         player.setSneaking(false);
@@ -1984,7 +1984,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void updateRiding(Entity riding) {
         if (riding != null && riding.isPassenger(this) && riding instanceof EntityPlayer) {
             int i = riding.getPassengers().indexOf(this);
-            float radius = (i == 2 ? 0F : 0.5F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
+            float radius = (i == 2 ? -0.2F : 0.5F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
             float angle = (0.01745329251F * ((EntityPlayer) riding).renderYawOffset) + (i == 1 ? 90 : i == 0 ? -90 : 0);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
