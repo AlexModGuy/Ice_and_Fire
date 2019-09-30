@@ -39,19 +39,24 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void onClientReceived(Minecraft client, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
-		Entity entity = player.world.getEntityByID(message.deathWormId);
-		if (entity != null && entity instanceof EntityDeathWorm) {
-			EntityDeathWorm worm = (EntityDeathWorm)entity;
-			worm.initSegments(message.scale);
+		if(player.world != null){
+			Entity entity = player.world.getEntityByID(message.deathWormId);
+			if (entity != null && entity instanceof EntityDeathWorm) {
+				EntityDeathWorm worm = (EntityDeathWorm)entity;
+				worm.initSegments(message.scale);
+			}
 		}
+
 	}
 
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
-		Entity entity = player.world.getEntityByID(message.deathWormId);
-		if (entity != null && entity instanceof EntityDeathWorm) {
-			EntityDeathWorm worm = (EntityDeathWorm)entity;
-			worm.initSegments(message.scale);
+		if(player.world != null) {
+			Entity entity = player.world.getEntityByID(message.deathWormId);
+			if (entity != null && entity instanceof EntityDeathWorm) {
+				EntityDeathWorm worm = (EntityDeathWorm) entity;
+				worm.initSegments(message.scale);
+			}
 		}
 	}
 }
