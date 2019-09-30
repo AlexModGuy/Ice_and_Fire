@@ -2182,6 +2182,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     @Override
+    public boolean isMovementBlocked() {
+        return this.getHealth() <= 0.0F || isSitting() || this.isModelDead() || this.isBeingRidden();
+    }
+
+    @Override
     public void travel(float strafe, float forward, float vertical) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden()) {
             strafe = 0;
