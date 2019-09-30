@@ -11,6 +11,7 @@ public class IceAndFireConfig {
 	public boolean generateSapphireOre = true;
 	public boolean generateDragonSkeletons = true;
 	public int generateDragonSkeletonChance = 300;
+	public int worldGenDistance = 300;
 	public boolean generateDragonDens = true;
 	public int generateDragonDenChance = 180;
 	public boolean generateDragonRoosts = true;
@@ -129,6 +130,7 @@ public class IceAndFireConfig {
 		this.useVanillaFont = config.getBoolean("Use Vanilla Font", "all", false, "Whether to use the vanilla font in the bestiary or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
 		this.logCascadingWorldGen  = config.getBoolean("Log Cascading World Gen", "all", false, "Whether to log cascading world gen lag. We hope to fix all cascading lag in the future, but the server console spam is over the top.");
+		this.worldGenDistance = config.getInt("World Gen Distance", "all", 150, 0, Integer.MAX_VALUE, "How far apart dragon dens, cyclops caves, gorgon temples etc should spawn apart from eachother (this is kept seperate for each type: a dragon roost can still spawn next to a myrmex hive)");
 		this.generateSapphireOre  = config.getBoolean("Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
 		this.generateDragonSkeletons  = config.getBoolean("Generate Dragon Skeletons", "all", true, "Whether to generate dragon skeletons or not");
 		this.generateDragonSkeletonChance  = config.getInt("Generate Dragon Skeleton Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
