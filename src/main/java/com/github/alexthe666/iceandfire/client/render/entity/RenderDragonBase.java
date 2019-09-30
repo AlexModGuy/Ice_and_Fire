@@ -48,16 +48,16 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
     }
 
     protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
-        String dragonOverallTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.getArmorInSlot(0)  + entity.getArmorInSlot(1)  + entity.getArmorInSlot(2)  + entity.getArmorInSlot(3)
+        String armorString = "ARMOR{Head=" + entity.getArmorInSlot(0) + ", Neck=" + entity.getArmorInSlot(1) + ", Body=" + entity.getArmorInSlot(2) + " Tail=" + entity.getArmorInSlot(3) + "}";
+        String dragonOverallTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + armorString
                + (entity.isSleeping() || entity.isBlinking()) + entity.isModelDead() + entity.isMale() + entity.isSkeletal();
         ResourceLocation resourcelocation = LAYERED_LOCATION_CACHE.get(dragonOverallTexture);
-
         if (resourcelocation == null) {
             resourcelocation = EnumDragonTextures.getTextureFromDragon(entity);
             List<String> tex = new ArrayList<String>();
             boolean ice = entity instanceof EntityIceDragon;
             tex.add(resourcelocation.toString());
-            if(entity.isMale()){
+            if(entity.isMale() && !entity.isModelDead()){
                 if (ice) {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).ICE_MALE_OVERLAY.toString());
                 } else {
