@@ -19,18 +19,18 @@ public class ModItems {
 
 	public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 	public static ArmorMaterial blindfoldArmor = EnumHelper.addArmorMaterial("Blindfold", "iceandfire:blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-	public static ArmorMaterial sheep = EnumHelper.addArmorMaterial("Sheep", "iceandfire:sheep_disguise", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+	public static ArmorMaterial sheep = EnumHelper.addArmorMaterial("Sheep", "iceandfire:sheep_disguise", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ArmorMaterial myrmexDesert = EnumHelper.addArmorMaterial("MyrmexDesert", "iceandfire:myrmex_desert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ArmorMaterial myrmexJungle = EnumHelper.addArmorMaterial("MyrmexJungle", "iceandfire:myrmex_jungle", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ArmorMaterial earplugsArmor = EnumHelper.addArmorMaterial("Earplugs", "iceandfire:earplugs", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
 	public static ArmorMaterial yellow_deathworm = EnumHelper.addArmorMaterial("Yellow Deathworm", "iceandfire:yellow_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
 	public static ArmorMaterial white_deathworm = EnumHelper.addArmorMaterial("White Deathworm", "iceandfire:white_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
 	public static ArmorMaterial red_deathworm = EnumHelper.addArmorMaterial("Red Deathworm", "iceandfire:red_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-	public static ArmorMaterial troll_mountain = EnumHelper.addArmorMaterial("Mountain Troll", "iceandfire:troll_mountain", 20, new int[]{4, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+	public static ArmorMaterial troll_mountain = EnumHelper.addArmorMaterial("Mountain Troll", "iceandfire:troll_mountain", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
 	public static ArmorMaterial troll_forest = EnumHelper.addArmorMaterial("Forest Troll", "iceandfire:troll_forest", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
 	public static ArmorMaterial troll_frost = EnumHelper.addArmorMaterial("Frost Troll", "iceandfire:troll_frost", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-	public static ArmorMaterial dragonsteel_fire_armor = EnumHelper.addArmorMaterial("Dragonsteel Fire", "iceandfire:dragonsteel_fire", 150, new int[]{7, 12, 9, 6}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-	public static ArmorMaterial dragonsteel_ice_armor = EnumHelper.addArmorMaterial("Dragonsteel Ice", "iceandfire:dragonsteel_ice", 150, new int[]{7, 12, 9, 6}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+	public static ArmorMaterial dragonsteel_fire_armor = EnumHelper.addArmorMaterial("Dragonsteel Fire", "iceandfire:dragonsteel_fire", 150, new int[]{7, 9, 12, 8}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+	public static ArmorMaterial dragonsteel_ice_armor = EnumHelper.addArmorMaterial("Dragonsteel Ice", "iceandfire:dragonsteel_ice", 150, new int[]{7, 9, 12, 8}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
 	public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 	public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
