@@ -97,6 +97,9 @@ public class DragonUtils {
 		Entity pointedEntity = null;
 		List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
+				if(onSameTeam(dragon, entity)){
+					return false;
+				}
 				return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase && !entity.isEntityEqual(dragon) && !entity.isOnSameTeam(dragon) &&  (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead());
 			}
 		}));
@@ -322,5 +325,33 @@ public class DragonUtils {
 		}else{
 			return entity instanceof EntityLivingBase && isAlive((EntityLivingBase)entity);
 		}
+	}
+
+	public static boolean onSameTeam(Entity entity1, Entity entity2){
+		Entity owner1 = null;
+		Entity owner2 = null;
+		boolean def = entity1.isOnSameTeam(entity2);
+		if(entity1 instanceof EntityTameable){
+			owner1 = ((EntityTameable) entity1).getOwner();
+		}
+		if(entity2 instanceof EntityTameable){
+			owner2 = ((EntityTameable) entity2).getOwner();
+		}
+		if(entity1 instanceof EntityMutlipartPart){
+			Entity multipart = ((EntityMutlipartPart) entity1).getParent();
+			if(multipart != null && multipart instanceof EntityTameable){
+				owner1 = ((EntityTameable) multipart).getOwner();
+			}
+		}
+		if(entity2 instanceof EntityMutlipartPart){
+			Entity multipart = ((EntityMutlipartPart) entity2).getParent();
+			if(multipart != null && multipart instanceof EntityTameable){
+				owner2 = ((EntityTameable) multipart).getOwner();
+			}
+		}
+		if(owner1 != null && owner2 != null){
+			return owner1.isEntityEqual(owner2);
+		}
+		return def;
 	}
 }

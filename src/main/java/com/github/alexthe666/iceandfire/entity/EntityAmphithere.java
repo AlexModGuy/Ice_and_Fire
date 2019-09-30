@@ -820,7 +820,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return 10;
     }
 
-
     @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
