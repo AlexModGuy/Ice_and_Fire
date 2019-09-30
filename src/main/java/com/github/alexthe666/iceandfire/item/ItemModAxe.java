@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.potion.PotionEffect;
@@ -28,11 +29,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class ItemModAxe extends ItemTool {
-	private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[]{Blocks.PLANKS, Blocks.BOOKSHELF, Blocks.LOG, Blocks.LOG2, Blocks.CHEST, Blocks.PUMPKIN, Blocks.LIT_PUMPKIN, Blocks.MELON_BLOCK, Blocks.LADDER, Blocks.OAK_DOOR, Blocks.WOODEN_PRESSURE_PLATE});
+public class ItemModAxe extends ItemAxe {
 
 	public ItemModAxe(ToolMaterial toolmaterial, String gameName, String name) {
-		super(toolmaterial, EFFECTIVE_ON);
+		super(ToolMaterial.DIAMOND);
+		this.toolMaterial = toolmaterial;
 		this.attackDamage = toolmaterial.getAttackDamage() + 5;
 		this.attackSpeed = -3;
 		this.setTranslationKey(name);
