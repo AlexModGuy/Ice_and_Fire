@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import com.github.alexthe666.iceandfire.entity.ai.ExperimentalWalkNodeProcessor;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -12,6 +11,12 @@ public class PathNavigateMyrmex extends PathNavigateGround {
 
     public PathNavigateMyrmex(EntityLiving entitylivingIn, World worldIn) {
         super(entitylivingIn, worldIn);
+    }
+
+    protected PathFinder getPathFinder() {
+        this.nodeProcessor = new NodeProcessorDragon();
+        this.nodeProcessor.setCanEnterDoors(true);
+        return new PathFinder(this.nodeProcessor);
     }
 
     public void clearPath() {

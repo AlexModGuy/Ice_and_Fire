@@ -795,18 +795,13 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             super(inventoryTitle, slotCount);
             this.addInventoryChangeListener(new EntityHippocampus.HippocampusInventoryListener(hippocampus));
         }
-
-
     }
 
     class HippocampusInventoryListener implements IInventoryChangedListener {
-
         EntityHippocampus hippocampus;
-
         public HippocampusInventoryListener(EntityHippocampus hippocampus) {
             this.hippocampus = hippocampus;
         }
-
         @Override
         public void onInventoryChanged(IInventory invBasic) {
             hippocampus.refreshInventory();

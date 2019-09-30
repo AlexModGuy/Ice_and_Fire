@@ -345,7 +345,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     private void initDragonInv() {
         ContainerHorseChest animalchest = this.dragonInv;
-        this.dragonInv = new ContainerHorseChest("dragonInventory", 4);
+        this.dragonInv = new ContainerHorseChest("dragonInventory",4);
         this.dragonInv.setCustomName(this.getName());
         if (animalchest != null) {
             int i = Math.min(animalchest.getSizeInventory(), this.dragonInv.getSizeInventory());

@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.entity.ai;
+package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.google.common.collect.Sets;
 
@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
-public class ExperimentalWalkNodeProcessor extends NodeProcessor {
+public class NodeProcessorMyrmex extends NodeProcessor {
     protected float avoidsWater;
 
     public void init(IBlockAccess sourceIn, EntityLiving mob) {
@@ -34,7 +34,6 @@ public class ExperimentalWalkNodeProcessor extends NodeProcessor {
     }
 
     public void postProcess() {
-       // this.entity.setPathPriority(PathNodeType.WATER, this.avoidsWater);
         super.postProcess();
     }
 
