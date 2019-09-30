@@ -171,7 +171,6 @@ public class IaFDragonFlightManager {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     changeRange = 5 + ageMod * 10;
                 }
-                float change = targetDegree - this.entity.rotationYaw;
                 this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, targetDegree, changeRange);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
                 if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {

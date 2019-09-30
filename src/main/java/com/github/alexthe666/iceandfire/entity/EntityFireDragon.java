@@ -403,9 +403,11 @@ public class EntityFireDragon extends EntityDragonBase {
                     IceAndFire.PROXY.spawnDragonParticle("dragonfire", headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
                 }
             } else {
-                RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
-                BlockPos pos = result.getBlockPos();
-                IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
+                if(!world.isRemote){
+                    RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
+                    BlockPos pos = result.getBlockPos();
+                    IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
+                }
             }
 
         }
@@ -413,7 +415,9 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            IaFDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+            if(!world.isRemote) {
+                IaFDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+            }
         }
     }
 
