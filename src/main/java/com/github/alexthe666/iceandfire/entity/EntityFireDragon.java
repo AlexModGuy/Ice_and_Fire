@@ -236,7 +236,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (this.ticksExisted % 5 == 0) {
                     this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
                 }
-                stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 0);
+                stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 1);
             }
         } else {
             this.setBreathingFire(true);

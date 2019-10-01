@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSyncMountPosition;
 import com.google.common.base.Predicate;
@@ -38,10 +37,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.storage.loot.LootEntryItem;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.RandomChance;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -741,10 +739,10 @@ public class EventLiving {
     @SubscribeEvent
     public void onChestGenerated(LootTableLoadEvent event) {
         if (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
-            LootPool pool1 = event.getTable().getPool("");
-            if (pool1 != null) {
-                pool1.addEntry(new LootEntryItem(ModItems.manuscript, 10, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript"));
-            }
+            LootCondition chance = new RandomChance(0.1f);
+            LootEntryItem item = new LootEntryItem(ModItems.manuscript, 10, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
+            LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[] {chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
+            event.getTable().addPool(pool);
         }
     }
 
