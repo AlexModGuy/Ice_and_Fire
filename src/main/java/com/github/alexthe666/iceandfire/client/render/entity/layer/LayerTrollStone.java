@@ -23,7 +23,6 @@ public class LayerTrollStone implements LayerRenderer {
 			EntityTroll troll = (EntityTroll)entitylivingbaseIn;
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, StoneEntityProperties.class);
 			if (properties != null && properties.isStone) {
-				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				this.renderer.bindTexture(troll.getType().TEXTURE_STONE);
 				this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);

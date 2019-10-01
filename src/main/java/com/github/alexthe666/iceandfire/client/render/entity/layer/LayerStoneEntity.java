@@ -32,7 +32,6 @@ public class LayerStoneEntity implements LayerRenderer {
 		if (entitylivingbaseIn instanceof EntityLiving) {
 			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
 			if (properties != null && properties.isStone) {
-				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				this.renderer.bindTexture(new ResourceLocation(getStoneType(renderer.getMainModel(), 1)));
 				if (this.renderer.getMainModel() instanceof ICustomStatueModel) {

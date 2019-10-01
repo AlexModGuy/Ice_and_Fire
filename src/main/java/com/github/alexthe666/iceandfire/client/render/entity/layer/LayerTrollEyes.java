@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -18,21 +19,22 @@ public class LayerTrollEyes implements LayerRenderer<EntityTroll> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityTroll troll, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+	public void doRenderLayer(EntityTroll troll, float f, float f1, float f6, float f2, float f3, float f4, float f5) {
 		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, StoneEntityProperties.class);
 		if (!EntityGorgon.isStoneMob(troll)) {
 			this.renderer.bindTexture(troll.getType().TEXTURE_EYES);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 			GlStateManager.disableLighting();
-			GlStateManager.depthMask(!troll.isInvisible());
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+			GlStateManager.depthFunc(514);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.0F);
 			GlStateManager.enableLighting();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
 			this.renderer.getMainModel().render(troll, f, f1, f2, f3, f4, f5);
+			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
 			this.renderer.setLightmap(troll);
-			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
+			GlStateManager.depthFunc(515);
 		}
 	}
 
