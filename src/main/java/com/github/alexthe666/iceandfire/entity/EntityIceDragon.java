@@ -296,7 +296,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
         if (this.isSwimming()) {
             ticksSwiming++;
-            if ((this.isInMaterialWater() ||  this.isOverWater()) && (ticksSwiming > 200 || this.getAttackTarget() != null && this.isInWater() != this.getAttackTarget().isInWater()) && !this.isChild() && !this.isHovering() && !this.isFlying() ) {
+            if ((this.isInMaterialWater() ||  this.isOverWater()) && (ticksSwiming > 4000 || this.getAttackTarget() != null && this.isInWater() != this.getAttackTarget().isInWater()) && !this.isChild() && !this.isHovering() && !this.isFlying() ) {
                 this.setHovering(true);
                 this.jump();
                 this.motionY += 0.8D;
