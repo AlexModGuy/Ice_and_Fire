@@ -157,9 +157,7 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
-		if (flag) {
-			player.getHeldItem(hand).interactWithEntity(player, this, hand);
+		if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
 			return true;
 		}
 		if (this.isOwner(player)) {

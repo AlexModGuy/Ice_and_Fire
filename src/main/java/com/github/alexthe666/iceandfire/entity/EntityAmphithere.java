@@ -120,9 +120,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
-        if (flag) {
-            itemstack.interactWithEntity(player, this, hand);
+        if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
         }
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {

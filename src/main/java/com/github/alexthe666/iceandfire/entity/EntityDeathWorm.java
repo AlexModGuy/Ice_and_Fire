@@ -381,7 +381,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-
+        if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
+            return true;
+        }
         if (this.getWormAge() > 4 && !player.isRiding() && player.getHeldItemMainhand().getItem() == Items.FISHING_ROD && player.getHeldItemOffhand().getItem() == Items.FISHING_ROD && !this.world.isRemote) {
             player.startRiding(this);
             return true;
