@@ -63,7 +63,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.zTile = -1;
         this.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 6.0D;
-        this.setSize(0.5F, 0.5F);
+        this.setSize(0.85F, 0.5F);
         this.stack = new ItemStack(ModItems.tide_trident);
     }
 
@@ -135,8 +135,11 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
     @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-        this.setPosition(x, y, z);
-        this.setRotation(yaw, pitch);
+        if(!inGround){
+            this.setPosition(x, y, z);
+            this.setRotation(yaw, pitch);
+        }
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -161,10 +164,11 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
             this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI));
+            this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
             this.prevRotationYaw = this.rotationYaw;
             this.prevRotationPitch = this.rotationPitch;
+            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
@@ -185,7 +189,6 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
         if (this.inGround) {
             int j = block.getMetaFromState(iblockstate);
-
             if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().grow(0.05D))) {
                 this.inGround = false;
                 this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
@@ -343,8 +346,6 @@ public class EntityTideTrident extends Entity implements IProjectile {
                 this.motionX *= -0.10000000149011612D;
                 this.motionY *= -0.10000000149011612D;
                 this.motionZ *= -0.10000000149011612D;
-                this.rotationYaw += 180.0F;
-                this.prevRotationYaw += 180.0F;
                 this.ticksInAir = 0;
 
                 if (!this.world.isRemote && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ < 0.0010000000474974513D) {
