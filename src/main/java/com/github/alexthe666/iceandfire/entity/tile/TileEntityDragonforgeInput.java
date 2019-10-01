@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -18,6 +19,7 @@ import javax.annotation.Nullable;
 public class TileEntityDragonforgeInput extends TileEntity implements ITickable {
     private int ticksSinceDragonFire;
     private static final int LURE_DISTANCE = 50;
+    private TileEntityDragonforge core = null;
 
     public void onHitWithFlame(){
         TileEntityDragonforge forge = getConnectedTileEntity();
@@ -28,10 +30,13 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
 
     @Override
     public void update() {
+        if(core == null){
+            core = getConnectedTileEntity();
+        }
         if (ticksSinceDragonFire > 0) {
             ticksSinceDragonFire--;
         }
-        if ((ticksSinceDragonFire == 0 || getConnectedTileEntity() == null) && this.isActive()) {
+        if ((ticksSinceDragonFire == 0 || core == null) && this.isActive()) {
             TileEntity tileentity = world.getTileEntity(pos);
             world.setBlockState(pos, getDeactivatedState());
             if (tileentity != null) {
@@ -40,12 +45,10 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
             }
         }
         lureDragons();
-        lureDragonsBreath();
     }
 
     protected void lureDragons(){
-        TileEntityDragonforge forge = getConnectedTileEntity();
-        if(forge != null && forge.canSmelt()) {
+        if(core != null && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
                 if (isFire() == dragon.isFire && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
@@ -61,8 +64,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         }
     }
 
-    protected void lureDragonsBreath(){
-
+    public void resetCore(){
+        core = null;
     }
 
     private boolean canSeeInput(EntityDragonBase dragon, Vec3d target) {

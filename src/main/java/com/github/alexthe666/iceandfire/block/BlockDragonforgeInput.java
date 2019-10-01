@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -72,6 +73,13 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
 
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[]{ACTIVE});
+    }
+
+    @Deprecated
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        if(worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput){
+            ((TileEntityDragonforgeInput) worldIn.getTileEntity(pos)).resetCore();
+        }
     }
 
     @Nullable

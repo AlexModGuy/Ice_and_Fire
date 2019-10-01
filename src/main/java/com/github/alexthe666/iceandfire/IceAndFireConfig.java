@@ -39,7 +39,7 @@ public class IceAndFireConfig {
 	public double dragonAttackDamageFire = 2;
 	public double dragonAttackDamageIce = 2.5;
 	public int maxDragonFlight = 128;
-	public int dragonGoldSearchLength = 17;
+	public int dragonGoldSearchLength = 30;
 	public boolean canDragonsDespawn = true;
 	public boolean dragonDigWhenStuck = true;
 	public int dragonBreakBlockCooldown = 5;
@@ -165,7 +165,7 @@ public class IceAndFireConfig {
 		this.dragonAttackDamageFire = config.getFloat("Dragon Attack Damage(Fire breath)", "all", 2.0F, 0, 10000, "Damage dealt from a successful fire breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
 		this.dragonAttackDamageIce = config.getFloat("Dragon Attack Damage(Ice breath)", "all", 2.5F, 0, 10000, "Damage dealt from a successful ice breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
 		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 100, Integer.MAX_VALUE, "How high dragons can fly, in Y height.");
-		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
+		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 30, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
 		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
 		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
 		this.dragonDropSkull = config.getBoolean("Dragons Drop Skull", "all", true, "True if dragons can drop their skull on death.");
