@@ -319,7 +319,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         } else {
             this.ticksStill = 0;
         }
-        if (!this.isFlying() && !this.isChild() && this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) {
+        if (!this.isFlying() && !this.isChild() && ((this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.posY < -1)) {
             this.motionY += 0.5F;
             this.setFlying(true);
         }

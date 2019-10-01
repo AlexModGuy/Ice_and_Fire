@@ -1503,7 +1503,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.setHovering(false);
         }
         if(!world.isRemote && (properties == null || properties != null && !properties.isStone)  && !this.isFlying() && !this.isHovering()){
-            if(isAllowedToTriggerFlight()){
+            if(isAllowedToTriggerFlight() || this.posY < -1){
                 if (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 || this.posY < -1 || this.getAttackTarget() != null  && this.getAttackTarget().posY + 5 < this.posY) {
                     this.setHovering(true);
                     this.setSleeping(false);

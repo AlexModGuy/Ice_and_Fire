@@ -749,7 +749,7 @@ public class EventLiving {
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
                 || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
-            LootCondition chance = new RandomChance(0.3f);
+            LootCondition chance = new RandomChance(0.2f);
             LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
             LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[] {chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
