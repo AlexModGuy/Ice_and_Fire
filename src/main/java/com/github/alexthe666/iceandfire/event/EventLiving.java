@@ -712,7 +712,6 @@ public class EventLiving {
         }
     }
 
-
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
         if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == ModBlocks.goldPile || event.getState().getBlock() == ModBlocks.silverPile)) {
@@ -735,10 +734,11 @@ public class EventLiving {
         }
     }
 
-
     @SubscribeEvent
     public void onChestGenerated(LootTableLoadEvent event) {
-        if (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
+        if (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+                || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
+                || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)) {
             LootCondition chance = new RandomChance(0.1f);
             LootEntryItem item = new LootEntryItem(ModItems.manuscript, 10, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[] {chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
