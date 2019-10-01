@@ -56,7 +56,7 @@ public class ItemPixieWand extends Item {
             d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
             d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
             EntityPixieCharge charge = new EntityPixieCharge(worldIn, playerIn, d2, d3, d4);
-            charge.setPosition(playerIn.posX, playerIn.posY + playerIn.height * 0.75F, playerIn.posZ);
+            charge.setPosition(playerIn.posX, playerIn.posY + 1, playerIn.posZ);
             if(!worldIn.isRemote){
                 worldIn.spawnEntity(charge);
             }
