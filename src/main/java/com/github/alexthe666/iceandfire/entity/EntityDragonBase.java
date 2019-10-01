@@ -1875,7 +1875,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
             if (!this.isHovering())
                 this.dragonPitch += (float) (ydist) * 10;
-            this.dragonPitch = MathHelper.clamp(this.dragonPitch, -90, 90);
+            this.dragonPitch = MathHelper.clamp(this.dragonPitch, -60, 40);
             float plateau = 2;
             if (this.dragonPitch > plateau) {
                 //down
