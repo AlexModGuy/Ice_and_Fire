@@ -49,7 +49,7 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.tameable.getAttackTarget() == null || this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
+        return this.tameable.getAttackTarget() == null && this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
     }
 
     public void startExecuting() {

@@ -11,10 +11,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.monster.EntityVex;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -40,32 +42,42 @@ import java.util.Random;
 
 public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
-    private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_royal.png");
-    private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_royal.png");
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityMyrmexRoyal.class, DataSerializers.BOOLEAN);
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
-    private int hiveTicks = 0;
+    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_jungle"));
+    private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_royal.png");
+    private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_royal.png");
+    private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityMyrmexRoyal.class, DataSerializers.BOOLEAN);
     public int releaseTicks = 0;
-    private int breedingTicks = 0;
     public int daylightTicks = 0;
     public float flyProgress;
+    public EntityMyrmexRoyal mate;
+    private int hiveTicks = 0;
+    private int breedingTicks = 0;
     private boolean isFlying;
     private boolean isLandNavigator;
     private boolean isMating = false;
-    public EntityMyrmexRoyal mate;
-    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_desert"));
-    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_jungle"));
-
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
-    }
 
     public EntityMyrmexRoyal(World worldIn) {
         super(worldIn);
         this.setSize(1.9F, 1.86F);
         this.switchNavigator(true);
+    }
+
+    public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
+        BlockPos pos = new BlockPos(x, entity.posY, z);
+        for (int yDown = 0; yDown < 10; yDown++) {
+            if (!world.isAirBlock(pos.down(yDown))) {
+                return pos.up(yDown);
+            }
+        }
+        return pos;
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
@@ -119,7 +131,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.releaseTicks = tag.getInteger("ReleaseTicks");
         this.setFlying(tag.getBoolean("Flying"));
     }
-
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
@@ -207,25 +218,26 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.tasks.addTask(0, new MyrmexAITradePlayer(this));
         this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
         this.tasks.addTask(0, new MyrmexAIMoveToMate(this, 1.0D));
-        this.tasks.addTask(1, new AIFlyRandom());
-        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(3, new MyrmexAIReEnterHive(this, 1.0D));
-        this.tasks.addTask(4, new MyrmexAIMoveThroughHive(this, 1.0D));
-        this.tasks.addTask(4, new MyrmexAIWanderHiveCenter(this, 1.0D));
-        this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(1, new AIFlyAtTarget());
+        this.tasks.addTask(2, new AIFlyRandom());
+        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, true));
+        this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
+        this.tasks.addTask(4, new MyrmexAIReEnterHive(this, 1.0D));
+        this.tasks.addTask(5, new MyrmexAIMoveThroughHive(this, 1.0D));
+        this.tasks.addTask(5, new MyrmexAIWanderHiveCenter(this, 1.0D));
+        this.tasks.addTask(6, new MyrmexAIWander(this, 1D));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIFindMate(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
                 if (entity instanceof EntityMyrmexBase && EntityMyrmexRoyal.this.isBreedingSeason() || entity instanceof EntityMyrmexRoyal) {
                     return false;
                 }
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexRoyal.this, entity) && DragonUtils.isAlive((EntityLivingBase) entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexRoyal.this, entity) && DragonUtils.isAlive(entity);
             }
         }));
 
@@ -237,10 +249,10 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         } else if (otherAnimal.getClass() != this.getClass()) {
             return false;
         } else {
-            if(otherAnimal instanceof EntityMyrmexBase){
-                if(((EntityMyrmexBase) otherAnimal).getHive() != null && this.getHive() != null){
-                    return !this.getHive().equals(((EntityMyrmexBase)otherAnimal).getHive());
-                }else{
+            if (otherAnimal instanceof EntityMyrmexBase) {
+                if (((EntityMyrmexBase) otherAnimal).getHive() != null && this.getHive() != null) {
+                    return !this.getHive().equals(((EntityMyrmexBase) otherAnimal).getHive());
+                } else {
                     return true;
                 }
             }
@@ -292,8 +304,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         if (this.getGrowthStage() < 2) {
             return false;
         }
-        if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
+        if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
+            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
             return true;
         }
         return false;
@@ -328,16 +340,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             double d2 = this.rand.nextGaussian() * 0.02D;
             this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
-    }
-
-    public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.posY, z);
-        for (int yDown = 0; yDown < 10; yDown++) {
-            if (!world.isAirBlock(pos.down(yDown))) {
-                return pos.up(yDown);
-            }
-        }
-        return pos;
     }
 
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
@@ -410,11 +412,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
 
         public boolean shouldExecute() {
-            if (EntityMyrmexRoyal.this.isFlying()) {
-                if(EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer)EntityMyrmexRoyal.this).getSummoner() != null){
-                    Entity summon = ((EntityMyrmexSwarmer)EntityMyrmexRoyal.this).getSummoner();
+            if (EntityMyrmexRoyal.this.isFlying() && EntityMyrmexRoyal.this.getAttackTarget() == null) {
+                if (EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner() != null) {
+                    Entity summon = ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner();
                     target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.posX + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.posZ + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
-                }else{
+                } else {
                     target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
                 }
                 return isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target) && !EntityMyrmexRoyal.this.getMoveHelper().isUpdating() && EntityMyrmexRoyal.this.rand.nextInt(2) == 0;
@@ -434,10 +436,10 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
         public void updateTask() {
             if (!isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target)) {
-                if(EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer)EntityMyrmexRoyal.this).getSummoner() != null){
-                    Entity summon = ((EntityMyrmexSwarmer)EntityMyrmexRoyal.this).getSummoner();
+                if (EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner() != null) {
+                    Entity summon = ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner();
                     target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.posX + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.posZ + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
-                }else{
+                } else {
                     target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
                 }
             }
@@ -446,6 +448,49 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 if (EntityMyrmexRoyal.this.getAttackTarget() == null) {
                     EntityMyrmexRoyal.this.getLookHelper().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
+                }
+            }
+        }
+    }
+
+    class AIFlyAtTarget extends EntityAIBase {
+        public AIFlyAtTarget() {
+            this.setMutexBits(0);
+        }
+
+        public boolean shouldExecute() {
+            if (EntityMyrmexRoyal.this.getAttackTarget() != null && !EntityMyrmexRoyal.this.getMoveHelper().isUpdating() && EntityMyrmexRoyal.this.rand.nextInt(7) == 0) {
+                return EntityMyrmexRoyal.this.getDistanceSq(EntityMyrmexRoyal.this.getAttackTarget()) > 4.0D;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean shouldContinueExecuting() {
+            return EntityMyrmexRoyal.this.getMoveHelper().isUpdating() && EntityMyrmexRoyal.this.getAttackTarget() != null && EntityMyrmexRoyal.this.getAttackTarget().isEntityAlive();
+        }
+
+        public void startExecuting() {
+            EntityLivingBase entitylivingbase = EntityMyrmexRoyal.this.getAttackTarget();
+            Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+            EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+        }
+
+        public void resetTask() {
+
+        }
+
+        public void updateTask() {
+            EntityLivingBase entitylivingbase = EntityMyrmexRoyal.this.getAttackTarget();
+
+            if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox())) {
+                EntityMyrmexRoyal.this.attackEntityAsMob(entitylivingbase);
+            } else {
+                double d0 = EntityMyrmexRoyal.this.getDistanceSq(entitylivingbase);
+
+                if (d0 < 9.0D) {
+                    Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+                    EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                 }
             }
         }

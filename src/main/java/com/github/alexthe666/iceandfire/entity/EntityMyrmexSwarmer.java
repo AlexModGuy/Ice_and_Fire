@@ -61,11 +61,12 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
-        //this.tasks.addTask(2, new AIFlyRandom());
-        this.tasks.addTask(2, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
-        this.tasks.addTask(3, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        this.tasks.addTask(5, new EntityAILookIdle(this));
+        this.tasks.addTask(2, new AIFlyAtTarget());
+        this.tasks.addTask(3, new AIFlyRandom());
+        this.tasks.addTask(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
+        this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
         this.targetTasks.addTask(2, new MyrmexAISummonerHurtByTarget(this));
         this.targetTasks.addTask(3, new MyrmexAISummonerHurtTarget(this));
