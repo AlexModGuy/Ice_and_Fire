@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.compat.thaumcraft;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -199,6 +201,24 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_jungle_resin_block), new AspectList().add(Aspect.EARTH, 5).add(Aspect.ORDER, 2).add(ThaumcraftCompat.MYTHICAL, 2));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_desert_resin_glass), new AspectList().add(Aspect.EARTH, 5).add(Aspect.AIR, 2).add(ThaumcraftCompat.MYTHICAL, 2));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.myrmex_jungle_resin_glass), new AspectList().add(Aspect.EARTH, 5).add(Aspect.AIR, 2).add(ThaumcraftCompat.MYTHICAL, 2));
+
+        evt.register.registerObjectTag(new ItemStack(ModItems.dragonsteel_fire_ingot), new AspectList().add(Aspect.METAL, 40).add(ThaumcraftCompat.MYTHICAL, 20).add(DRAGON, 10).add(Aspect.FIRE, 10).add(Aspect.MAGIC, 25).add(Aspect.DESIRE, 45));
+        evt.register.registerObjectTag(new ItemStack(ModItems.dragonsteel_ice_ingot), new AspectList().add(Aspect.METAL, 40).add(ThaumcraftCompat.MYTHICAL, 20).add(DRAGON, 10).add(Aspect.WATER, 10).add(Aspect.MAGIC, 25).add(Aspect.DESIRE, 45));
+        evt.register.registerObjectTag(new ItemStack(ModItems.hippogryph_talon), new AspectList().add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.AIR, 5).add(Aspect.DESIRE, 20).add(Aspect.FLIGHT, 8).add(Aspect.BEAST, 6));
+        evt.register.registerObjectTag(new ItemStack(ModItems.pixie_wings), new AspectList().add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.FLIGHT, 5).add(Aspect.MAN, 10).add(Aspect.AIR, 10).add(Aspect.MAGIC, 30).add(Aspect.DESIRE, 5).add(Aspect.EXCHANGE, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.cyclops_eye), new AspectList().add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.MAN, 10).add(Aspect.DEATH, 10).add(Aspect.MAGIC, 30).add(Aspect.DESIRE, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.siren_tear), new AspectList().add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.MAN, 10).add(Aspect.DESIRE, 25).add(Aspect.MAGIC, 30).add(Aspect.WATER, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.hippocampus_fin), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.WATER, 25));
+        evt.register.registerObjectTag(new ItemStack(ModItems.deathworm_tounge), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.TRAP, 5));
+        evt.register.registerObjectTag(new ItemStack(ModItems.cockatrice_eye), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.DEATH, 35));
+        evt.register.registerObjectTag(new ItemStack(ModItems.amphithere_feather), new AspectList().add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.BEAST, 10).add(Aspect.FLIGHT, 10));
+        evt.register.registerObjectTag(new ItemStack(ModItems.sea_serpent_fang), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.WATER, 10));
+        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
+            evt.register.registerObjectTag(new ItemStack(serpent.scale), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.WATER, 10));
+        }
+        for(EnumSkullType skull : EnumSkullType.values()) {
+            evt.register.registerObjectTag(new ItemStack(skull.skull_item), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.DEATH, 10));
+        }
         ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.MAGIC, 2));
         ThaumcraftApi.registerEntityTag("dragonskull", new AspectList().add(Aspect.DEATH, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.MAGIC, 2));
         ThaumcraftApi.registerEntityTag("firedragon", new AspectList().add(Aspect.FIRE, 25).add(Aspect.BEAST, 15).add(Aspect.FLIGHT, 25).add(Aspect.MIND, 5).add(ThaumcraftCompat.DRAGON, 50).add(Aspect.MAGIC, 10));
@@ -221,6 +241,9 @@ public class ThaumcraftCompat {
         ThaumcraftApi.registerEntityTag("myrmex_sentinel", new AspectList().add(Aspect.BEAST, 20).add(Aspect.PROTECT, 10).add(ThaumcraftCompat.MYTHICAL, 20));
         ThaumcraftApi.registerEntityTag("myrmex_royal", new AspectList().add(Aspect.BEAST, 20).add(Aspect.SENSES, 10).add(Aspect.FLIGHT, 10).add(ThaumcraftCompat.MYTHICAL, 20));
         ThaumcraftApi.registerEntityTag("myrmex_queen", new AspectList().add(Aspect.BEAST, 35).add(Aspect.EXCHANGE, 10).add(Aspect.LIFE, 10).add(ThaumcraftCompat.MYTHICAL, 30));
+        ThaumcraftApi.registerEntityTag("myrmex_swarmer", new AspectList().add(Aspect.BEAST, 10).add(Aspect.SENSES, 5).add(Aspect.FLIGHT, 5).add(ThaumcraftCompat.MYTHICAL, 5));
+        ThaumcraftApi.registerEntityTag("seaserpent", new AspectList().add(ThaumcraftCompat.MYTHICAL, 40).add(Aspect.BEAST, 30).add(Aspect.WATER, 20).add(Aspect.DEATH, 25).add(Aspect.DARKNESS, 10));
+        ThaumcraftApi.registerEntityTag("amphithere", new AspectList().add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.FLIGHT, 40).add(Aspect.BEAST, 10).add(Aspect.AIR, 20));
 
     }
 }

@@ -38,7 +38,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	private GorgonAIStareAttack aiStare;
 	private EntityAIAttackMelee aiMelee;
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
-
+	private int playerStatueCooldown;
 	public EntityGorgon(World worldIn) {
 		super(worldIn);
 		this.setSize(0.8F, 1.99F);
@@ -182,6 +182,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(playerStatueCooldown > 0){
+			playerStatueCooldown--;
+		}
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
@@ -202,8 +205,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 						if (this.getAttackTarget() instanceof EntityPlayer) {
 							if(!world.isRemote) {
 								this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
-								this.getAttackTarget().setDead();
-								if (!this.getAttackTarget().isEntityAlive()) {
+								if (!this.getAttackTarget().isEntityAlive() && playerStatueCooldown == 0) {
 									EntityStoneStatue statue = new EntityStoneStatue(world);
 									statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
 									statue.smallArms = true;
@@ -215,6 +217,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 									statue.rotationYawHead = this.getAttackTarget().rotationYaw;
 									statue.renderYawOffset = this.getAttackTarget().rotationYaw;
 									statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+									playerStatueCooldown = 40;
 								}
 								this.setAttackTarget(null);
 							}
