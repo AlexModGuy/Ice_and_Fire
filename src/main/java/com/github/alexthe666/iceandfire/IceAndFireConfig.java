@@ -42,6 +42,7 @@ public class IceAndFireConfig {
 	public int dragonGoldSearchLength = 17;
 	public boolean canDragonsDespawn = true;
 	public boolean dragonDigWhenStuck = true;
+	public int dragonBreakBlockCooldown = 5;
 	public boolean dragonDropSkull = true;
 	public boolean dragonDropHeart = true;
 	public boolean dragonDropBlood = true;
@@ -172,6 +173,7 @@ public class IceAndFireConfig {
 		this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 64, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
 		this.dragonWanderFromHomeDistance = config.getInt("Dragon Wander From Home Distance", "all", 40, 1, 10000, "How many blocks away can dragons wander from their defined \"home\" position.");
 		this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");
+		this.dragonBreakBlockCooldown = config.getInt("Dragon Block Break Cooldown", "all", 5, 0, 10000, "Every interval of this number in ticks, dragon allowed to break blocks.");
 		this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.animalsFearDragons = config.getBoolean("Animals Fear Dragons", "all", true, "True if animals should run away and hide from dragons and other hostile Ice and Fire mobs.");
 		this.blacklistedBreakBlocks = config.getStringList("Blacklisted Blocks from Dragon", "all", new String[0], "Blacklist for blocks that dragons are not to break or burn. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");

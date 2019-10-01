@@ -1239,7 +1239,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.blockBreakCounter <= 0) {
-            this.blockBreakCounter = 20;
+            this.blockBreakCounter = IceAndFire.CONFIG.dragonBreakBlockCooldown;
         }
         if (this.isBreathingFire() && burnProgress < 40) {
             burnProgress++;
@@ -1592,9 +1592,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public void breakBlock() {
-        if (this.blockBreakCounter > 0) {
+        if (this.blockBreakCounter > 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
-            if (this.blockBreakCounter == 0 && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+            if ((this.blockBreakCounter == 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
                 if (IceAndFire.CONFIG.dragonGriefing != 2 && (!this.isTamed() || IceAndFire.CONFIG.tamedDragonGriefing)) {
                     float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
