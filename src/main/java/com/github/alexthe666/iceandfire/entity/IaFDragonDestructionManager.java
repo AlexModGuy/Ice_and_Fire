@@ -23,7 +23,7 @@ public class IaFDragonDestructionManager {
     public static void destroyAreaFire(World world, BlockPos center, EntityDragonBase destroyer) {
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
-        float dmgScale = (float)IceAndFire.CONFIG.dragonAttackDamageFire;
+        float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageFire;
         if (stage <= 3) {
             for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))) {
                 if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()) {
@@ -76,7 +76,7 @@ public class IaFDragonDestructionManager {
     public static void destroyAreaIce(World world, BlockPos center, EntityDragonBase destroyer) {
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
-        float dmgScale = (float)IceAndFire.CONFIG.dragonAttackDamageIce;
+        float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageIce;
         if (stage <= 3) {
             for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))) {
                 if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()) {

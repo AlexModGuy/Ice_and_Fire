@@ -20,10 +20,10 @@ import slimeknights.tconstruct.tools.traits.TraitBonusDamage;
 
 import static slimeknights.tconstruct.library.materials.MaterialTypes.HEAD;
 import static slimeknights.tconstruct.library.materials.MaterialTypes.SHAFT;
-import static slimeknights.tconstruct.tools.TinkerTraits.*;
+import static slimeknights.tconstruct.tools.TinkerTraits.poisonous;
+import static slimeknights.tconstruct.tools.TinkerTraits.sharp;
 
 public class TinkersCompat {
-    private static final TinkersCompat INSTANCE = new TinkersCompat();
     public static final Material MATERIAL_DRAGONBONE = new Material("dragonbone", 0XB7B29D);
     public static final Material MATERIAL_DESERT_MYRMEX = new Material("desert_myrmex", 0X783B0C);
     public static final Material MATERIAL_JUNGLE_MYRMEX = new Material("jungle_myrmex", 0X267A72);
@@ -41,9 +41,10 @@ public class TinkersCompat {
     public static final AbstractTrait BURN_I = new TraitBurn(1);
     public static final AbstractTrait ANTIGRAVITY = new TraitAntigravity();
     public static final AbstractTrait ARROW_KNOCKBACK = new TraitArrowKnockback();
-    private static boolean registered = false;
+    private static final TinkersCompat INSTANCE = new TinkersCompat();
     public static FluidMolten MOLTEN_FIRE_DRAGONSTEEL;
     public static FluidMolten MOLTEN_ICE_DRAGONSTEEL;
+    private static boolean registered = false;
 
     public static void register() {
         if (!registered) {
@@ -103,7 +104,7 @@ public class TinkersCompat {
         MATERIAL_DRAGONSTEEL_FIRE.addItem(ModItems.dragonsteel_fire_ingot, 1, Material.VALUE_Ingot);
         MATERIAL_DRAGONSTEEL_FIRE.setRepresentativeItem(ModItems.dragonsteel_fire_ingot);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE,
-                new HeadMaterialStats(1500, 7.00f, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
+                new HeadMaterialStats(1500, 7.00f, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
                 new HandleMaterialStats(0.4F, 400),
                 new ExtraMaterialStats(510));
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE, new BowMaterialStats(0.9f, 3.0F, 6F));
@@ -117,7 +118,7 @@ public class TinkersCompat {
         MATERIAL_DRAGONSTEEL_ICE.setCraftable(false);
         MATERIAL_DRAGONSTEEL_ICE.setCastable(true);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE,
-                new HeadMaterialStats(1500, 7.00f, (float)IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
+                new HeadMaterialStats(1500, 7.00f, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
                 new HandleMaterialStats(0.4F, 400),
                 new ExtraMaterialStats(510));
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE, new BowMaterialStats(0.9f, 3.0F, 6F));

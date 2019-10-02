@@ -77,12 +77,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     }
 
     @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face){
-        if(face == EnumFacing.UP){
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        if (face == EnumFacing.UP) {
             return BlockFaceShape.SOLID;
-        }else if(face == EnumFacing.DOWN){
+        } else if (face == EnumFacing.DOWN) {
             return BlockFaceShape.SOLID;
-        }else{
+        } else {
             return BlockFaceShape.UNDEFINED;
         }
     }
@@ -111,7 +111,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANT});
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         return new TileEntityPodium();
     }
 
-    public static enum EnumType implements IStringSerializable {
+    public enum EnumType implements IStringSerializable {
         OAK(0, "oak"), SPRUCE(1, "spruce"), BIRCH(2, "birch"), JUNGLE(3, "jungle"), ACACIA(4, "acacia"), DARK_OAK(5, "dark_oak", "big_oak");
         private static final BlockPodium.EnumType[] META_LOOKUP = new BlockPodium.EnumType[values().length];
         private static final String __OBFID = "CL_00002081";
@@ -184,11 +184,11 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         private final String name;
         private final String unlocalizedName;
 
-        private EnumType(int meta, String name) {
+        EnumType(int meta, String name) {
             this(meta, name, name);
         }
 
-        private EnumType(int meta, String name, String unlocalizedName) {
+        EnumType(int meta, String name, String unlocalizedName) {
             this.meta = meta;
             this.name = name;
             this.unlocalizedName = unlocalizedName;

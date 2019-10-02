@@ -21,9 +21,9 @@ import java.util.List;
 
 public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends EntityAITarget {
     protected final Class<T> targetClass;
-    private final int targetChance;
     protected final CyclopsAITargetSheepPlayers.Sorter sorter;
     protected final Predicate<? super T> targetEntitySelector;
+    private final int targetChance;
     protected T targetEntity;
 
     public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight) {
@@ -31,7 +31,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
     }
 
     public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
-        this(creature, classTarget, 10, checkSight, onlyNearby, (Predicate) null);
+        this(creature, classTarget, 10, checkSight, onlyNearby, null);
     }
 
     public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
@@ -47,7 +47,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
                 } else if (targetSelector != null && !targetSelector.apply(p_apply_1_)) {
                     return false;
                 } else {
-                    return !EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) ? false : CyclopsAITargetSheepPlayers.this.isSuitableTarget(p_apply_1_, false);
+                    return EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) && CyclopsAITargetSheepPlayers.this.isSuitableTarget(p_apply_1_, false);
                 }
             }
         };
@@ -60,7 +60,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
         if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
             return false;
         } else if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) {
-            List<T> list = this.taskOwner.world.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+            List<T> list = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
                 return false;

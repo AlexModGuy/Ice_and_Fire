@@ -12,24 +12,24 @@ import net.minecraft.world.World;
 
 public class ItemAmbrosia extends ItemFood {
 
-	public ItemAmbrosia() {
-		super(5, 0.6F, false);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.setTranslationKey("iceandfire.ambrosia");
-		this.setRegistryName(IceAndFire.MODID, "ambrosia");
-		this.setMaxStackSize(1);
-		this.setAlwaysEdible();
-	}
+    public ItemAmbrosia() {
+        super(5, 0.6F, false);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.setTranslationKey("iceandfire.ambrosia");
+        this.setRegistryName(IceAndFire.MODID, "ambrosia");
+        this.setMaxStackSize(1);
+        this.setAlwaysEdible();
+    }
 
-	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-		player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 3600, 2));
-		player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 3600, 2));
-		player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 3600, 2));
-		player.addPotionEffect(new PotionEffect(MobEffects.LUCK, 3600, 2));
-	}
+    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+        player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 3600, 2));
+        player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 3600, 2));
+        player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 3600, 2));
+        player.addPotionEffect(new PotionEffect(MobEffects.LUCK, 3600, 2));
+    }
 
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		super.onItemUseFinish(stack, worldIn, entityLiving);
-		return new ItemStack(Items.BOWL);
-	}
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+        super.onItemUseFinish(stack, worldIn, entityLiving);
+        return new ItemStack(Items.BOWL);
+    }
 }

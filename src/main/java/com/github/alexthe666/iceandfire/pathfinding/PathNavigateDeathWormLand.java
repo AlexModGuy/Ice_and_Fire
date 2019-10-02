@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 public class PathNavigateDeathWormLand extends PathNavigate {
     private boolean shouldAvoidSun;
     private EntityDeathWorm worm;
+
     public PathNavigateDeathWormLand(EntityDeathWorm worm, World worldIn) {
         super(worm, worldIn);
         this.nodeProcessor.setCanSwim(true);
@@ -46,7 +47,6 @@ public class PathNavigateDeathWormLand extends PathNavigate {
             BlockPos blockpos;
 
             for (blockpos = pos.down(); blockpos.getY() > 0 && this.world.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.down()) {
-                ;
             }
 
             if (blockpos.getY() > 0) {
@@ -66,7 +66,6 @@ public class PathNavigateDeathWormLand extends PathNavigate {
             BlockPos blockpos1;
 
             for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
-                ;
             }
 
             return super.getPathToPos(blockpos1);
@@ -84,7 +83,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
      * Gets the safe pathing Y position for the entity depending on if it can path swim or not
      */
     private int getPathablePosY() {
-        if (this.worm.isInSand() ) {
+        if (this.worm.isInSand()) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
             IBlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
             int j = 0;
@@ -254,20 +253,20 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         this.nodeProcessor.setCanOpenDoors(canBreakDoors);
     }
 
-    public void setEnterDoors(boolean enterDoors) {
-        this.nodeProcessor.setCanEnterDoors(enterDoors);
-    }
-
     public boolean getEnterDoors() {
         return this.nodeProcessor.getCanEnterDoors();
     }
 
-    public void setCanSwim(boolean canSwim) {
-        this.nodeProcessor.setCanSwim(canSwim);
+    public void setEnterDoors(boolean enterDoors) {
+        this.nodeProcessor.setCanEnterDoors(enterDoors);
     }
 
     public boolean getCanSwim() {
         return this.nodeProcessor.getCanSwim();
+    }
+
+    public void setCanSwim(boolean canSwim) {
+        this.nodeProcessor.setCanSwim(canSwim);
     }
 
     public void setAvoidSun(boolean avoidSun) {

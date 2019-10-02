@@ -1,12 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,7 +24,7 @@ public class DeathwormAITargetItems<T extends EntityItem> extends EntityAITarget
     }
 
     public DeathwormAITargetItems(EntityDeathWorm creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 0, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
+        this(creature, 0, checkSight, onlyNearby, null);
     }
 
     public DeathwormAITargetItems(EntityDeathWorm creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
@@ -43,7 +41,7 @@ public class DeathwormAITargetItems<T extends EntityItem> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
-        List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {

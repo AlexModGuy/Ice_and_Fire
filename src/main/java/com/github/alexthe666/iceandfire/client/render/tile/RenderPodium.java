@@ -58,7 +58,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-            }else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
+            } else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
                 boolean jungle = podium.getStackInSlot(0).getItem() == ModItems.myrmex_jungle_egg;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
@@ -69,11 +69,11 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-            }else if(!podium.getStackInSlot(0).isEmpty()){
-                if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPodiumItemEvent(this, podium, f, x, y, z))) {
+            } else if (!podium.getStackInSlot(0).isEmpty()) {
+                if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPodiumItemEvent(this, podium, f, x, y, z))) {
                     GL11.glPushMatrix();
                     float f2 = ((float) podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * f);
-                    float f3 = MathHelper.sin(((float) f2) / 10.0F) * 0.1F + 0.1F;
+                    float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
                     GL11.glTranslatef((float) x + 0.5F, (float) y + 1.55F + f3, (float) z + 0.5F);
                     float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
                     GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);

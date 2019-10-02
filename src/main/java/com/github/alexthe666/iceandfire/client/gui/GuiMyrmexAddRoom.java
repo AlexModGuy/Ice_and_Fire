@@ -49,11 +49,11 @@ public class GuiMyrmexAddRoom extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if(ClientProxy.getReferedClientHive() == null){
+        if (ClientProxy.getReferedClientHive() == null) {
             return;
         }
         EntityPlayer player = Minecraft.getMinecraft().player;
-        switch(button.id){
+        switch (button.id) {
             case 0:
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
                 break;
@@ -67,7 +67,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, true, interactPos, facing);
                 break;
             case 4:
-                ClientProxy.getReferedClientHive().addRoomWithMessage(player,interactPos, WorldGenMyrmexHive.RoomType.EMPTY);
+                ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.EMPTY);
                 break;
         }
         onGuiClosed();

@@ -11,7 +11,7 @@ public class SirenAIVanillaSwimming extends EntityAIBase {
         this.entity = entityIn;
         this.setMutexBits(4);
         if (entityIn.getNavigator() instanceof PathNavigateGround) {
-            ((PathNavigateGround)entityIn.getNavigator()).setCanSwim(true);
+            ((PathNavigateGround) entityIn.getNavigator()).setCanSwim(true);
         }
     }
 

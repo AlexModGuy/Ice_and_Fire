@@ -13,11 +13,11 @@ public class EntityCyclopsEye extends PartEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if(this.parent instanceof EntityCyclops && source.isProjectile()){
-            ((EntityCyclops)this.parent).onHitEye(source, damage);
+        if (this.parent instanceof EntityCyclops && source.isProjectile()) {
+            ((EntityCyclops) this.parent).onHitEye(source, damage);
             return true;
 
-        }else {
+        } else {
             return this.parent.attackEntityFrom(source, damage);
         }
     }

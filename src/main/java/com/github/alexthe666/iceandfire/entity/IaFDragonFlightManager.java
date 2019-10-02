@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
@@ -29,12 +28,26 @@ public class IaFDragonFlightManager {
         this.dragon = dragon;
     }
 
+    public static float approach(float number, float max, float min) {
+        min = Math.abs(min);
+        return number < max ? MathHelper.clamp(number + min, number, max) : MathHelper.clamp(number - min, max, number);
+    }
+
+    public static float approachDegrees(float number, float max, float min) {
+        float add = MathHelper.wrapDegrees(max - number);
+        return approach(number, number + add, min);
+    }
+
+    public static float degreesDifferenceAbs(float f1, float f2) {
+        return Math.abs(MathHelper.wrapDegrees(f2 - f1));
+    }
+
     public void update() {
         if (dragon.getAttackTarget() != null && !dragon.getAttackTarget().isDead) {
-            if(dragon instanceof EntityIceDragon && ((EntityIceDragon) dragon).isInWater()){
-                if(dragon.getAttackTarget() == null){
+            if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
+                if (dragon.getAttackTarget() == null) {
                     dragon.airAttack = IaFDragonAttacks.Air.SCORCH_STREAM;
-                }else{
+                } else {
                     dragon.airAttack = IaFDragonAttacks.Air.TACKLE;
                 }
             }
@@ -64,10 +77,10 @@ public class IaFDragonFlightManager {
 
         } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = DragonUtils.getBlockInView(dragon);
-            if(dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())){
+            if (dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())) {
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
             }
-            if(dragon.getCommand() == 2 && dragon.isFlying()){
+            if (dragon.getCommand() == 2 && dragon.isFlying()) {
                 viewBlock = DragonUtils.getBlockInViewEscort(dragon);
             }
             if (viewBlock != null) {
@@ -75,13 +88,13 @@ public class IaFDragonFlightManager {
             }
         }
         if (target != null) {
-            if(target.y > IceAndFire.CONFIG.maxDragonFlight){
+            if (target.y > IceAndFire.CONFIG.maxDragonFlight) {
                 target = new Vec3d(target.x, IceAndFire.CONFIG.maxDragonFlight, target.z);
             }
             if (target.y >= dragon.posY && !dragon.isModelDead()) {
-                if(dragon instanceof EntityIceDragon && ((EntityIceDragon) dragon).isInWater()){
+                if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                     dragon.motionY += 0.1D;
-                }else{
+                } else {
                     dragon.motionY += 0.4D;
                 }
             }
@@ -104,7 +117,7 @@ public class IaFDragonFlightManager {
         if (prevAttackTarget != entitylivingbaseIn) {
             if (entitylivingbaseIn != null) {
                 startPreyVec = new Vec3d(entitylivingbaseIn.posX, entitylivingbaseIn.posY, entitylivingbaseIn.posZ);
-            }else {
+            } else {
                 startPreyVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
             }
             startAttackVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
@@ -155,7 +168,7 @@ public class IaFDragonFlightManager {
                 this.action = EntityMoveHelper.Action.WAIT;
             } else if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 this.action = EntityMoveHelper.Action.WAIT;
-                EntityDragonBase dragonBase = (EntityDragonBase)entity;
+                EntityDragonBase dragonBase = (EntityDragonBase) entity;
                 double d0 = this.posX - this.entity.posX;
                 double d1 = this.posZ - this.entity.posZ;
                 double d2 = this.posY - this.entity.posY;
@@ -167,7 +180,7 @@ public class IaFDragonFlightManager {
                 }
                 float targetDegree = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
                 float changeRange = 70F;
-                if(dragonBase.width > 2F) {
+                if (dragonBase.width > 2F) {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     changeRange = 5 + ageMod * 10;
                 }
@@ -231,29 +244,15 @@ public class IaFDragonFlightManager {
                 dragon.rotationPitch = finPitch;
                 float yawTurnHead = dragon.rotationYaw + 90.0F;
                 speed *= dragon.getFlightSpeedModifier();
-                double lvt_16_1_ = (double) (speed * MathHelper.cos(yawTurnHead * 0.017453292F)) * Math.abs((double) distX / dist);
-                double lvt_18_1_ = (double) (speed * MathHelper.sin(yawTurnHead * 0.017453292F)) * Math.abs((double) distZ / dist);
-                double lvt_20_1_ = (double) (speed * MathHelper.sin(finPitch * 0.017453292F)) * Math.abs((double) distY / dist);
+                double lvt_16_1_ = speed * MathHelper.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
+                double lvt_18_1_ = speed * MathHelper.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
+                double lvt_20_1_ = speed * MathHelper.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
                 dragon.motionX += lvt_16_1_ * 0.2D;
                 dragon.motionY += lvt_20_1_ * 0.2D;
                 dragon.motionZ += lvt_18_1_ * 0.2D;
             }
         }
 
-    }
-
-    public static float approach(float number, float max, float min) {
-        min = Math.abs(min);
-        return number < max ? MathHelper.clamp(number + min, number, max) : MathHelper.clamp(number - min, max, number);
-    }
-
-    public static float approachDegrees(float number, float max, float min) {
-        float add = MathHelper.wrapDegrees(max - number);
-        return approach(number, number + add, min);
-    }
-
-    public static float degreesDifferenceAbs(float f1, float f2) {
-        return Math.abs(MathHelper.wrapDegrees(f2 - f1));
     }
 
 

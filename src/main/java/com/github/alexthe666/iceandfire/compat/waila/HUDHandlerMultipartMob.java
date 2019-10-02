@@ -1,23 +1,18 @@
 package com.github.alexthe666.iceandfire.compat.waila;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
 import com.google.common.base.Strings;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
 import mcp.mobius.waila.api.IWailaEntityProvider;
-import mcp.mobius.waila.cbcore.LangUtil;
 import mcp.mobius.waila.config.FormattingConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -49,20 +44,20 @@ public class HUDHandlerMultipartMob implements IWailaEntityProvider {
         EntityMutlipartPart part = (EntityMutlipartPart) entity;
         if (config.getConfig("general.showhp") && part.getParent() instanceof EntityLivingBase) {
             nhearts = nhearts <= 0 ? 20 : nhearts;
-            float health = ((EntityLivingBase) part.getParent()).getHealth() / 2.0f;
-            float maxhp = ((EntityLivingBase) part.getParent()).getMaxHealth() / 2.0f;
+            float health = part.getParent().getHealth() / 2.0f;
+            float maxhp = part.getParent().getMaxHealth() / 2.0f;
 
-            if (((EntityLivingBase) part.getParent()).getMaxHealth() > maxhpfortext)
-                currenttip.add(String.format(I18n.translateToLocal("hud.msg.health") + ": %.0f / %.0f", ((EntityLivingBase) part.getParent()).getHealth(), ((EntityLivingBase) part.getParent()).getMaxHealth()));
+            if (part.getParent().getMaxHealth() > maxhpfortext)
+                currenttip.add(String.format(I18n.translateToLocal("hud.msg.health") + ": %.0f / %.0f", part.getParent().getHealth(), part.getParent().getMaxHealth()));
             else
                 currenttip.add(getRenderString("waila.health", String.valueOf(nhearts), String.valueOf(health), String.valueOf(maxhp)));
 
-            if(part.getParent() instanceof EntityDragonBase){
+            if (part.getParent() instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) part.getParent();
                 currenttip.add(String.format(I18n.translateToLocal("dragon.stage") + dragon.getDragonStage()));
-                if(dragon.isMale()){
+                if (dragon.isMale()) {
                     currenttip.add(String.format(I18n.translateToLocal("dragon.gender.male")));
-                }else{
+                } else {
                     currenttip.add(String.format(I18n.translateToLocal("dragon.gender.female")));
                 }
             }

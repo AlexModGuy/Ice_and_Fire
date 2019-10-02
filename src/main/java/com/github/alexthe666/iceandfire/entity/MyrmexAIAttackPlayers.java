@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 public class MyrmexAIAttackPlayers extends EntityAINearestAttackableTarget {
     private EntityMyrmexBase myrmex;
+
     public MyrmexAIAttackPlayers(EntityMyrmexBase myrmex) {
         super(myrmex, EntityPlayer.class, 10, true, true, new Predicate<EntityPlayer>() {
             public boolean apply(@Nullable EntityPlayer entity) {
@@ -17,7 +18,7 @@ public class MyrmexAIAttackPlayers extends EntityAINearestAttackableTarget {
         this.myrmex = myrmex;
     }
 
-    public boolean shouldExecute(){
+    public boolean shouldExecute() {
         return myrmex.shouldHaveNormalAI() && super.shouldExecute();
     }
 }

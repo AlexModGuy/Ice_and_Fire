@@ -11,11 +11,11 @@ import java.util.Random;
 
 public class TrollAIFleeSun extends EntityAIBase {
     private final EntityTroll troll;
+    private final double movementSpeed;
+    private final World world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
-    private final double movementSpeed;
-    private final World world;
 
     public TrollAIFleeSun(EntityTroll theCreatureIn, double movementSpeedIn) {
         this.troll = theCreatureIn;

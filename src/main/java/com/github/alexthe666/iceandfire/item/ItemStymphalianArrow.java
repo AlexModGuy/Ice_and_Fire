@@ -23,7 +23,7 @@ public class ItemStymphalianArrow extends ItemArrow {
         this.setRegistryName(IceAndFire.MODID, "stymphalian_arrow");
     }
 
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter){
+    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
         return new EntityStymphalianArrow(worldIn, shooter);
     }
 

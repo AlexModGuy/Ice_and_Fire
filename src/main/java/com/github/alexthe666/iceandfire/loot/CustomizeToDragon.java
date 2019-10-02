@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.*;
+import net.minecraft.world.storage.loot.functions.LootFunction;
 
 import java.util.Random;
 
@@ -24,38 +24,38 @@ public class CustomizeToDragon extends LootFunction {
     }
 
     public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-        if (!stack.isEmpty()  && context.getLootedEntity() instanceof EntityDragonBase) {
+        if (!stack.isEmpty() && context.getLootedEntity() instanceof EntityDragonBase) {
             Random random = new Random();
-            EntityDragonBase dragon = (EntityDragonBase)context.getLootedEntity();
-            if(stack.getItem() == ModItems.dragonbone){
+            EntityDragonBase dragon = (EntityDragonBase) context.getLootedEntity();
+            if (stack.getItem() == ModItems.dragonbone) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
                 return stack;
             }
-            if(stack.getItem() instanceof ItemDragonScales){
-                stack.setCount(dragon.getAgeInDays() / 25  + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
+            if (stack.getItem() instanceof ItemDragonScales) {
+                stack.setCount(dragon.getAgeInDays() / 25 + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
                 return new ItemStack(dragon.getVariantScale(dragon.getVariant()), stack.getCount(), stack.getMetadata());
             }
-            if(stack.getItem() instanceof ItemDragonEgg){
-                if(dragon.isAdult()){
+            if (stack.getItem() instanceof ItemDragonEgg) {
+                if (dragon.isAdult()) {
                     return new ItemStack(dragon.getVariantEgg(dragon.getVariant()), stack.getCount(), stack.getMetadata());
-                }else{
+                } else {
                     stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
                     return new ItemStack(dragon.getVariantScale(dragon.getVariant()), stack.getCount(), stack.getMetadata());
                 }
             }
-            if(stack.getItem() instanceof ItemDragonFlesh){
+            if (stack.getItem() instanceof ItemDragonFlesh) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
                 return new ItemStack(dragon.isFire ? ModItems.fire_dragon_flesh : ModItems.ice_dragon_flesh, stack.getCount(), stack.getMetadata());
             }
-            if(stack.getItem() instanceof ItemDragonSkull){
+            if (stack.getItem() instanceof ItemDragonSkull) {
                 ItemStack stack1 = new ItemStack(dragon.isFire ? ModItems.dragon_skull : ModItems.dragon_skull, stack.getCount(), stack.getMetadata());
                 stack1.setTagCompound(stack.getTagCompound());
                 return stack1;
             }
-            if(stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood){
+            if (stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood) {
                 return new ItemStack(dragon.isFire ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, stack.getCount(), stack.getMetadata());
             }
-            if(stack.getItem() == ModItems.fire_dragon_heart || stack.getItem() == ModItems.ice_dragon_heart){
+            if (stack.getItem() == ModItems.fire_dragon_heart || stack.getItem() == ModItems.ice_dragon_heart) {
                 return new ItemStack(dragon.isFire ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, stack.getCount(), stack.getMetadata());
             }
         }

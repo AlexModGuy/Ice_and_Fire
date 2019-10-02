@@ -2,15 +2,10 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,7 +24,7 @@ public class RenderTideTrident extends Render<EntityTideTrident> {
         GlStateManager.pushMatrix();
         GlStateManager.disableCull();
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+        GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.rotate(entity.prevRotationYaw + (entity.prevRotationYaw - entity.rotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(entity.prevRotationPitch + (entity.prevRotationPitch - entity.rotationPitch) * partialTicks + 90.0F, 0.0F, 0.0F, 1.0F);
         this.modelTideTrident.render(entity, 0, 0, 0, 0, 0, 0.0625F);

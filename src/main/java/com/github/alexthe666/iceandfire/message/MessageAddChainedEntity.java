@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.ChainEntityProperties;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -47,7 +45,7 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
         if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            if(!properties.connectedEntities.contains(toChain)){
+            if (!properties.connectedEntities.contains(toChain)) {
                 properties.connectedEntities.add(toChain);
             }
         }
@@ -59,7 +57,7 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
         if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            if(!properties.connectedEntities.contains(toChain)){
+            if (!properties.connectedEntities.contains(toChain)) {
                 properties.connectedEntities.add(toChain);
             }
         }

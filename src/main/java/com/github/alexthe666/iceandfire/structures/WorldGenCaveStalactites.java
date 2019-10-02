@@ -15,8 +15,8 @@ public class WorldGenCaveStalactites {
 
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         int height = 3 + rand.nextInt(3);
-        for(int i = 0; i < height; i++){
-            if(i < height/2){
+        for (int i = 0; i < height; i++) {
+            if (i < height / 2) {
                 worldIn.setBlockState(position.down(i).north(), block.getDefaultState());
                 worldIn.setBlockState(position.down(i).east(), block.getDefaultState());
                 worldIn.setBlockState(position.down(i).south(), block.getDefaultState());

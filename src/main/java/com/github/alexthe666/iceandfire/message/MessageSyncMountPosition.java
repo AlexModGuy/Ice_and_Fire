@@ -49,7 +49,7 @@ public class MessageSyncMountPosition extends AbstractMessage<MessageSyncMountPo
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageSyncMountPosition message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.dragonId);
-        if(entity != null){
+        if (entity != null) {
             entity.setPosition(message.posX, message.posY, message.posZ);
         }
     }
@@ -57,7 +57,7 @@ public class MessageSyncMountPosition extends AbstractMessage<MessageSyncMountPo
     @Override
     public void onServerReceived(MinecraftServer server, MessageSyncMountPosition message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.dragonId);
-        if(entity != null){
+        if (entity != null) {
             entity.setPosition(message.posX, message.posY, message.posZ);
         }
     }

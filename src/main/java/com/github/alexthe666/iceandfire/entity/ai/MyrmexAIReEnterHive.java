@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -23,7 +22,7 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(!this.myrmex.canMove() || this.myrmex.shouldLeaveHive() || !this.myrmex.shouldEnterHive() || !this.myrmex.canSeeSky() || !first){
+        if (!this.myrmex.canMove() || this.myrmex.shouldLeaveHive() || !this.myrmex.shouldEnterHive() || !this.myrmex.canSeeSky() || !first) {
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
@@ -41,15 +40,15 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
         }
     }
 
-    public void updateTask(){
-        if(first){
+    public void updateTask() {
+        if (first) {
             hive.setWorld(this.myrmex.world);
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
         }
         this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
         this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
-        if(this.myrmex.getDistanceSq(nextEntrance) < 9 && first){
-            if(hive != null){
+        if (this.myrmex.getDistanceSq(nextEntrance) < 9 && first) {
+            if (hive != null) {
                 nextEntrance = hive.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG());
                 first = false;
                 this.myrmex.getNavigator().clearPath();
@@ -57,15 +56,11 @@ public class MyrmexAIReEnterHive extends EntityAIBase {
                 this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
             }
         }
-        if(this.myrmex.getDistanceSq(nextEntrance) < 15 && !first){
-            this.myrmex.isEnteringHive = false;
-        }else{
-            this.myrmex.isEnteringHive = true;
-        }
+        this.myrmex.isEnteringHive = !(this.myrmex.getDistanceSq(nextEntrance) < 15) || first;
     }
 
     public boolean shouldContinueExecuting() {
-        if(this.myrmex.getDistanceSq(nextEntrance) < 15 && !first){
+        if (this.myrmex.getDistanceSq(nextEntrance) < 15 && !first) {
             return false;
         }
         return this.myrmex.shouldEnterHive();

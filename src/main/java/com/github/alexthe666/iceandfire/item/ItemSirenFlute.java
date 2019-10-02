@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.google.common.base.Predicate;
@@ -14,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -60,7 +58,7 @@ public class ItemSirenFlute extends Item {
         }));
         double d2 = d1;
         for (int j = 0; j < list.size(); ++j) {
-            Entity entity1 = (Entity) list.get(j);
+            Entity entity1 = list.get(j);
             AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
             RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
             if (axisalignedbb.contains(vec3d)) {
@@ -86,7 +84,7 @@ public class ItemSirenFlute extends Item {
         if (pointedEntity != null) {
             if (pointedEntity instanceof EntityLivingBase) {
                 MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscEntityProperties.class);
-                if(theirProperties != null) {
+                if (theirProperties != null) {
                     theirProperties.inLoveTicks = 600;
                 }
                 itemStackIn.damageItem(1, player);

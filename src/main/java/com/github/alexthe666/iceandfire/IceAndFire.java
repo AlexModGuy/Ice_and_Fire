@@ -2,13 +2,13 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.compat.CraftTweakerCompatBridge;
 import com.github.alexthe666.iceandfire.compat.OneProbeCompatBridge;
+import com.github.alexthe666.iceandfire.compat.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
-import com.github.alexthe666.iceandfire.compat.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.message.*;
@@ -60,7 +60,7 @@ public class IceAndFire {
             MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class,
             MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class,
             MessageAddChainedEntity.class, MessageRemoveChainedEntity.class, MessageDragonSetBurnBlock.class, MessageDragonSyncFire.class,
-            MessageSyncMountPosition.class, MessageLecternUse.class})
+            MessageSyncMountPosition.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -73,6 +73,25 @@ public class IceAndFire {
     public static Biome GLACIER;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
+
+    public static void loadConfig() {
+        File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (Exception e) {
+                logger.warn("Could not create a new Ice and Fire config file.");
+                logger.warn(e.getLocalizedMessage());
+            }
+        }
+        config = new Configuration(configFile);
+        config.load();
+    }
+
+    public static void syncConfig() {
+        CONFIG.init(config);
+        config.save();
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -94,26 +113,6 @@ public class IceAndFire {
         PROXY.preRender();
     }
 
-
-    public static void loadConfig() {
-        File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-            } catch (Exception e) {
-                logger.warn("Could not create a new Ice and Fire config file.");
-                logger.warn(e.getLocalizedMessage());
-            }
-        }
-        config = new Configuration(configFile);
-        config.load();
-    }
-
-    public static void syncConfig(){
-        CONFIG.init(config);
-        config.save();
-    }
-
     @EventHandler
     public void init(FMLInitializationEvent event) {
         ModVillagers.INSTANCE.init();
@@ -130,7 +129,7 @@ public class IceAndFire {
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.dragon";
                 String s1 = s + ".player_" + new Random().nextInt(2);
-                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, entityLivingBaseIn.getDisplayName()));
             }
         };
         dragonFire = new DamageSource("dragon_fire") {
@@ -138,7 +137,7 @@ public class IceAndFire {
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.dragon_fire";
                 String s1 = s + ".player_" + new Random().nextInt(2);
-                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, entityLivingBaseIn.getDisplayName()));
             }
         }.setFireDamage();
         dragonIce = new DamageSource("dragon_ice") {
@@ -146,7 +145,7 @@ public class IceAndFire {
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.dragon_ice";
                 String s1 = s + ".player_" + new Random().nextInt(2);
-                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, entityLivingBaseIn.getDisplayName()));
             }
         };
         gorgon = new DamageSource("gorgon") {
@@ -154,7 +153,7 @@ public class IceAndFire {
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.gorgon";
                 String s1 = s + ".player_" + new Random().nextInt(2);
-                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, entityLivingBaseIn.getDisplayName()));
             }
         }.setDamageBypassesArmor();
     }

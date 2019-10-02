@@ -1,16 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class ModelAmphithere extends ModelDragonBase {
@@ -311,13 +305,13 @@ public class ModelAmphithere extends ModelDragonBase {
             this.HeadFront.rotationPointZ = -2F;
             this.Jaw.rotationPointZ = -4.5F;
             GL11.glTranslatef(0, 0.2F, 0);
-        }else{
+        } else {
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);
             this.HeadFront.setScale(1F, 1F, 1F);
 
         }
-        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.BodyUpper.render(f5);
     }
 
@@ -417,7 +411,7 @@ public class ModelAmphithere extends ModelDragonBase {
         animator.resetKeyframe(5);
     }
 
-    private void wingBlastPose(){
+    private void wingBlastPose() {
         animator.move(BodyUpper, 0, -36, 20);
         this.rotateMinus(animator, BodyUpper, -80, 0, 0);
         this.rotateMinus(animator, BodyLower, -10, 0, 0);
@@ -449,7 +443,7 @@ public class ModelAmphithere extends ModelDragonBase {
         AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{Tail1, Tail2, Tail3, Tail4};
         AdvancedModelRenderer[] ENTIRE_BODY = new AdvancedModelRenderer[]{BodyUpper, BodyLower, Tail1, Tail2, Tail3, Tail4};
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3};
-        if(amphithere.groundProgress >= 10) {
+        if (amphithere.groundProgress >= 10) {
             this.chainSwing(ENTIRE_BODY, speed_walk, 0.125F, 2, f, f1);
             this.chainSwing(NECK, speed_walk, -degree_walk, 4, f, f1);
         }
@@ -552,13 +546,13 @@ public class ModelAmphithere extends ModelDragonBase {
             progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
         }
 
-        if(amphithere.groundProgress <= 0 && amphithere.getAnimation() != EntityAmphithere.ANIMATION_WING_BLAST && !amphithere.onGround){
+        if (amphithere.groundProgress <= 0 && amphithere.getAnimation() != EntityAmphithere.ANIMATION_WING_BLAST && !amphithere.onGround) {
             amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
             amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);
             amphithere.tail_buffer.applyChainSwingBuffer(TAIL);
 
         }
-   }
+    }
 
     @Override
     public void renderStatue() {

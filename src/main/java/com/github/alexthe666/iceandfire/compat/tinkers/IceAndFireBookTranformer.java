@@ -23,7 +23,7 @@ public class IceAndFireBookTranformer extends BookTransformer {
                 faModifierSection = section;
             }
         }
-        if(modifierSection != null && faModifierSection != null) {
+        if (modifierSection != null && faModifierSection != null) {
             for (PageData page : faModifierSection.pages) {
                 page.parent = modifierSection;
                 modifierSection.pages.add(page);

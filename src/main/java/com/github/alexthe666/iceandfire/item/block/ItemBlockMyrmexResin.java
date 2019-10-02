@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockMyrmexResin extends ItemBlock {
     private boolean sticky;
+
     public ItemBlockMyrmexResin(Block block) {
         super(block);
         sticky = block == ModBlocks.myrmex_resin_sticky;
@@ -15,9 +16,9 @@ public class ItemBlockMyrmexResin extends ItemBlock {
 
     @Override
     public String getTranslationKey(ItemStack itemstack) {
-        if(sticky) {
+        if (sticky) {
             return itemstack.getItemDamage() == 1 ? "tile.iceandfire.jungle_myrmex_resin_sticky" : "tile.iceandfire.desert_myrmex_resin_sticky";
-        }else{
+        } else {
             return itemstack.getItemDamage() == 1 ? "tile.iceandfire.jungle_myrmex_resin" : "tile.iceandfire.desert_myrmex_resin";
         }
     }

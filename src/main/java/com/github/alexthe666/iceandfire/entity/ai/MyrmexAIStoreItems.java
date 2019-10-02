@@ -123,9 +123,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
 
     public boolean isUseableCocoon(BlockPos blockpos) {
         if (this.myrmex.world.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.world.getTileEntity(blockpos) != null && this.myrmex.world.getTileEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-            if (!((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND))) {
-                return true;
-            }
+            return !((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND));
         }
         return false;
     }

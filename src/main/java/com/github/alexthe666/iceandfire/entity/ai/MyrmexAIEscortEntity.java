@@ -16,14 +16,11 @@ public class MyrmexAIEscortEntity extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.guardingEntity == null || !this.myrmex.guardingEntity.canSeeSky() && this.myrmex.canSeeSky() || this.myrmex.isEnteringHive) {
-            return false;
-        }
-        return true;
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.guardingEntity != null && (this.myrmex.guardingEntity.canSeeSky() || !this.myrmex.canSeeSky()) && !this.myrmex.isEnteringHive;
     }
 
     public void updateTask() {
-        if(this.myrmex.guardingEntity != null && (this.myrmex.getDistance(this.myrmex.guardingEntity) > 30 || this.myrmex.getNavigator().noPath())) {
+        if (this.myrmex.guardingEntity != null && (this.myrmex.getDistance(this.myrmex.guardingEntity) > 30 || this.myrmex.getNavigator().noPath())) {
             this.myrmex.getNavigator().tryMoveToEntityLiving(this.myrmex.guardingEntity, movementSpeed);
         }
     }

@@ -13,37 +13,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LayerGorgonEyes implements LayerRenderer<EntityGorgon> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_eyes.png");
-	private final RenderGorgon render;
+    private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_eyes.png");
+    private final RenderGorgon render;
 
-	public LayerGorgonEyes(RenderGorgon renderIn) {
-		this.render = renderIn;
-	}
+    public LayerGorgonEyes(RenderGorgon renderIn) {
+        this.render = renderIn;
+    }
 
-	public void doRenderLayer(EntityGorgon gorgon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(gorgon, StoneEntityProperties.class);
-		if (properties != null && !properties.isStone || properties == null) {
-			if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE || gorgon.getAnimation() == EntityGorgon.ANIMATION_HIT) {
-				this.render.bindTexture(TEXTURE);
-				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-				GlStateManager.disableLighting();
-				GlStateManager.depthMask(!gorgon.isInvisible());
-				int i = 61680;
-				int j = 61680;
-				int k = 0;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
-				GlStateManager.enableLighting();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				this.render.getMainModel().render(gorgon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-				this.render.setLightmap(gorgon);
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-			}
-		}
-	}
+    public void doRenderLayer(EntityGorgon gorgon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(gorgon, StoneEntityProperties.class);
+        if (properties == null || !properties.isStone) {
+            if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE || gorgon.getAnimation() == EntityGorgon.ANIMATION_HIT) {
+                this.render.bindTexture(TEXTURE);
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+                GlStateManager.disableLighting();
+                GlStateManager.depthMask(!gorgon.isInvisible());
+                int i = 61680;
+                int j = 61680;
+                int k = 0;
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+                GlStateManager.enableLighting();
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                this.render.getMainModel().render(gorgon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+                this.render.setLightmap(gorgon);
+                GlStateManager.depthMask(true);
+                GlStateManager.disableBlend();
+            }
+        }
+    }
 
-	public boolean shouldCombineTextures() {
-		return false;
-	}
+    public boolean shouldCombineTextures() {
+        return false;
+    }
 }

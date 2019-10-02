@@ -54,7 +54,7 @@ public enum EnumDragonTextures {
     public final ResourceLocation FIRE_MALE_OVERLAY;
     public final ResourceLocation ICE_MALE_OVERLAY;
 
-    private EnumDragonTextures(String fireVariant, String iceVariant) {
+    EnumDragonTextures(String fireVariant, String iceVariant) {
         FIRESTAGE1TEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + fireVariant + "1.png");
         FIRESTAGE2TEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + fireVariant + "2.png");
         FIRESTAGE3TEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + fireVariant + "3.png");
@@ -103,11 +103,10 @@ public enum EnumDragonTextures {
     public static ResourceLocation getTextureFromDragon(EntityDragonBase dragon) {
         if (dragon instanceof EntityIceDragon) {
             return getIceDragonTextures(dragon);
-        }else{
+        } else {
             return getFireDragonTextures(dragon);
         }
     }
-
 
 
     public static ResourceLocation getEyeTextureFromDragon(EntityDragonBase dragon) {
@@ -127,7 +126,7 @@ public enum EnumDragonTextures {
                 default:
                     return textures.ICESTAGE4EYESTEXTURE;
             }
-        }else{
+        } else {
             switch (dragon.getDragonStage()) {
                 case 1:
                     return textures.FIRESTAGE1EYESTEXTURE;
@@ -294,7 +293,41 @@ public enum EnumDragonTextures {
         }
     }
 
-    public enum Armor{
+    public static ResourceLocation getFireDragonSkullTextures(EntityDragonSkull skull) {
+        switch (skull.getDragonStage()) {
+            case 1:
+                return VARIANT1.FIRESTAGE1SKELETONTEXTURE;
+            case 2:
+                return VARIANT1.FIRESTAGE2SKELETONTEXTURE;
+            case 3:
+                return VARIANT1.FIRESTAGE3SKELETONTEXTURE;
+            case 4:
+                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
+            case 5:
+                return VARIANT1.FIRESTAGE5SKELETONTEXTURE;
+            default:
+                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
+        }
+    }
+
+    public static ResourceLocation getIceDragonSkullTextures(EntityDragonSkull skull) {
+        switch (skull.getDragonStage()) {
+            case 1:
+                return VARIANT1.ICESTAGE1SKELETONTEXTURE;
+            case 2:
+                return VARIANT1.ICESTAGE2SKELETONTEXTURE;
+            case 3:
+                return VARIANT1.ICESTAGE3SKELETONTEXTURE;
+            case 4:
+                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
+            case 5:
+                return VARIANT1.ICESTAGE5SKELETONTEXTURE;
+            default:
+                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
+        }
+    }
+
+    public enum Armor {
         EMPTY(""),
         ARMORBODY1("armor_body_1"),
         ARMORBODY2("armor_body_2"),
@@ -324,22 +357,22 @@ public enum EnumDragonTextures {
         public final ResourceLocation FIRETEXTURE;
         public final ResourceLocation ICETEXTURE;
 
-        private Armor(String resource){
-            if(!resource.isEmpty()){
+        Armor(String resource) {
+            if (!resource.isEmpty()) {
                 FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + resource + ".png");
                 ICETEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/" + resource + ".png");
-            }else{
+            } else {
                 FIRETEXTURE = null;
                 ICETEXTURE = null;
             }
         }
 
-        public static Armor getArmorForDragon(EntityDragonBase dragon, int slot){
+        public static Armor getArmorForDragon(EntityDragonBase dragon, int slot) {
             int armor = dragon.getArmorInSlot(slot);
-            switch(slot){
+            switch (slot) {
                 case 1:
                     //neck
-                    switch(armor){
+                    switch (armor) {
                         default:
                             return EMPTY;
                         case 1:
@@ -357,7 +390,7 @@ public enum EnumDragonTextures {
                     }
                 case 2:
                     //body
-                    switch(armor){
+                    switch (armor) {
                         default:
                             return EMPTY;
                         case 1:
@@ -375,7 +408,7 @@ public enum EnumDragonTextures {
                     }
                 case 3:
                     //tail
-                    switch(armor){
+                    switch (armor) {
                         default:
                             return EMPTY;
                         case 1:
@@ -393,7 +426,7 @@ public enum EnumDragonTextures {
                     }
                 default:
                     //head
-                    switch(armor){
+                    switch (armor) {
                         default:
                             return EMPTY;
                         case 1:
@@ -411,40 +444,6 @@ public enum EnumDragonTextures {
                     }
 
             }
-        }
-    }
-
-    public static ResourceLocation getFireDragonSkullTextures(EntityDragonSkull skull){
-        switch (skull.getDragonStage()) {
-            case 1:
-                return VARIANT1.FIRESTAGE1SKELETONTEXTURE;
-            case 2:
-                return VARIANT1.FIRESTAGE2SKELETONTEXTURE;
-            case 3:
-                return VARIANT1.FIRESTAGE3SKELETONTEXTURE;
-            case 4:
-                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
-            case 5:
-                return VARIANT1.FIRESTAGE5SKELETONTEXTURE;
-            default:
-                return VARIANT1.FIRESTAGE4SKELETONTEXTURE;
-        }
-    }
-
-    public static ResourceLocation getIceDragonSkullTextures(EntityDragonSkull skull){
-        switch (skull.getDragonStage()) {
-            case 1:
-                return VARIANT1.ICESTAGE1SKELETONTEXTURE;
-            case 2:
-                return VARIANT1.ICESTAGE2SKELETONTEXTURE;
-            case 3:
-                return VARIANT1.ICESTAGE3SKELETONTEXTURE;
-            case 4:
-                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
-            case 5:
-                return VARIANT1.ICESTAGE5SKELETONTEXTURE;
-            default:
-                return VARIANT1.ICESTAGE4SKELETONTEXTURE;
         }
     }
 }

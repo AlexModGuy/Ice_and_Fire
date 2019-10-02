@@ -55,7 +55,7 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
         this.ToothT.setRotationPoint(0.0F, -4.5F, -7.5F);
         this.ToothT.addBox(-0.5F, -0.4F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(ToothT, -2.7930504019665254F, -0.0F, 0.0F);
-       this.HeadInner = new AdvancedModelRenderer(this, 0, 48);
+        this.HeadInner = new AdvancedModelRenderer(this, 0, 48);
         this.HeadInner.setRotationPoint(0.0F, 0.0F, -0.3F);
         this.HeadInner.addBox(-4.0F, -4.0F, -8.0F, 8, 8, 8, 0.0F);
         this.ToothL_1 = new AdvancedModelRenderer(this, 52, 34);
@@ -93,15 +93,15 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
 
     public void animate(ItemStack stack, float partialTick) {
         this.resetToDefaultPose();
-        if(stack.getTagCompound() != null){
+        if (stack.getTagCompound() != null) {
             Entity holder = Minecraft.getMinecraft().world.getEntityByID(stack.getTagCompound().getInteger("HolderID"));
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscEntityProperties.class);
-            if(properties != null){
+            if (properties != null) {
                 int lungeTicks = properties.deathwormLungeTicks;
                 int prevLungeTicks = properties.prevDeathwormLungeTicks;
-                float lungeProg = ((float)prevLungeTicks + (lungeTicks - prevLungeTicks) * partialTick);
-                progressRotation(TopJaw, lungeProg, (float)Math.toRadians(-30), 0, 0);
-                progressRotation(BottomJaw, lungeProg, (float)Math.toRadians(30), 0, 0);
+                float lungeProg = ((float) prevLungeTicks + (lungeTicks - prevLungeTicks) * partialTick);
+                progressRotation(TopJaw, lungeProg, (float) Math.toRadians(-30), 0, 0);
+                progressRotation(BottomJaw, lungeProg, (float) Math.toRadians(30), 0, 0);
                 progressPosition(JawExtender, lungeProg, 0, 0, -4);
                 progressPosition(JawExtender2, lungeProg, 0, 0, -10);
                 progressPosition(JawExtender3, lungeProg, 0, 0, -10);
@@ -132,5 +132,6 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
     }
 
     @Override
-    public void renderStatue() { }
+    public void renderStatue() {
+    }
 }

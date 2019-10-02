@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderTrollWeapon extends TileEntitySpecialRenderer {
     private static final ModelBase MODEL = new ModelTrollWeapon();
+
     public RenderTrollWeapon() {
     }
 

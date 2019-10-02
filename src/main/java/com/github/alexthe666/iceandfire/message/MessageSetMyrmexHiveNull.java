@@ -12,26 +12,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageSetMyrmexHiveNull extends AbstractMessage<MessageSetMyrmexHiveNull> {
 
-	public MessageSetMyrmexHiveNull() {
-	}
+    public MessageSetMyrmexHiveNull() {
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
+    @Override
+    public void toBytes(ByteBuf buf) {
 
-	}
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void onClientReceived(Minecraft client, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
-		ClientProxy.setReferedClientHive(null);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onClientReceived(Minecraft client, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
+        ClientProxy.setReferedClientHive(null);
+    }
 
-	@Override
-	public void onServerReceived(MinecraftServer server, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
+    @Override
+    public void onServerReceived(MinecraftServer server, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
 
-	}
+    }
 }

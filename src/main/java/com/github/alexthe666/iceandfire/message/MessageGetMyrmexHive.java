@@ -16,43 +16,43 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> {
 
-	public MyrmexHive hive;
+    public MyrmexHive hive;
 
-	public MessageGetMyrmexHive(MyrmexHive hive) {
-		this.hive = hive;
-	}
+    public MessageGetMyrmexHive(MyrmexHive hive) {
+        this.hive = hive;
+    }
 
-	public MessageGetMyrmexHive() {
-	}
+    public MessageGetMyrmexHive() {
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		hive = new MyrmexHive();
-		hive.readVillageDataFromNBT(ByteBufUtils.readTag(buf));
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        hive = new MyrmexHive();
+        hive.readVillageDataFromNBT(ByteBufUtils.readTag(buf));
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		NBTTagCompound tag = new NBTTagCompound();
-		if(hive != null) {
-			hive.writeVillageDataToNBT(tag);
-		}
-		ByteBufUtils.writeTag(buf, tag);
-	}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        NBTTagCompound tag = new NBTTagCompound();
+        if (hive != null) {
+            hive.writeVillageDataToNBT(tag);
+        }
+        ByteBufUtils.writeTag(buf, tag);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
-		ClientProxy.setReferedClientHive(message.hive);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
+        ClientProxy.setReferedClientHive(message.hive);
+    }
 
-	@Override
-	public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
-		MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
-		if(serverHive != null){
-			NBTTagCompound tag = new NBTTagCompound();
-			message.hive.writeVillageDataToNBT(tag);
-			serverHive.readVillageDataFromNBT(tag);
-		}
-	}
+    @Override
+    public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
+        MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
+        if (serverHive != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            message.hive.writeVillageDataToNBT(tag);
+            serverHive.readVillageDataFromNBT(tag);
+        }
+    }
 }

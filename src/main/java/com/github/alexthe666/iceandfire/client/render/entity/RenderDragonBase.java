@@ -12,7 +12,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.LayeredTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +24,7 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
-    private static final Map<String, ResourceLocation> LAYERED_LOCATION_CACHE = Maps.<String, ResourceLocation>newHashMap();
+    private static final Map<String, ResourceLocation> LAYERED_LOCATION_CACHE = Maps.newHashMap();
 
     public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {
         super(renderManager, model, 0.8F);
@@ -41,7 +40,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
     @Override
     protected void preRenderCallback(EntityDragonBase entity, float f) {
-        this.shadowSize = ((EntityDragonBase) entity).getRenderSize() / 3;
+        this.shadowSize = entity.getRenderSize() / 3;
         GL11.glScalef(shadowSize, shadowSize, shadowSize);
         float f7 = entity.prevDragonPitch + (entity.dragonPitch - entity.prevDragonPitch) * f;
         GL11.glRotatef(f7, 1, 0, 0);
@@ -50,21 +49,21 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
     protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
         String armorString = "ARMOR{Head=" + entity.getArmorInSlot(0) + ", Neck=" + entity.getArmorInSlot(1) + ", Body=" + entity.getArmorInSlot(2) + " Tail=" + entity.getArmorInSlot(3) + "}";
         String dragonOverallTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + armorString
-               + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
+                + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_LOCATION_CACHE.get(dragonOverallTexture);
         if (resourcelocation == null) {
             resourcelocation = EnumDragonTextures.getTextureFromDragon(entity);
             List<String> tex = new ArrayList<String>();
             boolean ice = entity instanceof EntityIceDragon;
             tex.add(resourcelocation.toString());
-            if(entity.isMale() && !entity.isSkeletal()){
+            if (entity.isMale() && !entity.isSkeletal()) {
                 if (ice) {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).ICE_MALE_OVERLAY.toString());
                 } else {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).FIRE_MALE_OVERLAY.toString());
                 }
             }
-            for(int slot = 0; slot <= 3; slot++) {
+            for (int slot = 0; slot <= 3; slot++) {
                 if (entity.getArmorInSlot(slot) != 0) {
                     if (ice) {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).ICETEXTURE.toString());

@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.ItemMobSkull;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public enum EnumSkullType {
@@ -20,7 +18,7 @@ public enum EnumSkullType {
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":mob_skull")
     public Item skull_item;
 
-    EnumSkullType(){
+    EnumSkullType() {
         itemResourceName = this.name().toLowerCase() + "_skull";
     }
 

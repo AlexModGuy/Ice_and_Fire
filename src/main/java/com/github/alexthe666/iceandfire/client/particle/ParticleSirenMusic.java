@@ -5,8 +5,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ParticleSirenMusic extends Particle {
 
@@ -15,7 +13,7 @@ public class ParticleSirenMusic extends Particle {
 
     public ParticleSirenMusic(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double color, double motionY, double motionZ) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, 0, motionY, motionZ);
-        this.colorScale = (float)color;
+        this.colorScale = (float) color;
         this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
         this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
         this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
@@ -30,7 +28,7 @@ public class ParticleSirenMusic extends Particle {
 
     public void onUpdate() {
         colorScale += 0.25;
-        if(colorScale > 25){
+        if (colorScale > 25) {
             colorScale = 0;
         }
         this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;

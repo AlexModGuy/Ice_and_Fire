@@ -170,7 +170,7 @@ public class ModelCyclops extends ModelDragonBase {
         this.UpperBody.addChild(this.rightarm);
         animator = ModelAnimator.create();
         this.updateDefaultPose();
-}
+    }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -387,31 +387,27 @@ public class ModelCyclops extends ModelDragonBase {
         this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, entity.ticksExisted, 1);
         this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, entity.ticksExisted, 1);
         this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, entity.ticksExisted, 1);
-        if(entity.getAnimation() != entity.ANIMATION_EATPLAYER){
+        if (entity.getAnimation() != EntityCyclops.ANIMATION_EATPLAYER) {
             this.faceTarget(f3, f4, 1, this.Head);
         }
         this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, entity.ticksExisted, 1);
 
-        if (entity != null)
-        {
+        if (entity != null) {
             Vec3d vec3d = entity.getPositionEyes(0.0F);
             Vec3d vec3d1 = entity.getPositionEyes(0.0F);
             double d0 = vec3d.y - vec3d1.y;
 
-            if (d0 > 0.0D)
-            {
+            if (d0 > 0.0D) {
                 this.Eye.rotationPointY = -4.1F;
-            }
-            else
-            {
+            } else {
                 this.Eye.rotationPointY = -5.1F;
             }
 
             Vec3d vec3d2 = entity.getLook(0.0F);
             vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
-            Vec3d vec3d3 = (new Vec3d(vec3d1.x - vec3d.x, 0.0D, vec3d1.z - vec3d.z)).normalize().rotateYaw(((float)Math.PI / 2F));
+            Vec3d vec3d3 = (new Vec3d(vec3d1.x - vec3d.x, 0.0D, vec3d1.z - vec3d.z)).normalize().rotateYaw(((float) Math.PI / 2F));
             double d1 = vec3d2.dotProduct(vec3d3);
-            this.Eye.rotationPointX = MathHelper.sqrt((float)Math.abs(d1)) * 2.0F * (float)Math.signum(d1);
+            this.Eye.rotationPointX = MathHelper.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
         }
     }
 

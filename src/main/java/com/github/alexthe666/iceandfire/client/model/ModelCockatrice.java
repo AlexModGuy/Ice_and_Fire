@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 
 public class ModelCockatrice extends ModelDragonBase {
 
+    private static final ModelCockatriceChick CHICK_MODEL = new ModelCockatriceChick();
     public AdvancedModelRenderer lowerBody;
     public AdvancedModelRenderer leftThigh;
     public AdvancedModelRenderer rightThigh;
@@ -41,7 +42,6 @@ public class ModelCockatrice extends ModelDragonBase {
     public AdvancedModelRenderer rightLeg;
     public AdvancedModelRenderer rightFoot;
     private ModelAnimator animator;
-    private static final ModelCockatriceChick CHICK_MODEL = new ModelCockatriceChick();
 
     public ModelCockatrice() {
         this.textureWidth = 128;
@@ -216,9 +216,9 @@ public class ModelCockatrice extends ModelDragonBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        if(this.isChild){
+        if (this.isChild) {
             CHICK_MODEL.render(entity, f, f1, f2, f3, f4, f5);
-        }else{
+        } else {
             animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
             this.lowerBody.render(f5);
             this.leftThigh.render(f5);
@@ -361,7 +361,7 @@ public class ModelCockatrice extends ModelDragonBase {
 
     }
 
-    private void jumpPos(){
+    private void jumpPos() {
         this.rotate(animator, lowerBody, -29, 0, 0);
         this.rotate(animator, upperBody, 10, 0, 0);
         this.rotate(animator, neck, 7, 0, 0);
@@ -377,6 +377,7 @@ public class ModelCockatrice extends ModelDragonBase {
         this.rotate(animator, leftLeg, 0, -39, 0);
         this.rotate(animator, leftFoot, 50, 10, 0);
     }
+
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityCockatrice entity) {
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
@@ -409,14 +410,14 @@ public class ModelCockatrice extends ModelDragonBase {
         this.walk(rightLeg, speed_walk, degree_walk, false, 1, 0.1F, f, f1);
         this.walk(leftFoot, speed_walk, degree_walk * -1.75F, true, 1, -0.1F, f, f1);
         this.walk(rightFoot, speed_walk, degree_walk * -1.75F, false, 1, -0.1F, f, f1);
-        this.progressRotation(neck, entity.stareProgress, (float)Math.toRadians(10), 0.0F, 0.0F);
-        this.progressRotation(neck2, entity.stareProgress, (float)Math.toRadians(-18), 0.0F, 0.0F);
-        this.progressRotation(head, entity.stareProgress, (float)Math.toRadians(18), 0.0F, 0.0F);
+        this.progressRotation(neck, entity.stareProgress, (float) Math.toRadians(10), 0.0F, 0.0F);
+        this.progressRotation(neck2, entity.stareProgress, (float) Math.toRadians(-18), 0.0F, 0.0F);
+        this.progressRotation(head, entity.stareProgress, (float) Math.toRadians(18), 0.0F, 0.0F);
 
-        this.progressRotation(rightThigh, entity.sitProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
-        this.progressRotation(leftThigh, entity.sitProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
-        this.progressRotation(rightLeg, entity.sitProgress, (float)Math.toRadians(13), 0.0F, 0.0F);
-        this.progressRotation(leftLeg, entity.sitProgress, (float)Math.toRadians(13), 0.0F, 0.0F);
+        this.progressRotation(rightThigh, entity.sitProgress, (float) Math.toRadians(-15), 0.0F, 0.0F);
+        this.progressRotation(leftThigh, entity.sitProgress, (float) Math.toRadians(-15), 0.0F, 0.0F);
+        this.progressRotation(rightLeg, entity.sitProgress, (float) Math.toRadians(13), 0.0F, 0.0F);
+        this.progressRotation(leftLeg, entity.sitProgress, (float) Math.toRadians(13), 0.0F, 0.0F);
         this.progressRotation(rightFoot, entity.sitProgress, 0.0F, 0.0F, 0.0F);
         this.progressRotation(leftFoot, entity.sitProgress, 0.0F, 0.0F, 0.0F);
         this.progressPosition(rightThigh, entity.sitProgress, -3.0F, 19F, 3.0F);

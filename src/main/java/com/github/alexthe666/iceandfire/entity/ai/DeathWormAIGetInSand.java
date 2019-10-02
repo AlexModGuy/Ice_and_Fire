@@ -12,11 +12,11 @@ import java.util.Random;
 
 public class DeathWormAIGetInSand extends EntityAIBase {
     private final EntityDeathWorm creature;
+    private final double movementSpeed;
+    private final World world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
-    private final double movementSpeed;
-    private final World world;
 
     public DeathWormAIGetInSand(EntityDeathWorm theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;

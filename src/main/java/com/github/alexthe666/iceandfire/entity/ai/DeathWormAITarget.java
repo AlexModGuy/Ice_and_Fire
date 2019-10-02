@@ -27,7 +27,7 @@ public class DeathWormAITarget<T extends EntityLivingBase> extends EntityAINeare
                     return true;
                 }
                 if (this.targetEntity instanceof EntityMob && deathworm.getWormAge() > 2) {
-                    if(this.targetEntity instanceof EntityCreeper){
+                    if (this.targetEntity instanceof EntityCreeper) {
                         return deathworm.getWormAge() > 3;
                     }
                     return true;

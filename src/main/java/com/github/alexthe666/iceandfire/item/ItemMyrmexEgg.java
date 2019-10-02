@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMyrmexEgg extends Item implements ICustomRendered{
+public class ItemMyrmexEgg extends Item implements ICustomRendered {
 
     boolean isJungle;
 
@@ -50,7 +50,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered{
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String caste;
-        switch(stack.getMetadata()){
+        switch (stack.getMetadata()) {
             default:
                 caste = "worker";
                 break;
@@ -66,9 +66,9 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered{
             case 4:
                 caste = "queen";
         }
-        if(stack.getMetadata() == 4){
+        if (stack.getMetadata() == 4) {
             tooltip.add(TextFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
-        }else{
+        } else {
             tooltip.add(StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
         }
     }

@@ -10,23 +10,23 @@ import net.minecraft.world.World;
 
 public class ItemDragonFlesh extends ItemFood {
 
-	boolean isFire;
+    boolean isFire;
 
-	public ItemDragonFlesh(boolean isFire) {
-		super(8, 0.8F, true);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.setTranslationKey(isFire ? "iceandfire.fire_dragon_flesh" : "iceandfire.ice_dragon_flesh");
-		this.setRegistryName(IceAndFire.MODID, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
-		this.isFire = isFire;
-	}
+    public ItemDragonFlesh(boolean isFire) {
+        super(8, 0.8F, true);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.setTranslationKey(isFire ? "iceandfire.fire_dragon_flesh" : "iceandfire.ice_dragon_flesh");
+        this.setRegistryName(IceAndFire.MODID, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        this.isFire = isFire;
+    }
 
-	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-		if (!worldIn.isRemote) {
-			if (isFire) {
-				player.setFire(5);
-			} else {
-				player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
-			}
-		}
-	}
+    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+        if (!worldIn.isRemote) {
+            if (isFire) {
+                player.setFire(5);
+            } else {
+                player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
+            }
+        }
+    }
 }

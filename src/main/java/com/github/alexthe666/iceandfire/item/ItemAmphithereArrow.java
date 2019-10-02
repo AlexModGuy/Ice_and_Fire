@@ -23,7 +23,7 @@ public class ItemAmphithereArrow extends ItemArrow {
         this.setRegistryName(IceAndFire.MODID, "amphithere_arrow");
     }
 
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter){
+    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
         return new EntityAmphithereArrow(worldIn, shooter);
     }
 

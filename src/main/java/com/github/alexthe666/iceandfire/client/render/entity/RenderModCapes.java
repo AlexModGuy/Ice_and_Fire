@@ -15,127 +15,127 @@ import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
 public class RenderModCapes {
-	public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
-	public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
-	public ResourceLocation blueTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_ice.png");
-	public ResourceLocation blueElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_ice.png");
-	public ResourceLocation betaTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_beta.png");
-	public ResourceLocation betaElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_beta.png");
-	public UUID[] redcapes = new UUID[]{
-	/* zeklo */UUID.fromString("59efccaf-902d-45da-928a-5a549b9fd5e0"),
-	/* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c")
-	};
-	public UUID[] bluecapes = new UUID[]{
-	/* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),
-	/*Zyranna*/		UUID.fromString("5d43896a-06a0-49fb-95c5-38485c63667f")};
-	public UUID[] betatesters = new UUID[]{
-	};
+    public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
+    public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
+    public ResourceLocation blueTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_ice.png");
+    public ResourceLocation blueElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_ice.png");
+    public ResourceLocation betaTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_beta.png");
+    public ResourceLocation betaElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_beta.png");
+    public UUID[] redcapes = new UUID[]{
+            /* zeklo */UUID.fromString("59efccaf-902d-45da-928a-5a549b9fd5e0"),
+            /* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c")
+    };
+    public UUID[] bluecapes = new UUID[]{
+            /* Raptorfarian */UUID.fromString("0ed918c8-d612-4360-b711-cd415671356f"),
+            /*Zyranna*/        UUID.fromString("5d43896a-06a0-49fb-95c5-38485c63667f")};
+    public UUID[] betatesters = new UUID[]{
+    };
 
-	@SubscribeEvent
-	public void playerRender(RenderPlayerEvent.Pre event) {
-		if (event.getEntityPlayer() instanceof AbstractClientPlayer) {
-			NetworkPlayerInfo info = null;
-			try {
-				info = (NetworkPlayerInfo) ReflectionHelper.findField(AbstractClientPlayer.class, new String[]{"playerInfo", "field_175157_a"}).get(event.getEntityPlayer());
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			if (info != null) {
-				Map<Type, ResourceLocation> textureMap = null;
-				try {
-					textureMap = (Map<Type, ResourceLocation>) ReflectionHelper.findField(NetworkPlayerInfo.class, new String[]{"playerTextures", "field_187107_a"}).get(info);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				if (textureMap != null) {
-					if (hasBetaCape(event.getEntityPlayer().getUniqueID())) {
-						textureMap.put(Type.CAPE, betaTex);
-						textureMap.put(Type.ELYTRA, betaElytraTex);
-					}
-					if (hasRedCape(event.getEntityPlayer().getUniqueID())) {
-						textureMap.put(Type.CAPE, redTex);
-						textureMap.put(Type.ELYTRA, redElytraTex);
-					}
-					if (hasBlueCape(event.getEntityPlayer().getUniqueID())) {
-						textureMap.put(Type.CAPE, blueTex);
-						textureMap.put(Type.ELYTRA, blueElytraTex);
-					}
-				}
-			}
-		}
-		/*
-		 * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
-		 * (hasRedCape(event.getEntityPlayer().getUniqueID())){
-		 * AbstractClientPlayer player =
-		 * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
-		 * ReflectionHelper.findField(AbstractClientPlayer.class,
-		 * ObfuscationReflectionHelper
-		 * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
-		 * try { Field modifier = Field.class.getDeclaredField("modifiers");
-		 * modifier.setAccessible(true); modifier.setInt(field,
-		 * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
-		 * (NetworkPlayerInfo)field.get(player); Field field_capes =
-		 * ReflectionHelper.findField(NetworkPlayerInfo.class,
-		 * ObfuscationReflectionHelper
-		 * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
-		 * Field modifier_i = Field.class.getDeclaredField("modifiers");
-		 * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
-		 * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
-		 * redTex); } catch (Exception exception) { exception.printStackTrace();
-		 * } } catch (Exception exception) { exception.printStackTrace(); }
-		 * 
-		 * } else if (hasBlueCape(event.getEntityPlayer().getUniqueID())){
-		 * AbstractClientPlayer player =
-		 * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
-		 * ReflectionHelper.findField(AbstractClientPlayer.class,
-		 * ObfuscationReflectionHelper
-		 * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
-		 * try { Field modifier = Field.class.getDeclaredField("modifiers");
-		 * modifier.setAccessible(true); modifier.setInt(field,
-		 * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
-		 * (NetworkPlayerInfo)field.get(player); Field field_capes =
-		 * ReflectionHelper.findField(NetworkPlayerInfo.class,
-		 * ObfuscationReflectionHelper
-		 * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
-		 * Field modifier_i = Field.class.getDeclaredField("modifiers");
-		 * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
-		 * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
-		 * blueTex); } catch (Exception exception) {
-		 * exception.printStackTrace(); } } catch (Exception exception) {
-		 * exception.printStackTrace(); }
-		 * 
-		 * } }
-		 */
-	}
+    @SubscribeEvent
+    public void playerRender(RenderPlayerEvent.Pre event) {
+        if (event.getEntityPlayer() instanceof AbstractClientPlayer) {
+            NetworkPlayerInfo info = null;
+            try {
+                info = (NetworkPlayerInfo) ReflectionHelper.findField(AbstractClientPlayer.class, new String[]{"playerInfo", "field_175157_a"}).get(event.getEntityPlayer());
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if (info != null) {
+                Map<Type, ResourceLocation> textureMap = null;
+                try {
+                    textureMap = (Map<Type, ResourceLocation>) ReflectionHelper.findField(NetworkPlayerInfo.class, new String[]{"playerTextures", "field_187107_a"}).get(info);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                if (textureMap != null) {
+                    if (hasBetaCape(event.getEntityPlayer().getUniqueID())) {
+                        textureMap.put(Type.CAPE, betaTex);
+                        textureMap.put(Type.ELYTRA, betaElytraTex);
+                    }
+                    if (hasRedCape(event.getEntityPlayer().getUniqueID())) {
+                        textureMap.put(Type.CAPE, redTex);
+                        textureMap.put(Type.ELYTRA, redElytraTex);
+                    }
+                    if (hasBlueCape(event.getEntityPlayer().getUniqueID())) {
+                        textureMap.put(Type.CAPE, blueTex);
+                        textureMap.put(Type.ELYTRA, blueElytraTex);
+                    }
+                }
+            }
+        }
+        /*
+         * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
+         * (hasRedCape(event.getEntityPlayer().getUniqueID())){
+         * AbstractClientPlayer player =
+         * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
+         * ReflectionHelper.findField(AbstractClientPlayer.class,
+         * ObfuscationReflectionHelper
+         * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
+         * try { Field modifier = Field.class.getDeclaredField("modifiers");
+         * modifier.setAccessible(true); modifier.setInt(field,
+         * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
+         * (NetworkPlayerInfo)field.get(player); Field field_capes =
+         * ReflectionHelper.findField(NetworkPlayerInfo.class,
+         * ObfuscationReflectionHelper
+         * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
+         * Field modifier_i = Field.class.getDeclaredField("modifiers");
+         * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
+         * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
+         * redTex); } catch (Exception exception) { exception.printStackTrace();
+         * } } catch (Exception exception) { exception.printStackTrace(); }
+         *
+         * } else if (hasBlueCape(event.getEntityPlayer().getUniqueID())){
+         * AbstractClientPlayer player =
+         * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
+         * ReflectionHelper.findField(AbstractClientPlayer.class,
+         * ObfuscationReflectionHelper
+         * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
+         * try { Field modifier = Field.class.getDeclaredField("modifiers");
+         * modifier.setAccessible(true); modifier.setInt(field,
+         * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
+         * (NetworkPlayerInfo)field.get(player); Field field_capes =
+         * ReflectionHelper.findField(NetworkPlayerInfo.class,
+         * ObfuscationReflectionHelper
+         * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
+         * Field modifier_i = Field.class.getDeclaredField("modifiers");
+         * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
+         * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
+         * blueTex); } catch (Exception exception) {
+         * exception.printStackTrace(); } } catch (Exception exception) {
+         * exception.printStackTrace(); }
+         *
+         * } }
+         */
+    }
 
-	private boolean hasRedCape(UUID uniqueID) {
-		for (UUID uuid1 : redcapes) {
-			if (uniqueID.equals(uuid1)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean hasRedCape(UUID uniqueID) {
+        for (UUID uuid1 : redcapes) {
+            if (uniqueID.equals(uuid1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private boolean hasBlueCape(UUID uniqueID) {
-		for (UUID uuid1 : bluecapes) {
-			if (uniqueID.equals(uuid1)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean hasBlueCape(UUID uniqueID) {
+        for (UUID uuid1 : bluecapes) {
+            if (uniqueID.equals(uuid1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private boolean hasBetaCape(UUID uniqueID) {
-		for (UUID uuid1 : betatesters) {
-			if (uniqueID.equals(uuid1)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean hasBetaCape(UUID uniqueID) {
+        for (UUID uuid1 : betatesters) {
+            if (uniqueID.equals(uuid1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

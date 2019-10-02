@@ -27,14 +27,14 @@ public enum EnumSeaSerpentAnimations {
     public IceAndFireTabulaModel seaserpent_model;
     private String fileSuffix;
 
-    private EnumSeaSerpentAnimations(String fileSuffix){
+    EnumSeaSerpentAnimations(String fileSuffix) {
         this.fileSuffix = fileSuffix;
     }
 
     @SideOnly(Side.CLIENT)
-    public static void initializeSerpentModels(){
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
-            for(EnumSeaSerpentAnimations animation : values()){
+    public static void initializeSerpentModels() {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+            for (EnumSeaSerpentAnimations animation : values()) {
                 try {
                     animation.seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
                 } catch (Exception e) {

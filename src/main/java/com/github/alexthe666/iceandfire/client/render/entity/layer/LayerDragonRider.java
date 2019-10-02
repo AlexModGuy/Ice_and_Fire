@@ -33,7 +33,6 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
         GlStateManager.pushMatrix();
         if (!dragon.getPassengers().isEmpty()) {
             float dragonScale = dragon.getRenderSize() / 3;
-            ;
             for (Entity passenger : dragon.getPassengers()) {
                 boolean prey = dragon.getControllingPassenger() == null || dragon.getControllingPassenger().getEntityId() != passenger.getEntityId();
                 ClientProxy.currentDragonRiders.remove(passenger.getUniqueID());
@@ -91,7 +90,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
     protected void translateToHead() {
         postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck2"), 0.0625F);
         postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck3"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Head"),0.0625F);
+        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Head"), 0.0625F);
     }
 
     protected void postRender(AdvancedModelRenderer renderer, float scale) {
@@ -120,7 +119,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
         Render<Entity> render = null;
         RenderManager manager = Minecraft.getMinecraft().getRenderManager();
         try {
-            render = manager.<Entity>getEntityRenderObject(entityIn);
+            render = manager.getEntityRenderObject(entityIn);
 
             if (render != null && manager.renderEngine != null) {
                 try {

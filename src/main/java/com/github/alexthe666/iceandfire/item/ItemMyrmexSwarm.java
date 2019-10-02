@@ -38,17 +38,17 @@ public class ItemMyrmexSwarm extends Item {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         playerIn.setActiveHand(hand);
         playerIn.swingArm(hand);
-        if(!playerIn.capabilities.isCreativeMode){
+        if (!playerIn.capabilities.isCreativeMode) {
             itemStackIn.shrink(1);
             playerIn.getCooldownTracker().setCooldown(this, 20);
         }
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             EntityMyrmexSwarmer myrmex = new EntityMyrmexSwarmer(worldIn);
             myrmex.setPosition(playerIn.posX, playerIn.posY, playerIn.posZ);
             myrmex.setJungleVariant(jungle);
             myrmex.setSummonedBy(playerIn);
             myrmex.setFlying(true);
-            if(!worldIn.isRemote){
+            if (!worldIn.isRemote) {
                 worldIn.spawnEntity(myrmex);
             }
         }

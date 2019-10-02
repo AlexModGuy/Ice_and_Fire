@@ -24,68 +24,68 @@ import java.util.List;
 
 public class ItemModPickaxe extends ItemPickaxe {
 
-	public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
-		super(toolmaterial);
-		this.setTranslationKey(name);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.setRegistryName(IceAndFire.MODID, gameName);
-	}
+    public ItemModPickaxe(ToolMaterial toolmaterial, String gameName, String name) {
+        super(toolmaterial);
+        this.setTranslationKey(name);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.setRegistryName(IceAndFire.MODID, gameName);
+    }
 
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
-		ItemStack mat = this.toolMaterial.getRepairItemStack();
-		if(this.toolMaterial == ModItems.silverTools){
-			NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
-			for(ItemStack ingot : silverItems){
-				if(OreDictionary.itemMatches(repair, ingot, false)){
-					return true;
-				}
-			}
-		}
-		if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
-		return super.getIsRepairable(toRepair, repair);
-	}
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        ItemStack mat = this.toolMaterial.getRepairItemStack();
+        if (this.toolMaterial == ModItems.silverTools) {
+            NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
+            for (ItemStack ingot : silverItems) {
+                if (OreDictionary.itemMatches(repair, ingot, false)) {
+                    return true;
+                }
+            }
+        }
+        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
+        return super.getIsRepairable(toRepair, repair);
+    }
 
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (this == ModItems.silver_pickaxe) {
-			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-				target.attackEntityFrom(DamageSource.MAGIC, 2);
-			}
-		}
-		if (this.toolMaterial == ModItems.myrmexChitin) {
-			if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-			if (target instanceof EntityDeathWorm) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-		}
-		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
-			target.setFire(15);
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
-			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
-			frozenProps.setFrozenFor(300);
-			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		return super.hitEntity(stack, target, attacker);
-	}
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (this == ModItems.silver_pickaxe) {
+            if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
+                target.attackEntityFrom(DamageSource.MAGIC, 2);
+            }
+        }
+        if (this.toolMaterial == ModItems.myrmexChitin) {
+            if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
+                target.attackEntityFrom(DamageSource.GENERIC, 4);
+            }
+            if (target instanceof EntityDeathWorm) {
+                target.attackEntityFrom(DamageSource.GENERIC, 4);
+            }
+        }
+        if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+            target.setFire(15);
+            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+        }
+        if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+            FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
+            frozenProps.setFrozenFor(300);
+            target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
+            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+        }
+        return super.hitEntity(stack, target, attacker);
+    }
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (this == ModItems.silver_pickaxe) {
-			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
-		}
-		if (this == ModItems.myrmex_desert_pickaxe || this == ModItems.myrmex_jungle_pickaxe) {
-			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
-		}
-		if (toolMaterial == ModItems.dragonsteel_fire_tools) {
-			tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
-		}
-		if (toolMaterial == ModItems.dragonsteel_ice_tools) {
-			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
-		}
-	}
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if (this == ModItems.silver_pickaxe) {
+            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
+        }
+        if (this == ModItems.myrmex_desert_pickaxe || this == ModItems.myrmex_jungle_pickaxe) {
+            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
+        }
+        if (toolMaterial == ModItems.dragonsteel_fire_tools) {
+            tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+        }
+        if (toolMaterial == ModItems.dragonsteel_ice_tools) {
+            tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
+        }
+    }
 }

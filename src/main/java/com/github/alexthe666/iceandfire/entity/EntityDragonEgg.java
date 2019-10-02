@@ -30,9 +30,9 @@ import java.util.UUID;
 
 public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.<Integer>createKey(EntityDragonEgg.class, DataSerializers.VARINT);
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityDragonEgg.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.VARINT);
 
     public EntityDragonEgg(World worldIn) {
         super(worldIn);
@@ -220,12 +220,12 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public boolean isNoDespawnRequired(){
+    public boolean isNoDespawnRequired() {
         return true;
     }
 
     @Override
-    protected boolean canDespawn(){
+    protected boolean canDespawn() {
         return false;
     }
 }

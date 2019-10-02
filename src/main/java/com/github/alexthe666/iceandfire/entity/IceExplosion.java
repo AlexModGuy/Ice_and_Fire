@@ -45,8 +45,8 @@ public class IceExplosion extends Explosion {
     public IceExplosion(World world, Entity entity, double x, double y, double z, float size, boolean smoke) {
         super(world, entity, x, y, z, size, true, smoke);
         this.explosionRNG = new Random();
-        this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
-        this.playerKnockbackMap = Maps.<EntityPlayer, Vec3d>newHashMap();
+        this.affectedBlockPositions = Lists.newArrayList();
+        this.playerKnockbackMap = Maps.newHashMap();
         this.worldObj = world;
         this.exploder = entity;
         this.explosionSize = size;
@@ -63,7 +63,7 @@ public class IceExplosion extends Explosion {
      */
     @Override
     public void doExplosionA() {
-        Set<BlockPos> set = Sets.<BlockPos>newHashSet();
+        Set<BlockPos> set = Sets.newHashSet();
         int i = 16;
 
         for (int j = 0; j < 16; ++j) {
@@ -87,7 +87,7 @@ public class IceExplosion extends Explosion {
                             IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
 
                             if (iblockstate.getMaterial() != Material.AIR) {
-                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, (Entity) null, this);
+                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
 
@@ -202,9 +202,9 @@ public class IceExplosion extends Explosion {
                     d3 = d3 * d7;
                     d4 = d4 * d7;
                     d5 = d5 * d7;
-                    this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5, new int[0]);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+                    this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
+                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
                 }
                 if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
                     if (block == Blocks.GRASS_PATH) {

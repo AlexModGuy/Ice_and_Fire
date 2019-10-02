@@ -20,7 +20,7 @@ public class BlockDragonBoneWall extends BlockWall implements IDragonProof {
         this.setRegistryName(IceAndFire.MODID, "dragon_bone_wall");
     }
 
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this));
     }
 

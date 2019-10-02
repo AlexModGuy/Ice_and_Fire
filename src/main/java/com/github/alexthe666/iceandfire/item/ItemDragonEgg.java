@@ -21,50 +21,50 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonEgg extends Item {
-	public EnumDragonEgg type;
+    public EnumDragonEgg type;
 
-	public ItemDragonEgg(String name, EnumDragonEgg type) {
-		this.setHasSubtypes(true);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.type = type;
-		this.setTranslationKey("iceandfire.dragonegg");
-		this.maxStackSize = 1;
-		this.setRegistryName(IceAndFire.MODID, name);
-	}
+    public ItemDragonEgg(String name, EnumDragonEgg type) {
+        this.setHasSubtypes(true);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.type = type;
+        this.setTranslationKey("iceandfire.dragonegg");
+        this.maxStackSize = 1;
+        this.setRegistryName(IceAndFire.MODID, name);
+    }
 
-	@Override
-	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-		itemStack.setTagCompound(new NBTTagCompound());
-	}
+    @Override
+    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+        itemStack.setTagCompound(new NBTTagCompound());
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
+    }
 
 
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (facing != EnumFacing.UP) {
-			return EnumActionResult.PASS;
-		} else {
-			EntityDragonEgg egg = new EntityDragonEgg(worldIn);
-			egg.setType(type);
-			egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			egg.onPlayerPlace(player);
-			if (!worldIn.isRemote) {
-				worldIn.spawnEntity(egg);
-			}
-			ItemStack itemstack = player.getHeldItem(hand);
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (facing != EnumFacing.UP) {
+            return EnumActionResult.PASS;
+        } else {
+            EntityDragonEgg egg = new EntityDragonEgg(worldIn);
+            egg.setType(type);
+            egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+            egg.onPlayerPlace(player);
+            if (!worldIn.isRemote) {
+                worldIn.spawnEntity(egg);
+            }
+            ItemStack itemstack = player.getHeldItem(hand);
 
-			if (!player.capabilities.isCreativeMode) {
-				itemstack.shrink(1);
-				if (itemstack.getCount() <= 0) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
-				}
-			}
-			return EnumActionResult.SUCCESS;
+            if (!player.capabilities.isCreativeMode) {
+                itemstack.shrink(1);
+                if (itemstack.getCount() <= 0) {
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+                }
+            }
+            return EnumActionResult.SUCCESS;
 
-		}
-	}
+        }
+    }
 }

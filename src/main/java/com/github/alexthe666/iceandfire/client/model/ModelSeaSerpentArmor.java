@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -29,7 +28,7 @@ public class ModelSeaSerpentArmor extends ModelBiped {
         this.armFinR.setRotationPoint(-1.5F, 4.0F, -0.4F);
         this.armFinR.addBox(-0.5F, -5.4F, -6.0F, 1, 7, 5, 0.0F);
         this.setRotateAngle(armFinR, 3.141592653589793F, -1.3089969389957472F, -0.003490658503988659F);
-          this.headFin = new ModelRenderer(this, 0, 32);
+        this.headFin = new ModelRenderer(this, 0, 32);
         this.headFin.setRotationPoint(-3.5F, -8.8F, 3.5F);
         this.headFin.addBox(-0.5F, -8.4F, -7.9F, 1, 16, 14, 0.0F);
         this.setRotateAngle(headFin, 3.141592653589793F, -0.5235987755982988F, 0.0F);
@@ -49,7 +48,7 @@ public class ModelSeaSerpentArmor extends ModelBiped {
         this.shoulderR = new ModelRenderer(this, 38, 46);
         this.shoulderR.setRotationPoint(0.0F, -0.5F, 0.0F);
         this.shoulderR.addBox(-3.5F, -2.0F, -2.5F, 5, 12, 5, 0.0F);
-         this.armFinL = new ModelRenderer(this, 30, 32);
+        this.armFinL = new ModelRenderer(this, 30, 32);
         this.armFinL.mirror = true;
         this.armFinL.setRotationPoint(1.5F, 4.0F, -0.4F);
         this.armFinL.addBox(-0.5F, -5.4F, -6.0F, 1, 7, 5, 0.0F);
@@ -72,7 +71,7 @@ public class ModelSeaSerpentArmor extends ModelBiped {
 
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         if (entityIn instanceof EntityArmorStand) {
-            EntityArmorStand entityarmorstand = (EntityArmorStand)entityIn;
+            EntityArmorStand entityarmorstand = (EntityArmorStand) entityIn;
             this.bipedHead.rotateAngleX = 0.017453292F * entityarmorstand.getHeadRotation().getX();
             this.bipedHead.rotateAngleY = 0.017453292F * entityarmorstand.getHeadRotation().getY();
             this.bipedHead.rotateAngleZ = 0.017453292F * entityarmorstand.getHeadRotation().getZ();
@@ -95,7 +94,7 @@ public class ModelSeaSerpentArmor extends ModelBiped {
             this.bipedRightLeg.rotateAngleZ = 0.017453292F * entityarmorstand.getRightLegRotation().getZ();
             this.bipedRightLeg.setRotationPoint(-1.9F, 11.0F, 0.0F);
             copyModelAngles(this.bipedHead, this.bipedHeadwear);
-        }else{
+        } else {
             super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         }
     }

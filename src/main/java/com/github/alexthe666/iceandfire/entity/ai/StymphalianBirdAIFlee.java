@@ -27,7 +27,7 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
         this.stymphalianBird = stymphalianBird;
         this.canBeSeenSelector = new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof  EntityPlayer && entity.isEntityAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
+                return entity instanceof EntityPlayer && entity.isEntityAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
             }
         };
         this.avoidDistance = avoidDistanceIn;
@@ -39,7 +39,7 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
         if (this.stymphalianBird.getVictor() == null) {
             return false;
         }
-        List<EntityLivingBase> list = this.stymphalianBird.world.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, this.stymphalianBird.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
+        List<EntityLivingBase> list = this.stymphalianBird.world.getEntitiesWithinAABB(EntityLivingBase.class, this.stymphalianBird.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
                 Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector}));
 
         if (list.isEmpty()) {

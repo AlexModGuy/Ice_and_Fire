@@ -15,7 +15,6 @@ import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,7 +22,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
@@ -70,7 +68,7 @@ public class CommonProxy {
                     }
                 }
             }
-            for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+            for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
                 color.scaleBlock = new BlockSeaSerpentScales(color.resourceName, color.color);
                 event.getRegistry().register(color.scaleBlock);
             }
@@ -105,12 +103,12 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianFeather>create(), event, EntityStymphalianFeather.class, "stymphalianfeather", 25);
         registerUnspawnable(EntityEntryBuilder.<EntityStymphalianArrow>create(), event, EntityStymphalianArrow.class, "stymphalianarrow", 26);
         registerSpawnable(EntityEntryBuilder.<EntityTroll>create(), event, EntityTroll.class, "if_troll", 27, 0X3D413D, 0X58433A);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0X594520);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 29, 0XA16026, 0X7D622D);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 30, 0XA16026, 0XA27F3A);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexRoyal>create(), event,EntityMyrmexRoyal.class, "myrmex_royal", 31, 0XA16026, 0XC79B48);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 32, 0XA16026, 0XECB855);
-        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event,EntityMyrmexEgg.class, "myrmex_egg", 33);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event, EntityMyrmexWorker.class, "myrmex_worker", 28, 0XA16026, 0X594520);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event, EntityMyrmexSoldier.class, "myrmex_soldier", 29, 0XA16026, 0X7D622D);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event, EntityMyrmexSentinel.class, "myrmex_sentinel", 30, 0XA16026, 0XA27F3A);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexRoyal>create(), event, EntityMyrmexRoyal.class, "myrmex_royal", 31, 0XA16026, 0XC79B48);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event, EntityMyrmexQueen.class, "myrmex_queen", 32, 0XA16026, 0XECB855);
+        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event, EntityMyrmexEgg.class, "myrmex_egg", 33);
         registerSpawnable(EntityEntryBuilder.<EntityAmphithere>create(), event, EntityAmphithere.class, "amphithere", 34, 0X597535, 0X00AA98);
         registerUnspawnable(EntityEntryBuilder.<EntityAmphithereArrow>create(), event, EntityAmphithereArrow.class, "amphitherearrow", 35);
         registerSpawnable(EntityEntryBuilder.<EntitySeaSerpent>create(), event, EntitySeaSerpent.class, "seaserpent", 36, 0X008299, 0XC5E6E7);
@@ -118,9 +116,9 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 38);
         registerUnspawnable(EntityEntryBuilder.<EntityChainTie>create(), event, EntityChainTie.class, "chaintie", 39);
         registerUnspawnable(EntityEntryBuilder.<EntityPixieCharge>create(), event, EntityPixieCharge.class, "pixiecharge", 40);
-        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexSwarmer>create(), event,EntityMyrmexSwarmer.class, "myrmex_swarmer", 41);
-        registerUnspawnable(EntityEntryBuilder.<EntityTideTrident>create(), event,EntityTideTrident.class, "tide_trident", 42);
-        registerUnspawnable(EntityEntryBuilder.<EntityMobSkull>create(), event,EntityMobSkull.class, "if_mob_skull", 43);
+        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexSwarmer>create(), event, EntityMyrmexSwarmer.class, "myrmex_swarmer", 41);
+        registerUnspawnable(EntityEntryBuilder.<EntityTideTrident>create(), event, EntityTideTrident.class, "tide_trident", 42);
+        registerUnspawnable(EntityEntryBuilder.<EntityMobSkull>create(), event, EntityMobSkull.class, "if_mob_skull", 43);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
@@ -184,7 +182,7 @@ public class CommonProxy {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        for(EnumSeaSerpent color : EnumSeaSerpent.values()){
+        for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
             ItemBlock itemBlock = new ItemBlock(color.scaleBlock);
             itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
             event.getRegistry().register(itemBlock);

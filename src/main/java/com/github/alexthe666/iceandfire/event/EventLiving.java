@@ -67,6 +67,98 @@ public class EventLiving {
             return entity != null && entity instanceof IVillagerFear;
         }
     };
+    Random rand = new Random();
+
+    private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
+        float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+        List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
+        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+        if (!list.isEmpty()) {
+            Iterator<Entity> itr = list.iterator();
+            while (itr.hasNext()) {
+                Entity entity = itr.next();
+                if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
+                    EntityCockatrice cockatrice = (EntityCockatrice) entity;
+                    if (!DragonUtils.hasSameOwner(cockatrice, attacker)) {
+                        if (attacker instanceof EntityPlayer) {
+                            EntityPlayer player = (EntityPlayer) attacker;
+                            if (!player.isCreative() && !cockatrice.isOwner(player)) {
+                                cockatrice.setAttackTarget(player);
+                            }
+                        } else {
+                            cockatrice.setAttackTarget(attacker);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker) {
+        float d0 = IceAndFire.CONFIG.amphithereVillagerSearchLength;
+        List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
+        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
+        if (!list.isEmpty()) {
+            Iterator<Entity> itr = list.iterator();
+            while (itr.hasNext()) {
+                Entity entity = itr.next();
+                if (entity instanceof EntityAmphithere && !(attacker instanceof EntityAmphithere)) {
+                    EntityAmphithere amphithere = (EntityAmphithere) entity;
+                    if (!DragonUtils.hasSameOwner(amphithere, attacker)) {
+                        if (attacker instanceof EntityPlayer) {
+                            EntityPlayer player = (EntityPlayer) attacker;
+                            if (!player.isCreative() && !amphithere.isOwner(player)) {
+                                amphithere.setAttackTarget(player);
+                            }
+                        } else {
+                            amphithere.setAttackTarget(attacker);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
+        float f = MathHelper.wrapDegrees(targetAngle - angle);
+        if (f > maxIncrease) {
+            f = maxIncrease;
+        }
+        if (f < -maxIncrease) {
+            f = -maxIncrease;
+        }
+        return angle + f;
+    }
+
+    public static boolean isLivestock(Entity entity) {
+        String className = entity.getClass().getSimpleName();
+        return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
+                || entity instanceof EntityRabbit || entity instanceof AbstractHorse
+                || className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
+                || className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
+                || className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
+                || className.contains("Hog") || className.contains("Hog");
+    }
+
+    public static boolean isVillager(Entity entity) {
+        String className = entity.getClass().getSimpleName();
+        return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
+    }
+
+    public static boolean isAnimaniaSheep(Entity entity) {
+        String className = entity.getClass().getName();
+        return className.contains("sheep") || entity instanceof EntitySheep;
+    }
+
+    public static boolean isAnimaniaChicken(Entity entity) {
+        String className = entity.getClass().getName();
+        return (className.contains("chicken") || entity instanceof EntityChicken) && entity instanceof EntityLiving && !entity.isCreatureType(EnumCreatureType.MONSTER, false);
+    }
+
+    public static boolean isAnimaniaFerret(Entity entity) {
+        String className = entity.getClass().getName();
+        return className.contains("ferret") || className.contains("polecat");
+    }
 
     @SubscribeEvent
     public void onArrowCollide(ProjectileImpactEvent event) {
@@ -99,7 +191,7 @@ public class EventLiving {
         if (event.getEntity() != null && event.getEntity() instanceof IPhasesThroughBlock) {
             Iterator<AxisAlignedBB> itr = event.getCollisionBoxesList().iterator();
             while (itr.hasNext()) {
-                AxisAlignedBB aabb = (AxisAlignedBB) itr.next();
+                AxisAlignedBB aabb = itr.next();
                 BlockPos pos = new BlockPos(aabb.minX, aabb.minY, aabb.minZ);
                 if (((IPhasesThroughBlock) event.getEntity()).canPhaseThroughBlock(event.getWorld(), pos)) {
                     itr.remove();
@@ -150,7 +242,7 @@ public class EventLiving {
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
         }
-        if(event.getWorldObj().isRemote && event.getEntityBeingMounted() instanceof ISyncMount){
+        if (event.getWorldObj().isRemote && event.getEntityBeingMounted() instanceof ISyncMount) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(event.getEntityBeingMounted().getEntityId(), event.getEntityMounting().posX, event.getEntityMounting().posY, event.getEntityMounting().posZ));
         }
     }
@@ -221,7 +313,7 @@ public class EventLiving {
         if (event.getSource().getTrueSource() != null) {
             Entity attacker = event.getSource().getTrueSource();
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(attacker, MiscEntityProperties.class);
-            if(properties != null && properties.inLoveTicks > 0){
+            if (properties != null && properties.inLoveTicks > 0) {
                 event.setCanceled(true);
             }
             if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
@@ -248,56 +340,6 @@ public class EventLiving {
         }
     }
 
-    private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
-        float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
-        List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
-        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
-        if (!list.isEmpty()) {
-            Iterator<Entity> itr = list.iterator();
-            while (itr.hasNext()) {
-                Entity entity = itr.next();
-                if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
-                    EntityCockatrice cockatrice = (EntityCockatrice) entity;
-                    if (!DragonUtils.hasSameOwner(cockatrice, attacker)) {
-                        if (attacker instanceof EntityPlayer) {
-                            EntityPlayer player = (EntityPlayer) attacker;
-                            if (!player.isCreative() && !cockatrice.isOwner(player)) {
-                                cockatrice.setAttackTarget(player);
-                            }
-                        } else {
-                            cockatrice.setAttackTarget((EntityLivingBase) attacker);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker) {
-        float d0 = IceAndFire.CONFIG.amphithereVillagerSearchLength;
-        List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
-        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
-        if (!list.isEmpty()) {
-            Iterator<Entity> itr = list.iterator();
-            while (itr.hasNext()) {
-                Entity entity = itr.next();
-                if (entity instanceof EntityAmphithere && !(attacker instanceof EntityAmphithere)) {
-                    EntityAmphithere amphithere = (EntityAmphithere) entity;
-                    if (!DragonUtils.hasSameOwner(amphithere, attacker)) {
-                        if (attacker instanceof EntityPlayer) {
-                            EntityPlayer player = (EntityPlayer) attacker;
-                            if (!player.isCreative() && !amphithere.isOwner(player)) {
-                                amphithere.setAttackTarget(player);
-                            }
-                        } else {
-                            amphithere.setAttackTarget((EntityLivingBase) attacker);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @SubscribeEvent
     public void onPlayerAttack(AttackEntityEvent event) {
         if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
@@ -319,7 +361,7 @@ public class EventLiving {
         }
         if (event.getTarget() instanceof EntityLiving) {
             boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties((EntityLiving) event.getTarget(), StoneEntityProperties.class);
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone || stonePlayer) {
                 ((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
                 if (event.getEntityPlayer() != null) {
@@ -358,12 +400,13 @@ public class EventLiving {
             }
         }
     }
+
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
         if (chainProperties != null) {
             chainProperties.minimizeLists();
-            if(!event.getEntity().world.isRemote) {
+            if (!event.getEntity().world.isRemote) {
                 EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(ModItems.chain, chainProperties.connectedEntities.size()));
                 entityitem.setDefaultPickupDelay();
                 event.getEntity().world.spawnEntity(entityitem);
@@ -373,11 +416,12 @@ public class EventLiving {
     }
 
     @SubscribeEvent
-    public void onEntityStopUsingItem(LivingEntityUseItemEvent.Tick event){
-        if(event.getItem().getItem() instanceof ItemDeathwormGauntlet || event.getItem().getItem() instanceof ItemCockatriceScepter){
+    public void onEntityStopUsingItem(LivingEntityUseItemEvent.Tick event) {
+        if (event.getItem().getItem() instanceof ItemDeathwormGauntlet || event.getItem().getItem() instanceof ItemCockatriceScepter) {
             event.setDuration(20);
         }
     }
+
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
@@ -385,15 +429,13 @@ public class EventLiving {
         }
     }
 
-    Random rand = new Random();
-
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        if(event.getEntityLiving() instanceof EntityPlayer){
-            if(event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() != null){
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            if (event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() != null) {
                 Entity mount = event.getEntityLiving().getRidingEntity();
-                if(event.getEntityLiving().getDistance(mount) > 80){
-                    if(event.getEntityLiving().world.isRemote){
+                if (event.getEntityLiving().getDistance(mount) > 80) {
+                    if (event.getEntityLiving().world.isRemote) {
                         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(mount.getEntityId(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ));
                     }
                 }
@@ -485,7 +527,7 @@ public class EventLiving {
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, new int[]{Block.getIdFromBlock(ModBlocks.dragon_ice)});
+                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(ModBlocks.dragon_ice));
                     }
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
@@ -539,9 +581,9 @@ public class EventLiving {
                             sirenProps.singTime = 0;
                             closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
                             closestSiren.setSinging(false);
-                            closestSiren.setAttackTarget((EntityLivingBase) entity);
+                            closestSiren.setAttackTarget(entity);
                             closestSiren.setAggressive(true);
-                            closestSiren.triggerOtherSirens((EntityLivingBase) entity);
+                            closestSiren.triggerOtherSirens(entity);
                         }
                         if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
                             sirenProps.isCharmed = false;
@@ -592,7 +634,7 @@ public class EventLiving {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
         if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {
             Iterator<Entity> itr = properties.entitiesWeAreGlaringAt.iterator();
-            while(itr.hasNext()){
+            while (itr.hasNext()) {
                 Entity next = itr.next();
                 double d5 = 80F;
                 double d0 = next.posX - event.getEntityLiving().posX;
@@ -605,35 +647,33 @@ public class EventLiving {
                 double d4 = this.rand.nextDouble();
                 while (d4 < d3) {
                     d4 += 1.0D;
-                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getEntityLiving().posX + d0 * d4, event.getEntityLiving().posY + d1 * d4 + (double) event.getEntityLiving().getEyeHeight() * 0.5D, event.getEntityLiving().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, new int[]{3484199});
+                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getEntityLiving().posX + d0 * d4, event.getEntityLiving().posY + d1 * d4 + (double) event.getEntityLiving().getEyeHeight() * 0.5D, event.getEntityLiving().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
-                ((EntityLivingBase)next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
-                if(event.getEntityLiving().ticksExisted % 20 == 0){
+                ((EntityLivingBase) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
+                if (event.getEntityLiving().ticksExisted % 20 == 0) {
                     properties.specialWeaponDmg++;
-                    ((EntityLivingBase)next).attackEntityFrom(DamageSource.WITHER, 2);
+                    next.attackEntityFrom(DamageSource.WITHER, 2);
                 }
-                if(next == null || !next.isEntityAlive()){
+                if (next == null || !next.isEntityAlive()) {
                     itr.remove();
                 }
             }
         }
-        if(properties != null && properties.glarers.size() > 0){
+        if (properties != null && properties.glarers.size() > 0) {
             Iterator<Entity> itr = properties.glarers.iterator();
-            while(itr.hasNext()) {
+            while (itr.hasNext()) {
                 Entity next = itr.next();
-                if(next instanceof EntityLivingBase && !EntityGorgon.isEntityLookingAt((EntityLivingBase)next, event.getEntityLiving(), 0.2F)){
+                if (next instanceof EntityLivingBase && !EntityGorgon.isEntityLookingAt((EntityLivingBase) next, event.getEntityLiving(), 0.2F)) {
                     MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscEntityProperties.class);
-                    if(theirProperties.entitiesWeAreGlaringAt.contains(event.getEntityLiving())){
-                        theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
-                    }
+                    theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
                     itr.remove();
 
                 }
             }
         }
-        if(properties != null && properties.inLoveTicks > 0){
+        if (properties != null && properties.inLoveTicks > 0) {
             properties.inLoveTicks--;
-            if(event.getEntityLiving() instanceof EntityLiving){
+            if (event.getEntityLiving() instanceof EntityLiving) {
                 ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
             }
             if (rand.nextInt(7) == 0) {
@@ -642,17 +682,6 @@ public class EventLiving {
                 }
             }
         }
-    }
-
-    public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
-        float f = MathHelper.wrapDegrees(targetAngle - angle);
-        if (f > maxIncrease) {
-            f = maxIncrease;
-        }
-        if (f < -maxIncrease) {
-            f = -maxIncrease;
-        }
-        return angle + f;
     }
 
     @SubscribeEvent
@@ -741,7 +770,7 @@ public class EventLiving {
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)) {
             LootCondition chance = new RandomChance(0.4f);
             LootEntryItem item = new LootEntryItem(ModItems.manuscript, 20, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
-            LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[] {chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
+            LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
         if (IceAndFire.CONFIG.generateSilverOre && event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
@@ -752,7 +781,7 @@ public class EventLiving {
             LootCondition chance = new RandomChance(0.2f);
             LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
             LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
-            LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[] {chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
+            LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
             event.getTable().addPool(pool);
         }
     }
@@ -796,38 +825,8 @@ public class EventLiving {
                     }
                 }, 12.0F, 1.2D, 1.5D));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             IceAndFire.logger.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
         }
-    }
-
-    public static boolean isLivestock(Entity entity){
-        String className = entity.getClass().getSimpleName();
-        return entity instanceof EntityCow || entity instanceof EntitySheep || entity instanceof EntityPig || entity instanceof EntityChicken
-                || entity instanceof EntityRabbit || entity instanceof AbstractHorse
-                || className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
-                || className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
-                || className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
-                || className.contains("Hog") || className.contains("Hog");
-    }
-
-    public static boolean isVillager(Entity entity){
-        String className = entity.getClass().getSimpleName();
-        return entity instanceof INpc || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
-    }
-
-    public static boolean isAnimaniaSheep(Entity entity) {
-        String className = entity.getClass().getName();
-        return className.contains("sheep") || entity instanceof EntitySheep;
-    }
-
-    public static boolean isAnimaniaChicken(Entity entity) {
-        String className = entity.getClass().getName();
-        return (className.contains("chicken") || entity instanceof EntityChicken) && entity instanceof EntityLiving && !entity.isCreatureType(EnumCreatureType.MONSTER, false);
-    }
-
-    public static boolean isAnimaniaFerret(Entity entity) {
-        String className = entity.getClass().getName();
-        return className.contains("ferret") || className.contains("polecat");
     }
 }

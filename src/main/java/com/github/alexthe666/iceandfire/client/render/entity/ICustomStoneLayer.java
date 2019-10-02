@@ -5,5 +5,6 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public interface ICustomStoneLayer {
     LayerRenderer getStoneLayer(RenderLivingBase render);
+
     LayerRenderer getCrackLayer(RenderLivingBase render);
 }

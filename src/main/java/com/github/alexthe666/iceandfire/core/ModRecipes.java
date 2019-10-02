@@ -31,86 +31,73 @@ public class ModRecipes {
     public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
     public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
+
     public static void preInit() {
         FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.fire_dragon_blood), new ItemStack(ModItems.dragonsteel_fire_ingot)));
         ICE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.ice_dragon_blood), new ItemStack(ModItems.dragonsteel_ice_ingot)));
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.stymphalian_arrow, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.amphithere_arrow, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.amphithere_arrow, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.sea_serpent_arrow, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.sea_serpent_arrow, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.dragonbone_arrow, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.dragonbone_arrow, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDragonArrow entityarrow = new EntityDragonArrow(worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.hippogryph_egg, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.hippogryph_egg, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityHippogryphEgg entityarrow = new EntityHippogryphEgg(worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.rotten_egg, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.rotten_egg, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityCockatriceEgg entityarrow = new EntityCockatriceEgg(worldIn, position.getX(), position.getY(), position.getZ());
                 return entityarrow;
             }
         });
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.deathworm_egg, new BehaviorProjectileDispense()
-        {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.deathworm_egg, new BehaviorProjectileDispense() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
-            {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(worldIn, position.getX(), position.getY(), position.getZ(), stackIn.getMetadata() == 1);
                 return entityarrow;
             }
@@ -162,7 +149,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
         OreDictionary.registerOre("boneDragon", ModItems.dragonbone);
-        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()){
+        for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             OreDictionary.registerOre("seaSerpentScales", serpent.scale);
         }
         OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
@@ -231,7 +218,7 @@ public class ModRecipes {
         ModItems.boneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
-        for(EnumDragonArmor armor : EnumDragonArmor.values()){
+        for (EnumDragonArmor armor : EnumDragonArmor.values()) {
             armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
         }
         ModItems.dragonsteel_fire_armor.setRepairItem(new ItemStack(ModItems.dragonsteel_fire_ingot));
@@ -254,7 +241,7 @@ public class ModRecipes {
         ModItems.myrmexChitin.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexDesert.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexJungle.setRepairItem(new ItemStack(ModItems.myrmex_jungle_chitin));
-        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()){
+        for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             serpent.armorMaterial.setRepairItem(new ItemStack(serpent.scale));
         }
         ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);

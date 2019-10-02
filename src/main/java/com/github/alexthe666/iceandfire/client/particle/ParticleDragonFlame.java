@@ -1,17 +1,11 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -50,14 +44,14 @@ public class ParticleDragonFlame extends ParticleFlame {
         this.setPosition(this.posX, this.posY, this.posZ);
         this.dragonSize = dragonSize;
         this.speedBonus = rand.nextFloat() * 0.015F;
-}
+    }
 
     public ParticleDragonFlame(World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
         this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
         this.dragon = entityDragonBase;
-        this.targetX = dragon.burnParticleX  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetY = dragon.burnParticleY  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetZ = dragon.burnParticleZ  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetX = dragon.burnParticleX + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetY = dragon.burnParticleY + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetZ = dragon.burnParticleZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
         this.posX = x;
         this.posY = y;
         this.posZ = z;
@@ -116,13 +110,13 @@ public class ParticleDragonFlame extends ParticleFlame {
 
     public void onUpdate() {
         super.onUpdate();
-        if(dragon == null){
+        if (dragon == null) {
             float distX = (float) (this.initialX - this.posX);
             float distZ = (float) (this.initialZ - this.posZ);
             this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
             this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
             this.motionY += 0.015F * rand.nextFloat();
-        }else{
+        } else {
             double d2 = this.targetX - initialX;
             double d3 = this.targetY - initialY;
             double d4 = this.targetZ - initialZ;
@@ -131,7 +125,7 @@ public class ParticleDragonFlame extends ParticleFlame {
             this.motionX += d2 * speed;
             this.motionY += d3 * speed;
             this.motionZ += d4 * speed;
-            if(touchedTime > 3){
+            if (touchedTime > 3) {
                 this.setExpired();
             }
         }
@@ -143,7 +137,7 @@ public class ParticleDragonFlame extends ParticleFlame {
         double origZ = z;
 
         if (this.canCollide) {
-            List<AxisAlignedBB> list = this.world.getCollisionBoxes((Entity) null, this.getBoundingBox().expand(x, y, z));
+            List<AxisAlignedBB> list = this.world.getCollisionBoxes(null, this.getBoundingBox().expand(x, y, z));
 
             for (AxisAlignedBB axisalignedbb : list) {
                 y = axisalignedbb.calculateYOffset(this.getBoundingBox(), y);
@@ -162,7 +156,7 @@ public class ParticleDragonFlame extends ParticleFlame {
             }
 
             this.setBoundingBox(this.getBoundingBox().offset(0.0D, 0.0D, z));
-            if(!list.isEmpty()){
+            if (!list.isEmpty()) {
                 touchedTime++;
             }
         } else {

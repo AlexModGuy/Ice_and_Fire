@@ -59,7 +59,7 @@ public class ModelTideTrident extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.shaft.render(f5);
     }
 

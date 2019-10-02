@@ -1,17 +1,7 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.google.common.collect.Sets;
-
-import java.util.EnumSet;
-import java.util.Set;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -24,6 +14,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class NodeProcessorMyrmex extends NodeProcessor {
     protected float avoidsWater;
@@ -52,7 +46,6 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         } else {
             BlockPos blockpos;
             for (blockpos = new BlockPos(this.entity); (this.blockaccess.getBlockState(blockpos).getMaterial() == Material.AIR || this.blockaccess.getBlockState(blockpos).getBlock().isPassable(this.blockaccess, blockpos)) && blockpos.getY() > 0; blockpos = blockpos.down()) {
-                ;
             }
             i = blockpos.up().getY();
         }
@@ -61,7 +54,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         PathNodeType pathnodetype1 = this.getPathNodeType(this.entity, blockpos2.getX(), i, blockpos2.getZ());
 
         if (this.entity.getPathPriority(pathnodetype1) < 0.0F) {
-            Set<BlockPos> set = Sets.<BlockPos>newHashSet();
+            Set<BlockPos> set = Sets.newHashSet();
             set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double) i, this.entity.getEntityBoundingBox().minZ));
             set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double) i, this.entity.getEntityBoundingBox().maxZ));
             set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double) i, this.entity.getEntityBoundingBox().minZ));
@@ -250,7 +243,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
     }
 
     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
-        EnumSet<PathNodeType> enumset = EnumSet.<PathNodeType>noneOf(PathNodeType.class);
+        EnumSet<PathNodeType> enumset = EnumSet.noneOf(PathNodeType.class);
         PathNodeType pathnodetype = PathNodeType.BLOCKED;
         BlockPos blockpos = new BlockPos(entitylivingIn);
         pathnodetype = this.getPathNodeType(blockaccessIn, x, y, z, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn, enumset, pathnodetype, blockpos);
@@ -380,15 +373,15 @@ public class NodeProcessorMyrmex extends NodeProcessor {
                 return PathNodeType.DAMAGE_FIRE;
             } else if (block == Blocks.CACTUS) {
                 return PathNodeType.DAMAGE_CACTUS;
-            } else if (block instanceof BlockDoor && material == Material.WOOD && !((Boolean) iblockstate.getValue(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_WOOD_CLOSED;
-            } else if (block instanceof BlockDoor && material == Material.IRON && !((Boolean) iblockstate.getValue(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_IRON_CLOSED;
-            } else if (block instanceof BlockDoor && ((Boolean) iblockstate.getValue(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && iblockstate.getValue(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_OPEN;
             } else if (block instanceof BlockRailBase) {
                 return PathNodeType.RAIL;
-            } else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockstate.getValue(BlockFenceGate.OPEN)).booleanValue())) {
+            } else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN).booleanValue())) {
                 if (material == Material.WATER) {
                     return PathNodeType.WATER;
                 } else if (material == Material.LAVA) {

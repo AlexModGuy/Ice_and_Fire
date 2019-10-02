@@ -7,8 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,7 +36,7 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
         if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase)entity;
+            EntityLivingBase mob = (EntityLivingBase) entity;
             player.attackTargetEntityWithCurrentItem(mob);
         }
     }
@@ -47,7 +45,7 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     public void onServerReceived(MinecraftServer server, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
         if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase)entity;
+            EntityLivingBase mob = (EntityLivingBase) entity;
             player.attackTargetEntityWithCurrentItem(mob);
         }
     }

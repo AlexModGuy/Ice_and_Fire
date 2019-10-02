@@ -18,8 +18,8 @@ import java.util.List;
 public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityLivingBase> targetEntitySelector;
-    protected EntityLivingBase targetEntity;
     public EntityMyrmexWorker myrmex;
+    protected EntityLivingBase targetEntity;
 
     public MyrmexAIPickupBabies(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
@@ -27,7 +27,7 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
         this.targetEntitySelector = new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase myrmex) {
-                return myrmex != null && (myrmex instanceof EntityMyrmexBase && ((EntityMyrmexBase)myrmex).getGrowthStage() < 2 && !((EntityMyrmexBase)myrmex).isInNursery() || myrmex instanceof EntityMyrmexEgg && !((EntityMyrmexEgg)myrmex).isInNursery());
+                return myrmex != null && (myrmex instanceof EntityMyrmexBase && ((EntityMyrmexBase) myrmex).getGrowthStage() < 2 && !((EntityMyrmexBase) myrmex).isInNursery() || myrmex instanceof EntityMyrmexEgg && !((EntityMyrmexEgg) myrmex).isInNursery());
             }
         };
         this.myrmex = myrmex;
@@ -36,10 +36,10 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
 
     @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove()  || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
+        if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
         }
-        List<EntityLivingBase> listBabies = this.taskOwner.world.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<EntityLivingBase> listBabies = this.taskOwner.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (listBabies.isEmpty()) {
             return false;
         } else {

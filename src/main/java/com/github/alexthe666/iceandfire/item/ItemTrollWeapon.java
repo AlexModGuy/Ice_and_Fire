@@ -33,7 +33,7 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
     }
 
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
+        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 15D, 0));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3.5D, 0));
@@ -41,16 +41,16 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
         return multimap;
     }
 
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity){
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
         return player.getCooledAttackStrength(0) < 0.95 || player.swingProgress != 0;
     }
 
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if(entityLiving instanceof EntityPlayer) {
+        if (entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityLiving;
             if (player.getCooledAttackStrength(0) < 1 && player.swingProgress > 0) {
                 return true;
-            }else{
+            } else {
                 player.swingProgressInt = -1;
             }
         }
@@ -58,9 +58,9 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
     }
 
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(entityIn instanceof EntityPlayer&& isSelected){
-            EntityPlayer player = (EntityPlayer)entityIn;
-            if(player.getCooledAttackStrength(0) < 0.95 && player.swingProgress > 0){
+        if (entityIn instanceof EntityPlayer && isSelected) {
+            EntityPlayer player = (EntityPlayer) entityIn;
+            if (player.getCooledAttackStrength(0) < 0.95 && player.swingProgress > 0) {
                 player.swingProgressInt--;
             }
         }

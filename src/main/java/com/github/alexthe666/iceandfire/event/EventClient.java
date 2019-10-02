@@ -48,19 +48,27 @@ import java.util.Random;
 
 public class EventClient {
 
+    private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
+    private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/blocks/frosted_ice_0.png");
+    private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/blocks/frosted_ice_1.png");
+    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/blocks/frosted_ice_2.png");
+    private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/blocks/frosted_ice_3.png");
+    private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
+    private Random rand = new Random();
+
     public static void initializeStoneLayer() {
         for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getMinecraft().getRenderManager().entityRenderMap.entrySet()) {
             Render render = entry.getValue();
             if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
-                ((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
+                ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
             }
         }
 
-        Field renderingRegistryField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), new String[]{"INSTANCE", "INSTANCE"}));
-        Field entityRendersField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), new String[]{"entityRenderers", "entityRenderers"}));
-        Field entityRendersOldField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), new String[]{"entityRenderersOld", "entityRenderersOld"}));
+        Field renderingRegistryField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "INSTANCE", "INSTANCE"));
+        Field entityRendersField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "entityRenderers", "entityRenderers"));
+        Field entityRendersOldField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "entityRenderersOld", "entityRenderersOld"));
         RenderingRegistry registry = null;
         try {
             Field modifier = Field.class.getDeclaredField("modifiers");
@@ -90,7 +98,7 @@ public class EventClient {
                                 LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
                                 ((RenderLivingBase) render).addLayer(stoneLayer);
                                 ((RenderLivingBase) render).addLayer(crackLayer);
-                                ((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
+                                ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
                             }
                         } catch (NullPointerException exp) {
                             System.err.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
@@ -107,7 +115,7 @@ public class EventClient {
                         LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
                         ((RenderLivingBase) render).addLayer(stoneLayer);
                         ((RenderLivingBase) render).addLayer(crackLayer);
-                        ((RenderLivingBase) render).addLayer(new LayerChainedEntity((RenderLivingBase) render));
+                        ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
                     }
                 }
             }
@@ -115,6 +123,61 @@ public class EventClient {
 
     }
 
+    private static ResourceLocation getIceTexture(int ticksFrozen) {
+        if (ticksFrozen < 100) {
+            if (ticksFrozen < 50) {
+                if (ticksFrozen < 20) {
+                    return TEXTURE_3;
+                }
+                return TEXTURE_2;
+            }
+            return TEXTURE_1;
+        }
+        return TEXTURE_0;
+    }
+
+    public static void renderAABB(AxisAlignedBB boundingBox, double x, double y, double z) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
+        double maxX = boundingBox.maxX * 0.625F;
+        double minX = boundingBox.minX * 0.625F;
+        double maxY = boundingBox.maxY * 0.625F;
+        double minY = boundingBox.minY * 0.625F;
+        double maxZ = boundingBox.maxZ * 0.625F;
+        double minZ = boundingBox.minZ * 0.625F;
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
+
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
+
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
+
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
+        tessellator.draw();
+    }
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
@@ -161,9 +224,6 @@ public class EventClient {
         return renderer.rotateAngleZ * (180F / (float) Math.PI);
     }
 
-    private Random rand = new Random();
-    private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
-
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
@@ -202,18 +262,12 @@ public class EventClient {
         }
     }
 
-    private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/blocks/frosted_ice_0.png");
-    private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/blocks/frosted_ice_1.png");
-    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/blocks/frosted_ice_2.png");
-    private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/blocks/frosted_ice_3.png");
-    private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
-
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
-                if(Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels") || IceAndFire.CONFIG.dragonGLErrorFix){
+                if (Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels") || IceAndFire.CONFIG.dragonGLErrorFix) {
                     GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
                 }
             }
@@ -265,7 +319,7 @@ public class EventClient {
                     float f6 = -(float) IAFMath.atan2_accurate(vec3d2.z, vec3d2.x);
                     GlStateManager.rotate((((float) Math.PI / 2F) + f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-                    double d1 = (double) 0D;
+                    double d1 = 0D;
                     int j = 225;
                     int k = 225;
                     int l = 225;
@@ -321,7 +375,7 @@ public class EventClient {
         }
 
         MiscEntityProperties miscProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
-        if(miscProps != null && miscProps.glarers.size() > 0){
+        if (miscProps != null && miscProps.glarers.size() > 0) {
             float f = 1.0F;// ((float) miscProps.clientSideAttackTime + event.getPartialRenderTick()) / (float) 80;
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -339,8 +393,8 @@ public class EventClient {
             float f4 = entity.getEyeHeight();
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 1.2F, 0);
-            for(Entity entitylivingbase : miscProps.glarers) {
-                Vec3d vec3d = this.getChainPosition((EntityLivingBase)entitylivingbase, (double) entitylivingbase.getEyeHeight() * 0.75D, event.getPartialRenderTick());
+            for (Entity entitylivingbase : miscProps.glarers) {
+                Vec3d vec3d = this.getChainPosition(entitylivingbase, (double) entitylivingbase.getEyeHeight() * 0.75D, event.getPartialRenderTick());
                 Vec3d vec3d1 = this.getChainPosition(entity, (double) f4, event.getPartialRenderTick());
                 Vec3d vec3d2 = vec3d1.subtract(vec3d);
                 double d0 = vec3d2.length() + 1.0D;
@@ -407,66 +461,10 @@ public class EventClient {
         return new Vec3d(d0, d1, d2);
     }
 
-    private static ResourceLocation getIceTexture(int ticksFrozen) {
-        if (ticksFrozen < 100) {
-            if (ticksFrozen < 50) {
-                if (ticksFrozen < 20) {
-                    return TEXTURE_3;
-                }
-                return TEXTURE_2;
-            }
-            return TEXTURE_1;
-        }
-        return TEXTURE_0;
-    }
-
-    public static void renderAABB(AxisAlignedBB boundingBox, double x, double y, double z) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-        double maxX = boundingBox.maxX * 0.625F;
-        double minX = boundingBox.minX * 0.625F;
-        double maxY = boundingBox.maxY * 0.625F;
-        double minY = boundingBox.minY * 0.625F;
-        double maxZ = boundingBox.maxZ * 0.625F;
-        double minZ = boundingBox.minZ * 0.625F;
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
-
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
-
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        tessellator.draw();
-    }
-
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
         if (IceAndFire.CONFIG.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
-           event.setGui(new IceAndFireMainMenu());
+            event.setGui(new IceAndFireMainMenu());
         }
     }
 }

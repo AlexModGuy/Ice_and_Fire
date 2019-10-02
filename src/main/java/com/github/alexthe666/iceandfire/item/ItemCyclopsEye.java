@@ -40,23 +40,23 @@ public class ItemCyclopsEye extends Item {
         if (stack.getTagCompound() == null) {
             stack.setTagCompound(new NBTTagCompound());
         } else {
-            if(entity instanceof EntityLivingBase){
+            if (entity instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase) entity;
-                if(living.getHeldItemMainhand() == stack || living.getHeldItemOffhand() == stack){
+                if (living.getHeldItemMainhand() == stack || living.getHeldItemOffhand() == stack) {
                     double range = 15;
                     boolean inflictedDamage = false;
-                    for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) living.posX - range, (double) living.posY - range, (double) living.posZ - range, (double) living.posX + range, (double) living.posY + range, (double) living.posZ + range))) {
-                        if(!entityliving.isEntityEqual(living) && !entityliving.isOnSameTeam(living) && (entityliving.getAttackTarget() == living || entityliving.getRevengeTarget() == living || entityliving instanceof IMob)){
+                    for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(living.posX - range, living.posY - range, living.posZ - range, living.posX + range, living.posY + range, living.posZ + range))) {
+                        if (!entityliving.isEntityEqual(living) && !entityliving.isOnSameTeam(living) && (entityliving.getAttackTarget() == living || entityliving.getRevengeTarget() == living || entityliving instanceof IMob)) {
                             entityliving.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 10, 1));
                             inflictedDamage = true;
                         }
                     }
-                    if(inflictedDamage){
+                    if (inflictedDamage) {
                         stack.getTagCompound().setInteger("HurtingTicks", stack.getTagCompound().getInteger("HurtingTicks") + 1);
                     }
                 }
-                if(stack.getTagCompound().getInteger("HurtingTicks") > 120){
-                    stack.damageItem(1, (EntityLivingBase)entity);
+                if (stack.getTagCompound().getInteger("HurtingTicks") > 120) {
+                    stack.damageItem(1, (EntityLivingBase) entity);
                     stack.getTagCompound().setInteger("HurtingTicks", 0);
                 }
             }

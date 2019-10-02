@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -34,7 +33,7 @@ public class IceAndFireParticleSpawner {
     }
 
     private Particle spawnParticle0(Particle particleID, boolean ignoreRange, boolean ingoreLimit, boolean minParticles, double xCoord, double yCoord, double zCoord) {
-        if(mc == null){
+        if (mc == null) {
             mc = Minecraft.getMinecraft();
         }
 

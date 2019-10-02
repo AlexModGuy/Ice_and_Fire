@@ -7,13 +7,13 @@ import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
-import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -49,7 +49,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -328,7 +331,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
     }
 
-    protected void updateAITasks(){
+    protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
     }
@@ -1502,9 +1505,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.setFlying(false);
             this.setHovering(false);
         }
-        if(!world.isRemote && (properties == null || properties != null && !properties.isStone)  && !this.isFlying() && !this.isHovering()){
-            if(isAllowedToTriggerFlight() || this.posY < -1){
-                if (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 || this.posY < -1 || this.getAttackTarget() != null  && this.getAttackTarget().posY + 5 < this.posY) {
+        if (!world.isRemote && (properties == null || properties != null && !properties.isStone) && !this.isFlying() && !this.isHovering()) {
+            if (isAllowedToTriggerFlight() || this.posY < -1) {
+                if (this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 || this.posY < -1 || this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY) {
                     this.setHovering(true);
                     this.setSleeping(false);
                     this.setSitting(false);
@@ -2186,6 +2189,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean isMovementBlocked() {
         return this.getHealth() <= 0.0F || isSitting() || this.isModelDead() || this.isBeingRidden();
     }
+
     @Override
     public void travel(float strafe, float forward, float vertical) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isSitting()) {
@@ -2543,10 +2547,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
     }
 
-    public boolean hasFlightClearance(){
+    public boolean hasFlightClearance() {
         BlockPos topOfBB = new BlockPos(this.posX, this.getEntityBoundingBox().maxY, this.posZ);
-        for(int i = 1; i < 4; i++){
-            if(!world.isAirBlock(topOfBB.up(i))){
+        for (int i = 1; i < 4; i++) {
+            if (!world.isAirBlock(topOfBB.up(i))) {
                 return false;
             }
         }

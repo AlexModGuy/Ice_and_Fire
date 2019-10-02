@@ -16,20 +16,17 @@ public class DragonAIEscort extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.dragon.canMove() || this.dragon.getAttackTarget() != null || this.dragon.getOwner() == null || this.dragon.getCommand() != 2) {
-            return false;
-        }
-        return true;
+        return this.dragon.canMove() && this.dragon.getAttackTarget() == null && this.dragon.getOwner() != null && this.dragon.getCommand() == 2;
     }
 
     public void updateTask() {
-        if(this.dragon.getOwner() != null) {
+        if (this.dragon.getOwner() != null) {
             double dist = this.dragon.getDistance(this.dragon.getOwner());
-            if(dist > 20 && !this.dragon.isFlying() && !this.dragon.isHovering()){
+            if (dist > 20 && !this.dragon.isFlying() && !this.dragon.isHovering()) {
                 this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
             }
             System.out.println(!this.dragon.isFlying());
-            if(dist > 45 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()){
+            if (dist > 45 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
                 this.dragon.setHovering(true);
                 this.dragon.setSleeping(false);
                 this.dragon.setSitting(false);

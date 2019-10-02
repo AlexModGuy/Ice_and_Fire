@@ -28,9 +28,9 @@ import javax.annotation.Nullable;
 
 public class BlockMyrmexResin extends Block implements ICustomRendered {
 
-    private boolean sticky;
-    protected static final AxisAlignedBB STICKY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
     public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockMyrmexResin.EnumType.class);
+    protected static final AxisAlignedBB STICKY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
+    private boolean sticky;
 
     public BlockMyrmexResin(boolean sticky) {
         super(Material.CLAY);
@@ -84,7 +84,7 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANT});
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Nullable
@@ -94,12 +94,12 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        if(sticky) {
-            if((entityIn instanceof EntityMyrmexBase)){
+        if (sticky) {
+            if ((entityIn instanceof EntityMyrmexBase)) {
                 entityIn.motionX *= 1.2D;
                 entityIn.motionY *= 1.2D;
                 entityIn.motionZ *= 1.2D;
-            }else{
+            } else {
                 entityIn.motionX *= 0.4D;
                 entityIn.motionZ *= 0.4D;
             }
@@ -111,7 +111,8 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         DESERT("desert"), JUNGLE("jungle");
 
         private String name;
-        EnumType(String name){
+
+        EnumType(String name) {
             this.name = name;
         }
 

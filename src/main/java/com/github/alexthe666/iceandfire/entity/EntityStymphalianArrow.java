@@ -25,6 +25,11 @@ public class EntityStymphalianArrow extends EntityArrow {
         this.setDamage(3.5F);
     }
 
+    public EntityStymphalianArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
+        this.setDamage(3.5F);
+    }
+
     public void onUpdate() {
         super.onUpdate();
         float sqrt = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -35,7 +40,7 @@ public class EntityStymphalianArrow extends EntityArrow {
 
     protected void onHit(RayTraceResult raytraceResultIn) {
         if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityPlayer) {
-            this.damageShield((EntityPlayer)raytraceResultIn.entityHit, (float)this.getDamage());
+            this.damageShield((EntityPlayer) raytraceResultIn.entityHit, (float) this.getDamage());
         }
         super.onHit(raytraceResultIn);
     }
@@ -59,11 +64,6 @@ public class EntityStymphalianArrow extends EntityArrow {
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             }
         }
-    }
-
-    public EntityStymphalianArrow(World worldIn, EntityLivingBase shooter) {
-        super(worldIn, shooter);
-        this.setDamage(3.5F);
     }
 
     public boolean hasNoGravity() {

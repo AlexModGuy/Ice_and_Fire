@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -76,14 +75,14 @@ public class ModelMyrmexLarva extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.Body2.render(f5);
-        animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity)entity);
+        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
         animator.update(entity);
         animator.setAnimation(EntityMyrmexBase.ANIMATION_PUPA_WIGGLE);
         animator.startKeyframe(5);

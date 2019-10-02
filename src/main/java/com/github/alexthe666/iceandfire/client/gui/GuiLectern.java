@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.google.common.collect.Lists;
@@ -12,17 +10,12 @@ import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.glu.Project;
@@ -202,10 +195,9 @@ public class GuiLectern extends GuiContainer {
             if (this.isPointInRegion(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && k > 0) {
                 List<String> list = Lists.newArrayList();
 
-                if (enchantment == null){
+                if (enchantment == null) {
                     list.add(TextFormatting.RED + I18n.format("container.lectern.no_bestiary"));
-                }
-                else if (!flag) {
+                } else if (!flag) {
                     list.add("" + TextFormatting.WHITE + TextFormatting.ITALIC + I18n.format(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase()));
                     TextFormatting textformatting = i >= i1 ? TextFormatting.GRAY : TextFormatting.RED;
                     list.add(textformatting + "" + I18n.format("container.lectern.costs"));

@@ -16,14 +16,11 @@ public class MyrmexAIMoveToMate extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.mate == null || !this.myrmex.canSeeSky()) {
-            return false;
-        }
-        return true;
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.mate != null && this.myrmex.canSeeSky();
     }
 
     public void updateTask() {
-        if(this.myrmex.mate != null && (this.myrmex.getDistance(this.myrmex.mate) > 30 || this.myrmex.getNavigator().noPath())) {
+        if (this.myrmex.mate != null && (this.myrmex.getDistance(this.myrmex.mate) > 30 || this.myrmex.getNavigator().noPath())) {
             this.myrmex.getMoveHelper().setMoveTo(this.myrmex.mate.posX, this.myrmex.posY, this.myrmex.mate.posZ, movementSpeed);
         }
     }

@@ -111,8 +111,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         return this.hasHomePosition && this.getCommand() == 3 || super.hasHome();
     }
 
-    public BlockPos getHomePosition(){
-        if(this.hasHomePosition && this.getCommand() == 3){
+    public BlockPos getHomePosition() {
+        if (this.hasHomePosition && this.getCommand() == 3) {
             return this.homePos;
         }
         return super.getHomePosition();

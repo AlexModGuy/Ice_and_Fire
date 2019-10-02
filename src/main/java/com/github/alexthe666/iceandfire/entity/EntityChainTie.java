@@ -2,11 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockWall;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,6 +36,28 @@ public class EntityChainTie extends EntityHanging {
         this.setPosition((double) hangingPositionIn.getX() + 0.5D, (double) hangingPositionIn.getY(), (double) hangingPositionIn.getZ() + 0.5D);
         this.setSize(0.8F, 0.9F);
         this.forceSpawn = true;
+    }
+
+    public static EntityChainTie createKnot(World worldIn, BlockPos fence) {
+        EntityChainTie entityleashknot = new EntityChainTie(worldIn, fence);
+        worldIn.spawnEntity(entityleashknot);
+        entityleashknot.playPlaceSound();
+        return entityleashknot;
+    }
+
+    @Nullable
+    public static EntityChainTie getKnotForPosition(World worldIn, BlockPos pos) {
+        int i = pos.getX();
+        int j = pos.getY();
+        int k = pos.getZ();
+
+        for (EntityChainTie entityleashknot : worldIn.getEntitiesWithinAABB(EntityChainTie.class, new AxisAlignedBB((double) i - 1.0D, (double) j - 1.0D, (double) k - 1.0D, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D))) {
+            if (entityleashknot != null && entityleashknot.getHangingPosition() != null && entityleashknot.getHangingPosition().equals(pos)) {
+                return entityleashknot;
+            }
+        }
+
+        return null;
     }
 
     public void setPosition(double x, double y, double z) {
@@ -94,11 +113,11 @@ public class EntityChainTie extends EntityHanging {
     public void setDead() {
         this.isDead = true;
         double d0 = 30D;
-        List<EntityLiving> list = this.world.<EntityLiving>getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+        List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
         for (EntityLiving entityliving : list) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
-                chainProperties.removeChain(entityliving,this);
+                chainProperties.removeChain(entityliving, this);
                 EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(ModItems.chain));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
@@ -112,7 +131,7 @@ public class EntityChainTie extends EntityHanging {
         } else {
             boolean flag = false;
             double d0 = 30D;
-            List<EntityLiving> list = this.world.<EntityLiving>getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+            List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
 
             for (EntityLiving entityliving : list) {
                 ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
@@ -145,28 +164,6 @@ public class EntityChainTie extends EntityHanging {
 
     public boolean onValidSurface() {
         return this.world.getBlockState(this.hangingPosition).getBlock() instanceof BlockWall;
-    }
-
-    public static EntityChainTie createKnot(World worldIn, BlockPos fence) {
-        EntityChainTie entityleashknot = new EntityChainTie(worldIn, fence);
-        worldIn.spawnEntity(entityleashknot);
-        entityleashknot.playPlaceSound();
-        return entityleashknot;
-    }
-
-    @Nullable
-    public static EntityChainTie getKnotForPosition(World worldIn, BlockPos pos) {
-        int i = pos.getX();
-        int j = pos.getY();
-        int k = pos.getZ();
-
-        for (EntityChainTie entityleashknot : worldIn.getEntitiesWithinAABB(EntityChainTie.class, new AxisAlignedBB((double) i - 1.0D, (double) j - 1.0D, (double) k - 1.0D, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D))) {
-            if (entityleashknot != null && entityleashknot.getHangingPosition() != null && entityleashknot.getHangingPosition().equals(pos)) {
-                return entityleashknot;
-            }
-        }
-
-        return null;
     }
 
     public void playPlaceSound() {

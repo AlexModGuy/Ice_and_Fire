@@ -49,9 +49,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
                 if (entitylivingbase != null) {
                     Vec3d vec3d = this.getPosition(entitylivingbase, (double) entitylivingbase.height * 0.5D, 1.0F);
                     Vec3d vec3d1 = this.getPosition(livingEntity, (double) livingEntity.getEyeHeight(), 1.0F);
-                    if (camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z))) {
-                        return true;
-                    }
+                    return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
                 }
             }
 
@@ -146,16 +144,16 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
 
     @Override
     public void preRenderCallback(EntityCockatrice cockatrice, float partialTickTime) {
-        if(cockatrice.isChild()) {
+        if (cockatrice.isChild()) {
             GL11.glScalef(0.5F, 0.5F, 0.5F);
         }
     }
 
     @Override
     protected ResourceLocation getEntityTexture(EntityCockatrice cockatrice) {
-        if(cockatrice.isChild()){
+        if (cockatrice.isChild()) {
             return cockatrice.isHen() ? TEXTURE_HEN_CHICK : TEXTURE_ROOSTER_CHICK;
-        }else{
+        } else {
             return cockatrice.isHen() ? TEXTURE_HEN : TEXTURE_ROOSTER;
         }
     }

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
@@ -11,12 +10,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SeaSerpentAIAttackMelee extends EntityAIBase {
-    World world;
+    protected final int attackInterval = 20;
     protected EntitySeaSerpent attacker;
     /**
      * An amount of decrementing ticks that allows the entity to attack once the tick reaches 0.
      */
     protected int attackTick;
+    World world;
     /**
      * The speed with which the mob will approach the target
      */
@@ -33,7 +33,6 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
     private double targetX;
     private double targetY;
     private double targetZ;
-    protected final int attackInterval = 20;
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
 
@@ -98,9 +97,9 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        if(attacker.isInWater()){
+        if (attacker.isInWater()) {
             this.attacker.getMoveHelper().setMoveTo(this.targetX, this.targetY, this.targetZ, 0.1F);
-        }else{
+        } else {
             this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
         }
         this.delayCounter = 0;
@@ -113,7 +112,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
         if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
-            this.attacker.setAttackTarget((EntityLivingBase) null);
+            this.attacker.setAttackTarget(null);
         }
 
         this.attacker.getNavigator().clearPath();
@@ -121,7 +120,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
 
     public void updateTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
-        if(entitylivingbase != null) {
+        if (entitylivingbase != null) {
             if (attacker.isInWater()) {
                 this.attacker.getMoveHelper().setMoveTo(entitylivingbase.posX, entitylivingbase.posY + entitylivingbase.getEyeHeight(), entitylivingbase.posZ, 0.1D);
             }

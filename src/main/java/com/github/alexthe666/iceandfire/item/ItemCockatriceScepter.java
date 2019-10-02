@@ -17,7 +17,10 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -50,14 +53,12 @@ public class ItemCockatriceScepter extends Item {
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
-        if(properties != null && properties.specialWeaponDmg > 0){
+        if (properties != null && properties.specialWeaponDmg > 0) {
             stack.damageItem(properties.specialWeaponDmg, entity);
             properties.specialWeaponDmg = 0;
-            for(Entity e : properties.entitiesWeAreGlaringAt){
+            for (Entity e : properties.entitiesWeAreGlaringAt) {
                 MiscEntityProperties theirProp = EntityPropertiesHandler.INSTANCE.getProperties(e, MiscEntityProperties.class);
-                if(theirProp.glarers.contains(entity)){
-                    theirProp.glarers.remove(entity);
-                }
+                theirProp.glarers.remove(entity);
             }
             properties.entitiesWeAreGlaringAt.clear();
         }
@@ -98,7 +99,7 @@ public class ItemCockatriceScepter extends Item {
                 }));
                 double d2 = d1;
                 for (int j = 0; j < list.size(); ++j) {
-                    Entity entity1 = (Entity) list.get(j);
+                    Entity entity1 = list.get(j);
                     AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize());
                     RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
@@ -126,7 +127,7 @@ public class ItemCockatriceScepter extends Item {
                     if (pointedEntity instanceof EntityLivingBase) {
                         MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscEntityProperties.class);
                         theirProperties.isBeingGlaredAt = true;
-                        if(!theirProperties.glarers.contains(player) && !properties.entitiesWeAreGlaringAt.contains(pointedEntity)){
+                        if (!theirProperties.glarers.contains(player) && !properties.entitiesWeAreGlaringAt.contains(pointedEntity)) {
                             theirProperties.glarers.add(player);
                             properties.entitiesWeAreGlaringAt.add(pointedEntity);
                         }

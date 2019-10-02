@@ -11,7 +11,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-public class ItemDeathwormEgg extends Item implements  ICustomRendered{
+public class ItemDeathwormEgg extends Item implements ICustomRendered {
 
     public ItemDeathwormEgg() {
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
@@ -24,7 +24,7 @@ public class ItemDeathwormEgg extends Item implements  ICustomRendered{
 
 
     public String getTranslationKey(ItemStack stack) {
-        return stack.getMetadata() == 1 ? "item.iceandfire.deathworm_egg_giant" :"item.iceandfire.deathworm_egg";
+        return stack.getMetadata() == 1 ? "item.iceandfire.deathworm_egg_giant" : "item.iceandfire.deathworm_egg";
     }
 
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
@@ -41,7 +41,7 @@ public class ItemDeathwormEgg extends Item implements  ICustomRendered{
             itemstack.shrink(1);
         }
 
-        worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
             EntityDeathWormEgg entityegg = new EntityDeathWormEgg(worldIn, playerIn, itemstack.getMetadata() == 1);

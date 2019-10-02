@@ -18,9 +18,11 @@ public class StymphalianBirdFlock {
     private BlockPos prevLeaderTarget;
     private Random random;
     private int distance = 15;
-    private  StymphalianBirdFlock(){}
 
-    public static StymphalianBirdFlock createFlock(EntityStymphalianBird bird){
+    private StymphalianBirdFlock() {
+    }
+
+    public static StymphalianBirdFlock createFlock(EntityStymphalianBird bird) {
         StymphalianBirdFlock flock = new StymphalianBirdFlock();
         flock.leader = bird;
         flock.members = new ArrayList<>();
@@ -30,12 +32,8 @@ public class StymphalianBirdFlock {
         return flock;
     }
 
-    public boolean isLeader(EntityStymphalianBird bird){
-        return leader != null && leader == bird;
-    }
-
     @Nullable
-    public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird){
+    public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird) {
         float d0 = IceAndFire.CONFIG.stymphalianBirdFlockLength;
         List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.posX, bird.posY, bird.posZ, bird.posX + 1.0D, bird.posY + 1.0D, bird.posZ + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(bird));
@@ -43,9 +41,9 @@ public class StymphalianBirdFlock {
             Iterator<Entity> itr = list.iterator();
             while (itr.hasNext()) {
                 Entity entity = itr.next();
-                if(entity instanceof EntityStymphalianBird){
-                    EntityStymphalianBird other = (EntityStymphalianBird)entity;
-                    if(other.flock != null){
+                if (entity instanceof EntityStymphalianBird) {
+                    EntityStymphalianBird other = (EntityStymphalianBird) entity;
+                    if (other.flock != null) {
                         return other.flock;
                     }
                 }
@@ -54,23 +52,28 @@ public class StymphalianBirdFlock {
         }
         return null;
     }
-    public void addToFlock(EntityStymphalianBird bird){
+
+    public boolean isLeader(EntityStymphalianBird bird) {
+        return leader != null && leader == bird;
+    }
+
+    public void addToFlock(EntityStymphalianBird bird) {
         this.members.add(bird);
     }
 
-    public void update(){
-        if(!this.members.isEmpty() && (this.leader == null || this.leader.isDead)){
+    public void update() {
+        if (!this.members.isEmpty() && (this.leader == null || this.leader.isDead)) {
             this.leader = members.get(random.nextInt(members.size()));
         }
-        if(leader != null && !leader.isDead){
+        if (leader != null && !leader.isDead) {
             this.prevLeaderTarget = this.leaderTarget;
             this.leaderTarget = leader.airTarget;
         }
     }
 
-    public void onLeaderAttack(EntityLivingBase attackTarget){
-        for(EntityStymphalianBird bird : members){
-            if(bird.getAttackTarget() == null && !isLeader(bird)){
+    public void onLeaderAttack(EntityLivingBase attackTarget) {
+        for (EntityStymphalianBird bird : members) {
+            if (bird.getAttackTarget() == null && !isLeader(bird)) {
                 bird.setAttackTarget(attackTarget);
             }
         }
@@ -83,23 +86,23 @@ public class StymphalianBirdFlock {
 
     public void setTarget(BlockPos target) {
         this.leaderTarget = target;
-        for(EntityStymphalianBird bird : members){
-            if(!isLeader(bird)){
+        for (EntityStymphalianBird bird : members) {
+            if (!isLeader(bird)) {
                 bird.airTarget = StymphalianBirdAIAirTarget.getNearbyAirTarget(bird);
             }
         }
     }
 
     public void setFlying(boolean flying) {
-        for(EntityStymphalianBird bird : members){
-            if(!isLeader(bird)){
+        for (EntityStymphalianBird bird : members) {
+            if (!isLeader(bird)) {
                 bird.setFlying(flying);
             }
         }
     }
 
     public void setFearTarget(EntityLivingBase living) {
-        for(EntityStymphalianBird bird : members){
+        for (EntityStymphalianBird bird : members) {
             bird.setVictor(living);
         }
     }

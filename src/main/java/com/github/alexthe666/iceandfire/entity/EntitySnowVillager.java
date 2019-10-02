@@ -58,7 +58,7 @@ public class EntitySnowVillager extends EntityVillager {
     }
 
     private DataParameter<Boolean> BABY() {
-        Field field = ReflectionHelper.findField(EntityAgeable.class, ObfuscationReflectionHelper.remapFieldNames(EntityAgeable.class.getName(), new String[]{"BABY", "field_184751_bv"}));
+        Field field = ReflectionHelper.findField(EntityAgeable.class, ObfuscationReflectionHelper.remapFieldNames(EntityAgeable.class.getName(), "BABY", "field_184751_bv"));
         try {
             Field modifier = Field.class.getDeclaredField("modifiers");
             modifier.setAccessible(true);
@@ -72,7 +72,7 @@ public class EntitySnowVillager extends EntityVillager {
     }
 
     private DataParameter<Integer> PROFFESSION() {
-        Field field = ReflectionHelper.findField(EntityVillager.class, ObfuscationReflectionHelper.remapFieldNames(EntityVillager.class.getName(), new String[]{"PROFESSION", "field_184752_bw"}));
+        Field field = ReflectionHelper.findField(EntityVillager.class, ObfuscationReflectionHelper.remapFieldNames(EntityVillager.class.getName(), "PROFESSION", "field_184752_bw"));
         try {
             Field modifier = Field.class.getDeclaredField("modifiers");
             modifier.setAccessible(true);
@@ -126,7 +126,7 @@ public class EntitySnowVillager extends EntityVillager {
 
     public EntityVillager createChild(EntityAgeable ageable) {
         EntitySnowVillager entityvillager = new EntitySnowVillager(this.world);
-        entityvillager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData) null);
+        entityvillager.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entityvillager)), null);
         return entityvillager;
     }
 
@@ -142,7 +142,7 @@ public class EntitySnowVillager extends EntityVillager {
         } else {
             String s1 = this.getProfessionForge().getCareer(0).getName();
             {
-                ITextComponent itextcomponent = new TextComponentTranslation("entity.Villager." + s1, new Object[0]);
+                ITextComponent itextcomponent = new TextComponentTranslation("entity.Villager." + s1);
                 itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
                 itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
 

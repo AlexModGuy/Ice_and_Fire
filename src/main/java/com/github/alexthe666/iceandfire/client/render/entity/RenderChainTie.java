@@ -2,12 +2,9 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelChainTie;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
-import net.minecraft.client.model.ModelChest;
-import net.minecraft.client.model.ModelLeashKnot;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -43,10 +43,10 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
     public void onClientReceived(Minecraft client, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
         if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase)entity;
-            if(message.dmg > 0F){
+            EntityLivingBase mob = (EntityLivingBase) entity;
+            if (message.dmg > 0F) {
                 mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-            }else{
+            } else {
                 mob.processInitialInteract(player, EnumHand.MAIN_HAND);
             }
         }
@@ -56,10 +56,10 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
     public void onServerReceived(MinecraftServer server, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
         if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase)entity;
-            if(message.dmg > 0F){
+            EntityLivingBase mob = (EntityLivingBase) entity;
+            if (message.dmg > 0F) {
                 mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-            }else{
+            } else {
                 mob.processInitialInteract(player, EnumHand.MAIN_HAND);
             }
         }

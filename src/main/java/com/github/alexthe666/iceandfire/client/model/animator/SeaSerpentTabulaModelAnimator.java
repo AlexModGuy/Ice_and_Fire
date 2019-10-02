@@ -20,7 +20,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         model.resetToDefaultPose();
         model.getCube("BodyUpper").rotationPointY += 9;//model was made too high
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-        if(properties != null && properties.isStone){
+        if (properties != null && properties.isStone) {
             return;
         }
         model.llibAnimator.update(entity);
@@ -34,11 +34,11 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         IceAndFireTabulaModel prevPosition = swimPose[prevIndex];
         IceAndFireTabulaModel currentPosition = swimPose[currentIndex];
         float delta = ((entity.swimCycle) / 10.0F) % 1.0F + (LLibrary.PROXY.getPartialTicks() / 10.0F);
-        AdvancedModelRenderer[] tailParts = { model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4"), model.getCube("Tail5"), model.getCube("Tail6")};
-        AdvancedModelRenderer[] neckParts = { model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
+        AdvancedModelRenderer[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4"), model.getCube("Tail5"), model.getCube("Tail6")};
+        AdvancedModelRenderer[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
 
-        for(AdvancedModelRenderer cube : model.getCubes().values()) {
-              if (entity.jumpProgress > 0.0F) {
+        for (AdvancedModelRenderer cube : model.getCubes().values()) {
+            if (entity.jumpProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 5, false);
                 }
@@ -58,18 +58,18 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
 
         }
         if (entity.breathProgress > 0.0F) {
-            progressRotation(model.getCube("Head"), entity.breathProgress, (float)Math.toRadians(-15F), 0, 0);
-            progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float)Math.toRadians(-20F), 0, 0);
-            progressRotation(model.getCube("Jaw"), entity.breathProgress, (float)Math.toRadians(60F), 0, 0);
+            progressRotation(model.getCube("Head"), entity.breathProgress, (float) Math.toRadians(-15F), 0, 0);
+            progressRotation(model.getCube("HeadFront"), entity.breathProgress, (float) Math.toRadians(-20F), 0, 0);
+            progressRotation(model.getCube("Jaw"), entity.breathProgress, (float) Math.toRadians(60F), 0, 0);
         }
-        if(entity.jumpRot > 0.0F){
+        if (entity.jumpRot > 0.0F) {
 
-            float turn = (float)entity.motionY * -4F;
-            model.getCube("BodyUpper").rotateAngleX += (float)Math.toRadians(22.5F * turn) * entity.jumpRot;
-            model.getCube("Tail1").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail2").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail3").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail4").rotateAngleX -= (float)Math.toRadians(turn) * entity.jumpRot;
+            float turn = (float) entity.motionY * -4F;
+            model.getCube("BodyUpper").rotateAngleX += (float) Math.toRadians(22.5F * turn) * entity.jumpRot;
+            model.getCube("Tail1").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail2").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
         }
         entity.tail_buffer.applyChainSwingBuffer(tailParts);
         entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));

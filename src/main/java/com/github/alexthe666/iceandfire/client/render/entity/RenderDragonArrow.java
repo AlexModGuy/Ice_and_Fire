@@ -16,84 +16,84 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderDragonArrow extends Render {
-	private static final ResourceLocation arrowTextures = new ResourceLocation("iceandfire:textures/models/misc/dragonbone_arrow.png");
+    private static final ResourceLocation arrowTextures = new ResourceLocation("iceandfire:textures/models/misc/dragonbone_arrow.png");
 
-	public RenderDragonArrow(RenderManager render) {
-		super(render);
-	}
+    public RenderDragonArrow(RenderManager render) {
+        super(render);
+    }
 
-	public void doRender(EntityDragonArrow entity, double x, double y, double z, float yaw, float partialTicks) {
-		this.bindEntityTexture(entity);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder BufferBuilder = tessellator.getBuffer();
-		int i = 0;
-		float f = 0.0F;
-		float f1 = 0.5F;
-		float f2 = (0 + i * 10) / 32.0F;
-		float f3 = (5 + i * 10) / 32.0F;
-		float f4 = 0.0F;
-		float f5 = 0.15625F;
-		float f6 = (5 + i * 10) / 32.0F;
-		float f7 = (10 + i * 10) / 32.0F;
-		float f8 = 0.05625F;
-		GlStateManager.enableRescaleNormal();
-		float f9 = entity.arrowShake - partialTicks;
+    public void doRender(EntityDragonArrow entity, double x, double y, double z, float yaw, float partialTicks) {
+        this.bindEntityTexture(entity);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x, (float) y, (float) z);
+        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder BufferBuilder = tessellator.getBuffer();
+        int i = 0;
+        float f = 0.0F;
+        float f1 = 0.5F;
+        float f2 = (0 + i * 10) / 32.0F;
+        float f3 = (5 + i * 10) / 32.0F;
+        float f4 = 0.0F;
+        float f5 = 0.15625F;
+        float f6 = (5 + i * 10) / 32.0F;
+        float f7 = (10 + i * 10) / 32.0F;
+        float f8 = 0.05625F;
+        GlStateManager.enableRescaleNormal();
+        float f9 = entity.arrowShake - partialTicks;
 
-		if (f9 > 0.0F) {
-			float f10 = -MathHelper.sin(f9 * 3.0F) * f9;
-			GlStateManager.rotate(f10, 0.0F, 0.0F, 1.0F);
-		}
+        if (f9 > 0.0F) {
+            float f10 = -MathHelper.sin(f9 * 3.0F) * f9;
+            GlStateManager.rotate(f10, 0.0F, 0.0F, 1.0F);
+        }
 
-		GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
-		GlStateManager.scale(f8, f8, f8);
-		GlStateManager.translate(-4.0F, 0.0F, 0.0F);
-		GL11.glNormal3f(f8, 0.0F, 0.0F);
-		BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		BufferBuilder.pos(-7.0D, -2.0D, -2.0D).tex(f4, f6).endVertex();
-		BufferBuilder.pos(-7.0D, -2.0D, 2.0D).tex(f5, f6).endVertex();
-		BufferBuilder.pos(-7.0D, 2.0D, 2.0D).tex(f5, f7).endVertex();
-		BufferBuilder.pos(-7.0D, 2.0D, -2.0D).tex(f4, f7).endVertex();
-		tessellator.draw();
-		GL11.glNormal3f(-f8, 0.0F, 0.0F);
-		BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		BufferBuilder.pos(-7.0D, 2.0D, -2.0D).tex(f4, f6).endVertex();
-		BufferBuilder.pos(-7.0D, 2.0D, 2.0D).tex(f5, f6).endVertex();
-		BufferBuilder.pos(-7.0D, -2.0D, 2.0D).tex(f5, f7).endVertex();
-		BufferBuilder.pos(-7.0D, -2.0D, -2.0D).tex(f4, f7).endVertex();
-		tessellator.draw();
+        GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.scale(f8, f8, f8);
+        GlStateManager.translate(-4.0F, 0.0F, 0.0F);
+        GL11.glNormal3f(f8, 0.0F, 0.0F);
+        BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder.pos(-7.0D, -2.0D, -2.0D).tex(f4, f6).endVertex();
+        BufferBuilder.pos(-7.0D, -2.0D, 2.0D).tex(f5, f6).endVertex();
+        BufferBuilder.pos(-7.0D, 2.0D, 2.0D).tex(f5, f7).endVertex();
+        BufferBuilder.pos(-7.0D, 2.0D, -2.0D).tex(f4, f7).endVertex();
+        tessellator.draw();
+        GL11.glNormal3f(-f8, 0.0F, 0.0F);
+        BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder.pos(-7.0D, 2.0D, -2.0D).tex(f4, f6).endVertex();
+        BufferBuilder.pos(-7.0D, 2.0D, 2.0D).tex(f5, f6).endVertex();
+        BufferBuilder.pos(-7.0D, -2.0D, 2.0D).tex(f5, f7).endVertex();
+        BufferBuilder.pos(-7.0D, -2.0D, -2.0D).tex(f4, f7).endVertex();
+        tessellator.draw();
 
-		for (int j = 0; j < 4; ++j) {
-			GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glNormal3f(0.0F, 0.0F, f8);
-			BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-			BufferBuilder.pos(-8.0D, -2.0D, 0.0D).tex(f, f2).endVertex();
-			BufferBuilder.pos(8.0D, -2.0D, 0.0D).tex(f1, f2).endVertex();
-			BufferBuilder.pos(8.0D, 2.0D, 0.0D).tex(f1, f3).endVertex();
-			BufferBuilder.pos(-8.0D, 2.0D, 0.0D).tex(f, f3).endVertex();
-			tessellator.draw();
-		}
+        for (int j = 0; j < 4; ++j) {
+            GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            GL11.glNormal3f(0.0F, 0.0F, f8);
+            BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+            BufferBuilder.pos(-8.0D, -2.0D, 0.0D).tex(f, f2).endVertex();
+            BufferBuilder.pos(8.0D, -2.0D, 0.0D).tex(f1, f2).endVertex();
+            BufferBuilder.pos(8.0D, 2.0D, 0.0D).tex(f1, f3).endVertex();
+            BufferBuilder.pos(-8.0D, 2.0D, 0.0D).tex(f, f3).endVertex();
+            tessellator.draw();
+        }
 
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.popMatrix();
-		super.doRender(entity, x, y, z, yaw, partialTicks);
-	}
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+        super.doRender(entity, x, y, z, yaw, partialTicks);
+    }
 
-	protected ResourceLocation getEntityTexture(EntityDragonArrow arrow) {
-		return arrowTextures;
-	}
+    protected ResourceLocation getEntityTexture(EntityDragonArrow arrow) {
+        return arrowTextures;
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
-		return this.getEntityTexture((EntityDragonArrow) entity);
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(Entity entity) {
+        return this.getEntityTexture((EntityDragonArrow) entity);
+    }
 
-	@Override
-	public void doRender(Entity entity, double x, double y, double z, float f, float partialTicks) {
-		this.doRender((EntityDragonArrow) entity, x, y, z, f, partialTicks);
-	}
+    @Override
+    public void doRender(Entity entity, double x, double y, double z, float f, float partialTicks) {
+        this.doRender((EntityDragonArrow) entity, x, y, z, f, partialTicks);
+    }
 }

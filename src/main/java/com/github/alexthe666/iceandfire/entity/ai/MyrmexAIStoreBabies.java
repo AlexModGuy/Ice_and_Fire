@@ -44,8 +44,8 @@ public class MyrmexAIStoreBabies extends EntityAIBase {
     public void updateTask() {
         this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), this.movementSpeed);
         if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom) < 4 && this.myrmex.holdingBaby()) {
-            if(!this.myrmex.getPassengers().isEmpty()){
-                for(Entity entity : this.myrmex.getPassengers()){
+            if (!this.myrmex.getPassengers().isEmpty()) {
+                for (Entity entity : this.myrmex.getPassengers()) {
                     entity.dismountRidingEntity();
                     resetTask();
                     entity.copyLocationAndAnglesFrom(this.myrmex);

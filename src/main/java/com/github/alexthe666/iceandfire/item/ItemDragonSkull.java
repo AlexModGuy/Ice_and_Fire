@@ -81,7 +81,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
             BlockPos offset = pos.offset(side, 1);
             skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
             float yaw = player.rotationYaw;
-            if(side != EnumFacing.UP){
+            if (side != EnumFacing.UP) {
                 yaw = player.getHorizontalFacing().getHorizontalAngle();
             }
             skull.setYaw(yaw);

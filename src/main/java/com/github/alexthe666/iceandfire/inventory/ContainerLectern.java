@@ -4,26 +4,16 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class ContainerLectern extends SyncedFieldContainer {
     private final IInventory tileFurnace;
@@ -61,7 +51,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         this.tileFurnace.setField(id, data);
     }
 
-    public void onUpdate(){
+    public void onUpdate() {
         possiblePagesInt[0] = this.tileFurnace.getField(0);
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);
@@ -99,7 +89,7 @@ public class ContainerLectern extends SyncedFieldContainer {
                 } else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 2, 30, false)) {
                     return ItemStack.EMPTY;
                 }
-            }else{
+            } else {
                 return super.transferStackInSlot(playerIn, index);
             }
         }
@@ -117,7 +107,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if(this.tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
+        if (this.tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -153,8 +143,8 @@ public class ContainerLectern extends SyncedFieldContainer {
                 if (itemstack.getItem() == ModItems.bestiary) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
-                    if(this.tileFurnace instanceof TileEntityLectern){
-                        ((TileEntityLectern)this.tileFurnace).randomizePages();
+                    if (this.tileFurnace instanceof TileEntityLectern) {
+                        ((TileEntityLectern) this.tileFurnace).randomizePages();
                     }
                 }
                 if (!playerIn.capabilities.isCreativeMode && didEnchant) {

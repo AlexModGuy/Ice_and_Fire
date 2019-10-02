@@ -11,31 +11,31 @@ import java.util.Map;
 @IFMLLoadingPlugin.SortingIndex(1002)
 public class IceAndFirePlugin implements IFMLLoadingPlugin {
 
-	public static boolean runtimeDeobfEnabled = false;
-	
-	@Override
-	public String[] getASMTransformerClass() {
-		return new String[]{IceAndFireRuntimePatcher.class.getName()};
-	}
+    public static boolean runtimeDeobfEnabled = false;
 
-	@Override
-	public String getModContainerClass() {
-		return null;
-	}
+    @Override
+    public String[] getASMTransformerClass() {
+        return new String[]{IceAndFireRuntimePatcher.class.getName()};
+    }
 
-	@Override
-	public String getSetupClass() {
-		return null;
-	}
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
 
-	@Override
-	public void injectData(Map<String, Object> data) {
-		runtimeDeobfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
-	}
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
 
-	@Override
-	public String getAccessTransformerClass() {
-		return null;
-	}
+    @Override
+    public void injectData(Map<String, Object> data) {
+        runtimeDeobfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
+    }
+
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
+    }
 
 }

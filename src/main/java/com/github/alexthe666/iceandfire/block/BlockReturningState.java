@@ -2,14 +2,12 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,9 +15,9 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class BlockReturningState extends Block {
+    public static final PropertyBool REVERTS = PropertyBool.create("revert");
     public Item itemBlock;
     private IBlockState returnState;
-    public static final PropertyBool REVERTS = PropertyBool.create("revert");
 
     public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, IBlockState returnToState) {
         super(materialIn);
@@ -85,7 +83,7 @@ public class BlockReturningState extends Block {
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{REVERTS});
+        return new BlockStateContainer(this, REVERTS);
     }
 
 }

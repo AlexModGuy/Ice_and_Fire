@@ -39,17 +39,17 @@ public class EntityTideTrident extends Entity implements IProjectile {
             return p_apply_1_.canBeCollidedWith();
         }
     });
-    private static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityTideTrident.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> CRITICAL = EntityDataManager.createKey(EntityTideTrident.class, DataSerializers.BYTE);
+    public EntityArrow.PickupStatus pickupStatus;
+    public int arrowShake;
+    public Entity shootingEntity;
+    protected boolean inGround;
+    protected int timeInGround;
     private int xTile;
     private int yTile;
     private int zTile;
     private Block inTile;
     private int inData;
-    protected boolean inGround;
-    protected int timeInGround;
-    public EntityArrow.PickupStatus pickupStatus;
-    public int arrowShake;
-    public Entity shootingEntity;
     private int ticksInGround;
     private int ticksInAir;
     private double damage;
@@ -80,6 +80,13 @@ public class EntityTideTrident extends Entity implements IProjectile {
         if (shooter instanceof EntityPlayer && !((EntityPlayer) shooter).isCreative()) {
             this.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
         }
+    }
+
+    public static void registerFixesArrow(DataFixer fixer, String name) {
+    }
+
+    public static void registerFixesArrow(DataFixer fixer) {
+        registerFixesArrow(fixer, "Arrow");
     }
 
     @SideOnly(Side.CLIENT)
@@ -135,7 +142,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
     @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-        if(!inGround){
+        if (!inGround) {
             this.setPosition(x, y, z);
             this.setRotation(yaw, pitch);
         }
@@ -242,7 +249,6 @@ public class EntityTideTrident extends Entity implements IProjectile {
             this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
             for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f4) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-                ;
             }
 
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
@@ -421,13 +427,6 @@ public class EntityTideTrident extends Entity implements IProjectile {
         return entity;
     }
 
-    public static void registerFixesArrow(DataFixer fixer, String name) {
-    }
-
-    public static void registerFixesArrow(DataFixer fixer) {
-        registerFixesArrow(fixer, "Arrow");
-    }
-
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
@@ -496,9 +495,9 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
     }
 
-    protected ItemStack getArrowStack(){
-        if(shootingEntity instanceof EntityLivingBase){
-            stack.damageItem(1, (EntityLivingBase)shootingEntity);
+    protected ItemStack getArrowStack() {
+        if (shootingEntity instanceof EntityLivingBase) {
+            stack.damageItem(1, (EntityLivingBase) shootingEntity);
         }
         return stack;
     }
@@ -507,12 +506,12 @@ public class EntityTideTrident extends Entity implements IProjectile {
         return false;
     }
 
-    public void setDamage(double damageIn) {
-        this.damage = damageIn;
-    }
-
     public double getDamage() {
         return this.damage;
+    }
+
+    public void setDamage(double damageIn) {
+        this.damage = damageIn;
     }
 
     public void setKnockbackStrength(int knockbackStrengthIn) {
@@ -527,22 +526,22 @@ public class EntityTideTrident extends Entity implements IProjectile {
         return 0.0F;
     }
 
+    /**
+     * Whether the arrow has a stream of critical hit particles flying behind it.
+     */
+    public boolean getIsCritical() {
+        byte b0 = this.dataManager.get(CRITICAL).byteValue();
+        return (b0 & 1) != 0;
+    }
+
     public void setIsCritical(boolean critical) {
-        byte b0 = ((Byte) this.dataManager.get(CRITICAL)).byteValue();
+        byte b0 = this.dataManager.get(CRITICAL).byteValue();
 
         if (critical) {
             this.dataManager.set(CRITICAL, Byte.valueOf((byte) (b0 | 1)));
         } else {
             this.dataManager.set(CRITICAL, Byte.valueOf((byte) (b0 & -2)));
         }
-    }
-
-    /**
-     * Whether the arrow has a stream of critical hit particles flying behind it.
-     */
-    public boolean getIsCritical() {
-        byte b0 = ((Byte) this.dataManager.get(CRITICAL)).byteValue();
-        return (b0 & 1) != 0;
     }
 
     public void setEnchantmentEffectsFromEntity(EntityLivingBase p_190547_1_, float p_190547_2_) {
@@ -563,7 +562,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
     }
 
-    public static enum PickupStatus {
+    public enum PickupStatus {
         DISALLOWED,
         ALLOWED,
         CREATIVE_ONLY;

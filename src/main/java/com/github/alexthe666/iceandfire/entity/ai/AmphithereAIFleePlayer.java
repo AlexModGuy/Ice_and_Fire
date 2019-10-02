@@ -1,27 +1,21 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
-import java.util.List;
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.List;
+
 public class AmphithereAIFleePlayer extends EntityAIBase {
-    protected EntityAmphithere entity;
     private final double farSpeed;
     private final double nearSpeed;
-    protected EntityPlayer closestLivingEntity;
     private final float avoidDistance;
+    protected EntityAmphithere entity;
+    protected EntityPlayer closestLivingEntity;
     private Path path;
 
     public AmphithereAIFleePlayer(EntityAmphithere entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
@@ -34,8 +28,8 @@ public class AmphithereAIFleePlayer extends EntityAIBase {
 
 
     public boolean shouldExecute() {
-        if(!this.entity.isFlying() && !this.entity.isTamed()) {
-            List<EntityPlayer> list = this.entity.world.<EntityPlayer>getEntitiesWithinAABB(EntityPlayer.class, this.entity.getEntityBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
+        if (!this.entity.isFlying() && !this.entity.isTamed()) {
+            List<EntityPlayer> list = this.entity.world.getEntitiesWithinAABB(EntityPlayer.class, this.entity.getEntityBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
             if (list.isEmpty()) {
                 return false;
             } else {
@@ -51,7 +45,7 @@ public class AmphithereAIFleePlayer extends EntityAIBase {
                     return this.path != null;
                 }
             }
-        }else{
+        } else {
             return false;
         }
     }

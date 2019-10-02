@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -12,12 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
 
 public class EntityAmphithereArrow extends EntityArrow {
 
@@ -32,19 +28,24 @@ public class EntityAmphithereArrow extends EntityArrow {
         this.setDamage(2.5F);
     }
 
+    public EntityAmphithereArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
+        this.setDamage(2.5F);
+    }
+
     public void onUpdate() {
         super.onUpdate();
-        if((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround){
+        if ((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround) {
             this.playSound(ModSounds.AMPHITHERE_GUST, 1, 1);
         }
-        if(world.isRemote && !this.inGround){
+        if (world.isRemote && !this.inGround) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
 
         }
     }
@@ -66,11 +67,9 @@ public class EntityAmphithereArrow extends EntityArrow {
         spawnExplosionParticle();
     }
 
-
-
     public void spawnExplosionParticle() {
         if (this.world.isRemote) {
-            for(int height = 0; height < 1 + rand.nextInt(2); height++) {
+            for (int height = 0; height < 1 + rand.nextInt(2); height++) {
                 for (int i = 0; i < 20; ++i) {
                     double d0 = this.rand.nextGaussian() * 0.02D;
                     double d1 = this.rand.nextGaussian() * 0.02D;
@@ -78,7 +77,7 @@ public class EntityAmphithereArrow extends EntityArrow {
                     double d3 = 10.0D;
                     double xRatio = motionX * height;
                     double zRatio = motionZ * height;
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {
@@ -117,11 +116,6 @@ public class EntityAmphithereArrow extends EntityArrow {
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             }
         }
-    }
-
-    public EntityAmphithereArrow(World worldIn, EntityLivingBase shooter) {
-        super(worldIn, shooter);
-        this.setDamage(2.5F);
     }
 
     @Override

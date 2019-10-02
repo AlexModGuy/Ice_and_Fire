@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianFeather;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,7 +20,7 @@ import java.util.List;
 
 public class ItemStymphalianFeatherBundle extends Item {
 
-       public ItemStymphalianFeatherBundle() {
+    public ItemStymphalianFeatherBundle() {
         super();
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.stymphalian_feather_bundle");
@@ -35,15 +34,15 @@ public class ItemStymphalianFeatherBundle extends Item {
         player.getCooldownTracker().setCooldown(this, 15);
         player.playSound(SoundEvents.ENTITY_EGG_THROW, 1, 1);
         float rotation = player.rotationYawHead;
-        for(int i = 0; i < 8; i++){
+        for (int i = 0; i < 8; i++) {
             EntityStymphalianFeather feather = new EntityStymphalianFeather(worldIn, player);
             rotation += 45;
             feather.shoot(player, 0, rotation, 0.0F, 1.5F, 1.0F);
-            if(!worldIn.isRemote){
+            if (!worldIn.isRemote) {
                 worldIn.spawnEntity(feather);
             }
         }
-        if(!player.isCreative()){
+        if (!player.isCreative()) {
             itemStackIn.shrink(1);
         }
         return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);

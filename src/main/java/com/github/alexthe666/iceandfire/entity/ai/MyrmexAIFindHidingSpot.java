@@ -13,12 +13,11 @@ import java.util.List;
 
 public class MyrmexAIFindHidingSpot extends EntityAIBase {
     private static final int RADIUS = 32;
-
+    protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
+    protected final Predicate<? super Entity> targetEntitySelector;
     private final EntityMyrmexSentinel myrmex;
     private BlockPos targetBlock = BlockPos.ORIGIN;
     private int wanderRadius = RADIUS;
-    protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super Entity> targetEntitySelector;
 
     public MyrmexAIFindHidingSpot(EntityMyrmexSentinel myrmex) {
         super();
@@ -45,14 +44,14 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        if(areMyrmexNear(RADIUS) || this.myrmex.isOnResin()){
+        if (areMyrmexNear(RADIUS) || this.myrmex.isOnResin()) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 2) {
                 this.wanderRadius += RADIUS;
                 this.targetBlock = getTargetPosition(wanderRadius);
             }
-        }else{
-            if(this.myrmex.getAttackTarget() == null){
+        } else {
+            if (this.myrmex.getAttackTarget() == null) {
                 this.myrmex.setHiding(true);
                 resetTask();
             }
@@ -60,7 +59,7 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
 
     }
 
-    public void resetTask(){
+    public void resetTask() {
         this.targetBlock = BlockPos.ORIGIN;
         wanderRadius = RADIUS;
     }
@@ -69,16 +68,17 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
         return this.myrmex.getEntityBoundingBox().grow(targetDistance, 14.0D, targetDistance);
     }
 
-    public BlockPos getTargetPosition(int radius){
-        int x = (int)myrmex.posX + myrmex.getRNG().nextInt(radius * 2) - radius;
-        int z = (int)myrmex.posZ + myrmex.getRNG().nextInt(radius * 2) - radius;
+    public BlockPos getTargetPosition(int radius) {
+        int x = (int) myrmex.posX + myrmex.getRNG().nextInt(radius * 2) - radius;
+        int z = (int) myrmex.posZ + myrmex.getRNG().nextInt(radius * 2) - radius;
         return myrmex.world.getHeight(new BlockPos(x, 0, z));
     }
-    private boolean areMyrmexNear(double distance){
+
+    private boolean areMyrmexNear(double distance) {
         List<Entity> sentinels = this.myrmex.world.getEntitiesInAABBexcluding(this.myrmex, this.getTargetableArea(distance), this.targetEntitySelector);
         List<Entity> hiddenSentinels = new ArrayList<>();
-        for(Entity sentinel : sentinels){
-            if(sentinel instanceof EntityMyrmexSentinel && ((EntityMyrmexSentinel) sentinel).isHiding()){
+        for (Entity sentinel : sentinels) {
+            if (sentinel instanceof EntityMyrmexSentinel && ((EntityMyrmexSentinel) sentinel).isHiding()) {
                 hiddenSentinels.add(sentinel);
             }
         }

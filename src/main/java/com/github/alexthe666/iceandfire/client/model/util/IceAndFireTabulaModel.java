@@ -22,10 +22,10 @@ import java.util.Map;
  */
 @SideOnly(Side.CLIENT)
 public class IceAndFireTabulaModel extends AdvancedModelBase {
+    public ModelAnimator llibAnimator;
     protected Map<String, AdvancedModelRenderer> cubes = new HashMap<>();
     protected List<AdvancedModelRenderer> rootBoxes = new ArrayList<>();
     protected IIceAndFireTabulaModelAnimator tabulaAnimator;
-    public ModelAnimator llibAnimator;
     protected Map<String, AdvancedModelRenderer> identifierMap = new HashMap<>();
     protected double[] scale;
 

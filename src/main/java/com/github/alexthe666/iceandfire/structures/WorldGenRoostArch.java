@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class WorldGenRoostArch{
+public class WorldGenRoostArch {
     private Block block;
 
     public WorldGenRoostArch(Block block) {
@@ -19,22 +19,22 @@ public class WorldGenRoostArch{
         int width = Math.min(3, height - 2);
         EnumFacing direction = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length - 1)];
         boolean diagonal = rand.nextBoolean();
-        for(int i = 0; i < height; i++){
+        for (int i = 0; i < height; i++) {
             worldIn.setBlockState(position.up(i), block.getDefaultState());
         }
         BlockPos offsetPos = position;
         int placedWidths = 0;
-        for(int i = 0; i < width; i++){
+        for (int i = 0; i < width; i++) {
             offsetPos = position.up(height).offset(direction, i);
-            if(diagonal){
+            if (diagonal) {
                 offsetPos = position.up(height).offset(direction, i).offset(direction.rotateY(), i);
             }
-            if(placedWidths < width - 1 || rand.nextBoolean()){
+            if (placedWidths < width - 1 || rand.nextBoolean()) {
                 worldIn.setBlockState(offsetPos, block.getDefaultState());
             }
             placedWidths++;
         }
-        while(worldIn.isAirBlock(offsetPos.down()) && offsetPos.getY() > 0){
+        while (worldIn.isAirBlock(offsetPos.down()) && offsetPos.getY() > 0) {
             worldIn.setBlockState(offsetPos.down(), block.getDefaultState());
             offsetPos = offsetPos.down();
         }

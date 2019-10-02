@@ -18,7 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -47,46 +47,46 @@ import java.util.Random;
 
 public class EntityAmphithere extends EntityTameable implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute {
 
-    private int animationTick;
-    private Animation currentAnimation;
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityAmphithere.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.<Boolean>createKey(EntityAmphithere.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> FLAP_TICKS = EntityDataManager.<Integer>createKey(EntityAmphithere.class, DataSerializers.VARINT);
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "amphithere"));
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> FLAP_TICKS = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> COMMAND = EntityDataManager.<Integer>createKey(EntityAmphithere.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
+    public static Animation ANIMATION_BITE = Animation.create(15);
+    public static Animation ANIMATION_BITE_RIDER = Animation.create(15);
+    public static Animation ANIMATION_WING_BLAST = Animation.create(30);
+    public static Animation ANIMATION_TAIL_WHIP = Animation.create(30);
+    public static Animation ANIMATION_SPEAK = Animation.create(10);
     public float flapProgress;
-    private int flapTicks = 0;
     public float groundProgress = 0;
     public float sitProgress = 0;
     public float diveProgress = 0;
-    private int flightCooldown = 0;
-    private int ticksFlying = 0;
-    private boolean isFlying;
-    private boolean isLandNavigator = true;
     @SideOnly(Side.CLIENT)
     public IFChainBuffer roll_buffer;
     @SideOnly(Side.CLIENT)
     public IFChainBuffer tail_buffer;
     @SideOnly(Side.CLIENT)
     public IFChainBuffer pitch_buffer;
-    protected FlightBehavior flightBehavior = FlightBehavior.WANDER;
-    private boolean changedFlightBehavior = false;
     @Nullable
     public BlockPos orbitPos = null;
     public float orbitRadius = 0.0F;
-    private int ticksStill = 0;
-    private int ridingTime = 0;
     public boolean isFallen;
-    public static Animation ANIMATION_BITE = Animation.create(15);
-    public static Animation ANIMATION_BITE_RIDER = Animation.create(15);
-    public static Animation ANIMATION_WING_BLAST = Animation.create(30);
-    public static Animation ANIMATION_TAIL_WHIP = Animation.create(30);
-    public static Animation ANIMATION_SPEAK = Animation.create(10);
-    private boolean isSitting;
     public BlockPos homePos;
     public boolean hasHomePosition = false;
+    protected FlightBehavior flightBehavior = FlightBehavior.WANDER;
     protected int ticksCircling = 0;
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "amphithere"));
+    private int animationTick;
+    private Animation currentAnimation;
+    private int flapTicks = 0;
+    private int flightCooldown = 0;
+    private int ticksFlying = 0;
+    private boolean isFlying;
+    private boolean isLandNavigator = true;
+    private boolean changedFlightBehavior = false;
+    private int ticksStill = 0;
+    private int ridingTime = 0;
+    private boolean isSitting;
 
     public EntityAmphithere(World worldIn) {
         super(worldIn);
@@ -101,7 +101,37 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     }
 
+    public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
+        BlockPos pos = new BlockPos(x, entity.posY, z);
+        for (int yDown = 0; yDown < 6 + rand.nextInt(6); yDown++) {
+            if (!world.isAirBlock(pos.down(yDown))) {
+                return pos.up(yDown);
+            }
+        }
+        return pos;
+    }
 
+    public static BlockPos getPositionInOrbit(EntityAmphithere entity, World world, BlockPos orbit, Random rand) {
+        float possibleOrbitRadius = (entity.orbitRadius + 10.0F);
+        float radius = 10;
+        if (entity.getCommand() == 2) {
+            if (entity.getOwner() != null) {
+                orbit = entity.getOwner().getPosition().up(7);
+                radius = 5;
+            }
+        } else if (entity.hasHomePosition) {
+            orbit = entity.homePos.up(30);
+            radius = 30;
+        }
+        float angle = (0.01745329251F * possibleOrbitRadius);
+        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+        double extraZ = (double) (radius * MathHelper.cos(angle));
+        BlockPos radialPos = new BlockPos(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
+        //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
+        // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
+        entity.orbitRadius = possibleOrbitRadius;
+        return radialPos;
+    }
 
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
@@ -164,7 +194,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                     return true;
                 }
                 return true;
-            } else if(!this.isTamed() || this.isOwner(player)){
+            } else if (!this.isTamed() || this.isOwner(player)) {
                 player.startRiding(this);
                 return true;
             }
@@ -254,14 +284,13 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return stack.getItem() == Items.COOKIE;
     }
 
-
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.isInLove()) {
             this.setFlying(false);
         }
-        if(this.isSitting() && this.getAttackTarget() != null){
+        if (this.isSitting() && this.getAttackTarget() != null) {
             this.setAttackTarget(null);
         }
         boolean flapping = this.isFlapping();
@@ -276,7 +305,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
                 this.setSitting(true);
             }
-            if(this.isSitting()){
+            if (this.isSitting()) {
                 this.getNavigator().clearPath();
                 this.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
             }
@@ -364,9 +393,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
         if (this.isFallen && this.onGround) {
             this.setFlying(false);
-            if(this.isTamed()){
+            if (this.isTamed()) {
                 flightCooldown = 50;
-            }else{
+            } else {
                 flightCooldown = 12000;
             }
             this.isFallen = false;
@@ -413,6 +442,10 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return flapTicks > 0;
     }
 
+    public int getCommand() {
+        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
+    }
+
     public void setCommand(int command) {
         this.dataManager.set(COMMAND, Integer.valueOf(command));
         if (command == 1) {
@@ -422,17 +455,13 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    public int getCommand() {
-        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
-    }
-
     public void flapWings() {
         this.flapTicks = 20;
     }
 
     public boolean isSitting() {
         if (world.isRemote) {
-            boolean isSitting = (((Byte) this.dataManager.get(TAMED)).byteValue() & 1) != 0;
+            boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -443,14 +472,13 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
-        byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
+        byte b0 = this.dataManager.get(TAMED).byteValue();
         if (sitting) {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
         } else {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
         }
     }
-
 
     @Nullable
     public Entity getControllingPassenger() {
@@ -829,39 +857,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     public void fall(float distance, float damageMultiplier) {
     }
 
-
-    public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.posY, z);
-        for (int yDown = 0; yDown < 6 + rand.nextInt(6); yDown++) {
-            if (!world.isAirBlock(pos.down(yDown))) {
-                return pos.up(yDown);
-            }
-        }
-        return pos;
-    }
-
-    public static BlockPos getPositionInOrbit(EntityAmphithere entity, World world, BlockPos orbit, Random rand) {
-        float possibleOrbitRadius = (entity.orbitRadius + 10.0F);
-        float radius = 10;
-        if (entity.getCommand() == 2) {
-            if (entity.getOwner() != null) {
-                orbit = entity.getOwner().getPosition().up(7);
-                radius = 5;
-            }
-        } else if (entity.hasHomePosition) {
-            orbit = entity.homePos.up(30);
-            radius = 30;
-        }
-        float angle = (0.01745329251F * possibleOrbitRadius);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
-        BlockPos radialPos = new BlockPos(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
-        //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
-        // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
-        entity.orbitRadius = possibleOrbitRadius;
-        return radialPos;
-    }
-
     @Override
     public boolean canPhaseThroughBlock(World world, BlockPos pos) {
         return world.getBlockState(pos).getBlock().isLeaves(world.getBlockState(pos), world, pos);
@@ -931,10 +926,20 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
     public enum FlightBehavior {
         CIRCLE,
         WANDER,
-        NONE;
+        NONE
     }
 
     class AILandWander extends EntityAIWander {
@@ -974,7 +979,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
                 if (world.isAirBlock(pos) || world.isAirBlock(sidePos) || world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(sidePos).getMaterial() == Material.LEAVES) {
                     return true;
-                }else{
+                } else {
                     return rayTrace.typeOfHit != RayTraceResult.Type.MISS;
                 }
             }
@@ -1026,7 +1031,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
                 if (world.isAirBlock(pos) || world.isAirBlock(sidePos) || world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(sidePos).getMaterial() == Material.LEAVES) {
                     return true;
-                }else{
+                } else {
                     return rayTrace.typeOfHit != RayTraceResult.Type.MISS;
                 }
             }
@@ -1112,15 +1117,5 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isNoDespawnRequired(){
-        return true;
-    }
-
-    @Override
-    protected boolean canDespawn(){
-        return false;
     }
 }

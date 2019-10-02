@@ -12,11 +12,11 @@ import java.util.Random;
 
 public class AquaticAIGetOutOfWater extends EntityAIBase {
     private final EntityCreature creature;
+    private final double movementSpeed;
+    private final World world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
-    private final double movementSpeed;
-    private final World world;
 
     public AquaticAIGetOutOfWater(EntityCreature theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;

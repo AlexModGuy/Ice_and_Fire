@@ -19,6 +19,21 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
         this.theWorld = bird.world;
     }
 
+    public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
+        if (bird.getAttackTarget() == null) {
+            BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
+            if (pos != null && bird.world.getBlockState(pos).getMaterial() == Material.AIR) {
+                return pos;
+            }
+            if (bird.flock != null && bird.flock.isLeader(bird)) {
+                bird.flock.setTarget(bird.airTarget);
+            }
+        } else {
+            return new BlockPos((int) bird.getAttackTarget().posX, (int) bird.getAttackTarget().posY + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().posZ);
+        }
+        return bird.getPosition();
+    }
+
     public boolean shouldExecute() {
         if (bird != null) {
             if (!bird.isFlying()) {
@@ -66,20 +81,5 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
 
     public Vec3d findAirTarget() {
         return new Vec3d(getNearbyAirTarget(bird));
-    }
-
-    public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
-        if (bird.getAttackTarget() == null) {
-            BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
-            if (pos != null && bird.world.getBlockState(pos).getMaterial() == Material.AIR) {
-                return pos;
-            }
-            if(bird.flock != null && bird.flock.isLeader(bird)){
-                bird.flock.setTarget(bird.airTarget);
-            }
-        } else {
-            return new BlockPos((int) bird.getAttackTarget().posX, (int) bird.getAttackTarget().posY + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().posZ);
-        }
-        return bird.getPosition();
     }
 }

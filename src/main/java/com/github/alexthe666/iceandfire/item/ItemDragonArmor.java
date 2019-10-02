@@ -14,51 +14,51 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonArmor extends Item implements ICustomRendered{
+public class ItemDragonArmor extends Item implements ICustomRendered {
 
-	public int type;
-	public String name;
+    public int type;
+    public String name;
 
-	public ItemDragonArmor(int type, String name) {
-		this.type = type;
-		this.name = name;
-		this.setHasSubtypes(true);
-		this.setTranslationKey("iceandfire." + name);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.maxStackSize = 1;
-		this.setRegistryName(IceAndFire.MODID, name);
+    public ItemDragonArmor(int type, String name) {
+        this.type = type;
+        this.name = name;
+        this.setHasSubtypes(true);
+        this.setTranslationKey("iceandfire." + name);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.maxStackSize = 1;
+        this.setRegistryName(IceAndFire.MODID, name);
 
-	}
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (this.isInCreativeTab(tab)) {
-			items.add(new ItemStack(this, 1, 0));
-			items.add(new ItemStack(this, 1, 1));
-			items.add(new ItemStack(this, 1, 2));
-			items.add(new ItemStack(this, 1, 3));
-		}
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (this.isInCreativeTab(tab)) {
+            items.add(new ItemStack(this, 1, 0));
+            items.add(new ItemStack(this, 1, 1));
+            items.add(new ItemStack(this, 1, 2));
+            items.add(new ItemStack(this, 1, 3));
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		String words;
-		switch (stack.getMetadata()) {
-			default:
-				words = "dragon.armor_head";
-				break;
-			case 1:
-				words = "dragon.armor_neck";
-				break;
-			case 2:
-				words = "dragon.armor_body";
-				break;
-			case 3:
-				words = "dragon.armor_tail";
-				break;
-		}
-		tooltip.add(StatCollector.translateToLocal(words));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        String words;
+        switch (stack.getMetadata()) {
+            default:
+                words = "dragon.armor_head";
+                break;
+            case 1:
+                words = "dragon.armor_neck";
+                break;
+            case 2:
+                words = "dragon.armor_body";
+                break;
+            case 3:
+                words = "dragon.armor_tail";
+                break;
+        }
+        tooltip.add(StatCollector.translateToLocal(words));
+    }
 }

@@ -9,17 +9,17 @@ import net.minecraft.item.ItemStack;
 public class CreativeTab extends CreativeTabs {
 
 
-	public CreativeTab(String label) {
-		super(label);
-	}
+    public CreativeTab(String label) {
+        super(label);
+    }
 
-	@Override
-	public ItemStack createIcon() {
-		return this == IceAndFire.TAB_ITEMS ? new ItemStack(ModItems.dragon_skull) : new ItemStack(ModBlocks.dragonscale_red);
-	}
+    @Override
+    public ItemStack createIcon() {
+        return this == IceAndFire.TAB_ITEMS ? new ItemStack(ModItems.dragon_skull) : new ItemStack(ModBlocks.dragonscale_red);
+    }
 
-	@Override
-	public boolean hasSearchBar() {
-		return false;
-	}
+    @Override
+    public boolean hasSearchBar() {
+        return false;
+    }
 }

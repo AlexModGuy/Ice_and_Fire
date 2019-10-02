@@ -73,20 +73,21 @@ public enum EnumDragonAnimations {
     public IceAndFireTabulaModel icedragon_model;
     private String fileSuffix;
     private int dragonType;
-    private EnumDragonAnimations(String fileSuffix){
+
+    EnumDragonAnimations(String fileSuffix) {
         this.fileSuffix = fileSuffix;
     }
 
-    private EnumDragonAnimations(String fileSuffix, int iceOrFire){
+    EnumDragonAnimations(String fileSuffix, int iceOrFire) {
         this.fileSuffix = fileSuffix;
         this.dragonType = iceOrFire;
     }
 
     @SideOnly(Side.CLIENT)
-    public static void initializeDragonModels(){
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
-            for(EnumDragonAnimations animation : values()){
-                switch(animation.dragonType){
+    public static void initializeDragonModels() {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+            for (EnumDragonAnimations animation : values()) {
+                switch (animation.dragonType) {
                     case 0:
                         try {
                             animation.firedragon_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));

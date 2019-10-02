@@ -16,20 +16,35 @@ import java.util.UUID;
 public class MyrmexWorldData extends WorldSavedData {
 
     private static final String IDENTIFIER = "iceandfire_myrmex";
-
+    private final List<BlockPos> villagerPositionsList = Lists.newArrayList();
+    private final List<MyrmexHive> hiveList = Lists.newArrayList();
     private World world;
-    private final List<BlockPos> villagerPositionsList = Lists.<BlockPos>newArrayList();
-    private final List<MyrmexHive> hiveList = Lists.<MyrmexHive>newArrayList();
     private int tickCounter;
 
-    public MyrmexWorldData(String name){
-            super(name);
+    public MyrmexWorldData(String name) {
+        super(name);
     }
 
     public MyrmexWorldData(World world) {
         super(IDENTIFIER);
         this.world = world;
         this.markDirty();
+    }
+
+    public static MyrmexWorldData get(World world) {
+        MapStorage storage = world.getPerWorldStorage();
+        MyrmexWorldData instance = (MyrmexWorldData) storage.getOrLoadData(MyrmexWorldData.class, IDENTIFIER);
+
+        if (instance == null) {
+            instance = new MyrmexWorldData(world);
+            storage.setData(IDENTIFIER, instance);
+        }
+        instance.markDirty();
+        return instance;
+    }
+
+    public static void addHive(World world, MyrmexHive hive) {
+        get(world).hiveList.add(hive);
     }
 
     public void setWorldsForAll(World worldIn) {
@@ -95,7 +110,7 @@ public class MyrmexWorldData extends WorldSavedData {
         return false;
     }
 
-    public void debug(){
+    public void debug() {
         for (MyrmexHive hive : this.hiveList) {
             System.out.println(hive);
         }
@@ -127,25 +142,9 @@ public class MyrmexWorldData extends WorldSavedData {
         return compound;
     }
 
-    public static MyrmexWorldData get(World world) {
-        MapStorage storage =  world.getPerWorldStorage();
-        MyrmexWorldData instance = (MyrmexWorldData) storage.getOrLoadData(MyrmexWorldData.class, IDENTIFIER);
-
-        if (instance == null) {
-            instance = new MyrmexWorldData(world);
-            storage.setData(IDENTIFIER, instance);
-        }
-        instance.markDirty();
-        return instance;
-    }
-
-    public static void addHive(World world, MyrmexHive hive){
-        get(world).hiveList.add(hive);
-    }
-
     public MyrmexHive getHiveFromUUID(UUID id) {
         for (MyrmexHive hive : this.hiveList) {
-            if(hive.hiveUUID != null && hive.hiveUUID.equals(id)){
+            if (hive.hiveUUID != null && hive.hiveUUID.equals(id)) {
                 return hive;
             }
         }

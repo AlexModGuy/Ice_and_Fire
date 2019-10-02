@@ -4,30 +4,25 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.ilexiconn.llibrary.LLibrary;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
-import org.apache.commons.io.Charsets;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
 
-import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static org.jline.utils.AttributedStyle.WHITE;
 
 public class IceAndFireMainMenu extends GuiMainMenu {
     public static final int LAYER_COUNT = 2;
@@ -37,13 +32,15 @@ public class IceAndFireMainMenu extends GuiMainMenu {
     private static final ResourceLocation TABLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/main_menu/table.png");
     public static ResourceLocation[] pageFlipTextures;
     public static ResourceLocation[] drawingTextures = new ResourceLocation[18];
+    private final String[] namePartsArray = "Go Play My Other Mods Like Fossils Archeology Revival and Rats And Soon To Be Joined By Other Cool Stuff Too Dont Play The Knock Off Mods".split(" ");
     private int layerTick;
     private String splashText;
     private boolean isFlippingPage = false;
     private int pageFlip = 0;
-    private Picture drawnPictures[];
-    private Enscription drawnEnscriptions[];
+    private Picture[] drawnPictures;
+    private Enscription[] drawnEnscriptions;
     private float globalAlpha = 1F;
+
     public IceAndFireMainMenu() {
         pageFlipTextures = new ResourceLocation[]{new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_1.png"),
                 new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_2.png"),
@@ -52,7 +49,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
                 new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_5.png"),
                 new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_6.png")};
         for (int i = 0; i < drawingTextures.length; i++) {
-            drawingTextures[i] = new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (int) (i + 1) + ".png");
+            drawingTextures[i] = new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (i + 1) + ".png");
         }
         resetDrawnImages();
         BufferedReader reader = null;
@@ -85,6 +82,36 @@ public class IceAndFireMainMenu extends GuiMainMenu {
                 }
             }
         }
+    }
+
+    public static BufferedReader getURLContents(String urlString, String backupFileLoc) {
+        BufferedReader reader = null;
+        boolean useBackup = false;
+        URL url;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            url = null;
+            useBackup = true;
+        }
+        if (url != null) {
+            URLConnection connection = null;
+            try {
+                connection = url.openConnection();
+                InputStream is = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(is));
+            } catch (IOException e) {
+                IceAndFire.logger.error("Ice and Fire couldn't download splash texts for main menu");
+                useBackup = true;
+            }
+        }
+        if (useBackup) {
+            InputStream is = IceAndFireMainMenu.class.getClassLoader().getResourceAsStream(backupFileLoc);
+            if (is != null) {
+                reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            }
+        }
+        return reader;
     }
 
     @Override
@@ -139,11 +166,11 @@ public class IceAndFireMainMenu extends GuiMainMenu {
     public void updateScreen() {
         super.updateScreen();
         float flipTick = layerTick % 40;
-        if(globalAlpha < 1 && !isFlippingPage && flipTick < 30){
+        if (globalAlpha < 1 && !isFlippingPage && flipTick < 30) {
             globalAlpha += 0.1F;
         }
 
-        if(globalAlpha > 0 && flipTick > 30){
+        if (globalAlpha > 0 && flipTick > 30) {
             globalAlpha -= 0.1F;
         }
         if (flipTick == 0 && !isFlippingPage) {
@@ -177,9 +204,9 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             this.drawTexturedModalRect(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
         } else {
             for (Enscription enscription : drawnEnscriptions) {
-                float f2 = (float)60 - partialTicks;
+                float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
-                int opacity = 10 + (int)(255 * enscription.alpha * globalAlpha);
+                int opacity = 10 + (int) (255 * enscription.alpha * globalAlpha);
                 this.mc.standardGalacticFontRenderer.drawString(enscription.text, enscription.x, enscription.y, color | (opacity << 24));
             }
             for (Picture picture : drawnPictures) {
@@ -230,8 +257,6 @@ public class IceAndFireMainMenu extends GuiMainMenu {
         tessellator.draw();
     }
 
-    private final String[] namePartsArray = "Go Play My Other Mods Like Fossils Archeology Revival and Rats And Soon To Be Joined By Other Cool Stuff Too Dont Play The Knock Off Mods".split(" ");
-
     public String generateNewRandomName(FontRenderer fontRendererIn, int length, Random rand) {
         int i = rand.nextInt(2) + 3;
         String s = "";
@@ -242,9 +267,8 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             s = s + this.namePartsArray[rand.nextInt(this.namePartsArray.length)];
         }
         List<String> list = fontRendererIn.listFormattedStringToWidth(s, length);
-        return org.apache.commons.lang3.StringUtils.join((Iterable) (list.size() >= 2 ? list.subList(0, 2) : list), " ");
+        return org.apache.commons.lang3.StringUtils.join((list.size() >= 2 ? list.subList(0, 2) : list), " ");
     }
-
 
     private class Picture {
         int image;
@@ -276,40 +300,6 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             this.alpha = alpha;
             this.color = color;
         }
-    }
-
-    public static BufferedReader getURLContents(String urlString, String backupFileLoc){
-        BufferedReader reader = null;
-        boolean useBackup = false;
-        URL url;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            url = null;
-            useBackup = true;
-        }
-        if(url != null){
-            URLConnection connection = null;
-            try {
-                connection = url.openConnection();
-                InputStream is = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(is));
-            } catch (IOException e) {
-                IceAndFire.logger.error("Ice and Fire couldn't download splash texts for main menu");
-                useBackup = true;
-            }
-        }
-        if(useBackup){
-            InputStream is = IceAndFireMainMenu.class.getClassLoader().getResourceAsStream(backupFileLoc);
-            if (is != null) {
-                try {
-                    reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    IceAndFire.logger.error("Ice and Fire couldn't find splash texts files for main menu");
-                }
-            }
-        }
-        return reader;
     }
 }
 

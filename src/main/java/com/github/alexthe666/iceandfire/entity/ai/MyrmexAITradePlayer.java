@@ -45,6 +45,6 @@ public class MyrmexAITradePlayer extends EntityAIBase {
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     public void resetTask() {
-        this.myrmex.setCustomer((EntityPlayer) null);
+        this.myrmex.setCustomer(null);
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.EntityAIFollowOwner;
 
 public class CockatriceAIFollowOwner extends EntityAIFollowOwner {
     EntityCockatrice cockatrice;
+
     public CockatriceAIFollowOwner(EntityCockatrice cockatrice, double speed, float minDist, float maxDist) {
         super(cockatrice, speed, minDist, maxDist);
         this.cockatrice = cockatrice;

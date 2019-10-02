@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
 
 public class EntityMutlipartPart extends PartEntity {
 
@@ -17,7 +16,7 @@ public class EntityMutlipartPart extends PartEntity {
     }
 
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        if(world.isRemote){
+        if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));
         }
         return this.parent.processInitialInteract(player, hand);
@@ -25,17 +24,17 @@ public class EntityMutlipartPart extends PartEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if(world.isRemote && source.getTrueSource() instanceof EntityPlayer){
+        if (world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
         }
         return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
     }
 
-    public EntityLivingBase getParent(){
+    public EntityLivingBase getParent() {
         return this.parent;
     }
 
-    public void resize(float width, float height){
+    public void resize(float width, float height) {
         this.setSize(width, height);
     }
 
@@ -47,7 +46,7 @@ public class EntityMutlipartPart extends PartEntity {
         }
     }
 
-    public boolean shouldNotExist(){
+    public boolean shouldNotExist() {
         return !this.parent.isEntityAlive();
     }
 }

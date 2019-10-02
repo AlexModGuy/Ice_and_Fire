@@ -9,7 +9,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
@@ -25,7 +24,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
             float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
             if (dragonSize >= this.targetEntity.width) {
-                if(this.targetEntity instanceof EntityPlayer && !dragon.isTamed()){
+                if (this.targetEntity instanceof EntityPlayer && !dragon.isTamed()) {
                     return true;
                 }
                 if (this.targetEntity instanceof EntityDragonBase) {

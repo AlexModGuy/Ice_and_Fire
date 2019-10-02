@@ -66,7 +66,7 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
 
     private boolean isEmptyBlock(BlockPos pos) {
         IBlockState iblockstate = this.world.getBlockState(pos);
-        return iblockstate.getMaterial() == Material.AIR ? true : !iblockstate.isFullCube();
+        return iblockstate.getMaterial() == Material.AIR || !iblockstate.isFullCube();
     }
 
     @SuppressWarnings("deprecation")

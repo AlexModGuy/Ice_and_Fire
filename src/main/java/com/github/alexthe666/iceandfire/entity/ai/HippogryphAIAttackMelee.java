@@ -10,9 +10,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class HippogryphAIAttackMelee extends EntityAIBase {
-    World world;
+    protected final int attackInterval = 20;
     protected EntityCreature attacker;
     protected int attackTick;
+    World world;
     double speedTowardsTarget;
     boolean longMemory;
     Path path;
@@ -20,7 +21,6 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
     private double targetX;
     private double targetY;
     private double targetZ;
-    protected final int attackInterval = 20;
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
 
@@ -96,7 +96,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
         if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
-            this.attacker.setAttackTarget((EntityLivingBase) null);
+            this.attacker.setAttackTarget(null);
         }
 
         this.attacker.getNavigator().clearPath();
@@ -107,7 +107,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
      */
     public void updateTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
-        if(entitylivingbase != null) {
+        if (entitylivingbase != null) {
             this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
             double d0 = this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
             --this.delayCounter;

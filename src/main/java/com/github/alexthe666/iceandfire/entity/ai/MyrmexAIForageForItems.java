@@ -16,8 +16,8 @@ import java.util.List;
 public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityItem> targetEntitySelector;
-    protected EntityItem targetEntity;
     public EntityMyrmexWorker myrmex;
+    protected EntityItem targetEntity;
 
     public MyrmexAIForageForItems(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
@@ -37,7 +37,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
             return false;
         }
-        List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(32), this.targetEntitySelector);
+        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(32), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {

@@ -20,7 +20,7 @@ public class TraitSplinteringII extends AbstractTrait {
     public float damage(ItemStack tool, EntityLivingBase player, EntityLivingBase target, float damage, float newDamage, boolean isCritical) {
 
         PotionEffect effect = target.getActivePotionEffect(Splinter);
-        if(effect != null) {
+        if (effect != null) {
             newDamage += 0.6f * (effect.getAmplifier() + 1);
         }
 
@@ -32,7 +32,7 @@ public class TraitSplinteringII extends AbstractTrait {
         int level = 0;
 
         PotionEffect old = target.getActivePotionEffect(Splinter);
-        if(old != null) {
+        if (old != null) {
             level = Math.min(5, old.getAmplifier() + 1);
         }
         // apply splinter effect

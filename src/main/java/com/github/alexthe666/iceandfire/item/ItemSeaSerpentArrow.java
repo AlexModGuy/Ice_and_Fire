@@ -23,7 +23,7 @@ public class ItemSeaSerpentArrow extends ItemArrow {
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_arrow");
     }
 
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter){
+    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
         return new EntitySeaSerpentArrow(worldIn, shooter);
     }
 

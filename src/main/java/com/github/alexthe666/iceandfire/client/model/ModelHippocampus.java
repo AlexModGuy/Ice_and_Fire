@@ -225,7 +225,7 @@ public class ModelHippocampus extends ModelDragonBase {
             this.Body.setScale(1, 1, 1);
             this.Head.setScale(1, 1, 1);
         }
-        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.Body.render(f5);
     }
 
@@ -259,32 +259,32 @@ public class ModelHippocampus extends ModelDragonBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        EntityHippocampus hippo = (EntityHippocampus)entity;
+        EntityHippocampus hippo = (EntityHippocampus) entity;
         float speed_walk = 0.9F;
         float speed_idle = 0.05F;
         float speed_swim = 0.35F;
         float degree_walk = 1.5F;
         float degree_idle = 0.5F;
         float degree_swim = 0.75F;
-        this.progressRotation(Body, hippo.onLandProgress, (float)Math.toRadians(-5F), 0.0F, 0.0F);
-        this.progressRotation(FrontThighL, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(-65F));
-        this.progressRotation(FrontThighR, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float)Math.toRadians(65F));
+        this.progressRotation(Body, hippo.onLandProgress, (float) Math.toRadians(-5F), 0.0F, 0.0F);
+        this.progressRotation(FrontThighL, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float) Math.toRadians(-65F));
+        this.progressRotation(FrontThighR, Math.max(0, hippo.onLandProgress), 0.0F, 0.0F, (float) Math.toRadians(65F));
         this.progressPosition(Body, hippo.onLandProgress, 0.0F, 20.0F, 0.0F);
 
-        this.progressRotation(Body, hippo.sitProgress, (float)Math.toRadians(-5F), 0.0F, 0.0F);
-        this.progressRotation(Tail_1, hippo.sitProgress, (float)Math.toRadians(55F), 0.0F, 0.0F);
-        this.progressRotation(Tail_2, hippo.sitProgress, (float)Math.toRadians(-26F), 0.0F, 0.0F);
-        this.progressRotation(Tail_3, hippo.sitProgress, (float)Math.toRadians(-33F), 0.0F, 0.0F);
-        this.progressRotation(FlukeR, Math.max(0, hippo.sitProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(5F), (float)Math.toRadians(30F));
-        this.progressRotation(FlukeL, Math.max(0, hippo.sitProgress), (float)Math.toRadians(-50F), (float)Math.toRadians(-5F), (float)Math.toRadians(-30F));
-        this.progressRotation(Body, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(-5F), (float)Math.toRadians(-5F), (float)Math.toRadians(85F));
+        this.progressRotation(Body, hippo.sitProgress, (float) Math.toRadians(-5F), 0.0F, 0.0F);
+        this.progressRotation(Tail_1, hippo.sitProgress, (float) Math.toRadians(55F), 0.0F, 0.0F);
+        this.progressRotation(Tail_2, hippo.sitProgress, (float) Math.toRadians(-26F), 0.0F, 0.0F);
+        this.progressRotation(Tail_3, hippo.sitProgress, (float) Math.toRadians(-33F), 0.0F, 0.0F);
+        this.progressRotation(FlukeR, Math.max(0, hippo.sitProgress), (float) Math.toRadians(-50F), (float) Math.toRadians(5F), (float) Math.toRadians(30F));
+        this.progressRotation(FlukeL, Math.max(0, hippo.sitProgress), (float) Math.toRadians(-50F), (float) Math.toRadians(-5F), (float) Math.toRadians(-30F));
+        this.progressRotation(Body, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float) Math.toRadians(-5F), (float) Math.toRadians(-5F), (float) Math.toRadians(85F));
         this.progressPosition(Body, hippo.sitProgress * hippo.onLandProgress * 0.05F, 0.0F, 10, 0.0F);
-        if(hippo.onGround && !hippo.isInWater()){
-            this.progressRotation(FrontThighL, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float)Math.toRadians(60F));
-            this.progressRotation(FrontThighR, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float)Math.toRadians(-60F));
+        if (hippo.onGround && !hippo.isInWater()) {
+            this.progressRotation(FrontThighL, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float) Math.toRadians(60F));
+            this.progressRotation(FrontThighR, Math.max(0, hippo.sitProgress), 0.0F, 0.0F, (float) Math.toRadians(-60F));
         }
-        this.progressRotation(Tail_2, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(-7F), (float)Math.toRadians(-25F), (float)Math.toRadians(1));
-        this.progressRotation(Tail_3, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float)Math.toRadians(20), (float)Math.toRadians(-36), (float)Math.toRadians(36));
+        this.progressRotation(Tail_2, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float) Math.toRadians(-7F), (float) Math.toRadians(-25F), (float) Math.toRadians(1));
+        this.progressRotation(Tail_3, hippo.sitProgress * hippo.onLandProgress * 0.05F, (float) Math.toRadians(20), (float) Math.toRadians(-36), (float) Math.toRadians(36));
 
 
         AdvancedModelRenderer[] TAIL = {Tail_1, Tail_2, Tail_3};
@@ -292,7 +292,7 @@ public class ModelHippocampus extends ModelDragonBase {
         AdvancedModelRenderer[] LEG_L = {FrontThighL, FrontLegL};
         AdvancedModelRenderer[] LEG_R = {FrontThighR, FrontLegR};
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck, Head};
-        if(hippo.isInWater()) {
+        if (hippo.isInWater()) {
             this.chainWave(NECK, speed_swim, degree_swim * 0.15F, -2, f, f1);
             this.chainWave(TAIL_W_BODY, speed_swim, degree_swim * 0.15F, -3, f, f1);
             this.walk(Tail_3, speed_swim, degree_swim * -0.5F, false, 0, 0, f, f1);
@@ -301,7 +301,7 @@ public class ModelHippocampus extends ModelDragonBase {
             this.walk(Tail_1, speed_idle, degree_idle * 0.15F, false, 0, 0F, entity.ticksExisted, 1);
             this.walk(Tail_2, speed_idle, degree_idle * 0.25F, false, 0, 0F, entity.ticksExisted, 1);
 
-        }else{
+        } else {
             this.chainWave(LEG_L, speed_walk, degree_walk * 0.5F, 1, f, f1);
             this.chainWave(LEG_R, speed_walk, degree_walk * 0.5F, 1, f, f1);
             this.walk(Body, speed_walk, degree_walk * 0.05F, false, 0, 0.1F, f, f1);

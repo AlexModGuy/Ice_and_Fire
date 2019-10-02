@@ -29,28 +29,27 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 
 public class EntityMyrmexWorker extends EntityMyrmexBase {
 
-    private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_worker.png");
-    private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
-    public boolean keepSearching = true;
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
     public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_worker_desert"));
     public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_worker_jungle"));
-
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
-    }
+    private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_worker.png");
+    private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
+    public boolean keepSearching = true;
 
     public EntityMyrmexWorker(World worldIn) {
         super(worldIn);
         this.setSize(0.99F, 0.95F);
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
@@ -65,7 +64,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
-        if (this.getAnimation() == ANIMATION_STING&& this.getAnimationTick() == 0){
+        if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -74,24 +73,24 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
             }
         }
-        if(!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
-            if(this.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg){
+        if (!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+            if (this.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
                 boolean isJungle = this.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.myrmex_jungle_egg;
                 int metadata = this.getHeldItem(EnumHand.MAIN_HAND).getMetadata();
                 EntityMyrmexEgg egg = new EntityMyrmexEgg(world);
                 egg.copyLocationAndAnglesFrom(this);
                 egg.setJungle(isJungle);
                 egg.setMyrmexCaste(metadata);
-                if(!world.isRemote){
+                if (!world.isRemote) {
                     world.spawnEntity(egg);
                 }
                 egg.startRiding(this);
                 this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
-        if(!this.getPassengers().isEmpty()){
-            for(Entity entity : this.getPassengers()){
-                if(entity instanceof EntityMyrmexBase && ((EntityMyrmexBase) entity).getGrowthStage() >= 2){
+        if (!this.getPassengers().isEmpty()) {
+            for (Entity entity : this.getPassengers()) {
+                if (entity instanceof EntityMyrmexBase && ((EntityMyrmexBase) entity).getGrowthStage() >= 2) {
                     entity.dismountRidingEntity();
                 }
             }
@@ -115,11 +114,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIForageForItems(this));
         this.targetTasks.addTask(3, new MyrmexAIPickupBabies(this));
-        this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
         this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
             public boolean apply(@Nullable EntityLiving entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive((EntityLivingBase)entity);
+                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive(entity);
             }
         }));
 
@@ -147,11 +146,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return 0.6F;
     }
 
-    public boolean shouldLeaveHive(){
+    public boolean shouldLeaveHive() {
         return !holdingSomething();
     }
 
-    public boolean shouldEnterHive(){
+    public boolean shouldEnterHive() {
         return holdingSomething();
     }
 
@@ -161,17 +160,17 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        if(this.getGrowthStage() < 2){
+        if (this.getGrowthStage() < 2) {
             return false;
         }
-        if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
-            if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
+        if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
+            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
+            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
                 this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
             }
-            if(!this.getPassengers().isEmpty()){
-                for(Entity entity : this.getPassengers()){
+            if (!this.getPassengers().isEmpty()) {
+                for (Entity entity : this.getPassengers()) {
                     entity.dismountRidingEntity();
                 }
             }
@@ -181,11 +180,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
 
-    public boolean holdingSomething(){
+    public boolean holdingSomething() {
         return this.getHeldEntity() != null || !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
     }
 
-    public boolean holdingBaby(){
+    public boolean holdingBaby() {
         return this.getHeldEntity() != null && (this.getHeldEntity() instanceof EntityMyrmexBase || this.getHeldEntity() instanceof EntityMyrmexEgg);
     }
 
@@ -213,12 +212,12 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if(amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone){
+        if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
             this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
             this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         }
-        if(amount >= 1.0D && !this.getPassengers().isEmpty()){
-            for(Entity entity : this.getPassengers()){
+        if (amount >= 1.0D && !this.getPassengers().isEmpty()) {
+            for (Entity entity : this.getPassengers()) {
                 entity.dismountRidingEntity();
             }
         }
@@ -233,14 +232,14 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
-    public void onPickupItem(EntityItem itemEntity){
+    public void onPickupItem(EntityItem itemEntity) {
         Item item = itemEntity.getItem().getItem();
-        if(item == ModItems.myrmex_jungle_resin && this.isJungle() || item == ModItems.myrmex_desert_resin && !this.isJungle()){
+        if (item == ModItems.myrmex_jungle_resin && this.isJungle() || item == ModItems.myrmex_desert_resin && !this.isJungle()) {
 
             EntityPlayer owner = null;
-            try{
+            try {
                 owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
-            }catch(Exception e){
+            } catch (Exception e) {
                 IceAndFire.logger.warn("Myrmex picked up resin that wasn't thrown!");
             }
             if (owner != null && this.getHive() != null) {

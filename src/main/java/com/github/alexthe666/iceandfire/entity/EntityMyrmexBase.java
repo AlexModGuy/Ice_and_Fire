@@ -64,20 +64,20 @@ import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimatedEntity, IMerchant {
 
-    private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.<Integer>createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> VARIANT = EntityDataManager.<Boolean>createKey(EntityMyrmexBase.class, DataSerializers.BOOLEAN);
-    private int animationTick;
-    private Animation currentAnimation;
-    private MyrmexHive hive;
-    public boolean isEnteringHive = false;
-    public boolean isBeingGuarded = false;
-    protected int growthTicks = 1;
+    public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> VARIANT = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BOOLEAN);
     private static final ResourceLocation TEXTURE_DESERT_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_larva.png");
     private static final ResourceLocation TEXTURE_DESERT_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
     private static final ResourceLocation TEXTURE_JUNGLE_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
     private static final ResourceLocation TEXTURE_JUNGLE_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
-    public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
+    public boolean isEnteringHive = false;
+    public boolean isBeingGuarded = false;
+    protected int growthTicks = 1;
+    private int animationTick;
+    private Animation currentAnimation;
+    private MyrmexHive hive;
     @Nullable
     private EntityPlayer buyingPlayer;
     @Nullable
@@ -93,6 +93,57 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         super(worldIn);
         this.stepHeight = 2;
         //this.moveHelper = new GroundMoveHelper(this);
+    }
+
+    private static boolean isJungleBiome(World world, BlockPos position) {
+        Biome biome = world.getBiome(position);
+        return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
+    }
+
+    public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
+        if (entity instanceof EntityMyrmexBase) {
+            if (myrmex.getHive() != null && ((EntityMyrmexBase) entity).getHive() != null) {
+                if (myrmex.isJungle() == ((EntityMyrmexBase) entity).isJungle()) {
+                    return myrmex.getHive().getCenter() == ((EntityMyrmexBase) entity).getHive().getCenter();
+                }
+            }
+
+        }
+        if (entity instanceof EntityMyrmexEgg) {
+            return myrmex.isJungle() == ((EntityMyrmexEgg) entity).isJungle();
+        }
+        return false;
+    }
+
+    public static boolean isEdibleBlock(IBlockState blockState) {
+        Block block = blockState.getBlock();
+        if (block instanceof BlockMyrmexBiolight) {
+            return false;
+        }
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus || block instanceof BlockLeaves;
+    }
+
+    public static int getRandomCaste(World world, Random random, boolean royal) {
+        float rand = random.nextFloat();
+        if (royal) {
+            if (rand > 0.9) {
+                return 2;//royal
+            } else if (rand > 0.75) {
+                return 3;//sentinel
+            } else if (rand > 0.5) {
+                return 1;//soldier
+            } else {
+                return 0;//worker
+            }
+        } else {
+            if (rand > 0.8) {
+                return 3;//sentinel
+            } else if (rand > 0.6) {
+                return 1;//soldier
+            } else {
+                return 0;//worker
+            }
+        }
     }
 
     public boolean canMove() {
@@ -257,13 +308,13 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         this.wealth = tag.getInteger("Riches");
     }
 
-    public void setCustomer(@Nullable EntityPlayer player) {
-        this.buyingPlayer = player;
-    }
-
     @Nullable
     public EntityPlayer getCustomer() {
         return this.buyingPlayer;
+    }
+
+    public void setCustomer(@Nullable EntityPlayer player) {
+        this.buyingPlayer = player;
     }
 
     public boolean isTrading() {
@@ -384,12 +435,12 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return new BlockPos(this);
     }
 
-    public void setGrowthStage(int stage) {
-        this.dataManager.set(GROWTH_STAGE, stage);
-    }
-
     public int getGrowthStage() {
         return this.dataManager.get(GROWTH_STAGE).intValue();
+    }
+
+    public void setGrowthStage(int stage) {
+        this.dataManager.set(GROWTH_STAGE, stage);
     }
 
     public boolean isJungle() {
@@ -405,11 +456,11 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     public boolean isBesideClimbableBlock() {
-        return (((Byte) this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
+        return (this.dataManager.get(CLIMBING).byteValue() & 1) != 0;
     }
 
     public void setBesideClimbableBlock(boolean climbing) {
-        byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
+        byte b0 = this.dataManager.get(CLIMBING).byteValue();
 
         if (climbing) {
             b0 = (byte) (b0 | 1);
@@ -487,7 +538,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if(!shouldHaveNormalAI()){
+        if (!shouldHaveNormalAI()) {
             return false;
         }
         boolean flag2 = itemstack.getItem() == ModItems.myrmex_jungle_staff || itemstack.getItem() == ModItems.myrmex_desert_staff;
@@ -569,11 +620,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return livingdata;
     }
 
-    private static boolean isJungleBiome(World world, BlockPos position) {
-        Biome biome = world.getBiome(position);
-        return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
-    }
-
     public abstract boolean shouldLeaveHive();
 
     public abstract boolean shouldEnterHive();
@@ -608,21 +654,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
     }
 
-    public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
-        if (entity instanceof EntityMyrmexBase) {
-            if (myrmex.getHive() != null && ((EntityMyrmexBase) entity).getHive() != null) {
-                if (myrmex.isJungle() == ((EntityMyrmexBase) entity).isJungle()) {
-                    return myrmex.getHive().getCenter() == ((EntityMyrmexBase) entity).getHive().getCenter();
-                }
-            }
-
-        }
-        if (entity instanceof EntityMyrmexEgg) {
-            return myrmex.isJungle() == ((EntityMyrmexEgg) entity).isJungle();
-        }
-        return false;
-    }
-
     protected void collideWithEntity(Entity entityIn) {
         if (!haveSameHive(this, entityIn)) {
             entityIn.applyEntityCollision(this);
@@ -631,14 +662,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     public boolean canSeeSky() {
         return world.canBlockSeeSky(new BlockPos(this));
-    }
-
-    public static boolean isEdibleBlock(IBlockState blockState) {
-        Block block = blockState.getBlock();
-        if (block instanceof BlockMyrmexBiolight) {
-            return false;
-        }
-        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus || block instanceof BlockLeaves;
     }
 
     public boolean isOnResin() {
@@ -650,7 +673,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         IBlockState iblockstate = this.world.getBlockState(blockpos);
         return iblockstate.getBlock() instanceof BlockMyrmexResin || iblockstate.getBlock() instanceof BlockMyrmexConnectedResin;
     }
-
 
     public boolean isInNursery() {
         if (getHive() != null && getHive().getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
@@ -754,6 +776,21 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return true;
     }
 
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
+    public AxisAlignedBB getAttackBounds() {
+        float size = this.getRenderSizeModifier() * 0.25F;
+        return this.getEntityBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
+    }
+
     public static class BasicTrade implements EntityVillager.ITradeList {
         public ItemStack first;
         public ItemStack second;
@@ -772,39 +809,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             int j = secondPrice.getPrice(random);
             recipeList.add(new MerchantRecipe(new ItemStack(first.getItem(), i, first.getItemDamage()), new ItemStack(second.getItem(), j, second.getItemDamage())));
         }
-    }
-
-    public static int getRandomCaste(World world, Random random, boolean royal) {
-        float rand = random.nextFloat();
-        if (royal) {
-            if (rand > 0.9) {
-                return 2;//royal
-            } else if (rand > 0.75) {
-                return 3;//sentinel
-            } else if (rand > 0.5) {
-                return 1;//soldier
-            } else {
-                return 0;//worker
-            }
-        } else {
-            if (rand > 0.8) {
-                return 3;//sentinel
-            } else if (rand > 0.6) {
-                return 1;//soldier
-            } else {
-                return 0;//worker
-            }
-        }
-    }
-
-    @Override
-    public boolean isNoDespawnRequired(){
-        return true;
-    }
-
-    @Override
-    protected boolean canDespawn(){
-        return false;
     }
 
     protected static class GroundMoveHelper extends EntityMoveHelper {
@@ -860,8 +864,8 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
                 }
                 float f9 = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
                 float maxChange = 90F;
-                float distance = (float)Math.toDegrees(distance((float)Math.toRadians(this.entity.rotationYaw), (float)Math.toRadians(f9)));
-                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange/2, maxChange/2);
+                float distance = (float) Math.toDegrees(distance((float) Math.toRadians(this.entity.rotationYaw), (float) Math.toRadians(f9)));
+                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange / 2, maxChange / 2);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 
                 if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
@@ -879,11 +883,6 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             }
         }
 
-    }
-
-    public AxisAlignedBB getAttackBounds() {
-        float size = this.getRenderSizeModifier() * 0.25F;
-        return this.getEntityBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
 }

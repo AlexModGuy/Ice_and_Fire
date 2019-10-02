@@ -50,26 +50,26 @@ import javax.annotation.Nullable;
 
 public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock {
 
-    private int animationTick;
-    private boolean willExplode = false;
-    private int ticksTillExplosion = 60;
-    private Animation currentAnimation;
-    private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
-    @SideOnly(Side.CLIENT)
-    public ChainBuffer tail_buffer;
-    private boolean isSandNavigator;
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityDeathWorm.class, DataSerializers.VARINT);
-    private static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntityDeathWorm.class, DataSerializers.FLOAT);
-    private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> WORM_AGE = EntityDataManager.<Integer>createKey(EntityDeathWorm.class, DataSerializers.VARINT);
-    private static final DataParameter<BlockPos> HOME = EntityDataManager.<BlockPos>createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
-    public static Animation ANIMATION_BITE = Animation.create(10);
     public static final ResourceLocation TAN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan"));
     public static final ResourceLocation WHITE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white"));
     public static final ResourceLocation RED_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_red"));
     public static final ResourceLocation TAN_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan_giant"));
     public static final ResourceLocation WHITE_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white_giant"));
     public static final ResourceLocation RED_GIANT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_red_giant"));
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.FLOAT);
+    private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> WORM_AGE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
+    private static final DataParameter<BlockPos> HOME = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
+    public static Animation ANIMATION_BITE = Animation.create(10);
+    @SideOnly(Side.CLIENT)
+    public ChainBuffer tail_buffer;
+    private int animationTick;
+    private boolean willExplode = false;
+    private int ticksTillExplosion = 60;
+    private Animation currentAnimation;
+    private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
+    private boolean isSandNavigator;
     private float prevScale = 0.0F;
 
     public EntityDeathWorm(World worldIn) {
@@ -89,7 +89,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.tasks.addTask(5, new DeathWormAIWander(this, 1));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(3, new DeathwormAITargetItems(this, false, false));
         this.targetTasks.addTask(5, new DeathWormAITarget(this, EntityLivingBase.class, false, new Predicate<EntityLivingBase>() {
             @Override
@@ -146,11 +146,6 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.ticksTillExplosion = 60;
     }
 
-    @Override
-    public void setScaleForAge(boolean baby) {
-        this.setScale(Math.min(this.getScaleForAge(), 7F));
-    }
-
     public boolean attackEntityAsMob(Entity entityIn) {
         if (this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(ANIMATION_BITE);
@@ -198,7 +193,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, cause, capturedDrops, i, recentlyHit > 0)) {
                     for (EntityItem item : capturedDrops) {
                         world.spawnEntity(item);
-                        item.posY = this.getSurface((int)item.posX, (int)item.posY, (int)item.posZ);
+                        item.posY = this.getSurface((int) item.posX, (int) item.posY, (int) item.posZ);
                     }
                 }
             }
@@ -223,7 +218,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     @Nullable
     protected ResourceLocation getLootTable() {
-        switch(this.getVariant()){
+        switch (this.getVariant()) {
             case 0:
                 return this.getScaleForAge() > 3 ? TAN_GIANT_LOOT : TAN_LOOT;
             case 1:
@@ -233,7 +228,6 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
         return null;
     }
-
 
     @Nullable
     @Override
@@ -297,12 +291,12 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     }
 
     public BlockPos getWormHome() {
-        return (BlockPos) this.dataManager.get(HOME);
+        return this.dataManager.get(HOME);
     }
 
     public void setWormHome(BlockPos home) {
         if (home instanceof BlockPos) {
-            this.dataManager.set(HOME, (BlockPos) home);
+            this.dataManager.set(HOME, home);
         }
     }
 
@@ -320,6 +314,11 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     public float getScaleForAge() {
         return this.getScale() * (this.getWormAge() / 5F);
+    }
+
+    @Override
+    public void setScaleForAge(boolean baby) {
+        this.setScale(Math.min(this.getScaleForAge(), 7F));
     }
 
     public void setDeathWormScale(float scale) {
@@ -526,7 +525,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFire.CONFIG.deathWormAttackStrength * this.getScaleForAge()));
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFire.CONFIG.deathWormMaxHealth * this.getScaleForAge()));
-        this.setHealth((float)this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
+        this.setHealth((float) this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
     }
 
     public void onKillEntity(EntityLivingBase entityLivingIn) {
@@ -554,9 +553,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.setDeathWormScale(this.getScale());
             if (world.isRemote) {
                 for (int i = 0; i < 10 * this.getScaleForAge(); i++) {
-                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     for (int j = 0; j < segments.length; j++) {
-                        this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
+                        this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     }
                 }
             }
@@ -590,7 +589,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 this.motionY = 0.5F;
                 this.setAnimation(ANIMATION_BITE);
             }
-            if (dist <  Math.min(4, 4D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE) {
+            if (dist < Math.min(4, 4D * getScaleForAge()) && this.getAnimation() == ANIMATION_BITE) {
                 float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
                 this.motionY /= 2.0D;
@@ -648,8 +647,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         onUpdateParts();
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
             EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
-            if (this.getAnimation() != this.ANIMATION_BITE) {
-                this.setAnimation(this.ANIMATION_BITE);
+            if (this.getAnimation() != ANIMATION_BITE) {
+                this.setAnimation(ANIMATION_BITE);
                 this.playSound(this.getScaleForAge() > 3 ? ModSounds.DEATHWORM_GIANT_ATTACK : ModSounds.DEATHWORM_ATTACK, 1, 1);
                 if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1) {
                     float radius = 1.5F * this.getScaleForAge();
@@ -672,9 +671,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             int blockId = Block.getStateId(state);
             if (state.isOpaqueCube()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{blockId});
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     for (int i = 0; i < segments.length; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{blockId});
+                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     }
                 }
             }
@@ -699,9 +698,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
             if (isSandBelow()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     for (int i = 0; i < segments.length; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
+                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     }
                 }
             }
@@ -875,13 +874,28 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         return true;
     }
 
-    public boolean canBeTurnedToStone(){
+    public boolean canBeTurnedToStone() {
         return false;
     }
 
     @Override
     public boolean canPhaseThroughBlock(World world, BlockPos pos) {
         return world.getBlockState(pos).getMaterial() == Material.SAND;
+    }
+
+    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn, float p_174816_5_) {
+        float hardness = blockStateIn.getBlockHardness(worldIn, pos);
+        return hardness != -1.0F && hardness < 1.5F;
+    }
+
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
     }
 
     public class SandMoveHelper extends EntityMoveHelper {
@@ -902,7 +916,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.worm.rotationYaw = this.limitAngle(this.worm.rotationYaw, angle, 30.0F);
-                this.worm.setAIMoveSpeed((float) 1F);
+                this.worm.setAIMoveSpeed(1F);
                 this.worm.motionY += (double) this.worm.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.worm.rotationYaw * 0.017453292F;
@@ -915,20 +929,5 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 this.worm.setAIMoveSpeed(0.0F);
             }
         }
-    }
-
-    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn, float p_174816_5_){
-        float hardness = blockStateIn.getBlockHardness(worldIn, pos);
-        return hardness != -1.0F && hardness < 1.5F;
-    }
-
-    @Override
-    public boolean isNoDespawnRequired(){
-        return true;
-    }
-
-    @Override
-    protected boolean canDespawn(){
-        return false;
     }
 }

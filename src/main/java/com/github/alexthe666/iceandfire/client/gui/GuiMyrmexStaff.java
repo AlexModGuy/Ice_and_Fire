@@ -21,17 +21,18 @@ import java.util.List;
 public class GuiMyrmexStaff extends GuiScreen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
     private static final ResourceLocation DESERT_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_desert.png");
-    private ItemStack staff;
-    private boolean jungle;
     private static final WorldGenMyrmexHive.RoomType[] ROOMS = {WorldGenMyrmexHive.RoomType.FOOD, WorldGenMyrmexHive.RoomType.NURSERY, WorldGenMyrmexHive.RoomType.EMPTY};
+    private static final int ROOMS_PER_PAGE = 5;
+    private final List<Room> allRoomPos = Lists.newArrayList();
+    private final List<MyrmexDeleteButton> allRoomButtonPos = Lists.newArrayList();
     public ChangePageButton previousPage;
     public ChangePageButton nextPage;
     int ticksSinceDeleted = 0;
     int currentPage = 0;
-    private final List<Room> allRoomPos = Lists.<Room>newArrayList();
-    private final List<MyrmexDeleteButton> allRoomButtonPos = Lists.<MyrmexDeleteButton>newArrayList();
-    private static final int ROOMS_PER_PAGE = 5;
+    private ItemStack staff;
+    private boolean jungle;
     private int hiveCount;
+
     public GuiMyrmexStaff(ItemStack staff) {
         this.staff = staff;
         this.jungle = staff.getItem() == ModItems.myrmex_jungle_staff;
@@ -51,22 +52,18 @@ public class GuiMyrmexStaff extends GuiScreen {
         }
         populateRoomMap();
         this.buttonList.add(new GuiButton(0, i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? I18n.format("myrmex.message.disablebreeding") : I18n.format("myrmex.message.enablebreeding")));
-        this.buttonList.add(this.previousPage = new ChangePageButton(1, i + 5, j + 150, false, 0, this.jungle ? 2: 1));
-        this.buttonList.add(this.nextPage = new ChangePageButton(2, i + 225, j + 150, true, 0, this.jungle ? 2: 1));
+        this.buttonList.add(this.previousPage = new ChangePageButton(1, i + 5, j + 150, false, 0, this.jungle ? 2 : 1));
+        this.buttonList.add(this.nextPage = new ChangePageButton(2, i + 225, j + 150, true, 0, this.jungle ? 2 : 1));
         int totalRooms = allRoomPos.size();
         for (int rooms = 0; rooms < allRoomPos.size(); rooms++) {
             int yIndex = rooms % ROOMS_PER_PAGE;
             //IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
             MyrmexDeleteButton button = new MyrmexDeleteButton(2 + rooms, i + x_translate, j + y_translate + (yIndex) * 22, allRoomPos.get(rooms).pos, I18n.format("myrmex.message.delete"));
-            if (rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage) {
-                button.visible = true;
-            }else{
-                button.visible = false;
-            }
+            button.visible = rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage;
             this.buttonList.add(button);
             this.allRoomButtonPos.add(button);
         }
-        if(totalRooms <= ROOMS_PER_PAGE * (this.currentPage) && this.currentPage > 0){
+        if (totalRooms <= ROOMS_PER_PAGE * (this.currentPage) && this.currentPage > 0) {
             this.currentPage--;
         }
     }
@@ -174,11 +171,12 @@ public class GuiMyrmexStaff extends GuiScreen {
     }
 
 
-    private void drawRoomInfo(String type, BlockPos pos, int i, int j, int color){
+    private void drawRoomInfo(String type, BlockPos pos, int i, int j, int color) {
         String translate = "myrmex.message.room." + type;
         this.fontRenderer.drawString(I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color, true);
         hiveCount++;
     }
+
     private class Room {
         public BlockPos pos;
         public String string;

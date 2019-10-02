@@ -19,28 +19,28 @@ import java.util.List;
 
 public class ItemSeaSerpentArmor extends ItemArmor {
 
-	public EnumSeaSerpent armor_type;
+    public EnumSeaSerpent armor_type;
 
-	public ItemSeaSerpentArmor(EnumSeaSerpent armorType, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
-		super(material, renderIndex, slot);
-		this.armor_type = armorType;
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-	}
+    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
+        super(material, renderIndex, slot);
+        this.armor_type = armorType;
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 9 : 8);
-	}
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+        return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 9 : 8);
+    }
 
-	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (renderIndex == 2 ? "_legs.png" : ".png");
-	}
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        return "iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (renderIndex == 2 ? "_legs.png" : ".png");
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(armor_type.color + StatCollector.translateToLocal("sea_serpent." + armor_type.resourceName));
-		tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_0"));
-		tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_1"));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(armor_type.color + StatCollector.translateToLocal("sea_serpent." + armor_type.resourceName));
+        tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_0"));
+        tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_1"));
+    }
 }

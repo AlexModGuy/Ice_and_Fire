@@ -32,7 +32,7 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
         if (this.entity == null) {
             SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getMinecraft().player, SirenEntityProperties.class);
             EntitySiren siren = new EntitySiren(this.world);
-            if(sirenProps != null && sirenProps.getSiren(Minecraft.getMinecraft().player.world) != null){
+            if (sirenProps != null && sirenProps.getSiren(Minecraft.getMinecraft().player.world) != null) {
                 siren = sirenProps.getSiren(Minecraft.getMinecraft().player.world);
             }
             this.entity = siren;

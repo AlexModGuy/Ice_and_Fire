@@ -1,17 +1,13 @@
 package com.github.alexthe666.iceandfire.client.render.item;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDeathWormGauntlet;
-import com.github.alexthe666.iceandfire.client.model.ModelTrollWeapon;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IRenderContextHandler;
 import org.lwjgl.opengl.GL11;
 
 public class RenderDeathWormGauntlet {
@@ -20,11 +16,11 @@ public class RenderDeathWormGauntlet {
     public void renderItem(ItemStack stack, double x, double y, double z, float f, int f1, float alpha) {
         ResourceLocation texture;
 
-        if(stack.getItem() == ModItems.deathworm_gauntlet_red){
+        if (stack.getItem() == ModItems.deathworm_gauntlet_red) {
             texture = RenderDeathWorm.TEXTURE_RED;
-        }else if(stack.getItem() == ModItems.deathworm_gauntlet_white){
+        } else if (stack.getItem() == ModItems.deathworm_gauntlet_white) {
             texture = RenderDeathWorm.TEXTURE_WHITE;
-        }else{
+        } else {
             texture = RenderDeathWorm.TEXTURE_YELLOW;
         }
         GL11.glPushMatrix();
@@ -32,15 +28,15 @@ public class RenderDeathWormGauntlet {
         GL11.glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         GL11.glPushMatrix();
-        if(ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND ||
+        if (ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND ||
                 ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND ||
                 ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND ||
-                ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND){
+                ItemTESRContext.INSTANCE.getCurrentTransform() == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND) {
             MODEL.animate(stack, Minecraft.getMinecraft().getRenderPartialTicks());
-        }else{
+        } else {
             MODEL.resetToDefaultPose();
         }
-        MODEL.render(null, 0,0, 0, 0, 0, 0.0625F);
+        MODEL.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
         GL11.glPopMatrix();

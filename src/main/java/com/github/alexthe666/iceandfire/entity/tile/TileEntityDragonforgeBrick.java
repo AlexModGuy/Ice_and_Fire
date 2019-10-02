@@ -19,15 +19,14 @@ public class TileEntityDragonforgeBrick extends TileEntity {
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
-    {
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
         return getConnectedTileEntity() != null && getConnectedTileEntity().hasCapability(capability, facing);
     }
 
     private ICapabilityProvider getConnectedTileEntity() {
         for (EnumFacing facing : EnumFacing.values()) {
             if (world.getTileEntity(pos.offset(facing)) != null && world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
-                return (TileEntityDragonforge) world.getTileEntity(pos.offset(facing));
+                return world.getTileEntity(pos.offset(facing));
             }
         }
         return null;

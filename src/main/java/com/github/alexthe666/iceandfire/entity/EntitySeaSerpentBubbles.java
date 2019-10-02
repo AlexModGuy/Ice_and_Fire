@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.SoundEvents;
@@ -44,7 +43,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     }
 
     public void onUpdate() {
-        if(this.ticksExisted > 150){
+        if (this.ticksExisted > 150) {
             this.setDead();
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
@@ -84,7 +83,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     }
 
     public void autoTarget() {
-        if(this.shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) this.shootingEntity).getAttackTarget() != null){
+        if (this.shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) this.shootingEntity).getAttackTarget() != null) {
             Entity target = ((EntitySeaSerpent) this.shootingEntity).getAttackTarget();
             double d2 = target.posX - posX;
             double d3 = target.posY - posY;
@@ -96,7 +95,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         }
     }
 
-    public boolean isInWater(){
+    public boolean isInWater() {
         return this.isInsideOfMaterial(Material.WATER);
     }
 
@@ -104,14 +103,14 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         return true;
     }
 
-    protected EnumParticleTypes getParticleType(){
+    protected EnumParticleTypes getParticleType() {
         return EnumParticleTypes.WATER_SPLASH;
     }
 
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        if(result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity)){
+        if (result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity)) {
             result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 1F);
             this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());
             this.setDead();

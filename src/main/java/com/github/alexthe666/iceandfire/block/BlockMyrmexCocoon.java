@@ -54,7 +54,6 @@ public class BlockMyrmexCocoon extends BlockContainer {
     }
 
 
-
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;

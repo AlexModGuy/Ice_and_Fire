@@ -5,13 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -59,9 +57,9 @@ public class ParticleDragonFrost extends ParticleFlame {
     public ParticleDragonFrost(World world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
         this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
         this.dragon = entityDragonBase;
-        this.targetX = dragon.burnParticleX  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetY = dragon.burnParticleY  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetZ = dragon.burnParticleZ  + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetX = dragon.burnParticleX + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetY = dragon.burnParticleY + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
+        this.targetZ = dragon.burnParticleZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
         this.posX = x;
         this.posY = y;
         this.posZ = z;
@@ -92,7 +90,7 @@ public class ParticleDragonFrost extends ParticleFlame {
         GlStateManager.enableBlend();
         GlStateManager.enableNormalize();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        float f8 = (float)Math.PI / 2 + this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
+        float f8 = (float) Math.PI / 2 + this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
         float f9 = MathHelper.cos(f8 * 0.5F);
         float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
         float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
@@ -101,9 +99,9 @@ public class ParticleDragonFrost extends ParticleFlame {
         for (int l = 0; l < 4; ++l) {
             avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
         }
-        if(big){
+        if (big) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE_BIG);
-        }else{
+        } else {
             Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE);
 
         }
@@ -115,10 +113,10 @@ public class ParticleDragonFrost extends ParticleFlame {
         float alpha = 1;
         GL11.glPushMatrix();
         buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        buffer.pos((double)f3 + avec3d[0].x, (double)f4 + avec3d[0].y, (double)f5 + avec3d[0].z).tex(0, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double)f3 + avec3d[1].x, (double)f4 + avec3d[1].y, (double)f5 + avec3d[1].z).tex(1, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double)f3 + avec3d[2].x, (double)f4 + avec3d[2].y, (double)f5 + avec3d[2].z).tex(1, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double)f3 + avec3d[3].x, (double)f4 + avec3d[3].y, (double)f5 + avec3d[3].z).tex(0, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f3 + avec3d[0].x, (double) f4 + avec3d[0].y, (double) f5 + avec3d[0].z).tex(0, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f3 + avec3d[1].x, (double) f4 + avec3d[1].y, (double) f5 + avec3d[1].z).tex(1, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f3 + avec3d[2].x, (double) f4 + avec3d[2].y, (double) f5 + avec3d[2].z).tex(1, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
+        buffer.pos((double) f3 + avec3d[3].x, (double) f4 + avec3d[3].y, (double) f5 + avec3d[3].z).tex(0, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
         Tessellator.getInstance().draw();
         GL11.glPopMatrix();
         GlStateManager.disableBlend();
@@ -130,10 +128,9 @@ public class ParticleDragonFrost extends ParticleFlame {
         int i = super.getBrightnessForRender(partialTick);
         int j = i & 255;
         int k = i >> 16 & 255;
-        j = j + (int)(f * 15.0F * 16.0F);
+        j = j + (int) (f * 15.0F * 16.0F);
 
-        if (j > 240)
-        {
+        if (j > 240) {
             j = 240;
         }
 
@@ -146,13 +143,13 @@ public class ParticleDragonFrost extends ParticleFlame {
 
     public void onUpdate() {
         super.onUpdate();
-        if(dragon == null){
+        if (dragon == null) {
             float distX = (float) (this.initialX - this.posX);
             float distZ = (float) (this.initialZ - this.posZ);
             this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
             this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
             this.motionY += 0.015F * rand.nextFloat();
-        }else{
+        } else {
             double d2 = this.targetX - initialX;
             double d3 = this.targetY - initialY;
             double d4 = this.targetZ - initialZ;
@@ -161,7 +158,7 @@ public class ParticleDragonFrost extends ParticleFlame {
             this.motionX += d2 * speed;
             this.motionY += d3 * speed;
             this.motionZ += d4 * speed;
-            if(touchedTime > 3){
+            if (touchedTime > 3) {
                 this.setExpired();
             }
         }
@@ -173,7 +170,7 @@ public class ParticleDragonFrost extends ParticleFlame {
         double origZ = z;
 
         if (this.canCollide) {
-            List<AxisAlignedBB> list = this.world.getCollisionBoxes((Entity) null, this.getBoundingBox().expand(x, y, z));
+            List<AxisAlignedBB> list = this.world.getCollisionBoxes(null, this.getBoundingBox().expand(x, y, z));
 
             for (AxisAlignedBB axisalignedbb : list) {
                 y = axisalignedbb.calculateYOffset(this.getBoundingBox(), y);

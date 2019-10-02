@@ -12,7 +12,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.iceandfire.recipes")
 public class CraftTweakerCompat {
 
-    public static void preInit(){
+    public static void preInit() {
         CraftTweakerAPI.registerClass(CraftTweakerCompat.class);
     }
 

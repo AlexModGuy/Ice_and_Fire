@@ -19,17 +19,14 @@ public class ThaumcraftCompat {
 
     static final Aspect MYTHICAL = new Aspect("mythus", 0XD9D5AB, new Aspect[]{Aspect.BEAST, Aspect.MAGIC}, new ResourceLocation("iceandfire:textures/thaumcraft/mythical.png"), 1);
     static final Aspect DRAGON = getOrCreateAspect("draco", 0XA2271F, new Aspect[]{ThaumcraftCompat.MYTHICAL, Aspect.DESIRE}, new ResourceLocation("iceandfire", "textures/thaumcraft/dragon.png"), 1);
-
-    static Aspect getOrCreateAspect(String tag, int color, Aspect[] components, ResourceLocation image, int blend)
-    {
-        Aspect a = Aspect.getAspect(tag);
-        if(a != null) return a;
-        return new Aspect(tag, color, components, image, blend);
-    }
-
-
     private static final ThaumcraftCompat INSTANCE = new ThaumcraftCompat();
     private static boolean registered = false;
+
+    static Aspect getOrCreateAspect(String tag, int color, Aspect[] components, ResourceLocation image, int blend) {
+        Aspect a = Aspect.getAspect(tag);
+        if (a != null) return a;
+        return new Aspect(tag, color, components, image, blend);
+    }
 
     @Deprecated
     public static void register() {
@@ -42,7 +39,7 @@ public class ThaumcraftCompat {
     }
 
     @SubscribeEvent
-    public void aspectRegistrationEvent(AspectRegistryEvent evt){
+    public void aspectRegistrationEvent(AspectRegistryEvent evt) {
         evt.register.registerObjectTag(new ItemStack(ModItems.bestiary), new AspectList().add(ThaumcraftCompat.DRAGON, 2).add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.BEAST, 6).add(Aspect.MAGIC, 2).add(Aspect.MIND, 4).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         evt.register.registerObjectTag(new ItemStack(ModItems.manuscript), new AspectList().add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.PLANT, 3).add(Aspect.MIND, 2).add(Aspect.WATER, 2).add(Aspect.AIR, 1));
         evt.register.registerObjectTag(new ItemStack(ModItems.sapphireGem), new AspectList().add(Aspect.CRYSTAL, 15).add(Aspect.DESIRE, 10));
@@ -89,7 +86,7 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_gold, 1, 2), new AspectList().add(Aspect.METAL, 30).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 20).add(Aspect.PROTECT, 30));
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_gold, 1, 3), new AspectList().add(Aspect.METAL, 20).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 20).add(Aspect.PROTECT, 30));
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_diamond, 1, 0), new AspectList().add(Aspect.CRYSTAL, 20).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 30).add(Aspect.PROTECT, 40));
-        evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_diamond, 1, 1), new AspectList().add(Aspect.CRYSTAL, 10).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 30).add(Aspect.PROTECT, 40));;
+        evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_diamond, 1, 1), new AspectList().add(Aspect.CRYSTAL, 10).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 30).add(Aspect.PROTECT, 40));
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_diamond, 1, 2), new AspectList().add(Aspect.CRYSTAL, 30).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 30).add(Aspect.PROTECT, 40));
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_armor_diamond, 1, 3), new AspectList().add(Aspect.CRYSTAL, 20).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.DESIRE, 30).add(Aspect.PROTECT, 40));
         evt.register.registerObjectTag(new ItemStack(ModItems.dragon_meal), new AspectList().add(Aspect.LIFE, 10).add(Aspect.BEAST, 5).add(ThaumcraftCompat.DRAGON, 5));
@@ -117,7 +114,7 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModItems.deathworm_chitin, 1, 2), new AspectList().add(Aspect.BEAST, 5).add(ThaumcraftCompat.MYTHICAL, 5).add(Aspect.PROTECT, 5));
         evt.register.registerObjectTag(new ItemStack(ModItems.deathworm_egg, 1, 0), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 12).add(Aspect.LIFE, 7).add(Aspect.DESIRE, 7).add(Aspect.PROTECT, 7));
         evt.register.registerObjectTag(new ItemStack(ModItems.deathworm_egg, 1, 1), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 30).add(Aspect.LIFE, 10).add(Aspect.DESIRE, 20).add(Aspect.PROTECT, 20));
-        for(int i = 0; i < EnumHippogryphTypes.values().length; i++){
+        for (int i = 0; i < EnumHippogryphTypes.values().length; i++) {
             evt.register.registerObjectTag(new ItemStack(ModItems.hippogryph_egg, 1, i), new AspectList().add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.AIR, 5).add(Aspect.DESIRE, 20).add(Aspect.FLIGHT, 8).add(Aspect.BEAST, 6));
         }
         evt.register.registerObjectTag(new ItemStack(ModItems.rotten_egg), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 2).add(Aspect.LIFE, 5).add(Aspect.DEATH, 5).add(Aspect.UNDEAD, 5).add(Aspect.ENTROPY, 5));
@@ -126,7 +123,7 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModItems.troll_tusk), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.DEATH, 5).add(Aspect.BEAST, 5).add(Aspect.AVERSION, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5));
         evt.register.registerObjectTag(new ItemStack(ModItems.stone_statue), new AspectList().add(Aspect.BEAST, 20).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.DEATH, 10).add(Aspect.MAGIC, 5).add(Aspect.AVERSION, 2).add(Aspect.EARTH, 5).add(Aspect.ENTROPY, 5));
 
-        for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
+        for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
             evt.register.registerObjectTag(new ItemStack(weapon.item), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.DEATH, 5).add(Aspect.PROTECT, 15).add(Aspect.CRAFT, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5));
         }
         evt.register.registerObjectTag(new ItemStack(EnumTroll.MOUNTAIN.leather), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.EARTH, 7));
@@ -213,10 +210,10 @@ public class ThaumcraftCompat {
         evt.register.registerObjectTag(new ItemStack(ModItems.cockatrice_eye), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.DEATH, 35));
         evt.register.registerObjectTag(new ItemStack(ModItems.amphithere_feather), new AspectList().add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.BEAST, 10).add(Aspect.FLIGHT, 10));
         evt.register.registerObjectTag(new ItemStack(ModItems.sea_serpent_fang), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.WATER, 10));
-        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
+        for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             evt.register.registerObjectTag(new ItemStack(serpent.scale), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.WATER, 10));
         }
-        for(EnumSkullType skull : EnumSkullType.values()) {
+        for (EnumSkullType skull : EnumSkullType.values()) {
             evt.register.registerObjectTag(new ItemStack(skull.skull_item), new AspectList().add(ThaumcraftCompat.MYTHICAL, 20).add(Aspect.BEAST, 10).add(Aspect.DEATH, 10));
         }
         ThaumcraftApi.registerEntityTag("dragonegg", new AspectList().add(Aspect.LIFE, 5).add(Aspect.DESIRE, 5).add(ThaumcraftCompat.DRAGON, 10).add(Aspect.MAGIC, 2));

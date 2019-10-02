@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.compat.jei.icedragonforge;
 
 import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
-import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeDrawable;
-import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeRecipeWrapper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;

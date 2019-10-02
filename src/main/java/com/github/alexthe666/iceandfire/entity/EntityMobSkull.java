@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -16,14 +15,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import scala.Int;
 
 import javax.annotation.Nullable;
 
 public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.<Float>createKey(EntityMobSkull.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.<Integer>createKey(EntityMobSkull.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.VARINT);
 
     public EntityMobSkull(World worldIn) {
         super(worldIn);
@@ -153,12 +151,12 @@ public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStat
     }
 
     @Override
-    public boolean isNoDespawnRequired(){
+    public boolean isNoDespawnRequired() {
         return true;
     }
 
     @Override
-    protected boolean canDespawn(){
+    protected boolean canDespawn() {
         return false;
     }
 }

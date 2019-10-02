@@ -12,6 +12,8 @@ import java.util.Set;
 public class AquaticAITempt extends EntityAIBase {
     private final EntityCreature temptedEntity;
     private final double speed;
+    private final Set<Item> temptItem;
+    private final boolean scaredByPlayerMovement;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -20,8 +22,6 @@ public class AquaticAITempt extends EntityAIBase {
     private EntityPlayer temptingPlayer;
     private int delayTemptCounter;
     private boolean isRunning;
-    private final Set<Item> temptItem;
-    private final boolean scaredByPlayerMovement;
 
     public AquaticAITempt(EntityCreature temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
         this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemIn));

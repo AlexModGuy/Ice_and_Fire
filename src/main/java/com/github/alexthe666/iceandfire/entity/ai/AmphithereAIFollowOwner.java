@@ -7,9 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateFlying;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -18,12 +15,12 @@ import net.minecraft.world.World;
 
 public class AmphithereAIFollowOwner extends EntityAIBase {
     private final EntityAmphithere ampithere;
-    private EntityLivingBase owner;
-    World world;
     private final double followSpeed;
-    private int timeToRecalcPath;
+    World world;
     float maxDist;
     float minDist;
+    private EntityLivingBase owner;
+    private int timeToRecalcPath;
     private float oldWaterCost;
 
     public AmphithereAIFollowOwner(EntityAmphithere ampithereIn, double followSpeedIn, float minDistIn, float maxDistIn) {
@@ -37,7 +34,7 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
 
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.ampithere.getOwner();
-        if(ampithere.getCommand() != 2){
+        if (ampithere.getCommand() != 2) {
             return false;
         }
         if (entitylivingbase == null) {
@@ -58,10 +55,10 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
         return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.isSitting();
     }
 
-    private boolean noPath(){
-        if(!ampithere.isFlying()){
+    private boolean noPath() {
+        if (!ampithere.isFlying()) {
             return this.ampithere.getNavigator().noPath();
-        }else{
+        } else {
             return this.ampithere.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
         }
     }
@@ -112,10 +109,10 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
         return iblockstate.getBlockFaceShape(this.world, blockpos, EnumFacing.DOWN) == BlockFaceShape.SOLID && iblockstate.canEntitySpawn(this.ampithere) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
     }
 
-    private boolean tryMoveTo(){
-        if(!ampithere.isFlying()){
+    private boolean tryMoveTo() {
+        if (!ampithere.isFlying()) {
             return ampithere.getNavigator().tryMoveToEntityLiving(this.owner, this.followSpeed);
-        }else{
+        } else {
             this.ampithere.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight() + 5 + this.ampithere.getRNG().nextInt(8), this.owner.posZ, 0.25D);
             return true;
         }

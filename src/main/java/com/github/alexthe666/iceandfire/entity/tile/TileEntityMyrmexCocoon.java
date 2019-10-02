@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityLockableLoot;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
@@ -25,7 +24,7 @@ import java.util.Random;
 public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
 
-    private NonNullList<ItemStack> chestContents = NonNullList.<ItemStack>withSize(18, ItemStack.EMPTY);
+    private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
 
     public int getSizeInventory() {
         return 18;
@@ -48,7 +47,7 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        this.chestContents = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
         if (!this.checkLootAndRead(compound)) {
             ItemStackHelper.loadAllItems(compound, this.chestContents);
@@ -91,12 +90,12 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
     }
 
     public void openInventory(EntityPlayer player) {
-        this.fillWithLoot((EntityPlayer) null);
+        this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
     }
 
     public void closeInventory(EntityPlayer player) {
-        this.fillWithLoot((EntityPlayer) null);
+        this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
     }
 

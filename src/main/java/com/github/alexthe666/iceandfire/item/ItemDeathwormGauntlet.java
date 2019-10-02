@@ -60,12 +60,12 @@ public class ItemDeathwormGauntlet extends Item {
             if (properties.deathwormReceded || properties.deathwormLaunched) {
                 return;
             } else {
-                if(player instanceof EntityPlayer){
-                    if(stack.getTagCompound().getInteger("HolderID") != player.getEntityId()){
+                if (player instanceof EntityPlayer) {
+                    if (stack.getTagCompound().getInteger("HolderID") != player.getEntityId()) {
                         stack.getTagCompound().setInteger("HolderID", player.getEntityId());
                     }
-                    if(((EntityPlayer)player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
-                        ((EntityPlayer)player).getCooldownTracker().setCooldown(this, 10);
+                    if (((EntityPlayer) player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
+                        ((EntityPlayer) player).getCooldownTracker().setCooldown(this, 10);
                         player.playSound(ModSounds.DEATHWORM_ATTACK, 1F, 1F);
                         properties.deathwormReceded = false;
                         properties.deathwormLaunched = true;
@@ -77,11 +77,11 @@ public class ItemDeathwormGauntlet extends Item {
 
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscEntityProperties.class);
-        if(properties != null && properties.specialWeaponDmg > 0){
+        if (properties != null && properties.specialWeaponDmg > 0) {
             stack.damageItem(properties.specialWeaponDmg, entityLiving);
             properties.specialWeaponDmg = 0;
         }
-        if(stack.getTagCompound().getInteger("HolderID") != -1){
+        if (stack.getTagCompound().getInteger("HolderID") != -1) {
             stack.getTagCompound().setInteger("HolderID", -1);
         }
     }
@@ -119,7 +119,7 @@ public class ItemDeathwormGauntlet extends Item {
                         EntityPlayer player = (EntityPlayer) entity;
                         Vec3d vec3d = player.getLook(1.0F).normalize();
                         double range = 5;
-                        for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB((double) player.posX - range, (double) player.posY - range, (double) player.posZ - range, (double) player.posX + range, (double) player.posY + range, (double) player.posZ + range))) {
+                        for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(player.posX - range, player.posY - range, player.posZ - range, player.posX + range, player.posY + range, player.posZ + range))) {
                             Vec3d vec3d1 = new Vec3d(entityliving.posX - player.posX, entityliving.posY - player.posY, entityliving.posZ - player.posZ);
                             double d0 = vec3d1.length();
                             vec3d1 = vec3d1.normalize();

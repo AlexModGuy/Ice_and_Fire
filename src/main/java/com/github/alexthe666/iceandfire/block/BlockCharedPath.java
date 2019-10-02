@@ -22,9 +22,9 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockCharedPath extends BlockGrassPath {
+    public static final PropertyBool REVERTS = PropertyBool.create("revert");
     public Item itemBlock;
     boolean isFire;
-    public static final PropertyBool REVERTS = PropertyBool.create("revert");
 
     @SuppressWarnings("deprecation")
     public BlockCharedPath(boolean isFire) {
@@ -100,6 +100,6 @@ public class BlockCharedPath extends BlockGrassPath {
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{REVERTS});
+        return new BlockStateContainer(this, REVERTS);
     }
 }

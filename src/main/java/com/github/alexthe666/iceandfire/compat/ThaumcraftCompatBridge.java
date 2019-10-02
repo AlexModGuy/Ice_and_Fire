@@ -8,11 +8,11 @@ import net.minecraftforge.fml.common.Loader;
  */
 public class ThaumcraftCompatBridge {
 
-	private static final String TC_MOD_ID = "thaumcraft";
+    private static final String TC_MOD_ID = "thaumcraft";
 
-	public static void loadThaumcraftCompat() {
-		if (Loader.isModLoaded(TC_MOD_ID)) {
-			ThaumcraftCompat.register();
-		}
-	}
+    public static void loadThaumcraftCompat() {
+        if (Loader.isModLoaded(TC_MOD_ID)) {
+            ThaumcraftCompat.register();
+        }
+    }
 }

@@ -13,7 +13,7 @@ public class CyclopsAIAttackMelee extends EntityAIAttackMelee {
 
     protected void checkAndPerformAttack(EntityLivingBase entity, double distance) {
         double d0 = this.getAttackReachSqr(entity);
-        if(isCyclopsBlinded() && distance >= 36D){
+        if (isCyclopsBlinded() && distance >= 36D) {
             this.resetTask();
             return;
         }
@@ -24,7 +24,7 @@ public class CyclopsAIAttackMelee extends EntityAIAttackMelee {
         }
     }
 
-    private boolean isCyclopsBlinded(){
+    private boolean isCyclopsBlinded() {
         return this.attacker instanceof EntityCyclops && ((EntityCyclops) this.attacker).isBlinded();
     }
 }

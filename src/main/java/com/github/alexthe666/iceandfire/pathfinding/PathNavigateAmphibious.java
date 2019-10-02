@@ -39,7 +39,6 @@ public class PathNavigateAmphibious extends PathNavigate {
             BlockPos blockpos;
 
             for (blockpos = pos.down(); blockpos.getY() > 0 && this.world.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.down()) {
-                ;
             }
 
             if (blockpos.getY() > 0) {
@@ -59,7 +58,6 @@ public class PathNavigateAmphibious extends PathNavigate {
             BlockPos blockpos1;
 
             for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
-                ;
             }
 
             return super.getPathToPos(blockpos1);
@@ -239,20 +237,20 @@ public class PathNavigateAmphibious extends PathNavigate {
         this.nodeProcessor.setCanOpenDoors(canBreakDoors);
     }
 
-    public void setEnterDoors(boolean enterDoors) {
-        this.nodeProcessor.setCanEnterDoors(enterDoors);
-    }
-
     public boolean getEnterDoors() {
         return this.nodeProcessor.getCanEnterDoors();
     }
 
-    public void setCanSwim(boolean canSwim) {
-        this.nodeProcessor.setCanSwim(canSwim);
+    public void setEnterDoors(boolean enterDoors) {
+        this.nodeProcessor.setCanEnterDoors(enterDoors);
     }
 
     public boolean getCanSwim() {
         return this.nodeProcessor.getCanSwim();
+    }
+
+    public void setCanSwim(boolean canSwim) {
+        this.nodeProcessor.setCanSwim(canSwim);
     }
 
     public void setAvoidSun(boolean avoidSun) {

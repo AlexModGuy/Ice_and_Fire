@@ -24,7 +24,7 @@ public enum EnumDragonEgg {
     public TextFormatting color;
     public boolean isFire;
 
-    private EnumDragonEgg(int meta, TextFormatting color, boolean isFire) {
+    EnumDragonEgg(int meta, TextFormatting color, boolean isFire) {
         this.meta = meta;
         this.color = color;
         this.isFire = isFire;

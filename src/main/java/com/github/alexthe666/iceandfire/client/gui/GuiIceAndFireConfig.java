@@ -11,8 +11,8 @@ public class GuiIceAndFireConfig extends GuiConfig {
         titleLine2 = IceAndFire.config.getConfigFile().getAbsolutePath();
     }
 
-   @Override
-    public void onGuiClosed(){
+    @Override
+    public void onGuiClosed() {
         super.onGuiClosed();
     }
 }

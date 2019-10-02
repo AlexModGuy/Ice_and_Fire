@@ -14,20 +14,20 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonScales extends Item {
-	EnumDragonEgg type;
+    EnumDragonEgg type;
 
-	public ItemDragonScales(String name, EnumDragonEgg type) {
-		this.setHasSubtypes(true);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.type = type;
-		this.setTranslationKey("iceandfire.dragonscales");
-		this.setRegistryName(IceAndFire.MODID, name);
-	}
+    public ItemDragonScales(String name, EnumDragonEgg type) {
+        this.setHasSubtypes(true);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.type = type;
+        this.setTranslationKey("iceandfire.dragonscales");
+        this.setRegistryName(IceAndFire.MODID, name);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
+    }
 
 }

@@ -18,8 +18,8 @@ import java.util.List;
 public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;
-    protected EntityMyrmexBase targetEntity;
     public EntityMyrmexRoyal myrmex;
+    protected EntityMyrmexBase targetEntity;
 
     public MyrmexAIFindMate(EntityMyrmexRoyal myrmex) {
         super(myrmex, false, false);
@@ -36,7 +36,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget
 
     @Override
     public boolean shouldExecute() {
-        if(!this.myrmex.shouldHaveNormalAI()){
+        if (!this.myrmex.shouldHaveNormalAI()) {
             return false;
         }
         if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.releaseTicks < 400 || this.myrmex.mate != null) {
@@ -54,14 +54,14 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget
             return false;
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
-            for(Entity royal : list){
-                if(this.myrmex.canMateWith((EntityMyrmexRoyal)royal)){
-                    this.myrmex.mate = (EntityMyrmexRoyal)royal;
+            for (Entity royal : list) {
+                if (this.myrmex.canMateWith((EntityMyrmexRoyal) royal)) {
+                    this.myrmex.mate = (EntityMyrmexRoyal) royal;
                     this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
                     return true;
                 }
             }
-        return false;
+            return false;
         }
     }
 

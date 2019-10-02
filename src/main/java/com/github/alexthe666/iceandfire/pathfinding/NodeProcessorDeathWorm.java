@@ -16,7 +16,7 @@ public class NodeProcessorDeathWorm extends NodeProcessor {
     }
 
     public PathPoint getPathPointToCoords(double x, double y, double z) {
-        return this.openPoint(MathHelper.floor(x - (double) (0.4)), MathHelper.floor(y + 0.5D), MathHelper.floor(z - (double) (0.4)));
+        return this.openPoint(MathHelper.floor(x - 0.4), MathHelper.floor(y + 0.5D), MathHelper.floor(z - 0.4));
     }
 
     public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {

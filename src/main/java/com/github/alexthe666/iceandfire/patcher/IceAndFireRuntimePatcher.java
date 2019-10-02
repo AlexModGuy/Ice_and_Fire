@@ -1,17 +1,10 @@
 package com.github.alexthe666.iceandfire.patcher;
 
 import com.github.alexthe666.iceandfire.util.IceAndFireCoreUtils;
-import net.ilexiconn.llibrary.client.lang.LanguageHandler;
 import net.ilexiconn.llibrary.server.asm.InsnPredicate;
 import net.ilexiconn.llibrary.server.asm.RuntimePatcher;
-import net.ilexiconn.llibrary.server.world.TickRateHandler;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.Locale;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.CPacketVehicleMove;
-
-import java.util.List;
-import java.util.Map;
 
 public class IceAndFireRuntimePatcher extends RuntimePatcher {
     @Override

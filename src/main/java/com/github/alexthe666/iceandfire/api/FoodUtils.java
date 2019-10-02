@@ -13,34 +13,34 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class FoodUtils {
 
-    public static int getFoodPoints(Entity entity){
+    public static int getFoodPoints(Entity entity) {
         int foodPoints = Math.round(entity.width * entity.height * 10);
-        if(entity instanceof EntityAgeable){
+        if (entity instanceof EntityAgeable) {
             return foodPoints;
         }
-        if(entity instanceof EntityPlayer){
+        if (entity instanceof EntityPlayer) {
             return 15;
         }
         return 0;
     }
 
-    public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish){
-        if(item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem() instanceof ItemFood){
-            int food = (int)(((ItemFood)item.getItem()).getHealAmount(item) * 10);
-            if(!meatOnly){
+    public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish) {
+        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem() instanceof ItemFood) {
+            int food = (((ItemFood) item.getItem()).getHealAmount(item) * 10);
+            if (!meatOnly) {
                 return food;
-            }else if(((ItemFood)item.getItem()).isWolfsFavoriteMeat()){
+            } else if (((ItemFood) item.getItem()).isWolfsFavoriteMeat()) {
                 return food;
-            }else if(includeFish && item.getItem() == Items.FISH){
+            } else if (includeFish && item.getItem() == Items.FISH) {
                 return food;
             }
         }
         return 0;
     }
 
-    public static boolean isSeeds(ItemStack stack){
+    public static boolean isSeeds(ItemStack stack) {
         Item item = stack.getItem();
-        if(item instanceof ItemSeeds && item != Items.NETHER_WART){
+        if (item instanceof ItemSeeds && item != Items.NETHER_WART) {
             return true;
         }
         NonNullList<ItemStack> listAllseed = OreDictionary.getOres("listAllseed");

@@ -22,9 +22,9 @@ public abstract class ModelMyrmexBase extends ModelDragonBase {
     }
 
     public void postRenderArm(float scale, EnumHandSide side) {
-        for (ModelRenderer renderer : this.getHeadParts()){
+        for (ModelRenderer renderer : this.getHeadParts()) {
             renderer.postRender(scale);
-         }
+        }
     }
 
     public abstract ModelRenderer[] getHeadParts();

@@ -57,10 +57,10 @@ public class ItemPixieWand extends Item {
             d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
             EntityPixieCharge charge = new EntityPixieCharge(worldIn, playerIn, d2, d3, d4);
             charge.setPosition(playerIn.posX, playerIn.posY + 1, playerIn.posZ);
-            if(!worldIn.isRemote){
+            if (!worldIn.isRemote) {
                 worldIn.spawnEntity(charge);
             }
-            playerIn.playSound(ModSounds.PIXIE_WAND, 1F,  0.75F + 0.5F * playerIn.getRNG().nextFloat());
+            playerIn.playSound(ModSounds.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
             itemStackIn.damageItem(1, playerIn);
             playerIn.getCooldownTracker().setCooldown(this, 5);
         }

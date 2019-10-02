@@ -47,16 +47,16 @@ import javax.annotation.Nullable;
 
 public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
-    private int animationTick;
-    private Animation currentAnimation;
-    public PartEntity eyeEntity;
-    private static final DataParameter<Boolean> BLINDED = EntityDataManager.<Boolean>createKey(EntityCyclops.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityCyclops.class, DataSerializers.VARINT);
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "cyclops"));
+    private static final DataParameter<Boolean> BLINDED = EntityDataManager.createKey(EntityCyclops.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityCyclops.class, DataSerializers.VARINT);
     public static Animation ANIMATION_STOMP;
     public static Animation ANIMATION_EATPLAYER;
     public static Animation ANIMATION_KICK;
     public static Animation ANIMATION_ROAR;
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "cyclops"));
+    public PartEntity eyeEntity;
+    private int animationTick;
+    private Animation currentAnimation;
 
     public EntityCyclops(World worldIn) {
         super(worldIn);
@@ -85,7 +85,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
@@ -108,18 +108,18 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     public boolean attackEntityAsMob(Entity entityIn) {
         int attackDescision = this.getRNG().nextInt(3);
-        if(attackDescision == 0){
+        if (attackDescision == 0) {
             this.setAnimation(ANIMATION_STOMP);
             return true;
-        }else if(attackDescision == 1){
-            if(!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)){
+        } else if (attackDescision == 1) {
+            if (!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.startRiding(this, true);
-            }else{
+            } else {
                 this.setAnimation(ANIMATION_STOMP);
             }
             return true;
-        }else{
+        } else {
             this.setAnimation(ANIMATION_KICK);
             return true;
         }
@@ -164,13 +164,12 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
 
+    public boolean isBlinded() {
+        return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
+    }
 
     public void setBlinded(boolean blind) {
         this.dataManager.set(BLINDED, Boolean.valueOf(blind));
-    }
-
-    public boolean isBlinded() {
-        return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
     public void updatePassenger(Entity passenger) {
@@ -179,7 +178,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             passenger.motionX = 0;
             passenger.motionZ = 0;
             this.setAnimation(ANIMATION_EATPLAYER);
-            double raiseUp = this.getAnimationTick() < 10 ? 0 : Math.min((this.getAnimationTick()  * 3 - 30) * 0.2, 5.2F);
+            double raiseUp = this.getAnimationTick() < 10 ? 0 : Math.min((this.getAnimationTick() * 3 - 30) * 0.2, 5.2F);
             float pullIn = this.getAnimationTick() < 15 ? 0 : Math.min((this.getAnimationTick() - 15) * 0.15F, 0.75F);
             renderYawOffset = rotationYaw;
             this.rotationYaw *= 0;
@@ -189,8 +188,8 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = raiseUp;
             passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
-            if(this.getAnimationTick() == 32){
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float)IceAndFire.CONFIG.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? (float) ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+            if (this.getAnimationTick() == 32) {
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float) IceAndFire.CONFIG.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
                 passenger.dismountRidingEntity();
             }
         }
@@ -207,7 +206,8 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
         super.travel(strafe, forward, vertical);
     }
-    public boolean canPassengerSteer(){
+
+    public boolean canPassengerSteer() {
         return false;
     }
 
@@ -221,32 +221,32 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
 
-    public void onLivingUpdate(){
+    public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6){
+        if (this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6) {
             this.setAttackTarget(null);
         }
-        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5){
+        if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5) {
             this.playSound(ModSounds.CYCLOPS_BLINDED, 1, 1);
         }
-        if(this.getAnimation() == ANIMATION_EATPLAYER && this.getAnimationTick() == 25){
+        if (this.getAnimation() == ANIMATION_EATPLAYER && this.getAnimationTick() == 25) {
             this.playSound(ModSounds.CYCLOPS_BITE, 1, 1);
         }
-        if(this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14){
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        if (this.getAnimation() == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14) {
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         }
-        if(this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12){
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
 
         }
-        if(this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())){
+        if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())) {
             this.setAnimation(ANIMATION_EATPLAYER);
         }
-        if(this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
+        if (this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0) {
             this.setAnimation(ANIMATION_ROAR);
         }
-        if(this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14){
+        if (this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14) {
             for (int i1 = 0; i1 < 20; i1++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;
                 double motionY = getRNG().nextGaussian() * 0.07D;
@@ -260,7 +260,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
                 IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
                 if (iblockstate.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(iblockstate));
                     }
                 }
             }
@@ -300,6 +300,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             }
         }
     }
+
     @Override
     public int getAnimationTick() {
         return animationTick;
@@ -311,7 +312,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     public void setDead() {
-        if(eyeEntity != null){
+        if (eyeEntity != null) {
             world.removeEntityDangerously(eyeEntity);
         }
         super.setDead();
@@ -338,7 +339,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
 
     public void onHitEye(DamageSource source, float damage) {
-        if(!this.isBlinded()){
+        if (!this.isBlinded()) {
             this.setBlinded(true);
             this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(6F);
             this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
@@ -373,12 +374,12 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     @Override
-    public boolean isNoDespawnRequired(){
+    public boolean isNoDespawnRequired() {
         return true;
     }
 
     @Override
-    protected boolean canDespawn(){
+    protected boolean canDespawn() {
         return false;
     }
 

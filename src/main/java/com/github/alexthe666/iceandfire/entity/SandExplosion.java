@@ -38,8 +38,8 @@ public class SandExplosion extends Explosion {
 
     public SandExplosion(World world, Entity entity, double x, double y, double z, float size) {
         super(world, entity, x, y, z, size, true, true);
-        this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
-        this.playerKnockbackMap = Maps.<EntityPlayer, Vec3d>newHashMap();
+        this.affectedBlockPositions = Lists.newArrayList();
+        this.playerKnockbackMap = Maps.newHashMap();
         this.worldObj = world;
         this.exploder = entity;
         this.explosionSize = size;
@@ -51,7 +51,7 @@ public class SandExplosion extends Explosion {
 
     @Override
     public void doExplosionA() {
-        Set<BlockPos> set = Sets.<BlockPos>newHashSet();
+        Set<BlockPos> set = Sets.newHashSet();
         int i = 16;
         for (int j = 0; j < 16; ++j) {
             for (int k = 0; k < 16; ++k) {
@@ -74,7 +74,7 @@ public class SandExplosion extends Explosion {
                             IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
 
                             if (iblockstate.getMaterial() != Material.AIR) {
-                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, (Entity) null, this);
+                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
 

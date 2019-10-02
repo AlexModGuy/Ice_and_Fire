@@ -32,9 +32,9 @@ public class IFChainBuffer {
         this.prevPitchVariation = 0.0F;
     }
 
-    private boolean compareDouble(double a, double b){
-        double c = a-b;
-        return Math.abs(c-1.0) <= 0.01D;
+    private boolean compareDouble(double a, double b) {
+        double c = a - b;
+        return Math.abs(c - 1.0) <= 0.01D;
     }
 
     /**
@@ -90,7 +90,7 @@ public class IFChainBuffer {
      */
     public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, EntityLivingBase entity) {
         this.prevPitchVariation = this.pitchVariation;
-        if(Math.abs(entity.rotationPitch) > maxAngle){
+        if (Math.abs(entity.rotationPitch) > maxAngle) {
             return;
         }
         if (!compareDouble(entity.rotationPitch, entity.prevRotationPitch) && MathHelper.abs(this.pitchVariation) < maxAngle) {
@@ -134,7 +134,7 @@ public class IFChainBuffer {
 
         if (!compareDouble(entity.renderYawOffset, entity.prevRenderYawOffset) && MathHelper.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += MathHelper.clamp((entity.prevRenderYawOffset - entity.renderYawOffset) / divisor, -maxAngle, maxAngle);
-            if(entity instanceof IFlapable && Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 15D){
+            if (entity instanceof IFlapable && Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 15D) {
                 ((IFlapable) entity).flapWings();
             }
         }

@@ -1,12 +1,10 @@
 package com.github.alexthe666.iceandfire.compat.tinkers;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import slimeknights.tconstruct.library.entity.EntityProjectileBase;
 import slimeknights.tconstruct.library.traits.AbstractProjectileTrait;
-import slimeknights.tconstruct.library.traits.AbstractTrait;
 
 import javax.annotation.Nullable;
 

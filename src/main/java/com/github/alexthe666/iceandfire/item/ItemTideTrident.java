@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityStymphalianFeather;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -32,16 +31,6 @@ public class ItemTideTrident extends Item {
         this.setMaxDamage(400);
     }
 
-    @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
-    }
-
     public static float getArrowVelocity(int i) {
         float f = i / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
@@ -54,6 +43,16 @@ public class ItemTideTrident extends Item {
     }
 
     @Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 72000;
+    }
+
+    @Override
+    public EnumAction getItemUseAction(ItemStack stack) {
+        return EnumAction.BOW;
+    }
+
+    @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
         int i = this.getMaxItemUseDuration(stack) - timeLeft;
         if (i < 0) return;
@@ -61,10 +60,10 @@ public class ItemTideTrident extends Item {
         entity.playSound(SoundEvents.ENTITY_EGG_THROW, 1, 1);
         EntityTideTrident feather = new EntityTideTrident(worldIn, entity, stack);
         feather.shoot(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, f, 1.0F);
-        if(!worldIn.isRemote){
+        if (!worldIn.isRemote) {
             worldIn.spawnEntity(feather);
         }
-        if(!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())){
+        if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
             stack.shrink(1);
         }
     }

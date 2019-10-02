@@ -18,7 +18,10 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -27,7 +30,6 @@ import java.util.Random;
 
 public class EntityFireDragon extends EntityDragonBase {
 
-    public static Animation ANIMATION_FIRECHARGE;
     public static final float[] growth_stage_1 = new float[]{1F, 3F};
     public static final float[] growth_stage_2 = new float[]{3F, 7F};
     public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
@@ -36,6 +38,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public static final ResourceLocation FEMALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_female"));
     public static final ResourceLocation MALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_male"));
     public static final ResourceLocation SKELETON_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/fire_dragon_skeleton"));
+    public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
         super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
@@ -69,7 +72,7 @@ public class EntityFireDragon extends EntityDragonBase {
         this.tasks.addTask(8, new DragonAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
@@ -129,8 +132,8 @@ public class EntityFireDragon extends EntityDragonBase {
         }
         switch (groundAttack) {
             case BITE:
-                if (this.getAnimation() != this.ANIMATION_BITE) {
-                    this.setAnimation(this.ANIMATION_BITE);
+                if (this.getAnimation() != ANIMATION_BITE) {
+                    this.setAnimation(ANIMATION_BITE);
                     return false;
                 } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                     boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -141,16 +144,16 @@ public class EntityFireDragon extends EntityDragonBase {
                 break;
             case SHAKE_PREY:
                 if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-                    if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
-                        this.setAnimation(this.ANIMATION_SHAKEPREY);
+                    if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+                        this.setAnimation(ANIMATION_SHAKEPREY);
                         entityIn.startRiding(this);
                         this.usingGroundAttack = this.getRNG().nextBoolean();
                         this.randomizeAttacks();
                         return true;
                     }
                 } else {
-                    if (this.getAnimation() != this.ANIMATION_BITE) {
-                        this.setAnimation(this.ANIMATION_BITE);
+                    if (this.getAnimation() != ANIMATION_BITE) {
+                        this.setAnimation(ANIMATION_BITE);
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                         boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -161,13 +164,13 @@ public class EntityFireDragon extends EntityDragonBase {
                 }
                 break;
             case TAIL_WHIP:
-                if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
-                    this.setAnimation(this.ANIMATION_TAILWHACK);
+                if (this.getAnimation() != ANIMATION_TAILWHACK) {
+                    this.setAnimation(ANIMATION_TAILWHACK);
                     return false;
                 } else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 30) {
                     boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                     if (entityIn instanceof EntityLivingBase) {
-                        ((EntityLivingBase)entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                        ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
                     }
                     this.usingGroundAttack = this.getRNG().nextBoolean();
                     this.randomizeAttacks();
@@ -176,13 +179,13 @@ public class EntityFireDragon extends EntityDragonBase {
                 break;
             case WING_BLAST:
                 if (this.onGround && !this.isHovering() && !this.isFlying()) {
-                    if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
-                        this.setAnimation(this.ANIMATION_WINGBLAST);
+                    if (this.getAnimation() != ANIMATION_WINGBLAST) {
+                        this.setAnimation(ANIMATION_WINGBLAST);
                         return true;
                     }
                 } else {
-                    if (this.getAnimation() != this.ANIMATION_BITE) {
-                        this.setAnimation(this.ANIMATION_BITE);
+                    if (this.getAnimation() != ANIMATION_BITE) {
+                        this.setAnimation(ANIMATION_BITE);
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
                         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -205,10 +208,10 @@ public class EntityFireDragon extends EntityDragonBase {
             if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
-            if(this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack){
+            if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack) {
                 shootFireAtMob(this.getAttackTarget());
             }
-            if(this.airAttack == IaFDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100){
+            if (this.airAttack == IaFDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {
                 double difX = this.getAttackTarget().posX - this.posX;
                 double difY = this.getAttackTarget().posY + this.getAttackTarget().height - this.posY;
                 double difZ = this.getAttackTarget().posZ - this.posZ;
@@ -244,8 +247,8 @@ public class EntityFireDragon extends EntityDragonBase {
 
     public void riderShootFire(Entity controller) {
         if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
-            if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-                this.setAnimation(this.ANIMATION_FIRECHARGE);
+            if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+                this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
                 Vec3d headVec = this.getHeadPosition();
@@ -295,8 +298,8 @@ public class EntityFireDragon extends EntityDragonBase {
     private void shootFireAtMob(EntityLivingBase entity) {
         if (this.usingGroundAttack && this.groundAttack == IaFDragonAttacks.Ground.FIRE || !this.usingGroundAttack && (this.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM || this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST)) {
             if (this.usingGroundAttack && this.getRNG().nextInt(5) == 0 || !this.usingGroundAttack && this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST) {
-                if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-                    this.setAnimation(this.ANIMATION_FIRECHARGE);
+                if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+                    this.setAnimation(ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 20) {
                     rotationYaw = renderYawOffset;
                     Vec3d headVec = this.getHeadPosition();
@@ -358,9 +361,9 @@ public class EntityFireDragon extends EntityDragonBase {
             //sync with server, fire bomb
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonSyncFire(this.getEntityId(), burnX, burnY, burnZ, 5));
         }
-        if(syncType > 2 && syncType < 6){
-            if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-                this.setAnimation(this.ANIMATION_FIRECHARGE);
+        if (syncType > 2 && syncType < 6) {
+            if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+                this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
                 Vec3d headVec = this.getHeadPosition();
@@ -402,7 +405,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     IceAndFire.PROXY.spawnDragonParticle("dragonfire", headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
                 }
             } else {
-                if(!world.isRemote){
+                if (!world.isRemote) {
                     RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
                     BlockPos pos = result.getBlockPos();
                     IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
@@ -414,7 +417,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
-            if(!world.isRemote) {
+            if (!world.isRemote) {
                 IaFDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
             }
         }

@@ -29,7 +29,7 @@ public class BlockMyrmexBiolight extends BlockBush {
         this.setDefaultState(this.blockState.getBaseState().withProperty(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos){
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
         return true;
     }
 
@@ -59,7 +59,7 @@ public class BlockMyrmexBiolight extends BlockBush {
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{CONNECTED_DOWN});
+        return new BlockStateContainer(this, CONNECTED_DOWN);
     }
 
     public int getMetaFromState(IBlockState state) {

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -14,6 +13,7 @@ import net.minecraft.world.World;
 public class PathNavigateDragon extends PathNavigateGround {
     public BlockPos targetPosition;
     private EntityDragonBase dragon;
+
     public PathNavigateDragon(EntityDragonBase entitylivingIn, World worldIn) {
         super(entitylivingIn, worldIn);
         this.dragon = entitylivingIn;
@@ -58,7 +58,7 @@ public class PathNavigateDragon extends PathNavigateGround {
             }
         }
 
-        this.maxDistanceToWaypoint = this.dragon.getRenderSize()/3;
+        this.maxDistanceToWaypoint = this.dragon.getRenderSize() / 3;
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
 
         if (MathHelper.abs((float) (this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float) (this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < 1.0D) {

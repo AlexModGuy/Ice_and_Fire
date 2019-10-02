@@ -44,30 +44,31 @@ import javax.annotation.Nullable;
 
 public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
-    private int animationTick;
-    private Animation currentAnimation;
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.<Integer>createKey(EntityTroll.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> WEAPON = EntityDataManager.<Integer>createKey(EntityTroll.class, DataSerializers.VARINT);
     public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
     public static final Animation ANIMATION_SPEAK = Animation.create(10);
     public static final Animation ANIMATION_ROAR = Animation.create(25);
-    public float stoneProgress;
     public static final ResourceLocation FOREST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_forest"));
     public static final ResourceLocation FROST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_frost"));
     public static final ResourceLocation MOUNTAIN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "troll_mountain"));
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityTroll.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> WEAPON = EntityDataManager.createKey(EntityTroll.class, DataSerializers.VARINT);
+    public float stoneProgress;
+    private int animationTick;
+    private Animation currentAnimation;
     private boolean avoidSun = true;
+
     public EntityTroll(World worldIn) {
         super(worldIn);
         this.setSize(1.2F, 3.5F);
     }
 
-    private void setAvoidSun(boolean day){
-        if(day && !avoidSun){
+    private void setAvoidSun(boolean day) {
+        if (day && !avoidSun) {
             ((PathNavigateGround) this.getNavigator()).setAvoidSun(true);
             avoidSun = true;
         }
-        if(!day && avoidSun){
+        if (!day && avoidSun) {
             ((PathNavigateGround) this.getNavigator()).setAvoidSun(false);
             avoidSun = false;
         }
@@ -91,7 +92,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
         this.tasks.addTask(5, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
         setAvoidSun(true);
@@ -132,12 +133,12 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         this.dataManager.set(VARIANT, variant);
     }
 
-    public void setType(EnumTroll variant) {
-        this.setVariant(variant.ordinal());
-    }
-
     public EnumTroll getType() {
         return EnumTroll.values()[getVariant()];
+    }
+
+    public void setType(EnumTroll variant) {
+        this.setVariant(variant.ordinal());
     }
 
     private int getWeapon() {
@@ -148,12 +149,12 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         this.dataManager.set(WEAPON, variant);
     }
 
-    public void setWeaponType(EnumTroll.Weapon variant) {
-        this.setWeapon(variant.ordinal());
-    }
-
     public EnumTroll.Weapon getWeaponType() {
         return EnumTroll.Weapon.values()[getWeapon()];
+    }
+
+    public void setWeaponType(EnumTroll.Weapon variant) {
+        this.setWeapon(variant.ordinal());
     }
 
     @Override
@@ -191,9 +192,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Nullable
     protected ResourceLocation getLootTable() {
-        switch(this.getType()){
+        switch (this.getType()) {
             case MOUNTAIN:
-               return MOUNTAIN_LOOT;
+                return MOUNTAIN_LOOT;
             case FROST:
                 return FROST_LOOT;
             case FOREST:
@@ -209,7 +210,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
-            if(IceAndFire.CONFIG.trollsDropWeapon) {
+            if (IceAndFire.CONFIG.trollsDropWeapon) {
                 if (this.getRNG().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
                     weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
@@ -255,7 +256,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Nullable
     private EntityItem dropItemAt(ItemStack stack, double x, double y, double z) {
-        if(stack.getCount() > 0){
+        if (stack.getCount() > 0) {
             EntityItem entityitem = new EntityItem(this.world, x, y, z, stack);
             entityitem.setDefaultPickupDelay();
             if (captureDrops)
@@ -276,10 +277,10 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         } else if (!stone && stoneProgress > 0.0F) {
             stoneProgress -= 2F;
         }
-        if(!stone && this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
+        if (!stone && this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0) {
             this.setAnimation(ANIMATION_ROAR);
         }
-        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5){
+        if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5) {
             this.playSound(ModSounds.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {

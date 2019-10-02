@@ -3,7 +3,10 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
+import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
+import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
@@ -47,33 +50,33 @@ import java.util.List;
 
 public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
-    private int animationTick;
-    private Animation currentAnimation;
-    private static final DataParameter<Integer> HAIR_COLOR = EntityDataManager.<Integer>createKey(EntitySiren.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> AGGRESSIVE = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> SING_POSE = EntityDataManager.<Integer>createKey(EntitySiren.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> SINGING = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> SWIMMING = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> CHARMED = EntityDataManager.<Boolean>createKey(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntitySiren.class, DataSerializers.BYTE);
-    @SideOnly(Side.CLIENT)
-    public ChainBuffer tail_buffer;
-    public float singProgress;
-    private boolean isSinging;
-    private boolean isSwimming;
-    public float swimProgress;
     public static final int SEARCH_RANGE = 32;
-    private boolean isLandNavigator;
-    private int ticksAgressive;
-    public int singCooldown;
-    public static Animation ANIMATION_BITE = Animation.create(20);
-    public static Animation ANIMATION_PULL = Animation.create(20);
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
             return (p_apply_1_ instanceof EntityPlayer && !((EntityPlayer) p_apply_1_).isCreative() && !((EntityPlayer) p_apply_1_).isSpectator()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
         }
     };
+    private static final DataParameter<Integer> HAIR_COLOR = EntityDataManager.createKey(EntitySiren.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> AGGRESSIVE = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> SING_POSE = EntityDataManager.createKey(EntitySiren.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> SINGING = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> CHARMED = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BYTE);
+    public static Animation ANIMATION_BITE = Animation.create(20);
+    public static Animation ANIMATION_PULL = Animation.create(20);
+    @SideOnly(Side.CLIENT)
+    public ChainBuffer tail_buffer;
+    public float singProgress;
+    public float swimProgress;
+    public int singCooldown;
+    private int animationTick;
+    private Animation currentAnimation;
+    private boolean isSinging;
+    private boolean isSwimming;
+    private boolean isLandNavigator;
+    private int ticksAgressive;
 
     public EntitySiren(World worldIn) {
         super(worldIn);
@@ -87,7 +90,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         this.tasks.addTask(3, new EntityAILookIdle(this));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
             @Override
             public boolean apply(@Nullable EntityPlayer entity) {
@@ -103,6 +106,15 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         if (FMLCommonHandler.instance().getSide().isClient()) {
             tail_buffer = new ChainBuffer();
         }
+    }
+
+    public static boolean isWearingEarplugs(EntityLivingBase entity) {
+        ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        return helmet.getItem() == ModItems.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
+    }
+
+    public static boolean isDrawnToSong(Entity entity) {
+        return entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof IHearsSiren;
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
@@ -158,9 +170,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         if (this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
             BlockPos target = new BlockPos(this.navigator.getPath().getFinalPathPoint().x, this.navigator.getPath().getFinalPathPoint().y, this.navigator.getPath().getFinalPathPoint().z);
             BlockPos siren = new BlockPos(this);
-            if (world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY()) {
-                return true;
-            }
+            return world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY();
         }
         return false;
     }
@@ -178,7 +188,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(singCooldown > 0){
+        if (singCooldown > 0) {
             singCooldown--;
             this.setSinging(false);
         }
@@ -286,11 +296,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         this.setSinging(true);
     }
 
-    public static boolean isWearingEarplugs(EntityLivingBase entity) {
-        ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        return helmet.getItem() == ModItems.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
-    }
-
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
             this.triggerOtherSirens((EntityLivingBase) source.getTrueSource());
@@ -311,18 +316,17 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     public void updateLure() {
-        if(this.ticksExisted % 20 == 0){
+        if (this.ticksExisted % 20 == 0) {
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
-            for(EntityLivingBase entity : entities){
+            for (EntityLivingBase entity : entities) {
                 SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
-                if(!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)){
+                if (!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)) {
                     sirenProps.isCharmed = true;
                     sirenProps.sirenID = this.getEntityId();
                 }
             }
         }
     }
-
 
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
@@ -355,16 +359,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return isSinging;
     }
 
-    public boolean wantsToSing() {
-        return this.isSinging() && this.isInWater() && !this.isAgressive();
-    }
-
-    public boolean isActuallySinging() {
-        return isSinging() && !wantsToSing();
-    }
-
     public void setSinging(boolean singing) {
-        if(singCooldown > 0){
+        if (singCooldown > 0) {
             singing = false;
         }
         this.dataManager.set(SINGING, singing);
@@ -372,6 +368,14 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             this.isSinging = singing;
             IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSirenSong(this.getEntityId(), singing));
         }
+    }
+
+    public boolean wantsToSing() {
+        return this.isSinging() && this.isInWater() && !this.isAgressive();
+    }
+
+    public boolean isActuallySinging() {
+        return isSinging() && !wantsToSing();
     }
 
     public boolean isSwimming() {
@@ -396,28 +400,28 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return this.dataManager.get(AGGRESSIVE).booleanValue();
     }
 
-    public void setCharmed(boolean aggressive) {
-        this.dataManager.set(CHARMED, aggressive);
-    }
-
     public boolean isCharmed() {
         return this.dataManager.get(CHARMED).booleanValue();
     }
 
-    public void setHairColor(int hairColor) {
-        this.dataManager.set(HAIR_COLOR, hairColor);
+    public void setCharmed(boolean aggressive) {
+        this.dataManager.set(CHARMED, aggressive);
     }
 
     public int getHairColor() {
         return this.dataManager.get(HAIR_COLOR).intValue();
     }
 
-    public void setSingingPose(int pose) {
-        this.dataManager.set(SING_POSE, MathHelper.clamp(pose, 0, 2));
+    public void setHairColor(int hairColor) {
+        this.dataManager.set(HAIR_COLOR, hairColor);
     }
 
     public int getSingingPose() {
         return this.dataManager.get(SING_POSE).intValue();
+    }
+
+    public void setSingingPose(int pose) {
+        this.dataManager.set(SING_POSE, MathHelper.clamp(pose, 0, 2));
     }
 
     protected void applyEntityAttributes() {
@@ -488,10 +492,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return this.isAgressive() ? ModSounds.NAGA_DIE : ModSounds.MERMAID_DIE;
     }
 
-    public static boolean isDrawnToSong(Entity entity) {
-        return entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof IHearsSiren;
-    }
-
     @Override
     public void travel(float strafe, float forward, float vertical) {
         if (this.isServerWorld()) {
@@ -532,6 +532,21 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         this.limbSwing += this.limbSwingAmount;
     }
 
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldFear() {
+        return isAgressive();
+    }
+
     class SwimmingMoveHelper extends EntityMoveHelper {
         private EntitySiren siren = EntitySiren.this;
 
@@ -550,7 +565,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.siren.rotationYaw = this.limitAngle(this.siren.rotationYaw, angle, 30.0F);
-                this.siren.setAIMoveSpeed((float) 1F);
+                this.siren.setAIMoveSpeed(1F);
                 this.siren.motionY += (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.siren.rotationYaw * 0.017453292F;
@@ -566,20 +581,5 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                 this.siren.setAIMoveSpeed(0.0F);
             }
         }
-    }
-
-    @Override
-    public boolean isNoDespawnRequired(){
-        return true;
-    }
-
-    @Override
-    protected boolean canDespawn(){
-        return false;
-    }
-
-    @Override
-    public boolean shouldFear(){
-        return isAgressive();
     }
 }

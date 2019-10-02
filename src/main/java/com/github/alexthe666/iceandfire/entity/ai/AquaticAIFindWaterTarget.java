@@ -12,10 +12,10 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Comparator;
 
 public class AquaticAIFindWaterTarget extends EntityAIBase {
+    protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
     private EntityCreature mob;
     private int range;
     private boolean avoidAttacker;
-    protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
 
     public AquaticAIFindWaterTarget(EntityCreature mob, int range, boolean avoidAttacker) {
         this.mob = mob;
@@ -31,7 +31,7 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
             return false;
         }
         Path path = this.mob.getNavigator().getPath();
-        if (this.mob.getRNG().nextFloat() < 0.15F ||path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq((double)path.getFinalPathPoint().x, (double)path.getFinalPathPoint().y, (double)path.getFinalPathPoint().z) < 3) {
+        if (this.mob.getRNG().nextFloat() < 0.15F || path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq((double) path.getFinalPathPoint().x, (double) path.getFinalPathPoint().y, (double) path.getFinalPathPoint().z) < 3) {
             if (path != null && path.getFinalPathPoint() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }
@@ -61,7 +61,7 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
                 }
             }
         } else {
-            return  new BlockPos(this.mob.getAttackTarget());
+            return new BlockPos(this.mob.getAttackTarget());
         }
         return null;
     }
@@ -77,6 +77,7 @@ public class AquaticAIFindWaterTarget extends EntityAIBase {
         public Sorter(Entity theEntityIn) {
             this.pos = theEntityIn.getPosition();
         }
+
         //further; more prefered.
         public int compare(BlockPos p_compare_1_, BlockPos p_compare_2_) {
             this.pos = AquaticAIFindWaterTarget.this.mob.getPosition();

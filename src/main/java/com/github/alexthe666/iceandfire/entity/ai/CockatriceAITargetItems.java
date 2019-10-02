@@ -24,7 +24,7 @@ public class CockatriceAITargetItems<T extends EntityItem> extends EntityAITarge
     }
 
     public CockatriceAITargetItems(EntityCockatrice creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 0, checkSight, onlyNearby, (Predicate<? super EntityItem>) null);
+        this(creature, 0, checkSight, onlyNearby, null);
     }
 
     public CockatriceAITargetItems(EntityCockatrice creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
@@ -48,7 +48,7 @@ public class CockatriceAITargetItems<T extends EntityItem> extends EntityAITarge
         if (this.taskOwner.getHealth() >= this.taskOwner.getMaxHealth()) {
             return false;
         }
-        List<EntityItem> list = this.taskOwner.world.<EntityItem>getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;

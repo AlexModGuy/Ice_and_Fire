@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

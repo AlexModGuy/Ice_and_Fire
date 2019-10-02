@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
-import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
-import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
 import net.minecraft.client.model.ModelBase;
@@ -22,6 +20,7 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class RenderMobSkull extends Render<EntityMobSkull> {
 
+    private static final Map<String, ResourceLocation> SKULL_TEXTURE_CACHE = Maps.newHashMap();
     private ModelHippogryph hippogryphModel;
     private ModelCyclops cyclopsModel;
     private ModelCockatrice cockatriceModel;
@@ -29,7 +28,6 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
     private ModelTroll trollModel;
     private ModelAmphithere amphithereModel;
     private IceAndFireTabulaModel seaSerpentModel;
-    private static final Map<String, ResourceLocation> SKULL_TEXTURE_CACHE = Maps.newHashMap();
 
     public RenderMobSkull(RenderManager renderManager, ModelBase seaSerpentModel) {
         super(renderManager);
@@ -40,6 +38,12 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
         this.trollModel = new ModelTroll();
         this.amphithereModel = new ModelAmphithere();
         this.seaSerpentModel = (IceAndFireTabulaModel) seaSerpentModel;
+    }
+
+    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
+        cube.rotateAngleX = rotX;
+        cube.rotateAngleY = rotY;
+        cube.rotateAngleZ = rotZ;
     }
 
     public void doRender(EntityMobSkull entity, double x, double y, double z, float entityYaw, float partialTicks) {
@@ -70,67 +74,61 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
     }
 
     private void renderForEnum(EnumSkullType skull, boolean onWall) {
-        switch(skull){
+        switch (skull) {
             case HIPPOGRYPH:
                 GL11.glTranslatef(0, -0.0F, -0.2F);
                 GL11.glScalef(1.2F, 1.2F, 1.2F);
                 hippogryphModel.resetToDefaultPose();
-                setRotationAngles(hippogryphModel.Head, onWall ? (float)Math.toRadians(50F) : (float)Math.toRadians(-5), 0, 0);
+                setRotationAngles(hippogryphModel.Head, onWall ? (float) Math.toRadians(50F) : (float) Math.toRadians(-5), 0, 0);
                 hippogryphModel.Head.render(0.0625F);
                 break;
             case CYCLOPS:
                 GL11.glTranslatef(0, 1.8F, -0.5F);
                 GL11.glScalef(2.25F, 2.25F, 2.25F);
                 cyclopsModel.resetToDefaultPose();
-                setRotationAngles(cyclopsModel.Head, onWall ? (float)Math.toRadians(50F) : 0F, 0, 0);
+                setRotationAngles(cyclopsModel.Head, onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 cyclopsModel.Head.render(0.0625F);
                 break;
             case COCKATRICE:
-                if(onWall){
+                if (onWall) {
                     GL11.glTranslatef(0, 0F, 0.35F);
                 }
                 cockatriceModel.resetToDefaultPose();
-                setRotationAngles(cockatriceModel.head, onWall ? (float)Math.toRadians(50F) : 0F, 0, 0);
+                setRotationAngles(cockatriceModel.head, onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 cockatriceModel.head.render(0.0625F);
                 break;
             case STYMPHALIAN:
-                if(!onWall){
+                if (!onWall) {
                     GL11.glTranslatef(0, 0F, -0.35F);
                 }
                 stymphalianBirdModel.resetToDefaultPose();
-                setRotationAngles(stymphalianBirdModel.HeadBase, onWall ? (float)Math.toRadians(50F) : 0F, 0, 0);
+                setRotationAngles(stymphalianBirdModel.HeadBase, onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 stymphalianBirdModel.HeadBase.render(0.0625F);
                 break;
             case TROLL:
                 GL11.glTranslatef(0, 1F, -0.35F);
-                if(onWall){
+                if (onWall) {
                     GL11.glTranslatef(0, 0F, 0.35F);
                 }
                 trollModel.resetToDefaultPose();
-                setRotationAngles(trollModel.head, onWall ? (float)Math.toRadians(50F) : (float)Math.toRadians(-20), 0, 0);
+                setRotationAngles(trollModel.head, onWall ? (float) Math.toRadians(50F) : (float) Math.toRadians(-20), 0, 0);
                 trollModel.head.render(0.0625F);
                 break;
             case AMPHITHERE:
                 GL11.glTranslatef(0, -0.2F, 0.7F);
                 GL11.glScalef(2.0F, 2.0F, 2.0F);
                 amphithereModel.resetToDefaultPose();
-                setRotationAngles(amphithereModel.Head, onWall ? (float)Math.toRadians(50F) : 0F, 0, 0);
+                setRotationAngles(amphithereModel.Head, onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 amphithereModel.Head.render(0.0625F);
                 break;
             case SEASERPENT:
                 GL11.glTranslatef(0, -0.5F, 0.8F);
                 GL11.glScalef(2.5F, 2.5F, 2.5F);
                 seaSerpentModel.resetToDefaultPose();
-                setRotationAngles(seaSerpentModel.getCube("Head"), onWall ? (float)Math.toRadians(50F) : 0F, 0, 0);
+                setRotationAngles(seaSerpentModel.getCube("Head"), onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 seaSerpentModel.getCube("Head").render(0.0625F);
                 break;
         }
-    }
-
-    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.rotateAngleX = rotX;
-        cube.rotateAngleY = rotY;
-        cube.rotateAngleZ = rotZ;
     }
 
     protected ResourceLocation getEntityTexture(EntityMobSkull entity) {

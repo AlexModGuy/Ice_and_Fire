@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeBrick;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -25,8 +24,8 @@ import java.util.Random;
 
 public class BlockDragonforgeBricks extends BlockContainer implements IDragonProof {
 
-    private final boolean isFire;
     public static final PropertyBool GRILL = PropertyBool.create("grill");
+    private final boolean isFire;
 
     public BlockDragonforgeBricks(boolean isFire) {
         super(Material.ROCK);
@@ -62,8 +61,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         }
     }
 
-    public int tickRate(World worldIn)
-    {
+    public int tickRate(World worldIn) {
         return 3;
     }
 
@@ -78,7 +76,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         for (EnumFacing facing : EnumFacing.values()) {
             if (worldIn.getTileEntity(pos.offset(facing)) != null && worldIn.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
                 TileEntityDragonforge forge = (TileEntityDragonforge) worldIn.getTileEntity(pos.offset(facing));
-                if(forge != null && forge.assembled()){
+                if (forge != null && forge.assembled()) {
                     return forge;
                 }
             }
@@ -91,15 +89,14 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
     }
 
     public int getMetaFromState(IBlockState state) {
-        return ((Boolean) state.getValue(GRILL)).booleanValue() ? 1 : 0;
+        return state.getValue(GRILL).booleanValue() ? 1 : 0;
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{GRILL});
+        return new BlockStateContainer(this, GRILL);
     }
 
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 

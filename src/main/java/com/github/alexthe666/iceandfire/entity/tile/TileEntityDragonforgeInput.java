@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -17,20 +15,20 @@ import net.minecraft.util.math.Vec3d;
 import javax.annotation.Nullable;
 
 public class TileEntityDragonforgeInput extends TileEntity implements ITickable {
-    private int ticksSinceDragonFire;
     private static final int LURE_DISTANCE = 50;
+    private int ticksSinceDragonFire;
     private TileEntityDragonforge core = null;
 
-    public void onHitWithFlame(){
+    public void onHitWithFlame() {
         TileEntityDragonforge forge = getConnectedTileEntity();
-        if(forge != null){
+        if (forge != null) {
             forge.transferPower(1);
         }
     }
 
     @Override
     public void update() {
-        if(core == null){
+        if (core == null) {
             core = getConnectedTileEntity();
         }
         if (ticksSinceDragonFire > 0) {
@@ -47,14 +45,14 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         lureDragons();
     }
 
-    protected void lureDragons(){
-        if(core != null && core.canSmelt()) {
+    protected void lureDragons() {
+        if (core != null && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
                 if (isFire() == dragon.isFire && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
                 }
             }
-        }else{
+        } else {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
                 if (dragon.burningTarget == this.pos) {
                     dragon.burningTarget = null;
@@ -64,19 +62,17 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         }
     }
 
-    public void resetCore(){
+    public void resetCore() {
         core = null;
     }
 
     private boolean canSeeInput(EntityDragonBase dragon, Vec3d target) {
         if (target != null) {
-            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(dragon.getPosition().up((int)dragon.height)), target, false);
+            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(dragon.getPosition().up((int) dragon.height)), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
                 BlockPos sidePos = rayTrace.getBlockPos();
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput || world.getBlockState(sidePos).getBlock() instanceof BlockDragonforgeInput) {
-                    return true;
-                }
+                return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput || world.getBlockState(sidePos).getBlock() instanceof BlockDragonforgeInput;
             }
         }
         return false;
@@ -86,7 +82,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         return isFire() ? ModBlocks.dragonforge_fire_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false) : ModBlocks.dragonforge_ice_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false);
     }
 
-    private boolean isFire(){
+    private boolean isFire() {
         return world.getBlockState(pos).getBlock() == ModBlocks.dragonforge_fire_input;
     }
 
@@ -94,7 +90,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput && world.getBlockState(pos).getValue(BlockDragonforgeInput.ACTIVE);
     }
 
-    private void setActive(){
+    private void setActive() {
         TileEntity tileentity = world.getTileEntity(pos);
         world.setBlockState(this.pos, getDeactivatedState().withProperty(BlockDragonforgeInput.ACTIVE, true));
         if (tileentity != null) {

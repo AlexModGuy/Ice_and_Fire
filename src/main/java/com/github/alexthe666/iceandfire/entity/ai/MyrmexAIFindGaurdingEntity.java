@@ -15,8 +15,8 @@ import java.util.List;
 public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityMyrmexBase> targetEntitySelector;
-    protected EntityMyrmexBase targetEntity;
     public EntityMyrmexSoldier myrmex;
+    protected EntityMyrmexBase targetEntity;
 
     public MyrmexAIFindGaurdingEntity(EntityMyrmexSoldier myrmex) {
         super(myrmex, false, false);
@@ -36,7 +36,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Enti
         if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.guardingEntity != null) {
             return false;
         }
-        List<EntityMyrmexBase> list = this.taskOwner.world.<EntityMyrmexBase>getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<EntityMyrmexBase> list = this.taskOwner.world.getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {

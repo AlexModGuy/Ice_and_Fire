@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -28,8 +27,8 @@ import java.util.UUID;
 
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
-    private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.<Optional<UUID>>createKey(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.<Integer>createKey(EntityMyrmexSwarmer.class, DataSerializers.VARINT);
+    private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.VARINT);
 
     public EntityMyrmexSwarmer(World worldIn) {
         super(worldIn);
@@ -43,7 +42,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 0;
     }
 
-    protected void switchNavigator(boolean onLand) {}
+    protected void switchNavigator(boolean onLand) {
+    }
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
@@ -67,18 +67,19 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new MyrmexAISummonerHurtByTarget(this));
         this.targetTasks.addTask(3, new MyrmexAISummonerHurtTarget(this));
     }
 
     protected void collideWithEntity(Entity entityIn) {
-        if(entityIn instanceof EntityMyrmexSwarmer){
+        if (entityIn instanceof EntityMyrmexSwarmer) {
             super.collideWithEntity(entityIn);
         }
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {}
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    }
 
     protected void entityInit() {
         super.entityInit();
@@ -97,7 +98,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public boolean isOnSameTeam(Entity entityIn) {
-        if(this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null){
+        if (this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null) {
             return false;
         }
         return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID()) || entityIn instanceof EntityTameable && ((EntityTameable) entityIn).getOwnerId().equals(this.getSummonerUUID());
@@ -142,12 +143,12 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return (UUID) ((Optional) this.dataManager.get(SUMMONER_ID)).orNull();
     }
 
-    public void setTicksAlive(int ticks) {
-        this.dataManager.set(TICKS_ALIVE, ticks);
-    }
-
     public int getTicksAlive() {
         return this.dataManager.get(TICKS_ALIVE).intValue();
+    }
+
+    public void setTicksAlive(int ticks) {
+        this.dataManager.set(TICKS_ALIVE, ticks);
     }
 
     public void onLivingUpdate() {
@@ -155,26 +156,26 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         setFlying(true);
         boolean flying = this.isFlying() && !this.onGround;
         setTicksAlive(getTicksAlive() + 1);
-        if(flying){
+        if (flying) {
             this.motionY -= 0.08D;
-            if(this.moveHelper.getY() > this.posY){
+            if (this.moveHelper.getY() > this.posY) {
                 this.motionY += 0.08D;
             }
         }
-        if(this.onGround){
+        if (this.onGround) {
             this.onGround = false;
             this.motionY += 0.2F;
         }
-        if(this.getAttackTarget() != null){
+        if (this.getAttackTarget() != null) {
             this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().posZ, 1.0F);
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
-            if(this.getAttackTarget().isDead){
+            if (this.getAttackTarget().isDead) {
                 this.moveHelper.action = EntityMoveHelper.Action.WAIT;
             }
         }
-        if(this.getTicksAlive() > 1800){
+        if (this.getTicksAlive() > 1800) {
             this.onKillCommand();
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {

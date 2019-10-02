@@ -23,10 +23,11 @@ import java.util.UUID;
 
 public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.<Boolean>createKey(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.<Integer>createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.<Integer>createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
     public UUID hiveUUID;
+
     public EntityMyrmexEgg(World worldIn) {
         super(worldIn);
         this.isImmuneToFire = true;
@@ -77,7 +78,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
 
     public int getMyrmexAge() {
         return this.getDataManager().get(MYRMEX_AGE).intValue();
-}
+    }
 
     public void setMyrmexAge(int i) {
         this.getDataManager().set(MYRMEX_AGE, i);
@@ -101,10 +102,10 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         if (!canSeeSky()) {
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
-        if(this.getMyrmexAge() > IceAndFire.CONFIG.myrmexEggTicks){
+        if (this.getMyrmexAge() > IceAndFire.CONFIG.myrmexEggTicks) {
             this.setDead();
             EntityMyrmexBase myrmex;
-            switch(this.getMyrmexCaste()){
+            switch (this.getMyrmexCaste()) {
                 default:
                     myrmex = new EntityMyrmexWorker(world);
                     break;
@@ -124,13 +125,13 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
-            if(myrmex instanceof EntityMyrmexQueen){
+            if (myrmex instanceof EntityMyrmexQueen) {
                 MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
                 EntityPlayer player = world.getClosestPlayerToEntity(this, 30);
-                if(player != null){
+                if (player != null) {
                     hive.hasOwner = true;
                     hive.ownerUUID = player.getUniqueID();
-                    if(!world.isRemote){
+                    if (!world.isRemote) {
                         hive.modifyPlayerReputation(player.getUniqueID(), 100);
                     }
                 }
@@ -138,9 +139,9 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
                 myrmex.setHive(hive);
 
 
-            }else{
+            } else {
                 MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
-                if(!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000){
+                if (!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000) {
                     myrmex.setHive(hive);
                 }
             }
@@ -164,7 +165,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
 
     @Override
     public boolean attackEntityFrom(DamageSource dmg, float var2) {
-        if(dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL){
+        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL) {
             return false;
         }
         if (!world.isRemote && !dmg.canHarmInCreative()) {
@@ -205,7 +206,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
             return false;
         }
-        if(hive != null) {
+        if (hive != null) {
             BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
             return this.getDistanceSqToCenter(nursery) < 45;
         }
@@ -213,12 +214,12 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public boolean isNoDespawnRequired(){
+    public boolean isNoDespawnRequired() {
         return true;
     }
 
     @Override
-    protected boolean canDespawn(){
+    protected boolean canDespawn() {
         return false;
     }
 }

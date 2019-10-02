@@ -10,11 +10,11 @@ public class HippocampusAIWander extends EntityAIWander {
         super(creatureIn, speedIn);
     }
 
-    public boolean shouldExecute(){
+    public boolean shouldExecute() {
         return !(entity instanceof EntityTameable && ((EntityTameable) entity).isSitting()) && !this.entity.isInWater() && super.shouldExecute();
     }
 
-    public boolean shouldContinueExecuting(){
+    public boolean shouldContinueExecuting() {
         return !(entity instanceof EntityTameable && ((EntityTameable) entity).isSitting()) && !this.entity.isInWater() && super.shouldContinueExecuting();
     }
 }

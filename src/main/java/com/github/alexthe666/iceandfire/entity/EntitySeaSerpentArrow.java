@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -10,11 +9,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntitySeaSerpentArrow extends EntityArrow {
 
@@ -29,22 +25,27 @@ public class EntitySeaSerpentArrow extends EntityArrow {
         this.setDamage(3F);
     }
 
+    public EntitySeaSerpentArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
+        this.setDamage(3F);
+    }
+
     public void onUpdate() {
         super.onUpdate();
-        if(world.isRemote && !this.inGround){
+        if (world.isRemote && !this.inGround) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
-            this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
 
         }
     }
 
-    public boolean isInWater(){
+    public boolean isInWater() {
         return false;
     }
 
@@ -67,11 +68,6 @@ public class EntitySeaSerpentArrow extends EntityArrow {
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             }
         }
-    }
-
-    public EntitySeaSerpentArrow(World worldIn, EntityLivingBase shooter) {
-        super(worldIn, shooter);
-        this.setDamage(3F);
     }
 
     @Override

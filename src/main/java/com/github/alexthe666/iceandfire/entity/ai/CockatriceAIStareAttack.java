@@ -21,12 +21,22 @@ public class CockatriceAIStareAttack extends EntityAIBase {
     private BlockPos target = null;
     private int walkingTime = -1;
     private float prevYaw;
+
     public CockatriceAIStareAttack(EntityCockatrice cockatrice, double speedAmplifier, int delay, float maxDistance) {
         this.entity = cockatrice;
         this.moveSpeedAmp = speedAmplifier;
         this.attackCooldown = delay;
         this.maxAttackDistance = maxDistance * maxDistance;
         this.setMutexBits(3);
+    }
+
+    public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
+        Vec3d vec3d = looker.getLook(1.0F).normalize();
+        Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
+        double d0 = vec3d1.length();
+        vec3d1 = vec3d1.normalize();
+        double d1 = vec3d.dotProduct(vec3d1);
+        return d1 > 1.0D - degree / d0;
     }
 
     public void setAttackCooldown(int cooldown) {
@@ -60,11 +70,11 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 resetTask();
                 return;
             }
-            if(!isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS) || (entitylivingbase.prevPosX != entity.posX || entitylivingbase.prevPosY != entity.posY || entitylivingbase.prevPosZ != entity.posZ)){
+            if (!isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS) || (entitylivingbase.prevPosX != entity.posX || entitylivingbase.prevPosY != entity.posY || entitylivingbase.prevPosZ != entity.posZ)) {
                 this.entity.getNavigator().clearPath();
                 this.prevYaw = entitylivingbase.rotationYaw;
                 BlockPos pos = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, entitylivingbase);
-                if(target == null || pos.distanceSq(target) > 4){
+                if (target == null || pos.distanceSq(target) > 4) {
                     target = pos;
                 }
             }
@@ -83,23 +93,14 @@ public class CockatriceAIStareAttack extends EntityAIBase {
             } else {
                 --this.seeTime;
             }
-            if(target != null){
-                if(this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)){
+            if (target != null) {
+                if (this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
                     this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), moveSpeedAmp);
                 }
 
             }
             this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double) entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
         }
-    }
-
-    public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
-        Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
-        double d0 = vec3d1.length();
-        vec3d1 = vec3d1.normalize();
-        double d1 = vec3d.dotProduct(vec3d1);
-        return d1 > 1.0D - degree / d0;
     }
 
 }

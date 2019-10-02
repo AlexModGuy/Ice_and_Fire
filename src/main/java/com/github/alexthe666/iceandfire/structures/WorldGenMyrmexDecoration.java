@@ -106,7 +106,7 @@ public class WorldGenMyrmexDecoration {
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             worldIn.setBlockState(blockpos, jungle ? ModBlocks.jungle_myrmex_cocoon.getDefaultState() : ModBlocks.desert_myrmex_cocoon.getDefaultState(), 3);
 
-            if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityLockableLoot && !((TileEntityLockableLoot) worldIn.getTileEntity(blockpos)).isInvalid()) {
+            if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityLockableLoot && !worldIn.getTileEntity(blockpos).isInvalid()) {
                 TileEntity tileentity1 = worldIn.getTileEntity(blockpos);
                 ((TileEntityLockableLoot) tileentity1).setLootTable(lootTable, rand.nextLong());
 
@@ -132,7 +132,7 @@ public class WorldGenMyrmexDecoration {
                 worldIn.setBlockState(blockpos.up(), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
                 if (worldIn.getBlockState(blockpos.up()).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up());
-                    if (tileentity1 instanceof TileEntityChest && !((TileEntityChest) tileentity1).isInvalid()) {
+                    if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
                         ((TileEntityChest) tileentity1).setLootTable(MYRMEX_GOLD_CHEST, rand.nextLong());
                     }
                 }

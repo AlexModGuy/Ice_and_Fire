@@ -26,7 +26,7 @@ public class EntityStymphalianFeather extends EntityArrow {
 
     public void setDead() {
         super.setDead();
-        if(IceAndFire.CONFIG.stymphalianBirdFeatherDropChance > 0){
+        if (IceAndFire.CONFIG.stymphalianBirdFeatherDropChance > 0) {
             if (!world.isRemote && this.rand.nextInt(IceAndFire.CONFIG.stymphalianBirdFeatherDropChance) == 0) {
                 this.entityDropItem(getArrowStack(), 0.1F);
             }

@@ -32,9 +32,9 @@ public class EntityCockatriceEgg extends EntityEgg {
             for (int i = 0; i < 8; ++i) {
                 this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(ModItems.rotten_egg));
             }
-            if(thrower != null && thrower instanceof EntityPlayer){
+            if (thrower != null && thrower instanceof EntityPlayer) {
                 for (int i = 0; i < 8; ++i) {
-                    this.world.spawnParticle(EnumParticleTypes.HEART, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.HEART, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
                 }
             }
         }
@@ -61,8 +61,8 @@ public class EntityCockatriceEgg extends EntityEgg {
                     cockatrice.setGrowingAge(-24000);
                     cockatrice.setHen(this.rand.nextBoolean());
                     cockatrice.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                    if(thrower != null && thrower instanceof EntityPlayer){
-                        cockatrice.setTamedBy((EntityPlayer)thrower);
+                    if (thrower != null && thrower instanceof EntityPlayer) {
+                        cockatrice.setTamedBy((EntityPlayer) thrower);
                     }
                     this.world.spawnEntity(cockatrice);
                 }

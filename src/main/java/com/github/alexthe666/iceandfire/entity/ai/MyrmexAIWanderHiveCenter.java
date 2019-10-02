@@ -20,7 +20,7 @@ public class MyrmexAIWanderHiveCenter extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if(!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()){
+        if (!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()) {
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(new BlockPos(this.myrmex), 300);
@@ -51,7 +51,7 @@ public class MyrmexAIWanderHiveCenter extends EntityAIBase {
 
     }
 
-    public BlockPos getNearPos(BlockPos pos){
+    public BlockPos getNearPos(BlockPos pos) {
         return pos.add(this.myrmex.getRNG().nextInt(8) - 4, 0, this.myrmex.getRNG().nextInt(8) - 4);
     }
 }

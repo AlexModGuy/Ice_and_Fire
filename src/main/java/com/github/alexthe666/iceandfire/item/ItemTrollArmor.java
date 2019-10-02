@@ -36,7 +36,7 @@ public class ItemTrollArmor extends ItemArmor {
 
 
     private String getArmorPart(EntityEquipmentSlot slot) {
-        switch (slot){
+        switch (slot) {
             case HEAD:
                 return "helmet";
             case CHEST:

@@ -46,7 +46,7 @@ public class MyrmexAIForage extends EntityAIBase {
             this.myrmex.keepSearching = true;
             this.wanderRadius += RADIUS;
             Vec3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
-            if(vec != null){
+            if (vec != null) {
                 this.targetBlock = new BlockPos(vec);
             }
             return true;
@@ -58,12 +58,12 @@ public class MyrmexAIForage extends EntityAIBase {
 
     @Override
     public boolean shouldContinueExecuting() {
-        if(!this.myrmex.keepSearching) {
+        if (!this.myrmex.keepSearching) {
             if (this.targetBlock == null) {
                 return false;
             }
         }
-        if(myrmex.shouldEnterHive()){
+        if (myrmex.shouldEnterHive()) {
             this.myrmex.keepSearching = false;
             return false;
         }
@@ -72,29 +72,29 @@ public class MyrmexAIForage extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        if(this.myrmex.keepSearching){
+        if (this.myrmex.keepSearching) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 4) {
                 this.resetTask();
             }
-        }else if (this.targetBlock != null) {
+        } else if (this.targetBlock != null) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             IBlockState block = this.myrmex.world.getBlockState(this.targetBlock);
 
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 double distance = this.getDistance(this.targetBlock);
                 if (distance <= 6) {
-                    List<ItemStack> drops =  block.getBlock().getDrops(this.myrmex.world, this.targetBlock, block, 0); // use the old method until it gets removed, for backward compatibility
-                    if(!drops.isEmpty()){
+                    List<ItemStack> drops = block.getBlock().getDrops(this.myrmex.world, this.targetBlock, block, 0); // use the old method until it gets removed, for backward compatibility
+                    if (!drops.isEmpty()) {
                         this.myrmex.world.destroyBlock(this.targetBlock, false);
                         ItemStack heldStack = drops.get(0).copy();
                         heldStack.setCount(1);
                         drops.get(0).shrink(1);
                         this.myrmex.setHeldItem(EnumHand.MAIN_HAND, heldStack);
-                        for(ItemStack stack : drops){
+                        for (ItemStack stack : drops) {
                             EntityItem itemEntity = new EntityItem(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
                             itemEntity.setDefaultPickupDelay();
-                            if(!this.myrmex.world.isRemote){
+                            if (!this.myrmex.world.isRemote) {
                                 this.myrmex.world.spawnEntity(itemEntity);
                             }
                         }
@@ -110,7 +110,7 @@ public class MyrmexAIForage extends EntityAIBase {
 
     }
 
-    public void resetTask(){
+    public void resetTask() {
         this.targetBlock = BlockPos.ORIGIN;
         this.myrmex.keepSearching = true;
     }

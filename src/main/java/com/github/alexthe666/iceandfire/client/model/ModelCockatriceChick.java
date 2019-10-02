@@ -267,7 +267,7 @@ public class ModelCockatriceChick extends ModelDragonBase {
 
     }
 
-    private void jumpPos(){
+    private void jumpPos() {
         this.rotate(animator, lowerBody, -29, 0, 0);
         this.rotate(animator, upperBody, 10, 0, 0);
         this.rotate(animator, neck, 7, 0, 0);
@@ -314,14 +314,14 @@ public class ModelCockatriceChick extends ModelDragonBase {
         this.walk(rightLeg, speed_walk, degree_walk, false, 1, 0.1F, f, f1);
         this.walk(leftFoot, speed_walk, degree_walk * -1.75F, true, 1, -0.1F, f, f1);
         this.walk(rightFoot, speed_walk, degree_walk * -1.75F, false, 1, -0.1F, f, f1);
-        this.progressRotation(neck, entity.stareProgress, (float)Math.toRadians(10), 0.0F, 0.0F);
-        this.progressRotation(neck2, entity.stareProgress, (float)Math.toRadians(-18), 0.0F, 0.0F);
-        this.progressRotation(head, entity.stareProgress, (float)Math.toRadians(18), 0.0F, 0.0F);
+        this.progressRotation(neck, entity.stareProgress, (float) Math.toRadians(10), 0.0F, 0.0F);
+        this.progressRotation(neck2, entity.stareProgress, (float) Math.toRadians(-18), 0.0F, 0.0F);
+        this.progressRotation(head, entity.stareProgress, (float) Math.toRadians(18), 0.0F, 0.0F);
 
-        this.progressRotation(rightThigh, entity.sitProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
-        this.progressRotation(leftThigh, entity.sitProgress, (float)Math.toRadians(-15), 0.0F, 0.0F);
-        this.progressRotation(rightLeg, entity.sitProgress, (float)Math.toRadians(13), 0.0F, 0.0F);
-        this.progressRotation(leftLeg, entity.sitProgress, (float)Math.toRadians(13), 0.0F, 0.0F);
+        this.progressRotation(rightThigh, entity.sitProgress, (float) Math.toRadians(-15), 0.0F, 0.0F);
+        this.progressRotation(leftThigh, entity.sitProgress, (float) Math.toRadians(-15), 0.0F, 0.0F);
+        this.progressRotation(rightLeg, entity.sitProgress, (float) Math.toRadians(13), 0.0F, 0.0F);
+        this.progressRotation(leftLeg, entity.sitProgress, (float) Math.toRadians(13), 0.0F, 0.0F);
         this.progressRotation(rightFoot, entity.sitProgress, 0.0F, 0.0F, 0.0F);
         this.progressRotation(leftFoot, entity.sitProgress, 0.0F, 0.0F, 0.0F);
         this.progressPosition(rightThigh, entity.sitProgress, -3.0F, 19F, 3.0F);

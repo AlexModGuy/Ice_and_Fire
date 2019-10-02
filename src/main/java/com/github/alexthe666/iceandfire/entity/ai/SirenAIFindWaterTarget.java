@@ -49,21 +49,21 @@ public class SirenAIFindWaterTarget extends EntityAIBase {
             List<Vec3d> water = new ArrayList<>();
             List<Vec3d> singTargets = new ArrayList<>();
             for (int x = (int) this.mob.posX - 5; x < (int) this.mob.posX + 5; x++) {
-                for (int y = (int)this.mob.posY - 5; y < (int) this.mob.posY + 5; y++) {
+                for (int y = (int) this.mob.posY - 5; y < (int) this.mob.posY + 5; y++) {
                     for (int z = (int) this.mob.posZ - 5; z < (int) this.mob.posZ + 5; z++) {
-                        if(mob.wantsToSing()){
+                        if (mob.wantsToSing()) {
                             if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid() && this.mob.world.isAirBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y + 1, z))) {
                                 singTargets.add(new Vec3d(x, y + 1, z));
                             }
                         }
                         if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y, z))) {
-                                water.add(new Vec3d(x, y, z));
+                            water.add(new Vec3d(x, y, z));
                         }
 
                     }
                 }
             }
-            if(!singTargets.isEmpty()){
+            if (!singTargets.isEmpty()) {
                 return singTargets.get(this.mob.getRNG().nextInt(singTargets.size()));
 
             }

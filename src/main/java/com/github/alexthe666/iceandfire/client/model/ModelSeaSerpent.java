@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
 public class ModelSeaSerpent extends ModelDragonBase {
@@ -254,9 +252,9 @@ public class ModelSeaSerpent extends ModelDragonBase {
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3, Head};
         EntitySeaSerpent serpent = (EntitySeaSerpent) entity;
 
-            //this.chainSwing(ENTIRE_BODY, 0.35F, 0.2F, 4.5F, f, f1);
+        //this.chainSwing(ENTIRE_BODY, 0.35F, 0.2F, 4.5F, f, f1);
         //this.chainSwing(TAIL_END, 0.35F, 0.15F, 0, f, f1);
-            //this.swing(Tail6, 0.35F, 0.15F, false, 0, 0, f, f1);
+        //this.swing(Tail6, 0.35F, 0.15F, false, 0, 0, f, f1);
         //this.chainSwing(NECK, 0.35F, 0.15F, 2, f, f1);
         serpent.pitch_buffer.applyChainWaveBuffer(BodyUpper);
         serpent.tail_buffer.applyChainSwingBuffer(TAIL);

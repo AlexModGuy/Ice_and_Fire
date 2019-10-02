@@ -15,30 +15,30 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderTroll extends RenderLiving<EntityTroll> implements ICustomStoneLayer{
+public class RenderTroll extends RenderLiving<EntityTroll> implements ICustomStoneLayer {
 
-	public RenderTroll(RenderManager renderManager) {
-		super(renderManager, new ModelTroll(), 0.9F);
-		this.layerRenderers.add(new LayerTrollWeapon(this));
-		this.layerRenderers.add(new LayerTrollEyes(this));
-	}
+    public RenderTroll(RenderManager renderManager) {
+        super(renderManager, new ModelTroll(), 0.9F);
+        this.layerRenderers.add(new LayerTrollWeapon(this));
+        this.layerRenderers.add(new LayerTrollEyes(this));
+    }
 
-	@Override
-	public void preRenderCallback(EntityTroll entitylivingbaseIn, float partialTickTime) {
-	}
+    @Override
+    public void preRenderCallback(EntityTroll entitylivingbaseIn, float partialTickTime) {
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(EntityTroll troll) {
-		return troll.getType().TEXTURE;
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(EntityTroll troll) {
+        return troll.getType().TEXTURE;
+    }
 
-	@Override
-	public LayerRenderer getStoneLayer(RenderLivingBase render) {
-		return new LayerTrollStone(render);
-	}
+    @Override
+    public LayerRenderer getStoneLayer(RenderLivingBase render) {
+        return new LayerTrollStone(render);
+    }
 
-	@Override
-	public LayerRenderer getCrackLayer(RenderLivingBase render) {
-		return new LayerStoneEntityCrack(render);
-	}
+    @Override
+    public LayerRenderer getCrackLayer(RenderLivingBase render) {
+        return new LayerStoneEntityCrack(render);
+    }
 }

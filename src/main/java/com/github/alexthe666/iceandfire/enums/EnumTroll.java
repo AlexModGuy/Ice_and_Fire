@@ -28,7 +28,6 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE_EYES;
     public BiomeDictionary.Type spawnBiome;
     public ItemArmor.ArmorMaterial material;
-    private Weapon[] weapons;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
     public Item leather;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_helmet")
@@ -39,8 +38,9 @@ public enum EnumTroll {
     public Item leggings;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_boots")
     public Item boots;
+    private Weapon[] weapons;
 
-    EnumTroll(BiomeDictionary.Type biome, ItemArmor.ArmorMaterial material, Weapon... weapons){
+    EnumTroll(BiomeDictionary.Type biome, ItemArmor.ArmorMaterial material, Weapon... weapons) {
         spawnBiome = biome;
         this.weapons = weapons;
         this.material = material;
@@ -58,7 +58,7 @@ public enum EnumTroll {
     public static EnumTroll getBiomeType(Biome biome) {
         List<EnumTroll> types = new ArrayList<EnumTroll>();
         for (EnumTroll type : values()) {
-            if(BiomeDictionary.hasType(biome, type.spawnBiome)){
+            if (BiomeDictionary.hasType(biome, type.spawnBiome)) {
                 types.add(type);
             }
         }
@@ -70,8 +70,7 @@ public enum EnumTroll {
     }
 
 
-
-    public static Weapon getWeaponForType(EnumTroll troll){
+    public static Weapon getWeaponForType(EnumTroll troll) {
         return troll.weapons[new Random().nextInt(troll.weapons.length)];
     }
 
@@ -79,7 +78,8 @@ public enum EnumTroll {
         AXE, COLUMN, COLUMN_FOREST, COLUMN_FROST, HAMMER, TRUNK, TRUNK_FROST;
         public ResourceLocation TEXTURE;
         public Item item;
-        Weapon(){
+
+        Weapon() {
             TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/weapon/weapon_" + this.name().toLowerCase() + ".png");
             item = new ItemTrollWeapon(this);
         }

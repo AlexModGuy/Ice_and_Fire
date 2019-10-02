@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class BlockDragonforgeInput extends BlockContainer implements IDragonProof {
-    private boolean isFire;
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    private boolean isFire;
 
     public BlockDragonforgeInput(boolean isFire) {
         super(Material.IRON);
@@ -62,22 +62,21 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
         return this.getDefaultState().withProperty(ACTIVE, Boolean.valueOf(meta > 0));
     }
 
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
     public int getMetaFromState(IBlockState state) {
-        return ((Boolean) state.getValue(ACTIVE)).booleanValue() ? 1 : 0;
+        return state.getValue(ACTIVE).booleanValue() ? 1 : 0;
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{ACTIVE});
+        return new BlockStateContainer(this, ACTIVE);
     }
 
     @Deprecated
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if(worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput){
+        if (worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
             ((TileEntityDragonforgeInput) worldIn.getTileEntity(pos)).resetCore();
         }
     }

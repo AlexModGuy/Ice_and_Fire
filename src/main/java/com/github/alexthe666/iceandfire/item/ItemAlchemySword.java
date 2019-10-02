@@ -25,51 +25,51 @@ import java.util.List;
 
 public class ItemAlchemySword extends ItemSword {
 
-	public ItemAlchemySword(ToolMaterial toolmaterial, String gameName, String name) {
-		super(toolmaterial);
-		this.setTranslationKey(name);
-		this.setCreativeTab(IceAndFire.TAB_ITEMS);
-		this.setRegistryName(IceAndFire.MODID, gameName);
-	}
+    public ItemAlchemySword(ToolMaterial toolmaterial, String gameName, String name) {
+        super(toolmaterial);
+        this.setTranslationKey(name);
+        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        this.setRegistryName(IceAndFire.MODID, gameName);
+    }
 
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (this == ModItems.dragonbone_sword_fire) {
-			if (target instanceof EntityIceDragon) {
-				target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
-			}
-			target.setFire(5);
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		if (this == ModItems.dragonbone_sword_ice) {
-			if (target instanceof EntityFireDragon) {
-				target.attackEntityFrom(DamageSource.DROWN, 13.5F);
-			}
-			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
-			frozenProps.setFrozenFor(200);
-			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
-			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		return super.hitEntity(stack, target, attacker);
-	}
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (this == ModItems.dragonbone_sword_fire) {
+            if (target instanceof EntityIceDragon) {
+                target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
+            }
+            target.setFire(5);
+            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+        }
+        if (this == ModItems.dragonbone_sword_ice) {
+            if (target instanceof EntityFireDragon) {
+                target.attackEntityFrom(DamageSource.DROWN, 13.5F);
+            }
+            FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
+            frozenProps.setFrozenFor(200);
+            target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
+            target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
+            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+        }
+        return super.hitEntity(stack, target, attacker);
+    }
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-		if (this == ModItems.dragonbone_sword_fire) {
-			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_fire.hurt1"));
-			tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
-		}
-		if (this == ModItems.dragonbone_sword_ice) {
-			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt1"));
-			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
+        if (this == ModItems.dragonbone_sword_fire) {
+            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_fire.hurt1"));
+            tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+        }
+        if (this == ModItems.dragonbone_sword_ice) {
+            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt1"));
+            tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
 
-		}
-	}
+        }
+    }
 
-	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack stack) {
-		return true;
-	}
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack stack) {
+        return true;
+    }
 }

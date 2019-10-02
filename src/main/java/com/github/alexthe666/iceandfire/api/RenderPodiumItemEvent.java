@@ -9,10 +9,11 @@ import net.minecraftforge.fml.common.eventhandler.Event;
     Called before an item is rendered on a podium. Cancel to remove default render of item
  */
 public class RenderPodiumItemEvent extends Event {
-    private RenderPodium render;
-    private TileEntityPodium podium;
     float partialTicks;
     double x, y, z;
+    private RenderPodium render;
+    private TileEntityPodium podium;
+
     public RenderPodiumItemEvent(RenderPodium renderPodium, TileEntityPodium podium, float partialTicks, double x, double y, double z) {
         this.render = renderPodium;
         this.podium = podium;

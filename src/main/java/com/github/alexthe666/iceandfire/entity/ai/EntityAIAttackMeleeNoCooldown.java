@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 
 public class EntityAIAttackMeleeNoCooldown extends EntityAIAttackMelee {
