@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.asm;
 
+import com.github.alexthe666.iceandfire.patcher.IceAndFireRuntimePatcher;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.Name("iceandfirecore")
+@IFMLLoadingPlugin.Name("iceandfire")
 @IFMLLoadingPlugin.TransformerExclusions({"com.github.alexthe666.iceandfire.asm"})
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.SortingIndex(1002)
@@ -14,7 +15,7 @@ public class IceAndFirePlugin implements IFMLLoadingPlugin {
 	
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[]{ClassTransformer.class.getName()};
+		return new String[]{IceAndFireRuntimePatcher.class.getName()};
 	}
 
 	@Override
