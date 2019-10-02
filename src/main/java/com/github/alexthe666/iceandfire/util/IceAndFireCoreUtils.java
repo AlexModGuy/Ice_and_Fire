@@ -6,7 +6,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 public class IceAndFireCoreUtils {
 
     public static double getMoveThreshold(NetHandlerPlayServer e) {
-        return e.player.getLowestRidingEntity() instanceof ISyncMount ? 1.0D : 0.0625D;
+        return e.player.getLowestRidingEntity() instanceof ISyncMount ? 2.0D : 0.0625D;
     }
 
     public static double getFastestEntityMotionSpeed(NetHandlerPlayServer e) {
