@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 
 public class ComponentAnimalFarm extends StructureVillagePieces.Village {
-    private int averageGroundLevel = -1;
 
     public ComponentAnimalFarm() {
         super();
@@ -31,12 +30,13 @@ public class ComponentAnimalFarm extends StructureVillagePieces.Village {
 
     @Override
     public boolean addComponentParts(World world, Random random, StructureBoundingBox sbb) {
-        if (this.averageGroundLevel < 0) {
-            this.averageGroundLevel = this.getAverageGroundLevel(world, sbb);
-            if (this.averageGroundLevel < 0) {
-                return false;
+        if (this.averageGroundLvl < 0) {
+            this.averageGroundLvl = this.getAverageGroundLevel(world, sbb);
+
+            if (this.averageGroundLvl < 0) {
+                return true;
             }
-            this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 4, 0);
+            this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 7 - 1, 0);
         }
         BlockPos blockpos = new BlockPos(this.getXWithOffset(4, 4), this.getYWithOffset(0), this.getZWithOffset(4, 4));
         return new WorldGenAnimalFarm().generate(world, random, blockpos.up());

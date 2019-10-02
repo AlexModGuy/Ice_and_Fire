@@ -65,15 +65,12 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                         GlStateManager.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
                     }
 
-                } else {
-
                 }
                 GlStateManager.pushMatrix();
                 GlStateManager.rotate(180, 0, 0, 1);
                 GlStateManager.translate(0, 0, -0.025F * dragonScale);
                 GlStateManager.rotate(riderRot + 180, 0, 1, 0);
                 GlStateManager.scale(1 / dragonScale, 1 / dragonScale, 1 / dragonScale);
-                Minecraft.getMinecraft().getRenderManager().setRenderOutlines(false);
                 renderEntity(passenger, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
                 GlStateManager.popMatrix();
                 ClientProxy.currentDragonRiders.add(passenger.getUniqueID());
