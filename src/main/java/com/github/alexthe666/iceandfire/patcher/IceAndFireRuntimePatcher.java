@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.patcher;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IceAndFireCoreUtils;
 import net.ilexiconn.llibrary.server.asm.InsnPredicate;
 import net.ilexiconn.llibrary.server.asm.RuntimePatcher;

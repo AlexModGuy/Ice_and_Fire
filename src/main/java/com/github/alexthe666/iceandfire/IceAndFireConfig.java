@@ -126,6 +126,7 @@ public class IceAndFireConfig {
     public double dragonsteelBaseDamage = 25F;
     public boolean spawnStructuresOnSuperflat = true;
     public boolean dragonGLErrorFix = false;
+    public boolean dragonMovedWronglyFix = false;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -268,5 +269,6 @@ public class IceAndFireConfig {
 
         this.dragonsteelBaseDamage = (double) config.getFloat("Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
         this.dragonGLErrorFix = config.getBoolean("Dragon GL Error Fix", "all", false, "DO NOT CHANGE THIS UNLESS DRAGON RIDING GLITCHES OUT THE MODEL AND GIVES A GL ERROR. Otherwise it will break your client rendering");
+        this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
     }
 }
