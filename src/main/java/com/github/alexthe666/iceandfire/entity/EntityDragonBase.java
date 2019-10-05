@@ -1307,11 +1307,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
         if (this.getAnimation() == ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
-            if (this.getAttackTarget() != null) {
-                boolean flag = this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
-                this.getAttackTarget().knockBack(this.getAttackTarget(), this.getDragonStage() * 0.6F, 1, 1);
-                this.randomizeAttacks();
-            }
         }
         if (!world.isRemote && this.isFlying() && this.getAttackTarget() != null && this.airAttack == IaFDragonAttacks.Air.TACKLE) {
             this.setTackling(true);
@@ -1581,6 +1576,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             hasHadHornUse = false;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
+        if(animationTick > this.getAnimation().getDuration()){
+            animationTick = 0;
+        }
     }
 
     private boolean isDiving() {
@@ -2422,15 +2420,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
-        int animationTick = 0;
+        int tick = 0;
         if (this.getAnimationTick() < 10) {
-            animationTick = this.getAnimationTick();
+            tick = this.getAnimationTick();
         } else if (this.getAnimationTick() > 50) {
-            animationTick = 60 - this.getAnimationTick();
+            tick = 60 - this.getAnimationTick();
         } else {
-            animationTick = 10;
+            tick = 10;
         }
-        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? animationTick * 0.1F : 0;
+        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? tick * 0.1F : 0;
         float sleepProg = this.sleepProgress * -0.025F;
         float pitchMulti = 0;
         float pitchAdjustment = 0;

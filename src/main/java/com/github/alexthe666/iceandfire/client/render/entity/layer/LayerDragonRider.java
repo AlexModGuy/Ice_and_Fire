@@ -53,7 +53,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                             modelBase = ((RenderLiving) render).getMainModel();
                         }
                         if ((passenger.height > passenger.width || modelBase instanceof ModelBiped) && !(modelBase instanceof ModelQuadruped) && !(modelBase instanceof ModelHorse)) {
-                            GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.15F * passenger.height, -0.1F * dragonScale - 0.1F * passenger.width);
+                            GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.1F * passenger.height, -0.1F * dragonScale - 0.1F * passenger.width);
                             GlStateManager.rotate(90, 0, 0, 1);
                             GlStateManager.rotate(45, 0, 1, 0);
                         } else {

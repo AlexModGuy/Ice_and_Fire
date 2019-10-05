@@ -35,10 +35,6 @@ public class DragonAIAttackMelee extends EntityAIBase {
         if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         }
-        if (dragon.groundAttack == IaFDragonAttacks.Ground.FIRE && entitylivingbase != null && !entitylivingbase.isDead && this.dragon.getDistance(entitylivingbase) < 100) {
-            dragon.faceEntity(entitylivingbase, dragon.getHorizontalFaceSpeed(), dragon.getVerticalFaceSpeed());
-            return false;
-        }
         if (entitylivingbase == null) {
             return false;
         } else if (!entitylivingbase.isEntityAlive()) {
