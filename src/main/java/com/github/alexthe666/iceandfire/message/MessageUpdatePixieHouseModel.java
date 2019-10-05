@@ -41,15 +41,17 @@ public class MessageUpdatePixieHouseModel extends AbstractMessage<MessageUpdateP
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePixieHouseModel message, EntityPlayer player, MessageContext messageContext) {
-        BlockPos pos = BlockPos.fromLong(message.blockPos);
-        if (client.world.getTileEntity(pos) != null) {
-            if (client.world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
-                TileEntityPixieHouse house = (TileEntityPixieHouse) client.world.getTileEntity(pos);
-                house.houseType = message.houseType;
-            }
-            if (client.world.getTileEntity(pos) instanceof TileEntityJar) {
-                TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
-                jar.pixieType = message.houseType;
+        if (player.world != null) {
+            BlockPos pos = BlockPos.fromLong(message.blockPos);
+            if (client.world.getTileEntity(pos) != null) {
+                if (client.world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
+                    TileEntityPixieHouse house = (TileEntityPixieHouse) client.world.getTileEntity(pos);
+                    house.houseType = message.houseType;
+                }
+                if (client.world.getTileEntity(pos) instanceof TileEntityJar) {
+                    TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
+                    jar.pixieType = message.houseType;
+                }
             }
         }
     }

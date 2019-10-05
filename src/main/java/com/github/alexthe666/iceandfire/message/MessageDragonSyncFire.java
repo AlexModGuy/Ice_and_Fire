@@ -51,19 +51,23 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageDragonSyncFire message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null && entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null && entity instanceof EntityDragonBase) {
+                EntityDragonBase dragon = (EntityDragonBase) entity;
+                dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageDragonSyncFire message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null && entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null && entity instanceof EntityDragonBase) {
+                EntityDragonBase dragon = (EntityDragonBase) entity;
+                dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+            }
         }
     }
 }

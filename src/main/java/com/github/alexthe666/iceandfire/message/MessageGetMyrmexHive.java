@@ -48,11 +48,13 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
-        MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
-        if (serverHive != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            message.hive.writeVillageDataToNBT(tag);
-            serverHive.readVillageDataFromNBT(tag);
+        if (player.world != null) {
+            MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
+            if (serverHive != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                message.hive.writeVillageDataToNBT(tag);
+                serverHive.readVillageDataFromNBT(tag);
+            }
         }
     }
 }

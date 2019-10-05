@@ -41,21 +41,25 @@ public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveCha
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageRemoveChainedEntity message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.chainedId);
-        Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-        if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
-            ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            properties.connectedEntities.remove(toChain);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.chainedId);
+            Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
+            if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
+                properties.connectedEntities.remove(toChain);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageRemoveChainedEntity message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.chainedId);
-        Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-        if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
-            ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-            properties.connectedEntities.remove(toChain);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.chainedId);
+            Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
+            if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
+                properties.connectedEntities.remove(toChain);
+            }
         }
     }
 }

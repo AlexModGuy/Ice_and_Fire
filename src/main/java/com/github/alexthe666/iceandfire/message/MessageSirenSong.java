@@ -40,19 +40,23 @@ public class MessageSirenSong extends AbstractMessage<MessageSirenSong> {
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageSirenSong message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.sirenId);
-        if (entity != null && entity instanceof EntitySiren) {
-            EntitySiren siren = (EntitySiren) entity;
-            siren.setSinging(message.isSinging);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.sirenId);
+            if (entity != null && entity instanceof EntitySiren) {
+                EntitySiren siren = (EntitySiren) entity;
+                siren.setSinging(message.isSinging);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageSirenSong message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.sirenId);
-        if (entity != null && entity instanceof EntitySiren) {
-            EntitySiren siren = (EntitySiren) entity;
-            siren.setSinging(message.isSinging);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.sirenId);
+            if (entity != null && entity instanceof EntitySiren) {
+                EntitySiren siren = (EntitySiren) entity;
+                siren.setSinging(message.isSinging);
+            }
         }
     }
 }

@@ -42,19 +42,23 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.entityId);
-        if (entity != null && entity instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-            properties.isStone = message.isStone;
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.entityId);
+            if (entity != null && entity instanceof EntityLiving) {
+                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                properties.isStone = message.isStone;
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.entityId);
-        if (entity != null && entity instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-            properties.isStone = message.isStone;
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.entityId);
+            if (entity != null && entity instanceof EntityLiving) {
+                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                properties.isStone = message.isStone;
+            }
         }
     }
 }

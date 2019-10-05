@@ -40,11 +40,13 @@ public class MessageUpdatePixieJar extends AbstractMessage<MessageUpdatePixieJar
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
-        BlockPos pos = BlockPos.fromLong(message.blockPos);
-        if (client.world.getTileEntity(pos) != null) {
-            if (client.world.getTileEntity(pos) instanceof TileEntityJar) {
-                TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
-                jar.hasProduced = message.isProducing;
+        if (client.world != null) {
+            BlockPos pos = BlockPos.fromLong(message.blockPos);
+            if (client.world.getTileEntity(pos) != null) {
+                if (client.world.getTileEntity(pos) instanceof TileEntityJar) {
+                    TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
+                    jar.hasProduced = message.isProducing;
+                }
             }
         }
     }

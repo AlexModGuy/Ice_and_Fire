@@ -41,26 +41,30 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase) entity;
-            if (message.dmg > 0F) {
-                mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-            } else {
-                mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.creatureID);
+            if (entity != null && entity instanceof EntityLivingBase) {
+                EntityLivingBase mob = (EntityLivingBase) entity;
+                if (message.dmg > 0F) {
+                    mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
+                } else {
+                    mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                }
             }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase) entity;
-            if (message.dmg > 0F) {
-                mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-            } else {
-                mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.creatureID);
+            if (entity != null && entity instanceof EntityLivingBase) {
+                EntityLivingBase mob = (EntityLivingBase) entity;
+                if (message.dmg > 0F) {
+                    mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
+                } else {
+                    mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                }
             }
         }
     }

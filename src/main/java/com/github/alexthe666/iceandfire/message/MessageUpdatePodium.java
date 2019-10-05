@@ -42,11 +42,13 @@ public class MessageUpdatePodium extends AbstractMessage<MessageUpdatePodium> {
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePodium message, EntityPlayer player, MessageContext messageContext) {
-        BlockPos pos = BlockPos.fromLong(message.blockPos);
-        if (client.world.getTileEntity(pos) != null) {
-            if (client.world.getTileEntity(pos) instanceof TileEntityPodium) {
-                TileEntityPodium podium = (TileEntityPodium) client.world.getTileEntity(pos);
-                podium.setInventorySlotContents(0, message.heldStack);
+        if (client.world != null) {
+            BlockPos pos = BlockPos.fromLong(message.blockPos);
+            if (client.world.getTileEntity(pos) != null) {
+                if (client.world.getTileEntity(pos) instanceof TileEntityPodium) {
+                    TileEntityPodium podium = (TileEntityPodium) client.world.getTileEntity(pos);
+                    podium.setInventorySlotContents(0, message.heldStack);
+                }
             }
         }
     }

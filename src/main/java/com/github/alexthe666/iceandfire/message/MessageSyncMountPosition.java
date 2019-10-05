@@ -48,17 +48,21 @@ public class MessageSyncMountPosition extends AbstractMessage<MessageSyncMountPo
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageSyncMountPosition message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null) {
-            entity.setPosition(message.posX, message.posY, message.posZ);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null) {
+                entity.setPosition(message.posX, message.posY, message.posZ);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageSyncMountPosition message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null) {
-            entity.setPosition(message.posX, message.posY, message.posZ);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null) {
+                entity.setPosition(message.posX, message.posY, message.posZ);
+            }
         }
     }
 }

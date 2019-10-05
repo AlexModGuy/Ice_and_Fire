@@ -53,21 +53,25 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageDragonSetBurnBlock message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null && entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            dragon.setBreathingFire(message.breathingFire);
-            dragon.burningTarget = new BlockPos(posX, posY, posZ);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null && entity instanceof EntityDragonBase) {
+                EntityDragonBase dragon = (EntityDragonBase) entity;
+                dragon.setBreathingFire(message.breathingFire);
+                dragon.burningTarget = new BlockPos(posX, posY, posZ);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessageDragonSetBurnBlock message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity != null && entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            dragon.setBreathingFire(message.breathingFire);
-            dragon.burningTarget = new BlockPos(posX, posY, posZ);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.dragonId);
+            if (entity != null && entity instanceof EntityDragonBase) {
+                EntityDragonBase dragon = (EntityDragonBase) entity;
+                dragon.setBreathingFire(message.breathingFire);
+                dragon.burningTarget = new BlockPos(posX, posY, posZ);
+            }
         }
     }
 }

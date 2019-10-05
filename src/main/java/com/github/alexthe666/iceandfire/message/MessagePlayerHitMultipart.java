@@ -34,19 +34,23 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase) entity;
-            player.attackTargetEntityWithCurrentItem(mob);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.creatureID);
+            if (entity != null && entity instanceof EntityLivingBase) {
+                EntityLivingBase mob = (EntityLivingBase) entity;
+                player.attackTargetEntityWithCurrentItem(mob);
+            }
         }
     }
 
     @Override
     public void onServerReceived(MinecraftServer server, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
-            EntityLivingBase mob = (EntityLivingBase) entity;
-            player.attackTargetEntityWithCurrentItem(mob);
+        if (player.world != null) {
+            Entity entity = player.world.getEntityByID(message.creatureID);
+            if (entity != null && entity instanceof EntityLivingBase) {
+                EntityLivingBase mob = (EntityLivingBase) entity;
+                player.attackTargetEntityWithCurrentItem(mob);
+            }
         }
     }
 }
