@@ -45,7 +45,9 @@ public enum EnumBestiaryPages {
     public static List<Integer> toList(int[] containedpages) {
         List<Integer> intList = new ArrayList<Integer>();
         for (int containedpage : containedpages) {
-            intList.add(containedpage);
+            if(containedpage >= 0 && containedpage < EnumBestiaryPages.values().length){
+                intList.add(containedpage);
+            }
         }
         return intList;
     }
@@ -59,9 +61,11 @@ public enum EnumBestiaryPages {
 
     public static List<EnumBestiaryPages> containedPages(List<Integer> pages) {
         Iterator<Integer> itr = pages.iterator();
-        List<EnumBestiaryPages> list = new ArrayList<EnumBestiaryPages>();
-        while (itr.hasNext()) {
-            list.add(EnumBestiaryPages.values()[MathHelper.clamp(itr.next(), 0, EnumBestiaryPages.values().length - 1)]);
+        List<EnumBestiaryPages> list = new ArrayList<>();
+        for(Integer page : pages){
+            if(page >= 0 && page < EnumBestiaryPages.values().length){
+                list.add(EnumBestiaryPages.values()[page]);
+            }
         }
         return list;
     }
