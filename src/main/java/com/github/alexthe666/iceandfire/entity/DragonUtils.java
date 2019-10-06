@@ -304,12 +304,22 @@ public class DragonUtils {
     }
 
     public static boolean isBlacklistedBlock(Block block) {
-        for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
-            if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
-                return true;
+        if(IceAndFire.CONFIG.blacklistBreakBlocksIsWhiteList) {
+            for (String name: IceAndFire.CONFIG.blacklistedBreakBlocks) {
+                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                    return false;
+                }
             }
+            return true;
         }
-        return false;
+        else {
+            for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
+                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public static boolean canHostilesTarget(Entity entity) {
