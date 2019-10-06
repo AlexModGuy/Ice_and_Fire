@@ -239,7 +239,7 @@ public class IaFDragonFlightManager {
                     speed = IaFDragonFlightManager.approach((float) speed, 1.8F, 0.005F * (1.8F / (float) speed));
                 } else {
                     speed = IaFDragonFlightManager.approach((float) speed, 0.2F, 0.025F);
-                    if(dist < 100D){
+                    if(dist < 100D && dragon.getAttackTarget() != null){
                         speed = speed * (dist/100D);
                     }
                 }

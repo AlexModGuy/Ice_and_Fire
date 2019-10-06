@@ -215,6 +215,14 @@ public class EntityIceDragon extends EntityDragonBase {
                     if (this.getAnimation() != ANIMATION_WINGBLAST) {
                         this.setAnimation(ANIMATION_WINGBLAST);
                         return true;
+                    } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
+                        boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        if (entityIn instanceof EntityLivingBase) {
+                            ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                        }
+                        this.usingGroundAttack = this.getRNG().nextBoolean();
+                        this.randomizeAttacks();
+                        return flag2;
                     }
                 } else {
                     if (this.getAnimation() != ANIMATION_BITE) {
@@ -252,7 +260,7 @@ public class EntityIceDragon extends EntityDragonBase {
             if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
-            if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && usingGroundAttack) {
+            if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
                 shootIceAtMob(this.getAttackTarget());
             }
             if (this.airAttack == IaFDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {

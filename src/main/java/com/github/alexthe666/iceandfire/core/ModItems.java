@@ -28,16 +28,16 @@ public class ModItems {
     public static ArmorMaterial troll_mountain = EnumHelper.addArmorMaterial("Mountain Troll", "iceandfire:troll_mountain", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static ArmorMaterial troll_forest = EnumHelper.addArmorMaterial("Forest Troll", "iceandfire:troll_forest", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static ArmorMaterial troll_frost = EnumHelper.addArmorMaterial("Frost Troll", "iceandfire:troll_frost", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static ArmorMaterial dragonsteel_fire_armor = EnumHelper.addArmorMaterial("Dragonsteel Fire", "iceandfire:dragonsteel_fire", 150, new int[]{7, 9, 12, 8}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static ArmorMaterial dragonsteel_ice_armor = EnumHelper.addArmorMaterial("Dragonsteel Ice", "iceandfire:dragonsteel_ice", 150, new int[]{7, 9, 12, 8}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static ArmorMaterial dragonsteel_fire_armor = EnumHelper.addArmorMaterial("Dragonsteel Fire", "iceandfire:dragonsteel_fire", (int)(0.02D * IceAndFire.CONFIG.dragonsteelBaseDurability), new int[]{IceAndFire.CONFIG.dragonsteelBaseArmor - 6, IceAndFire.CONFIG.dragonsteelBaseArmor - 3, IceAndFire.CONFIG.dragonsteelBaseArmor, IceAndFire.CONFIG.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static ArmorMaterial dragonsteel_ice_armor = EnumHelper.addArmorMaterial("Dragonsteel Ice", "iceandfire:dragonsteel_ice", (int)(0.02D * IceAndFire.CONFIG.dragonsteelBaseDurability), new int[]{IceAndFire.CONFIG.dragonsteelBaseArmor - 6, IceAndFire.CONFIG.dragonsteelBaseArmor - 3, IceAndFire.CONFIG.dragonsteelBaseArmor, IceAndFire.CONFIG.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
     public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
     public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
     public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
     public static ToolMaterial iceBoneTools = EnumHelper.addToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
     public static ToolMaterial trollWeapon = EnumHelper.addToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
     public static ToolMaterial myrmexChitin = EnumHelper.addToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
-    public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, 8000, 10.0F, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
-    public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, 8000, 10.0F, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
+    public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, IceAndFire.CONFIG.dragonsteelBaseDurability, 10.0F, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
+    public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, IceAndFire.CONFIG.dragonsteelBaseDurability, 10.0F, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 4.0F, 10);
     public static ToolMaterial hippogryph_sword_tools = EnumHelper.addToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
     public static ToolMaterial stymphalian_sword_tools = EnumHelper.addToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
     public static ToolMaterial amphithere_sword_tools = EnumHelper.addToolMaterial("AmphithereSword", 2, 500, 10.0F, 1F, 10);
@@ -400,5 +400,6 @@ public class ModItems {
         EnumDragonArmor.initArmors();
         EnumSeaSerpent.initArmors();
         EnumSkullType.initItems();
+
     }
 }
