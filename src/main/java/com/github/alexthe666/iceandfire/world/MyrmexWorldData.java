@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.NBTTagCompound;
@@ -112,7 +113,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
     public void debug() {
         for (MyrmexHive hive : this.hiveList) {
-            System.out.println(hive);
+            IceAndFire.logger.debug(hive);
         }
     }
 

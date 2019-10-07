@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public enum EnumSeaSerpentAnimations {
                 try {
                     animation.seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
                 } catch (Exception e) {
-                    System.out.println("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
+                    IceAndFire.logger.warn("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
                     e.printStackTrace();
                 }
             }

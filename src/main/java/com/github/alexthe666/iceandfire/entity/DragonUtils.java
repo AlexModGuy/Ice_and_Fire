@@ -304,15 +304,14 @@ public class DragonUtils {
     }
 
     public static boolean isBlacklistedBlock(Block block) {
-        if(IceAndFire.CONFIG.blacklistBreakBlocksIsWhiteList) {
-            for (String name: IceAndFire.CONFIG.blacklistedBreakBlocks) {
+        if (IceAndFire.CONFIG.blacklistBreakBlocksIsWhiteList) {
+            for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
                 if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
                     return false;
                 }
             }
             return true;
-        }
-        else {
+        } else {
             for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
                 if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
                     return true;

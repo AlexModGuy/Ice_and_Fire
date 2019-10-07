@@ -187,6 +187,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_diamond.png");
         private final ResourceLocation TEXTURE_GOLD = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_gold.png");
         private final ResourceLocation TEXTURE_IRON = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_iron.png");
+
         public LayerHippocampusArmor(RenderHippocampus renderer) {
             this.renderer = renderer;
         }

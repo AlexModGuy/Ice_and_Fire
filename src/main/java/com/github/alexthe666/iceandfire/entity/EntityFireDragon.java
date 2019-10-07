@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
@@ -26,7 +25,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -190,14 +188,14 @@ public class EntityFireDragon extends EntityDragonBase {
                         this.setAnimation(ANIMATION_WINGBLAST);
                         return true;
                     } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
-                            boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                            if (entityIn instanceof EntityLivingBase) {
-                                ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
-                            }
-                            this.usingGroundAttack = this.getRNG().nextBoolean();
-                            this.randomizeAttacks();
-                            return flag2;
+                        boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        if (entityIn instanceof EntityLivingBase) {
+                            ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
                         }
+                        this.usingGroundAttack = this.getRNG().nextBoolean();
+                        this.randomizeAttacks();
+                        return flag2;
+                    }
                 } else {
                     if (this.getAnimation() != ANIMATION_BITE) {
                         this.setAnimation(ANIMATION_BITE);

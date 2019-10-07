@@ -101,7 +101,7 @@ public class EventClient {
                                 ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
                             }
                         } catch (NullPointerException exp) {
-                            System.err.println("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
+                            IceAndFire.logger.warn("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
                         }
                     }
 
@@ -268,8 +268,8 @@ public class EventClient {
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
                 if (Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels") || IceAndFire.CONFIG.dragonGLErrorFix) {
-                    if(event.getEntity() instanceof EntityPlayer)
-                    GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
+                    if (event.getEntity() instanceof EntityPlayer)
+                        GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
                 }
             }
         }

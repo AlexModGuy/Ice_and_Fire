@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;

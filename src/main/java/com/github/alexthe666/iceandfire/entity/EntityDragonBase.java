@@ -1576,7 +1576,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             hasHadHornUse = false;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if(animationTick > this.getAnimation().getDuration() && !world.isRemote){
+        if (animationTick > this.getAnimation().getDuration() && !world.isRemote) {
             animationTick = 0;
         }
     }

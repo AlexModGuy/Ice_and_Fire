@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;

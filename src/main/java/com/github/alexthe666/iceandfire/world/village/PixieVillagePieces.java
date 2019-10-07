@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
