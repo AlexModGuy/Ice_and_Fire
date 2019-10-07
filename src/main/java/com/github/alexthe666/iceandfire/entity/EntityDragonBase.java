@@ -1576,7 +1576,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             hasHadHornUse = false;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if(animationTick > this.getAnimation().getDuration()){
+        if(animationTick > this.getAnimation().getDuration() && !world.isRemote){
             animationTick = 0;
         }
     }
@@ -1952,6 +1952,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+        this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
         if (this.isTackling()) {
             return false;
         }

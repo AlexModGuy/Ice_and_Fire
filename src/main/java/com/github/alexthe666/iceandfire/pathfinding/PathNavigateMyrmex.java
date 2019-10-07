@@ -18,6 +18,7 @@ public class PathNavigateMyrmex extends PathNavigateGround {
     protected PathFinder getPathFinder() {
         this.nodeProcessor = new NodeProcessorDragon();
         this.nodeProcessor.setCanEnterDoors(true);
+        this.nodeProcessor.setCanSwim(true);
         return new PathFinder(this.nodeProcessor);
     }
 

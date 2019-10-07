@@ -117,12 +117,8 @@ public class DragonAIAttackMelee extends EntityAIBase {
                 } else if (d0 > 256.0D) {
                     this.delayCounter += 5;
                 }
-                if (!dragon.isBreathingFire()) {
-                    if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
-                        this.delayCounter += 15;
-                    }
-                } else {
-                    this.dragon.getNavigator().clearPath();
+                if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
+                    this.delayCounter += 15;
                 }
             }
 

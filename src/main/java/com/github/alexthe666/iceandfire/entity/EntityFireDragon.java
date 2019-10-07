@@ -136,6 +136,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
+        this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
         switch (groundAttack) {
             case BITE:
                 if (this.getAnimation() != ANIMATION_BITE) {
