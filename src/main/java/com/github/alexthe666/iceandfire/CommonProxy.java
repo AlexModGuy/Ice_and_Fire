@@ -166,6 +166,8 @@ public class CommonProxy {
                         itemBlock = new ItemBlockPodium((Block) obj);
                     } else if (obj instanceof BlockMyrmexResin) {
                         itemBlock = new ItemBlockMyrmexResin((Block) obj);
+                    } else if (obj instanceof BlockGenericSlab) {
+                        itemBlock = ((BlockGenericSlab)obj).getItemBlock();
                     } else {
                         itemBlock = new ItemBlock((Block) obj);
                     }

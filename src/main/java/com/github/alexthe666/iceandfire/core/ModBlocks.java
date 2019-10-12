@@ -152,6 +152,15 @@ public class ModBlocks {
     public static Block dread_stone_tile = new BlockGeneric(Material.ROCK, "dread_stone_tile", "iceandfire.dread_stone_tile", "pickaxe", 3, 100.0F, 100000.0F, SoundType.STONE);
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_face")
     public static Block dread_stone_face = new BlockDreadStoneFace();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_torch")
+    public static Block dread_torch = new BlockDreadTorch();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_stairs")
+    public static Block dread_stone_bricks_stairs = new BlockGenericStairs(dread_stone_bricks.getDefaultState(), "dread_stone_stairs");
+     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_double_slab")
+    public static BlockGenericSlab dread_stone_bricks_double_slab = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 100F, 10000F, SoundType.STONE);
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_slab")
+    public static BlockGenericSlab dread_stone_bricks_slab = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 100F, 10000F, SoundType.STONE);
+
     static {
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");

@@ -80,6 +80,9 @@ tile.iceandfire.dread_stone_bricks_cracked.name=Cracked Dreadstone Bricks
 tile.iceandfire.dread_stone_bricks_mossy.name=Mossy Dreadstone Bricks
 tile.iceandfire.dread_stone_face.name=Dreadstone Chiseled Skull
 tile.iceandfire.dread_stone_tile.name=Dreadstone Tile
+tile.iceandfire.dread_torch.name=Dreadstone Torch
+tile.iceandfire.dread_stone_slab.name=Dreadstone Bricks Slab
+tile.iceandfire.dread_stone_stairs.name=Dreadstone Bricks Stairs
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
