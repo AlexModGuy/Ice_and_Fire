@@ -73,6 +73,13 @@ tile.iceandfire.myrmex_desert_resin_block.name=Hardened Desert Myrmex Resin
 tile.iceandfire.myrmex_jungle_resin_block.name=Hardened Jungle Myrmex Resin
 tile.iceandfire.myrmex_desert_resin_glass.name=Desert Myrmex Resin Glass
 tile.iceandfire.myrmex_jungle_resin_glass.name=Jungle Myrmex Resin Glass
+tile.iceandfire.dread_stone.name=Dreadstone
+tile.iceandfire.dread_stone_bricks.name=Dreadstone Bricks
+tile.iceandfire.dread_stone_bricks_chiseled.name=Chiseled Dreadstone Bricks
+tile.iceandfire.dread_stone_bricks_cracked.name=Cracked Dreadstone Bricks
+tile.iceandfire.dread_stone_bricks_mossy.name=Mossy Dreadstone Bricks
+tile.iceandfire.dread_stone_face.name=Dreadstone Chiseled Skull
+tile.iceandfire.dread_stone_tile.name=Dreadstone Tile
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
