@@ -294,6 +294,7 @@ public class ClientProxy extends CommonProxy {
         ModItems.deathworm_gauntlet_yellow.setTileEntityItemStackRenderer(TEISR);
         ModItems.deathworm_gauntlet_white.setTileEntityItemStackRenderer(TEISR);
         ModItems.deathworm_gauntlet_red.setTileEntityItemStackRenderer(TEISR);
+        Item.getItemFromBlock(ModBlocks.dread_portal).setTileEntityItemStackRenderer(TEISR);
 
     }
 
@@ -359,6 +360,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class, new RenderEggInIce());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPixieHouse.class, new RenderPixieHouse());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new RenderJar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDreadPortal.class, new RenderDreadPortal());
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 0, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 1, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 2, TileEntityPixieHouse.class);
@@ -401,6 +403,9 @@ public class ClientProxy extends CommonProxy {
         }
         if (name.equals("dread_torch")) {
             particle = new ParticleDreadTorch(world, x, y, z, motX, motY, motZ, size);
+        }
+        if (name.equals("dread_portal")) {
+            particle = new ParticleDreadPortal(world, x, y, z, motX, motY, motZ, size);
         }
         if (name.equals("blood")) {
             particle = new ParticleBlood(world, x, y, z);

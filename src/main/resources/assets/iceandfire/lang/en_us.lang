@@ -83,7 +83,10 @@ tile.iceandfire.dread_stone_tile.name=Dreadstone Tile
 tile.iceandfire.dread_torch.name=Dreadstone Torch
 tile.iceandfire.dread_stone_slab.name=Dreadstone Bricks Slab
 tile.iceandfire.dread_stone_stairs.name=Dreadstone Bricks Stairs
-
+tile.iceandfire.dreadwood_log.name=Dreadwood Log
+tile.iceandfire.dreadwood_planks.name=Dreadwood Planks
+tile.iceandfire.dreadwood_planks_lock.name=Dreadwood Keyhole
+tile.iceandfire.dread_portal.name=Dread Lands Portal
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
 item.iceandfire.sapphireGem.name=Sapphire

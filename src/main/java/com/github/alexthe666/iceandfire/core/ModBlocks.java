@@ -160,7 +160,14 @@ public class ModBlocks {
     public static BlockGenericSlab dread_stone_bricks_double_slab = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 100F, 10000F, SoundType.STONE);
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_slab")
     public static BlockGenericSlab dread_stone_bricks_slab = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 100F, 10000F, SoundType.STONE);
-
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_log")
+    public static Block dreadwood_log = new BlockDreadWoodLog();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_planks")
+    public static Block dreadwood_planks = new BlockGeneric(Material.WOOD, "dreadwood_planks", "iceandfire.dreadwood_planks", "axe", 3, 100.0F, 100000.0F, SoundType.WOOD);
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_planks_lock")
+    public static Block dreadwood_planks_lock = new BlockDreadWoodLock();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_portal")
+    public static Block dread_portal = new BlockDreadPortal();
     static {
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");

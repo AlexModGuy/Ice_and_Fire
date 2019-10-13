@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":  { "model": "iceandfire:dreadwood_log" },
+        "axis=z":   { "model": "iceandfire:dreadwood_log", "x": 90 },
+        "axis=x":   { "model": "iceandfire:dreadwood_log", "x": 90, "y": 90 },
+        "axis=none": { "model": "iceandfire:dreadwood_log" }
+    }
+}

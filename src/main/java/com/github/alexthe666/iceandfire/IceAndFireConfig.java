@@ -130,6 +130,7 @@ public class IceAndFireConfig {
     public boolean spawnStructuresOnSuperflat = true;
     public boolean dragonGLErrorFix = false;
     public boolean dragonMovedWronglyFix = false;
+    public int dreadlandsDimensionId = -12;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
