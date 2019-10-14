@@ -168,6 +168,9 @@ public class ModBlocks {
     public static Block dreadwood_planks_lock = new BlockDreadWoodLock();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_portal")
     public static Block dread_portal = new BlockDreadPortal();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_spawner")
+    public static Block dread_spawner = new BlockDreadSpawner();
+
     static {
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");

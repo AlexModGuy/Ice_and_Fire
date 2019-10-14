@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
+import com.github.alexthe666.iceandfire.world.dimension.TeleporterDreadLands;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -10,6 +11,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -45,7 +48,6 @@ public class BlockDreadPortal extends BlockContainer {
 
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-        /*
         if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty())) {
             if ((entity instanceof EntityPlayerMP)) {
                 EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
@@ -69,7 +71,6 @@ public class BlockDreadPortal extends BlockContainer {
                 }
             }
         }
-        */
     }
 
 

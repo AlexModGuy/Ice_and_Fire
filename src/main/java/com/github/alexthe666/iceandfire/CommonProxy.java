@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.*;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
@@ -236,12 +233,12 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
-        IceAndFire.GLACIER = new BiomeGlacier().setRegistryName(IceAndFire.MODID, "Glacier");
-        event.getRegistry().register(IceAndFire.GLACIER);
-        BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        event.getRegistry().registerAll(ModWorld.DREADLANDS_BIOME, ModWorld.GLACIER_BIOME);
+        BiomeDictionary.addTypes(ModWorld.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         if (IceAndFire.CONFIG.spawnGlaciers) {
-            BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
-            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+            BiomeManager.addSpawnBiome(ModWorld.GLACIER_BIOME);
+            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(ModWorld.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));
 
         }
     }
@@ -297,4 +294,7 @@ public class CommonProxy {
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
     }
 
+    public Object getDreadlandsRender(int i) {
+        return null;
+    }
 }

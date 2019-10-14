@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
+import com.github.alexthe666.iceandfire.core.ModWorld;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
@@ -70,7 +71,6 @@ public class IceAndFire {
     public static DamageSource dragonFire;
     public static DamageSource dragonIce;
     public static DamageSource gorgon;
-    public static Biome GLACIER;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
 
@@ -101,6 +101,7 @@ public class IceAndFire {
         TAB_ITEMS = new CreativeTab(MODID + "_items");
         TAB_BLOCKS = new CreativeTab(MODID + "_blocks");
         ModEntities.init();
+        ModWorld.init();
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");

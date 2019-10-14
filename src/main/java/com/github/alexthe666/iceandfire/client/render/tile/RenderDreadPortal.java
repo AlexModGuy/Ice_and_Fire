@@ -39,7 +39,7 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             float f1 = 2.0F / (float) (18 - j);
 
             if (j == 0) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/environment/dread_portal_background.png"));
+                Minecraft.getMinecraft().getTextureManager().bindTexture(END_SKY_TEXTURE);
                 f1 = 0.85F;
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -74,7 +74,7 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             float f2 = (float) (j + 1);
             float time = (Minecraft.getMinecraft().player.ticksExisted - 1 + (1 * partialTicks)) % 800.0F / 800.0F;
             if (te == null) {
-                time = (Sys.getTime() - 1 + (1 * partialTicks)) % 80000.0F / 80000.0F;
+                time = (Minecraft.getMinecraft().frameTimer.getIndex() - 1 + (1 * partialTicks)) % 3200F / 3200F;
             }
             GlStateManager.translate((j == 0 ? 7 : 17.0F) / f2 * time * RANDOM.nextGaussian(), j == 0 ? 0 : (2.0F + f2 / 1.5F) * -time, 0.0F);
             GlStateManager.rotate(180, 0.0F, 0.0F, 1.0F);
@@ -134,7 +134,7 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             tessellator.draw();
             GlStateManager.popMatrix();
             GlStateManager.matrixMode(5888);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/environment/dread_portal_background.png"));
+            Minecraft.getMinecraft().getTextureManager().bindTexture(END_SKY_TEXTURE);
         }
 
         GlStateManager.disableBlend();

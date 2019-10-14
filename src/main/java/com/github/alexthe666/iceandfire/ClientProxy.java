@@ -14,6 +14,8 @@ import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
+import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsSky;
+import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsWeather;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
@@ -42,6 +44,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -82,7 +85,8 @@ public class ClientProxy extends CommonProxy {
     private IceAndFireParticleSpawner particleSpawner;
     private FontRenderer bestiaryFontRenderer;
     private int thirdPersonViewDragon = 0;
-
+    private IRenderHandler dreadlandsWeatherRenderer = new RenderDreadlandsWeather();
+    private IRenderHandler dreadlandsSkyRenderer = new RenderDreadlandsSky();
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
@@ -361,6 +365,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPixieHouse.class, new RenderPixieHouse());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new RenderJar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDreadPortal.class, new RenderDreadPortal());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDreadSpawner.class, new RenderDreadSpawner());
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 0, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 1, TileEntityPixieHouse.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.pixieHouse), 2, TileEntityPixieHouse.class);
@@ -490,5 +495,15 @@ public class ClientProxy extends CommonProxy {
 
     public void setDragon3rdPersonView(int view) {
         thirdPersonViewDragon = view;
+    }
+
+    public Object getDreadlandsRender(int i) {
+        if(i == 0){
+            return dreadlandsSkyRenderer;
+        }
+        if(i == 1){
+            return dreadlandsWeatherRenderer;
+        }
+        return null;
     }
 }
