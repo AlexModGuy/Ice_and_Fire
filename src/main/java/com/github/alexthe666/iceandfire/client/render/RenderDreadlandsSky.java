@@ -288,10 +288,10 @@ public class RenderDreadlandsSky extends IRenderHandler {
         float f24 = (float) (i2 + 1) / 4.0F;
         float f14 = (float) (k2 + 1) / 2.0F;
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos((double) (-f17), -100.0D, (double) f17).tex((double) f24, (double) f14).endVertex();
-        bufferbuilder.pos((double) f17, -100.0D, (double) f17).tex((double) f22, (double) f14).endVertex();
-        bufferbuilder.pos((double) f17, -100.0D, (double) (-f17)).tex((double) f22, (double) f23).endVertex();
-        bufferbuilder.pos((double) (-f17), -100.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
+        bufferbuilder.pos((double) (-f17), -50.0D, (double) f17).tex((double) f24, (double) f14).endVertex();
+        bufferbuilder.pos((double) f17, -50.0D, (double) f17).tex((double) f22, (double) f14).endVertex();
+        bufferbuilder.pos((double) f17, -50.0D, (double) (-f17)).tex((double) f22, (double) f23).endVertex();
+        bufferbuilder.pos((double) (-f17), -50.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
         tessellator.draw();
         GlStateManager.disableTexture2D();
         float f15 = world.getStarBrightness(partialTicks) * f16;
