@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
+import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsAurora;
 import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsSky;
 import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsWeather;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
@@ -87,6 +88,7 @@ public class ClientProxy extends CommonProxy {
     private int thirdPersonViewDragon = 0;
     private IRenderHandler dreadlandsWeatherRenderer = new RenderDreadlandsWeather();
     private IRenderHandler dreadlandsSkyRenderer = new RenderDreadlandsSky();
+    private IRenderHandler dreadlandsAuroraRender = new RenderDreadlandsAurora();
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
@@ -503,6 +505,9 @@ public class ClientProxy extends CommonProxy {
         }
         if(i == 1){
             return dreadlandsWeatherRenderer;
+        }
+        if(i == 2){
+            return dreadlandsAuroraRender;
         }
         return null;
     }

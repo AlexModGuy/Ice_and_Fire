@@ -108,4 +108,10 @@ public class WorldProviderDreadLands extends WorldProvider {
         return (net.minecraftforge.client.IRenderHandler) IceAndFire.PROXY.getDreadlandsRender(0);
     }
 
+    @Nullable
+    @SideOnly(Side.CLIENT)
+    public net.minecraftforge.client.IRenderHandler getCloudRenderer() {
+        return (net.minecraftforge.client.IRenderHandler) IceAndFire.PROXY.getDreadlandsRender(2);
+    }
+
 }

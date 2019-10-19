@@ -44,6 +44,9 @@ public class RenderDreadlandsWeather extends IRenderHandler {
         if(lightTexture == null){
             lightTexture = mc.getTextureManager().getDynamicTextureLocation("lightMap", this.lightmapTexture);
         }
+        if(true){
+            return;
+        }
         float f = 1.0F;//mc.world.getRainStrength(partialTicks);
         rendererUpdateCount++;
         boolean building = false;
