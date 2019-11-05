@@ -1,0 +1,65 @@
+你就可以建造龍火熔爐
+
+<item><iceandfire:dragon_bone_block 0 40 30 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<item><iceandfire:dragon_bone_block 0 56 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<item><iceandfire:dragon_bone_block 0 24 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<item><iceandfire:dragon_bone_block 0 40 46 1>
+第1層
+
+
+
+
+
+
+
+<item><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<item><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<item><iceandfire:dragonforge_fire_core 0 40 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<item><iceandfire:dragonforge_fire_input 0 32 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 86 1>
+第2層
+
+
+
+
+
+
+
+
+
+<item><iceandfire:dragon_bone_block 0 140 10 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<item><iceandfire:dragon_bone_block 0 156 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<item><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<item><iceandfire:dragon_bone_block 0 124 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<item><iceandfire:dragon_bone_block 0 140 26 1>
+第3層
+
+
+
+
+
+
+
+
+
+先建造第1層
+第2層放在第1層上
+然後再將第3層放在第2層之上已完成結構
+完成後的結構 還需某種能量
+
+為了給龍火熔爐能量，需要龍火。
+這可以通過馴服後的龍
+或使用鍵條捕獲野生龍來實現。
