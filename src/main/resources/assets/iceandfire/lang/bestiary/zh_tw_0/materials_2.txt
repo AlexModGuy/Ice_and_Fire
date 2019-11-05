@@ -1,0 +1,27 @@
+﻿  龍的頭骨不僅可以打造成馴龍杖，還是不錯
+的裝飾品：擺出來的巨大頭骨威風凜凜，而它
+們也可用於染出有龍紋的旗幟圖案。不過，每
+隻龍身上只有一顆頭骨。
+
+
+
+
+
+
+
+
+
+冰龍和火龍的血液蘊含著精純的魔力，但卻
+內蘊極深、難以利用。
+
+我得好好研究研究······
+
+
+
+
+看來現在可以將龍骨和魚鱗安全地壓實成大塊
+利於存儲。
+我預言，在一個區塊中合併如此大量的魔法
+一定存在無法預料的用途。
+<recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 80 0.75>
+<recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 140 0.75>
