@@ -313,9 +313,15 @@ public class ChunkProviderDreadLands implements IChunkGenerator {
                     }
 
                     if (this.world.canSnowAt(blockpos1, true)) {
-                        this.world.setBlockState(blockpos1, Blocks.SNOW.getDefaultState(), 2);
-                        this.world.setBlockState(blockpos1.up(), Blocks.SNOW.getDefaultState(), 2);
-                        this.world.setBlockState(blockpos1.up(2), Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(4)), 2);
+                        if(this.world.getBlockState(blockpos1.down()).getBlock() == ModBlocks.dreadwood_log){
+                            this.world.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(2)), 2);
+
+                        }else{
+                            this.world.setBlockState(blockpos1, Blocks.SNOW.getDefaultState(), 2);
+                            this.world.setBlockState(blockpos1.up(), Blocks.SNOW.getDefaultState(), 2);
+                            this.world.setBlockState(blockpos1.up(2), Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(4)), 2);
+                        }
+
                     }
                 }
             }
