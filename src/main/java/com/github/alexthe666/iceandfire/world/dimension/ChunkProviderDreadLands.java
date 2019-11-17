@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
+import com.github.alexthe666.iceandfire.block.BlockUtils;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockSnow;
@@ -313,9 +314,8 @@ public class ChunkProviderDreadLands implements IChunkGenerator {
                     }
 
                     if (this.world.canSnowAt(blockpos1, true)) {
-                        if(this.world.getBlockState(blockpos1.down()).getBlock() == ModBlocks.dreadwood_log){
+                        if(!BlockUtils.canSnowUpon(this.world.getBlockState(blockpos1.down()))){
                             this.world.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(2)), 2);
-
                         }else{
                             this.world.setBlockState(blockpos1, Blocks.SNOW.getDefaultState(), 2);
                             this.world.setBlockState(blockpos1.up(), Blocks.SNOW.getDefaultState(), 2);

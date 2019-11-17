@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.structures.WorldGenDreadRuin;
+import com.github.alexthe666.iceandfire.structures.WorldGenDreadSpike;
 import com.github.alexthe666.iceandfire.structures.WorldGenDreadwoodTree;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
@@ -25,6 +27,8 @@ public class BiomeDreadLands extends Biome {
     protected static final IBlockState GRAVEL = ModBlocks.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
     protected static final IBlockState DRAGON_ICE = ModBlocks.dragon_ice.getDefaultState();
     private static final WorldGenDreadwoodTree DREADWOOD_TREE = new WorldGenDreadwoodTree();
+    private static final WorldGenDreadSpike DREAD_SPIKE = new WorldGenDreadSpike();
+    private static final WorldGenDreadRuin DREAD_RUIN = new WorldGenDreadRuin();
 
     public BiomeDreadLands() {
         super(new BiomeProperties("dreadlands").setTemperature(-1.0F).setBaseHeight(1.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(3.5F).setSnowEnabled());
@@ -45,17 +49,27 @@ public class BiomeDreadLands extends Biome {
         }
 
         if (net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, rand, pos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.TREE))
-            for (int j2 = 0; j2 < k1; ++j2) {
-                int k6 = rand.nextInt(16) + 8;
-                int l = rand.nextInt(16) + 8;
-                if(rand.nextFloat() < 0.3F){
+            if (rand.nextFloat() < 0.1F) {
+                for (int j2 = 0; j2 < k1; ++j2) {
+                    int k6 = rand.nextInt(16) + 8;
+                    int l = rand.nextInt(16) + 8;
                     BlockPos blockpos = worldIn.getHeight(pos.add(k6, 0, l));
                     DREADWOOD_TREE.generate(worldIn, rand, blockpos);
                 }
-
             }
+        if (rand.nextFloat() < 0.2F) {
+            int k6 = rand.nextInt(16) + 8;
+            int l = rand.nextInt(16) + 8;
+            BlockPos blockpos = worldIn.getHeight(pos.add(k6, -1, l));
+            DREAD_SPIKE.generate(worldIn, rand, blockpos);
+        }
+        if (rand.nextFloat() < 0.05F) {
+            int k6 = rand.nextInt(16) + 8;
+            int l = rand.nextInt(16) + 8;
+            BlockPos blockpos = worldIn.getHeight(pos.add(k6, -1, l));
+            DREAD_RUIN.generate(worldIn, rand, blockpos);
+        }
     }
-
 
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal) {
         this.generateGlacierBiome(worldIn, rand, chunkPrimerIn, x, z, noiseVal);

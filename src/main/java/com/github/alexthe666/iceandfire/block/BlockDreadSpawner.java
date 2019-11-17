@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockDreadSpawner extends BlockMobSpawner {
+public class BlockDreadSpawner extends BlockMobSpawner implements IDreadBlock {
 
     public BlockDreadSpawner() {
         super();

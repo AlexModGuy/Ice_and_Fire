@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockDreadTorch extends BlockTorch {
+public class BlockDreadTorch extends BlockTorch implements IDreadBlock {
 
     public BlockDreadTorch() {
         super();

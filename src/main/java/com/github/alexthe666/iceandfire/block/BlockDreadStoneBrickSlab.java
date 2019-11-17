@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockDreadStoneBrickSlab {
-    public static class Double extends BlockGenericSlab {
+    public static class Double extends BlockGenericSlab implements IDreadBlock {
         public Double(String name, float hardness, float resistance, SoundType soundType) {
             super(name, hardness, resistance, soundType, Material.WOOD, ModBlocks.dread_stone_bricks);
         }
@@ -31,7 +31,7 @@ public class BlockDreadStoneBrickSlab {
         }
     }
 
-    public static class Half extends BlockGenericSlab {
+    public static class Half extends BlockGenericSlab implements IDreadBlock {
         public Half(String name, float hardness, float resistance, SoundType soundType) {
             super(name, hardness, resistance, soundType, Material.WOOD, ModBlocks.dread_stone_bricks);
         }

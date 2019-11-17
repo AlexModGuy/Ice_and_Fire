@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDreadPortal extends BlockContainer {
+public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
 
     public BlockDreadPortal() {
         super(Material.PORTAL);
