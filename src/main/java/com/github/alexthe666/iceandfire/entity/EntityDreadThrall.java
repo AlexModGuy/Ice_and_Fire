@@ -5,26 +5,31 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     public static Animation ANIMATION_SPAWN = Animation.create(40);
-    public static Animation ANIMATION_DIE = Animation.create(40);
     private int animationTick;
     private Animation currentAnimation;
 
     public EntityDreadThrall(World worldIn) {
         super(worldIn);
-        this.setSize(0.8F, 1.8F);
+        this.setSize(0.6F, 1.8F);
     }
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        this.setAnimation(ANIMATION_SPAWN);
         if(this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30){
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if(belowBlock != Blocks.AIR){
@@ -34,6 +39,25 @@ public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimated
 
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
+    }
+
+    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
+    {
+        super.setEquipmentBasedOnDifficulty(difficulty);
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+        this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+        this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+        this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+        this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+    }
+
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
+    {
+        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+        this.setAnimation(ANIMATION_SPAWN);
+        this.setEquipmentBasedOnDifficulty(difficulty);
+        return data;
     }
 
     @Override
@@ -58,7 +82,7 @@ public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimated
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{ANIMATION_SPAWN, ANIMATION_DIE};
+        return new Animation[]{ANIMATION_SPAWN};
     }
 
     @Override
