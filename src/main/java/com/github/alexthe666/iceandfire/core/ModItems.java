@@ -42,6 +42,7 @@ public class ModItems {
     public static ToolMaterial stymphalian_sword_tools = EnumHelper.addToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
     public static ToolMaterial amphithere_sword_tools = EnumHelper.addToolMaterial("AmphithereSword", 2, 500, 10.0F, 1F, 10);
     public static ToolMaterial hippocampus_sword_tools = EnumHelper.addToolMaterial("HippocampusSword", 0, 500, 0.0F, -2F, 50);
+    public static ToolMaterial dread_sword_tools = EnumHelper.addToolMaterial("DreadSword", 0, 100, 0.0F, 1F, 0);
 
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
     public static Item bestiary = new ItemBestiary();
@@ -395,6 +396,9 @@ public class ModItems {
     public static Item dragonsteel_ice_leggings = new ItemDragonsteelArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
     public static Item dragonsteel_ice_boots = new ItemDragonsteelArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_sword")
+    public static Item dread_sword = new ItemModSword(dread_sword_tools, "dread_sword", "iceandfire.dread_sword");
 
     static {
         EnumDragonArmor.initArmors();
