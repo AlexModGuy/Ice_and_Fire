@@ -229,6 +229,7 @@ public class ModelDreadThrall extends AdvancedModelBase {
             }
         }
         this.flap(bipedBody, 0.5F, 0.15F, false, 1, 0F, limbSwing, limbSwingAmount);
+
     }
 
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {

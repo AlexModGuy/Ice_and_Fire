@@ -228,4 +228,3 @@ public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimated
         return null;
     }
 }
-//FOR SOME REASON, DISCORD DOESNT SHOW THE ACTUAL TAB OF MINECRAFT OPEN- no idea why
