@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -30,8 +31,10 @@ import javax.annotation.Nullable;
 public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     public static Animation ANIMATION_SPAWN = Animation.create(40);
+    public static Animation ANIMATION_SLASH = Animation.create(25);
     private int animationTick;
     private Animation currentAnimation;
+    private int hostileTicks = 0;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> SCREAMS = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
 
@@ -43,7 +46,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
+        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 0.5D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -52,11 +55,11 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
     }
 
     @Override
@@ -64,6 +67,13 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
         super.entityInit();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(SCREAMS, Integer.valueOf(0));
+    }
+
+    public boolean attackEntityAsMob(Entity entityIn) {
+        if (this.getAnimation() == NO_ANIMATION) {
+            this.setAnimation(ANIMATION_SLASH);
+        }
+        return true;
     }
 
     public void onLivingUpdate() {
@@ -74,6 +84,41 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
                 for (int i = 0; i < 5; i++){
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
+            }
+        }
+        if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 4 && this.canEntityBeSeen(this.getAttackTarget())) {
+            if (this.getAnimation() == NO_ANIMATION) {
+                this.setAnimation(ANIMATION_SLASH);
+            }
+            this.faceEntity(this.getAttackTarget(), 360, 80);
+            if (this.getAnimation() == ANIMATION_SLASH && (this.getAnimationTick() == 9 || this.getAnimationTick() == 19)) {
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+                this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.posX - this.getAttackTarget().posX, this.posZ - this.getAttackTarget().posZ);
+            }
+        }
+        if(!world.isRemote){
+            if(this.getAttackTarget() != null){
+                hostileTicks++;
+                if(this.getScreamStage() == 0){
+                    if(hostileTicks > 20){
+                        this.setScreamStage(1);
+                    }
+                }else{
+                    if(this.ticksExisted % 20 < 10){
+                        this.setScreamStage(1);
+                    }else{
+                        this.setScreamStage(2);
+                    }
+                }
+            }else{
+                if(this.getScreamStage() > 0){
+                    if(this.ticksExisted % 20 < 10 && this.getScreamStage() == 2){
+                        this.setScreamStage(1);
+                    }else{
+                        this.setScreamStage(0);
+                    }
+                }
+                hostileTicks = 0;
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
@@ -140,7 +185,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
 
     @Override
     public Animation[] getAnimations() {
-        return new Animation[]{ANIMATION_SPAWN};
+        return new Animation[]{ANIMATION_SPAWN, ANIMATION_SLASH};
     }
 
     @Override

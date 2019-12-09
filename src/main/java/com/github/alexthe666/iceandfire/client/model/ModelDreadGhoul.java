@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
+import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -85,6 +86,29 @@ public class ModelDreadGhoul extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityDreadGhoul) entity);
         animator.update(entity);
+        animator.update(entity);
+        animator.setAnimation(EntityDreadGhoul.ANIMATION_SLASH);
+        animator.startKeyframe(5);
+        rotate(animator, this.armRight, 20, 45, 80);
+        rotate(animator, this.body, 0, 30, 0);
+        rotate(animator, this.head, 0, -20, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        rotate(animator, this.armRight, -80, -15, 10);
+        rotate(animator, this.body, 0, -70, 0);
+        rotate(animator, this.head, 0, 60, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        rotate(animator, this.armLeft, 20, -45, -80);
+        rotate(animator, this.body, 0, -30, 0);
+        rotate(animator, this.head, 0, 20, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        rotate(animator, this.armLeft, -80, 15, -10);
+        rotate(animator, this.body, 0, 70, 0);
+        rotate(animator, this.head, 0, -60, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadGhoul thrall) {
@@ -96,6 +120,20 @@ public class ModelDreadGhoul extends ModelDragonBase {
         this.flap(armRight, speed_idle, 0.15F, true, 2, -0.1F, thrall.ticksExisted, 1);
         this.flap(clawsLeft, speed_idle, 0.05F, false, 3, -0.05F, thrall.ticksExisted, 1);
         this.flap(clawsRight, speed_idle, 0.05F, true, 3, -0.05F, thrall.ticksExisted, 1);
+        this.walk(head, speed_idle, 0.1F, true, 1, -0.05F, thrall.ticksExisted, 1);
+
+        this.walk(legRight, speed_walk, degree_walk, false, 0, 0, f, f1);
+        this.walk(legLeft, speed_walk, degree_walk, true, 0, 0, f, f1);
+        this.flap(legRight, speed_walk, degree_walk * 0.1F, true, 3, -0.05F, f, f1);
+        this.flap(legLeft, speed_walk, degree_walk * 0.1F, true, 3, 0.05F, f, f1);
+        this.flap(body, speed_walk, degree_walk * 0.1F, true, 1, 0, f, f1);
+
+        this.walk(armRight, speed_walk, degree_walk, true, -2, 0, f, f1);
+        this.walk(armLeft, speed_walk, degree_walk, false, -2, 0, f, f1);
+        this.flap(armRight, speed_walk, degree_walk * 0.8F, true, -2, -0.1F, f, f1);
+        this.flap(armLeft, speed_walk, degree_walk * 0.8F, true, -2, 0.1F, f, f1);
+        this.flap(head, speed_walk, degree_walk * 0.2F, false, 0, 0, f, f1);
+
     }
 
     @Override
