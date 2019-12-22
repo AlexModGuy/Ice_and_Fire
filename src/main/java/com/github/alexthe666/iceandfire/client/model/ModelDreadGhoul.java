@@ -86,7 +86,6 @@ public class ModelDreadGhoul extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityDreadGhoul) entity);
         animator.update(entity);
-        animator.update(entity);
         animator.setAnimation(EntityDreadGhoul.ANIMATION_SLASH);
         animator.startKeyframe(5);
         rotate(animator, this.armRight, 20, 45, 80);

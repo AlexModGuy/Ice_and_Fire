@@ -15,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -154,7 +153,6 @@ public class NodeProcessorMyrmex extends NodeProcessor {
     /**
      * Returns a point that the entity can safely move to
      */
-    @Nullable
     private PathPoint getSafePoint(int x, int y, int z, int p_186332_4_, double p_186332_5_, EnumFacing facing) {
         PathPoint pathpoint = null;
         BlockPos blockpos = new BlockPos(x, y, z);
