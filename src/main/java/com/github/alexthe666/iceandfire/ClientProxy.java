@@ -285,6 +285,7 @@ public class ClientProxy extends CommonProxy {
             this.bestiaryFontRenderer = Minecraft.getMinecraft().fontRenderer;
         }
         this.particleSpawner = new IceAndFireParticleSpawner();
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
         ModKeys.init();
         MinecraftForge.EVENT_BUS.register(new RenderModCapes());
         MinecraftForge.EVENT_BUS.register(new EventClient());
