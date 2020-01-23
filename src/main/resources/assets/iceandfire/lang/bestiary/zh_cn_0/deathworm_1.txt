@@ -1,0 +1,40 @@
+Death Worms have two major
+attacks. The first and most
+common of which is the
+tongue grab. The Worm
+will shoot forwards its
+retractable tongue to grab
+and injure prey.
+
+
+
+
+
+
+
+The second and rarer attack
+is for the worm to spout
+forth nearby blocks into
+the air. These will push
+up those who stand on them
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+and the falling blocks may
+injure the worm's prey.
+This attack scales with
+the worm's size.

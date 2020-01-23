@@ -1,0 +1,37 @@
+
+
+
+
+§nSoldiers
+Soldiers are the first line of
+defense of the colony. They follow
+around individuals of other castes
+to protect them from other threats.
+
+
+
+
+§nRoyals
+Royals are the colonies' means of
+reproduction, and the only members
+capable of flight. Royals only fly
+after a long period of mostly
+idling within the colony. When two
+
+royals mate, the male dies and the
+female becomes a queen.
+
+
+
+
+
+
+
+§nSentinels
+Sentinels are the covert operations
+caste of the colony. They scout out
+nearby foraging routes and hide in
+wait, to ambush possible prey and
+predators of the hive. They are the
+most deadly caste, other than the
+queen.

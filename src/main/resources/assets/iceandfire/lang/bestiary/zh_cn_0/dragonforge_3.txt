@@ -1,0 +1,48 @@
+The result is a metal known
+as dragonsteel. Dragonsteel is
+one of the strongest and most
+versatile materials known to man.
+It can be made into tools, armor,
+and dragon armor.
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+Keep in mind that dragon forges
+can be constructed with ice
+dragons in mind, to create
+Ice dragonsteel using the sheer
+cold of their frost breath.
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+Fire dragonsteel sets attackers
+aflame for up to 15 seconds and
+deals a large amount of knockback.
+Ice dragonsteel freezes targets
+into a giant block of ice. Both
+types of dragonsteel deal high
+amounts of damage and can easily
+dispatch a large dragon.
+Dragonsteel armor also provides
+increased protection against
+dragon breath attacks.
