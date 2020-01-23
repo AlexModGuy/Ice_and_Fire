@@ -1,0 +1,43 @@
+<recipe><iceandfire:chain 0 minecraft:air 0 iceandfire:chain_link 0 iceandfire:chain_link 0 minecraft:air 0 iceandfire:chain_link 0 minecraft:air 0 iceandfire:chain_link 0 iceandfire:chain_link 0 minecraft:air 0 4 10 1>
+
+
+
+
+
+
+
+
+Chains can be created to capture
+wild dragons and any other monster.
+They can be tied to walls. Dragons
+will destroy most walls, like
+cobblestone walls, so those who wish
+to power their furnace with a dragon
+need dragon bone walls.
+<recipe><iceandfire:dragon_bone_wall 0 minecraft:air 0 minecraft:air 0 minecraft:air 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 25 145 0.75>
+
+
+
+
+
+To properly power a forge, one must
+place the chained or tame dragon
+directly in front of the aperture.
+Then the dragon will begin to
+breathe flame or frost as long as
+there are valid items in the forge.
+
+
+Most items, when placed in a forge,
+will be turned to ash or dragon ice
+respectively. But placing an iron
+ingot and dragon blood (fire blood
+for fire forges, ice blood for ice
+forges) will result in a powerful
+alchemical metal.
+<item><minecraft:iron_ingot 0 110 78 1>
+<item><iceandfire:fire_dragon_blood 0 130 78 1>
+<item><iceandfire:dragonsteel_fire_ingot 0 170 78 1>
+<item><minecraft:iron_ingot 0 110 92 1>
+<item><iceandfire:ice_dragon_blood 0 130 92 1>
+<item><iceandfire:dragonsteel_ice_ingot 0 170 92 1>

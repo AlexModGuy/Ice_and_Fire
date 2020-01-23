@@ -1,0 +1,67 @@
+blocks, and 17 dragon forge
+bricks, you can construct the
+dragon forge itself.
+
+<item><iceandfire:dragon_bone_block 0 40 30 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<item><iceandfire:dragon_bone_block 0 56 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<item><iceandfire:dragon_bone_block 0 24 38 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<item><iceandfire:dragon_bone_block 0 40 46 1>
+Layer 1
+
+
+
+
+
+
+
+<item><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<item><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<item><iceandfire:dragonforge_fire_core 0 40 78 1>
+<item><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<item><iceandfire:dragonforge_fire_input 0 32 82 1>
+<item><iceandfire:dragonforge_fire_brick 0 40 86 1>
+Layer 2
+
+
+
+
+
+
+
+
+<item><iceandfire:dragon_bone_block 0 140 10 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<item><iceandfire:dragon_bone_block 0 156 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<item><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<item><iceandfire:dragon_bone_block 0 124 18 1>
+<item><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<item><iceandfire:dragon_bone_block 0 140 26 1>
+Layer 3
+
+
+
+
+
+
+Construct the forge by placing
+Layer 1, then Layer 2 on top of
+Layer 1, then Layer 3 above Layer
+2. Once the forge is complete, it
+will need some sort of power.
+
+In order to power the forge,
+dragon's breath is required. This
+can be achieved either by building
+the structure close to a tame
+dragon, or capturing a wild dragon
+using chains.

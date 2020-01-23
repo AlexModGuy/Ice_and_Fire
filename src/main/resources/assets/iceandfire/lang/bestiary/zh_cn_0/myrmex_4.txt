@@ -1,0 +1,37 @@
+Trading with myrmex is a lucrative
+business. Worker trades are
+usually low quality, yet they are
+willing to trade some resin for
+sediment and the occasional gem.
+Soldiers will trade for common
+mob drops, and Sentinels for
+rarer ones and poisonous items.
+Royals will trade for artifacts
+and alchemical ingredients.
+Queens trade exclusively eggs.
+
+
+
+
+
+Myrmex Staffs can be used to
+modify the structure of Myrmex
+colonies. interacting with a
+
+myrmex with one in hand will
+bind it to their colony. By
+using it, one can delete certain
+rooms of the colony and disable
+reproduction of the queen. By
+using it while sneaking, one can
+add a new room at their position.
+One can only use this staff if
+they have a reputation of 75 or
+higher.
+
+Myrmex Eggs only hatch when
+underground. A queen egg, when
+hatched near a player underground,
+will bind to them, and the following
+colony that will form will have a
+permanent opinion of 100.
