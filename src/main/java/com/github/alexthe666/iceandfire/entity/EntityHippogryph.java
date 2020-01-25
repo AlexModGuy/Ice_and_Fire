@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -37,6 +38,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -53,7 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor {
+public class EntityHippogryph extends EntityTameable implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMob {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -88,7 +90,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     private int flyTicks;
     private int hoverTicks;
     private boolean hasChestVarChanged = false;
-
+    private int navigatorType = -1;
     public EntityHippogryph(World worldIn) {
         super(worldIn);
         ANIMATION_EAT = Animation.create(25);
@@ -103,12 +105,30 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         this.stepHeight = 1;
     }
 
+    protected void switchNavigator(){
+        if(this.isBeingRidden() && !this.onGround){
+            if(navigatorType != 1){
+                this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+                this.navigator = new PathNavigateFlyingCreature(this, world);
+                navigatorType = 1;
+            }
+        }
+        if(!this.isBeingRidden() || this.onGround){
+            if(navigatorType != 0){
+                this.moveHelper = new EntityMoveHelper(this);
+                this.navigator = new PathNavigateGround(this, world);
+                navigatorType = 0;
+            }
+        }
+    }
+
     protected int getExperiencePoints(EntityPlayer player) {
         return 10;
     }
 
     @Override
     protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, new HippogryphAIAttackMelee(this, 1.5D, true));
@@ -149,6 +169,12 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
     public boolean canBeSteered() {
         return true;
     }
@@ -522,6 +548,23 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         }
     }
 
+    public boolean isRidingPlayer(EntityPlayer player) {
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
+    }
+
+    @Override
+    public double getFlightSpeedModifier() {
+        return 1;
+    }
+
     public boolean isFlying() {
         if (world.isRemote) {
             return this.isFlying = Boolean.valueOf(this.dataManager.get(FLYING).booleanValue());
@@ -650,10 +693,6 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityHippogryph.ANIMATION_EAT, EntityHippogryph.ANIMATION_BITE, EntityHippogryph.ANIMATION_SPEAK, EntityHippogryph.ANIMATION_SCRATCH};
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
-    }
-
     public boolean shouldDismountInWater(Entity rider) {
         return true;
     }
@@ -695,24 +734,6 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             super.travel(strafe, forward, vertical);
             return;
         }
-        if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null) {
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                }
-                if (this.isFlying() || this.isHovering()) {
-                    motionX *= 1.06;
-                    motionZ *= 1.06;
-                }
-                jumpMovementFactor = 0.05F;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
-                super.travel(strafe, vertical = 0, forward);
-                return;
-            }
-        }
         super.travel(strafe, forward, vertical);
     }
 
@@ -741,6 +762,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        switchNavigator();
         if (!this.world.isRemote) {
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
