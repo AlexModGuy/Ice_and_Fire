@@ -68,7 +68,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements ISyncMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
+public abstract class EntityDragonBase extends EntityTameable implements IFlyingMob, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -1469,7 +1469,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         } else if (!riding && ridingProgress > 0.0F) {
             ridingProgress -= 0.5F;
         }
-
         if (this.isModelDead()) {
             return;
         }

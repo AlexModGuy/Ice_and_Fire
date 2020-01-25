@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityAmphithere extends EntityTameable implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute {
+public class EntityAmphithere extends EntityTameable implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMob {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "amphithere"));
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
@@ -82,11 +82,16 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     private int flightCooldown = 0;
     private int ticksFlying = 0;
     private boolean isFlying;
-    private boolean isLandNavigator = true;
     private boolean changedFlightBehavior = false;
     private int ticksStill = 0;
     private int ridingTime = 0;
     private boolean isSitting;
+    /*
+          0 = ground/walking
+          1 = ai flight
+          2 = controlled flight
+       */
+    private int navigatorType = 0;
 
     public EntityAmphithere(World worldIn) {
         super(worldIn);
@@ -97,8 +102,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             pitch_buffer = new IFChainBuffer();
             tail_buffer = new IFChainBuffer();
         }
-        switchNavigator(true);
-
+        switchNavigator(0);
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
@@ -209,6 +213,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(0, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(1, new AmphithereAIAttackMelee(this, 1.0D, true));
@@ -228,15 +233,19 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return Math.abs(this.motionX) < 0.05 && Math.abs(this.motionZ) < 0.05;
     }
 
-    private void switchNavigator(boolean onLand) {
-        if (onLand) {
+    protected void switchNavigator(int navigatorType) {
+        if (navigatorType == 0) {
             this.moveHelper = new EntityMoveHelper(this);
             this.navigator = new PathNavigateClimber(this, world);
-            this.isLandNavigator = true;
-        } else {
+            this.navigatorType = 0;
+        } else if(navigatorType == 1) {
             this.moveHelper = new EntityAmphithere.FlyMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
-            this.isLandNavigator = false;
+            this.navigatorType = 1;
+        }else{
+            this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+            this.navigator = new PathNavigateFlyingCreature(this, world);
+            this.navigatorType = 2;
         }
     }
 
@@ -294,7 +303,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             this.setAttackTarget(null);
         }
         boolean flapping = this.isFlapping();
-        boolean flying = this.isFlying() && !this.onGround || (!this.onGround && !onLeaves());
+        boolean flying = this.isFlying() && this.isOverAir() || (this.isOverAir() && !onLeaves());
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;
         boolean sitting = isSitting() && !isFlying();
         boolean notGrounded = flying || this.getAnimation() == ANIMATION_WING_BLAST;
@@ -314,6 +323,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             } else {
                 ticksFlying = 0;
             }
+        }
+        if(isFlying() && this.onGround){
+            this.setFlying(false);
         }
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
@@ -400,11 +412,16 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             }
             this.isFallen = false;
         }
-        if (flying && this.isLandNavigator) {
-            switchNavigator(false);
+        if (flying && this.isOverAir()) {
+            if(this.getRidingPlayer() == null && this.navigatorType != 1) {
+                switchNavigator(1);
+            }
+            if(this.getRidingPlayer() != null && this.navigatorType != 2){
+                switchNavigator(2);
+            }
         }
-        if (!flying && !this.isLandNavigator) {
-            switchNavigator(true);
+        if (!flying && this.navigatorType != 0) {
+            switchNavigator(0);
         }
         if ((this.hasHomePosition || this.getCommand() == 2) && this.flightBehavior == FlightBehavior.WANDER) {
             this.flightBehavior = FlightBehavior.CIRCLE;
@@ -428,14 +445,10 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (changedFlightBehavior) {
             changedFlightBehavior = false;
         }
-        if (!flapping && (this.motionY > 0.15F || this.motionY > 0 && this.ticksExisted % 200 == 0) && !this.onGround) {
+        if (!flapping && (this.motionY > 0.15F || this.motionY > 0 && this.ticksExisted % 200 == 0) && this.isOverAir()) {
             flapWings();
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-    }
-
-    public boolean canBeSteered() {
-        return true;
     }
 
     public boolean isFlapping() {
@@ -553,12 +566,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         this.setCommand(compound.getInteger("Command"));
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer
-                && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID())
-                && this.isTamed();
-    }
-
     public boolean getCanSpawnHere() {
         int i = MathHelper.floor(this.posX);
         int j = MathHelper.floor(this.getEntityBoundingBox().minY);
@@ -634,7 +641,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 this.setFlying(true);
             }
         }
-        if (this.onGround && !world.isRemote && ticksFlying > 50) {
+        if (!this.isOverAir() && this.isFlying() && ticksFlying > 25) {
             this.setFlying(false);
         }
         if (this.dismount()) {
@@ -679,6 +686,18 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             return true;
         }
         return false;
+    }
+
+    public boolean isRidingPlayer(EntityPlayer player) {
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
@@ -870,28 +889,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             super.travel(strafe, forward, vertical);
             return;
         }
-        if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null) {
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                if (!this.onGround) {
-                    strafe = 0;
-                    forward = 1.5F;
-                }
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                }
-                if (this.isFlying()) {
-                    motionX *= 1.06;
-                    motionZ *= 1.06;
-                }
-                jumpMovementFactor = 0.05F;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
-                super.travel(strafe, vertical = 0, forward);
-                return;
-            }
-        }
         super.travel(strafe, forward, vertical);
     }
 
@@ -934,6 +931,30 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Override
     protected boolean canDespawn() {
         return false;
+    }
+
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeSteered() {
+        return true;
+    }
+
+    @Override
+    public double getFlightSpeedModifier() {
+        return 0.555D;
+    }
+
+    @Override
+    public boolean fliesLikeElytra() {
+        return this.isFlying();
+    }
+
+    private boolean isOverAir(){
+        return world.isAirBlock(this.getPosition().down());
     }
 
     public enum FlightBehavior {

@@ -2,10 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
@@ -260,11 +257,11 @@ public class IaFDragonFlightManager {
 
     }
 
-    protected static class PlayerFlightMoveHelper extends EntityMoveHelper {
+    protected static class PlayerFlightMoveHelper<T extends EntityCreature & IFlyingMob> extends EntityMoveHelper {
 
-        private EntityDragonBase dragon;
+        private T dragon;
 
-        public PlayerFlightMoveHelper(EntityDragonBase dragon) {
+        public PlayerFlightMoveHelper(T dragon) {
             super(dragon);
             this.dragon = dragon;
         }
