@@ -150,7 +150,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean usingGroundAttack = true;
     protected int flyHovering;
     protected IaFDragonFlightManager flightManager;
-    protected boolean isLandNavigator;
     boolean hasHadHornUse = false;
     private int prevFlightCycle;
     private boolean isSleeping;
@@ -179,6 +178,12 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     private EntityDragonPart tail3Part;
     private EntityDragonPart tail4Part;
     private int blockBreakCounter;
+    /*
+        0 = ground/walking
+        1 = ai flight
+        2 = controlled flight
+     */
+    public int navigatorType;
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -203,7 +208,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
         this.flightManager = new IaFDragonFlightManager(this);
         this.ignoreFrustumCheck = true;
-        switchNavigator(true);
+        switchNavigator(0);
         randomizeAttacks();
         resetParts(1);
     }
@@ -319,15 +324,19 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return new PathNavigateDragon(this, world);
     }
 
-    protected void switchNavigator(boolean onLand) {
-        if (onLand) {
+    protected void switchNavigator(int navigatorType) {
+        if (navigatorType == 0) {
             this.moveHelper = new IaFDragonFlightManager.GroundMoveHelper(this);
             this.navigator = createNavigator(world);
-            this.isLandNavigator = true;
-        } else {
+            this.navigatorType = 0;
+        } else if(navigatorType == 1) {
             this.moveHelper = new IaFDragonFlightManager.FlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
-            this.isLandNavigator = false;
+            this.navigatorType = 1;
+        }else{
+            this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+            this.navigator = new PathNavigateFlyingCreature(this, world);
+            this.navigatorType = 2;
         }
     }
 
@@ -722,7 +731,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
     }
 
     @Override
@@ -1241,6 +1258,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        EntityPlayer ridingPlayer = this.getRidingPlayer();
         if (this.blockBreakCounter <= 0) {
             this.blockBreakCounter = IceAndFire.CONFIG.dragonBreakBlockCooldown;
         }
@@ -1427,11 +1445,17 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 2F;
         }
-        if (flying && this.isLandNavigator) {
-            switchNavigator(false);
+        if(ridingPlayer == null){
+            if(flying && navigatorType != 1){
+                switchNavigator(1);
+            }
+        }else{
+            if((flying || hovering) && navigatorType != 2){
+                switchNavigator(2);
+            }
         }
-        if (!flying && !this.isLandNavigator) {
-            switchNavigator(true);
+        if (!flying && !hovering && navigatorType != 0) {
+            switchNavigator(0);
         }
         boolean modeldead = isModelDead();
         if (modeldead && modelDeadProgress < 20.0F) {
@@ -1631,9 +1655,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
                 float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                 double extraY = 0.8F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
+                double extraZ = radius * MathHelper.cos(angle);
                 BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
                 IBlockState iblockstate = this.world.getBlockState(ground);
                 if (iblockstate.getMaterial() != Material.AIR) {
@@ -1710,8 +1734,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
         float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
         float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 2F) * 0.015F;
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
         prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
     }
@@ -1789,8 +1813,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     @Override
     public void onUpdate() {
-        world.profiler.startSection("dragonUpdate");
         super.onUpdate();
+        world.profiler.startSection("dragonUpdate");
         if (isFlying() && !world.isRemote) {
             this.flightManager.update();
         }
@@ -1988,8 +2012,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             int i = riding.getPassengers().indexOf(this);
             float radius = (i == 2 ? -0.2F : 0.5F) + (((EntityPlayer) riding).isElytraFlying() ? 2 : 0);
             float angle = (0.01745329251F * ((EntityPlayer) riding).renderYawOffset) + (i == 1 ? 90 : i == 0 ? -90 : 0);
-            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
             double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYawHead = ((EntityPlayer) riding).rotationYawHead;
             this.prevRotationYaw = ((EntityPlayer) riding).rotationYawHead;
@@ -2180,13 +2204,19 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
     }
 
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
     public boolean canBeSteered() {
         return true;
     }
 
     @Override
     public boolean isMovementBlocked() {
-        return this.getHealth() <= 0.0F || isSitting() || this.isModelDead() || this.isBeingRidden();
+        return this.getHealth() <= 0.0F || isSitting() || this.isModelDead();
     }
 
     @Override
@@ -2202,27 +2232,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             return;
         }
         if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null && controller != this.getAttackTarget()) {
-                this.rotationYaw = controller.rotationYaw;
-                this.prevRotationYaw = this.rotationYaw;
-                this.setRotation(this.rotationYaw, 0);
-                this.renderYawOffset = this.rotationYaw;
-                this.rotationYawHead = this.renderYawOffset;
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                }
-                if (this.isFlying() || this.isHovering()) {
-                    motionX *= 1.06;
-                    motionZ *= 1.06;
-                }
-                jumpMovementFactor = 0.05F;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : (float) getFlySpeed());
-                super.travel(strafe, vertical = 0, forward);
-                return;
-            }
+        //    super.travel(strafe, forward, vertical);
         }
         super.travel(strafe, forward, vertical);
     }

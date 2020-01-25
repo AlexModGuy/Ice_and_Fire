@@ -66,6 +66,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
@@ -286,11 +287,15 @@ public class EntityIceDragon extends EntityDragonBase {
         } else if (!swimming && swimProgress > 0.0F) {
             swimProgress -= 0.5F;
         }
-        if ((swimming || this.isFlying()) && this.isLandNavigator) {
-            switchNavigator(false);
+        if ((swimming || this.isFlying())) {
+            if(this.getRidingPlayer() != null && this.navigatorType != 2){
+                switchNavigator(2);
+            }else if(navigatorType != 1){
+                switchNavigator(1);
+            }
         }
-        if (!swimming && !this.isFlying() && !this.isLandNavigator) {
-            switchNavigator(true);
+        if (!swimming && !this.isFlying() && this.navigatorType != 0) {
+            switchNavigator(0);
         }
         if (this.isInMaterialWater() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
             this.setSwimming(true);

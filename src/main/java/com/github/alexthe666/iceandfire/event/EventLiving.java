@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import com.github.alexthe666.iceandfire.message.MessageSyncMountPosition;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
@@ -67,7 +66,7 @@ public class EventLiving {
             return entity != null && entity instanceof IVillagerFear;
         }
     };
-    Random rand = new Random();
+    private Random rand = new Random();
 
     private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
         float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
@@ -213,6 +212,7 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
+        /*
         if (event.getEntityBeingMounted() instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
             if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote) {
@@ -242,9 +242,7 @@ public class EventLiving {
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
         }
-        if (event.getWorldObj().isRemote && event.getEntityBeingMounted() instanceof ISyncMount) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(event.getEntityBeingMounted().getEntityId(), event.getEntityMounting().posX, event.getEntityMounting().posY, event.getEntityMounting().posZ));
-        }
+         */
     }
 
     @SubscribeEvent
@@ -431,19 +429,7 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            if (event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() != null) {
-                Entity mount = event.getEntityLiving().getRidingEntity();
-                if (event.getEntityLiving().getDistance(mount) > 80) {
-                    if (event.getEntityLiving().world.isRemote) {
-                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(mount.getEntityId(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ));
-                    }
-                }
-            }
-        }
-
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-
         if (chainProperties != null && chainProperties.isChained()) {
             if (chainProperties.wasJustDisconnected) {
                 chainProperties.wasJustDisconnected = false;

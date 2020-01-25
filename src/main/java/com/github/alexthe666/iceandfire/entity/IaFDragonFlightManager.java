@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.pathfinding.NodeProcessor;
@@ -256,7 +257,34 @@ public class IaFDragonFlightManager {
             }
         }
 
+
     }
 
+    protected static class PlayerFlightMoveHelper extends EntityMoveHelper {
 
+        private EntityDragonBase dragon;
+
+        public PlayerFlightMoveHelper(EntityDragonBase dragon) {
+            super(dragon);
+            this.dragon = dragon;
+        }
+
+        @Override
+        public void onUpdateMoveHelper() {
+            double flySpeed = 0.8F * dragon.getFlightSpeedModifier();
+            Vec3d dragonVec = dragon.getPositionVector();
+            Vec3d moveVec = new Vec3d(posX, posY, posZ);
+            Vec3d normalized = moveVec.subtract(dragonVec).normalize();
+            double dist = dragonVec.distanceTo(moveVec);
+            dragon.motionX = normalized.x * flySpeed;
+            dragon.motionY = normalized.y * flySpeed;
+            dragon.motionZ = normalized.z * flySpeed;
+            if (dist > 2.5E-7) {
+                float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
+                dragon.rotationYaw = limitAngle(dragon.rotationYaw, yaw, 5);
+                entity.setAIMoveSpeed((float)(speed));
+            }
+            dragon.move(MoverType.SELF, dragon.motionX, dragon.motionY, dragon.motionZ);
+        }
+    }
 }
