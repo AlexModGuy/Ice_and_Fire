@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock {
+public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
 
     public static final ResourceLocation TAN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan"));
     public static final ResourceLocation WHITE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white"));
@@ -82,6 +82,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
         this.spawnableBlock = Blocks.SAND;
         this.switchNavigator(false);
+        this.tasks.addTask(0, new EntityGroundAIRide<>(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.5D, true));
         this.tasks.addTask(3, new DeathWormAIFindSandTarget(this, 10));
@@ -613,10 +614,6 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
     }
 
-    public boolean canBeSteered() {
-        return true;
-    }
-
     public int getSurface(int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);
         while (!world.isAirBlock(pos)) {
@@ -758,10 +755,6 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         setStateField(2, attack);
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
-    }
-
     public boolean isSandBelow() {
         int i = MathHelper.floor(this.posX);
         int j = MathHelper.floor(this.posY - 1);
@@ -813,6 +806,17 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     }
 
     @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeSteered() {
+        return true;
+    }
+
+
+    @Override
     public void travel(float strafe, float vertical, float forward) {
         float f4;
         if (this.isBeingRidden() && this.canBeSteered()) {
@@ -822,11 +826,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                     this.setAttackTarget(null);
                     this.getNavigator().clearPath();
                 }
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                this.fallDistance = 0;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
-                super.travel(strafe, vertical = 0, forward);
+                super.travel(strafe, vertical, forward);
                 return;
             }
         }
@@ -896,6 +896,23 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     @Override
     protected boolean canDespawn() {
         return false;
+    }
+
+    public boolean isRidingPlayer(EntityPlayer player) {
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
+    }
+
+    @Override
+    public double getRideSpeedModifier() {
+        return 1;
     }
 
     public class SandMoveHelper extends EntityMoveHelper {

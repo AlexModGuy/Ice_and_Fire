@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public interface IFlyingMob {
+public interface IFlyingMount {
 
     EntityPlayer getRidingPlayer();
     double getFlightSpeedModifier();
