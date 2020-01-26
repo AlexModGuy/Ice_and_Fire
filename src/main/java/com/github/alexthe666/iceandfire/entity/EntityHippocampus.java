@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAIFindWaterTarget;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
-import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
@@ -41,6 +38,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -78,6 +76,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         ANIMATION_SPEAK = Animation.create(15);
         this.setSize(1.95F, 0.95F);
         this.switchNavigator(true);
+        this.tasks.addTask(0, new HippocampusAIRide(this));
         this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
         this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
         this.tasks.addTask(1, new AquaticAIFindWaterTarget(this, 10, true));
@@ -126,10 +125,6 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         this.dataManager.register(SADDLE, Boolean.valueOf(false));
         this.dataManager.register(CHESTED, Boolean.valueOf(false));
         this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
-    }
-
-    public boolean canBeSteered() {
-        return true;
     }
 
     private void initHippocampusInv() {
@@ -226,10 +221,6 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-    }
-
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
     }
 
     public boolean shouldDismountInWater(Entity rider) {
@@ -520,59 +511,6 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             super.travel(0, 0, 0);
             return;
         }
-        if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null) {
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                }
-                this.fallDistance = 0;
-                if (this.isInWater()) {
-                    this.moveRelative(strafe, vertical, forward, 1F);
-                    f4 = 0.8F;
-                    float d0 = 3;
-                    if (!this.onGround) {
-                        d0 *= 0.5F;
-                    }
-                    if (d0 > 0.0F) {
-                        f4 += (0.54600006F - f4) * d0 / 3.0F;
-                    }
-                    //this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-                    this.motionX *= (double) f4;
-                    this.motionX *= 0.900000011920929D;
-                    this.motionY *= 0.900000011920929D;
-                    this.motionY *= (double) f4;
-                    this.motionZ *= 0.900000011920929D;
-                    this.motionZ *= (double) f4;
-                    motionY += 0.01185D;
-                } else {
-                    forward = controller.moveForward * 0.25F;
-                    strafe = controller.moveStrafing * 0.125F;
-
-                    this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
-                    super.travel(strafe, vertical, forward);
-                    return;
-                }
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 1);
-                super.travel(strafe, vertical = 0, forward);
-                this.prevLimbSwingAmount = this.limbSwingAmount;
-                double deltaX = this.posX - this.prevPosX;
-                double deltaZ = this.posZ - this.prevPosZ;
-                double deltaY = this.posY - this.prevPosY;
-                float delta = MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 4.0F;
-                if (delta > 1.0F) {
-                    delta = 1.0F;
-                }
-                if (delta > 0.5D && this.isInWater() && this.isBeingRidden()) {
-                    this.doWaterSplashEffect();
-                }
-                this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
-                this.limbSwing += this.limbSwingAmount;
-                return;
-            }
-        }
         if (this.isServerWorld()) {
             float f5;
             if (this.isInWater()) {
@@ -782,6 +720,32 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         return false;
     }
 
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeSteered() {
+        return true;
+    }
+
+    public boolean isRidingPlayer(EntityPlayer player) {
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
+    }
+
+    public double getRideSpeedModifier() {
+        return this.isInWater() ? 1.2F : 0.55F;
+    }
+
     class SwimmingMoveHelper extends EntityMoveHelper {
         private EntityHippocampus hippo = EntityHippocampus.this;
 
@@ -791,7 +755,22 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
 
         @Override
         public void onUpdateMoveHelper() {
-            if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.hippo.getNavigator().noPath() && !this.hippo.isBeingRidden()) {
+            if(this.hippo.isBeingRidden()){
+                double flySpeed = 0.8F * hippo.getRideSpeedModifier();
+                Vec3d dragonVec = hippo.getPositionVector();
+                Vec3d moveVec = new Vec3d(posX, posY, posZ);
+                Vec3d normalized = moveVec.subtract(dragonVec).normalize();
+                double dist = dragonVec.distanceTo(moveVec);
+                hippo.motionX = normalized.x * flySpeed;
+                hippo.motionY = normalized.y * flySpeed;
+                hippo.motionZ = normalized.z * flySpeed;
+                if (dist > 2.5E-7) {
+                    float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
+                    hippo.rotationYaw = limitAngle(hippo.rotationYaw, yaw, 5);
+                    entity.setAIMoveSpeed((float)(speed));
+                }
+                hippo.move(MoverType.SELF, hippo.motionX, hippo.motionY, hippo.motionZ);
+            }else if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.hippo.getNavigator().noPath()) {
                 double distanceX = this.posX - this.hippo.posX;
                 double distanceY = this.posY - this.hippo.posY;
                 double distanceZ = this.posZ - this.hippo.posZ;
