@@ -395,6 +395,8 @@ public class ModItems {
     public static Item dragonsteel_ice_leggings = new ItemDragonsteelArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
     public static Item dragonsteel_ice_boots = new ItemDragonsteelArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":weezer_blue_album")
+    public static Item weezer_blue_album = new ItemGeneric("weezer_blue_album", "iceandfire.weezer_blue_album", 1);
 
     static {
         EnumDragonArmor.initArmors();

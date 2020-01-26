@@ -31,6 +31,7 @@ public class TinkersCompat {
     public static final Material MATERIAL_DRAGONSTEEL_ICE = new Material("dragonsteel_ice", 0XBBE4FD);
     public static final Material MATERIAL_STYMPH_FEATHER = new Material("stymph_feather", 0X7D5B40);
     public static final Material MATERIAL_AMPHITHERE_FEATHER = new Material("amphithere_feather", 0X228760);
+    public static final Material MATERIAL_WEEZER = new Material("weezer", 0X00AAE2, true);
     public static final AbstractTrait SPLINTERING_II = new TraitSplinteringII();
     public static final AbstractTrait SPLINTERS_II = new TraitSplitting2();
     public static final AbstractTrait FRACTURED_II = new TraitBonusDamage("fractured2", 3f);
@@ -41,6 +42,9 @@ public class TinkersCompat {
     public static final AbstractTrait BURN_I = new TraitBurn(1);
     public static final AbstractTrait ANTIGRAVITY = new TraitAntigravity();
     public static final AbstractTrait ARROW_KNOCKBACK = new TraitArrowKnockback();
+    public static final AbstractTrait IN_THE_GARAGE = new TraitInTheGarage();
+    public static final AbstractTrait SWEATER_SONG = new TraitSweaterSong();
+    public static final AbstractTrait SURF_WAX_AMERICA = new TraitSurfWaxAmerica();
     private static final TinkersCompat INSTANCE = new TinkersCompat();
     public static FluidMolten MOLTEN_FIRE_DRAGONSTEEL;
     public static FluidMolten MOLTEN_ICE_DRAGONSTEEL;
@@ -142,6 +146,25 @@ public class TinkersCompat {
         MATERIAL_AMPHITHERE_FEATHER.setRepresentativeItem(ModItems.amphithere_feather);
         MATERIAL_AMPHITHERE_FEATHER.addTrait(ARROW_KNOCKBACK);
         TinkerRegistry.addMaterialStats(MATERIAL_AMPHITHERE_FEATHER, new FletchingMaterialStats(0.9f, 0.7f));
+
+        if(IceAndFire.CONFIG.weezer) {
+            TinkerMaterials.materials.add(MATERIAL_WEEZER);
+            TinkerRegistry.integrate(MATERIAL_WEEZER).preInit();
+
+            MATERIAL_WEEZER.addItem(ModItems.weezer_blue_album, 1, Material.VALUE_Ingot);
+            MATERIAL_WEEZER.setRepresentativeItem(ModItems.weezer_blue_album);
+            MATERIAL_WEEZER.setCraftable(true);
+            MATERIAL_WEEZER.setCastable(false);
+            TinkerRegistry.addMaterialStats(MATERIAL_WEEZER,
+                    new HeadMaterialStats(1500, 5.00f, 10.00f, HarvestLevels.COBALT),
+                    new HandleMaterialStats(1.5F, 100),
+                    new ExtraMaterialStats(500));
+            TinkerRegistry.addMaterialStats(MATERIAL_WEEZER, new BowMaterialStats(1.5f, 1.2f, 8F));
+            TinkerRegistry.addMaterialStats(MATERIAL_WEEZER, new ArrowShaftMaterialStats(1.1f, 30));
+            MATERIAL_WEEZER.addTrait(IN_THE_GARAGE);
+            MATERIAL_WEEZER.addTrait(SWEATER_SONG);
+            MATERIAL_WEEZER.addTrait(SURF_WAX_AMERICA);
+        }
     }
 
     public static void setupFluids() {

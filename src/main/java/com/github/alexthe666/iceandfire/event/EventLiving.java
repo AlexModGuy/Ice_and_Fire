@@ -8,6 +8,9 @@ import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
+import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
@@ -556,7 +559,7 @@ public class EventLiving {
                         if (entity.isRiding()) {
                             entity.dismountRidingEntity();
                         }
-                        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+                        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                         float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                         float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
                         entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
@@ -768,6 +771,16 @@ public class EventLiving {
             LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
             LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
+            event.getTable().addPool(pool);
+        }
+        if (IceAndFire.CONFIG.weezer && (
+                event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
+                        || event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
+                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
+                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
+            LootCondition chance = new RandomChance(0.01f);
+            LootEntryItem silver = new LootEntryItem(ModItems.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
+            LootPool pool = new LootPool(new LootEntry[]{silver}, new LootCondition[]{chance}, new RandomValueRange(1, 1), new RandomValueRange(1, 1), "weezer");
             event.getTable().addPool(pool);
         }
     }
