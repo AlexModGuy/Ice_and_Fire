@@ -773,8 +773,7 @@ public class EventLiving {
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
             event.getTable().addPool(pool);
         }
-        if (IceAndFire.CONFIG.weezer && (
-                event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
+        if ((event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
                         || event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
                         || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
                         || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {

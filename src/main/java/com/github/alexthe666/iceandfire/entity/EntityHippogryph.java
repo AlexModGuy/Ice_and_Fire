@@ -970,21 +970,12 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             if (this.airBorneCounter == 0) {
                 this.motionY += 1;
             }
-            if (!this.isFlying() && !this.isHovering()) {
-                this.spacebarTicks += 2;
-            }
-            if (this.isFlying() || this.isHovering()) {
-                this.motionY += 0.4D;
-            }
         } else if (this.dismount()) {
             if (this.isFlying() || this.isHovering()) {
                 this.motionY -= 0.4D;
                 this.setFlying(false);
                 this.setHovering(false);
             }
-        }
-        if (this.down() && (this.isFlying() || this.isHovering())) {
-            this.motionY -= 0.4D;
         }
         if (!this.dismount() && (this.isFlying() || this.isHovering())) {
             this.motionY += 0.01D;

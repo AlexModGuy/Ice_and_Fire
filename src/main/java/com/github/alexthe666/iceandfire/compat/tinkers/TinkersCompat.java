@@ -153,7 +153,7 @@ public class TinkersCompat {
         MATERIAL_AMPHITHERE_FEATHER.addTrait(ARROW_KNOCKBACK);
         TinkerRegistry.addMaterialStats(MATERIAL_AMPHITHERE_FEATHER, new FletchingMaterialStats(0.9f, 0.7f));
 
-        if(IceAndFire.CONFIG.weezer) {
+        if(IceAndFire.CONFIG.weezerTinkers) {
             TinkerMaterials.materials.add(MATERIAL_WEEZER);
             TinkerRegistry.integrate(MATERIAL_WEEZER).preInit();
             MATERIAL_WEEZER.setCraftable(true);
@@ -184,7 +184,7 @@ public class TinkersCompat {
     }
 
     public static void post() {
-        MATERIAL_WEEZER.hide = true;
+        //MATERIAL_WEEZER.hide = true;
     }
 
     protected static boolean isSmelteryLoaded() {

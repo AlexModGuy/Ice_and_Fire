@@ -68,7 +68,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
+public abstract class EntityDragonBase extends EntityTameable implements ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -1255,9 +1255,16 @@ public abstract class EntityDragonBase extends EntityTameable implements IFlying
         return !this.isChained() && !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15)) && ticksStill > 80 && !this.isHovering() && canMove();
     }
 
+    private boolean isOverAir(){
+        return world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ));
+    }
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isBeingRidden() && !isOverAir() && this.isFlying() && !this.isHovering() && this.flyTicks > 40){
+            this.setFlying(false);
+        }
         EntityPlayer ridingPlayer = this.getRidingPlayer();
         if (this.blockBreakCounter <= 0) {
             this.blockBreakCounter = IceAndFire.CONFIG.dragonBreakBlockCooldown;
@@ -1479,7 +1486,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IFlying
         if (this.getControllingPassenger() != null && !this.onGround && (this.isFlying() || this.isHovering())) {
             this.motionY *= 0D;
         }
-        if (this.isHovering() && !world.isRemote) {
+        if (this.isHovering() && this.isFlying() && flyTicks > 40) {
+            this.setHovering(false);
+            this.setFlying(true);
+
+        }
+        if (this.isHovering() && !this.isFlying()) {
             if (this.isSleeping()) {
                 this.setHovering(false);
             }
@@ -1830,9 +1842,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IFlying
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
             }
-            if (this.isFlying() || this.isHovering()) {
-                this.motionY += 0.4D;
-            }
         } else if (this.dismount()) {
             if (this.isFlying() || this.isHovering()) {
                 this.motionY -= 0.4D;
@@ -1840,9 +1849,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IFlying
                 this.setHovering(false);
             }
         }
-        if (this.down() && (this.isFlying() || this.isHovering())) {
-            this.motionY -= 0.4D;
-        }
+
         if (!this.dismount() && (this.isFlying() || this.isHovering())) {
             this.motionY += 0.01D;
         }
@@ -1894,11 +1901,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IFlying
                 pitch_buffer_body.calculateChainWaveBuffer(80, 10, 1, 0.5F, this);
             }
         }
-        if (!this.onGround && !this.isRiding()) {
+        if (this.isOverAir() && !this.isRiding()) {
             double ydist = prevPosY - this.posY;//down 0.4 up -0.38
             double planeDist = (Math.abs(motionX) + Math.abs(motionZ)) * 6F;
-            if (!this.isHovering())
+            if (!this.isHovering()){
                 this.dragonPitch += (float) (ydist) * 10;
+            }
             this.dragonPitch = MathHelper.clamp(this.dragonPitch, -60, 40);
             float plateau = 2;
             if (this.dragonPitch > plateau) {

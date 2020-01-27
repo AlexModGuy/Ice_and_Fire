@@ -8,4 +8,6 @@ public interface IFlyingMount {
     double getFlightSpeedModifier();
     default boolean fliesLikeElytra() { return false; }
     boolean isFlying();
+    default boolean up(){ return false; }
+    default boolean down(){ return false; }
 }
