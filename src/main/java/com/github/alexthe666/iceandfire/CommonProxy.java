@@ -295,4 +295,10 @@ public class CommonProxy {
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
     }
 
+    public int getPreviousViewType() {
+        return 0;
+    }
+
+    public void setPreviousViewType(int view) {
+    }
 }

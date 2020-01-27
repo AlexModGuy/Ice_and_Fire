@@ -49,18 +49,6 @@ public class LayerDragonBanner implements LayerRenderer<EntityDragonBase> {
         }
     }
 
-
-    protected void translateToBody() {
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("BodyUpper"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("BodyLower"), 0.0625F);
-    }
-
-    protected void translateToHead() {
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck2"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck3"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Head"), 0.0625F);
-    }
-
     protected void postRender(AdvancedModelRenderer renderer, float scale) {
         if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
             if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {

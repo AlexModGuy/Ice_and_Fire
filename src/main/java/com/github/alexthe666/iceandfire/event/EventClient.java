@@ -33,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -467,6 +468,19 @@ public class EventClient {
     public void onGuiOpened(GuiOpenEvent event) {
         if (IceAndFire.CONFIG.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
             event.setGui(new IceAndFireMainMenu());
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityMount(EntityMountEvent event) {
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote) {
+            if (event.isDismounting()) {
+                Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
+            } else {
+                IceAndFire.PROXY.setPreviousViewType(Minecraft.getMinecraft().gameSettings.thirdPersonView);
+                Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
+                IceAndFire.PROXY.setDragon3rdPersonView(2);
+            }
         }
     }
 }

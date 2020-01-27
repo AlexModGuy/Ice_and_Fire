@@ -62,7 +62,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class EventLiving {
+public class EventServer {
 
     private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>() {
         public boolean apply(@Nullable EntityLivingBase entity) {

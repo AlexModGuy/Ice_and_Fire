@@ -81,6 +81,7 @@ public class ClientProxy extends CommonProxy {
     private static MyrmexHive referedClientHive = null;
     private IceAndFireParticleSpawner particleSpawner;
     private FontRenderer bestiaryFontRenderer;
+    private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
 
     @SubscribeEvent
@@ -482,5 +483,13 @@ public class ClientProxy extends CommonProxy {
 
     public void setDragon3rdPersonView(int view) {
         thirdPersonViewDragon = view;
+    }
+
+    public int getPreviousViewType() {
+        return previousViewType;
+    }
+
+    public void setPreviousViewType(int view) {
+        previousViewType = view;
     }
 }

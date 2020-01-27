@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
-import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventServer;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
 import com.google.common.base.Predicate;
@@ -211,8 +211,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            this.getAttackTarget().rotationPitch = EventLiving.updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
-            this.getAttackTarget().rotationYaw = EventLiving.updateRotation(this.getAttackTarget().rotationYaw, f, 30F);
+            this.getAttackTarget().rotationPitch = EventServer.updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
+            this.getAttackTarget().rotationYaw = EventServer.updateRotation(this.getAttackTarget().rotationYaw, f, 30F);
         }
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 2.5F, this);
