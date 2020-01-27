@@ -9,6 +9,8 @@ import slimeknights.tconstruct.library.book.content.ContentListing;
 import slimeknights.tconstruct.library.book.content.ContentModifier;
 import slimeknights.tconstruct.library.modifiers.IModifier;
 
+import static com.github.alexthe666.iceandfire.compat.tinkers.TinkersCompat.MATERIAL_WEEZER;
+
 public class IceAndFireBookTranformer extends BookTransformer {
 
     @Override

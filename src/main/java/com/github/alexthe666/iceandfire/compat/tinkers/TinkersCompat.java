@@ -6,8 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.fluid.FluidMolten;
@@ -17,6 +21,8 @@ import slimeknights.tconstruct.library.utils.HarvestLevels;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerMaterials;
 import slimeknights.tconstruct.tools.traits.TraitBonusDamage;
+
+import java.lang.reflect.Field;
 
 import static slimeknights.tconstruct.library.materials.MaterialTypes.HEAD;
 import static slimeknights.tconstruct.library.materials.MaterialTypes.SHAFT;
@@ -31,7 +37,7 @@ public class TinkersCompat {
     public static final Material MATERIAL_DRAGONSTEEL_ICE = new Material("dragonsteel_ice", 0XBBE4FD);
     public static final Material MATERIAL_STYMPH_FEATHER = new Material("stymph_feather", 0X7D5B40);
     public static final Material MATERIAL_AMPHITHERE_FEATHER = new Material("amphithere_feather", 0X228760);
-    public static final Material MATERIAL_WEEZER = new Material("weezer", 0X00AAE2, true);
+    public static final MaterialWeezer MATERIAL_WEEZER = new MaterialWeezer("weezer", 0X00AAE2, true);
     public static final AbstractTrait SPLINTERING_II = new TraitSplinteringII();
     public static final AbstractTrait SPLINTERS_II = new TraitSplitting2();
     public static final AbstractTrait FRACTURED_II = new TraitBonusDamage("fractured2", 3f);
@@ -150,11 +156,12 @@ public class TinkersCompat {
         if(IceAndFire.CONFIG.weezer) {
             TinkerMaterials.materials.add(MATERIAL_WEEZER);
             TinkerRegistry.integrate(MATERIAL_WEEZER).preInit();
+            MATERIAL_WEEZER.setCraftable(true);
+            MATERIAL_WEEZER.setCastable(false);
 
             MATERIAL_WEEZER.addItem(ModItems.weezer_blue_album, 1, Material.VALUE_Ingot);
             MATERIAL_WEEZER.setRepresentativeItem(ModItems.weezer_blue_album);
-            MATERIAL_WEEZER.setCraftable(true);
-            MATERIAL_WEEZER.setCastable(false);
+
             TinkerRegistry.addMaterialStats(MATERIAL_WEEZER,
                     new HeadMaterialStats(1500, 5.00f, 10.00f, HarvestLevels.COBALT),
                     new HandleMaterialStats(1.5F, 100),
@@ -177,6 +184,7 @@ public class TinkersCompat {
     }
 
     public static void post() {
+        MATERIAL_WEEZER.hide = true;
     }
 
     protected static boolean isSmelteryLoaded() {

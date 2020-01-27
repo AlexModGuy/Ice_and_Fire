@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.compat.tinkers;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.tconstruct.common.ModelRegisterUtil;
 import slimeknights.tconstruct.library.book.TinkerBook;
@@ -10,6 +12,7 @@ import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 public class TinkersCompatClient {
 
     public static void preInit() {
+
         TinkerBook.INSTANCE.addTransformer(new IceAndFireBookTranformer());
         TinkerBook.INSTANCE.addRepository(new FileRepository("iceandfire:tinkers/book"));
         MaterialRenderInfo boneInfo = new MaterialRenderInfo.Default(0XB2AD98);
