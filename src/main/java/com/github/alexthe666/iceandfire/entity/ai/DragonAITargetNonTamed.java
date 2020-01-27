@@ -13,6 +13,7 @@ public class DragonAITargetNonTamed<T extends EntityLivingBase> extends EntityAI
 
     public DragonAITargetNonTamed(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
+        this.setMutexBits(1);
         this.dragon = entityIn;
     }
 

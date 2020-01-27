@@ -25,6 +25,7 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
 
     public DragonAITargetItems(EntityCreature creature, boolean checkSight) {
         this(creature, checkSight, false);
+        this.setMutexBits(1);
     }
 
     public DragonAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {

@@ -12,6 +12,9 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,6 +33,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
         super(renderManager, model, 0.8F);
         this.addLayer(new LayerDragonEyes(this));
         this.addLayer(new LayerDragonRider(this));
+        this.addLayer(new LayerDragonBanner(this));
 
     }
 
@@ -46,8 +50,14 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
         GL11.glRotatef(f7, 1, 0, 0);
     }
 
+    private static EntityEquipmentSlot[] ARMOR_SLOTS = {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
+
     protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
-        String armorString = "ARMOR{Head=" + entity.getArmorInSlot(0) + ", Neck=" + entity.getArmorInSlot(1) + ", Body=" + entity.getArmorInSlot(2) + " Tail=" + entity.getArmorInSlot(3) + "}";
+        int armorHead = entity.getArmorOrdinal(entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+        int armorNeck = entity.getArmorOrdinal(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+        int armorLegs = entity.getArmorOrdinal(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+        int armorFeet = entity.getArmorOrdinal(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+        String armorString = "ARMOR{Head=" + armorHead + ", Neck=" + armorNeck + ", Body=" + armorLegs + " Tail=" + armorFeet + "}";
         String dragonOverallTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + armorString
                 + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_LOCATION_CACHE.get(dragonOverallTexture);
@@ -63,8 +73,8 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).FIRE_MALE_OVERLAY.toString());
                 }
             }
-            for (int slot = 0; slot <= 3; slot++) {
-                if (entity.getArmorInSlot(slot) != 0) {
+            for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
+                if (!entity.getItemStackFromSlot(slot).isEmpty()) {
                     if (ice) {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).ICETEXTURE.toString());
                     } else {

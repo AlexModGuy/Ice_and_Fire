@@ -27,7 +27,7 @@ public class GuiDragon extends GuiContainer {
     public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
         super(new ContainerDragon(dragon, Minecraft.getMinecraft().player));
         this.playerInventory = playerInv;
-        this.dragonInv = dragon.dragonInv;
+        this.dragonInv = dragon.dragonInventory;
         this.dragon = dragon;
         this.allowUserInput = false;
         this.ySize = 214;

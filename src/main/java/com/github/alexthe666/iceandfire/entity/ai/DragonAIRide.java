@@ -15,7 +15,7 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
 
     public DragonAIRide(T dragon) {
         this.dragon = dragon;
-        this.setMutexBits(0);
+        this.setMutexBits(1);
     }
 
     @Override

@@ -6,25 +6,33 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 
 public class ContainerDragon extends Container {
-    private IInventory dragonInv;
+    private IInventory ratInventory;
     private EntityDragonBase dragon;
 
     public ContainerDragon(final EntityDragonBase dragon, EntityPlayer player) {
 
-        this.dragonInv = dragon.dragonInv;
+        this.ratInventory = dragon.dragonInventory;
         this.dragon = dragon;
         byte b0 = 3;
-        dragonInv.openInventory(player);
+        ratInventory.openInventory(player);
         int i = (b0 - 4) * 18;
-        this.addSlotToContainer(new Slot(dragon.dragonInv, 0, 8, 18) {
+        this.addSlotToContainer(new Slot(dragon.dragonInventory, 1, 8, 54) {
             public void onSlotChanged() {
-                EntityDragonBase drg = ContainerDragon.this.dragon;
-                drg.setArmorInSlot(0, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(0)));
                 this.inventory.markDirty();
-                drg.updateDragonSlots();
+            }
+
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return super.isItemValid(stack) && stack.getItem() instanceof ItemBanner;
+            }
+        });
+        this.addSlotToContainer(new Slot(dragon.dragonInventory, 2, 8, 18) {
+            public void onSlotChanged() {
+                this.inventory.markDirty();
             }
 
             @Override
@@ -32,12 +40,9 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 0;
             }
         });
-        this.addSlotToContainer(new Slot(dragon.dragonInv, 1, 8, 36) {
+        this.addSlotToContainer(new Slot(dragon.dragonInventory, 3, 8, 36) {
             public void onSlotChanged() {
-                EntityDragonBase drg = ContainerDragon.this.dragon;
-                drg.setArmorInSlot(1, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(1)));
                 this.inventory.markDirty();
-                drg.updateDragonSlots();
             }
 
             @Override
@@ -45,12 +50,9 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 1;
             }
         });
-        this.addSlotToContainer(new Slot(dragon.dragonInv, 2, 153, 18) {
+        this.addSlotToContainer(new Slot(dragon.dragonInventory, 4, 153, 18) {
             public void onSlotChanged() {
-                EntityDragonBase drg = ContainerDragon.this.dragon;
-                drg.setArmorInSlot(2, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(2)));
                 this.inventory.markDirty();
-                drg.updateDragonSlots();
             }
 
             @Override
@@ -58,12 +60,9 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && stack.getMetadata() == 2;
             }
         });
-        this.addSlotToContainer(new Slot(dragon.dragonInv, 3, 153, 36) {
+        this.addSlotToContainer(new Slot(dragon.dragonInventory, 5, 153, 36) {
             public void onSlotChanged() {
-                EntityDragonBase drg = ContainerDragon.this.dragon;
-                drg.setArmorInSlot(3, drg.getIntFromArmor(ContainerDragon.this.dragonInv.getStackInSlot(3)));
                 this.inventory.markDirty();
-                drg.updateDragonSlots();
             }
 
             @Override
@@ -86,7 +85,7 @@ public class ContainerDragon extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return this.dragonInv.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 8.0F;
+        return this.ratInventory.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 8.0F;
     }
 
     @Override
@@ -96,8 +95,8 @@ public class ContainerDragon extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index < this.dragonInv.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.dragonInv.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.ratInventory.getSizeInventory()) {
+                if (!this.mergeItemStack(itemstack1, this.ratInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
@@ -109,7 +108,7 @@ public class ContainerDragon extends Container {
                 if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.dragonInv.getSizeInventory() <= 2 || !this.mergeItemStack(itemstack1, 2, this.dragonInv.getSizeInventory(), false)) {
+            } else if (this.ratInventory.getSizeInventory() <= 2 || !this.mergeItemStack(itemstack1, 2, this.ratInventory.getSizeInventory(), false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.isEmpty()) {
@@ -124,7 +123,7 @@ public class ContainerDragon extends Container {
     @Override
     public void onContainerClosed(EntityPlayer playerIn) {
         super.onContainerClosed(playerIn);
-        this.dragonInv.closeInventory(playerIn);
+        this.ratInventory.closeInventory(playerIn);
     }
 
 }

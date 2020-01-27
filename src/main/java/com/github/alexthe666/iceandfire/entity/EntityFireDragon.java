@@ -425,7 +425,6 @@ public class EntityFireDragon extends EntityDragonBase {
                     IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
                 }
             }
-
         }
         if (burnProgress >= 40D && canPositionBeSeen(burnX, burnY, burnZ)) {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;

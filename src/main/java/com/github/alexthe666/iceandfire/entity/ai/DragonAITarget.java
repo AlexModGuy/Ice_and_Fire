@@ -16,6 +16,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 
     public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
+        this.setMutexBits(1);
         this.dragon = entityIn;
     }
 

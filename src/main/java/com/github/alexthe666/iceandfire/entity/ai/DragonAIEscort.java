@@ -12,7 +12,7 @@ public class DragonAIEscort extends EntityAIBase {
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(0);
+        this.setMutexBits(1);
     }
 
     public boolean shouldExecute() {
