@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.IFlyingMount;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -37,27 +39,30 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
         double z = dragon.posZ;
         double speed = 1.8F * dragon.getFlightSpeedModifier();
         Vec3d lookVec = player.getLookVec();
-
+        if (player.moveForward < 0) {
+            lookVec = lookVec.rotateYaw((float) Math.PI);
+        } else if (player.moveStrafing > 0) {
+            lookVec = lookVec.rotateYaw((float) Math.PI * 0.5f);
+        } else if (player.moveStrafing < 0) {
+            lookVec = lookVec.rotateYaw((float) Math.PI * -0.5f);
+        }
+        if (dragon.up()) {
+            lookVec = lookVec.add(0, 1, 0);
+        }
+        if (dragon.down()) {
+            lookVec = lookVec.add(0, -1, 0);
+        }
         if (player.moveStrafing != 0 || player.moveForward != 0 || (dragon.fliesLikeElytra())) {
-            if (player.moveForward < 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI);
-            } else if (player.moveStrafing > 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI * 0.5f);
-            } else if (player.moveStrafing < 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI * -0.5f);
-            }
-            if(dragon.up()){
-                lookVec = lookVec.add(0, 1, 0);
-            }
-            if(dragon.down()){
-                lookVec = lookVec.add(0, -1, 0);
-            }
             x += lookVec.x * 10;
-            if(dragon.isFlying() && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())){
-                y += lookVec.y * 10;
-            }
             z += lookVec.z * 10;
         }
+        if ((dragon.isFlying()  || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
+            y += lookVec.y * 10;
+        }
         dragon.getMoveHelper().setMoveTo(x, y, z, speed);
+    }
+
+    private boolean hovering(){
+        return dragon instanceof EntityDragonBase && ((EntityDragonBase) dragon).isHovering() || dragon instanceof EntityHippogryph && ((EntityHippogryph) dragon).isHovering();
     }
 }

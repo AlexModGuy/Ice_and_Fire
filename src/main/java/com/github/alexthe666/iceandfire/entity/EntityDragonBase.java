@@ -1489,7 +1489,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (this.isHovering() && this.isFlying() && flyTicks > 40) {
             this.setHovering(false);
             this.setFlying(true);
-
         }
         if (this.isHovering() && !this.isFlying()) {
             if (this.isSleeping()) {
