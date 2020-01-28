@@ -336,7 +336,7 @@ public class EventClient {
                     double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * texture_scale;
                     double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * texture_scale;
                     double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * texture_scale;
-                    double d22 = (double) (0.0F);
+                    double d22 = 0.0F;
                     double d23 = d0 * 1 - texture_scale + d22;
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
@@ -398,7 +398,7 @@ public class EventClient {
             GlStateManager.translate(0, 1.2F, 0);
             for (Entity entitylivingbase : miscProps.glarers) {
                 Vec3d vec3d = this.getChainPosition(entitylivingbase, (double) entitylivingbase.getEyeHeight() * 0.75D, event.getPartialRenderTick());
-                Vec3d vec3d1 = this.getChainPosition(entity, (double) f4, event.getPartialRenderTick());
+                Vec3d vec3d1 = this.getChainPosition(entity, f4, event.getPartialRenderTick());
                 Vec3d vec3d2 = vec3d1.subtract(vec3d);
                 double d0 = vec3d2.length() + 1.0D;
                 vec3d2 = vec3d2.normalize();
@@ -427,7 +427,7 @@ public class EventClient {
                 double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * 0.2D;
                 double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * 0.2D;
                 double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-                double d22 = (double) (-1.0F + f3);
+                double d22 = -1.0F + f3;
                 double d23 = d0 * 2.5D + d22;
                 bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
                 bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
@@ -473,7 +473,7 @@ public class EventClient {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote) {
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getMinecraft().player) {
             if (event.isDismounting()) {
                 Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
             } else {

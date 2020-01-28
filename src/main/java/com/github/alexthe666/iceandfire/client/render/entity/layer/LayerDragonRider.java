@@ -65,6 +65,9 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                         GlStateManager.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
                     }
 
+                }else{
+                    GlStateManager.translate(0, -0.005F * dragonScale, 0);
+
                 }
                 GlStateManager.pushMatrix();
                 GlStateManager.rotate(180, 0, 0, 1);

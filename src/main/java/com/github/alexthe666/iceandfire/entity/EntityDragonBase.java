@@ -341,8 +341,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public boolean canDestroyBlock(BlockPos pos) {
-        float hardness = world.getBlockState(pos).getBlock().getBlockHardness(world.getBlockState(pos), world, pos);
-        return world.getBlockState(pos).getBlock().canEntityDestroy(world.getBlockState(pos), world, pos, this) && hardness >= 0;
+        return world.getBlockState(pos).getBlock().canEntityDestroy(world.getBlockState(pos), world, pos, this);
     }
 
     public boolean isMobDead() {
@@ -1300,6 +1299,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (isDiving()) {
             this.playSound(SoundEvents.ITEM_ELYTRA_FLYING, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
         }
+
         if (flightCycle < 58) {
             flightCycle += 2;
         } else {
@@ -1396,13 +1396,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.setHovering(false);
         }
         if (this.getControllingPassenger() != null && !this.onGround && (this.isFlying() || this.isHovering())) {
-            this.motionY *= 0D;
+          //  this.motionY *= 0D;
         }
-        if (this.isHovering() && this.isFlying() && flyTicks > 40) {
+        if (this.isHovering() && this.isFlying() && flyTicks > 40 && this.world.isRemote) {
             this.setHovering(false);
             this.setFlying(true);
         }
-        if (this.isHovering() && !this.isFlying()) {
+
+        if (this.isHovering() && !this.isFlying() && !world.isRemote) {
             if (this.isSleeping()) {
                 this.setHovering(false);
             }
@@ -1413,7 +1414,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 if (this.getControllingPassenger() == null && !this.isBeyondHeight()) {
                     this.motionY += 0.08;
                 }
-                if (this.hoverTicks > 40) {
+                if (this.hoverTicks > 40 && !world.isRemote) {
                     if (!this.isChild()) {
                         this.setFlying(true);
                     }
@@ -1541,23 +1542,21 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void breakBlock() {
         if (this.blockBreakCounter > 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
+            int bounds = (int)Math.ceil(this.getRenderSize() * 0.1);
             if ((this.blockBreakCounter == 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
                 if (IceAndFire.CONFIG.dragonGriefing != 2 && (!this.isTamed() || IceAndFire.CONFIG.tamedDragonGriefing)) {
                     float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (int a = (int) Math.floor(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.ceil(this.getEntityBoundingBox().maxX) + 1; a++) {
-                            for (int b = (int) Math.floor(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.ceil(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
-                                for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + 1; c++) {
+                        for (int a = (int) Math.floor(this.getEntityBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getEntityBoundingBox().maxX) + bounds; a++) {
+                            for (int b = (int) Math.floor(this.getEntityBoundingBox().minY) + bounds; (b <= (int) Math.ceil(this.getEntityBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
+                                for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + bounds; c++) {
                                     BlockPos pos = new BlockPos(a, b, c);
-                                    IBlockState state = world.getBlockState(new BlockPos(a, b, c));
-                                    Block block = state.getBlock();
-                                    if (state.getMaterial() != Material.AIR && (!(block instanceof BlockBush) || block instanceof BlockLilyPad) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
+                                    IBlockState state = world.getBlockState(pos);
+                                    if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world,pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                         this.motionX *= 0.6D;
                                         this.motionZ *= 0.6D;
-                                        if (block != Blocks.AIR) {
-                                            if (!world.isRemote) {
-                                                world.destroyBlock(new BlockPos(a, b, c), true);
-                                            }
+                                        if (!world.isRemote) {
+                                            world.destroyBlock(pos, rand.nextFloat() <= IceAndFire.CONFIG.dragonBlockBreakingDropChance);
                                         }
                                     }
                                 }
@@ -1733,10 +1732,21 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     }
 
+    public void updateClient(){
+
+    }
+
+    public void updateServer(){
+
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
         world.profiler.startSection("dragonUpdate");
+        if(world.isRemote){
+
+        }
         if (isFlying() && !world.isRemote) {
             this.flightManager.update();
         }
@@ -1785,7 +1795,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             }
             this.getControllingPassenger().dismountRidingEntity();
         }
-        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
+        if (!world.isRemote && this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
             this.setHovering(true);
             this.setFlying(false);
         }
@@ -2110,7 +2120,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     @Override
     public boolean isMovementBlocked() {
-        return this.getHealth() <= 0.0F || isSitting() || this.isModelDead();
+        return this.getHealth() <= 0.0F || isSitting() && !this.isBeingRidden() || this.isModelDead();
     }
 
     @Override

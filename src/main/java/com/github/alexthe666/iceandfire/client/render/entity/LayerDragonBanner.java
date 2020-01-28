@@ -35,18 +35,18 @@ public class LayerDragonBanner implements LayerRenderer<EntityDragonBase> {
 
     public void doRenderLayer(EntityDragonBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack itemstack = entity.getHeldItem(EnumHand.OFF_HAND);
+        GlStateManager.pushMatrix();
         if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemBanner) {
             this.banner.setItemValues(itemstack, false);
             float f = (entity.getRenderSize() / 3F);
             float f2 = 1F / f;
             GlStateManager.pushMatrix();
+            GlStateManager.translate(0, -0.125F, 0.4F);
             postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("BodyUpper"),  0.0625F);
-            postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("BodyLower"),  0.0625F);
-            GlStateManager.translate(0, -0.75F, 0.15F);
-            GlStateManager.translate(0, f * 0.075F, 0.0F);
             renderBanner(banner, 0, 0, 0, partialTicks, 0, f, false);
             GlStateManager.popMatrix();
         }
+        GlStateManager.popMatrix();
     }
 
     protected void postRender(AdvancedModelRenderer renderer, float scale) {
