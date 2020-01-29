@@ -65,8 +65,11 @@ public class PathNavigateDragon extends PathNavigateGround {
 
         this.maxDistanceToWaypoint = this.entity.width;
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
+        float distX = MathHelper.abs((float)(this.entity.posX - (vec3d1.x + 0.5D)));
+        float distZ = MathHelper.abs((float)(this.entity.posZ - (vec3d1.z + 0.5D)));
+        float distY = (float)Math.abs(this.entity.posY - vec3d1.y);
 
-        if (MathHelper.abs((float)(this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float)(this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < 1.0D)
+        if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.height)
         {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
