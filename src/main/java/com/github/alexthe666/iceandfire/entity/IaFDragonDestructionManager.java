@@ -257,7 +257,7 @@ public class IaFDragonDestructionManager {
     }
 
     public static IBlockState transformBlockFire(IBlockState in) {
-        if (in.getBlock() instanceof IDragonProof) {
+        if (in.getBlock() instanceof IDragonProof || !DragonUtils.canDragonBreak(in.getBlock())) {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
@@ -281,7 +281,7 @@ public class IaFDragonDestructionManager {
     }
 
     public static IBlockState transformBlockIce(IBlockState in) {
-        if (in.getBlock() instanceof IDragonProof || !canDragonDestroyBlock(in)) {
+        if (in.getBlock() instanceof IDragonProof || !DragonUtils.canDragonBreak(in.getBlock())) {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
@@ -302,9 +302,5 @@ public class IaFDragonDestructionManager {
             return Blocks.AIR.getDefaultState();
         }
         return in;
-    }
-
-    private static boolean canDragonDestroyBlock(IBlockState in) {
-        return EntityWither.canDestroyBlock(in.getBlock());
     }
 }
