@@ -590,21 +590,25 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     protected void spawnDeathParticles(){
-        for (int k = 0; k < 10; ++k) {
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+        if (this.world.isRemote) {
+            for (int k = 0; k < 10; ++k) {
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+            }
         }
     }
 
     protected void spawnBabyParticles() {
-        for (int i = 0; i < 5; i++) {
-            float radiusAdd = i * 0.15F;
-            float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-            float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
-            float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-            IceAndFire.PROXY.spawnParticle("dragonice", headPosX, headPosY, headPosZ, 0, 0, 0);
+        if (this.world.isRemote) {
+            for (int i = 0; i < 5; i++) {
+                float radiusAdd = i * 0.15F;
+                float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+                float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+                IceAndFire.PROXY.spawnParticle("dragonice", headPosX, headPosY, headPosZ, 0, 0, 0);
+            }
         }
     }
 

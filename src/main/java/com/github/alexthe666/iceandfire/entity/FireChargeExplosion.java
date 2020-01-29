@@ -220,8 +220,10 @@ public class FireChargeExplosion extends Explosion {
                     d3 = d3 * d7;
                     d4 = d4 * d7;
                     d5 = d5 * d7;
-                    IceAndFire.PROXY.spawnParticle("dragonice", (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-                    IceAndFire.PROXY.spawnParticle("dragonice", d0, d1, d2, d3, d4, d5);
+                    if (this.worldObj.isRemote) {
+                        IceAndFire.PROXY.spawnParticle("dragonice", (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+                        IceAndFire.PROXY.spawnParticle("dragonice", d0, d1, d2, d3, d4, d5);
+                    }
                 }
 
                 if (iblockstate.getMaterial() != Material.AIR) {

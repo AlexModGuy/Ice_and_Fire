@@ -94,7 +94,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
     @Override
     public void update() {
         ticksExisted++;
-        if (this.hasPixie) {
+        if (this.world.isRemote && this.hasPixie) {
             IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
         if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie) {

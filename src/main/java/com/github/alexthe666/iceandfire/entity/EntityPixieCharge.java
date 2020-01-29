@@ -56,8 +56,10 @@ public class EntityPixieCharge extends EntityFireball {
     }
 
     public void onUpdate() {
-        for (int i = 0; i < 5; ++i) {
-            IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+        if (this.world.isRemote) {
+            for (int i = 0; i < 5; ++i) {
+                IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+            }
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
             super.onEntityUpdate();
@@ -91,8 +93,10 @@ public class EntityPixieCharge extends EntityFireball {
                 ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 0));
                 movingObject.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
             }
-            for (int i = 0; i < 20; ++i) {
-                IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+            if (this.world.isRemote) {
+                for (int i = 0; i < 20; ++i) {
+                    IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                }
             }
             if (this.shootingEntity == null || !(shootingEntity instanceof EntityPlayer) || !((EntityPlayer) shootingEntity).isCreative()) {
                 if (rand.nextInt(3) == 0) {

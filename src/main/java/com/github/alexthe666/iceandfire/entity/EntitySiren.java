@@ -208,7 +208,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             double d0 = this.posX - this.getAttackTarget().posX;
             double d2 = this.posZ - this.getAttackTarget().posZ;
             double d1 = this.posY - 1 - this.getAttackTarget().posY;
-            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
             this.getAttackTarget().rotationPitch = EventServer.updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
@@ -277,14 +277,15 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             if (this.getRNG().nextInt(3) == 0) {
                 this.renderYawOffset = 0;
                 renderYawOffset = rotationYaw;
-                float radius = -0.9F;
-                float angle = (0.01745329251F * this.renderYawOffset) - 3F;
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                double extraY = 1.2F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
-                IceAndFire.PROXY.spawnParticle("siren_music", this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                if (this.world.isRemote) {
+                    float radius = -0.9F;
+                    float angle = (0.01745329251F * this.renderYawOffset) - 3F;
+                    double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+                    double extraY = 1.2F;
+                    double extraZ = radius * MathHelper.cos(angle);
+                    IceAndFire.PROXY.spawnParticle("siren_music", this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                }
             }
-
         }
         if (this.isActuallySinging() && !this.isInWater() && this.ticksExisted % 200 == 0) {
             this.playSound(ModSounds.SIREN_SONG, 2, 1);
@@ -511,12 +512,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
                 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-                this.motionX *= (double) f4;
+                this.motionX *= f4;
                 this.motionX *= 0.900000011920929D;
                 this.motionY *= 0.900000011920929D;
-                this.motionY *= (double) f4;
+                this.motionY *= f4;
                 this.motionZ *= 0.900000011920929D;
-                this.motionZ *= (double) f4;
+                this.motionZ *= f4;
             } else {
                 super.travel(strafe, forward, vertical);
             }
@@ -561,7 +562,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                 double distanceY = this.posY - this.siren.posY;
                 double distanceZ = this.posZ - this.siren.posZ;
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
-                double distanceWithY = (double) MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.siren.rotationYaw = this.limitAngle(this.siren.rotationYaw, angle, 30.0F);
@@ -569,8 +570,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                 this.siren.motionY += (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.siren.rotationYaw * 0.017453292F;
-                    this.siren.motionX -= (double) (MathHelper.sin(f) * 0.35F);
-                    this.siren.motionZ += (double) (MathHelper.cos(f) * 0.35F);
+                    this.siren.motionX -= MathHelper.sin(f) * 0.35F;
+                    this.siren.motionZ += MathHelper.cos(f) * 0.35F;
                 }
             } else if (this.action == EntityMoveHelper.Action.JUMPING) {
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));

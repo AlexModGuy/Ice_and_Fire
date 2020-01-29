@@ -247,7 +247,7 @@ public class EventClient {
                     sirenProps.isCharmed = false;
                 }
                 if (sirenProps.isCharmed) {
-                    if (rand.nextInt(40) == 0) {
+                    if (player.world.isRemote && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
                     }
 
