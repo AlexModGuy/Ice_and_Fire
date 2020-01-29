@@ -11,8 +11,15 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 
 public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntitySeaSerpent> {
 
+    public IceAndFireTabulaModel[] swimPose = {EnumSeaSerpentAnimations.SWIM1.seaserpent_model, EnumSeaSerpentAnimations.SWIM3.seaserpent_model, EnumSeaSerpentAnimations.SWIM4.seaserpent_model, EnumSeaSerpentAnimations.SWIM6.seaserpent_model};
+
     public SeaSerpentTabulaModelAnimator() {
         super(EnumSeaSerpentAnimations.T_POSE.seaserpent_model);
+    }
+
+    @Override
+    public void init(IceAndFireTabulaModel model) {
+
     }
 
     @Override
@@ -25,7 +32,6 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         }
         model.llibAnimator.update(entity);
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
-        IceAndFireTabulaModel[] swimPose = {EnumSeaSerpentAnimations.SWIM1.seaserpent_model, EnumSeaSerpentAnimations.SWIM3.seaserpent_model, EnumSeaSerpentAnimations.SWIM4.seaserpent_model, EnumSeaSerpentAnimations.SWIM6.seaserpent_model};
         int currentIndex = entity.swimCycle / 10;
         int prevIndex = currentIndex - 1;
         if (prevIndex < 0) {

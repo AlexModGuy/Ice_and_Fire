@@ -16,21 +16,35 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityFireDragon> {
 
+    private IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
+    private IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.firedragon_model, EnumDragonAnimations.FLIGHT2.firedragon_model, EnumDragonAnimations.FLIGHT3.firedragon_model, EnumDragonAnimations.FLIGHT4.firedragon_model, EnumDragonAnimations.FLIGHT5.firedragon_model, EnumDragonAnimations.FLIGHT6.firedragon_model};
+    AdvancedModelRenderer[] neckParts;
+    AdvancedModelRenderer[] tailParts;
+    AdvancedModelRenderer[] tailPartsWBody;
+    AdvancedModelRenderer[] toesPartsL;
+    AdvancedModelRenderer[] toesPartsR;
+    AdvancedModelRenderer[] clawL;
+    AdvancedModelRenderer[] clawR;
+    
     public FireDragonTabulaModelAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.firedragon_model);
+    }
+
+    @Override
+    public void init(IceAndFireTabulaModel model) {
+        neckParts = new AdvancedModelRenderer[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
+        tailParts = new AdvancedModelRenderer[]{model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
+        tailPartsWBody = new AdvancedModelRenderer[]{model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
+        toesPartsL = new AdvancedModelRenderer[]{model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
+        toesPartsR = new AdvancedModelRenderer[]{model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
+        clawL = new AdvancedModelRenderer[]{model.getCube("ClawL")};
+        clawR = new AdvancedModelRenderer[]{model.getCube("ClawR")};
     }
 
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
-        IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-        IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.firedragon_model,
-                EnumDragonAnimations.FLIGHT2.firedragon_model,
-                EnumDragonAnimations.FLIGHT3.firedragon_model,
-                EnumDragonAnimations.FLIGHT4.firedragon_model,
-                EnumDragonAnimations.FLIGHT5.firedragon_model,
-                EnumDragonAnimations.FLIGHT6.firedragon_model};
         boolean walking = !entity.isHovering() && !entity.isFlying() && entity.hoverProgress <= 0 && entity.flyProgress <= 0;
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
         int prevIndex = currentIndex - 1;
@@ -45,13 +59,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         if (delta == 0) {
             deltaTicks = 0;
         }
-        AdvancedModelRenderer[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
-        AdvancedModelRenderer[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        AdvancedModelRenderer[] tailPartsWBody = {model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        AdvancedModelRenderer[] toesPartsL = {model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
-        AdvancedModelRenderer[] toesPartsR = {model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
-        AdvancedModelRenderer[] clawL = {model.getCube("ClawL")};
-        AdvancedModelRenderer[] clawR = {model.getCube("ClawR")};
+
 
         for (AdvancedModelRenderer cube : model.getCubes().values()) {
             this.genderMob(entity, cube);

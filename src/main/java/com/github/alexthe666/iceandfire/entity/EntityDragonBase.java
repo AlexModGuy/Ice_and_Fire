@@ -648,7 +648,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     private void initInventory() {
-        dragonInventory = new ContainerHorseChest("ratInventory", 5);
+        dragonInventory = new ContainerHorseChest("ratInventory", 6);
         dragonInventory.setCustomName(this.getName());
         if (dragonInventory != null) {
             for (int j = 0; j < dragonInventory.getSizeInventory(); ++j) {
@@ -1537,7 +1537,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public Animation getAnimation() {
         if (this.isModelDead()) {
-            return this.NO_ANIMATION;
+            return NO_ANIMATION;
         }
         return currentAnimation;
     }
@@ -1833,7 +1833,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public void dropArmor() {
-        //TODO
+
     }
 
     public boolean isChained() {
@@ -1885,6 +1885,12 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         float headPosY = (float) (posY + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
         float headPosZ = (float) (posZ + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
+    }
+
+    public void onKillCommand() {
+        this.setDead();
+        this.setDeathStage(this.getAgeInDays() / 5);
+        this.setModelDead(false);
     }
 
     public Vec3d getHeadPosition() {

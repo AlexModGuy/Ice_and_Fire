@@ -16,26 +16,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityIceDragon> {
 
+    private IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
+    private IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.icedragon_model, EnumDragonAnimations.FLIGHT2.icedragon_model, EnumDragonAnimations.FLIGHT3.icedragon_model, EnumDragonAnimations.FLIGHT4.icedragon_model, EnumDragonAnimations.FLIGHT5.icedragon_model, EnumDragonAnimations.FLIGHT6.icedragon_model};
+    private IceAndFireTabulaModel[] swimPoses = {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
+    private AdvancedModelRenderer[] neckParts;
+    private AdvancedModelRenderer[] tailParts;
+    private AdvancedModelRenderer[] tailPartsWBody;
+    private AdvancedModelRenderer[] toesPartsL;
+    private AdvancedModelRenderer[] toesPartsR;
+    private AdvancedModelRenderer[] clawL;
+    private AdvancedModelRenderer[] clawR;
+
     public IceDragonTabulaModelAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.icedragon_model);
+    }
+
+    @Override
+    public void init(IceAndFireTabulaModel model) {
+        neckParts = new AdvancedModelRenderer[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
+        tailParts = new AdvancedModelRenderer[]{model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
+        tailPartsWBody = new AdvancedModelRenderer[]{model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
+        toesPartsL = new AdvancedModelRenderer[]{model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
+        toesPartsR = new AdvancedModelRenderer[]{model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
+        clawL = new AdvancedModelRenderer[]{model.getCube("ClawL")};
+        clawR = new AdvancedModelRenderer[]{model.getCube("ClawR")};
     }
 
     @Override
     public void setRotationAngles(IceAndFireTabulaModel model, EntityIceDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
-        IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
-        IceAndFireTabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.icedragon_model,
-                EnumDragonAnimations.FLIGHT2.icedragon_model,
-                EnumDragonAnimations.FLIGHT3.icedragon_model,
-                EnumDragonAnimations.FLIGHT4.icedragon_model,
-                EnumDragonAnimations.FLIGHT5.icedragon_model,
-                EnumDragonAnimations.FLIGHT6.icedragon_model};
-        IceAndFireTabulaModel[] swimPoses = {EnumDragonAnimations.SWIM1.icedragon_model,
-                EnumDragonAnimations.SWIM2.icedragon_model,
-                EnumDragonAnimations.SWIM3.icedragon_model,
-                EnumDragonAnimations.SWIM4.icedragon_model,
-                EnumDragonAnimations.SWIM5.icedragon_model};
         boolean walking = !entity.isHovering() && !entity.isFlying() && entity.hoverProgress <= 0 && entity.flyProgress <= 0;
         boolean swimming = entity.isInWater() && entity.swimProgress > 0;
         int currentIndex = walking ? (entity.walkCycle / 10) : (entity.flightCycle / 10);
@@ -56,13 +66,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
         if (delta == 0) {
             deltaTicks = 0;
         }
-        AdvancedModelRenderer[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
-        AdvancedModelRenderer[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        AdvancedModelRenderer[] tailPartsWBody = {model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        AdvancedModelRenderer[] toesPartsL = {model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
-        AdvancedModelRenderer[] toesPartsR = {model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
-        AdvancedModelRenderer[] clawL = {model.getCube("ClawL")};
-        AdvancedModelRenderer[] clawR = {model.getCube("ClawR")};
+
 
         for (AdvancedModelRenderer cube : model.getCubes().values()) {
             this.genderMob(entity, cube);

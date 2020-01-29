@@ -363,8 +363,8 @@ public enum EnumDragonTextures {
                 FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + resource + ".png");
                 ICETEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/" + resource + ".png");
             } else {
-                FIRETEXTURE = null;
-                ICETEXTURE = null;
+                FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
+                ICETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
             }
         }
 

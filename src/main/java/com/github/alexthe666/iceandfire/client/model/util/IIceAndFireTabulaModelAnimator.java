@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @since 1.0.0
  */
 @SideOnly(Side.CLIENT)
-@FunctionalInterface
 public interface IIceAndFireTabulaModelAnimator<T extends Entity> {
+    void init(IceAndFireTabulaModel model);
     void setRotationAngles(IceAndFireTabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale);
 }

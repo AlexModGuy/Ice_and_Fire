@@ -103,13 +103,22 @@ public class ContainerDragon extends Container {
                 if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
-
-            } else if (this.getSlot(0).isItemValid(itemstack1)) {
-                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.ratInventory.getSizeInventory() <= 2 || !this.mergeItemStack(itemstack1, 2, this.ratInventory.getSizeInventory(), false)) {
-                return ItemStack.EMPTY;
+            } else if (this.getSlot(3).isItemValid(itemstack1) && !this.getSlot(3).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(4).isItemValid(itemstack1) && !this.getSlot(4).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 4, 5, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(5).isItemValid(itemstack1) && !this.getSlot(5).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 5, 6, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
             if (itemstack1.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
