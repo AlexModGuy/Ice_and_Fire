@@ -428,6 +428,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     this.ticksSinceJump = 0;
                 }
             }
+            if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+                this.setAttackTarget(null);
+            }
         }
         super.onLivingUpdate();
         boolean breathing = isBreathing() && this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_ROAR;

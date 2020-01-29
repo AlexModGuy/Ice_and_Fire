@@ -36,6 +36,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -296,6 +297,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         if (this.isInLove()) {
             this.setFlying(false);
         }

@@ -37,6 +37,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -271,6 +272,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         boolean stone = EntityGorgon.isStoneMob(this);
         if (stone && stoneProgress < 20.0F) {
             stoneProgress += 2F;
