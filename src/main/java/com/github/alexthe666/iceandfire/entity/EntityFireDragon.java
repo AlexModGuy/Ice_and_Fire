@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +43,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
-        super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+        super(worldIn, DragonType.FIRE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
         this.setSize(0.78F, 1.2F);
         this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
@@ -410,7 +411,7 @@ public class EntityFireDragon extends EntityDragonBase {
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
-        int increment = (int)Math.ceil(conqueredDistance / 100);
+        int increment = (int) Math.ceil(conqueredDistance / 100);
         for (int i = 0; i < conqueredDistance; i += increment) {
             double progressX = headPos.x + d2 * (i / (float) distance);
             double progressY = headPos.y + d3 * (i / (float) distance);
@@ -466,5 +467,24 @@ public class EntityFireDragon extends EntityDragonBase {
         return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
     }
 
+    protected void spawnDeathParticles() {
+        for (int k = 0; k < 3; ++k) {
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            if (world.isRemote) {
+                this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+            }
+        }
+    }
 
+    protected void spawnBabyParticles() {
+        for (int i = 0; i < 5; i++) {
+            float radiusAdd = i * 0.15F;
+            float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+            float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+            float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
+        }
+    }
 }

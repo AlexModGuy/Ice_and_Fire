@@ -289,11 +289,7 @@ public class IafDragonLogic {
         if ((dragon.groundAttack == IaFDragonAttacks.Ground.FIRE) && dragon.getDragonStage() < 2) {
             dragon.usingGroundAttack = true;
             dragon.randomizeAttacks();
-            if (dragon.isFire) {
-                dragon.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
-            } else {
-                dragon.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
-            }
+            dragon.playSound(dragon.getBabyFireSound(), 1, 1);
         }
         if (dragon.isBreathingFire()) {
             dragon.fireTicks++;
@@ -359,17 +355,7 @@ public class IafDragonLogic {
             dragon.flightCycle = 0;
         }
         if ((dragon.groundAttack == IaFDragonAttacks.Ground.FIRE) && dragon.getDragonStage() < 2) {
-            for (int i = 0; i < 5; i++) {
-                float radiusAdd = i * 0.15F;
-                float headPosX = (float) (dragon.posX + 1.8F * dragon.getRenderSize() * (0.3F + radiusAdd) * Math.cos((dragon.rotationYaw + 90) * Math.PI / 180));
-                float headPosZ = (float) (dragon.posZ + 1.8F * dragon.getRenderSize() * (0.3F + radiusAdd) * Math.sin((dragon.rotationYaw + 90) * Math.PI / 180));
-                float headPosY = (float) (dragon.posY + 0.5 * dragon.getRenderSize() * 0.3F);
-                if (dragon.isFire) {
-                    dragon.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
-                } else {
-                    IceAndFire.PROXY.spawnParticle("dragonice", headPosX, headPosY, headPosZ, 0, 0, 0);
-                }
-            }
+            dragon.spawnBabyParticles();
         }
     }
 

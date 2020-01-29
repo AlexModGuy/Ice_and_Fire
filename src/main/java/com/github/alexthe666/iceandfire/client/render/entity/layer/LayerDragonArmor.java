@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.client.texture.ArrayLayeredTexture;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
@@ -20,12 +21,10 @@ import java.util.Map;
 public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
     private static EntityEquipmentSlot[] ARMOR_SLOTS = {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
     private final RenderLiving render;
-    private boolean isFireDragon;
     private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
     public LayerDragonArmor(RenderLiving renderIn, boolean isFireDragon) {
         this.render = renderIn;
-        this.isFireDragon = isFireDragon;
     }
 
     public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
@@ -33,15 +32,14 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
         int armorNeck = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
         int armorLegs = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
         int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-        String dragonName = isFireDragon ? "fire" : "ice";
-        String armorTexture = dragonName + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
-        if (!armorTexture.equals(dragonName + "|0|0|0|0")) {
+        String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
+        if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
             if(resourcelocation == null){
                 resourcelocation = EnumDragonTextures.Armor.EMPTY.FIRETEXTURE;
                 List<String> tex = new ArrayList<String>();
                 for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
-                    if (isFireDragon) {
+                    if (dragon.dragonType == DragonType.FIRE) {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).FIRETEXTURE.toString());
                     } else {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).ICETEXTURE.toString());

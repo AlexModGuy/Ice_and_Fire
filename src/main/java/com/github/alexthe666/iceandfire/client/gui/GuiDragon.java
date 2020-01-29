@@ -76,7 +76,7 @@ public class GuiDragon extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s1 = new TextComponentTranslation(dragon.isFire ? "entity.firedragon.name" : "entity.icedragon.name").getUnformattedText();
+        String s1 = dragon.getName();
         this.fontRenderer.drawString(s1, this.xSize / 2 - this.fontRenderer.getStringWidth(s1) / 2, 6, 4210752);
         String s3 = dragon.getCustomNameTag().length() == 0 ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomNameTag();
         this.fontRenderer.drawString(s3, this.xSize / 2 - this.fontRenderer.getStringWidth(s3) / 2, 75, 0XFFFFFF);

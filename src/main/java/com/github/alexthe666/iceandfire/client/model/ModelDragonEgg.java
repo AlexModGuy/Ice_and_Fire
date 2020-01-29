@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
@@ -61,7 +62,7 @@ public class ModelDragonEgg extends AdvancedModelBase {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         if (entity instanceof EntityDragonEgg) {
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
-            if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().isFire) {
+            if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().dragonType == DragonType.FIRE) {
                 this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
                 this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
             }

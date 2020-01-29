@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.google.common.collect.Maps;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Map;
 
 public enum EnumDragonEgg {
-    RED(0, TextFormatting.DARK_RED, true), GREEN(1, TextFormatting.DARK_GREEN, true), BRONZE(2, TextFormatting.GOLD, true), GRAY(3, TextFormatting.GRAY, true),
-    BLUE(4, TextFormatting.AQUA, false), WHITE(5, TextFormatting.WHITE, false), SAPPHIRE(6, TextFormatting.BLUE, false), SILVER(7, TextFormatting.DARK_GRAY, false);
+    RED(0, TextFormatting.DARK_RED, DragonType.FIRE), GREEN(1, TextFormatting.DARK_GREEN, DragonType.FIRE), BRONZE(2, TextFormatting.GOLD, DragonType.FIRE), GRAY(3, TextFormatting.GRAY, DragonType.FIRE),
+    BLUE(4, TextFormatting.AQUA, DragonType.ICE), WHITE(5, TextFormatting.WHITE, DragonType.ICE), SAPPHIRE(6, TextFormatting.BLUE, DragonType.ICE), SILVER(7, TextFormatting.DARK_GRAY, DragonType.ICE);
 
     private static final Map<Integer, EnumDragonEgg> META_LOOKUP = Maps.newHashMap();
 
@@ -22,12 +23,12 @@ public enum EnumDragonEgg {
 
     public int meta;
     public TextFormatting color;
-    public boolean isFire;
+    public DragonType dragonType;
 
-    EnumDragonEgg(int meta, TextFormatting color, boolean isFire) {
+    EnumDragonEgg(int meta, TextFormatting color, DragonType dragonType) {
         this.meta = meta;
         this.color = color;
-        this.isFire = isFire;
+        this.dragonType = dragonType;
     }
 
     public static EnumDragonEgg byMetadata(int meta) {

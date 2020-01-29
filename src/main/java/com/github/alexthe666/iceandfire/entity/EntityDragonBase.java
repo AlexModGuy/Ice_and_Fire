@@ -89,6 +89,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public static Animation ANIMATION_ROAR;
     public static Animation ANIMATION_EPIC_ROAR;
     public static Animation ANIMATION_TAILWHACK;
+    public DragonType dragonType;
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -126,7 +127,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public ChainBuffer tail_buffer;
     public int spacebarTicks;
     public float[][] growth_stages;
-    public boolean isFire = this instanceof EntityFireDragon;
     public LegSolverQuadruped legSolver;
     public int walkCycle;
     public BlockPos burningTarget;
@@ -179,9 +179,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
 
-    public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
+    public EntityDragonBase(World world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
         initInventory();
+        this.dragonType = type;
         this.minimumDamage = minimumDamage;
         this.maximumDamage = maximumDamage;
         this.minimumHealth = minimumHealth;
@@ -387,20 +388,13 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
-            for (int k = 0; k < 3; ++k) {
-                double d2 = this.rand.nextGaussian() * 0.02D;
-                double d0 = this.rand.nextGaussian() * 0.02D;
-                double d1 = this.rand.nextGaussian() * 0.02D;
-                if (isFire) {
-                    if (world.isRemote) {
-                        this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
-                    }
-                } else {
-                    IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
-                }
-            }
+           spawnDeathParticles();
         }
     }
+
+    protected void spawnDeathParticles(){}
+
+    protected void spawnBabyParticles(){}
 
     public void setDead() {
         removeParts();
@@ -700,8 +694,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         int armorNeck = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
         int armorLegs = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
         int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-        String dragonName = isFire ? "fire" : "ice";
-        armorResLoc = dragonName + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
+        armorResLoc = dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         IceAndFire.PROXY.updateDragonArmorRender(armorResLoc);
         double healthStep = (maximumHealth - minimumHealth) / (125);
         double attackStep = (maximumDamage - minimumDamage) / (125);
@@ -932,7 +925,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             } else if (!world.isRemote && stack.isEmpty() && IceAndFire.CONFIG.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
-                    ItemStack skull = new ItemStack(ModItems.dragon_skull, 1, this.isFire ? 0 : 1);
+                    ItemStack skull = dragonType.getSkull().copy();
                     skull.setTagCompound(new NBTTagCompound());
                     skull.getTagCompound().setInteger("Stage", this.getDragonStage());
                     skull.getTagCompound().setInteger("DragonType", 0);
@@ -998,7 +991,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     this.openGUI(player);
                     return true;
                 } else {
-                    int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, !isFire);
+                    int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, dragonType.isPiscivore());
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                         //this.growDragon(1);
                         this.setHunger(this.getHunger() + itemFoodAmount);
@@ -1075,7 +1068,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
                         hasHadHornUse = true;
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
-                        ItemStack stack1 = new ItemStack(this.isFire ? ModItems.dragon_horn_fire : ModItems.dragon_horn_ice);
+                        ItemStack stack1 = dragonType.getHorn().copy();
                         stack1.setTagCompound(new NBTTagCompound());
                         this.writeEntityToNBT(stack1.getTagCompound());
                         player.setHeldItem(hand, stack1);
@@ -1575,9 +1568,13 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         int k = MathHelper.floor(this.posZ);
         BlockPos pos = new BlockPos(i, j, k);
         EntityDragonEgg dragon = new EntityDragonEgg(this.world);
-        dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + (this.isFire ? 0 : 4)));
+        dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
         dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
         return dragon;
+    }
+
+    public int getStartMetaForType(){
+        return 0;
     }
 
     public boolean isTargetBlocked(Vec3d target) {
@@ -2051,4 +2048,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return super.getSoundPitch();
     }
 
+    public SoundEvent getBabyFireSound() {
+        return SoundEvents.BLOCK_FIRE_EXTINGUISH;
+    }
 }
