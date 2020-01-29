@@ -21,7 +21,7 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
     private static EntityEquipmentSlot[] ARMOR_SLOTS = {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
     private final RenderLiving render;
     private boolean isFireDragon;
-    private Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
+    private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
     public LayerDragonArmor(RenderLiving renderIn, boolean isFireDragon) {
         this.render = renderIn;
@@ -33,10 +33,12 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
         int armorNeck = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
         int armorLegs = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
         int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-        String armorTexture = armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
-        if (!armorTexture.equals("0|0|0|0")) {
+        String dragonName = isFireDragon ? "fire" : "ice";
+        String armorTexture = dragonName + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
+        if (!armorTexture.equals(dragonName + "|0|0|0|0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
             if(resourcelocation == null){
+                resourcelocation = EnumDragonTextures.Armor.EMPTY.FIRETEXTURE;
                 List<String> tex = new ArrayList<String>();
                 for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
                     if (isFireDragon) {
@@ -45,11 +47,9 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).ICETEXTURE.toString());
                     }
                 }
-                if(!tex.isEmpty()){
-                    ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
-                    Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
-                    LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
-                }
+                ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
+                Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
+                LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
             }
             this.render.bindTexture(resourcelocation);
             this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -59,5 +59,9 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
 
     public boolean shouldCombineTextures() {
         return false;
+    }
+
+    public static void clearCache(String str){
+        LAYERED_ARMOR_CACHE.remove(str);
     }
 }

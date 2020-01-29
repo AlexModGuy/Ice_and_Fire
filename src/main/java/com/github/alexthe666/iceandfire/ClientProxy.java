@@ -15,6 +15,7 @@ import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimatio
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -492,4 +493,9 @@ public class ClientProxy extends CommonProxy {
     public void setPreviousViewType(int view) {
         previousViewType = view;
     }
+
+    public void updateDragonArmorRender(String clear){
+        LayerDragonArmor.clearCache(clear);
+    }
+
 }

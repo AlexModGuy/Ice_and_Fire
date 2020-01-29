@@ -53,7 +53,6 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
     protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
         String baseTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
-        System.out.println(baseTexture);
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {
             resourcelocation = EnumDragonTextures.getTextureFromDragon(entity);

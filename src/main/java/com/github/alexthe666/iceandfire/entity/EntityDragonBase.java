@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
@@ -21,9 +20,6 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockLilyPad;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -34,7 +30,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -181,6 +176,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public int navigatorType;
     public ContainerHorseChest dragonInventory;
     private boolean isOverAir;
+    public String prevArmorResLoc = "0|0|0|0";
+    public String armorResLoc = "0|0|0|0";
 
     public EntityDragonBase(World world, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -648,7 +645,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     private void initInventory() {
-        dragonInventory = new ContainerHorseChest("ratInventory", 6);
+        dragonInventory = new ContainerHorseChest("dragonInventory", 5);
         dragonInventory.setCustomName(this.getName());
         if (dragonInventory != null) {
             for (int j = 0; j < dragonInventory.getSizeInventory(); ++j) {
@@ -698,6 +695,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     protected void updateAttributes() {
+        prevArmorResLoc = armorResLoc;
+        int armorHead = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+        int armorNeck = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+        int armorLegs = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+        int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+        String dragonName = isFire ? "fire" : "ice";
+        armorResLoc = dragonName + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
+        IceAndFire.PROXY.updateDragonArmorRender(armorResLoc);
         double healthStep = (maximumHealth - minimumHealth) / (125);
         double attackStep = (maximumDamage - minimumDamage) / (125);
         double speedStep = (maximumSpeed - minimumSpeed) / (125);
@@ -871,29 +876,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void onKillEntity(EntityLivingBase entity) {
         super.onKillEntity(entity);
         this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
-    }
-
-    public void setArmorInSlot(int i, ItemStack dragonArmor) {
-        switch (i) {
-            case 0:
-                this.setItemStackToSlot(EntityEquipmentSlot.HEAD, dragonArmor);
-                break;
-            case 1:
-                this.setItemStackToSlot(EntityEquipmentSlot.CHEST, dragonArmor);
-                break;
-            case 2:
-                this.setItemStackToSlot(EntityEquipmentSlot.LEGS, dragonArmor);
-                break;
-            case 3:
-                this.setItemStackToSlot(EntityEquipmentSlot.FEET, dragonArmor);
-                break;
-        }
-        if (world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonArmor(this.getEntityId(), i, dragonArmor));
-        }
-        double armorStep = (maximumArmor - minimumArmor) / (125);
-        double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
     }
 
     private double calculateArmorModifier() {
@@ -2034,38 +2016,35 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
-        if (slotIn == EntityEquipmentSlot.MAINHAND) {
+       if (slotIn == EntityEquipmentSlot.OFFHAND) {
             return dragonInventory.getStackInSlot(0);
-        } else if (slotIn == EntityEquipmentSlot.OFFHAND) {
-            return dragonInventory.getStackInSlot(1);
         } else if (slotIn == EntityEquipmentSlot.HEAD) {
-            return dragonInventory.getStackInSlot(2);
+            return dragonInventory.getStackInSlot(1);
         }else if (slotIn == EntityEquipmentSlot.CHEST) {
-            return dragonInventory.getStackInSlot(3);
+            return dragonInventory.getStackInSlot(2);
         }else if (slotIn == EntityEquipmentSlot.LEGS) {
-            return dragonInventory.getStackInSlot(4);
+            return dragonInventory.getStackInSlot(3);
         }else if (slotIn == EntityEquipmentSlot.FEET) {
-            return dragonInventory.getStackInSlot(5);
+            return dragonInventory.getStackInSlot(4);
         }
         return super.getItemStackFromSlot(slotIn);
     }
 
     public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
-        if (slotIn == EntityEquipmentSlot.MAINHAND) {
+        if (slotIn == EntityEquipmentSlot.OFFHAND) {
             dragonInventory.setInventorySlotContents(0, stack);
-        } else if (slotIn == EntityEquipmentSlot.OFFHAND) {
-            dragonInventory.setInventorySlotContents(1, stack);
         } else if (slotIn == EntityEquipmentSlot.HEAD) {
-            dragonInventory.setInventorySlotContents(2, stack);
+            dragonInventory.setInventorySlotContents(1, stack);
         } else if (slotIn == EntityEquipmentSlot.CHEST) {
-            dragonInventory.setInventorySlotContents(3, stack);
+            dragonInventory.setInventorySlotContents(2, stack);
         } else if (slotIn == EntityEquipmentSlot.LEGS) {
-            dragonInventory.setInventorySlotContents(4, stack);
+            dragonInventory.setInventorySlotContents(3, stack);
         } else if (slotIn == EntityEquipmentSlot.FEET) {
-            dragonInventory.setInventorySlotContents(5, stack);
+            dragonInventory.setInventorySlotContents(4, stack);
         } else {
             super.getItemStackFromSlot(slotIn);
         }
+        updateAttributes();
     }
 
     public float getSoundPitch(){

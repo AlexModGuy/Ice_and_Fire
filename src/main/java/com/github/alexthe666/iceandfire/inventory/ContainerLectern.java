@@ -75,7 +75,6 @@ public class ContainerLectern extends SyncedFieldContainer {
                 if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
-
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
                 if (!itemstack1.isEmpty() && itemstack1.getItem() == ModItems.bestiary) {
