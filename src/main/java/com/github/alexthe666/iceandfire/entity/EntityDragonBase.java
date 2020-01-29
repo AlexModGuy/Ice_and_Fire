@@ -1226,8 +1226,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                                     if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world,pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                         this.motionX *= 0.6D;
                                         this.motionZ *= 0.6D;
+
                                         if (!world.isRemote) {
-                                            world.destroyBlock(pos, rand.nextFloat() <= IceAndFire.CONFIG.dragonBlockBreakingDropChance);
+                                            world.destroyBlock(pos, rand.nextFloat() <= IceAndFire.CONFIG.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
                                         }
                                     }
                                 }

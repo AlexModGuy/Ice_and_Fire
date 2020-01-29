@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -355,5 +356,14 @@ public class DragonUtils {
             return owner1.isEntityEqual(owner2);
         }
         return def;
+    }
+
+    public static boolean canDropFromDragonBlockBreak(IBlockState state) {
+        for (String name : IceAndFire.CONFIG.noDropBreakBlocks) {
+            if (name.equalsIgnoreCase(state.getBlock().getRegistryName().toString())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
