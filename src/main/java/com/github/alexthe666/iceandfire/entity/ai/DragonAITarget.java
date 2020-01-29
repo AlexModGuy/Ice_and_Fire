@@ -22,6 +22,9 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 
     @Override
     public boolean shouldExecute() {
+        if(dragon.getCommand() == 1 || dragon.getCommand() == 2){
+            return false;
+        }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
             float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
             if (dragonSize >= this.targetEntity.width) {
