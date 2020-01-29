@@ -52,6 +52,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -496,6 +497,10 @@ public class ClientProxy extends CommonProxy {
 
     public void updateDragonArmorRender(String clear){
         LayerDragonArmor.clearCache(clear);
+    }
+
+    public boolean shouldSeeBestiaryContents() {
+        return Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
     }
 
 }

@@ -73,13 +73,20 @@ public class ItemBestiary extends Item {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         if (stack.getTagCompound() != null) {
-            tooltip.add(StatCollector.translateToLocal("bestiary.contains"));
-            List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTagCompound().getIntArray("Pages")));
-            for (EnumBestiaryPages page : pages) {
-                tooltip.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
+            if(IceAndFire.PROXY.shouldSeeBestiaryContents()){
+                tooltip.add(StatCollector.translateToLocal("bestiary.contains"));
+                List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTagCompound().getIntArray("Pages")));
+                for (EnumBestiaryPages page : pages) {
+                    tooltip.add(TextFormatting.WHITE + "-" + StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase()));
+                }
+            }else{
+                tooltip.add(StatCollector.translateToLocal("bestiary.hold_shift"));
+
             }
+
 
         }
     }

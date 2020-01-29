@@ -303,4 +303,8 @@ public class CommonProxy {
     }
 
     public void updateDragonArmorRender(String clear){}
+
+    public boolean shouldSeeBestiaryContents() {
+        return true;
+    }
 }

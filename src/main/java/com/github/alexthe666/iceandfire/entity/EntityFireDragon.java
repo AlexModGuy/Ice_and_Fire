@@ -487,4 +487,13 @@ public class EntityFireDragon extends EntityDragonBase {
             world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
         }
     }
+
+    protected ItemStack getSkull() {
+        return new ItemStack(ModItems.dragon_skull);
+    }
+
+    protected ItemStack getHorn() {
+        return new ItemStack(ModItems.dragon_horn_fire);
+    }
+
 }

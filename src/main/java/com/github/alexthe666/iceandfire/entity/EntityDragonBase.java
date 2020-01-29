@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
+import com.ibm.icu.text.Replaceable;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -925,7 +926,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             } else if (!world.isRemote && stack.isEmpty() && IceAndFire.CONFIG.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
-                    ItemStack skull = dragonType.getSkull().copy();
+                    ItemStack skull = getSkull().copy();
                     skull.setTagCompound(new NBTTagCompound());
                     skull.getTagCompound().setInteger("Stage", this.getDragonStage());
                     skull.getTagCompound().setInteger("DragonType", 0);
@@ -977,6 +978,20 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             }
             if (this.isOwner(player)) {
+                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+                if (stack.getItem() == ModItems.dragon_horn && (properties == null || !properties.isStone)) {
+                    stack.setCount(0);
+                    hasHadHornUse = true;
+                    this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
+                    ItemStack stack1 = getHorn().copy();
+                    stack1.setTagCompound(new NBTTagCompound());
+                    this.writeEntityToNBT(stack1.getTagCompound());
+                    if (!player.inventory.addItemStackToInventory(stack1)) {
+                        player.dropItem(stack1, false);
+                    }
+                    this.setDead();
+                    return true;
+                }
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (this.getDragonStage() < 2) {
                         this.startRiding(player, true);
@@ -1064,22 +1079,19 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                             return true;
                         }
                     }
-                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone)) {
-                        hasHadHornUse = true;
-                        this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
-                        ItemStack stack1 = dragonType.getHorn().copy();
-                        stack1.setTagCompound(new NBTTagCompound());
-                        this.writeEntityToNBT(stack1.getTagCompound());
-                        player.setHeldItem(hand, stack1);
-                        this.setDead();
-                        return true;
-                    }
                 }
             }
         }
         return super.processInteract(player, hand);
 
+    }
+
+    protected ItemStack getSkull() {
+        return ItemStack.EMPTY;
+    }
+
+    protected ItemStack getHorn() {
+        return ItemStack.EMPTY;
     }
 
     private ItemStack getRandomDrop() {
@@ -1388,22 +1400,23 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (world.isRemote) {
             this.updateClientControls();
         }
+
+        world.profiler.startSection("dragonLogic");
+        isOverAir = isOverAirLogic();
+        logic.updateDragonCommon();
         if (this.isModelDead()) {
             return;
         }
-        world.profiler.startSection("dragonLogic");
-        isOverAir = isOverAirLogic();
         if(world.isRemote){
             logic.updateDragonClient();
         }else{
             logic.updateDragonServer();
         }
-        logic.updateDragonCommon();
+        world.profiler.endSection();
         world.profiler.startSection("dragonFlight");
         if (isFlying() && !world.isRemote) {
             this.flightManager.update();
         }
-        world.profiler.endSection();
         world.profiler.endSection();
     }
 

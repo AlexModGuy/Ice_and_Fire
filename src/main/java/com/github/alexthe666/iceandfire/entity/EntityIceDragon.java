@@ -616,4 +616,12 @@ public class EntityIceDragon extends EntityDragonBase {
     public SoundEvent getBabyFireSound() {
         return SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH;
     }
+
+    protected ItemStack getSkull() {
+        return new ItemStack(ModItems.dragon_skull, 1, 1);
+    }
+
+    protected ItemStack getHorn() {
+        return new ItemStack(ModItems.dragon_horn_fire);
+    }
 }

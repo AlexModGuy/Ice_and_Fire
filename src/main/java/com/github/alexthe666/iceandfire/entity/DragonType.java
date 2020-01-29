@@ -13,18 +13,14 @@ import net.minecraft.util.math.BlockPos;
 
 public class DragonType {
 
-    public static final DragonType FIRE = new DragonType("fire", new ItemStack(ModItems.dragon_skull, 1), new ItemStack(ModItems.dragon_horn_fire));
-    public static final DragonType ICE = new DragonType("ice", new ItemStack(ModItems.dragon_skull, 1, 1), new ItemStack(ModItems.dragon_horn_ice)).setPiscivore();
+    public static final DragonType FIRE = new DragonType("fire");
+    public static final DragonType ICE = new DragonType("ice").setPiscivore();
 
     private String name;
-    private ItemStack skull;
-    private ItemStack horn;
     private boolean piscivore;
 
-    public DragonType(String name, ItemStack skull, ItemStack horn) {
+    public DragonType(String name) {
         this.name = name;
-        this.skull = skull;
-        this.horn = horn;
     }
 
     public String getName() {
@@ -33,14 +29,6 @@ public class DragonType {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ItemStack getSkull() {
-        return skull;
-    }
-
-    public ItemStack getHorn() {
-        return horn;
     }
 
     public boolean isPiscivore() {
