@@ -2,18 +2,23 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.Level;
 
 /*
-    Generic dragon logic
+    dragon logic separation for client, server and shared sides.
  */
 public class IafDragonLogic {
 
@@ -432,6 +437,44 @@ public class IafDragonLogic {
         }
         if (dragon.hasHadHornUse) {
             dragon.hasHadHornUse = false;
+        }
+    }
+
+    public void debug() {
+        String side = dragon.world.isRemote ? "CLIENT" : "SERVER";
+        String owner = dragon.getOwner() == null ? "null" : dragon.getOwner().getName();
+        String attackTarget = dragon.getAttackTarget() == null ? "null" : dragon.getAttackTarget().getName();
+        IceAndFire.logger.log(Level.INFO, "DRAGON DEBUG[" + side + "]:"
+                + "\nStage: " + dragon.getDragonStage()
+                + "\nAge: " + dragon.getAgeInDays()
+                + "\nVariant: " + dragon.getVariantName(dragon.getVariant())
+                + "\nOwner: " + owner
+                + "\nAttack Target: " + attackTarget
+                + "\nFlying: " + dragon.isFlying()
+                + "\nHovering: " + dragon.isHovering()
+                + "\nWidth: " + dragon.width
+
+        );
+    }
+
+    public void debugPathfinder(Path currentPath) {
+        if(IceAndFire.DEBUG){
+            try{
+                for(int i = 0; i < currentPath.getCurrentPathLength(); i++){
+                    PathPoint point = currentPath.getPathPointFromIndex(i);
+                    int particle = EnumParticleTypes.HEART.getParticleID();
+                    IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
+                }
+                if(currentPath.getCurrentPos() != null){
+                    Vec3d point = currentPath.getCurrentPos();
+                    int particle = EnumParticleTypes.CLOUD.getParticleID();
+                    IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
+
+                }
+            }catch (Exception e){
+                //Pathfinders are always unfriendly.
+            }
+
         }
     }
 }

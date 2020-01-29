@@ -90,11 +90,8 @@ public class IaFDragonFlightManager {
                 target = new Vec3d(target.x, IceAndFire.CONFIG.maxDragonFlight, target.z);
             }
             if (target.y >= dragon.posY && !dragon.isModelDead()) {
-                if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
-                    dragon.motionY += 0.1D;
-                } else {
-                    dragon.motionY += 0.4D;
-                }
+                dragon.motionY += 0.1D;
+
             }
         }
 
@@ -183,7 +180,7 @@ public class IaFDragonFlightManager {
                     changeRange = 5 + ageMod * 10;
                 }
                 if(dragonBase.getAttackTarget() != null){
-                   // changeRange = 70F;
+                   changeRange = 70F;
                 }
                 this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, targetDegree, changeRange);
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));

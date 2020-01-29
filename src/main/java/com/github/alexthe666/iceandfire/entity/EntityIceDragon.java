@@ -369,7 +369,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
-                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 0);
+                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 1);
                     }
                 }
             } else {

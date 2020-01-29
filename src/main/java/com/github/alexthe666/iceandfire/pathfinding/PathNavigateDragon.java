@@ -49,7 +49,89 @@ public class PathNavigateDragon extends PathNavigateGround {
     }
 
     protected void pathFollow() {
-        super.pathFollow();
+        Vec3d vec3d = this.getEntityPosition();
+        int i = this.currentPath.getCurrentPathLength();
+        if(dragon.logic != null){
+            dragon.logic.debugPathfinder(this.currentPath);
+        }
+        for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j)
+        {
+            if ((double)this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y))
+            {
+                i = j;
+                break;
+            }
+        }
+
+        this.maxDistanceToWaypoint = this.entity.width;
+        Vec3d vec3d1 = this.currentPath.getCurrentPos();
+
+        if (MathHelper.abs((float)(this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float)(this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < 1.0D)
+        {
+            this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
+        }
+
+        int k = MathHelper.ceil(this.entity.width);
+        int l = MathHelper.ceil(this.entity.height);
+        int i1 = k;
+
+        for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1)
+        {
+            if (this.isDirectPathBetweenPoints(vec3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1))
+            {
+                this.currentPath.setCurrentPathIndex(j1);
+                break;
+            }
+        }
+
+        this.checkForStuck(vec3d);
+    }
+
+    private int ticksAtLastPos;
+    private Vec3d lastPosCheck = Vec3d.ZERO;
+    private Vec3d timeoutCachedNode = Vec3d.ZERO;
+    private long timeoutTimer;
+    private long lastTimeoutCheck;
+    private double timeoutLimit;
+
+    protected void checkForStuck(Vec3d positionVec3)
+    {
+        if (this.totalTicks - this.ticksAtLastPos > 100)
+        {
+            if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D)
+            {
+                this.clearPath();
+            }
+
+            this.ticksAtLastPos = this.totalTicks;
+            this.lastPosCheck = positionVec3;
+        }
+
+        if (this.currentPath != null && !this.currentPath.isFinished())
+        {
+            Vec3d vec3d = this.currentPath.getCurrentPos();
+
+            if (vec3d.equals(this.timeoutCachedNode))
+            {
+                this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;
+            }
+            else
+            {
+                this.timeoutCachedNode = vec3d;
+                double d0 = positionVec3.distanceTo(this.timeoutCachedNode);
+                this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double)this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
+            }
+
+            if (this.timeoutLimit > 0.0D && (double)this.timeoutTimer > this.timeoutLimit * 3.0D)
+            {
+                this.timeoutCachedNode = Vec3d.ZERO;
+                this.timeoutTimer = 0L;
+                this.timeoutLimit = 0.0D;
+                this.clearPath();
+            }
+
+            this.lastTimeoutCheck = System.currentTimeMillis();
+        }
     }
 
     public void clearPath() {

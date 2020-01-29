@@ -61,7 +61,7 @@ public class IceAndFire {
     @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
             MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class,
             MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class,
-            MessageAddChainedEntity.class, MessageRemoveChainedEntity.class, MessageDragonSetBurnBlock.class, MessageDragonSyncFire.class})
+            MessageAddChainedEntity.class, MessageRemoveChainedEntity.class, MessageDragonSetBurnBlock.class, MessageDragonSyncFire.class, MessageSpawnParticleAt.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -74,6 +74,7 @@ public class IceAndFire {
     public static Biome GLACIER;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
+    public static final boolean DEBUG = true;
 
     public static void loadConfig() {
         File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
