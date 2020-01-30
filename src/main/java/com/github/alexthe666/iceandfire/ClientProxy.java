@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -87,6 +88,8 @@ public class ClientProxy extends CommonProxy {
     private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
+    public static List<LayerRenderer> strippedRenderLayers = new ArrayList<>();
+    public static String currentStrippedRender = "";
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {

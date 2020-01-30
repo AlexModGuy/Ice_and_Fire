@@ -47,6 +47,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -271,8 +272,22 @@ public class EventClient {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
             boolean invisibleByDefault = event.getEntity().isPotionActive(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(invisibleByDefault);
+            if(ClientProxy.currentStrippedRender.equals(event.getRenderer().toString()) && !ClientProxy.strippedRenderLayers.isEmpty()){
+                for(LayerRenderer layer : ClientProxy.strippedRenderLayers){
+                    event.getRenderer().addLayer(layer);
+                }
+                ClientProxy.strippedRenderLayers.clear();
+            }
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
                 event.getEntity().setInvisible(true);
+                try{
+                    List<LayerRenderer> layerRenderers = (List<LayerRenderer>) ReflectionHelper.findField(RenderLivingBase.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "layerRenderers", "field_177097_h")).get(event.getRenderer());
+                    ClientProxy.strippedRenderLayers.addAll(layerRenderers);
+                    layerRenderers.clear();
+                    ClientProxy.currentStrippedRender = event.getRenderer().toString();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
 
