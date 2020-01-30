@@ -287,16 +287,6 @@ public class EntityIceDragon extends EntityDragonBase {
         } else if (!swimming && swimProgress > 0.0F) {
             swimProgress -= 0.5F;
         }
-        if ((swimming || this.isFlying())) {
-            if(this.getRidingPlayer() != null && this.navigatorType != 2){
-                switchNavigator(2);
-            }else if(navigatorType != 1){
-                switchNavigator(1);
-            }
-        }
-        if (!swimming && !this.isFlying() && this.navigatorType != 0) {
-            switchNavigator(0);
-        }
         if (this.isInMaterialWater() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
             this.setSwimming(true);
             this.setHovering(false);
@@ -580,7 +570,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public double getFlightSpeedModifier() {
-        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.3F : 1F);
+        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.8F : 1F);
     }
 
     public boolean isAllowedToTriggerFlight() {
@@ -625,5 +615,9 @@ public class EntityIceDragon extends EntityDragonBase {
 
     protected ItemStack getHorn() {
         return new ItemStack(ModItems.dragon_horn_fire);
+    }
+
+    public boolean useFlyingPathFinder() {
+        return this.isFlying() || this.isInMaterialWater();
     }
 }

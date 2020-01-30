@@ -197,15 +197,15 @@ public class IafDragonLogic {
             dragon.setHovering(false);
         }
         if(ridingPlayer == null){
-            if(dragon.isFlying() && dragon.navigatorType != 1){
+            if(dragon.useFlyingPathFinder() && dragon.navigatorType != 1){
                 dragon.switchNavigator(1);
             }
         }else{
-            if((dragon.isFlying() || dragon.isHovering()) && dragon.navigatorType != 2){
+            if((dragon.useFlyingPathFinder() || dragon.isHovering()) && dragon.navigatorType != 2){
                 dragon.switchNavigator(2);
             }
         }
-        if (!dragon.isFlying() && !dragon.isHovering() && dragon.navigatorType != 0) {
+        if (!dragon.useFlyingPathFinder() && !dragon.isHovering() && dragon.navigatorType != 0) {
             dragon.switchNavigator(0);
         }
         if (!dragon.isOverAir() && dragon.doesWantToLand() && (dragon.isFlying() || dragon.isHovering())) {

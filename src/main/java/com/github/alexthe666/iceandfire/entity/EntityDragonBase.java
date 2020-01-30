@@ -791,6 +791,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return isFlying;
     }
 
+    public boolean useFlyingPathFinder() {
+        return isFlying();
+    }
+
     public void setFlying(boolean flying) {
         this.dataManager.set(FLYING, flying);
         if (!world.isRemote) {

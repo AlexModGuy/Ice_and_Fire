@@ -63,6 +63,6 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
     }
 
     private boolean hovering(){
-        return dragon instanceof EntityDragonBase && ((EntityDragonBase) dragon).isHovering() || dragon instanceof EntityHippogryph && ((EntityHippogryph) dragon).isHovering();
+        return dragon instanceof EntityDragonBase && (((EntityDragonBase) dragon).isHovering() || ((EntityDragonBase) dragon).useFlyingPathFinder()) || dragon instanceof EntityHippogryph && ((EntityHippogryph) dragon).isHovering();
     }
 }
