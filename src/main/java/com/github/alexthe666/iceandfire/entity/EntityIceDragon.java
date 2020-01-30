@@ -164,9 +164,6 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        if (this.getAnimation() == ANIMATION_WINGBLAST) {
-            return false;
-        }
         switch (groundAttack) {
             case BITE:
                 if (this.getAnimation() != ANIMATION_BITE) {
