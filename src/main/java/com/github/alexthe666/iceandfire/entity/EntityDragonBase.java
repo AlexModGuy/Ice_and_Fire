@@ -36,6 +36,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -176,7 +177,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         2 = controlled flight
      */
     public int navigatorType;
-    public ContainerHorseChest dragonInventory;
+    public InventoryBasic dragonInventory;
     private boolean isOverAir;
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
@@ -641,7 +642,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     private void initInventory() {
-        dragonInventory = new ContainerHorseChest("dragonInventory", 5);
+        dragonInventory = new InventoryBasic("dragonInventory", false, 5);
         dragonInventory.setCustomName(this.getName());
         if (dragonInventory != null) {
             for (int j = 0; j < dragonInventory.getSizeInventory(); ++j) {
