@@ -6,6 +6,7 @@ import net.ilexiconn.llibrary.LLibrary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -136,17 +137,16 @@ public class IceAndFireMainMenu extends GuiMainMenu {
         Random random = new Random();
         drawnPictures = new Picture[1 + random.nextInt(2)];
         int cornerRight = 32;
-        int middle = width / 2;
         int cornerLeft = 32;
         boolean left = random.nextBoolean();
         for (int i = 0; i < drawnPictures.length; i++) {
             left = !left;
             int x;
-            int y = 45 + random.nextInt(25);
+            int y = random.nextInt(25);
             if (left) {
-                x = 50 + random.nextInt(60);
+                x = -30 - random.nextInt(20) - 128;
             } else {
-                x = middle + random.nextInt(cornerRight);
+                x = 30 + random.nextInt(20);
             }
             drawnPictures[i] = new Picture(random.nextInt(drawingTextures.length - 1), x, y, 0.5F, random.nextFloat() * 0.5F + 0.5F);
         }
@@ -154,11 +154,11 @@ public class IceAndFireMainMenu extends GuiMainMenu {
         for (int i = 0; i < drawnEnscriptions.length; i++) {
             left = !left;
             int x;
-            int y = 60 + random.nextInt(130);
+            int y = 10 + random.nextInt(130);
             if (left) {
-                x = 60 + random.nextInt(70);
+                x = -30 - random.nextInt(30) - 50;
             } else {
-                x = middle + random.nextInt(cornerRight);
+                x = 30 + random.nextInt(30);
             }
             String s1 = generateNewRandomName(Minecraft.getMinecraft().standardGalacticFontRenderer, 50, random);
             drawnEnscriptions[i] = new Enscription(s1, x, y, random.nextFloat() * 0.5F + 0.5F, 0X9C8B7B);
@@ -206,16 +206,25 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             this.mc.getTextureManager().bindTexture(pageFlipTextures[Math.min(5, pageFlip)]);
             this.drawTexturedModalRect(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
         } else {
+            int middleX = this.width / 2;
+            int middleY = this.height / 5;
+            System.out.println(this.width);
+            float widthScale = this.width / 427F;
+            float imageScale = widthScale * 128;
+            System.out.println("game scale: " + Minecraft.getMinecraft().gameSettings.guiScale);
             for (Enscription enscription : drawnEnscriptions) {
                 float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
                 int opacity = 10 + (int) (255 * enscription.alpha * globalAlpha);
-                this.mc.standardGalacticFontRenderer.drawString(enscription.text, enscription.x, enscription.y, color | (opacity << 24));
+                this.mc.standardGalacticFontRenderer.drawString(enscription.text, (int)(enscription.x * widthScale) + middleX, (int)(enscription.y * widthScale) + middleY, color | (opacity << 24));
             }
             for (Picture picture : drawnPictures) {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, picture.alpha * globalAlpha + 0.01F);
                 this.mc.getTextureManager().bindTexture(drawingTextures[picture.image]);
-                this.drawTexturedModalRect(picture.x, picture.y, 0, 0, 128, 128, 128, 128, this.zLevel);
+                ScaledResolution res = new ScaledResolution(this.mc);
+                //3 -> 1
+                //1 -> 3
+                this.drawTexturedModalRect((picture.x * widthScale) + middleX, (picture.y * widthScale) + middleY, 0, 0, imageScale, imageScale, imageScale, imageScale, this.zLevel);
             }
         }
         GlStateManager.enableTexture2D();
