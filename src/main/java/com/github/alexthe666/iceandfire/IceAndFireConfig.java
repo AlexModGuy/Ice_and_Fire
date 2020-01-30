@@ -84,6 +84,7 @@ public class IceAndFireConfig {
     public int deathWormSpawnCheckChance = 3;
     public int cockatriceChickenSearchLength = 32;
     public int cockatriceEggChance = 30;
+    public double cockatriceMaxHealth = 40.0D;
     public boolean chickensLayRottenEggs = true;
     public boolean spawnCockatrices = true;
     public int cockatriceSpawnRate = 4;
@@ -226,6 +227,7 @@ public class IceAndFireConfig {
         this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 2, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
         this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
+        this.cockatriceMaxHealth = (double) config.getFloat("Cockatrice Health", "all", 40, 1, 10000, "Maximum cockatrice health");
         this.cockatriceChickenSearchLength = config.getInt("Cockatrice chicken Search Length", "all", 32, 1, 10000, "How many blocks away can cockatrices detect chickens. Note that increasing this could cause lag.");
         this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 30, 1, Integer.MAX_VALUE, "1 out of this number chance per 6000 ticks for a chicken to lay a cockatrice egg.");
         this.chickensLayRottenEggs = config.getBoolean("Chickens Lay Rotten Eggs", "all", true, "True if chickens lay rotten eggs.");
