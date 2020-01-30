@@ -114,9 +114,8 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!keepInventory) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
-
-            if (tileentity instanceof TileEntityFurnace) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityFurnace) tileentity);
+            if (tileentity instanceof TileEntityDragonforge) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityDragonforge) tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
         }
