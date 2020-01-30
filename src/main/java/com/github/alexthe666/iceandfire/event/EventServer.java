@@ -762,11 +762,11 @@ public class EventServer {
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
-        if (IceAndFire.CONFIG.generateSilverOre && event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+        if (IceAndFire.CONFIG.generateSilverOre && (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
                 || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
-                || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
+                || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH))) {
             LootCondition chance = new RandomChance(0.2f);
             LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
             LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
