@@ -260,6 +260,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (!this.isTamed() && this.isFlying() && !onGround && source.isProjectile() && !world.isRemote) {
             this.isFallen = true;
         }
+        if(source.getTrueSource() instanceof EntityLivingBase && this.isTamed() && this.isOwner((EntityLivingBase) source.getTrueSource())){
+            return false;
+        }
         return super.attackEntityFrom(source, damage);
     }
 
