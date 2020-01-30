@@ -188,7 +188,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
     }
 
     public int getDragonStage() {
-        return getStage();
+        return Math.max(getStage(), 1);
     }
 
     @Override
