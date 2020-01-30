@@ -1773,7 +1773,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
                             living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50 * size));
                         } else {
-                            living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
+                            if(living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != ModItems.earplugs){
+                                living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
+                            }
                         }
                     }
                 }
