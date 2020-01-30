@@ -169,7 +169,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             }
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage()) {
+        if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage() && this.getHealth() < this.getMaxHealth()) {
             this.heal(5);
             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
