@@ -115,6 +115,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         } else if (attackDescision == 1) {
             if (!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)) {
                 this.setAnimation(ANIMATION_EATPLAYER);
+                entityIn.dismountRidingEntity();
                 entityIn.startRiding(this, true);
             } else {
                 this.setAnimation(ANIMATION_STOMP);

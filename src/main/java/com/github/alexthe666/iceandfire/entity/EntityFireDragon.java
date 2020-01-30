@@ -153,6 +153,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                     if (this.getAnimation() != ANIMATION_SHAKEPREY) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
+                        entityIn.dismountRidingEntity();
                         entityIn.startRiding(this);
                         this.usingGroundAttack = this.getRNG().nextBoolean();
                         this.randomizeAttacks();
