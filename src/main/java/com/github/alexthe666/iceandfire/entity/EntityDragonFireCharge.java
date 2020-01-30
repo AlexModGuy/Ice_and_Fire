@@ -111,9 +111,9 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                     return;
                 }
             }
-            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
+            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity && this.shootingEntity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
-                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
                     return;
                 }
                 if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
