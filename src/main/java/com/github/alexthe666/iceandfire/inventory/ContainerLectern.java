@@ -4,11 +4,15 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -22,8 +26,18 @@ public class ContainerLectern extends SyncedFieldContainer {
     public ContainerLectern(InventoryPlayer playerInv, IInventory furnaceInventory) {
         super(furnaceInventory);
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 15, 47));
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47));
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 15, 47){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
+            }
+        });
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == ModItems.manuscript;
+            }
+        });
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -66,33 +80,31 @@ public class ContainerLectern extends SyncedFieldContainer {
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
-
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
+            if (index < this.tileFurnace.getSizeInventory()) {
+                if (!this.mergeItemStack(itemstack1, this.tileFurnace.getSizeInventory(), this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(0).isItemValid(itemstack1) && !this.getSlot(0).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
 
-            if (index == 2) {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+            } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onSlotChange(itemstack1, itemstack);
-            } else if (index != 1 && index != 0) {
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == ModItems.bestiary) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (!itemstack1.isEmpty() && itemstack1.getItem() == ModItems.manuscript) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 2, 30, false)) {
-                    return ItemStack.EMPTY;
-                }
+            } else if (this.tileFurnace.getSizeInventory() <= 5 || !this.mergeItemStack(itemstack1, 5, this.tileFurnace.getSizeInventory(), false)) {
+                return ItemStack.EMPTY;
+            }
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
-                return super.transferStackInSlot(playerIn, index);
+                slot.onSlotChanged();
             }
         }
-
         return itemstack;
     }
 
