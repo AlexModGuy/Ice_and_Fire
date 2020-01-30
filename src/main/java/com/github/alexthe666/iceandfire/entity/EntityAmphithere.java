@@ -300,6 +300,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
             this.setAttackTarget(null);
         }
+        if(this.isChild() && this.getAttackTarget() != null){
+            this.setAttackTarget(null);
+        }
         if (this.isInLove()) {
             this.setFlying(false);
         }
