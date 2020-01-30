@@ -585,6 +585,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.hurtMob(this.getAttackTarget());
         }
         breakBlock();
+        if(!world.isRemote && this.isRiding() && this.getLowestRidingEntity() instanceof EntityBoat){
+            EntityBoat boat = (EntityBoat) this.getLowestRidingEntity();
+            this.dismountRidingEntity();
+            boat.setDead();
+        }
     }
 
     private void doSplashDamage() {
