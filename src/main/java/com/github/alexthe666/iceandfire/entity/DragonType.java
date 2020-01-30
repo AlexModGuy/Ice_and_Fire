@@ -50,6 +50,9 @@ public class DragonType {
                 if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
                     egg.world.setBlockToAir(pos);
                     EntityFireDragon dragon = new EntityFireDragon(egg.world);
+                    if(egg.hasCustomName()){
+                        dragon.setCustomNameTag(egg.getCustomNameTag());
+                    }
                     dragon.setVariant(egg.getType().ordinal());
                     dragon.setGender(egg.getRNG().nextBoolean());
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);

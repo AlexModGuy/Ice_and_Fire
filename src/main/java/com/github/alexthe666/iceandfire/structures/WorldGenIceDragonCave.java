@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -29,20 +30,18 @@ public class WorldGenIceDragonCave extends WorldGenerator {
 
     public static void setGoldPile(World world, BlockPos pos, Random rand) {
         int chance = rand.nextInt(99) + 1;
-        if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
-            return;
-        }
-
-        if (chance < 60) {
-            int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
-            boolean generateGold = rand.nextInt(goldRand) == 0;
-            world.setBlockState(pos, generateGold ? ModBlocks.silverPile.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
-        } else if (chance > 60 && chance < 62) {
-            world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 3);
-            if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
-                TileEntity tileentity1 = world.getTileEntity(pos);
-                if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
-                    ((TileEntityChest) tileentity1).setLootTable(isMale ? ICEDRAGON_MALE_CHEST : ICEDRAGON_CHEST, rand.nextLong());
+        if (!(world.getBlockState(pos).getBlock() instanceof BlockContainer)) {
+            if (chance < 60) {
+                int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
+                boolean generateGold = rand.nextInt(goldRand) == 0;
+                world.setBlockState(pos, generateGold ? ModBlocks.silverPile.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+            } else if (chance == 61) {
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 3);
+                if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
+                    TileEntity tileentity1 = world.getTileEntity(pos);
+                    if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
+                        ((TileEntityChest) tileentity1).setLootTable(isMale ? ICEDRAGON_MALE_CHEST : ICEDRAGON_CHEST, rand.nextLong());
+                    }
                 }
             }
         }
@@ -109,7 +108,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
         float f = (float) (j + k + l) * 0.333F + 0.5F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
             if (blockpos.distanceSq(position) <= (double) (f * f)) {
-                if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
+                if (!(worldIn.getBlockState(position).getBlock() instanceof BlockContainer) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
                     boolean doOres = rand.nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
                     if (doOres) {
                         int chance = rand.nextInt(199) + 1;
@@ -153,7 +152,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
         float f = (float) (j + k + l) * 0.333F + 0.5F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
-                if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
+                if (!(worldIn.getBlockState(position).getBlock() instanceof BlockContainer)) {
                     worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                 }
             }
