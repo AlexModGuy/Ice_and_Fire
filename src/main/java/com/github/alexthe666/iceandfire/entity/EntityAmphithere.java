@@ -199,7 +199,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                     return true;
                 }
                 return true;
-            } else if (!this.isTamed() || this.isOwner(player)) {
+            } else if ((!this.isTamed() || this.isOwner(player)) && !this.isChild()) {
                 player.startRiding(this);
                 return true;
             }

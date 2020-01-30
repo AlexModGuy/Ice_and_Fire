@@ -208,10 +208,8 @@ public class IceAndFireMainMenu extends GuiMainMenu {
         } else {
             int middleX = this.width / 2;
             int middleY = this.height / 5;
-            System.out.println(this.width);
             float widthScale = this.width / 427F;
             float imageScale = widthScale * 128;
-            System.out.println("game scale: " + Minecraft.getMinecraft().gameSettings.guiScale);
             for (Enscription enscription : drawnEnscriptions) {
                 float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
