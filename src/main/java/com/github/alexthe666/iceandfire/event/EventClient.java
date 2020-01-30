@@ -16,6 +16,7 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -26,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +46,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -266,12 +269,10 @@ public class EventClient {
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
+            boolean invisibleByDefault = event.getEntity().isPotionActive(MobEffects.INVISIBILITY);
+            event.getEntity().setInvisible(invisibleByDefault);
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
-                event.setCanceled(true);
-                if (Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels") || IceAndFire.CONFIG.dragonGLErrorFix) {
-                    if (event.getEntity() instanceof EntityPlayer)
-                        GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
-                }
+                event.getEntity().setInvisible(true);
             }
         }
 

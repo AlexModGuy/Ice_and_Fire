@@ -130,7 +130,6 @@ public class IceAndFireConfig {
     public int dragonsteelBaseArmor = 12;
     public int dragonsteelBaseDurability = 8000;
     public boolean spawnStructuresOnSuperflat = true;
-    public boolean dragonGLErrorFix = false;
     public boolean dragonMovedWronglyFix = false;
     public boolean weezerTinkers = false;
     public double dragonBlockBreakingDropChance = 0.1D;
@@ -279,7 +278,6 @@ public class IceAndFireConfig {
         this.dragonsteelBaseDamage = (double) config.getFloat("Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
         this.dragonsteelBaseArmor = config.getInt("Dragonsteel Base Armor", "all", 12, 7, Integer.MAX_VALUE, "Default armor value of dragonsteel chestplate.");
         this.dragonsteelBaseDurability = config.getInt("Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
-        this.dragonGLErrorFix = config.getBoolean("Dragon GL Error Fix", "all", false, "DO NOT CHANGE THIS UNLESS DRAGON RIDING GLITCHES OUT THE MODEL AND GIVES A GL ERROR. Otherwise it will break your client rendering");
         this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
         this.weezerTinkers = config.getBoolean("Weezer", "all", false, "Set this to true. I dare you.");
     }

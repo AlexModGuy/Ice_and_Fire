@@ -31,6 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -58,6 +59,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber
@@ -85,7 +87,6 @@ public class ClientProxy extends CommonProxy {
     private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
-
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
