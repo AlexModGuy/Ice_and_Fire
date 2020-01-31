@@ -298,6 +298,8 @@ public class IaFDragonDestructionManager {
             return ModBlocks.frozenGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
             return ModBlocks.frozenSplinters.getDefaultState();
+        } else if (in.getMaterial() == Material.WATER) {
+            return Blocks.ICE.getDefaultState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW_LAYER) {
             return Blocks.AIR.getDefaultState();
         }
