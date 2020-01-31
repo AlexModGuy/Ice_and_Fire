@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.*;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -16,7 +18,7 @@ public class PathNavigateMyrmex extends PathNavigateGround {
     }
 
     protected PathFinder getPathFinder() {
-        this.nodeProcessor = new NodeProcessorDragon();
+        this.nodeProcessor = new WalkNodeProcessor();
         this.nodeProcessor.setCanEnterDoors(true);
         this.nodeProcessor.setCanSwim(true);
         return new PathFinder(this.nodeProcessor);
@@ -33,7 +35,7 @@ public class PathNavigateMyrmex extends PathNavigateGround {
     protected void pathFollow() {
         Vec3d vec3d = this.getEntityPosition();
         int i = this.currentPath.getCurrentPathLength();
-
+        debugPathfinder(this.currentPath);
         for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j) {
             if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y)) {
                 i = j;
@@ -41,10 +43,10 @@ public class PathNavigateMyrmex extends PathNavigateGround {
             }
         }
 
-        this.maxDistanceToWaypoint = this.entity.width * 2;
+        this.maxDistanceToWaypoint = Math.max(this.entity.width * 2, 2.0F);
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
 
-        if (MathHelper.abs((float) (this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float) (this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < 1.0D) {
+        if (MathHelper.abs((float) (this.entity.posX - (vec3d1.x + 0.5D))) < this.maxDistanceToWaypoint && MathHelper.abs((float) (this.entity.posZ - (vec3d1.z + 0.5D))) < this.maxDistanceToWaypoint && Math.abs(this.entity.posY - vec3d1.y) < Math.ceil(this.entity.height)) {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
 
@@ -60,6 +62,27 @@ public class PathNavigateMyrmex extends PathNavigateGround {
         }
 
         this.checkForStuck(vec3d);
+    }
+
+    public void debugPathfinder(Path currentPath) {
+        if(IceAndFire.DEBUG){
+            try{
+                for(int i = 0; i < currentPath.getCurrentPathLength(); i++){
+                    PathPoint point = currentPath.getPathPointFromIndex(i);
+                    int particle = EnumParticleTypes.HEART.getParticleID();
+                    IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
+                }
+                if(currentPath.getCurrentPos() != null){
+                    Vec3d point = currentPath.getCurrentPos();
+                    int particle = EnumParticleTypes.CLOUD.getParticleID();
+                    IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
+
+                }
+            }catch (Exception e){
+                //Pathfinders are always unfriendly.
+            }
+
+        }
     }
 
 }
