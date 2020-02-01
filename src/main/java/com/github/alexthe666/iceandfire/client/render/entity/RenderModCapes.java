@@ -1,14 +1,20 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.event.EventServer;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 import java.util.UUID;
@@ -21,6 +27,7 @@ public class RenderModCapes {
     public ResourceLocation blueElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_ice.png");
     public ResourceLocation betaTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_beta.png");
     public ResourceLocation betaElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_beta.png");
+
     public UUID[] redcapes = new UUID[]{
             /* zeklo */UUID.fromString("59efccaf-902d-45da-928a-5a549b9fd5e0"),
             /* Alexthe666 */UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c")
@@ -67,49 +74,20 @@ public class RenderModCapes {
                 }
             }
         }
-        /*
-         * if(event.getEntityPlayer() instanceof AbstractClientPlayer){ if
-         * (hasRedCape(event.getEntityPlayer().getUniqueID())){
-         * AbstractClientPlayer player =
-         * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
-         * ReflectionHelper.findField(AbstractClientPlayer.class,
-         * ObfuscationReflectionHelper
-         * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
-         * try { Field modifier = Field.class.getDeclaredField("modifiers");
-         * modifier.setAccessible(true); modifier.setInt(field,
-         * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
-         * (NetworkPlayerInfo)field.get(player); Field field_capes =
-         * ReflectionHelper.findField(NetworkPlayerInfo.class,
-         * ObfuscationReflectionHelper
-         * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
-         * Field modifier_i = Field.class.getDeclaredField("modifiers");
-         * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
-         * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
-         * redTex); } catch (Exception exception) { exception.printStackTrace();
-         * } } catch (Exception exception) { exception.printStackTrace(); }
-         *
-         * } else if (hasBlueCape(event.getEntityPlayer().getUniqueID())){
-         * AbstractClientPlayer player =
-         * (AbstractClientPlayer)event.getEntityPlayer(); Field field =
-         * ReflectionHelper.findField(AbstractClientPlayer.class,
-         * ObfuscationReflectionHelper
-         * .remapFieldNames(AbstractClientPlayer.class.getName(), playerInfo));
-         * try { Field modifier = Field.class.getDeclaredField("modifiers");
-         * modifier.setAccessible(true); modifier.setInt(field,
-         * field.getModifiers() & ~Modifier.FINAL); NetworkPlayerInfo info =
-         * (NetworkPlayerInfo)field.get(player); Field field_capes =
-         * ReflectionHelper.findField(NetworkPlayerInfo.class,
-         * ObfuscationReflectionHelper
-         * .remapFieldNames(NetworkPlayerInfo.class.getName(), cape)); try {
-         * Field modifier_i = Field.class.getDeclaredField("modifiers");
-         * modifier_i.setAccessible(true); modifier_i.setInt(field_capes,
-         * field_capes.getModifiers() & ~Modifier.FINAL); field_capes.set(info,
-         * blueTex); } catch (Exception exception) {
-         * exception.printStackTrace(); } } catch (Exception exception) {
-         * exception.printStackTrace(); }
-         *
-         * } }
-         */
+        if(event.getEntityPlayer().getUniqueID().equals(EventServer.ALEX_UUID)){
+            GL11.glPushMatrix();
+            float f2 = ((float) event.getEntityPlayer().ticksExisted - 1 +  event.getPartialRenderTick());
+            float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
+            GL11.glTranslatef((float) 0, (float) 1.3F * event.getEntityPlayer().height, (float) 0);
+            float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
+            GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
+            GL11.glPushMatrix();
+            GL11.glScalef(1.4F, 1.4F, 1.4F);
+            Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, EventServer.WEEZER_STACK, ItemCameraTransforms.TransformType.GROUND);
+            GL11.glPopMatrix();
+            GL11.glPopMatrix();
+
+        }
     }
 
     private boolean hasRedCape(UUID uniqueID) {
