@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.event.EventServer;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import net.minecraft.client.Minecraft;
@@ -7,6 +8,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -83,7 +85,7 @@ public class RenderModCapes {
             GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
             GL11.glPushMatrix();
             GL11.glScalef(1.4F, 1.4F, 1.4F);
-            Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, EventServer.WEEZER_STACK, ItemCameraTransforms.TransformType.GROUND);
+            Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, new ItemStack(ModItems.weezer_blue_album), ItemCameraTransforms.TransformType.GROUND);
             GL11.glPopMatrix();
             GL11.glPopMatrix();
 

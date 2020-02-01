@@ -80,6 +80,8 @@ public class ClientProxy extends CommonProxy {
     private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS = new ModelDragonsteelFireArmor(0.2F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL = new ModelDragonsteelIceArmor(0.4F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
+    private static final ModelSilverArmor SILVER_ARMOR_MODEL = new ModelSilverArmor(0.5F);
+    private static final ModelSilverArmor SILVER_ARMOR_MODEL_LEGS = new ModelSilverArmor(0.2F);
     @SideOnly(Side.CLIENT)
     private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
     public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
@@ -475,6 +477,10 @@ public class ClientProxy extends CommonProxy {
                 return DRAGONSTEEL_ICE_ARMOR_MODEL;
             case 13:
                 return DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS;
+            case 14:
+                return SILVER_ARMOR_MODEL;
+            case 15:
+                return SILVER_ARMOR_MODEL_LEGS;
         }
         return null;
     }

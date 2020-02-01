@@ -62,8 +62,6 @@ import java.util.*;
 public class EventServer {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
-    public static ItemStack WEEZER_STACK = new ItemStack(ModItems.weezer_blue_album);
-
     private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>() {
         public boolean apply(@Nullable EntityLivingBase entity) {
             return entity != null && entity instanceof IVillagerFear;
@@ -415,7 +413,7 @@ public class EventServer {
             chainProperties.clearChained();
         }
         if (event.getEntityLiving().getUniqueID().equals(EventServer.ALEX_UUID)) {
-            event.getEntityLiving().entityDropItem(WEEZER_STACK.copy(), 1);
+            event.getEntityLiving().entityDropItem(new ItemStack(ModItems.weezer_blue_album), 1);
         }
     }
 
