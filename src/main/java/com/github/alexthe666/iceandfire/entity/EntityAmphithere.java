@@ -594,6 +594,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 10) {
+                this.getAttackTarget().knockBack(this, 0.6F, (double)MathHelper.sin(this.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(this.rotationYaw * 0.017453292F)));
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             }
         }
