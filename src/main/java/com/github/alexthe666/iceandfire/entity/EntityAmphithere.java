@@ -300,8 +300,11 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
             this.setAttackTarget(null);
+        }
+        if(this.isInWater() && this.isJumping){
+            this.motionY += 0.1D;
         }
         if(this.isChild() && this.getAttackTarget() != null){
             this.setAttackTarget(null);
@@ -406,7 +409,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (this.isFallen && this.flightBehavior != FlightBehavior.NONE) {
             this.flightBehavior = FlightBehavior.NONE;
         }
-        if (this.flightBehavior == FlightBehavior.NONE && this.getControllingPassenger() == null) {
+        if (this.flightBehavior == FlightBehavior.NONE && this.getControllingPassenger() == null && this.isFlying()) {
             this.motionY -= 0.3F;
         }
         if (this.isFlying() && !this.onGround && this.isFallen && this.getControllingPassenger() == null) {
