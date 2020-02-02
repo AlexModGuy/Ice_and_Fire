@@ -135,6 +135,7 @@ public class IceAndFireConfig {
     public boolean weezerTinkers = true;
     public double dragonBlockBreakingDropChance = 0.1D;
     public boolean completeDragonPathfinding = false;
+    public boolean dragonAuto3rdPerson = true;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -191,7 +192,7 @@ public class IceAndFireConfig {
         this.noDropBreakBlocks = config.getStringList("No-Drop Blocks from Dragon Block Breaking", "all", new String[]{"minecraft:stone", "minecraft:dirt", "minecraft:grass"}, "Blocks that will not drop as items when broken by a dragon. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");
         this.blacklistBreakBlocksIsWhiteList = config.getBoolean("Blacklisted Blocks from Dragon is a Whitelist", "all", false, "If true, then the blacklist will act as a whitelist.");
         this.completeDragonPathfinding = config.getBoolean("Intelligent Dragon Pathfinding", "all", false, "A more intelligent dragon pathfinding system, but is also laggier. Turn this on if you think dragons are too stupid.");
-
+        this.dragonAuto3rdPerson = config.getBoolean("Auto 3rd person when riding dragon", "all", true, "True if riding dragons should make the player take a 3rd person view automatically.");
 
         this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
         this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");

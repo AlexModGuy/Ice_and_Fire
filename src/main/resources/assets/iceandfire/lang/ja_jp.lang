@@ -1,4 +1,4 @@
-itemGroup.iceandfire=Ice And Fire
+﻿itemGroup.iceandfire=Ice And Fire
 iceandfire.empty =空
 
 tile.iceandfire.lectern.name=書見台
@@ -294,7 +294,7 @@ item.iceandfire.myrmex_swarm.desc_1=一回きり
 item.iceandfire.hippogryph_talon.name=ヒッポグリフの鉤爪
 item.iceandfire.hippogryph_talon.desc_0=§6レアドロップ§r
 item.iceandfire.hippogryph_sword.name=ヒッポグリフタロンソード
-item.iceandfire.hippogryph_sword.desc_0=敵を跳ね飛ばし、追加ダメージを与える
+item.iceandfire.hippogryph_sword.desc_0=常に範囲攻撃が可能
 item.iceandfire.cyclops_eye.name=サイクロプスの眼
 item.iceandfire.cyclops_eye.desc_0=範囲効果武器
 item.iceandfire.cyclops_eye.desc_1=持っている間周りの全ての敵性モブに弱体化を付与する
@@ -669,6 +669,40 @@ fluid.tconstruct.dragonsteel_ice.name=溶解氷竜鋼
 
 
 #BANNERS
+item.banner.fire.white=白のファイアドラゴン
+item.banner.fire.orange=橙のファイアドラゴン
+item.banner.fire.magenta=赤紫のファイアドラゴン
+item.banner.fire.lightBlue=空色のファイアドラゴン
+item.banner.fire.yellow=黄色のファイアドラゴン
+item.banner.fire.lime=黄緑のファイアドラゴン
+item.banner.fire.pink=桃色のファイアドラゴン
+item.banner.fire.gray=灰色のファイアドラゴン
+item.banner.fire.silver=薄灰のファイアドラゴン
+item.banner.fire.cyan=水色のファイアドラゴン
+item.banner.fire.purple=紫のファイアドラゴン
+item.banner.fire.blue=青のファイアドラゴン
+item.banner.fire.brown=茶色のファイアドラゴン
+item.banner.fire.green=緑のファイアドラゴン
+item.banner.fire.red=赤のファイアドラゴン
+item.banner.fire.black=黒のファイアドラゴン
+
+item.banner.ice.white=白のアイスドラゴン
+item.banner.ice.orange=橙のアイスドラゴン
+item.banner.ice.magenta=赤紫のアイスドラゴン
+item.banner.ice.lightBlue=空色のアイスドラゴン
+item.banner.ice.yellow=黄色のアイスドラゴン
+item.banner.ice.lime=黄緑のアイスドラゴン
+item.banner.ice.pink=桃色のアイスドラゴン
+item.banner.ice.gray=灰色のアイスドラゴン
+item.banner.ice.silver=薄灰のアイスドラゴン
+item.banner.ice.cyan=水色のアイスドラゴン
+item.banner.ice.purple=紫のアイスドラゴン
+item.banner.ice.blue=青のアイスドラゴン
+item.banner.ice.brown=茶色のアイスドラゴン
+item.banner.ice.green=緑のアイスドラゴン
+item.banner.ice.red=赤のアイスドラゴン
+item.banner.ice.black=黒のアイスドラゴン
+
 item.banner.firedragon.white=白のファイアドラゴン
 item.banner.firedragon.orange=橙のファイアドラゴン
 item.banner.firedragon.magenta=赤紫のファイアドラゴン

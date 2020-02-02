@@ -489,13 +489,18 @@ public class EventClient {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getMinecraft().player) {
-            if (event.isDismounting()) {
-                Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
-            } else {
-                IceAndFire.PROXY.setPreviousViewType(Minecraft.getMinecraft().gameSettings.thirdPersonView);
-                Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
-                IceAndFire.PROXY.setDragon3rdPersonView(2);
+        if (IceAndFire.CONFIG.dragonAuto3rdPerson) {
+            if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getMinecraft().player) {
+                EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
+                if(dragon.isTamed() && dragon.isOwner(Minecraft.getMinecraft().player)){
+                    if (event.isDismounting()) {
+                        Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
+                    } else {
+                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getMinecraft().gameSettings.thirdPersonView);
+                        Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
+                        IceAndFire.PROXY.setDragon3rdPersonView(2);
+                    }
+                }
             }
         }
     }
