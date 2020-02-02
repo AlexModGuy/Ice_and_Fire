@@ -242,7 +242,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-            this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
+            this.getAttackTarget().knockBack(this, 2, 1, 1);
 
         }
         if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())) {

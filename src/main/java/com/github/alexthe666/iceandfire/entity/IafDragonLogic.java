@@ -129,9 +129,6 @@ public class IafDragonLogic {
             dragon.blockBreakCounter = IceAndFire.CONFIG.dragonBreakBlockCooldown;
         }
         dragon.updateBurnTarget();
-        if (dragon.isOverAir() && dragon.isModelDead()) {
-            dragon.motionY -= 0.1D;
-        }
         if (dragon.isSitting() && (dragon.getCommand() != 1 || dragon.getControllingPassenger() != null)) {
             dragon.setSitting(false);
         }
@@ -140,9 +137,6 @@ public class IafDragonLogic {
         }
         if (dragon.isSitting()) {
             dragon.getNavigator().clearPath();
-        }
-        if (dragon.isBeyondHeight() && dragon.isOverAir()) {
-            dragon.motionY -= 0.1F;
         }
         if (dragon.isInLove()) {
             dragon.world.setEntityState(dragon, (byte) 18);

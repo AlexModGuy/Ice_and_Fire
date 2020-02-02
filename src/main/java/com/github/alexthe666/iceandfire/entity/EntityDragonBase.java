@@ -142,10 +142,24 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public IaFDragonAttacks.Air airAttack;
     public IaFDragonAttacks.Ground groundAttack;
     public boolean usingGroundAttack = true;
+    public IafDragonLogic logic;
+    public int hoverTicks;
+    public int tacklingTicks;
+    public int ticksStill;
+    /*
+        0 = ground/walking
+        1 = ai flight
+        2 = controlled flight
+     */
+    public int navigatorType;
+    public InventoryBasic dragonInventory;
+    public String prevArmorResLoc = "0|0|0|0";
+    public String armorResLoc = "0|0|0|0";
     protected int flyHovering;
     protected IaFDragonFlightManager flightManager;
-    public IafDragonLogic logic;
     protected boolean hasHadHornUse = false;
+    protected int fireTicks;
+    protected int blockBreakCounter;
     private int prevFlightCycle;
     private boolean isSleeping;
     private boolean isSitting;
@@ -153,13 +167,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     private boolean isFlying;
     private boolean isBreathingFire;
     private boolean isTackling;
-    protected int fireTicks;
-    public int hoverTicks;
     private boolean isModelDead;
     private int animationTick;
     private Animation currentAnimation;
-    public int tacklingTicks;
-    public int ticksStill;
     private float lastScale;
     private EntityDragonPart headPart;
     private EntityDragonPart neckPart;
@@ -171,17 +181,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     private EntityDragonPart tail2Part;
     private EntityDragonPart tail3Part;
     private EntityDragonPart tail4Part;
-    protected int blockBreakCounter;
-    /*
-        0 = ground/walking
-        1 = ai flight
-        2 = controlled flight
-     */
-    public int navigatorType;
-    public InventoryBasic dragonInventory;
     private boolean isOverAir;
-    public String prevArmorResLoc = "0|0|0|0";
-    public String armorResLoc = "0|0|0|0";
 
     public EntityDragonBase(World world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
@@ -329,11 +329,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.moveHelper = new IaFDragonFlightManager.GroundMoveHelper(this);
             this.navigator = createNavigator(world);
             this.navigatorType = 0;
-        } else if(navigatorType == 1) {
+        } else if (navigatorType == 1) {
             this.moveHelper = new IaFDragonFlightManager.FlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 1;
-        }else{
+        } else {
             this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 2;
@@ -392,13 +392,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
-           spawnDeathParticles();
+            spawnDeathParticles();
         }
     }
 
-    protected void spawnDeathParticles(){}
+    protected void spawnDeathParticles() {
+    }
 
-    protected void spawnBabyParticles(){}
+    protected void spawnBabyParticles() {
+    }
 
     public void setDead() {
         removeParts();
@@ -674,8 +676,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     @Nullable
     public EntityPlayer getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof EntityPlayer){
-            return (EntityPlayer)this.getControllingPassenger();
+        if (this.getControllingPassenger() instanceof EntityPlayer) {
+            return (EntityPlayer) this.getControllingPassenger();
         }
         return null;
     }
@@ -792,15 +794,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return isFlying;
     }
 
-    public boolean useFlyingPathFinder() {
-        return isFlying();
-    }
-
     public void setFlying(boolean flying) {
         this.dataManager.set(FLYING, flying);
         if (!world.isRemote) {
             this.isFlying = flying;
         }
+    }
+
+    public boolean useFlyingPathFinder() {
+        return isFlying();
     }
 
     public void setGender(boolean male) {
@@ -919,7 +921,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
-        if(stack.getItem() == ModItems.dragon_debug_stick){
+        if (stack.getItem() == ModItems.dragon_debug_stick) {
             logic.debug();
             return true;
         }
@@ -1006,7 +1008,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isRiding()) {
                         player.setSneaking(false);
                         player.startRiding(this, true);
-                        if(world.isRemote){
+                        if (world.isRemote) {
                             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStartRidingMob(this.getEntityId(), true));
                         }
                         this.setSleeping(false);
@@ -1187,11 +1189,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return !this.isChained() && !this.isTamed() && (!this.getNavigator().noPath() && (this.getNavigator().getPath() == null || this.getNavigator().getPath().getFinalPathPoint() != null && this.getDistanceSq(new BlockPos(this.getNavigator().getPath().getFinalPathPoint().x, this.getNavigator().getPath().getFinalPathPoint().y, this.getNavigator().getPath().getFinalPathPoint().z)) > 15)) && ticksStill > 80 && !this.isHovering() && canMove();
     }
 
-    protected boolean isOverAir(){
+    protected boolean isOverAir() {
         return isOverAir;
     }
 
-    private boolean isOverAirLogic(){
+    private boolean isOverAirLogic() {
         return world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ));
     }
 
@@ -1220,7 +1222,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                                 for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + bounds; c++) {
                                     BlockPos pos = new BlockPos(a, b, c);
                                     IBlockState state = world.getBlockState(pos);
-                                    if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world,pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
+                                    if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                         this.motionX *= 0.6D;
                                         this.motionZ *= 0.6D;
 
@@ -1415,12 +1417,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
-            return;
-        }
-        if(world.isRemote){
-            logic.updateDragonClient();
-        }else{
-            logic.updateDragonServer();
+            if(!world.isRemote && world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ)) && this.posY > -1){
+                this.move(MoverType.SELF, 0, -0.2F, 0);
+            }
+        }else {
+            if (world.isRemote) {
+                logic.updateDragonClient();
+            } else {
+                logic.updateDragonServer();
+            }
         }
         world.profiler.endSection();
         world.profiler.startSection("dragonFlight");
@@ -1433,7 +1438,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
             this.setAttackTarget(null);
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
@@ -1599,7 +1604,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return dragon;
     }
 
-    public int getStartMetaForType(){
+    public int getStartMetaForType() {
         return 0;
     }
 
@@ -1711,9 +1716,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             super.travel(strafe, forward, vertical);
             return;
         }
-        if (this.isBeingRidden() && this.canBeSteered()) {
-        //    super.travel(strafe, forward, vertical);
-        }
         super.travel(strafe, forward, vertical);
     }
 
@@ -1782,7 +1784,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
                             living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50 * size));
                         } else {
-                            if(living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != ModItems.earplugs){
+                            if (living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != ModItems.earplugs) {
                                 living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
                             }
                         }
@@ -1817,7 +1819,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1,  vec2, false, true, false);
+        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1, vec2, false, true, false);
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
@@ -2041,15 +2043,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
-       if (slotIn == EntityEquipmentSlot.OFFHAND) {
+        if (slotIn == EntityEquipmentSlot.OFFHAND) {
             return dragonInventory.getStackInSlot(0);
         } else if (slotIn == EntityEquipmentSlot.HEAD) {
             return dragonInventory.getStackInSlot(1);
-        }else if (slotIn == EntityEquipmentSlot.CHEST) {
+        } else if (slotIn == EntityEquipmentSlot.CHEST) {
             return dragonInventory.getStackInSlot(2);
-        }else if (slotIn == EntityEquipmentSlot.LEGS) {
+        } else if (slotIn == EntityEquipmentSlot.LEGS) {
             return dragonInventory.getStackInSlot(3);
-        }else if (slotIn == EntityEquipmentSlot.FEET) {
+        } else if (slotIn == EntityEquipmentSlot.FEET) {
             return dragonInventory.getStackInSlot(4);
         }
         return super.getItemStackFromSlot(slotIn);
@@ -2072,7 +2074,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         updateAttributes();
     }
 
-    public float getSoundPitch(){
+    public float getSoundPitch() {
         return super.getSoundPitch();
     }
 

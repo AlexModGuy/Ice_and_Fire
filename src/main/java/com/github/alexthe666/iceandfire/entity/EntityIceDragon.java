@@ -205,7 +205,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 } else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
                     boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                     if (entityIn instanceof EntityLivingBase) {
-                        ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                        ((EntityLivingBase) entityIn).knockBack(this, this.getDragonStage() * 0.6F, 1, 1);
                     }
                     this.usingGroundAttack = this.getRNG().nextBoolean();
                     this.randomizeAttacks();
@@ -220,7 +220,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
                         boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                         if (entityIn instanceof EntityLivingBase) {
-                            ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                            ((EntityLivingBase) entityIn).knockBack(this, this.getDragonStage() * 0.6F, 1, 1);
                         }
                         this.usingGroundAttack = this.getRNG().nextBoolean();
                         this.randomizeAttacks();
