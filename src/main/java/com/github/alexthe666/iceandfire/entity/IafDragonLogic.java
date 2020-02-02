@@ -28,6 +28,9 @@ public class IafDragonLogic {
         this.dragon = dragon;
     }
 
+    /*
+    logic done exclusively on server.
+    */
     public void updateDragonServer() {
         EntityPlayer ridingPlayer = dragon.getRidingPlayer();
         if (dragon.up()) {
@@ -190,12 +193,12 @@ public class IafDragonLogic {
             dragon.setFlying(false);
             dragon.setHovering(false);
         }
-        if(ridingPlayer == null){
-            if(dragon.useFlyingPathFinder() && dragon.navigatorType != 1){
+        if (ridingPlayer == null) {
+            if (dragon.useFlyingPathFinder() && dragon.navigatorType != 1) {
                 dragon.switchNavigator(1);
             }
-        }else{
-            if((dragon.useFlyingPathFinder() || dragon.isHovering()) && dragon.navigatorType != 2){
+        } else {
+            if ((dragon.useFlyingPathFinder() || dragon.isHovering()) && dragon.navigatorType != 2) {
                 dragon.switchNavigator(2);
             }
         }
@@ -240,7 +243,7 @@ public class IafDragonLogic {
         }
         if (dragon.isAllowedToTriggerFlight() && dragon.isFlying() && dragon.doesWantToLand()) {
             dragon.setFlying(false);
-            dragon.setHovering(!dragon.onGround);
+            dragon.setHovering(dragon.isOverAir());
             if (!dragon.isOverAir()) {
                 dragon.flyTicks = 0;
                 dragon.setFlying(false);
@@ -313,6 +316,9 @@ public class IafDragonLogic {
 
     }
 
+    /*
+    logic done exclusively on client.
+    */
     public void updateDragonClient() {
         if (!dragon.isModelDead()) {
             dragon.turn_buffer.calculateChainSwingBuffer(50, 0, 4, dragon);
@@ -353,6 +359,9 @@ public class IafDragonLogic {
         }
     }
 
+    /*
+    logic done on server and client on parallel.
+    */
     public void updateDragonCommon() {
         if (dragon.isBreathingFire() && dragon.burnProgress < 40) {
             dragon.burnProgress++;
@@ -420,6 +429,39 @@ public class IafDragonLogic {
         }
     }
 
+
+    /*
+    logic handler for the dragon's melee attacks.
+    */
+    public void updateDragonAttack() {
+        if (dragon.isPlayingAttackAnimation() && dragon.getAttackTarget() != null && dragon.canEntityBeSeen(dragon.getAttackTarget())) {
+            EntityLivingBase target = dragon.getAttackTarget();
+            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
+                if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
+                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                    dragon.randomizeAttacks();
+                }
+            }
+            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
+                if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
+                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
+                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                    dragon.randomizeAttacks();
+                }
+            }
+            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
+                if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
+                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
+                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                    dragon.randomizeAttacks();
+                }
+            }
+        }
+    }
+
     public void debug() {
         String side = dragon.world.isRemote ? "CLIENT" : "SERVER";
         String owner = dragon.getOwner() == null ? "null" : dragon.getOwner().getName();
@@ -438,20 +480,20 @@ public class IafDragonLogic {
     }
 
     public void debugPathfinder(Path currentPath) {
-        if(IceAndFire.DEBUG){
-            try{
-                for(int i = 0; i < currentPath.getCurrentPathLength(); i++){
+        if (IceAndFire.DEBUG) {
+            try {
+                for (int i = 0; i < currentPath.getCurrentPathLength(); i++) {
                     PathPoint point = currentPath.getPathPointFromIndex(i);
                     int particle = EnumParticleTypes.HEART.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
                 }
-                if(currentPath.getCurrentPos() != null){
+                if (currentPath.getCurrentPos() != null) {
                     Vec3d point = currentPath.getCurrentPos();
                     int particle = EnumParticleTypes.CLOUD.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 //Pathfinders are always unfriendly.
             }
 

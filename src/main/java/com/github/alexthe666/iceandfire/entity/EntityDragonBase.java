@@ -206,7 +206,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         }
         legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
         this.flightManager = new IaFDragonFlightManager(this);
-        this.logic = new IafDragonLogic(this);
+        this.logic = createDragonLogic();
         this.ignoreFrustumCheck = true;
         switchNavigator(0);
         randomizeAttacks();
@@ -1425,6 +1425,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 logic.updateDragonClient();
             } else {
                 logic.updateDragonServer();
+                logic.updateDragonAttack();
             }
         }
         world.profiler.endSection();
@@ -2080,5 +2081,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     public SoundEvent getBabyFireSound() {
         return SoundEvents.BLOCK_FIRE_EXTINGUISH;
+    }
+
+    protected boolean isPlayingAttackAnimation(){
+        return this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_SHAKEPREY || this.getAnimation() == ANIMATION_WINGBLAST ||
+                this.getAnimation() == ANIMATION_TAILWHACK;
+    }
+
+    protected IafDragonLogic createDragonLogic(){
+        return new IafDragonLogic(this);
     }
 }

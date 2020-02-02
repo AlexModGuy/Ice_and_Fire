@@ -110,6 +110,7 @@ public class ParticleDragonFlame extends ParticleFlame {
 
     public void onUpdate() {
         super.onUpdate();
+
         if (dragon == null) {
             float distX = (float) (this.initialX - this.posX);
             float distZ = (float) (this.initialZ - this.posZ);

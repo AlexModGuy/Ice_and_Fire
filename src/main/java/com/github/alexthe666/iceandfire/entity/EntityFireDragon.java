@@ -137,83 +137,32 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        switch (groundAttack) {
-            case BITE:
-                if (this.getAnimation() != ANIMATION_BITE) {
+        if(!this.isPlayingAttackAnimation()){
+            switch (groundAttack) {
+                case BITE:
                     this.setAnimation(ANIMATION_BITE);
-                    return false;
-                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag;
-                }
-                break;
-            case SHAKE_PREY:
-                if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-                    if (this.getAnimation() != ANIMATION_SHAKEPREY) {
-                        this.setAnimation(ANIMATION_SHAKEPREY);
-                        entityIn.dismountRidingEntity();
-                        entityIn.startRiding(this);
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return true;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
-                        this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag1;
-                    }
-                }
-                break;
-            case TAIL_WHIP:
-                if (this.getAnimation() != ANIMATION_TAILWHACK) {
+                    break;
+                case TAIL_WHIP:
                     this.setAnimation(ANIMATION_TAILWHACK);
-                    return false;
-                } else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 30) {
-                    boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    if (entityIn instanceof EntityLivingBase) {
-                        ((EntityLivingBase) entityIn).knockBack(this, this.getDragonStage() * 0.6F, 1, 1);
+                    break;
+                case SHAKE_PREY:
+                    boolean flag = false;
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) &&
+                            entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                        this.setAnimation(ANIMATION_SHAKEPREY);
+                        flag = true;
+                        entityIn.startRiding(this);
                     }
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag2;
-                }
-                break;
-            case WING_BLAST:
-                if (this.onGround && !this.isHovering() && !this.isFlying()) {
-                    if (this.getAnimation() != ANIMATION_WINGBLAST) {
-                        this.setAnimation(ANIMATION_WINGBLAST);
-                        return true;
-                    } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
-                        boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        if (entityIn instanceof EntityLivingBase) {
-                            ((EntityLivingBase) entityIn).knockBack(this, this.getDragonStage() * 0.6F, 1, 1);
-                        }
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag2;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
+                    if(!flag){
+                        groundAttack = IaFDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag;
                     }
-                }
-
-                break;
+                    break;
+                case WING_BLAST:
+                    this.setAnimation(ANIMATION_WINGBLAST);
+                    break;
+            }
         }
-
         return false;
     }
 
