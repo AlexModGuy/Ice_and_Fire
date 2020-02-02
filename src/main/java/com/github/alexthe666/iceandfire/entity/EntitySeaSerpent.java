@@ -832,7 +832,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 if (this.ticksExisted % 40 == 0) {
                     this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
                 }
-                if (this.ticksExisted % 3 == 0) {
+                if (this.ticksExisted % 5 == 0) {
                     rotationYaw = renderYawOffset;
                     float f1 = 0;
                     float f2 = 0;

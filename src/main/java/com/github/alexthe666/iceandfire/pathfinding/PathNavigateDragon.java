@@ -167,8 +167,6 @@ public class PathNavigateDragon extends PathNavigateGround {
                 sizeX = 1;
                 sizeZ = 1;
             }
-
-
             if (!this.isSafeToStandAt(i, (int)posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1))
             {
                 return false;
