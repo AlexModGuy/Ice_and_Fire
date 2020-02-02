@@ -75,7 +75,7 @@ public class IceAndFire {
     public static Biome GLACIER;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static void loadConfig() {
         File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
