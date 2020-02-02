@@ -228,6 +228,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(3, new AmphithereAITargetItems(this, false));
     }
 
     public boolean isStill() {
