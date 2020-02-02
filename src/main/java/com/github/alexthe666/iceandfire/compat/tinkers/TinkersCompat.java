@@ -37,7 +37,7 @@ public class TinkersCompat {
     public static final Material MATERIAL_DRAGONSTEEL_ICE = new Material("dragonsteel_ice", 0XBBE4FD);
     public static final Material MATERIAL_STYMPH_FEATHER = new Material("stymph_feather", 0X7D5B40);
     public static final Material MATERIAL_AMPHITHERE_FEATHER = new Material("amphithere_feather", 0X228760);
-    public static final MaterialWeezer MATERIAL_WEEZER = new MaterialWeezer("weezer", 0X00AAE2, true);
+    public static final Material MATERIAL_WEEZER = new Material("weezer", 0X00AAE2, true);
     public static final AbstractTrait SPLINTERING_II = new TraitSplinteringII();
     public static final AbstractTrait SPLINTERS_II = new TraitSplitting2();
     public static final AbstractTrait FRACTURED_II = new TraitBonusDamage("fractured2", 3f);
@@ -158,16 +158,13 @@ public class TinkersCompat {
             TinkerRegistry.integrate(MATERIAL_WEEZER).preInit();
             MATERIAL_WEEZER.setCraftable(true);
             MATERIAL_WEEZER.setCastable(false);
-
             MATERIAL_WEEZER.addItem(ModItems.weezer_blue_album, 1, Material.VALUE_Ingot);
             MATERIAL_WEEZER.setRepresentativeItem(ModItems.weezer_blue_album);
-
             TinkerRegistry.addMaterialStats(MATERIAL_WEEZER,
                     new HeadMaterialStats(1500, 5.00f, 10.00f, HarvestLevels.COBALT),
                     new HandleMaterialStats(1.5F, 100),
                     new ExtraMaterialStats(500));
             TinkerRegistry.addMaterialStats(MATERIAL_WEEZER, new BowMaterialStats(1.5f, 1.2f, 8F));
-            TinkerRegistry.addMaterialStats(MATERIAL_WEEZER, new ArrowShaftMaterialStats(1.1f, 30));
             MATERIAL_WEEZER.addTrait(IN_THE_GARAGE);
             MATERIAL_WEEZER.addTrait(SWEATER_SONG);
             MATERIAL_WEEZER.addTrait(SURF_WAX_AMERICA);

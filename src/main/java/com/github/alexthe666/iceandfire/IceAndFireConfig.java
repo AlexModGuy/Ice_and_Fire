@@ -132,7 +132,7 @@ public class IceAndFireConfig {
     public int dragonsteelBaseDurability = 8000;
     public boolean spawnStructuresOnSuperflat = true;
     public boolean dragonMovedWronglyFix = false;
-    public boolean weezerTinkers = false;
+    public boolean weezerTinkers = true;
     public double dragonBlockBreakingDropChance = 0.1D;
     public boolean completeDragonPathfinding = false;
 
@@ -284,6 +284,6 @@ public class IceAndFireConfig {
         this.dragonsteelBaseArmor = config.getInt("Dragonsteel Base Armor", "all", 12, 7, Integer.MAX_VALUE, "Default armor value of dragonsteel chestplate.");
         this.dragonsteelBaseDurability = config.getInt("Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
         this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
-        this.weezerTinkers = config.getBoolean("Weezer", "all", false, "Set this to true. I dare you.");
+        this.weezerTinkers = config.getBoolean("Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
     }
 }
