@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
+import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.ibm.icu.text.Replaceable;
@@ -1005,6 +1006,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isRiding()) {
                         player.setSneaking(false);
                         player.startRiding(this, true);
+                        if(world.isRemote){
+                            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStartRidingMob(this.getEntityId(), true));
+                        }
                         this.setSleeping(false);
                     }
                     return true;
