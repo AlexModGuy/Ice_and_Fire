@@ -27,9 +27,9 @@ public class ModelSilverArmor extends ModelBiped {
         this.robeLowerBack.setRotationPoint(0.0F, 12.0F, 0.0F);
         this.robeLowerBack.addBox(-4.0F, 0.0F, -2.5F, 8, 8, 1, modelSize);
         this.setRotateAngle(robeLowerBack, 0.0F, 3.141592653589793F, 0.0F);
-        this.crest = new ModelRenderer(this, 24, 37);
+        this.crest = new ModelRenderer(this, 18, 32);
         this.crest.setRotationPoint(0.0F, -7.9F, -0.1F);
-        this.crest.addBox(0.0F, -0.5F, 0.0F, 0, 9, 9, modelSize);
+        this.crest.addBox(0.0F, -0.5F, 0.0F, 1, 9, 9, 0.0F);
         this.setRotateAngle(crest, 1.2292353921796064F, 0.0F, 0.0F);
         this.robeLower = new ModelRenderer(this, 4, 55);
         this.robeLower.setRotationPoint(0.0F, 12.0F, 0.0F);
@@ -43,9 +43,9 @@ public class ModelSilverArmor extends ModelBiped {
         this.helmWingL.setRotationPoint(3.0F, -6.3F, 1.3F);
         this.helmWingL.addBox(-0.5F, -1.0F, 0.0F, 1, 4, 6, modelSize);
         this.setRotateAngle(helmWingL, 0.5235987755982988F, 0.4363323129985824F, 0.05235987755982988F);
+        this.bipedHeadwear.addChild(this.crest);
         this.bipedHead.addChild(this.faceGuard);
         this.bipedBody.addChild(this.robeLowerBack);
-        this.bipedHead.addChild(this.crest);
         this.bipedBody.addChild(this.robeLower);
         this.bipedHead.addChild(this.helmWingR);
         this.bipedHead.addChild(this.helmWingL);

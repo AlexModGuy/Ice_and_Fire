@@ -54,15 +54,15 @@ public class ItemModAxe extends ItemAxe {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if (this == ModItems.silver_axe) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.MAGIC, 2);
+                target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);
             }
         }
         if (this.toolMaterial == ModItems.myrmexChitin) {
             if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
-                target.attackEntityFrom(DamageSource.GENERIC, 4);
+                target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
             if (target instanceof EntityDeathWorm) {
-                target.attackEntityFrom(DamageSource.GENERIC, 4);
+                target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
         }
         if (toolMaterial == ModItems.dragonsteel_fire_tools) {
