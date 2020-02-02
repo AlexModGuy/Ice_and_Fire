@@ -436,27 +436,30 @@ public class IafDragonLogic {
     public void updateDragonAttack() {
         if (dragon.isPlayingAttackAnimation() && dragon.getAttackTarget() != null && dragon.canEntityBeSeen(dragon.getAttackTarget())) {
             EntityLivingBase target = dragon.getAttackTarget();
-            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
-                if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
-                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
-                    dragon.randomizeAttacks();
+            double dist = dragon.getDistance(target);
+            if(dist < dragon.getRenderSize() * 0.2574 * 2 + 2){
+                if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
+                    if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                        dragon.randomizeAttacks();
+                    }
                 }
-            }
-            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
-                if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
-                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
-                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
-                    dragon.randomizeAttacks();
+                if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
+                    if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
+                        dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                        dragon.randomizeAttacks();
+                    }
                 }
-            }
-            if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
-                if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
-                    target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
-                    dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
-                    dragon.randomizeAttacks();
+                if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
+                    if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
+                        dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
+                        dragon.randomizeAttacks();
+                    }
                 }
             }
         }
