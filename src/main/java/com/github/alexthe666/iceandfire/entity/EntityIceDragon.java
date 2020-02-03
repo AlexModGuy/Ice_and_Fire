@@ -562,7 +562,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     protected ItemStack getHorn() {
-        return new ItemStack(ModItems.dragon_horn_fire);
+        return new ItemStack(ModItems.dragon_horn_ice);
     }
 
     public boolean useFlyingPathFinder() {
