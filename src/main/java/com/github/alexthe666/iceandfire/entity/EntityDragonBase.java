@@ -1420,6 +1420,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             if(!world.isRemote && world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ)) && this.posY > -1){
                 this.move(MoverType.SELF, 0, -0.2F, 0);
             }
+            this.setBreathingFire(false);
         }else {
             if (world.isRemote) {
                 logic.updateDragonClient();
