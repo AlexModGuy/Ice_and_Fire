@@ -59,7 +59,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
         BufferedReader reader = null;
         try {
             List<String> list = new ArrayList<>();
-            reader = getURLContents("https://raw.githubusercontent.com/Alex-the-666/Ice_and_Fire/1.12.2/src/main/resources/assets/iceandfire/splashes.txt", "assets/iceandfire/splashes.txt");
+            reader = getURLContents("https://raw.githubusercontent.com/Alex-the-666/Ice_and_Fire/1.8.4-1.12.2/src/main/resources/assets/iceandfire/splashes.txt", "assets/iceandfire/splashes.txt");
             String s;
 
             while ((s = reader.readLine()) != null) {
@@ -144,7 +144,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             int x;
             int y = random.nextInt(25);
             if (left) {
-                x = -30 - random.nextInt(20) - 128;
+                x = -15 - random.nextInt(20) - 128;
             } else {
                 x = 30 + random.nextInt(20);
             }
