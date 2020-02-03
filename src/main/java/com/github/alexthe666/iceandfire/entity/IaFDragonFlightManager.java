@@ -265,7 +265,7 @@ public class IaFDragonFlightManager {
 
         @Override
         public void onUpdateMoveHelper() {
-            double flySpeed = speed;
+            double flySpeed = speed * speedMod();
             Vec3d dragonVec = dragon.getPositionVector();
             Vec3d moveVec = new Vec3d(posX, posY, posZ);
             Vec3d normalized = moveVec.subtract(dragonVec).normalize();
@@ -279,6 +279,10 @@ public class IaFDragonFlightManager {
                 entity.setAIMoveSpeed((float)(speed));
             }
             dragon.move(MoverType.SELF, dragon.motionX, dragon.motionY, dragon.motionZ);
+        }
+
+        public double speedMod(){
+            return dragon instanceof EntityAmphithere ? 0.75D : 0.5D;
         }
     }
 }
