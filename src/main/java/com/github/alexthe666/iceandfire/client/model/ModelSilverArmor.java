@@ -86,7 +86,16 @@ public class ModelSilverArmor extends ModelBiped {
         } else {
             super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         }
-        this.robeLower.rotateAngleX = Math.min(0, Math.min(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX));
+        float f = 0;
+        float f1 = 12;
+        if(isSneak){
+            f = -1;
+            f1 = 10;
+        }
+        this.robeLower.rotateAngleX = Math.min(0, Math.min(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX)) - this.bipedBody.rotateAngleX;
+        this.robeLower.rotationPointZ = f;
+        this.robeLower.rotationPointY = f1;
+
         this.robeLowerBack.rotateAngleX =  -Math.max(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX);
 
     }
