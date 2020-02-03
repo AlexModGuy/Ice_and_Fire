@@ -354,9 +354,6 @@ public class IafDragonLogic {
         if (dragon.isModelDead() && dragon.flightCycle != 0) {
             dragon.flightCycle = 0;
         }
-        if ((dragon.groundAttack == IaFDragonAttacks.Ground.FIRE) && dragon.getDragonStage() < 2) {
-            dragon.spawnBabyParticles();
-        }
     }
 
     /*
@@ -426,6 +423,12 @@ public class IafDragonLogic {
         }
         if (dragon.hasHadHornUse) {
             dragon.hasHadHornUse = false;
+        }
+        if ((dragon.groundAttack == IaFDragonAttacks.Ground.FIRE) && dragon.getDragonStage() < 2) {
+            if(dragon.world.isRemote){
+                dragon.spawnBabyParticles();
+            }
+            dragon.randomizeAttacks();
         }
     }
 
