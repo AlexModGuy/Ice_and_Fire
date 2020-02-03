@@ -265,7 +265,7 @@ public class IaFDragonFlightManager {
 
         @Override
         public void onUpdateMoveHelper() {
-            double flySpeed = 0.8F * dragon.getFlightSpeedModifier();
+            double flySpeed = speed;
             Vec3d dragonVec = dragon.getPositionVector();
             Vec3d moveVec = new Vec3d(posX, posY, posZ);
             Vec3d normalized = moveVec.subtract(dragonVec).normalize();

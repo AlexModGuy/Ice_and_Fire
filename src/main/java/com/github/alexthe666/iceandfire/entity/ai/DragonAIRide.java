@@ -6,6 +6,8 @@ import com.github.alexthe666.iceandfire.entity.IFlyingMount;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends EntityAIBase {
@@ -46,6 +48,12 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
         } else if (player.moveStrafing < 0) {
             lookVec = lookVec.rotateYaw((float) Math.PI * -0.5f);
         }
+        if(Math.abs(player.moveStrafing) > 0.0){
+            speed *= 0.25D;
+        }
+        if(player.moveForward < 0.0){
+            speed *= 0.15D;
+        }
         if (dragon.up()) {
             lookVec = lookVec.add(0, 1, 0);
         }
@@ -56,13 +64,13 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
             x += lookVec.x * 10;
             z += lookVec.z * 10;
         }
-        if ((dragon.isFlying()  || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
+        if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
             y += lookVec.y * 10;
         }
         dragon.getMoveHelper().setMoveTo(x, y, z, speed);
     }
 
     private boolean hovering(){
-        return dragon instanceof EntityDragonBase && (((EntityDragonBase) dragon).isHovering() || ((EntityDragonBase) dragon).useFlyingPathFinder()) || dragon instanceof EntityHippogryph && ((EntityHippogryph) dragon).isHovering();
+        return dragon.isHovering() || dragon instanceof EntityDragonBase && ((EntityDragonBase) dragon).useFlyingPathFinder();
     }
 }

@@ -10,4 +10,5 @@ public interface IFlyingMount {
     boolean isFlying();
     default boolean up(){ return false; }
     default boolean down(){ return false; }
+    default boolean isHovering(){ return false; }
 }

@@ -140,7 +140,6 @@ public class IceAndFireBookTranformer extends BookTransformer {
                     Map<String, PageData> previousMaterialPages = new HashMap<>();
                     while (itr.hasNext()) {
                         PageData data = itr.next();
-                        System.out.println(data.name + " " + data.type + " " + data.content);
                         if (data.content instanceof ContentPageIconList && previousContents == null) {
                             previousContents = (ContentPageIconList) data.content;
                             contentLoc = bowMaterialsSection.pages.indexOf(data);
