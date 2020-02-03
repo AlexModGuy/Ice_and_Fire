@@ -45,6 +45,12 @@ public class EntityGroundAIRide<T extends EntityCreature & IGroundMount> extends
             } else if (player.moveStrafing < 0) {
                 lookVec = lookVec.rotateYaw((float)Math.PI * -0.5f);
             }
+            if(Math.abs(player.moveStrafing) > 0.0){
+                speed *= 0.25D;
+            }
+            if(player.moveForward < 0.0){
+                speed *= 0.15D;
+            }
             x += lookVec.x * 10;
             z += lookVec.z * 10;
         }
