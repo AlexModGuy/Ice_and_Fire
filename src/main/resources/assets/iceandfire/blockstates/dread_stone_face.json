@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {   "when": { "facing": "east" },
+      "apply": { "model": "iceandfire:dread_stone_face", "y" : -90, "uvlock": false }
+    },
+    {   "when": { "facing": "west" },
+      "apply": { "model": "iceandfire:dread_stone_face", "y" : -270, "uvlock": false }
+    },
+    {   "when": { "facing": "north" },
+      "apply": { "model": "iceandfire:dread_stone_face", "y" : 180, "uvlock": false }
+    },
+    {   "when": { "facing": "south" },
+      "apply": { "model": "iceandfire:dread_stone_face", "y" : 0, "uvlock": false }
+    },
+    {   "apply": { "model": "iceandfire:dread_stone_face_overlay", "uvlock": true }}
+  ]
+}

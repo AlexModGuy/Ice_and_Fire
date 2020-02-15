@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "inventory": {
+      "model": "iceandfire:dread_stone_slab"
+    },
+    "half=bottom": {
+      "model": "iceandfire:dread_stone_slab"
+    },
+    "half=top": {
+      "model": "iceandfire:dread_stone_upper_slab"
+    }
+  }
+}

@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.*;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
@@ -119,6 +116,9 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityMyrmexSwarmer>create(), event, EntityMyrmexSwarmer.class, "myrmex_swarmer", 41);
         registerUnspawnable(EntityEntryBuilder.<EntityTideTrident>create(), event, EntityTideTrident.class, "tide_trident", 42);
         registerUnspawnable(EntityEntryBuilder.<EntityMobSkull>create(), event, EntityMobSkull.class, "if_mob_skull", 43);
+        registerSpawnable(EntityEntryBuilder.<EntityDreadThrall>create(), event, EntityDreadThrall.class, "dread_thrall", 44, 0XE0E6E6, 0X00FFFF);
+        registerSpawnable(EntityEntryBuilder.<EntityDreadGhoul>create(), event, EntityDreadGhoul.class, "dread_ghoul", 45, 0XE0E6E6, 0X7B838A);
+        registerSpawnable(EntityEntryBuilder.<EntityDreadBeast>create(), event, EntityDreadBeast.class, "dread_beast", 46, 0XE0E6E6, 0X38373C);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
@@ -166,6 +166,8 @@ public class CommonProxy {
                         itemBlock = new ItemBlockPodium((Block) obj);
                     } else if (obj instanceof BlockMyrmexResin) {
                         itemBlock = new ItemBlockMyrmexResin((Block) obj);
+                    } else if (obj instanceof BlockGenericSlab) {
+                        itemBlock = ((BlockGenericSlab)obj).getItemBlock();
                     } else {
                         itemBlock = new ItemBlock((Block) obj);
                     }
@@ -234,12 +236,12 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
-        IceAndFire.GLACIER = new BiomeGlacier().setRegistryName(IceAndFire.MODID, "Glacier");
-        event.getRegistry().register(IceAndFire.GLACIER);
-        BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        event.getRegistry().registerAll(ModWorld.DREADLANDS_BIOME, ModWorld.GLACIER_BIOME);
+        BiomeDictionary.addTypes(ModWorld.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         if (IceAndFire.CONFIG.spawnGlaciers) {
-            BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
-            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+            BiomeManager.addSpawnBiome(ModWorld.GLACIER_BIOME);
+            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(ModWorld.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));
 
         }
     }
@@ -294,6 +296,10 @@ public class CommonProxy {
 
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
     }
+
+
+    public Object getDreadlandsRender(int i) {
+        return null;
 
     public int getPreviousViewType() {
         return 0;

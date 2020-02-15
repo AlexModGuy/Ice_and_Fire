@@ -1,0 +1,47 @@
+這金屬 我們稱為龍鋼。
+龍鋼是人類已知的最堅固、
+最通用的材料之一。
+它可以製成工具、盔甲和龍甲。
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+
+
+
+記住，也可在冰龍的情況下建造龍火熔爐
+並利用冰霜般的氣息來製造冰龍鋼。
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+
+
+
+
+
+火龍鋼使攻擊目標燃燒最多15秒，
+並造成大量擊退。
+冰龍鋼將目標凍結成巨大冰塊。
+兩者類型的龍鋼都可造成巨大傷害
+並輕鬆打發一隻巨龍
+鐵鋼裝甲還提供防護力，可防止
+龍之吐息

@@ -296,6 +296,9 @@ public class StructureGenerator implements IWorldGenerator {
     }
 
     private boolean isDimensionBlacklisted(int id, boolean dragons) {
+        if(id == IceAndFire.CONFIG.dreadlandsDimensionId){
+            return true;
+        }
         boolean useBlackOrWhiteLists = IceAndFire.CONFIG.useDimensionBlackList;
         int[] blacklistedArray = dragons ? IceAndFire.CONFIG.dragonBlacklistedDimensions : IceAndFire.CONFIG.structureBlacklistedDimensions;
         int[] whitelistedArray = dragons ? IceAndFire.CONFIG.dragonWhitelistedDimensions : IceAndFire.CONFIG.structureWhitelistedDimensions;
@@ -308,6 +311,7 @@ public class StructureGenerator implements IWorldGenerator {
         if (dimList.contains(id)) {
             return useBlackOrWhiteLists;
         }
+
         return !useBlackOrWhiteLists;
     }
 

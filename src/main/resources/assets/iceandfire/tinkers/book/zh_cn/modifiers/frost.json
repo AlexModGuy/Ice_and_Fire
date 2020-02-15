@@ -1,0 +1,35 @@
+{
+  "modifier": "frost",
+  "text": [
+    {
+      "text": "A coating of Ice Dragon's blood imbues the tool with the power to trap foes in a block of ice."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Cannot be applied to dragonsteel tools. Incompatible with Inferno"
+    },
+    {
+      "text": "\n"
+    }
+  ],
+  "effects": [
+    "Freezes enemies in a block of ice for 10 seconds",
+    "Deals extra dragon ice damage",
+    "Deals slowness",
+    "Single Level Only"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword",
+    "tconstruct:cleaver",
+    "tconstruct:hammer",
+    "tconstruct:arrow",
+    "tconstruct:longsword",
+    "tconstruct:shortbow",
+    "tconstruct:frypan",
+    "tconstruct:crossbow",
+    "tconstruct:scythe",
+    "tconstruct:shuriken"
+  ]
+}

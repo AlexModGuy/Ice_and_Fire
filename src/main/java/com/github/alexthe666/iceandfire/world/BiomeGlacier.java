@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -16,6 +17,7 @@ public class BiomeGlacier extends BiomeSnow {
         super(false, new BiomeProperties("Glacier").setBaseHeight(2.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(0.5F).setSnowEnabled());
         this.topBlock = Blocks.SNOW.getDefaultState();
         this.fillerBlock = Blocks.PACKED_ICE.getDefaultState();
+        this.setRegistryName(IceAndFire.MODID, "Glacier");
     }
 
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal) {

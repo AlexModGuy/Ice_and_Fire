@@ -1,0 +1,52 @@
+﻿傳說生物寓言書的封面後夾著一張破破爛爛
+的便條紙。
+上面寫道：
+<item><iceandfire:manuscript 0 38 20 1>
+
+
+謹以此記錄著超自然工具設計和神奇生物追
+尋指南的筆記，贈予願探索神秘生物的有緣
+人。願這張紙條助你一臂之力。
+
+
+
+
+
+
+從奇特的礦物開始，傳說生物寓言將指引你
+走向世界上的超自然現象。
+
+
+
+
+與黃金埋藏在同樣深處的銀礦便是一種具有
+神秘力量的礦物。
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
+
+
+
+
+
+銀礦石煉成的銀錠有廣泛的應用。
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
+
+
+
+
+
+
+
+
+
+銀製武器的特性，使得這些武器可以更有效地
+殺傷不死生物。
