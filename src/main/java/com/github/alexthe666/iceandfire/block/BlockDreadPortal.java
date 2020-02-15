@@ -64,10 +64,10 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
             if (!(entity instanceof EntityPlayer)) {
                 if (entity.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
                     entity.timeUntilPortal = 10;
-                    entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
+                 //   entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
                 } else {
                     entity.timeUntilPortal = 10;
-                    entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
+                   // entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
                 }
             }
         }

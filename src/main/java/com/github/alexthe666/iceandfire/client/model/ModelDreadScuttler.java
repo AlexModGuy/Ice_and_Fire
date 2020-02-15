@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -236,6 +237,17 @@ public class ModelDreadScuttler extends ModelDragonBase {
         this.resetToDefaultPose();
         setRotationAngles(f, f1, f2, f3, f4, f5, (EntityDreadScuttler) entity);
         animator.update(entity);
+        animator.setAnimation(EntityDreadScuttler.ANIMATION_BITE);
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, -30, 0, 0);
+        this.rotate(animator, palpTopR1, -50, 0, 0);
+        this.rotate(animator, palpTopL1, -50, 0, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(5);
+        this.rotate(animator, Neck1, -70, 0, 0);
+        this.rotate(animator, HeadBase, 20, 0, 10);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadScuttler beast) {

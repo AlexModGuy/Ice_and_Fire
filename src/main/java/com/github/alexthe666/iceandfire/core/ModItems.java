@@ -400,9 +400,10 @@ public class ModItems {
     public static Item weezer_blue_album = new ItemGeneric("weezer_blue_album", "iceandfire.weezer_blue_album", 1).setCreativeTab(null);
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_debug_stick")
     public static Item dragon_debug_stick = new ItemGeneric("dragon_debug_stick", "iceandfire.dragon_debug_stick", 1).setCreativeTab(null);
-
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_sword")
     public static Item dread_sword = new ItemModSword(dread_sword_tools, "dread_sword", "iceandfire.dread_sword");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":lich_staff")
+    public static Item lich_staff = new ItemLichStaff();
 
     static {
         EnumDragonArmor.initArmors();
