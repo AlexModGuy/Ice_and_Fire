@@ -31,12 +31,12 @@ public class DragonAIAttackMelee extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-        if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
-            return false;
-        }
+
         if (entitylivingbase == null) {
             return false;
         } else if (!entitylivingbase.isEntityAlive()) {
+            return false;
+        } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         } else {
             if (canPenalize) {

@@ -12,7 +12,7 @@ public class DragonAIEscort extends EntityAIBase {
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(0);
+        this.setMutexBits(1);
     }
 
     public boolean shouldExecute() {
@@ -22,7 +22,7 @@ public class DragonAIEscort extends EntityAIBase {
     public void updateTask() {
         if (this.dragon.getOwner() != null) {
             double dist = this.dragon.getDistance(this.dragon.getOwner());
-            if (dist > 20 && !this.dragon.isFlying() && !this.dragon.isHovering()) {
+            if (dist > 20 && (!this.dragon.isFlying() && !this.dragon.isHovering() || !dragon.isAllowedToTriggerFlight())) {
                 this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
             }
             if (dist > 45 && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {

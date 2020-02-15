@@ -139,7 +139,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             flyProgress -= 1F;
         }
         if (flying) {
-            this.motionY += 0.08D;
+            double up = isInWater() ? 0.16D : 0.08D;
+            this.motionY += up;
         }
         if (flying && this.isLandNavigator) {
             switchNavigator(false);

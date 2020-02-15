@@ -158,11 +158,13 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
     protected void onDeathUpdate() {
         ++this.deathTime;
         this.livingSoundTime = 20;
-        for (int k = 0; k < 5; ++k) {
-            double d2 = 0.4;
-            double d0 = 0.1;
-            double d1 = 0.1;
-            IceAndFire.PROXY.spawnParticle("blood", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+        if (this.world.isRemote) {
+            for (int k = 0; k < 5; ++k) {
+                double d2 = 0.4;
+                double d0 = 0.1;
+                double d1 = 0.1;
+                IceAndFire.PROXY.spawnParticle("blood", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+            }
         }
         if (this.deathTime >= 200) {
             if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {

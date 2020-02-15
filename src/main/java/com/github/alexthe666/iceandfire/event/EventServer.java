@@ -8,7 +8,9 @@ import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import com.github.alexthe666.iceandfire.message.MessageSyncMountPosition;
+import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
+import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
+import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
@@ -55,19 +57,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class EventLiving {
+public class EventServer {
 
+    public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
     private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>() {
         public boolean apply(@Nullable EntityLivingBase entity) {
             return entity != null && entity instanceof IVillagerFear;
         }
     };
-    Random rand = new Random();
+    private Random rand = new Random();
 
     private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
         float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
@@ -213,6 +213,7 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
+        /*
         if (event.getEntityBeingMounted() instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
             if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote) {
@@ -242,9 +243,7 @@ public class EventLiving {
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
         }
-        if (event.getWorldObj().isRemote && event.getEntityBeingMounted() instanceof ISyncMount) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(event.getEntityBeingMounted().getEntityId(), event.getEntityMounting().posX, event.getEntityMounting().posY, event.getEntityMounting().posZ));
-        }
+         */
     }
 
     @SubscribeEvent
@@ -413,6 +412,9 @@ public class EventLiving {
             }
             chainProperties.clearChained();
         }
+        if (event.getEntityLiving().getUniqueID().equals(EventServer.ALEX_UUID)) {
+            event.getEntityLiving().entityDropItem(new ItemStack(ModItems.weezer_blue_album), 1);
+        }
     }
 
     @SubscribeEvent
@@ -431,19 +433,7 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            if (event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() != null) {
-                Entity mount = event.getEntityLiving().getRidingEntity();
-                if (event.getEntityLiving().getDistance(mount) > 80) {
-                    if (event.getEntityLiving().world.isRemote) {
-                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSyncMountPosition(mount.getEntityId(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ));
-                    }
-                }
-            }
-        }
-
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-
         if (chainProperties != null && chainProperties.isChained()) {
             if (chainProperties.wasJustDisconnected) {
                 chainProperties.wasJustDisconnected = false;
@@ -570,7 +560,7 @@ public class EventLiving {
                         if (entity.isRiding()) {
                             entity.dismountRidingEntity();
                         }
-                        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+                        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                         float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                         float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
                         entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
@@ -773,15 +763,24 @@ public class EventLiving {
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
-        if (IceAndFire.CONFIG.generateSilverOre && event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+        if (IceAndFire.CONFIG.generateSilverOre && (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
                 || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
-                || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
+                || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH))) {
             LootCondition chance = new RandomChance(0.2f);
             LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
             LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
+            event.getTable().addPool(pool);
+        }
+        if ((event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
+                        || event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
+                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
+                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
+            LootCondition chance = new RandomChance(0.01f);
+            LootEntryItem silver = new LootEntryItem(ModItems.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
+            LootPool pool = new LootPool(new LootEntry[]{silver}, new LootCondition[]{chance}, new RandomValueRange(1, 1), new RandomValueRange(1, 1), "weezer");
             event.getTable().addPool(pool);
         }
     }

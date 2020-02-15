@@ -16,6 +16,7 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -26,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -33,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -43,6 +46,8 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -246,7 +251,7 @@ public class EventClient {
                     sirenProps.isCharmed = false;
                 }
                 if (sirenProps.isCharmed) {
-                    if (rand.nextInt(40) == 0) {
+                    if (player.world.isRemote && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
                     }
 
@@ -265,11 +270,23 @@ public class EventClient {
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
+            boolean invisibleByDefault = event.getEntity().isPotionActive(MobEffects.INVISIBILITY);
+            event.getEntity().setInvisible(invisibleByDefault);
+            if(ClientProxy.currentStrippedRender.equals(event.getRenderer().toString()) && !ClientProxy.strippedRenderLayers.isEmpty()){
+                for(LayerRenderer layer : ClientProxy.strippedRenderLayers){
+                    event.getRenderer().addLayer(layer);
+                }
+                ClientProxy.strippedRenderLayers.clear();
+            }
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
-                event.setCanceled(true);
-                if (Loader.isModLoaded("heroesexpansion") || Loader.isModLoaded("moreplayermodels") || IceAndFire.CONFIG.dragonGLErrorFix) {
-                    if (event.getEntity() instanceof EntityPlayer)
-                        GlStateManager.popMatrix();//bad coding on their part - but yet again I have to fix it
+                event.getEntity().setInvisible(true);
+                try{
+                    List<LayerRenderer> layerRenderers = (List<LayerRenderer>) ReflectionHelper.findField(RenderLivingBase.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "layerRenderers", "field_177097_h")).get(event.getRenderer());
+                    ClientProxy.strippedRenderLayers.addAll(layerRenderers);
+                    layerRenderers.clear();
+                    ClientProxy.currentStrippedRender = event.getRenderer().toString();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }
@@ -335,7 +352,7 @@ public class EventClient {
                     double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * texture_scale;
                     double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * texture_scale;
                     double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * texture_scale;
-                    double d22 = (double) (0.0F);
+                    double d22 = 0.0F;
                     double d23 = d0 * 1 - texture_scale + d22;
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
@@ -397,7 +414,7 @@ public class EventClient {
             GlStateManager.translate(0, 1.2F, 0);
             for (Entity entitylivingbase : miscProps.glarers) {
                 Vec3d vec3d = this.getChainPosition(entitylivingbase, (double) entitylivingbase.getEyeHeight() * 0.75D, event.getPartialRenderTick());
-                Vec3d vec3d1 = this.getChainPosition(entity, (double) f4, event.getPartialRenderTick());
+                Vec3d vec3d1 = this.getChainPosition(entity, f4, event.getPartialRenderTick());
                 Vec3d vec3d2 = vec3d1.subtract(vec3d);
                 double d0 = vec3d2.length() + 1.0D;
                 vec3d2 = vec3d2.normalize();
@@ -426,7 +443,7 @@ public class EventClient {
                 double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * 0.2D;
                 double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * 0.2D;
                 double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-                double d22 = (double) (-1.0F + f3);
+                double d22 = -1.0F + f3;
                 double d23 = d0 * 2.5D + d22;
                 bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
                 bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
@@ -467,6 +484,24 @@ public class EventClient {
     public void onGuiOpened(GuiOpenEvent event) {
         if (IceAndFire.CONFIG.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
             event.setGui(new IceAndFireMainMenu());
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityMount(EntityMountEvent event) {
+        if (IceAndFire.CONFIG.dragonAuto3rdPerson) {
+            if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getMinecraft().player) {
+                EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
+                if(dragon.isTamed() && dragon.isOwner(Minecraft.getMinecraft().player)){
+                    if (event.isDismounting()) {
+                        Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
+                    } else {
+                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getMinecraft().gameSettings.thirdPersonView);
+                        Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
+                        IceAndFire.PROXY.setDragon3rdPersonView(2);
+                    }
+                }
+            }
         }
     }
 }

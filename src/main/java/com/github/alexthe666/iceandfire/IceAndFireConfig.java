@@ -26,6 +26,7 @@ public class IceAndFireConfig {
     public int[] structureBlacklistedDimensions = new int[]{1, -1};
     public int[] structureWhitelistedDimensions = new int[]{0};
     public String[] blacklistedBreakBlocks = new String[0];
+    public String[] noDropBreakBlocks = new String[]{"minecraft:stone", "minecraft:dirt", "minecraft:grass"};
     public boolean blacklistBreakBlocksIsWhiteList = false;
     public boolean spawnGlaciers = true;
     public int glacierSpawnChance = 4;
@@ -42,6 +43,7 @@ public class IceAndFireConfig {
     public int maxDragonFlight = 128;
     public int dragonGoldSearchLength = 30;
     public boolean canDragonsDespawn = true;
+    public boolean doDragonsSleep = true;
     public boolean dragonDigWhenStuck = true;
     public int dragonBreakBlockCooldown = 5;
     public boolean dragonDropSkull = true;
@@ -83,6 +85,7 @@ public class IceAndFireConfig {
     public int deathWormSpawnCheckChance = 3;
     public int cockatriceChickenSearchLength = 32;
     public int cockatriceEggChance = 30;
+    public double cockatriceMaxHealth = 40.0D;
     public boolean chickensLayRottenEggs = true;
     public boolean spawnCockatrices = true;
     public int cockatriceSpawnRate = 4;
@@ -128,9 +131,12 @@ public class IceAndFireConfig {
     public int dragonsteelBaseArmor = 12;
     public int dragonsteelBaseDurability = 8000;
     public boolean spawnStructuresOnSuperflat = true;
-    public boolean dragonGLErrorFix = false;
     public boolean dragonMovedWronglyFix = false;
     public int dreadlandsDimensionId = -12;
+    public boolean weezerTinkers = true;
+    public double dragonBlockBreakingDropChance = 0.1D;
+    public boolean completeDragonPathfinding = false;
+    public boolean dragonAuto3rdPerson = true;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -159,7 +165,7 @@ public class IceAndFireConfig {
         this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
         this.dangerousWorldGenDistanceLimit = config.getInt("Dangerous World Gen Distance From Spawn", "all", 200, 0, Integer.MAX_VALUE, "How many blocks away does dangerous(dragons, cyclops, etc.) world gen have to generate from spawn");
         this.spawnStructuresOnSuperflat = config.getBoolean("Generate All Structures on Superflat", "all", true, "Whether to generate structures or mobs on superflat worlds");
-
+        this.dragonBlockBreakingDropChance = config.getFloat("Dragon Block Breaking Drop Chance", "all", 0.1F, 0.0F, 1.0F, "The percentage chance for a block to drop as an item when a dragon breaks it.");
         this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
         this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
         this.tamedDragonGriefing = config.getBoolean("Tamed Dragon Griefing", "all", true, "True if tamed dragons can follow the griefing rules.");
@@ -172,6 +178,7 @@ public class IceAndFireConfig {
         this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 100, Integer.MAX_VALUE, "How high dragons can fly, in Y height.");
         this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 30, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
         this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
+        this.doDragonsSleep = config.getBoolean("Tamed Dragons Sleep", "all", true, "True if tamed dragons go to sleep at night.");
         this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
         this.dragonDropSkull = config.getBoolean("Dragons Drop Skull", "all", true, "True if dragons can drop their skull on death.");
         this.dragonDropHeart = config.getBoolean("Dragons Drop Heart", "all", true, "True if dragons can drop their heart on death.");
@@ -183,8 +190,10 @@ public class IceAndFireConfig {
         this.villagersFearDragons = config.getBoolean("Villagers Fear Dragons", "all", true, "True if villagers should run away and hide from dragons and other hostile Ice and Fire mobs.");
         this.animalsFearDragons = config.getBoolean("Animals Fear Dragons", "all", true, "True if animals should run away and hide from dragons and other hostile Ice and Fire mobs.");
         this.blacklistedBreakBlocks = config.getStringList("Blacklisted Blocks from Dragon", "all", new String[0], "Blacklist for blocks that dragons are not to break or burn. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");
+        this.noDropBreakBlocks = config.getStringList("No-Drop Blocks from Dragon Block Breaking", "all", new String[]{"minecraft:stone", "minecraft:dirt", "minecraft:grass"}, "Blocks that will not drop as items when broken by a dragon. Ex. \"minecraft:chest\" or \"rats:rat_crafting_table\"");
         this.blacklistBreakBlocksIsWhiteList = config.getBoolean("Blacklisted Blocks from Dragon is a Whitelist", "all", false, "If true, then the blacklist will act as a whitelist.");
-
+        this.completeDragonPathfinding = config.getBoolean("Intelligent Dragon Pathfinding", "all", false, "A more intelligent dragon pathfinding system, but is also laggier. Turn this on if you think dragons are too stupid.");
+        this.dragonAuto3rdPerson = config.getBoolean("Auto 3rd person when riding dragon", "all", true, "True if riding dragons should make the player take a 3rd person view automatically.");
 
         this.spawnHippogryphs = config.getBoolean("Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
         this.hippogryphSpawnRate = config.getInt("Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
@@ -224,6 +233,7 @@ public class IceAndFireConfig {
         this.deathWormSpawnRate = config.getInt("Death Worm Spawn Weight", "all", 2, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
         this.deathWormSpawnCheckChance = config.getInt("Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
+        this.cockatriceMaxHealth = (double) config.getFloat("Cockatrice Health", "all", 40, 1, 10000, "Maximum cockatrice health");
         this.cockatriceChickenSearchLength = config.getInt("Cockatrice chicken Search Length", "all", 32, 1, 10000, "How many blocks away can cockatrices detect chickens. Note that increasing this could cause lag.");
         this.cockatriceEggChance = config.getInt("Cockatrice chicken Search Length", "all", 30, 1, Integer.MAX_VALUE, "1 out of this number chance per 6000 ticks for a chicken to lay a cockatrice egg.");
         this.chickensLayRottenEggs = config.getBoolean("Chickens Lay Rotten Eggs", "all", true, "True if chickens lay rotten eggs.");
@@ -275,7 +285,7 @@ public class IceAndFireConfig {
         this.dragonsteelBaseDamage = (double) config.getFloat("Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
         this.dragonsteelBaseArmor = config.getInt("Dragonsteel Base Armor", "all", 12, 7, Integer.MAX_VALUE, "Default armor value of dragonsteel chestplate.");
         this.dragonsteelBaseDurability = config.getInt("Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
-        this.dragonGLErrorFix = config.getBoolean("Dragon GL Error Fix", "all", false, "DO NOT CHANGE THIS UNLESS DRAGON RIDING GLITCHES OUT THE MODEL AND GIVES A GL ERROR. Otherwise it will break your client rendering");
         this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
+        this.weezerTinkers = config.getBoolean("Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
     }
 }

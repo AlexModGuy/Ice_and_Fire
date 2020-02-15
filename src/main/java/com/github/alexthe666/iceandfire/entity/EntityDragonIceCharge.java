@@ -54,8 +54,10 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
     }
 
     public void onUpdate() {
-        for (int i = 0; i < 14; ++i) {
-            IceAndFire.PROXY.spawnParticle("dragonice", this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+        if (this.world.isRemote) {
+            for (int i = 0; i < 14; ++i) {
+                IceAndFire.PROXY.spawnParticle("dragonice", this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+            }
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
             super.onUpdate();
@@ -110,9 +112,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
             if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer) movingObject.entityHit)) {
                 return;
             }
-            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
+            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity && this.shootingEntity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
-                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
                     return;
                 }
                 if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {

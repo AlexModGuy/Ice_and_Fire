@@ -34,6 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -150,8 +151,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         float possibleOrbitRadius = (entity.orbitRadius + 10.0F);
         float radius = 5 * entity.getSeaSerpentScale();
         float angle = (0.01745329251F * possibleOrbitRadius);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
         entity.orbitRadius = possibleOrbitRadius;
         return radialPos;
@@ -161,8 +162,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         float radius = 10 * entity.getSeaSerpentScale();
         entity.renderYawOffset = entity.rotationYaw;
         float angle = (0.01745329251F * entity.renderYawOffset);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         double signum = Math.signum(target.getY() + 0.5F - entity.posY);
         BlockPos pos = new BlockPos(target.getX() + extraX, target.getY() + entity.rand.nextInt(5) * signum, target.getZ() + extraZ);
         entity.isArcing = true;
@@ -186,11 +187,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(0, new EntitySeaSerpent.AISwimBite());
-        this.tasks.addTask(0, new EntitySeaSerpent.AISwimWander());
-        this.tasks.addTask(0, new EntitySeaSerpent.AISwimCircle());
-        this.tasks.addTask(1, new SeaSerpentAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(2, new SeaSerpentAIGetInWater(this, 1.0D));
+        this.tasks.addTask(0, new SeaSerpentAIGetInWater(this, 1.0D));
+        this.tasks.addTask(1, new EntitySeaSerpent.AISwimBite());
+        this.tasks.addTask(1, new EntitySeaSerpent.AISwimWander());
+        this.tasks.addTask(1, new EntitySeaSerpent.AISwimCircle());
+        this.tasks.addTask(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(3, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new FlyingAITarget(this, EntityLivingBase.class, 0, true, false, NOT_SEA_SERPENT));
@@ -203,7 +204,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveHelper = new EntityMoveHelper(this);
-            this.navigator = new PathNavigateAmphibious(this, world);
+            this.navigator = new PathNavigateGround(this, world);
+            ((PathNavigateGround) this.navigator).setCanSwim(true);
             this.isLandNavigator = true;
         } else {
             this.moveHelper = new EntitySeaSerpent.SwimmingMoveHelper();
@@ -312,9 +314,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 float radius = 1.25F * getSeaSerpentScale();
                 float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                 double extraY = 0.8F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
+                double extraZ = radius * MathHelper.cos(angle);
                 if (world.isRemote) {
                     world.spawnParticle(type, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, 0);
                 }
@@ -427,6 +429,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     this.setJumpingOutOfWater(false);
                     this.ticksSinceJump = 0;
                 }
+            }
+            if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
+                this.setAttackTarget(null);
             }
         }
         super.onLivingUpdate();
@@ -582,6 +587,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.hurtMob(this.getAttackTarget());
         }
         breakBlock();
+        if (!world.isRemote && this.isRiding() && this.getLowestRidingEntity() instanceof EntityBoat) {
+            EntityBoat boat = (EntityBoat) this.getLowestRidingEntity();
+            this.dismountRidingEntity();
+            boat.setDead();
+        }
     }
 
     private void doSplashDamage() {
@@ -599,7 +609,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 entity.motionZ /= 2.0D;
                 entity.motionX -= xRatio / (double) f * (double) strength;
                 entity.motionZ -= zRatio / (double) f * (double) strength;
-                entity.motionY += (double) strength;
+                entity.motionY += strength;
                 if (this.motionY > 0.4000000059604645D) {
                     this.motionY = 0.4000000059604645D;
                 }
@@ -824,7 +834,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 if (this.ticksExisted % 40 == 0) {
                     this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
                 }
-                if (this.ticksExisted % 3 == 0) {
+                if (this.ticksExisted % 5 == 0) {
                     rotationYaw = renderYawOffset;
                     float f1 = 0;
                     float f2 = 0;
@@ -900,12 +910,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
                 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-                this.motionX *= (double) f4;
+                this.motionX *= f4;
                 this.motionX *= 0.900000011920929D;
                 this.motionY *= 0.900000011920929D;
-                this.motionY *= (double) f4;
+                this.motionY *= f4;
                 this.motionZ *= 0.900000011920929D;
-                this.motionZ *= (double) f4;
+                this.motionZ *= f4;
             } else {
                 super.travel(strafe, vertical, forward);
             }
@@ -938,6 +948,10 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return false;
     }
 
+    public int getMaxFallHeight() {
+        return 1000;
+    }
+
     enum SwimBehavior {
         CIRCLE,
         WANDER,
@@ -960,7 +974,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 double d1 = this.posY - EntitySeaSerpent.this.posY;
                 double d2 = this.posZ - EntitySeaSerpent.this.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double) MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
                 if (d3 < 6 && EntitySeaSerpent.this.getAttackTarget() == null) {
                     if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.WANDER && EntitySeaSerpent.this.rand.nextInt(20) == 0) {
                         EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.CIRCLE;
@@ -1200,7 +1214,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     double d0 = EntitySeaSerpent.this.getAttackTarget().posX - EntitySeaSerpent.this.posX;
                     double d1 = EntitySeaSerpent.this.getAttackTarget().posZ - EntitySeaSerpent.this.posZ;
                     double d2 = d0 * d0 + d1 * d1;
-                    d2 = (double) MathHelper.sqrt(d2);
+                    d2 = MathHelper.sqrt(d2);
                     EntitySeaSerpent.this.arcingYAdditive = (secondPhase ? 1 : -1) * (float) d2;
                 }
                 if (!secondPhase) {

@@ -43,7 +43,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     }
 
     public void onUpdate() {
-        if (this.ticksExisted > 150) {
+        if (this.ticksExisted > 60) {
             this.setDead();
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
@@ -61,8 +61,10 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             float f = this.getMotionFactor();
 
             if (this.isInWater()) {
-                for (int i = 0; i < 6; ++i) {
-                    IceAndFire.PROXY.spawnParticle("serpent_bubble", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                if (this.world.isRemote) {
+                    for (int i = 0; i < 6; ++i) {
+                        IceAndFire.PROXY.spawnParticle("serpent_bubble", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                    }
                 }
             } else {
                 this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());

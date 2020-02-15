@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.core.ModWorld;
 import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventServer;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
@@ -47,21 +48,23 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.Random;
 
-@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME, guiFactory = "com.github.alexthe666.iceandfire.client.gui.IceAndFireGuiFactory")
+@Mod(modid = IceAndFire.MODID,
+        dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)",
+        version = IceAndFire.VERSION, name = IceAndFire.NAME, guiFactory = "com.github.alexthe666.iceandfire.client.gui.IceAndFireGuiFactory")
 public class IceAndFire {
 
     public static final String MODID = "iceandfire";
-    public static final String VERSION = "1.8.3";
+    public static final String VERSION = "1.8.4";
     public static final String LLIBRARY_VERSION = "1.7.9";
     public static final String NAME = "Ice And Fire";
     public static final Logger logger = LogManager.getLogger(NAME);
     @Instance(value = MODID)
     public static IceAndFire INSTANCE;
-    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
+    @NetworkWrapper({MessageDaytime.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
             MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class,
             MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class,
-            MessageAddChainedEntity.class, MessageRemoveChainedEntity.class, MessageDragonSetBurnBlock.class, MessageDragonSyncFire.class,
-            MessageSyncMountPosition.class})
+            MessageAddChainedEntity.class, MessageRemoveChainedEntity.class, MessageDragonSetBurnBlock.class, MessageDragonSyncFire.class, MessageSpawnParticleAt.class,
+            MessageStartRidingMob.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -73,6 +76,7 @@ public class IceAndFire {
     public static DamageSource gorgon;
     public static IceAndFireConfig CONFIG = new IceAndFireConfig();
     public static Configuration config;
+    public static final boolean DEBUG = false;
 
     public static void loadConfig() {
         File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
@@ -97,7 +101,7 @@ public class IceAndFire {
     public void preInit(FMLPreInitializationEvent event) {
         loadConfig();
         syncConfig();
-        MinecraftForge.EVENT_BUS.register(new EventLiving());
+        MinecraftForge.EVENT_BUS.register(new EventServer());
         TAB_ITEMS = new CreativeTab(MODID + "_items");
         TAB_BLOCKS = new CreativeTab(MODID + "_blocks");
         ModEntities.init();

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 
 public enum EnumDragonTextures {
@@ -362,15 +363,15 @@ public enum EnumDragonTextures {
                 FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + resource + ".png");
                 ICETEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/" + resource + ".png");
             } else {
-                FIRETEXTURE = null;
-                ICETEXTURE = null;
+                FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
+                ICETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
             }
         }
 
-        public static Armor getArmorForDragon(EntityDragonBase dragon, int slot) {
-            int armor = dragon.getArmorInSlot(slot);
+        public static Armor getArmorForDragon(EntityDragonBase dragon, EntityEquipmentSlot slot) {
+            int armor = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(slot));
             switch (slot) {
-                case 1:
+                case CHEST:
                     //neck
                     switch (armor) {
                         default:
@@ -388,7 +389,7 @@ public enum EnumDragonTextures {
                         case 6:
                             return ARMORNECK6;
                     }
-                case 2:
+                case LEGS:
                     //body
                     switch (armor) {
                         default:
@@ -406,7 +407,7 @@ public enum EnumDragonTextures {
                         case 6:
                             return ARMORBODY6;
                     }
-                case 3:
+                case FEET:
                     //tail
                     switch (armor) {
                         default:

@@ -55,13 +55,13 @@ public class ModItems {
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_nugget")
     public static Item silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_helmet")
-    public static Item silver_helmet = new ItemModArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
+    public static Item silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_chestplate")
-    public static Item silver_chestplate = new ItemModArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
+    public static Item silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_leggings")
-    public static Item silver_leggings = new ItemModArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
+    public static Item silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_boots")
-    public static Item silver_boots = new ItemModArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
+    public static Item silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_sword")
     public static Item silver_sword = new ItemModSword(silverTools, "silver_sword", "iceandfire.silver_sword");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_shovel")
@@ -396,6 +396,10 @@ public class ModItems {
     public static Item dragonsteel_ice_leggings = new ItemDragonsteelArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
     public static Item dragonsteel_ice_boots = new ItemDragonsteelArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":weezer_blue_album")
+    public static Item weezer_blue_album = new ItemGeneric("weezer_blue_album", "iceandfire.weezer_blue_album", 1).setCreativeTab(null);
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_debug_stick")
+    public static Item dragon_debug_stick = new ItemGeneric("dragon_debug_stick", "iceandfire.dragon_debug_stick", 1).setCreativeTab(null);
 
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_sword")
     public static Item dread_sword = new ItemModSword(dread_sword_tools, "dread_sword", "iceandfire.dread_sword");

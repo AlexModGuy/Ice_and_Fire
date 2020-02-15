@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAITargetSheepPlayers;
-import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventServer;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -40,6 +40,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -89,7 +90,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventLiving.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !EventServer.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
         this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {
@@ -101,7 +102,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     protected void collideWithEntity(Entity entityIn) {
-        if (!EventLiving.isAnimaniaSheep(entityIn)) {
+        if (!EventServer.isAnimaniaSheep(entityIn)) {
             entityIn.applyEntityCollision(this);
         }
     }
@@ -114,6 +115,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         } else if (attackDescision == 1) {
             if (!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)) {
                 this.setAnimation(ANIMATION_EATPLAYER);
+                entityIn.dismountRidingEntity();
                 entityIn.startRiding(this, true);
             } else {
                 this.setAnimation(ANIMATION_STOMP);
@@ -223,6 +225,9 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         if (this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6) {
             this.setAttackTarget(null);
         }
@@ -237,7 +242,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-            this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
+            this.getAttackTarget().knockBack(this, 2, 1, 1);
 
         }
         if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())) {

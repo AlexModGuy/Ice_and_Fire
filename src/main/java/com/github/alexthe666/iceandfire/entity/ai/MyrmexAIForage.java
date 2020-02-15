@@ -73,7 +73,9 @@ public class MyrmexAIForage extends EntityAIBase {
     @Override
     public void updateTask() {
         if (this.myrmex.keepSearching) {
-            this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
+            if(this.myrmex.getNavigator().noPath()) {
+                this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
+            }
             if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 4) {
                 this.resetTask();
             }

@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -37,6 +38,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,6 +47,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -53,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor {
+public class EntityHippogryph extends EntityTameable implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -88,7 +91,8 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     private int flyTicks;
     private int hoverTicks;
     private boolean hasChestVarChanged = false;
-
+    private int navigatorType = -1;
+    private boolean isOverAir;
     public EntityHippogryph(World worldIn) {
         super(worldIn);
         ANIMATION_EAT = Animation.create(25);
@@ -103,12 +107,38 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         this.stepHeight = 1;
     }
 
+    protected void switchNavigator(){
+        if(this.isBeingRidden() && this.isOverAir()){
+            if(navigatorType != 1){
+                this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+                this.navigator = new PathNavigateFlyingCreature(this, world);
+                navigatorType = 1;
+            }
+        }
+        if(!this.isBeingRidden() || !this.isOverAir()){
+            if(navigatorType != 0){
+                this.moveHelper = new EntityMoveHelper(this);
+                this.navigator = new PathNavigateGround(this, world);
+                navigatorType = 0;
+            }
+        }
+    }
+
+    protected boolean isOverAir() {
+        return isOverAir;
+    }
+
+    private boolean isOverAirLogic() {
+        return world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ));
+    }
+
     protected int getExperiencePoints(EntityPlayer player) {
         return 10;
     }
 
     @Override
     protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, new HippogryphAIAttackMelee(this, 1.5D, true));
@@ -149,6 +179,12 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+
+    @Override
     public boolean canBeSteered() {
         return true;
     }
@@ -522,6 +558,23 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         }
     }
 
+    public boolean isRidingPlayer(EntityPlayer player) {
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+    }
+
+    @Nullable
+    public EntityPlayer getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof EntityPlayer){
+            return (EntityPlayer)this.getControllingPassenger();
+        }
+        return null;
+    }
+
+    @Override
+    public double getFlightSpeedModifier() {
+        return 1;
+    }
+
     public boolean isFlying() {
         if (world.isRemote) {
             return this.isFlying = Boolean.valueOf(this.dataManager.get(FLYING).booleanValue());
@@ -650,10 +703,6 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityHippogryph.ANIMATION_EAT, EntityHippogryph.ANIMATION_BITE, EntityHippogryph.ANIMATION_SPEAK, EntityHippogryph.ANIMATION_SCRATCH};
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
-        return this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer && this.getControllingPassenger().getUniqueID().equals(player.getUniqueID());
-    }
-
     public boolean shouldDismountInWater(Entity rider) {
         return true;
     }
@@ -695,24 +744,6 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             super.travel(strafe, forward, vertical);
             return;
         }
-        if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
-            if (controller != null) {
-                strafe = controller.moveStrafing * 0.5F;
-                forward = controller.moveForward;
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                }
-                if (this.isFlying() || this.isHovering()) {
-                    motionX *= 1.06;
-                    motionZ *= 1.06;
-                }
-                jumpMovementFactor = 0.05F;
-                this.setAIMoveSpeed(onGround ? (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() : 2);
-                super.travel(strafe, vertical = 0, forward);
-                return;
-            }
-        }
         super.travel(strafe, forward, vertical);
     }
 
@@ -741,6 +772,10 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        switchNavigator();
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         if (!this.world.isRemote) {
             if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
@@ -782,7 +817,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
                 }
             }
         }
-        if (!world.isRemote && this.onGround && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
+        if (!world.isRemote && !this.isOverAir() && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().posY - 3 > this.posY && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;
@@ -792,7 +827,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (!this.onGround) {
+        if (this.isOverAir()) {
             airBorneCounter++;
         } else {
             airBorneCounter = 0;
@@ -808,7 +843,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             }
             hasChestVarChanged = false;
         }
-        if (!this.onGround && this.airTarget != null) {
+        if (this.isOverAir() && this.airTarget != null) {
             this.setFlying(true);
         }
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSitting()) {
@@ -821,26 +856,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             this.getNavigator().clearPath();
 
         }
-        if (this.getControllingPassenger() != null) {
-            if (motionY > 0.5 && (this.isFlying() || this.isHovering())) {
-                this.motionY = 0.5;
-            }
-            if (motionY < -0.5) {
-                this.motionY = -0.5;
-            }
-        } else {
-            if (motionY > 0.8) {
-                this.motionY = 0.5;
-            }
-            if (motionY < -0.8) {
-                this.motionY = -0.8;
-            }
-            if (motionY > 1) {
-                this.motionY = 0;
-            }
-        }
         AnimationHandler.INSTANCE.updateAnimations(this);
-
         boolean sitting = isSitting() && !isHovering() && !isFlying();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
@@ -860,15 +876,12 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 0.5F;
         }
-        if ((flying || hovering) && ticksExisted % 20 == 0 && !this.onGround) {
+        if ((flying || hovering) && ticksExisted % 20 == 0 && this.isOverAir()) {
             this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IceAndFire.CONFIG.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
         }
-        if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
+        if (!this.isOverAir() && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
             this.setHovering(false);
-        }
-        if (this.getControllingPassenger() != null && !this.onGround && (this.isFlying() || this.isHovering())) {
-            this.motionY *= 0D;
         }
         if (this.isHovering()) {
             if (this.isSitting()) {
@@ -894,10 +907,10 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         if (this.isSitting()) {
             this.getNavigator().clearPath();
         }
-        if (!this.isFlying() && !this.isHovering() && this.airTarget != null && this.onGround) {
+        if (!this.isFlying() && !this.isHovering() && this.airTarget != null && !this.isOverAir()) {
             this.airTarget = null;
         }
-        if (this.isFlying() && this.airTarget == null && this.onGround && this.getControllingPassenger() == null) {
+        if (this.isFlying() && this.airTarget == null && !this.isOverAir() && this.getControllingPassenger() == null) {
             this.setFlying(false);
         }
 
@@ -906,13 +919,13 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         } else if (getAttackTarget() != null) {
             flyTowardsTarget();
         }
-        if (this.onGround && flyTicks != 0) {
+        if (!this.isOverAir() && flyTicks != 0) {
             flyTicks = 0;
         }
         if (this.isFlying() && this.doesWantToLand() && this.getControllingPassenger() == null) {
             this.setFlying(false);
             this.setHovering(false);
-            if (this.onGround) {
+            if (!this.isOverAir()) {
                 flyTicks = 0;
                 this.setFlying(false);
             }
@@ -924,7 +937,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
+        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && !this.isOverAir() || this.posY < -1)) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;
@@ -941,6 +954,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onUpdate() {
         super.onUpdate();
+        isOverAir = this.isOverAirLogic();
         if (world.isRemote) {
             this.updateClientControls();
         }
@@ -951,23 +965,12 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
             }
-            if (this.isFlying() || this.isHovering()) {
-                this.motionY += 0.4D;
-            }
         } else if (this.dismount()) {
             if (this.isFlying() || this.isHovering()) {
-                this.motionY -= 0.4D;
                 this.setFlying(false);
                 this.setHovering(false);
             }
         }
-        if (this.down() && (this.isFlying() || this.isHovering())) {
-            this.motionY -= 0.4D;
-        }
-        if (!this.dismount() && (this.isFlying() || this.isHovering())) {
-            this.motionY += 0.01D;
-        }
-
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
             EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
@@ -981,18 +984,18 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();
         }
-        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
+        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
             this.setHovering(true);
             this.setFlying(false);
         }
-        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
+        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
             this.setFlying(true);
             this.setHovering(false);
         }
         if (this.spacebarTicks > 0) {
             this.spacebarTicks--;
         }
-        if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+        if (this.spacebarTicks > 10 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
         }
         if (world.isRemote) {

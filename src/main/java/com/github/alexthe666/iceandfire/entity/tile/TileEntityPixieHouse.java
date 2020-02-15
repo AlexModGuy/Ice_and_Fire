@@ -83,7 +83,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         if (!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0) {
             releasePixie();
         }
-        if (this.hasPixie) {
+        if (this.world.isRemote && this.hasPixie) {
             IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
     }

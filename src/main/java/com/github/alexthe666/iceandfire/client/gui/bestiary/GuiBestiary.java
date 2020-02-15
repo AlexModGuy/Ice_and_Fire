@@ -260,7 +260,7 @@ public class GuiBestiary extends GuiScreen {
                 if (bookPages == 1) {
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 25, 20, 303, 309, 71, 56, 512F);
+                    drawImage(DRAWINGS_0, 25, 20, 303, 309, 70, 56, 512F);
                     GL11.glPopMatrix();
                 }
                 break;

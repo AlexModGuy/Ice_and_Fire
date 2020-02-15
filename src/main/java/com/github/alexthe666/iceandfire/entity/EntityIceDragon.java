@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +52,7 @@ public class EntityIceDragon extends EntityDragonBase {
     public int swimCycle;
 
     public EntityIceDragon(World worldIn) {
-        super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+        super(worldIn, DragonType.ICE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
         this.setSize(0.78F, 1.2F);
         ANIMATION_SPEAK = Animation.create(20);
         ANIMATION_BITE = Animation.create(35);
@@ -66,6 +68,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
@@ -161,85 +164,32 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        if (this.getAnimation() == ANIMATION_WINGBLAST) {
-            return false;
-        }
-        switch (groundAttack) {
-            case BITE:
-                if (this.getAnimation() != ANIMATION_BITE) {
+        if(!this.isPlayingAttackAnimation()){
+            switch (groundAttack) {
+                case BITE:
                     this.setAnimation(ANIMATION_BITE);
-                    return false;
-                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag;
-                }
-                break;
-            case SHAKE_PREY:
-                if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-                    if (this.getAnimation() != ANIMATION_SHAKEPREY) {
-                        this.setAnimation(ANIMATION_SHAKEPREY);
-                        entityIn.startRiding(this);
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return true;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
-                        this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag1;
-                    }
-                }
-                break;
-            case TAIL_WHIP:
-                if (this.getAnimation() != ANIMATION_TAILWHACK) {
+                    break;
+                case TAIL_WHIP:
                     this.setAnimation(ANIMATION_TAILWHACK);
-                    return false;
-                } else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
-                    boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    if (entityIn instanceof EntityLivingBase) {
-                        ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                    break;
+                case SHAKE_PREY:
+                    boolean flag = false;
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) &&
+                            entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                        this.setAnimation(ANIMATION_SHAKEPREY);
+                        flag = true;
+                        entityIn.startRiding(this);
                     }
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag2;
-                }
-                break;
-            case WING_BLAST:
-                if (this.onGround && !this.isHovering() && !this.isFlying()) {
-                    if (this.getAnimation() != ANIMATION_WINGBLAST) {
-                        this.setAnimation(ANIMATION_WINGBLAST);
-                        return true;
-                    } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
-                        boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        if (entityIn instanceof EntityLivingBase) {
-                            ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
-                        }
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag2;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
+                    if(!flag){
+                        groundAttack = IaFDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag;
                     }
-                }
-
-                break;
+                    break;
+                case WING_BLAST:
+                    this.setAnimation(ANIMATION_WINGBLAST);
+                    break;
+            }
         }
-
         return false;
     }
 
@@ -286,12 +236,6 @@ public class EntityIceDragon extends EntityDragonBase {
         } else if (!swimming && swimProgress > 0.0F) {
             swimProgress -= 0.5F;
         }
-        if ((swimming || this.isFlying()) && this.isLandNavigator) {
-            switchNavigator(false);
-        }
-        if (!swimming && !this.isFlying() && !this.isLandNavigator) {
-            switchNavigator(true);
-        }
         if (this.isInMaterialWater() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
             this.setSwimming(true);
             this.setHovering(false);
@@ -310,7 +254,6 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.jump();
                 this.motionY += 0.8D;
                 this.setSwimming(false);
-                randomizeAttacks();
             }
         }
         if (!world.isRemote && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
@@ -364,7 +307,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
-                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 0);
+                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 1);
                     }
                 }
             } else {
@@ -487,7 +430,8 @@ public class EntityIceDragon extends EntityDragonBase {
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
-        for (int i = 0; i < conqueredDistance; i++) {
+        int increment = (int)Math.ceil(conqueredDistance / 100);
+        for (int i = 0; i < conqueredDistance; i += increment) {
             double progressX = headPos.x + d2 * (i / (float) distance);
             double progressY = headPos.y + d3 * (i / (float) distance);
             double progressZ = headPos.z + d4 * (i / (float) distance);
@@ -574,10 +518,54 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public double getFlightSpeedModifier() {
-        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.3F : 1F);
+        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.8F : 1F);
     }
 
     public boolean isAllowedToTriggerFlight() {
         return super.isAllowedToTriggerFlight() && !this.isInWater();
+    }
+
+    protected void spawnDeathParticles(){
+        if (this.world.isRemote) {
+            for (int k = 0; k < 10; ++k) {
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+            }
+        }
+    }
+
+    protected void spawnBabyParticles() {
+        if (this.world.isRemote) {
+            for (int i = 0; i < 5; i++) {
+                float radiusAdd = i * 0.15F;
+                float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+                float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+                IceAndFire.PROXY.spawnParticle("dragonice", headPosX, headPosY, headPosZ, 0, 0, 0);
+            }
+        }
+    }
+
+    //Required for proper egg drop
+    public int getStartMetaForType(){
+        return 4;
+    }
+
+    public SoundEvent getBabyFireSound() {
+        return SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH;
+    }
+
+    protected ItemStack getSkull() {
+        return new ItemStack(ModItems.dragon_skull, 1, 1);
+    }
+
+    protected ItemStack getHorn() {
+        return new ItemStack(ModItems.dragon_horn_ice);
+    }
+
+    public boolean useFlyingPathFinder() {
+        return this.isFlying() || this.isInMaterialWater();
     }
 }

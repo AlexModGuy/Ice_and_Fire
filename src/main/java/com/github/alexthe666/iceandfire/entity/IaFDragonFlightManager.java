@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
@@ -92,11 +90,8 @@ public class IaFDragonFlightManager {
                 target = new Vec3d(target.x, IceAndFire.CONFIG.maxDragonFlight, target.z);
             }
             if (target.y >= dragon.posY && !dragon.isModelDead()) {
-                if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
-                    dragon.motionY += 0.1D;
-                } else {
-                    dragon.motionY += 0.4D;
-                }
+                dragon.motionY += 0.1D;
+
             }
         }
 
@@ -256,7 +251,38 @@ public class IaFDragonFlightManager {
             }
         }
 
+
     }
 
+    protected static class PlayerFlightMoveHelper<T extends EntityCreature & IFlyingMount> extends EntityMoveHelper {
 
+        private T dragon;
+
+        public PlayerFlightMoveHelper(T dragon) {
+            super(dragon);
+            this.dragon = dragon;
+        }
+
+        @Override
+        public void onUpdateMoveHelper() {
+            double flySpeed = speed * speedMod();
+            Vec3d dragonVec = dragon.getPositionVector();
+            Vec3d moveVec = new Vec3d(posX, posY, posZ);
+            Vec3d normalized = moveVec.subtract(dragonVec).normalize();
+            double dist = dragonVec.distanceTo(moveVec);
+            dragon.motionX = normalized.x * flySpeed;
+            dragon.motionY = normalized.y * flySpeed;
+            dragon.motionZ = normalized.z * flySpeed;
+            if (dist > 2.5E-7) {
+                float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
+                dragon.rotationYaw = limitAngle(dragon.rotationYaw, yaw, 5);
+                entity.setAIMoveSpeed((float)(speed));
+            }
+            dragon.move(MoverType.SELF, dragon.motionX, dragon.motionY, dragon.motionZ);
+        }
+
+        public double speedMod(){
+            return dragon instanceof EntityAmphithere ? 0.75D : 0.5D;
+        }
+    }
 }

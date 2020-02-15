@@ -26,7 +26,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
     public MyrmexAIStoreItems(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(0);
+        this.setMutexBits(1);
     }
 
     public boolean shouldExecute() {
@@ -52,14 +52,19 @@ public class MyrmexAIStoreItems extends EntityAIBase {
     @Override
     public void updateTask() {
         if (first && mainRoom != null) {
-            this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
+            if(this.myrmex.getNavigator().noPath()){
+                this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
+
+            }
             if (this.myrmex.getDistanceSq(mainRoom) < 8) {
                 first = false;
                 return;
             }
         }
         if (!first && nextCocoon != null) {
-            this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
+            if(this.myrmex.getNavigator().noPath()) {
+                this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
+            }
             if (this.myrmex.getDistanceSq(nextCocoon) < 4 && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
                 ItemStack itemstack = this.myrmex.getHeldItem(EnumHand.MAIN_HAND);

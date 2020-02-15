@@ -121,38 +121,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     public void onUpdate() {
         super.onUpdate();
         this.setAir(200);
-        BlockPos pos = new BlockPos(this);
-        if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
-            this.setDragonAge(this.getDragonAge() + 1);
-        }
-        if (world.getBlockState(pos).getMaterial() == Material.WATER && !getType().isFire && this.getRNG().nextInt(500) == 0) {
-            this.setDead();
-            world.setBlockState(pos, ModBlocks.eggInIce.getDefaultState());
-            this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_GLASS_BREAK, this.getSoundCategory(), 2.5F, 1.0F, false);
-            if (world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
-                ((TileEntityEggInIce) world.getTileEntity(pos)).type = this.getType();
-                ((TileEntityEggInIce) world.getTileEntity(pos)).ownerUUID = this.getOwnerId();
-            }
-        }
-        if (this.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {
-            if (world.getBlockState(pos).getMaterial() == Material.FIRE && getType().isFire) {
-                world.setBlockToAir(pos);
-                EntityFireDragon dragon = new EntityFireDragon(world);
-                dragon.setVariant(getType().ordinal());
-                dragon.setGender(this.getRNG().nextBoolean());
-                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                dragon.setHunger(50);
-                if (!world.isRemote) {
-                    world.spawnEntity(dragon);
-                }
-                dragon.setTamed(true);
-                dragon.setOwnerId(this.getOwnerId());
-                this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, this.getSoundCategory(), 2.5F, 1.0F, false);
-                this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, ModSounds.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
-                this.setDead();
-            }
-
-        }
+        getType().dragonType.updateEggCondition(this);
     }
 
     @Override

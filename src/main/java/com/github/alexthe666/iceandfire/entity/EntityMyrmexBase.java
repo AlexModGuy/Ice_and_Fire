@@ -51,6 +51,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -237,6 +238,9 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     public void onUpdate() {
         super.onUpdate();
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+            this.setAttackTarget(null);
+        }
         if (this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase) {
             float yaw = this.getRidingEntity().rotationYaw;
             this.rotationYaw = yaw;

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.event.EventServer;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -101,7 +101,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.targetTasks.addTask(5, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof EntityPlayer || EventLiving.isAnimaniaFerret(entity)) && !EventLiving.isAnimaniaChicken(entity);
+                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof EntityPlayer || EventServer.isAnimaniaFerret(entity)) && !EventServer.isAnimaniaChicken(entity);
             }
         }));
         this.tasks.removeTask(aiMelee);
@@ -124,12 +124,12 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public boolean isOnSameTeam(Entity entityIn) {
-        return EventLiving.isAnimaniaChicken(entityIn) || super.isOnSameTeam(entityIn);
+        return EventServer.isAnimaniaChicken(entityIn) || super.isOnSameTeam(entityIn);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.getTrueSource() != null && EventLiving.isAnimaniaFerret(source.getTrueSource())) {
+        if (source.getTrueSource() != null && EventServer.isAnimaniaFerret(source.getTrueSource())) {
             damage *= 5;
         }
         if (source == DamageSource.IN_WALL) {
@@ -139,7 +139,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     private boolean canUseStareOn(Entity entity) {
-        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !EventLiving.isAnimaniaFerret(entity);
+        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !EventServer.isAnimaniaFerret(entity);
     }
 
     private void switchAI(boolean melee) {
@@ -181,7 +181,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.cockatriceMaxHealth);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
@@ -614,7 +614,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     private boolean shouldMelee() {
         boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
         if (this.getAttackTarget() != null) {
-            return this.getDistance(this.getAttackTarget()) < 4D || EventLiving.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
+            return this.getDistance(this.getAttackTarget()) < 4D || EventServer.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
         }
         return false;
     }

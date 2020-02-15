@@ -48,19 +48,4 @@ public class ItemModArmor extends ItemArmor {
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-
-
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        ItemStack mat = this.getArmorMaterial().getRepairItemStack();
-        if (this.getArmorMaterial() == ModItems.silverMetal) {
-            NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
-            for (ItemStack ingot : silverItems) {
-                if (OreDictionary.itemMatches(repair, ingot, false)) {
-                    return true;
-                }
-            }
-        }
-        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
-        return super.getIsRepairable(toRepair, repair);
-    }
 }

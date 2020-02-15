@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +43,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
-        super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+        super(worldIn, DragonType.FIRE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
         this.setSize(0.78F, 1.2F);
         this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
@@ -63,6 +64,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(0, new DragonAIRide(this));
         this.tasks.addTask(1, new DragonAIAttackMelee(this, 1.5D, false));
         this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
@@ -135,82 +137,32 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        switch (groundAttack) {
-            case BITE:
-                if (this.getAnimation() != ANIMATION_BITE) {
+        if(!this.isPlayingAttackAnimation()){
+            switch (groundAttack) {
+                case BITE:
                     this.setAnimation(ANIMATION_BITE);
-                    return false;
-                } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag;
-                }
-                break;
-            case SHAKE_PREY:
-                if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-                    if (this.getAnimation() != ANIMATION_SHAKEPREY) {
-                        this.setAnimation(ANIMATION_SHAKEPREY);
-                        entityIn.startRiding(this);
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return true;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
-                        this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag1;
-                    }
-                }
-                break;
-            case TAIL_WHIP:
-                if (this.getAnimation() != ANIMATION_TAILWHACK) {
+                    break;
+                case TAIL_WHIP:
                     this.setAnimation(ANIMATION_TAILWHACK);
-                    return false;
-                } else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 30) {
-                    boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                    if (entityIn instanceof EntityLivingBase) {
-                        ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
+                    break;
+                case SHAKE_PREY:
+                    boolean flag = false;
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) &&
+                            entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                        this.setAnimation(ANIMATION_SHAKEPREY);
+                        flag = true;
+                        entityIn.startRiding(this);
                     }
-                    this.usingGroundAttack = this.getRNG().nextBoolean();
-                    this.randomizeAttacks();
-                    return flag2;
-                }
-                break;
-            case WING_BLAST:
-                if (this.onGround && !this.isHovering() && !this.isFlying()) {
-                    if (this.getAnimation() != ANIMATION_WINGBLAST) {
-                        this.setAnimation(ANIMATION_WINGBLAST);
-                        return true;
-                    } else if ((this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
-                        boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        if (entityIn instanceof EntityLivingBase) {
-                            ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
-                        }
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag2;
-                    }
-                } else {
-                    if (this.getAnimation() != ANIMATION_BITE) {
+                    if(!flag){
+                        groundAttack = IaFDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
-                        return false;
-                    } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-                        this.usingGroundAttack = this.getRNG().nextBoolean();
-                        this.randomizeAttacks();
-                        return flag;
                     }
-                }
-
-                break;
+                    break;
+                case WING_BLAST:
+                    this.setAnimation(ANIMATION_WINGBLAST);
+                    break;
+            }
         }
-
         return false;
     }
 
@@ -290,7 +242,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
-                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 2);
+                        stimulateFire(mop.hitVec.x, mop.hitVec.y, mop.hitVec.z, 1);
                     }
                 }
             } else {
@@ -409,7 +361,8 @@ public class EntityFireDragon extends EntityDragonBase {
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(5 * this.getDistance(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
-        for (int i = 0; i < conqueredDistance; i++) {
+        int increment = (int) Math.ceil(conqueredDistance / 100);
+        for (int i = 0; i < conqueredDistance; i += increment) {
             double progressX = headPos.x + d2 * (i / (float) distance);
             double progressY = headPos.y + d3 * (i / (float) distance);
             double progressZ = headPos.z + d4 * (i / (float) distance);
@@ -424,7 +377,6 @@ public class EntityFireDragon extends EntityDragonBase {
                     IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
                 }
             }
-
         }
         if (burnProgress >= 40D && canPositionBeSeen(burnX, burnY, burnZ)) {
             double spawnX = burnX + (rand.nextFloat() * 3.0) - 1.5;
@@ -465,5 +417,33 @@ public class EntityFireDragon extends EntityDragonBase {
         return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
     }
 
+    protected void spawnDeathParticles() {
+        for (int k = 0; k < 3; ++k) {
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            if (world.isRemote) {
+                this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+            }
+        }
+    }
+
+    protected void spawnBabyParticles() {
+        for (int i = 0; i < 5; i++) {
+            float radiusAdd = i * 0.15F;
+            float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+            float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+            float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
+        }
+    }
+
+    protected ItemStack getSkull() {
+        return new ItemStack(ModItems.dragon_skull);
+    }
+
+    protected ItemStack getHorn() {
+        return new ItemStack(ModItems.dragon_horn_fire);
+    }
 
 }

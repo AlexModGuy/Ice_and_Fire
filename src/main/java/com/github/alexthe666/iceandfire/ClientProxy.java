@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsAurora;
 import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsSky;
 import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsWeather;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -33,10 +34,12 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,11 +58,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler.*;
@@ -81,16 +86,22 @@ public class ClientProxy extends CommonProxy {
     private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS = new ModelDragonsteelFireArmor(0.2F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL = new ModelDragonsteelIceArmor(0.4F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
+    private static final ModelSilverArmor SILVER_ARMOR_MODEL = new ModelSilverArmor(0.5F);
+    private static final ModelSilverArmor SILVER_ARMOR_MODEL_LEGS = new ModelSilverArmor(0.2F);
     @SideOnly(Side.CLIENT)
     private static final IceAndFireTEISR TEISR = new IceAndFireTEISR();
     public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
     private static MyrmexHive referedClientHive = null;
     private IceAndFireParticleSpawner particleSpawner;
     private FontRenderer bestiaryFontRenderer;
+    private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
     private IRenderHandler dreadlandsWeatherRenderer = new RenderDreadlandsWeather();
     private IRenderHandler dreadlandsSkyRenderer = new RenderDreadlandsSky();
     private IRenderHandler dreadlandsAuroraRender = new RenderDreadlandsAurora();
+    public static List<LayerRenderer> strippedRenderLayers = new ArrayList<>();
+    public static String currentStrippedRender = "";
+    
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
@@ -493,6 +504,10 @@ public class ClientProxy extends CommonProxy {
                 return DRAGONSTEEL_ICE_ARMOR_MODEL;
             case 13:
                 return DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS;
+            case 14:
+                return SILVER_ARMOR_MODEL;
+            case 15:
+                return SILVER_ARMOR_MODEL_LEGS;
         }
         return null;
     }
@@ -520,5 +535,21 @@ public class ClientProxy extends CommonProxy {
             return dreadlandsAuroraRender;
         }
         return null;
+    }
+
+    public int getPreviousViewType() {
+        return previousViewType;
+    }
+
+    public void setPreviousViewType(int view) {
+        previousViewType = view;
+    }
+
+    public void updateDragonArmorRender(String clear){
+        LayerDragonArmor.clearCache(clear);
+    }
+
+    public boolean shouldSeeBestiaryContents() {
+        return Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
     }
 }
