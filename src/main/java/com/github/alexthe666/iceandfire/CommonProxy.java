@@ -300,6 +300,7 @@ public class CommonProxy {
 
     public Object getDreadlandsRender(int i) {
         return null;
+    }
 
     public int getPreviousViewType() {
         return 0;

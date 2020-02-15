@@ -64,7 +64,7 @@ repositories {
         url = "http://dvs1.progwml6.com/files/maven"
     }
     maven {
-            name = 'DVS1 Maven FS'
+        name = 'DVS1 Maven FS'
         url = 'http://dvs1.progwml6.com/files/maven'
     }
 
@@ -87,7 +87,7 @@ dependencies {
     runtime "mezz.jei:jei_1.12.2:4.9.1.181"
     deobfProvided "mezz.jei:jei_1.12.2:4.9.1.181:api"
     compile "baubles:Baubles:1.12:1.5.2"
-    compile "thaumcraft:Thaumcraft:1.12.2:6.1.BETA26"
+    deobfCompile "thaumcraft:Thaumcraft:1.12.2:6.1.BETA26"
     compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.6.465"
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 }

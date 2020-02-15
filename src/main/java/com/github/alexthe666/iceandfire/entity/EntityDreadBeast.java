@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     public static Animation ANIMATION_SPAWN = Animation.create(40);
-    public static Animation ANIMATION_BITE = Animation.create(25);
+    public static Animation ANIMATION_BITE = Animation.create(15);
     private int animationTick;
     private Animation currentAnimation;
     private int hostileTicks = 0;
@@ -41,7 +41,7 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 0.5D));
+        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -51,7 +51,7 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
@@ -72,7 +72,6 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        this.setAnimation(ANIMATION_BITE);
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
@@ -86,7 +85,7 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
                 this.setAnimation(ANIMATION_BITE);
             }
             this.faceEntity(this.getAttackTarget(), 360, 80);
-            if (this.getAnimation() == ANIMATION_BITE && (this.getAnimationTick() == 9 || this.getAnimationTick() == 19)) {
+            if (this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 6) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                 this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.posX - this.getAttackTarget().posX, this.posZ - this.getAttackTarget().posZ);
             }
