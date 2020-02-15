@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlo
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +37,7 @@ public class RenderDreadGhoul extends RenderLiving<EntityDreadGhoul> {
 
     @Override
     public void preRenderCallback(EntityDreadGhoul entitylivingbaseIn, float partialTickTime) {
+        GlStateManager.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
     }
 
     @Override

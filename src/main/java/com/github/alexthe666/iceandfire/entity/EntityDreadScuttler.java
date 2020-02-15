@@ -1,22 +1,24 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
+import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.DifficultyInstance;
@@ -24,21 +26,20 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadScuttler extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.FLOAT);
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.BYTE);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_BITE = Animation.create(15);
     private int animationTick;
     private Animation currentAnimation;
-    private int hostileTicks = 0;
-    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.FLOAT);
-   private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.VARINT);
-    private static final float INITIAL_WIDTH = 1.2F;
-    private static final float INITIAL_HEIGHT = 0.9F;
-    private float firstWidth = 1.0F;
-    private float firstHeight = 1.0F;
+    private static final float INITIAL_WIDTH = 1.5F;
+    private static final float INITIAL_HEIGHT = 1.3F;
+    private float firstWidth = -1.0F;
+    private float firstHeight = -1.0F;
 
-    public EntityDreadBeast(World worldIn) {
+    public EntityDreadScuttler(World worldIn) {
         super(worldIn);
         this.setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
     }
@@ -55,17 +56,17 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
+        this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
         this.dataManager.register(SCALE, Float.valueOf(1F));
     }
 
@@ -75,6 +76,18 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
 
     public void setScale(float scale) {
         this.dataManager.set(SCALE, Float.valueOf(scale));
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setFloat("Scale", this.getScale());
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.setScale(compound.getFloat("Scale"));
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -91,10 +104,13 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
             firstHeight = INITIAL_HEIGHT * getScale();
             this.setSize(firstWidth, firstHeight);
         }
+        if (!this.world.isRemote) {
+            this.setBesideClimbableBlock(this.collidedHorizontally);
+        }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
@@ -113,34 +129,42 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
-        compound.setFloat("Scale", this.getScale());
+    public boolean isOnLadder() {
+        return this.isBesideClimbableBlock();
     }
 
-    @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
-        this.setScale(compound.getFloat("Scale"));
+    public void setInWeb() {
     }
 
-    public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+    public EnumCreatureAttribute getCreatureAttribute() {
+        return EnumCreatureAttribute.ARTHROPOD;
     }
 
-    public void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+    public boolean isPotionApplicable(PotionEffect potioneffectIn) {
+        return potioneffectIn.getPotion() != MobEffects.POISON && super.isPotionApplicable(potioneffectIn);
+    }
+
+    public boolean isBesideClimbableBlock() {
+        return (this.dataManager.get(CLIMBING).byteValue() & 1) != 0;
+    }
+
+    public void setBesideClimbableBlock(boolean climbing) {
+        byte b0 = this.dataManager.get(CLIMBING).byteValue();
+
+        if (climbing) {
+            b0 = (byte) (b0 | 1);
+        } else {
+            b0 = (byte) (b0 & -2);
+        }
+
+        this.dataManager.set(CLIMBING, Byte.valueOf(b0));
     }
 
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
-        this.setVariant(rand.nextInt(2));
-        this.setScale(0.85F + rand.nextFloat() * 0.5F);
+        this.setScale(0.5F + rand.nextFloat() * 1.5F);
         return data;
     }
 

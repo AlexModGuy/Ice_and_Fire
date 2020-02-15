@@ -35,12 +35,17 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
     private int animationTick;
     private Animation currentAnimation;
     private int hostileTicks = 0;
+    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> SCREAMS = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
+    private static final float INITIAL_WIDTH = 0.6F;
+    private static final float INITIAL_HEIGHT = 1.8F;
+    private float firstWidth = 1.0F;
+    private float firstHeight = 1.0F;
 
     public EntityDreadGhoul(World worldIn) {
         super(worldIn);
-        this.setSize(0.6F, 1.8F);
+        this.setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
     }
 
     protected void initEntityAI() {
@@ -67,6 +72,15 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
         super.entityInit();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(SCREAMS, Integer.valueOf(0));
+        this.dataManager.register(SCALE, Float.valueOf(1F));
+    }
+
+    public float getScale() {
+        return Float.valueOf(this.dataManager.get(SCALE).floatValue());
+    }
+
+    public void setScale(float scale) {
+        this.dataManager.set(SCALE, Float.valueOf(scale));
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -78,6 +92,11 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F){
+            firstWidth = INITIAL_WIDTH * getScale();
+            firstHeight = INITIAL_HEIGHT * getScale();
+            this.setSize(firstWidth, firstHeight);
+        }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
@@ -129,6 +148,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setInteger("ScreamStage", this.getScreamStage());
+        compound.setFloat("Scale", this.getScale());
     }
 
     @Override
@@ -136,6 +156,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setScreamStage(compound.getInteger("ScreamStage"));
+        this.setScale(compound.getFloat("Scale"));
     }
 
     public int getVariant() {
