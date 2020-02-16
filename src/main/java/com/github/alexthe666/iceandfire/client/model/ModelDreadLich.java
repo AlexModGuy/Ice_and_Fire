@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
-import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
+import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -66,9 +66,9 @@ public class ModelDreadLich extends ModelDragonBase {
         this.sleeveRight = new HideableModelRenderer(this, 33, 35);
         this.sleeveRight.setRotationPoint(0.0F, -0.1F, 0.0F);
         this.sleeveRight.addBox(-2.2F, -2.0F, -2.0F, 3, 12, 4, 0.0F);
-        this.mask = new HideableModelRenderer(this, 40, 8);
+        this.mask = new HideableModelRenderer(this, 40, 6);
         this.mask.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.mask.addBox(-4.0F, -8.6F, -4.1F, 8, 8, 0, 0.0F);
+        this.mask.addBox(-3.5F, -10F, -4.1F, 7, 8, 0, 0.0F);
         this.armRight = new HideableModelRenderer(this, 40, 16);
         this.armRight.setRotationPoint(-5.0F, 2.0F, 0.0F);
         this.armRight.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, 0.0F);
@@ -102,6 +102,8 @@ public class ModelDreadLich extends ModelDragonBase {
         this.body.addChild(this.head);
         this.body.addChild(this.armLeft);
         this.legLeft.addChild(this.robeLowerLeft);
+        this.updateDefaultPose();
+        animator = ModelAnimator.create();
     }
 
     public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
@@ -125,23 +127,8 @@ public class ModelDreadLich extends ModelDragonBase {
         this.resetToDefaultPose();
         animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
         ItemStack itemstack = ((EntityLivingBase) entityIn).getHeldItemMainhand();
-        EntityDreadThrall thrall = (EntityDreadThrall) entityIn;
-        if (false) {
-            float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
-            float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);
-            this.armRight.rotateAngleZ = 0.0F;
-            this.armLeft.rotateAngleZ = 0.0F;
-            this.armRight.rotateAngleY = -(0.1F - f * 0.6F);
-            this.armLeft.rotateAngleY = 0.1F - f * 0.6F;
-            this.armRight.rotateAngleX = -((float) Math.PI / 2F);
-            this.armLeft.rotateAngleX = -((float) Math.PI / 2F);
-            this.armRight.rotateAngleX -= f * 1.2F - f1 * 0.4F;
-            this.armLeft.rotateAngleX -= f * 1.2F - f1 * 0.4F;
-            this.armRight.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-            this.armLeft.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-            this.armRight.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-            this.armLeft.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-        }
+        EntityDreadLich thrall = (EntityDreadLich) entityIn;
+        this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
         this.armRight.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;
         this.armLeft.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F / f;
@@ -215,7 +202,7 @@ public class ModelDreadLich extends ModelDragonBase {
         float speed_idle = 0.05F;
         float degree_walk = 1F;
         float degree_idle = 0.5F;
-        if (thrall.getAnimation() == EntityDreadThrall.ANIMATION_SPAWN) {
+        if (thrall.getAnimation() == EntityDreadLich.ANIMATION_SPAWN) {
             //this.walk(armRight, 1.5F, 0.4F, false, 2, -0.3F, thrall.ticksExisted, 1);
             //this.walk(armLeft, 1.5F,  0.4F, true, 2, 0.3F, thrall.ticksExisted, 1);
             if (thrall.getAnimationTick() < 30) {
@@ -225,7 +212,6 @@ public class ModelDreadLich extends ModelDragonBase {
                 this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
             }
         }
-        this.flap(body, 0.5F, 0.15F, false, 1, 0F, limbSwing, limbSwingAmount);
 
     }
 
@@ -238,7 +224,7 @@ public class ModelDreadLich extends ModelDragonBase {
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
-        animator.setAnimation(EntityDreadThrall.ANIMATION_SPAWN);
+        animator.setAnimation(EntityDreadLich.ANIMATION_SPAWN);
         animator.startKeyframe(0);
         animator.move(this.body, 0, 35, 0);
         rotate(animator, this.armLeft, -180, 0, 0);

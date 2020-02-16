@@ -23,7 +23,6 @@ public class RenderDreadLich extends RenderLiving<EntityDreadLich> {
     public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_2.png");
     public static final ResourceLocation TEXTURE_3 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_3.png");
     public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_4.png");
-    public static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_5.png");
 
     public RenderDreadLich(RenderManager renderManager) {
         super(renderManager, new ModelDreadLich(0.0F, false), 0.6F);
@@ -49,8 +48,6 @@ public class RenderDreadLich extends RenderLiving<EntityDreadLich> {
     @Override
     protected ResourceLocation getEntityTexture(EntityDreadLich entity) {
         switch (entity.getVariant()){
-            default:
-                return TEXTURE_0;
             case 1:
                 return TEXTURE_1;
             case 2:
@@ -59,8 +56,8 @@ public class RenderDreadLich extends RenderLiving<EntityDreadLich> {
                 return TEXTURE_3;
             case 4:
                 return TEXTURE_4;
-            case 5:
-                return TEXTURE_5;
+                default:
+                return TEXTURE_0;
         }
     }
 }
