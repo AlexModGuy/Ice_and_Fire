@@ -14,8 +14,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -35,10 +39,23 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     private int animationTick;
     private Animation currentAnimation;
+    public static final ItemStack SHIELD = generateShield();
 
     public EntityDreadKnight(World worldIn) {
         super(worldIn);
         this.setSize(0.6F, 1.8F);
+    }
+
+    private static ItemStack generateShield() {
+        NBTTagList patterns = new NBTTagList();
+        NBTTagCompound currentPattern = new NBTTagCompound();
+        currentPattern.setString("Pattern", "iceandfire.dread");
+        currentPattern.setInteger("Color", EnumDyeColor.WHITE.getDyeDamage());
+        patterns.appendTag(currentPattern);
+        ItemStack banner = ItemBanner.makeBanner(EnumDyeColor.CYAN, patterns);
+        ItemStack shield = new ItemStack(Items.SHIELD, 1);
+        shield.setTagCompound(banner.getTagCompound());
+        return shield;
     }
 
     protected void initEntityAI() {
@@ -83,6 +100,9 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
         this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.dread_knight_sword));
+        if(rand.nextBoolean()){
+            this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, SHIELD.copy());
+        }
         setArmorVariant(rand.nextInt(3));
     }
 

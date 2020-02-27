@@ -2,13 +2,18 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
+import net.minecraft.init.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -36,7 +41,6 @@ public class EntityDreadHorse extends EntitySkeletonHorse implements IDreadMob {
         } else {
             compound.setString("CommanderUUID", this.getCommanderId().toString());
         }
-
     }
 
     @Override
@@ -55,6 +59,13 @@ public class EntityDreadHorse extends EntitySkeletonHorse implements IDreadMob {
             } catch (Throwable var4) {
             }
         }
+    }
+
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+        this.setGrowingAge(24000);
+        return data;
     }
 
     @Override

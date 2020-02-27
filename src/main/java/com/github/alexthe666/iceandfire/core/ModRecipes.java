@@ -201,6 +201,7 @@ public class ModRecipes {
         addBanner("sea_serpent", new ItemStack(ModItems.sea_serpent_fang));
         addBanner("troll", new ItemStack(ModItems.troll_tusk));
         addBanner("weezer", new ItemStack(ModItems.weezer_blue_album));
+        addBanner("dread", new ItemStack(ModItems.dread_sword));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
