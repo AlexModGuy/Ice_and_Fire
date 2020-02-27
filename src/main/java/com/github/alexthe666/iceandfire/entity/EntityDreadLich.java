@@ -22,22 +22,26 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear, IRangedAttackMob {
+public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IRangedAttackMob {
 
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadLich.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> MINION_COUNT = EntityDataManager.createKey(EntityDreadLich.class, DataSerializers.VARINT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_SUMMON = Animation.create(40);
     private int animationTick;
     private Animation currentAnimation;
     private final DreadLichAIStrife aiArrowAttack = new DreadLichAIStrife(this, 1.0D, 20, 15.0F);
-    private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false);
+    private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.0D, false);
     private int fireCooldown = 0;
+    private int minionCooldown = 0;
 
     public EntityDreadLich(World worldIn) {
         super(worldIn);
@@ -66,6 +70,7 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
+        this.dataManager.register(MINION_COUNT, Integer.valueOf(0));
     }
 
     public void onLivingUpdate() {
@@ -80,6 +85,9 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
         }
         if(fireCooldown > 0){
             fireCooldown--;
+        }
+        if(minionCooldown > 0){
+            minionCooldown--;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
@@ -113,12 +121,14 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
+        compound.setInteger("MinionCount", this.getMinionCount());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
+        this.setMinionCount(compound.getInteger("MinionCount"));
         this.setCombatTask();
     }
 
@@ -128,6 +138,14 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
 
     public void setVariant(int variant) {
         this.dataManager.set(VARIANT, variant);
+    }
+
+    public int getMinionCount() {
+        return this.dataManager.get(MINION_COUNT).intValue();
+    }
+
+    public void setMinionCount(int minions) {
+        this.dataManager.set(MINION_COUNT, minions);
     }
 
     @Override
@@ -183,15 +201,33 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
         }
     }
 
-
-
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-       if(fireCooldown == 0){
+        boolean flag = false;
+        if(this.getMinionCount() < 5 && minionCooldown == 0){
+            this.setAnimation(ANIMATION_SUMMON);
+            EntityLiving minion = getRandomNewMinion();
+            int x = (int) (this.posX) - 5 + rand.nextInt(10);
+            int z = (int) (this.posZ) - 5 + rand.nextInt(10);
+            double y = getHeightFromXZ(x, z);
+            minion.setLocationAndAngles(x + 0.5D, y, z + 0.5D, this.rotationYaw, this.rotationPitch);
+            minion.setAttackTarget(target);
+            minion.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(this)), null);
+            if(minion instanceof EntityDreadMob){
+                ((EntityDreadMob) minion).setCommanderId(this.getUniqueID());
+            }
+            if(!world.isRemote){
+                world.spawnEntity(minion);
+            }
+            minionCooldown = 100;
+            this.setMinionCount(this.getMinionCount() + 1);
+            flag = true;
+        }
+       if(fireCooldown == 0 && !flag){
            this.swingArm(EnumHand.MAIN_HAND);
            EntityDreadLichSkull skull = new EntityDreadLichSkull(world, this, 6);
            double d0 = target.posX - this.posX;
-           double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - skull.posY;
+           double d1 = target.getEntityBoundingBox().minY + (double)(target.height * 2) - skull.posY;
            double d2 = target.posZ - this.posZ;
            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
            skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, (float)(14 - this.world.getDifficulty().getId() * 4));
@@ -200,8 +236,39 @@ public class EntityDreadLich extends EntityMob implements IDreadMob, IAnimatedEn
        }
     }
 
+    private EntityLiving getRandomNewMinion() {
+        float chance = rand.nextFloat();
+        if(chance > 0.5F){
+            return new EntityDreadThrall(world);
+        }else if(chance > 0.35F){
+            return new EntityDreadGhoul(world);
+        }else if(chance > 0.15F){
+            return new EntityDreadBeast(world);
+        }else {
+            return new EntityDreadScuttler(world);
+        }
+    }
+
+    private double getHeightFromXZ(int x, int z) {
+        BlockPos thisPos = new BlockPos(x, this.posY + 7, z);
+        while(world.isAirBlock(thisPos) && thisPos.getY() > 2){
+            thisPos = thisPos.down();
+        }
+        double height = thisPos.getY() + 1.0D;
+        AxisAlignedBB bb = world.getBlockState(thisPos).getCollisionBoundingBox(world, thisPos);
+        if(bb != null){
+            height = thisPos.getY() + bb.maxY;
+        }
+        return height;
+    }
+
     @Override
     public void setSwingingArms(boolean swingingArms) {
 
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entityIn){
+        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 }

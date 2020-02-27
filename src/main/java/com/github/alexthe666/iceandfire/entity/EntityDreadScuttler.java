@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityDreadScuttler extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.FLOAT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.BYTE);
@@ -206,5 +206,10 @@ public class EntityDreadScuttler extends EntityMob implements IDreadMob, IAnimat
     @Override
     public Entity getCommander() {
         return null;
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entityIn){
+        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 }

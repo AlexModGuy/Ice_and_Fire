@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
+import com.google.common.base.Optional;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -12,6 +13,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,25 +23,27 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
-public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
-    public static Animation ANIMATION_SPAWN = Animation.create(40);
-    public static Animation ANIMATION_SLASH = Animation.create(25);
-    private int animationTick;
-    private Animation currentAnimation;
-    private int hostileTicks = 0;
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> SCREAMS = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
     private static final float INITIAL_WIDTH = 0.6F;
     private static final float INITIAL_HEIGHT = 1.8F;
+    public static Animation ANIMATION_SPAWN = Animation.create(40);
+    public static Animation ANIMATION_SLASH = Animation.create(25);
+    private int animationTick;
+    private Animation currentAnimation;
+    private int hostileTicks = 0;
     private float firstWidth = 1.0F;
     private float firstHeight = 1.0F;
 
@@ -92,7 +96,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F){
+        if (Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F) {
             firstWidth = INITIAL_WIDTH * getScale();
             firstHeight = INITIAL_HEIGHT * getScale();
             this.setSize(firstWidth, firstHeight);
@@ -100,7 +104,7 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
@@ -115,25 +119,25 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
                 this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.posX - this.getAttackTarget().posX, this.posZ - this.getAttackTarget().posZ);
             }
         }
-        if(!world.isRemote){
-            if(this.getAttackTarget() != null){
+        if (!world.isRemote) {
+            if (this.getAttackTarget() != null) {
                 hostileTicks++;
-                if(this.getScreamStage() == 0){
-                    if(hostileTicks > 20){
+                if (this.getScreamStage() == 0) {
+                    if (hostileTicks > 20) {
                         this.setScreamStage(1);
                     }
-                }else{
-                    if(this.ticksExisted % 20 < 10){
+                } else {
+                    if (this.ticksExisted % 20 < 10) {
                         this.setScreamStage(1);
-                    }else{
+                    } else {
                         this.setScreamStage(2);
                     }
                 }
-            }else{
-                if(this.getScreamStage() > 0){
-                    if(this.ticksExisted % 20 < 10 && this.getScreamStage() == 2){
+            } else {
+                if (this.getScreamStage() > 0) {
+                    if (this.ticksExisted % 20 < 10 && this.getScreamStage() == 2) {
                         this.setScreamStage(1);
-                    }else{
+                    } else {
                         this.setScreamStage(0);
                     }
                 }
@@ -217,10 +221,5 @@ public class EntityDreadGhoul extends EntityMob implements IDreadMob, IAnimatedE
     @Override
     public boolean shouldFear() {
         return true;
-    }
-
-    @Override
-    public Entity getCommander() {
-        return null;
     }
 }

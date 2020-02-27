@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_BITE = Animation.create(15);
@@ -182,5 +182,10 @@ public class EntityDreadBeast extends EntityMob implements IDreadMob, IAnimatedE
     @Override
     public Entity getCommander() {
         return null;
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entityIn){
+        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 }

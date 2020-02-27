@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     private static final DataParameter<Boolean> CUSTOM_ARMOR_HEAD = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> CUSTOM_ARMOR_CHEST = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
@@ -226,5 +226,10 @@ public class EntityDreadThrall extends EntityMob implements IDreadMob, IAnimated
     @Override
     public Entity getCommander() {
         return null;
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entityIn){
+        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 }
