@@ -222,14 +222,4 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     public boolean shouldFear() {
         return true;
     }
-
-    @Override
-    public Entity getCommander() {
-        return null;
-    }
-
-    @Override
-    public boolean isOnSameTeam(Entity entityIn){
-        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
-    }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "iceandfire:items/dread_knight_sword"
+  }
+}
