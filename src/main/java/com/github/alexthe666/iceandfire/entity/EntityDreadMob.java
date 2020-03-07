@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -80,4 +81,7 @@ public class EntityDreadMob extends EntityMob implements IDreadMob {
         }
     }
 
+    public EnumCreatureAttribute getCreatureAttribute() {
+        return EnumCreatureAttribute.UNDEAD;
+    }
 }

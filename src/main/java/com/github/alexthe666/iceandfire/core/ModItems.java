@@ -44,6 +44,7 @@ public class ModItems {
     public static ToolMaterial hippocampus_sword_tools = EnumHelper.addToolMaterial("HippocampusSword", 0, 500, 0.0F, -2F, 50);
     public static ToolMaterial dread_sword_tools = EnumHelper.addToolMaterial("DreadSword", 0, 100, 0.0F, 1F, 0);
     public static ToolMaterial dread_knight_sword_tools = EnumHelper.addToolMaterial("DreadKnightSword", 0, 1200, 0.0F, 13F, 10);
+    public static ToolMaterial dread_queen_sword_tools = EnumHelper.addToolMaterial("DreadQueenSword", 0, IceAndFire.CONFIG.dragonsteelBaseDurability, 10.0F, (float) IceAndFire.CONFIG.dragonsteelBaseDamage, 10);
 
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
     public static Item bestiary = new ItemBestiary();
@@ -407,6 +408,10 @@ public class ModItems {
     public static Item dread_knight_sword = new ItemModSword(dread_knight_sword_tools, "dread_knight_sword", "iceandfire.dread_knight_sword");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":lich_staff")
     public static Item lich_staff = new ItemLichStaff();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_queen_sword")
+    public static Item dread_queen_sword = new ItemModSword(dread_queen_sword_tools, "dread_queen_sword", "iceandfire.dread_queen_sword");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_queen_staff")
+    public static Item dread_queen_staff = new ItemDreadQueenStaff();
 
     static {
         EnumDragonArmor.initArmors();

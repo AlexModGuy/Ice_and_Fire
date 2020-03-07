@@ -11,6 +11,7 @@ import net.minecraft.client.model.ModelBanner;
 import net.minecraft.client.renderer.BannerTextures;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBanner;
@@ -26,11 +27,11 @@ import javax.annotation.Nullable;
 
 public class LayerDragonBanner implements LayerRenderer<EntityDragonBase> {
 
-    protected final RenderDragonBase render;
+    protected final RenderLivingBase render;
     private final ModelBanner bannerModel = new ModelBanner();
     private final TileEntityBanner banner = new TileEntityBanner();
 
-    public LayerDragonBanner(RenderDragonBase livingEntityRendererIn) {
+    public LayerDragonBanner(RenderLivingBase livingEntityRendererIn) {
         this.render = livingEntityRendererIn;
     }
 

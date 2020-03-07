@@ -37,7 +37,7 @@ public class DreadAIRideHorse extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.knight.isRiding();
+        return !this.knight.isRiding() && this.horse != null && !this.horse.isBeingRidden();
     }
 
     public void startExecuting() {

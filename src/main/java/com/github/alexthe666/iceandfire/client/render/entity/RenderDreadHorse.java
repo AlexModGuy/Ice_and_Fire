@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadHorse;
 import com.google.common.collect.Maps;
 import net.minecraft.client.model.ModelHorse;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class RenderDreadHorse extends RenderLiving<EntityDreadHorse> {
     private final float scale;
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/dread/dread_knight_horse.png");
+    public static final ResourceLocation TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/dread/dread_knight_horse_eyes.png");
 
     public RenderDreadHorse(RenderManager manager)
     {
@@ -24,6 +26,7 @@ public class RenderDreadHorse extends RenderLiving<EntityDreadHorse> {
     public RenderDreadHorse(RenderManager renderManagerIn, float scaleIn)
     {
         super(renderManagerIn, new ModelHorse(), 0.75F);
+        this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
         this.scale = scaleIn;
     }
 

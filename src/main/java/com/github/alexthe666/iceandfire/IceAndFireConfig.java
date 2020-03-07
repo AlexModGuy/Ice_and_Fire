@@ -137,6 +137,7 @@ public class IceAndFireConfig {
     public double dragonBlockBreakingDropChance = 0.1D;
     public boolean completeDragonPathfinding = false;
     public boolean dragonAuto3rdPerson = true;
+    public double dreadQueenMaxHealth = 750;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -287,5 +288,7 @@ public class IceAndFireConfig {
         this.dragonsteelBaseDurability = config.getInt("Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
         this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
         this.weezerTinkers = config.getBoolean("Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
+
+        this.dreadQueenMaxHealth = (double) config.getFloat("Dread Queen Max Health", "all", 750, 1, Integer.MAX_VALUE, "Maximum dread queen health");
     }
 }

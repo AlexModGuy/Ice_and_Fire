@@ -212,4 +212,6 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     public boolean isOnSameTeam(Entity entityIn){
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
+
+
 }

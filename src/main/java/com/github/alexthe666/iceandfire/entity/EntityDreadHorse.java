@@ -2,7 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.init.Items;
@@ -26,6 +28,15 @@ public class EntityDreadHorse extends EntitySkeletonHorse implements IDreadMob {
     public EntityDreadHorse(World worldIn) {
         super(worldIn);
     }
+
+    @Override
+    protected void applyEntityAttributes(){
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getEntityAttribute(JUMP_STRENGTH).setBaseValue(this.getModifiedJumpStrength());
+    }
+
 
     @Override
     protected void entityInit() {
@@ -90,5 +101,9 @@ public class EntityDreadHorse extends EntitySkeletonHorse implements IDreadMob {
         } catch (IllegalArgumentException var2) {
             return null;
         }
+    }
+
+    public EnumCreatureAttribute getCreatureAttribute() {
+        return EnumCreatureAttribute.UNDEAD;
     }
 }
