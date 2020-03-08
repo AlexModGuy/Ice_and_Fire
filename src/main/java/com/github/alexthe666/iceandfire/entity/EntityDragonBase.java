@@ -2091,4 +2091,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     protected IafDragonLogic createDragonLogic(){
         return new IafDragonLogic(this);
     }
+
+    protected int getFlightChancePerTick(){
+        return FLIGHT_CHANCE_PER_TICK;
+    }
 }

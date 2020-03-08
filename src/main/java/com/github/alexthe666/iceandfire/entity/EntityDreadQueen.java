@@ -136,4 +136,14 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         super.onLivingUpdate();
 
     }
+
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
 }
