@@ -2,7 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -11,13 +13,22 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob {
+
+    protected static final DataParameter<Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.createKey(EntityBlackFrostDragon.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
     public EntityBlackFrostDragon(World worldIn) {
         super(worldIn);
@@ -25,10 +36,15 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.absent());
+    }
+
+    @Override
     protected void initEntityAI() {
-        this.tasks.addTask(0, new DragonAIRide(this));
+        this.tasks.addTask(0, new DreadAIDragonFindQueen(this));
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
         this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
@@ -44,14 +60,130 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
 
     @Nullable
     public Entity getControllingPassenger() {
-        if(getCommander() != null && getCommander().isRidingOrBeingRiddenBy(this)){
-            return getCommander();
+        Entity commander = getCommander();
+        if (commander != null) {
+            for (Entity passenger : this.getPassengers()) {
+                if (passenger.getUniqueID().equals(commander.getUniqueID())) {
+                    return passenger;
+                }
+            }
         }
         return super.getControllingPassenger();
     }
 
     @Override
+    public boolean canBeSteered() {
+        return false;
+    }
+
+    public boolean canMove() {
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        if (properties != null && properties.isStone) {
+            return false;
+        }
+        return !this.isSitting() && !this.isSleeping() && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+    }
+
+
+    public void updatePassenger(Entity passenger) {
+        if (this.isPassenger(passenger)) {
+            passenger.setPosition(this.posX, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ);
+        }
+        if (this.isPassenger(passenger)) {
+            if (!(passenger instanceof EntityDreadQueen) && (this.getControllingPassenger() == null || !this.getControllingPassenger().getUniqueID().equals(passenger.getUniqueID()))) {
+                updatePreyInMouth(passenger);
+            } else {
+                if (this.isModelDead()) {
+                    passenger.dismountRidingEntity();
+                }
+                if(passenger instanceof EntityDreadQueen){
+                    passenger.rotationYaw = this.rotationYaw;
+                    ((EntityDreadQueen)passenger).renderYawOffset = rotationYaw;
+                }else{
+                    renderYawOffset = rotationYaw;
+                    this.rotationYaw = passenger.rotationYaw;
+                }
+
+                Vec3d riderPos = this.getRiderPosition();
+                passenger.setPosition(riderPos.x, riderPos.y + passenger.height, riderPos.z);
+                this.stepHeight = 1;
+            }
+        }
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        if (this.getCommanderId() == null) {
+            compound.setString("CommanderUUID", "");
+        } else {
+            compound.setString("CommanderUUID", this.getCommanderId().toString());
+        }
+
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        String s;
+        if (compound.hasKey("CommanderUUID", 8)) {
+            s = compound.getString("CommanderUUID");
+        } else {
+            String s1 = compound.getString("Owner");
+            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+        }
+        if (!s.isEmpty()) {
+            try {
+                this.setCommanderId(UUID.fromString(s));
+            } catch (Throwable var4) {
+            }
+        }
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entityIn) {
+        return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
+    }
+
+    public boolean shouldRiderSit() {
+        return this.getControllingPassenger() != null || getRidingQueen() != null;
+    }
+
+    public EntityDreadQueen getRidingQueen(){
+        for(Entity passenger : this.getPassengers()){
+            if(passenger instanceof EntityDreadQueen){
+                return (EntityDreadQueen) passenger;
+            }
+        }
+        return null;
+    }
+    @Nullable
+    public UUID getCommanderId() {
+        return (UUID) ((Optional) this.dataManager.get(COMMANDER_UNIQUE_ID)).orNull();
+    }
+
+    public void setCommanderId(@Nullable UUID uuid) {
+        this.dataManager.set(COMMANDER_UNIQUE_ID, Optional.fromNullable(uuid));
+    }
+
+    @Override
     public Entity getCommander() {
+        try {
+            UUID uuid = this.getCommanderId();
+            EntityLivingBase player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            if (player != null) {
+                return player;
+            } else {
+                if (!world.isRemote) {
+                    Entity entity = world.getMinecraftServer().getWorld(this.dimension).getEntityFromUuid(uuid);
+                    if (entity instanceof EntityLivingBase) {
+                        return entity;
+                    }
+                }
+            }
+        } catch (IllegalArgumentException var2) {
+            return null;
+        }
         return null;
     }
 

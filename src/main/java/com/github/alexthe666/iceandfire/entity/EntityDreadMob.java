@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,10 +76,21 @@ public class EntityDreadMob extends EntityMob implements IDreadMob {
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            EntityLivingBase player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            if (player != null) {
+                return player;
+            } else {
+                if (!world.isRemote) {
+                    Entity entity = world.getMinecraftServer().getWorld(this.dimension).getEntityFromUuid(uuid);
+                    if (entity instanceof EntityLivingBase) {
+                        return (EntityLivingBase) entity;
+                    }
+                }
+            }
         } catch (IllegalArgumentException var2) {
             return null;
         }
+        return null;
     }
 
     public EnumCreatureAttribute getCreatureAttribute() {

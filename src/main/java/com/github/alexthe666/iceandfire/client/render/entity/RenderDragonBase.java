@@ -31,7 +31,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
     public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {
         super(renderManager, model, 0.8F);
         this.addLayer(new LayerDragonEyes(this));
-        this.addLayer(new LayerDragonRider(this));
+        this.addLayer(new LayerDragonRider(this, false));
         this.addLayer(new LayerDragonBanner(this));
         this.addLayer(new LayerDragonArmor(this, fire));
         this.fire = fire;

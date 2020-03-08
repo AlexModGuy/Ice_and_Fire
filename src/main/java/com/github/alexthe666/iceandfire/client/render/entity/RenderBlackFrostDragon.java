@@ -29,7 +29,7 @@ public class RenderBlackFrostDragon extends RenderLiving<EntityDragonBase> {
     public RenderBlackFrostDragon(RenderManager renderManager, ModelBase model, boolean fire) {
         super(renderManager, model, 0.8F);
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
-        this.addLayer(new LayerDragonRider(this));
+        this.addLayer(new LayerDragonRider(this, true));
         this.addLayer(new LayerDragonBanner(this));
     }
 

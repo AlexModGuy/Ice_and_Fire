@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -24,9 +25,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
     private final RenderLiving render;
+    private final boolean excludeDreadQueenMob;
 
-    public LayerDragonRider(RenderLiving renderIn) {
+    public LayerDragonRider(RenderLiving renderIn, boolean excludeDreadQueenMob) {
         this.render = renderIn;
+        this.excludeDreadQueenMob = excludeDreadQueenMob;
     }
 
     public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
@@ -35,6 +38,9 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
             float dragonScale = dragon.getRenderSize() / 3;
             for (Entity passenger : dragon.getPassengers()) {
                 boolean prey = dragon.getControllingPassenger() == null || dragon.getControllingPassenger().getEntityId() != passenger.getEntityId();
+                if(excludeDreadQueenMob && passenger instanceof EntityDreadQueen){
+                    prey = false;
+                }
                 ClientProxy.currentDragonRiders.remove(passenger.getUniqueID());
                 float riderRot = passenger.prevRotationYaw + (passenger.rotationYaw - passenger.prevRotationYaw) * partialTicks;
                 int animationTicks = 0;

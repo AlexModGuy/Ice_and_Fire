@@ -1290,7 +1290,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
-            if (this.getControllingPassenger() == null || this.getControllingPassenger().getEntityId() != passenger.getEntityId()) {
+            if (this.getControllingPassenger() == null || !this.getControllingPassenger().getUniqueID().equals(passenger.getUniqueID())) {
                 updatePreyInMouth(passenger);
             } else {
                 if (this.isModelDead()) {
@@ -1300,7 +1300,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 this.rotationYaw = passenger.rotationYaw;
                 Vec3d riderPos = this.getRiderPosition();
                 passenger.setPosition(riderPos.x, riderPos.y + passenger.height, riderPos.z);
-
                 this.stepHeight = 1;
             }
         }
@@ -1314,7 +1313,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return bob * this.getRenderSize() / 3;
     }
 
-    private void updatePreyInMouth(Entity prey) {
+    protected void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 17F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
