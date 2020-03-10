@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.world.dimension.TeleporterDreadLands;
 import net.minecraft.block.Block;
@@ -58,7 +59,7 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
                     thePlayer.server.getPlayerList().transferPlayerToDimension(thePlayer, IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId)));
                 } else {
                     thePlayer.timeUntilPortal = 10;
-                    thePlayer.server.getPlayerList().transferPlayerToDimension(thePlayer, IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId)));
+                    thePlayer.server.getPlayerList().transferPlayerToDimension(thePlayer, 0, new TeleporterDreadLands(thePlayer.server.getWorld(0)));
                 }
             }
             if (!(entity instanceof EntityPlayer)) {
@@ -87,7 +88,7 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
     }
 
     public boolean canSurviveAt(World world, BlockPos pos) {
-        return true;
+        return DragonUtils.isDreadBlock(world.getBlockState(pos.up())) && DragonUtils.isDreadBlock(world.getBlockState(pos.down()));
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
