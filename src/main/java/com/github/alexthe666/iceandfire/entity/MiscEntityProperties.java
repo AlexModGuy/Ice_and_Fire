@@ -4,6 +4,7 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
     public boolean deathwormLaunched = false;
     public boolean deathwormReceded = false;
     public boolean isBeingGlaredAt = false;
+    public BlockPos lastEnteredDreadPortal = BlockPos.ORIGIN;
     public List<Entity> glarers = new ArrayList<>();
     public List<Entity> entitiesWeAreGlaringAt = new ArrayList<>();
     public int inLoveTicks;
@@ -30,12 +32,16 @@ public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
     public void saveNBTData(NBTTagCompound compound) {
         compound.setBoolean("DismountedDragon", hasDismountedDragon);
         compound.setInteger("GauntletDamage", specialWeaponDmg);
+        compound.setInteger("DreadPortalX", lastEnteredDreadPortal.getX());
+        compound.setInteger("DreadPortalY", lastEnteredDreadPortal.getY());
+        compound.setInteger("DreadPortalZ", lastEnteredDreadPortal.getZ());
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         this.hasDismountedDragon = compound.getBoolean("DismountedDragon");
         this.specialWeaponDmg = compound.getInteger("GauntletDamage");
+        lastEnteredDreadPortal = new BlockPos(compound.getInteger("DreadPortalX"), compound.getInteger("DreadPortalY"), compound.getInteger("DreadPortalZ"));
     }
 
     @Override

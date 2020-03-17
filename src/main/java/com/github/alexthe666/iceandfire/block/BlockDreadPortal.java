@@ -3,8 +3,11 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.world.dimension.TeleporterDreadLands;
+import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -28,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
+public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
 
     public BlockDreadPortal() {
         super(Material.PORTAL);
@@ -42,34 +45,34 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock{
     }
 
     @SideOnly(Side.CLIENT)
-    public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
+    public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
         return 15728880;
     }
 
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-        if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty())) {
-            if ((entity instanceof EntityPlayerMP)) {
-                EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
-                if (thePlayer.timeUntilPortal > 0) {
-                    thePlayer.timeUntilPortal = 10;
-                } else if (thePlayer.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
-                    thePlayer.timeUntilPortal = 10;
-                    thePlayer.server.getPlayerList().transferPlayerToDimension(thePlayer, IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId)));
-                } else {
-                    thePlayer.timeUntilPortal = 10;
-                    thePlayer.server.getPlayerList().transferPlayerToDimension(thePlayer, 0, new TeleporterDreadLands(thePlayer.server.getWorld(0)));
+        if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty()) && (entity instanceof EntityPlayerMP)) {
+            CriteriaTriggers.ENTER_BLOCK.trigger((EntityPlayerMP) entity, world.getBlockState(pos));
+            EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
+            if (thePlayer.timeUntilPortal > 0) {
+                thePlayer.timeUntilPortal = 10;
+            } else if (thePlayer.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
+                thePlayer.timeUntilPortal = 10;
+                MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(thePlayer, MiscEntityProperties.class);
+                if (properties != null) {
+                    properties.lastEnteredDreadPortal = pos;
                 }
-            }
-            if (!(entity instanceof EntityPlayer)) {
-                if (entity.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
-                    entity.timeUntilPortal = 10;
-                 //   entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
-                } else {
-                    entity.timeUntilPortal = 10;
-                   // entity.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId);
+                thePlayer.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId), false));
+            } else {
+                MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(thePlayer, MiscEntityProperties.class);
+                BlockPos setPos = BlockPos.ORIGIN;
+                if (properties != null) {
+                    setPos = properties.lastEnteredDreadPortal;
                 }
+                thePlayer.timeUntilPortal = 10;
+                thePlayer.changeDimension( 0, new TeleporterDreadLands(thePlayer.server.getWorld(0), true));
+                thePlayer.setPositionAndRotation(setPos.getX(), setPos.getY() + 0.5D, setPos.getZ(), 0, 0);
+
             }
         }
     }
