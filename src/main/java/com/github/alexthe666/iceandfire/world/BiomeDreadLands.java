@@ -42,6 +42,7 @@ public class BiomeDreadLands extends Biome {
     }
 
     public void decorate(World worldIn, Random rand, BlockPos pos) {
+
         float k1 = decorator.treesPerChunk;
 
         if (rand.nextFloat() < decorator.extraTreeChance) {

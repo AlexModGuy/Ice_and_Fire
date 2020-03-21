@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.structures.WorldGenDreadExitPortal;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,6 +11,8 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ITeleporter;
+
+import java.util.Random;
 
 public class TeleporterDreadLands implements ITeleporter {
 
@@ -31,7 +34,7 @@ public class TeleporterDreadLands implements ITeleporter {
                 placeInPortal(entity);
                 MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
                 if(properties != null){
-                    setPos = properties.lastEnteredDreadPortal;
+                    setPos = new BlockPos(properties.lastEnteredDreadPortalX, properties.lastEnteredDreadPortalY, properties.lastEnteredDreadPortalZ);
                 }
             }
             if(setPos == null){
@@ -39,7 +42,12 @@ public class TeleporterDreadLands implements ITeleporter {
             }
             entity.setPositionAndRotation(setPos.getX(), setPos.getY() + 0.5D, setPos.getZ(), 0, 0);
         }else{
-            entity.setPositionAndRotation(0, 110, 0, 0, 0);
+            WorldGenDreadExitPortal exitPortal = new WorldGenDreadExitPortal();
+            BlockPos zeroHeight = new BlockPos(0, 87, 0);
+
+            exitPortal.generate(world, new Random(),  zeroHeight);
+            BlockPos playerSetPos = zeroHeight.add(2, 1, 2);
+            entity.setPositionAndRotation(playerSetPos.getX(), playerSetPos.getY(), playerSetPos.getZ(), 0, 0);
         }
     }
 }

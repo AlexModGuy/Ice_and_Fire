@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.structures;
+package com.github.alexthe666.iceandfire.structures.processor;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.state.IBlockState;

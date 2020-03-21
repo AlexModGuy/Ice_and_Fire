@@ -170,6 +170,8 @@ public class ModBlocks {
     public static Block dread_portal = new BlockDreadPortal();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_spawner")
     public static Block dread_spawner = new BlockDreadSpawner();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":burnt_torch")
+    public static Block burnt_torch = new BlockBurntTorch();
 
     static {
         GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");

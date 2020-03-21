@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.block.BlockBurntTorch;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -13,9 +14,9 @@ import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.*;
+import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -35,10 +36,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.RandomChance;
@@ -158,6 +161,14 @@ public class EventServer {
     public static boolean isAnimaniaFerret(Entity entity) {
         String className = entity.getClass().getName();
         return className.contains("ferret") || className.contains("polecat");
+    }
+
+    protected static boolean isExceptionBlockForAttaching(Block attachBlock) {
+        return attachBlock instanceof BlockShulkerBox || attachBlock instanceof BlockLeaves || attachBlock instanceof BlockTrapDoor || attachBlock == Blocks.BEACON || attachBlock == Blocks.CAULDRON || attachBlock == Blocks.GLASS || attachBlock == Blocks.GLOWSTONE || attachBlock == Blocks.ICE || attachBlock == Blocks.SEA_LANTERN || attachBlock == Blocks.STAINED_GLASS;
+    }
+
+    protected static boolean isExceptBlockForAttachWithPiston(Block attachBlock) {
+        return isExceptionBlockForAttaching(attachBlock) || attachBlock == Blocks.PISTON || attachBlock == Blocks.STICKY_PISTON || attachBlock == Blocks.PISTON_HEAD;
     }
 
     @SubscribeEvent
@@ -422,6 +433,42 @@ public class EventServer {
         if (event.getItem().getItem() instanceof ItemDeathwormGauntlet || event.getItem().getItem() instanceof ItemCockatriceScepter) {
             event.setDuration(20);
         }
+    }
+
+    @SubscribeEvent
+    public void onEntityRightClickBlock(PlayerInteractEvent.RightClickItem event) {
+        if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IceAndFire.CONFIG.dreadlandsDimensionId) {
+            event.setCanceled(true);
+            if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
+                IBlockState state = ModBlocks.burnt_torch.getDefaultState();
+                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
+                    if (canTorchPlaceAt(event.getWorld(), event.getPos(), enumfacing)) {
+                        state = state.withProperty(BlockBurntTorch.FACING, enumfacing);
+                    }
+                }
+                event.getWorld().setBlockState(event.getPos(), state);
+            }
+        }
+    }
+
+    private boolean canTorchPlaceAt(World worldIn, BlockPos pos, EnumFacing facing) {
+        BlockPos blockpos = pos.offset(facing.getOpposite());
+        IBlockState iblockstate = worldIn.getBlockState(blockpos);
+        Block block = iblockstate.getBlock();
+        BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, blockpos, facing);
+
+        if (facing.equals(EnumFacing.UP) && this.canPlaceTorchOn(worldIn, blockpos)) {
+            return true;
+        } else if (facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
+            return !isExceptBlockForAttachWithPiston(block) && blockfaceshape == BlockFaceShape.SOLID;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean canPlaceTorchOn(World worldIn, BlockPos pos) {
+        IBlockState state = worldIn.getBlockState(pos);
+        return state.getBlock().canPlaceTorchOnTop(state, worldIn, pos);
     }
 
     @SubscribeEvent
@@ -775,9 +822,9 @@ public class EventServer {
             event.getTable().addPool(pool);
         }
         if ((event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
-                        || event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
-                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
-                        || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
+                || event.getName().equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
+                || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
+                || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
             LootCondition chance = new RandomChance(0.01f);
             LootEntryItem silver = new LootEntryItem(ModItems.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
             LootPool pool = new LootPool(new LootEntry[]{silver}, new LootCondition[]{chance}, new RandomValueRange(1, 1), new RandomValueRange(1, 1), "weezer");

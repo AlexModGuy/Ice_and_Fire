@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=up":  { "model": "iceandfire:burnt_torch" },
+        "facing=east":  { "model": "iceandfire:burnt_torch_wall" },
+        "facing=south":  { "model": "iceandfire:burnt_torch_wall", "y": 90 },
+        "facing=west":  { "model": "iceandfire:burnt_torch_wall", "y": 180 },
+        "facing=north":  { "model": "iceandfire:burnt_torch_wall", "y": 270 }
+    }
+}

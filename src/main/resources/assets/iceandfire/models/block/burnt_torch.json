@@ -1,0 +1,6 @@
+{
+  "parent": "block/torch",
+  "textures": {
+    "torch": "iceandfire:blocks/burnt_torch"
+  }
+}

@@ -51,6 +51,14 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
 
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if(entity.dimension != IceAndFire.CONFIG.dreadlandsDimensionId){
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
+            if (properties != null) {
+                properties.lastEnteredDreadPortalX = pos.getX();
+                properties.lastEnteredDreadPortalY = pos.getY();
+                properties.lastEnteredDreadPortalZ = pos.getZ();
+            }
+        }
         if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty()) && (entity instanceof EntityPlayerMP)) {
             CriteriaTriggers.ENTER_BLOCK.trigger((EntityPlayerMP) entity, world.getBlockState(pos));
             EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
@@ -58,16 +66,12 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
                 thePlayer.timeUntilPortal = 10;
             } else if (thePlayer.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
                 thePlayer.timeUntilPortal = 10;
-                MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(thePlayer, MiscEntityProperties.class);
-                if (properties != null) {
-                    properties.lastEnteredDreadPortal = pos;
-                }
                 thePlayer.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId), false));
             } else {
                 MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(thePlayer, MiscEntityProperties.class);
                 BlockPos setPos = BlockPos.ORIGIN;
                 if (properties != null) {
-                    setPos = properties.lastEnteredDreadPortal;
+                    setPos = new BlockPos(properties.lastEnteredDreadPortalX, properties.lastEnteredDreadPortalY, properties.lastEnteredDreadPortalZ);
                 }
                 thePlayer.timeUntilPortal = 10;
                 thePlayer.changeDimension( 0, new TeleporterDreadLands(thePlayer.server.getWorld(0), true));

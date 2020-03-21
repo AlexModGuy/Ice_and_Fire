@@ -18,7 +18,9 @@ public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
     public boolean deathwormLaunched = false;
     public boolean deathwormReceded = false;
     public boolean isBeingGlaredAt = false;
-    public BlockPos lastEnteredDreadPortal = BlockPos.ORIGIN;
+    public int lastEnteredDreadPortalX = 0;
+    public int lastEnteredDreadPortalY = 0;
+    public int lastEnteredDreadPortalZ = 0;
     public List<Entity> glarers = new ArrayList<>();
     public List<Entity> entitiesWeAreGlaringAt = new ArrayList<>();
     public int inLoveTicks;
@@ -32,26 +34,31 @@ public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
     public void saveNBTData(NBTTagCompound compound) {
         compound.setBoolean("DismountedDragon", hasDismountedDragon);
         compound.setInteger("GauntletDamage", specialWeaponDmg);
-        compound.setInteger("DreadPortalX", lastEnteredDreadPortal.getX());
-        compound.setInteger("DreadPortalY", lastEnteredDreadPortal.getY());
-        compound.setInteger("DreadPortalZ", lastEnteredDreadPortal.getZ());
+        compound.setInteger("DreadPortalX", lastEnteredDreadPortalX);
+        compound.setInteger("DreadPortalY", lastEnteredDreadPortalY);
+        compound.setInteger("DreadPortalZ", lastEnteredDreadPortalZ);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         this.hasDismountedDragon = compound.getBoolean("DismountedDragon");
         this.specialWeaponDmg = compound.getInteger("GauntletDamage");
-        lastEnteredDreadPortal = new BlockPos(compound.getInteger("DreadPortalX"), compound.getInteger("DreadPortalY"), compound.getInteger("DreadPortalZ"));
+        this.lastEnteredDreadPortalX = compound.getInteger("DreadPortalX");
+        this.lastEnteredDreadPortalY = compound.getInteger("DreadPortalY");
+        this.lastEnteredDreadPortalZ = compound.getInteger("DreadPortalZ");
     }
 
     @Override
     public void init() {
         hasDismountedDragon = false;
+        lastEnteredDreadPortalX = 0;
+        lastEnteredDreadPortalY = 0;
+        lastEnteredDreadPortalZ = 0;
     }
 
     @Override
     public String getID() {
-        return "Ice And Fire - Player Property Tracker";
+        return "Ice and Fire - Player Property Tracker";
     }
 
     @Override
