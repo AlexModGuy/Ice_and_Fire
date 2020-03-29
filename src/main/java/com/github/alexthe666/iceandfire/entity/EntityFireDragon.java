@@ -64,15 +64,15 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new DragonAIRide(this));
-        this.tasks.addTask(1, new DragonAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
-        this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
-        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
-        this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
-        this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-        this.tasks.addTask(8, new DragonAILookIdle(this));
+        this.tasks.addTask(0, new DragonAIRide<EntityFireDragon>(this));
+        this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
+        this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
+        this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
+        this.tasks.addTask(3, new DragonAIAttackMelee(this, 1.5D, false));
+        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
+        this.tasks.addTask(5, new DragonAIWander(this, 1.0D));
+        this.tasks.addTask(6, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(6, new DragonAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
