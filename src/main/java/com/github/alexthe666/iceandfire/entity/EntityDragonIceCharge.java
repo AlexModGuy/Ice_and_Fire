@@ -112,16 +112,18 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
             if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer) movingObject.entityHit)) {
                 return;
             }
-            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity && this.shootingEntity instanceof EntityDragonBase) {
-                EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
-                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
-                    return;
-                }
-                if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-                    IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
-                }
-                if (dragon != null) {
-                    dragon.randomizeAttacks();
+            if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
+                if (this.shootingEntity instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
+                    if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                        return;
+                    }
+                    if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
+                        IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                    }
+                    if (dragon != null) {
+                        dragon.randomizeAttacks();
+                    }
                 }
                 this.setDead();
             }
