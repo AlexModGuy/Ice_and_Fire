@@ -211,6 +211,14 @@ public class ModelDreadBeast extends ModelDragonBase {
         this.rotate(animator, Jaw, 10, 0, 0);
         animator.endKeyframe();
         animator.resetKeyframe(5);
+        animator.setAnimation(EntityDreadBeast.ANIMATION_SPAWN);
+        animator.startKeyframe(0);
+        animator.move(this.Body, 0, 35, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(30);
+        animator.move(this.Body, 0, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadBeast beast) {

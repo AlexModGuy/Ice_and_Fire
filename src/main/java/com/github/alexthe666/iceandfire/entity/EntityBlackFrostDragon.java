@@ -41,6 +41,16 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
         this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.absent());
     }
 
+
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        System.out.println(this.airAttack);
+        EntityDreadQueen queen = this.getRidingQueen();
+        if(queen != null && queen.getAttackTarget() != null){
+            this.setAttackTarget(queen.getAttackTarget());
+        }
+    }
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new DreadAIDragonFindQueen(this));

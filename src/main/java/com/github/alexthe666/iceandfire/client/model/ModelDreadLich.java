@@ -212,7 +212,18 @@ public class ModelDreadLich extends ModelDragonBase {
                 this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
             }
         }
-
+        if (thrall.getAnimation() == EntityDreadLich.ANIMATION_SUMMON) {
+            this.armRight.rotationPointZ = 0.0F;
+            this.armRight.rotationPointX = -5.0F;
+            this.armLeft.rotationPointZ = 0.0F;
+            this.armLeft.rotationPointX = 5.0F;
+            this.armRight.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+            this.armLeft.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+            this.armRight.rotateAngleZ = 2.3561945F;
+            this.armLeft.rotateAngleZ = -2.3561945F;
+            this.armRight.rotateAngleY = 0.0F;
+            this.armLeft.rotateAngleY = 0.0F;
+        }
     }
 
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {

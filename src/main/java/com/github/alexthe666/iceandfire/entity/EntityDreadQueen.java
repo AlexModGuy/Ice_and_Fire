@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
@@ -42,7 +43,13 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(3, new DreadAITargetNonDread(this, EntityLivingBase.class, false));
+        this.targetTasks.addTask(3, new DreadAITargetNonDread(this, EntityLivingBase.class, false){
+            protected AxisAlignedBB getTargetableArea(double targetDistance)
+            {
+                return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+            }
+
+        });
     }
 
     protected void applyEntityAttributes() {

@@ -24,4 +24,6 @@ public class DreadAITargetNonDread extends EntityAINearestAttackableTarget {
         }
         return false;
     }
+
+
 }

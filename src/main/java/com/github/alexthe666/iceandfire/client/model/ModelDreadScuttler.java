@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
+import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
 import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -248,6 +249,14 @@ public class ModelDreadScuttler extends ModelDragonBase {
         this.rotate(animator, HeadBase, 20, 0, 10);
         animator.endKeyframe();
         animator.resetKeyframe(5);
+        animator.setAnimation(EntityDreadScuttler.ANIMATION_SPAWN);
+        animator.startKeyframe(0);
+        animator.move(this.Body2, 0, 35, 0);
+        animator.endKeyframe();
+        animator.startKeyframe(30);
+        animator.move(this.Body2, 0, 0, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadScuttler beast) {
@@ -273,6 +282,13 @@ public class ModelDreadScuttler extends ModelDragonBase {
 
         this.walk(palpMidR1, speed_idle * 2F, degree_idle * -0.5F, true, 1, 0.2F, f2, 1);
         this.walk(palpMidL1, speed_idle * 2F, degree_idle * -0.5F, true, 1, 0.2F, f2, 1);
+
+        if (beast.getAnimation() == EntityDreadScuttler.ANIMATION_SPAWN) {
+            if (beast.getAnimationTick() < 39) {
+                f = f2;
+                f1 = 1;
+            }
+        }
 
         this.animateLeg(LEGR1, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR3, speed_walk, degree_walk, false, 0, 1, f, f1);

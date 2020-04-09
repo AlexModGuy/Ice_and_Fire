@@ -108,6 +108,8 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
+            this.motionX = 0.0D;
+            this.motionZ = 0.0D;
         }
         if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 4 && this.canEntityBeSeen(this.getAttackTarget())) {
             if (this.getAnimation() == NO_ANIMATION) {

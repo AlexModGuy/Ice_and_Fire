@@ -124,8 +124,6 @@ public class CommonProxy {
         registerUnspawnable(EntityEntryBuilder.<EntityDreadLichSkull>create(), event, EntityDreadLichSkull.class, "dread_lich_skull", 49);
         registerSpawnable(EntityEntryBuilder.<EntityDreadKnight>create(), event, EntityDreadKnight.class, "dread_knight", 50, 0XE0E6E6, 0X4A6C6E);
         registerSpawnable(EntityEntryBuilder.<EntityDreadHorse>create(), event, EntityDreadHorse.class, "dread_horse", 51, 0XE0E6E6, 0XACACAC);
-        registerSpawnable(EntityEntryBuilder.<EntityBlackFrostDragon>create(), event, EntityBlackFrostDragon.class, "black_frost_dragon", 52, 0XE0E6E6, 0X000000, 256, 3);
-        registerSpawnable(EntityEntryBuilder.<EntityDreadQueen>create(), event, EntityDreadQueen.class, "dread_queen", 53, 0X446B8A, 0X00FFFF, 256, 3);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
@@ -243,9 +241,9 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
-        event.getRegistry().registerAll(ModWorld.DREADLANDS_BIOME, ModWorld.GLACIER_BIOME);
+        event.getRegistry().register(ModWorld.GLACIER_BIOME);
         BiomeDictionary.addTypes(ModWorld.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-        BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        //BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         if (IceAndFire.CONFIG.spawnGlaciers) {
             BiomeManager.addSpawnBiome(ModWorld.GLACIER_BIOME);
             BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(ModWorld.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));

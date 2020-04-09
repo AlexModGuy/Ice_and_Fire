@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.entity.ai.DreadLichAIStrife;
@@ -35,7 +36,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadLich.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> MINION_COUNT = EntityDataManager.createKey(EntityDreadLich.class, DataSerializers.VARINT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
-    public static Animation ANIMATION_SUMMON = Animation.create(40);
+    public static Animation ANIMATION_SUMMON = Animation.create(15);
     private int animationTick;
     private Animation currentAnimation;
     private final DreadLichAIStrife aiArrowAttack = new DreadLichAIStrife(this, 1.0D, 20, 15.0F);
@@ -82,6 +83,16 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
+        }
+        if (this.world.isRemote && this.getAnimation() == ANIMATION_SUMMON) {
+            double d0 = 0;
+            double d1 = 0;
+            double d2 = 0;
+            float f = this.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.ticksExisted * 0.6662F) * 0.25F;
+            float f1 = MathHelper.cos(f);
+            float f2 = MathHelper.sin(f);
+            IceAndFire.PROXY.spawnParticle("dread_torch", this.posX + (double) f1 * 0.6D, this.posY + 1.8D, this.posZ + (double) f2 * 0.6D, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle("dread_torch", this.posX - (double) f1 * 0.6D, this.posY + 1.8D, this.posZ - (double) f2 * 0.6D, d0, d1, d2);
         }
         if(fireCooldown > 0){
             fireCooldown--;

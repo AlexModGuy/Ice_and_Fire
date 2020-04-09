@@ -108,6 +108,19 @@ public class ModelDreadGhoul extends ModelDragonBase {
         rotate(animator, this.head, 0, -60, 0);
         animator.endKeyframe();
         animator.resetKeyframe(5);
+        animator.setAnimation(EntityDreadGhoul.ANIMATION_SPAWN);
+        animator.startKeyframe(0);
+        animator.move(this.body, 0, 35, 0);
+        rotateMinus(animator, this.armLeft, -180, -90, 50);
+        rotateMinus(animator, this.head, -60, 0, 0);
+        rotateMinus(animator, this.armRight, -180, 90, -50);
+        animator.endKeyframe();
+        animator.startKeyframe(30);
+        animator.move(this.body, 0, 0, 0);
+        rotate(animator, this.armLeft, -30, -90, 0);
+        rotate(animator, this.armRight, -30, 90, 0);
+        animator.endKeyframe();
+        animator.resetKeyframe(5);
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadGhoul thrall) {
@@ -115,6 +128,14 @@ public class ModelDreadGhoul extends ModelDragonBase {
         float speed_idle = 0.05F;
         float degree_walk = 1F;
         float degree_idle = 0.5F;
+        if (thrall.getAnimation() == EntityDreadGhoul.ANIMATION_SPAWN) {
+            if (thrall.getAnimationTick() < 30) {
+                this.swing(armRight, 0.5F, 0.5F, false, 2, -0.7F, thrall.ticksExisted, 1);
+                this.swing(armLeft, 0.5F, 0.5F, true, 2, -0.7F, thrall.ticksExisted, 1);
+                this.flap(armRight, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
+                this.flap(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
+            }
+        }
         this.flap(armLeft, speed_idle, 0.15F, false, 2, -0.1F, thrall.ticksExisted, 1);
         this.flap(armRight, speed_idle, 0.15F, true, 2, -0.1F, thrall.ticksExisted, 1);
         this.flap(clawsLeft, speed_idle, 0.05F, false, 3, -0.05F, thrall.ticksExisted, 1);

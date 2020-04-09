@@ -15,7 +15,7 @@ public class ModWorld {
     public static Biome DREADLANDS_BIOME = new BiomeDreadLands();
 
     public static void init() {
-        DREADLANDS_DIM = DimensionType.register("Dreadlands", "_dreadlands", IceAndFire.CONFIG.dreadlandsDimensionId, WorldProviderDreadLands.class, false);
-        DimensionManager.registerDimension(IceAndFire.CONFIG.dreadlandsDimensionId, DREADLANDS_DIM);
+       // DREADLANDS_DIM = DimensionType.register("Dreadlands", "_dreadlands", IceAndFire.CONFIG.dreadlandsDimensionId, WorldProviderDreadLands.class, false);
+       // DimensionManager.registerDimension(IceAndFire.CONFIG.dreadlandsDimensionId, DREADLANDS_DIM);
     }
 }

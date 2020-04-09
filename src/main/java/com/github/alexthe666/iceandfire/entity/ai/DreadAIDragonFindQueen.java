@@ -12,7 +12,7 @@ public class DreadAIDragonFindQueen extends EntityAIBase {
 
     public DreadAIDragonFindQueen(EntityBlackFrostDragon dragon) {
         this.dragon = dragon;
-        this.setMutexBits(1);
+        this.setMutexBits(0);
     }
 
     public boolean shouldExecute() {
