@@ -1,9 +1,9 @@
-The result is a metal known
-as dragonsteel. Dragonsteel is
-one of the strongest and most
-versatile materials known to man.
-It can be made into tools, armor,
-and dragon armor.
+这金属名为龙钢。龙钢，乃是人类已
+知的最坚韧、最万能的金属材料。它
+能被打造成工具、铠甲，甚至于龙铠。
+
+
+
 <item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
 <item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
 <item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
@@ -21,11 +21,11 @@ and dragon armor.
 
 
 
-Keep in mind that dragon forges
-can be constructed with ice
-dragons in mind, to create
-Ice dragonsteel using the sheer
-cold of their frost breath.
+请记住，锻冶龙钢所需的并非高温，而
+是龙息中的魔力。这就是说，极寒的龙
+息也能在对应种类的锻炉中锻造合金，
+是为龙霜钢。
+
 <item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
 <item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
 <item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
@@ -35,14 +35,14 @@ cold of their frost breath.
 
 
 
-Fire dragonsteel sets attackers
-aflame for up to 15 seconds and
-deals a large amount of knockback.
-Ice dragonsteel freezes targets
-into a giant block of ice. Both
-types of dragonsteel deal high
-amounts of damage and can easily
-dispatch a large dragon.
-Dragonsteel armor also provides
-increased protection against
-dragon breath attacks.
+龙炎钢会让敌手陷入至多可长达十五秒
+的熊熊烈火中，并将其击退很远；龙霜
+钢所命中的目标则会变成一大坨冰块。
+两种龙钢均极为锋利，其高伤害能让屠
+龙变得易如反掌。
+龙钢制成的铠甲还能高效地抵御龙息攻击。
+
+
+
+
+

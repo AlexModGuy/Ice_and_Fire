@@ -1,24 +1,24 @@
 {
-  "modifier": "frost",
+  "modifier": "霜冻",
   "text": [
     {
-      "text": "A coating of Ice Dragon's blood imbues the tool with the power to trap foes in a block of ice."
+      "text": "在工具上涂满冰龙血，能赋予工具冻结敌人的能力。"
     },
     {
       "text": "\n"
     },
     {
-      "text": "Cannot be applied to dragonsteel tools. Incompatible with Inferno"
+      "text": "不能用于龙钢制工具；与炎灼冲突。"
     },
     {
       "text": "\n"
     }
   ],
   "effects": [
-    "Freezes enemies in a block of ice for 10 seconds",
-    "Deals extra dragon ice damage",
-    "Deals slowness",
-    "Single Level Only"
+    "冻结敌人10秒",
+    "追加额外的龙霜伤害",
+    "使敌人接下来的行动减速",
+    "仅能强化一次"
   ],
   "demoTool": [
     "tconstruct:broadsword",
