@@ -79,12 +79,14 @@ public class DragonAIMate extends EntityAIBase {
         double d0 = Double.MAX_VALUE;
         EntityDragonBase mate = null;
         for (EntityDragonBase partner : list) {
-            if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSq(partner) < d0) {
-                mate = partner;
-                break;
+            if (this.dragon.canMateWith(partner)) {
+                double d1 = this.dragon.getDistanceSq(partner);
+                if(d1 < d0) { // find min distance
+                    mate = partner;
+                    d0 = d1;
+                }
             }
         }
-
         return mate;
     }
 

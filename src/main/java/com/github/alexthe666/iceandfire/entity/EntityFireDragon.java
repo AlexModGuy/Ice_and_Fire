@@ -63,32 +63,8 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     protected void initEntityAI() {
+        super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new DragonAIRide(this));
-        this.tasks.addTask(1, new DragonAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
-        this.tasks.addTask(4, new DragonAIMate(this, 1.0D));
-        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
-        this.tasks.addTask(7, new DragonAIWander(this, 1.0D));
-        this.tasks.addTask(8, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-        this.tasks.addTask(8, new DragonAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new DragonAITargetNonTamed(this, EntityPlayer.class, false, new Predicate<EntityPlayer>() {
-            @Override
-            public boolean apply(@Nullable EntityPlayer entity) {
-                return DragonUtils.canHostilesTarget(entity) && !entity.isCreative();
-            }
-        }));
-        this.targetTasks.addTask(5, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase && DragonUtils.canHostilesTarget(entity);
-            }
-        }));
-        this.targetTasks.addTask(6, new DragonAITargetItems(this, false));
     }
 
     public String getVariantName(int variant) {

@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -64,29 +65,6 @@ public class EntityIceDragon extends EntityDragonBase {
         ANIMATION_EPIC_ROAR = Animation.create(60);
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
         this.stepHeight = 1;
-    }
-
-    @Override
-    protected void initEntityAI() {
-        this.tasks.addTask(0, new DragonAIRide(this));
-        this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
-        this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, ModItems.frost_stew, false));
-        this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
-        this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
-        this.tasks.addTask(7, new DragonAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new DragonAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLivingBase) entity);
-            }
-        }));
-        this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
     }
 
     @Override

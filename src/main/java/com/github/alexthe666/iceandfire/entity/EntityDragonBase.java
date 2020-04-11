@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -14,6 +15,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
+import com.google.common.base.Predicate;
 import com.ibm.icu.text.Replaceable;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -27,6 +29,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -211,6 +214,35 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         switchNavigator(0);
         randomizeAttacks();
         resetParts(1);
+    }
+
+    @Override
+    protected void initEntityAI() {
+        this.tasks.addTask(0, new DragonAIRide<>(this));
+        this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
+        this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
+        this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
+        this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
+        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, ModItems.fire_stew, false));
+        this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
+        this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(7, new DragonAILookIdle(this));
+        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
+        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
+        this.targetTasks.addTask(4, new DragonAITargetNonTamed<>(this, EntityPlayer.class, false, new Predicate<EntityPlayer>() {
+            @Override
+            public boolean apply(@Nullable EntityPlayer entity) {
+                return DragonUtils.canHostilesTarget(entity) && !entity.isCreative();
+            }
+        }));
+        this.targetTasks.addTask(5, new DragonAITarget<>(this, EntityLivingBase.class, true, new Predicate<Entity>() {
+            @Override
+            public boolean apply(@Nullable Entity entity) {
+                return entity instanceof EntityLivingBase && DragonUtils.canHostilesTarget(entity);
+            }
+        }));
+        this.targetTasks.addTask(6, new DragonAITargetItems(this, false));
     }
 
     public void resetParts(float scale) {
