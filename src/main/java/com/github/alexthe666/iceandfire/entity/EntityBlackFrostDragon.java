@@ -45,7 +45,6 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        System.out.println(this.airAttack);
         EntityDreadQueen queen = this.getRidingQueen();
         if(queen != null && queen.getAttackTarget() != null){
             this.setAttackTarget(queen.getAttackTarget());

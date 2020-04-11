@@ -43,7 +43,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear {
+public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear, IHumanoid {
 
     public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);

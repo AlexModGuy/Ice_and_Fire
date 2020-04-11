@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
 import com.github.alexthe666.iceandfire.entity.IDreadMob;
 import net.minecraft.entity.EntityCreature;
@@ -17,7 +19,7 @@ public class DreadAITargetNonDread extends EntityAINearestAttackableTarget {
 
     protected boolean isSuitableTarget(@Nullable EntityLivingBase target, boolean includeInvincibles) {
         if(super.isSuitableTarget(target, includeInvincibles)){
-            if(target instanceof IDreadMob){
+            if(target instanceof IDreadMob || !DragonUtils.isAlive(target)){
                 return false;
             }
             return true;

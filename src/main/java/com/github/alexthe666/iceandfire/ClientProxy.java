@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.block.BlockCharedPath;
-import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
-import com.github.alexthe666.iceandfire.block.BlockReturningState;
+import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
@@ -230,6 +228,15 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomStateMapper(ModBlocks.frozenCobblestone, (new StateMap.Builder()).ignore(BlockReturningState.REVERTS).build());
         ModelLoader.setCustomStateMapper(ModBlocks.frozenGravel, (new StateMap.Builder()).ignore(BlockFallingReturningState.REVERTS).build());
         ModelLoader.setCustomStateMapper(ModBlocks.frozenGrassPath, (new StateMap.Builder()).ignore(BlockCharedPath.REVERTS).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_bricks, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_bricks_chiseled, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_bricks_cracked, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_bricks_mossy, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_tile, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dread_stone_face, (new StateMap.Builder()).ignore(BlockDreadStoneFace.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dreadwood_planks, (new StateMap.Builder()).ignore(BlockDreadBase.PLAYER_PLACED).build());
+        ModelLoader.setCustomStateMapper(ModBlocks.dreadwood_planks_lock, (new StateMap.Builder()).ignore(BlockDreadWoodLock.PLAYER_PLACED).build());
         try {
             for (Field f : ModBlocks.class.getDeclaredFields()) {
                 Object obj = f.get(null);

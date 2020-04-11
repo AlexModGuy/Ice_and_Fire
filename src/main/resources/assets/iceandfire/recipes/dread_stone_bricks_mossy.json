@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:dread_stone_bricks",
+      "data": 0
+    },
+    {
+      "item": "minecraft:vine",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dread_stone_bricks_mossy",
+    "data": 0,
+    "count": 1
+  }
+}

@@ -4,12 +4,20 @@ import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -73,6 +81,17 @@ public class EntityDreadMob extends EntityMob implements IDreadMob {
     }
 
     @Override
+    public void onLivingUpdate(){
+        super.onLivingUpdate();
+        if (!world.isRemote && this.getCommander() instanceof EntityDreadLich) {
+            EntityDreadLich lich = (EntityDreadLich) this.getCommander();
+            if (lich.getAttackTarget() != null && lich.getAttackTarget().isEntityAlive()) {
+                this.setAttackTarget(lich.getAttackTarget());
+            }
+        }
+    }
+
+    @Override
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
@@ -91,6 +110,78 @@ public class EntityDreadMob extends EntityMob implements IDreadMob {
             return null;
         }
         return null;
+    }
+
+    public void onKillEntity(EntityLivingBase entityLivingIn) {
+        Entity commander = this instanceof EntityDreadLich ? this : this.getCommander();
+        if(commander != null && !(entityLivingIn instanceof EntityDragonBase)){// zombie dragons!!!!
+            Entity summoned = necromancyEntity(entityLivingIn);
+            if(summoned != null){
+                summoned.copyLocationAndAnglesFrom(entityLivingIn);
+                if(!world.isRemote){
+                    world.spawnEntity(summoned);
+                }
+                if(commander instanceof EntityDreadLich){
+                    ((EntityDreadLich) commander).setMinionCount(((EntityDreadLich) commander).getMinionCount() + 1);
+                }
+                if(summoned instanceof EntityDreadMob){
+                    ((EntityDreadMob) summoned).setCommanderId(commander.getUniqueID());
+                }
+            }
+        }
+
+    }
+
+    public static Entity necromancyEntity(EntityLivingBase entity) {
+        Entity lichSummoned = null;
+        if(entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD){
+            lichSummoned = new EntityDreadScuttler(entity.world);
+            float readInScale = (entity.width * entity.height) / 1.95F;
+            ((EntityDreadScuttler)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadScuttler)lichSummoned).setScale(readInScale);
+            return lichSummoned;
+        }
+        if(entity instanceof EntityZombie || entity instanceof IHumanoid) {
+            lichSummoned = new EntityDreadGhoul(entity.world);
+            float readInScale = (entity.width * entity.height);
+            ((EntityDreadGhoul)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadGhoul)lichSummoned).setScale(readInScale);
+            return lichSummoned;
+        }
+        if(entity.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD || entity instanceof AbstractSkeleton || entity instanceof EntityPlayer) {
+            lichSummoned = new EntityDreadThrall(entity.world);
+            EntityDreadThrall thrall = (EntityDreadThrall)lichSummoned;
+            thrall.onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            thrall.setCustomArmorHead(false);
+            thrall.setCustomArmorChest(false);
+            thrall.setCustomArmorLegs(false);
+            thrall.setCustomArmorFeet(false);
+            for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()){
+                thrall.setItemStackToSlot(slot, entity.getItemStackFromSlot(slot));
+            }
+            return thrall;
+        }
+        if(entity instanceof AbstractHorse) {
+            lichSummoned = new EntityDreadHorse(entity.world);
+            return lichSummoned;
+        }
+        if(entity instanceof EntityAnimal) {
+            lichSummoned = new EntityDreadBeast(entity.world);
+            float readInScale = (entity.width * entity.height) / 1.08F;
+            ((EntityDreadBeast)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadBeast)lichSummoned).setScale(readInScale);
+            return lichSummoned;
+        }
+        return lichSummoned;
+    }
+
+
+    public void setDead() {
+        if (!isDead && this.getCommander() != null && this.getCommander() instanceof EntityDreadLich) {
+            EntityDreadLich lich = (EntityDreadLich) this.getCommander();
+            lich.setMinionCount(lich.getMinionCount() - 1);
+        }
+        this.isDead = true;
     }
 
     public EnumCreatureAttribute getCreatureAttribute() {

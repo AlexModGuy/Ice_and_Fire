@@ -29,7 +29,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
     public static Animation ANIMATION_SCARE;

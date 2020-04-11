@@ -213,6 +213,7 @@ public class ModRecipes {
         GameRegistry.addSmelting(ModBlocks.frozenStone, new ItemStack(Blocks.STONE), 0.1F);
         GameRegistry.addSmelting(ModBlocks.frozenGravel, new ItemStack(Blocks.GRAVEL), 0.1F);
         GameRegistry.addSmelting(ModBlocks.frozenSplinters, new ItemStack(Items.STICK, 3), 0.1F);
+        GameRegistry.addSmelting(ModBlocks.dread_stone_bricks, new ItemStack(ModBlocks.dread_stone_bricks_cracked), 0.1F);
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
         ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));

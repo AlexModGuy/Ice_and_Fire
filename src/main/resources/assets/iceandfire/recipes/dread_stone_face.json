@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "DDD",
+    "DSD",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "iceandfire:dread_stone_bricks",
+      "data": 0
+    },
+    "S": {
+      "item": "minecraft:skull",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dread_stone_face",
+    "data": 0,
+    "count": 8
+  }
+}

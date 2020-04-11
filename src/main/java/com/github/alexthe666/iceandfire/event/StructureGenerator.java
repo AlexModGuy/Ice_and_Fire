@@ -15,6 +15,7 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -56,6 +57,7 @@ public class StructureGenerator implements IWorldGenerator {
     private BlockPos lastCyclopsCave = null;
     private BlockPos lastSirenIsland = null;
     private BlockPos lastGorgonTemple = null;
+    private BlockPos lastMausoleum = null;
 
     public static BlockPos getHeight(World world, BlockPos pos) {
         return world.getHeight(pos);
@@ -287,6 +289,16 @@ public class StructureGenerator implements IWorldGenerator {
                     if (surface != null) {
                         world.setBlockState(surface.up(), ModBlocks.fire_lily.getDefaultState());
                     }
+                }
+            }
+        }
+        if (!isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMausoleum == null || lastMausoleum.distanceSq(height) >= spawnCheck)) {
+            if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
+                if (random.nextInt(20 + 1) == 0) {
+                    BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+                    surface = degradeSurface(world, surface);
+                    new WorldGenMausoleum(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
+                    lastMausoleum = surface;
                 }
             }
         }

@@ -412,6 +412,10 @@ public class ModItems {
     public static Item dread_queen_sword = new ItemModSword(dread_queen_sword_tools, "dread_queen_sword", "iceandfire.dread_queen_sword");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_queen_staff")
     public static Item dread_queen_staff = new ItemDreadQueenStaff();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_shard")
+    public static Item dread_shard = new ItemGeneric("dread_shard", "iceandfire.dread_shard", 0);
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_key")
+    public static Item dread_key = new ItemGeneric("dread_key", "iceandfire.dread_key", 0);
 
     static {
         EnumDragonArmor.initArmors();

@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "C  ",
+    "CC ",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "iceandfire:dread_stone_bricks",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dread_stone_stairs",
+    "count": 4
+  }
+}

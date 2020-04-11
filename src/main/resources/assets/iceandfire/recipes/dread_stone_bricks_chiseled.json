@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "D",
+    "D"
+  ],
+  "key": {
+    "D": {
+      "item": "iceandfire:dread_stone_slab",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:dread_stone_bricks_chiseled",
+    "data": 0
+  }
+}
