@@ -1,23 +1,23 @@
 {
-  "modifier": "flame",
+  "modifier": "炎灼",
   "text": [
     {
-      "text": "A coating of Fire Dragon's blood imbues the tool with the power to set foes aflame."
+      "text": "在工具上涂满火龙血，能赋予工具灼烧敌人的能力。"
     },
     {
       "text": "\n"
     },
     {
-      "text": "Cannot be applied to dragonsteel tools. Incompatible with Blizzard"
+      "text": "不能用于龙钢制工具；与霜冻冲突。"
     },
     {
       "text": "\n"
     }
   ],
   "effects": [
-    "Sets enemies on fire for 10 seconds",
-    "Deals extra dragon flame damage",
-    "Single Level Only"
+    "点燃敌人10秒",
+    "追加额外的龙炎伤害",
+    "仅能强化一次"
   ],
   "demoTool": [
     "tconstruct:broadsword",

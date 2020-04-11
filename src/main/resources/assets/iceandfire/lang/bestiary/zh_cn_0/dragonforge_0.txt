@@ -1,9 +1,9 @@
-The magical aura of dragon bones
-and dragon scales definitely has
-some powerful properties, as is
-well known. When combined with
-stone, they become indestructible
-to dragon frost and flame.
+众所周知，龙鳞和龙骨上附有飞龙的魔法
+气息，这意味着它们必定具备某些强大的
+性质。譬如，它们与石材相结合制成的砖
+块，就拥有着抵御龙霜和龙炎的能力。
+
+
 <recipe><iceandfire:dragonforge_fire_brick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 5 76 1>
 
 
@@ -14,11 +14,11 @@ to dragon frost and flame.
 
 
 
-it appears there are several
-constructs that can be made
-with dragonforge bricks. It
-is also known that there are
-ice dragon variants as well.
+据记载，龙息锻炉砖块似乎可以用于
+建造某些建筑。这些建筑依据龙种
+的不同，可分为龙炎和龙霜两类。
+
+
 <recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
 <recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
 
@@ -39,6 +39,6 @@ ice dragon variants as well.
 
 
 
-Once you have aquired a
-dragon forge core, a dragon
-forge input, 8 dragon bone
+准备好一台龙息锻炉核心、一口
+龙息锻炉焰孔、八方龙骨块和
+

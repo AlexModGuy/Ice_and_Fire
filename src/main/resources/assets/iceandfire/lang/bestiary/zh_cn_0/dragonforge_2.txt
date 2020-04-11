@@ -7,34 +7,34 @@
 
 
 
-Chains can be created to capture
-wild dragons and any other monster.
-They can be tied to walls. Dragons
-will destroy most walls, like
-cobblestone walls, so those who wish
-to power their furnace with a dragon
-need dragon bone walls.
+坚不可摧的铁链本就是为束缚住各种怪
+物而设计的，拽住野龙自然不在话下。
+但固定住野龙需要把铁链拴在墙上，野
+龙又能摧毁以圆石墙为代表的大多数墙
+类方块，因此，你需要龙骨墙来保证野
+龙老实工作，而非大搞破坏。
+
 <recipe><iceandfire:dragon_bone_wall 0 minecraft:air 0 minecraft:air 0 minecraft:air 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 25 145 0.75>
 
 
 
 
 
-To properly power a forge, one must
-place the chained or tame dragon
-directly in front of the aperture.
-Then the dragon will begin to
-breathe flame or frost as long as
-there are valid items in the forge.
+若要以正确的方式为锻炉供能，须引导提供
+龙息的龙————驯化或捆缚不限————正对焰孔。
+龙就位后，一见锻炉内放有物品，就会向炉
+中喷射龙息。
 
 
-Most items, when placed in a forge,
-will be turned to ash or dragon ice
-respectively. But placing an iron
-ingot and dragon blood (fire blood
-for fire forges, ice blood for ice
-forges) will result in a powerful
-alchemical metal.
+
+
+被丢进锻炉的大部分物品，都会在对应种类
+的龙息中化作灰烬或龙息冰块。但当铁锭和
+龙血被一起放进锻炉时，血与火将会让凡铁
+发生质的变化，诞生出极为强大的炼金术合
+金。
+
+
 <item><minecraft:iron_ingot 0 110 78 1>
 <item><iceandfire:fire_dragon_blood 0 130 78 1>
 <item><iceandfire:dragonsteel_fire_ingot 0 170 78 1>
