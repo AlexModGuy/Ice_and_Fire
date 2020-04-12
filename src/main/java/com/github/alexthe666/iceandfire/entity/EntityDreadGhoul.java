@@ -26,14 +26,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dread_ghoul"));
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> SCREAMS = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
@@ -223,5 +226,10 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     @Override
     public boolean shouldFear() {
         return true;
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 }

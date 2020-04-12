@@ -201,7 +201,7 @@ public class ModRecipes {
         addBanner("sea_serpent", new ItemStack(ModItems.sea_serpent_fang));
         addBanner("troll", new ItemStack(ModItems.troll_tusk));
         addBanner("weezer", new ItemStack(ModItems.weezer_blue_album));
-        addBanner("dread", new ItemStack(ModItems.dread_sword));
+        addBanner("dread", new ItemStack(ModItems.dread_shard));
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
@@ -243,6 +243,8 @@ public class ModRecipes {
         ModItems.myrmexChitin.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexDesert.setRepairItem(new ItemStack(ModItems.myrmex_desert_chitin));
         ModItems.myrmexJungle.setRepairItem(new ItemStack(ModItems.myrmex_jungle_chitin));
+        ModItems.dread_sword_tools.setRepairItem(new ItemStack(ModItems.dread_shard));
+        ModItems.dread_knight_sword_tools.setRepairItem(new ItemStack(ModItems.dread_shard));
         for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             serpent.armorMaterial.setRepairItem(new ItemStack(serpent.scale));
         }

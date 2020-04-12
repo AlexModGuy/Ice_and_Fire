@@ -19,13 +19,16 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
 public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dread_beast"));
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_BITE = Animation.create(15);
     private int animationTick;
@@ -189,5 +192,10 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     @Override
     public boolean isOnSameTeam(Entity entityIn){
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 }

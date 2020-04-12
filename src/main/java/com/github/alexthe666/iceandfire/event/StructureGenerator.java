@@ -292,9 +292,9 @@ public class StructureGenerator implements IWorldGenerator {
                 }
             }
         }
-        if (!isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMausoleum == null || lastMausoleum.distanceSq(height) >= spawnCheck)) {
+        if (IceAndFire.CONFIG.generateMausoleums && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMausoleum == null || lastMausoleum.distanceSq(height) >= spawnCheck)) {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
-                if (random.nextInt(20 + 1) == 0) {
+                if (random.nextInt(IceAndFire.CONFIG.generateMausoleumChance + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
                     new WorldGenMausoleum(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);

@@ -50,6 +50,14 @@ public class ModEntities {
                 }
             }
         }
+        if (IceAndFire.CONFIG.spawnLiches) {
+            for (Biome biome : Biome.REGISTRY) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.MONSTER);
+                    spawnList.add(new Biome.SpawnListEntry(EntityDreadLich.class, IceAndFire.CONFIG.lichSpawnRate, 1, 1));
+                }
+            }
+        }
         if (IceAndFire.CONFIG.spawnCockatrices) {
             for (Biome biome : Biome.REGISTRY) {
                 if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SPARSE)) {

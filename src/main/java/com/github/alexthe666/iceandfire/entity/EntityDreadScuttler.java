@@ -21,13 +21,16 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
 public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dread_scuttler"));
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.FLOAT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.BYTE);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
@@ -215,5 +218,8 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 
-
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
+    }
 }

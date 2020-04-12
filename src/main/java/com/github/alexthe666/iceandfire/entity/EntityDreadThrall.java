@@ -22,13 +22,16 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
 public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dread_thrall"));
     private static final DataParameter<Boolean> CUSTOM_ARMOR_HEAD = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> CUSTOM_ARMOR_CHEST = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> CUSTOM_ARMOR_LEGS = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
@@ -221,5 +224,10 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     @Override
     public boolean shouldFear() {
         return true;
+    }
+
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
     }
 }

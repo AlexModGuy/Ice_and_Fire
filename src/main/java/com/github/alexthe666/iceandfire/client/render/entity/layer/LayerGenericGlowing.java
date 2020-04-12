@@ -34,7 +34,7 @@ public class LayerGenericGlowing implements LayerRenderer<EntityLiving> {
             int i = 61680;
             int j = 61680;
             int k = 0;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 61680.0F, 0.0F);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.0F);
             GlStateManager.enableLighting();
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.render.getMainModel().render(gorgon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
