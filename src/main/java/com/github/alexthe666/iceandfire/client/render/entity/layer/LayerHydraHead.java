@@ -40,20 +40,19 @@ public class LayerHydraHead implements LayerRenderer {
     };
     public LayerHydraHead(RenderHydra renderer) {
         this.renderer = renderer;
-        modelArr = new ModelHydraHead[9];
+        modelArr = new ModelHydraHead[EntityHydra.HEADS];
         for (int i = 0; i < modelArr.length; i++) {
-            modelArr[i] = new ModelHydraHead();
+            modelArr[i] = new ModelHydraHead(i);
         }
     }
 
     public void doRenderLayer(EntityHydra entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        int heads = 1;
+        int heads = entity.getHeadCount();
         GlStateManager.pushMatrix();
         translateToBody();
         for (int head = 1; head <= heads; head++) {
             GlStateManager.pushMatrix();
             float bodyWidth = 0.5F;
-            //
             GL11.glTranslatef(TRANSLATE[heads - 1][head - 1] * bodyWidth, 0, 0);
             GL11.glRotatef(ROTATE[heads - 1][head - 1], 0, 1, 0);
             modelArr[head - 1].render(entity, f, f1, f2, f3, f4, f5);

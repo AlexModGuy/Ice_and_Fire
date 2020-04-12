@@ -108,7 +108,19 @@ public class ModelHydraBody extends ModelDragonBase {
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;
-        float degree_idle = 0.5F;
+        float degree_idle = 0.25F;
+        AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{BodyLower, Tail1, Tail2, Tail3, Tail4, Tail5};
+        this.chainSwing(TAIL, speed_walk, degree_walk * 0.75F, -3, f, f1);
+        this.swing(BodyUpper, speed_walk * 1.5F, degree_walk * 0.12F, true, 3, 0F, f, f1);
+        this.swing(Tail5, speed_idle * 1.5F, degree_idle * 0.2F, false, 3, 0F, f2, 1);
+        this.swing(Tail4, speed_idle * 1.5F, degree_idle * 0.2F, false, 2, 0F, f2, 1);
+        this.walk(BodySpike1, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.2F, f2, 1);
+        this.walk(BodySpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.2F, f2, 1);
+        this.walk(BodySpike3, speed_idle * 1.5F, degree_idle * 0.4F, false, 4, -0.2F, f2, 1);
+
+        this.walk(TailSpike1, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.2F, f2, 1);
+        this.walk(TailSpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.2F, f2, 1);
+        this.walk(TailSpike3, speed_idle * 1.5F, degree_idle * 0.4F, false, 4, -0.2F, f2, 1);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
+import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelHydraHead extends ModelDragonBase {
     public AdvancedModelRenderer Neck1;
@@ -21,8 +23,10 @@ public class ModelHydraHead extends ModelDragonBase {
     public AdvancedModelRenderer TeethR1;
     public AdvancedModelRenderer TeethTL1;
     private ModelAnimator animator;
+    private int headIndex = 0;
 
-    public ModelHydraHead() {
+    public ModelHydraHead(int headIndex) {
+        this.headIndex = headIndex;
         this.textureWidth = 256;
         this.textureHeight = 128;
         this.Neck3 = new AdvancedModelRenderer(this, 25, 90);
@@ -108,8 +112,31 @@ public class ModelHydraHead extends ModelDragonBase {
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityHydra entity) {
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
-        float degree_walk = 1F;
+        float degree_walk = 0.2F;
         float degree_idle = 0.5F;
+        AdvancedModelRenderer[] ENTIRE_HEAD = new AdvancedModelRenderer[]{Neck1, Neck2, Neck3, Neck4};
+        this.chainFlap(ENTIRE_HEAD, speed_idle, degree_idle * 0.15F, -3 + headIndex % 4, f2, 1);
+        this.chainSwing(ENTIRE_HEAD, speed_idle, degree_idle * 0.05F, -3 + headIndex % 3, f2, 1);
+        this.chainWave(ENTIRE_HEAD, speed_idle * 1.5F, degree_idle * 0.05F, -2 + headIndex % 3, f2, 1);
+        this.faceTarget(f3, f4, 1, Head1);
+        this.walk(neckSpike1, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.1F, f2, 1);
+        this.walk(neckSpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.1F, f2, 1);
+        this.chainSwing(ENTIRE_HEAD, speed_walk, degree_walk * 0.75F, -3, f, f1);
+        float speakProgress =  entity.prevSpeakingProgress[headIndex] + LLibrary.PROXY.getPartialTicks() * (entity.speakingProgress[headIndex] - entity.prevSpeakingProgress[headIndex]);
+        this.progressRotationInterp(LowerJaw1, (float) (Math.sin(speakProgress * Math.PI) * 10F), (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
+        float limbSwingProgress = f1;
+        this.progressRotationInterp(Neck1, (float)limbSwingProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 1F);
+        this.progressRotationInterp(Neck2, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
+        this.progressRotationInterp(Neck3, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
+        this.progressRotationInterp(Neck4, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
+        this.progressRotationInterp(Head1, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
+        float strikeProgress = entity.prevStrikeProgress[headIndex] + LLibrary.PROXY.getPartialTicks() * (entity.strikingProgress[headIndex] - entity.prevStrikeProgress[headIndex]);
+        this.progressRotationInterp(Neck2, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 20F);
+        this.progressRotationInterp(Neck3, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 20F);
+        this.progressRotationInterp(Neck4, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 20F);
+        this.progressRotationInterp(Head1, (float)strikeProgress, (float) Math.toRadians(-25), 0.0F, 0.0F, 20F);
+        this.progressRotationInterp(LowerJaw1, (float)strikeProgress, (float) Math.toRadians(45), 0.0F, 0.0F, 20F);
+
     }
 
     @Override
