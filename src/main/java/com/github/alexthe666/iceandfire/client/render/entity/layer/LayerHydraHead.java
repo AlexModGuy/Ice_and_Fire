@@ -11,11 +11,16 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class LayerHydraHead implements LayerRenderer {
     private final RenderHydra renderer;
     private ModelHydraHead[] modelArr;
+    public static final ResourceLocation TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/hydra/stone.png");
     private static final float[][] TRANSLATE = new float[][]{
             {0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 1 total heads
             {-0.15F, 0.15F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 2 total heads
@@ -48,6 +53,7 @@ public class LayerHydraHead implements LayerRenderer {
 
     public void doRenderLayer(EntityHydra entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         int heads = entity.getHeadCount();
+        boolean stone = EntityGorgon.isStoneMob(entity);
         GlStateManager.pushMatrix();
         translateToBody();
         for (int head = 1; head <= heads; head++) {
@@ -55,6 +61,10 @@ public class LayerHydraHead implements LayerRenderer {
             float bodyWidth = 0.5F;
             GL11.glTranslatef(TRANSLATE[heads - 1][head - 1] * bodyWidth, 0, 0);
             GL11.glRotatef(ROTATE[heads - 1][head - 1], 0, 1, 0);
+            if(stone){
+                renderer.bindTexture(TEXTURE_STONE);
+                f2 = 0;
+            }
             modelArr[head - 1].render(entity, f, f1, f2, f3, f4, f5);
             GlStateManager.popMatrix();
         }

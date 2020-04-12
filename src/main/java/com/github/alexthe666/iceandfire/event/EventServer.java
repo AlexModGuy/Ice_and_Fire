@@ -192,7 +192,12 @@ public class EventServer {
             event.setCanceled(true);
             EntityLivingBase parent = ((EntityMutlipartPart) event.getTarget()).getParent();
             ((EntityPlayer) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId()));
+            int extraData = 0;
+            if(event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra){
+                extraData = ((EntityHydraHead)event.getTarget()).headIndex;
+                ((EntityHydra) parent).triggerHeadFlags(extraData);
+            }
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId(), extraData));
 
         }
     }

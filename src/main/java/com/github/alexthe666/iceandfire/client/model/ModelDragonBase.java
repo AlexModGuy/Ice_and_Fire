@@ -28,6 +28,12 @@ public abstract class ModelDragonBase extends AdvancedModelBase implements ICust
         model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / max;
     }
 
+    public void progresPositionInterp(AdvancedModelRenderer model, float progress, float x, float y, float z, float max) {
+        model.rotationPointX += progress * (x) / max;
+        model.rotationPointY += progress * (y) / max;
+        model.rotationPointZ += progress * (z) / max;
+    }
+
     public void progressRotation(AdvancedModelRenderer model, float progress, float rotX, float rotY, float rotZ) {
         model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 20.0F;
         model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 20.0F;

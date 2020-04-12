@@ -17,7 +17,7 @@ public class RenderHydra extends RenderLiving<EntityHydra> {
     public static final ResourceLocation TEXUTURE_EYES = new ResourceLocation("iceandfire:textures/models/hydra/hydra_eyes.png");
 
     public RenderHydra(RenderManager renderManager) {
-        super(renderManager, new ModelHydraBody(), 1.6F);
+        super(renderManager, new ModelHydraBody(), 1.2F);
         this.addLayer(new LayerHydraHead(this));
         this.addLayer(new LayerGenericGlowing(this, TEXUTURE_EYES));
     }

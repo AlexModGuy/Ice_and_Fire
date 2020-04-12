@@ -24,7 +24,7 @@ public class EntityMutlipartPart extends PartEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
+        if(world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
         }
         return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);

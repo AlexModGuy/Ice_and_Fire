@@ -394,6 +394,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBlackFrostDragon.class, new RenderBlackFrostDragon(Minecraft.getMinecraft().getRenderManager(), icedragon_model, false));
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadQueen.class, new RenderDreadQueen(Minecraft.getMinecraft().getRenderManager()));
         RenderingRegistry.registerEntityRenderingHandler(EntityHydra.class, new RenderHydra(Minecraft.getMinecraft().getRenderManager()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityHydraBreath.class, new RenderNothing(Minecraft.getMinecraft().getRenderManager()));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class, new RenderPodium());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class, new RenderLectern());
@@ -462,6 +463,9 @@ public class ClientProxy extends CommonProxy {
         }
         if (name.equals("serpent_bubble")) {
             particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
+        }
+        if (name.equals("hydra")) {
+            particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
         }
         if (particle != null) {
             particleSpawner.spawnParticle(particle, false, false, false, x, y, z);
