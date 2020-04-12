@@ -12,7 +12,8 @@ public enum EnumSkullType {
     STYMPHALIAN,
     TROLL,
     AMPHITHERE,
-    SEASERPENT;
+    SEASERPENT,
+    HYDRA;
 
     public String itemResourceName;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":mob_skull")

@@ -27,6 +27,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
     private ModelStymphalianBird stymphalianBirdModel;
     private ModelTroll trollModel;
     private ModelAmphithere amphithereModel;
+    private ModelHydraHead hydraModel;
     private IceAndFireTabulaModel seaSerpentModel;
 
     public RenderMobSkull(RenderManager renderManager, ModelBase seaSerpentModel) {
@@ -38,6 +39,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
         this.trollModel = new ModelTroll();
         this.amphithereModel = new ModelAmphithere();
         this.seaSerpentModel = (IceAndFireTabulaModel) seaSerpentModel;
+        this.hydraModel = new ModelHydraHead(0);
     }
 
     private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
@@ -127,6 +129,13 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
                 seaSerpentModel.resetToDefaultPose();
                 setRotationAngles(seaSerpentModel.getCube("Head"), onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
                 seaSerpentModel.getCube("Head").render(0.0625F);
+                break;
+            case HYDRA:
+                GL11.glTranslatef(0, -0.2F, -0.1F);
+                GL11.glScalef(2.0F, 2.0F, 2.0F);
+                hydraModel.resetToDefaultPose();
+                setRotationAngles(hydraModel.Head1, onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
+                hydraModel.Head1.render(0.0625F);
                 break;
         }
     }
