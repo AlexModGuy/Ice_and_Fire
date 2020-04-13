@@ -1,0 +1,43 @@
+In the coldest reaches of the
+overworld, a nefarious force has
+sealed away. Massive complexes
+known as Mausoleums, constructed
+of indestructible Dreadstone lock
+a great and ancient evil away.
+
+However, their power has been
+failing. Beings from another
+time and place have been seen
+emerging from these structures
+and scouting the frozen wastes.
+
+The most commonly seen one is
+the Dread Lich, an undead
+necromancer who will summon
+undead abominations to defend
+itself.
+
+<image><drawings_2.png 230 25 0 0 36 42 1>
+<image><drawings_2.png 300 10 37 0 38 59 1>
+
+
+
+
+
+
+
+
+Equiped with his staff, the
+necromancer will either fire
+a frozen soul skull at its target
+or summon one of the following:
+<image><drawings_2.png 250 120 0 60 87 35 1>
+
+
+
+
+Dread Thralls are slow, weak
+skeletons summoned by the
+necromancer. Emerging from the
+ground, they are equipped with
+broken swords and armor they

@@ -35,7 +35,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
     private static final ResourceLocation BESTIARY_TEXTURE = new ResourceLocation("iceandfire:textures/gui/main_menu/bestiary_menu.png");
     private static final ResourceLocation TABLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/main_menu/table.png");
     public static ResourceLocation[] pageFlipTextures;
-    public static ResourceLocation[] drawingTextures = new ResourceLocation[18];
+    public static ResourceLocation[] drawingTextures = new ResourceLocation[20];
     private final String[] namePartsArray = "Go Play My Other Mods Like Fossils Archeology Revival and Rats And Soon To Be Joined By Other Cool Stuff Too Dont Play The Knock Off Mods".split(" ");
     private int layerTick;
     private String splashText;
