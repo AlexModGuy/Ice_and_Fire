@@ -112,15 +112,6 @@ processResources
     }
 }
 
-minecraft.coreMod = "com.github.alexthe666.iceandfire.asm.IceAndFirePlugin"
-
-jar {
-    manifest {
-        attributes 'FMLCorePlugin': "com.github.alexthe666.iceandfire.asm.IceAndFirePlugin", 'FMLCorePluginContainsFMLMod': true
-    }
-}
-
-
 task devJar(type: Jar) {
     classifier = "dev"
     from sourceSets.main.output
