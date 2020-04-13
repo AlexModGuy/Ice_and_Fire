@@ -598,8 +598,8 @@ death.attack.gorgon.player_1=was turned into gorgonzola by a gorgon
 death.attack.gorgon.player_2=was solidified by a gorgon
 key.dragon_strike=Dragon Strike
 key.dragon_fireAttack=Dragon Breath
-key.dragon_down=Dragon Down/Baby Dragon Off
-key.dragon_change_view=Change 3rd person camera for mount
+key.dragon_down=Dragon Down
+key.dragon_change_view=Change 3rd person camera for dragon
 
 tc.aspect.mythus=Mythological Creature, Legendary Being, Cryptid, Fearsome Critter
 tc.aspect.draco=Dragon
