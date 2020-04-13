@@ -596,6 +596,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         compound.setBoolean("Gender", this.isMale());
         compound.setInteger("Variant", this.getVariant());
         compound.setBoolean("Sleeping", this.isSleeping());
+        compound.setBoolean("TamedDragon", this.isTamed());
         compound.setBoolean("FireBreathing", this.isBreathingFire());
         compound.setBoolean("AttackDecision", usingGroundAttack);
         compound.setBoolean("Hovering", this.isHovering());
@@ -638,6 +639,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.setGender(compound.getBoolean("Gender"));
         this.setVariant(compound.getInteger("Variant"));
         this.setSleeping(compound.getBoolean("Sleeping"));
+        this.setTamed(compound.getBoolean("TamedDragon"));
         this.setBreathingFire(compound.getBoolean("FireBreathing"));
         this.usingGroundAttack = compound.getBoolean("AttackDecision");
         this.setHovering(compound.getBoolean("Hovering"));
