@@ -98,10 +98,17 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public boolean isOnSameTeam(Entity entityIn) {
+        if(entityIn == null){
+            return false;
+        }
         if (this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null) {
             return false;
         }
-        return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID()) || entityIn instanceof EntityTameable && ((EntityTameable) entityIn).getOwnerId().equals(this.getSummonerUUID());
+        if(entityIn instanceof EntityTameable){
+            UUID ownerID = ((EntityTameable) entityIn).getOwnerId();
+            return ownerID != null && ownerID.equals(this.getSummonerUUID());
+        }
+        return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() != null && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID());
     }
 
     public void setSummonerID(@Nullable UUID uuid) {
