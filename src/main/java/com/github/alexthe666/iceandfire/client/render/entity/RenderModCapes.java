@@ -43,14 +43,7 @@ public class RenderModCapes {
     @SubscribeEvent
     public void playerRender(RenderPlayerEvent.Pre event) {
         if (event.getEntityPlayer() instanceof AbstractClientPlayer) {
-            NetworkPlayerInfo info = null;
-            try {
-                info = (NetworkPlayerInfo) ReflectionHelper.findField(AbstractClientPlayer.class, new String[]{"playerInfo", "field_175157_a"}).get(event.getEntityPlayer());
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            NetworkPlayerInfo info = ((AbstractClientPlayer)event.getEntityPlayer()).getPlayerInfo();
             if (info != null) {
                 Map<Type, ResourceLocation> textureMap = null;
                 try {

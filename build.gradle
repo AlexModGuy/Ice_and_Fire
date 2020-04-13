@@ -117,3 +117,8 @@ task devJar(type: Jar) {
     from sourceSets.main.output
 }
 
+jar {
+    manifest {
+        attributes "FMLAT": "iceandfire_at.cfg"
+    }
+}
