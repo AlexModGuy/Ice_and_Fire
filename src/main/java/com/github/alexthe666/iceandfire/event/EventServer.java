@@ -616,8 +616,10 @@ public class EventServer {
                         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                         float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                         float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                        entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-                        entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+                        if(!(entity instanceof EntityPlayer)){
+                            entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
+                            entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+                        }
                         if (entity.getDistance(closestSiren) < 5D) {
                             sirenProps.isCharmed = false;
                             sirenProps.sirenID = 0;
