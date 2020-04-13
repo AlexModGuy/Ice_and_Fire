@@ -1757,17 +1757,13 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public void updateCheckPlayer() {
         double checklength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
         EntityPlayer player = world.getClosestPlayerToEntity(this, checklength);
-        if (!this.isTamed() && this.isSleeping()) {
-            if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
+        if (this.isSleeping()) {
+            if (player != null && !this.isOwner(player) && !player.isCreative()) {
                 this.setSleeping(false);
                 this.setSitting(false);
                 this.setAttackTarget(player);
             }
         }
-        EntityPlayer player1 = world.getClosestPlayerToEntity(this, (this.getRenderSize() / 2) + 15);
-        //if (player1 != null) {
-        //	player1.addStat(ModAchievements.dragonEncounter, 1);
-        //}
     }
 
     public boolean shouldDismountInWater(Entity rider) {

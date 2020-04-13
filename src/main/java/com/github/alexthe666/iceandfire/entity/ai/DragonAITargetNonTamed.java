@@ -19,7 +19,7 @@ public class DragonAITargetNonTamed<T extends EntityLivingBase> extends EntityAI
 
     @Override
     public boolean shouldExecute() {
-        return !dragon.isTamed() && super.shouldExecute();
+        return !dragon.isTamed() && !dragon.isSleeping() && super.shouldExecute();
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {

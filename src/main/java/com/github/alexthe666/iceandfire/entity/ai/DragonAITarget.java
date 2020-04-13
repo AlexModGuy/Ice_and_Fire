@@ -22,7 +22,7 @@ public class DragonAITarget<T extends EntityLivingBase> extends EntityAINearestA
 
     @Override
     public boolean shouldExecute() {
-        if(dragon.getCommand() == 1 || dragon.getCommand() == 2){
+        if(dragon.getCommand() == 1 || dragon.getCommand() == 2 || dragon.isSleeping()){
             return false;
         }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {

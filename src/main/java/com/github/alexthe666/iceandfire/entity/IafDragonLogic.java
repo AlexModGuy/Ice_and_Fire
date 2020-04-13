@@ -188,7 +188,9 @@ public class IafDragonLogic {
             }
             dragon.getNavigator().clearPath();
         }
-        dragon.updateCheckPlayer();
+        if(!dragon.isTamed()){
+            dragon.updateCheckPlayer();
+        }
         if (dragon.isModelDead() && (dragon.isFlying() || dragon.isHovering())) {
             dragon.setFlying(false);
             dragon.setHovering(false);
