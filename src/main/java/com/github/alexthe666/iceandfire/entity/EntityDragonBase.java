@@ -1039,7 +1039,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     }
                     if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isRiding()) {
                         player.setSneaking(false);
-                        player.startRiding(this, true);
+                        if(!world.isRemote){
+                            player.startRiding(this, true);
+                        }
                         if (world.isRemote) {
                             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStartRidingMob(this.getEntityId(), true));
                         }

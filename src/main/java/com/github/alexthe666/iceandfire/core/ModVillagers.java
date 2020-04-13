@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Map;
 import java.util.Random;

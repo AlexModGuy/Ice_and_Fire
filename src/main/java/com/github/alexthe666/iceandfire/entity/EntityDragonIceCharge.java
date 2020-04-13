@@ -26,7 +26,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 
     public EntityDragonIceCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
-        double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
         this.accelerationY = accelY / d0 * 0.07D;
         this.accelerationZ = accelZ / d0 * 0.07D;
@@ -34,7 +34,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 
     public EntityDragonIceCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(worldIn, shooter, accelX, accelY, accelZ);
-        double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
         this.accelerationY = accelY / d0 * 0.07D;
         this.accelerationZ = accelZ / d0 * 0.07D;
@@ -91,9 +91,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
             this.motionX += this.accelerationX;
             this.motionY += this.accelerationY;
             this.motionZ += this.accelerationZ;
-            this.motionX *= (double) f;
-            this.motionY *= (double) f;
-            this.motionZ *= (double) f;
+            this.motionX *= f;
+            this.motionY *= f;
+            this.motionZ *= f;
             this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
             this.setPosition(this.posX, this.posY, this.posZ);
         } else {
@@ -147,7 +147,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
                     //((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
                 }
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
-                IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                if (this.shootingEntity instanceof EntityDragonBase) {
+                    IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                }
                 this.setDead();
             }
         }
@@ -158,7 +160,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
         float f = -MathHelper.sin(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
         float f1 = -MathHelper.sin(yaw * 0.017453292F);
         float f2 = MathHelper.cos(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
-        this.setThrowableHeading(fireball, (double) f, (double) f1, (double) f2, b, c);
+        this.setThrowableHeading(fireball, f, f1, f2, b, c);
         fireball.motionX += entity.motionX;
         fireball.motionZ += entity.motionZ;
 
@@ -183,7 +185,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
         fireball.motionZ = z;
         float f1 = MathHelper.sqrt(x * x + z * z);
         fireball.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
-        fireball.rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
+        fireball.rotationPitch = (float) (MathHelper.atan2(y, f1) * (180D / Math.PI));
         fireball.prevRotationYaw = fireball.rotationYaw;
         fireball.prevRotationPitch = fireball.rotationPitch;
     }
