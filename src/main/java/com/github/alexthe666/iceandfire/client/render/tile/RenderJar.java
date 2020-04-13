@@ -61,11 +61,10 @@ public class RenderJar extends TileEntitySpecialRenderer<TileEntityJar> {
                 GlStateManager.rotate(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, f), 0.0F, 1.0F, 0.0F);
                 GL11.glScalef(0.50F, 0.50F, 0.50F);
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-                GlStateManager.disableLighting();
-                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-                GlStateManager.enableLighting();
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0F);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 MODEL_PIXIE.animateInJar(entity.hasProduced, entity, 0);
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 GL11.glEnable(GL11.GL_CULL_FACE);
             }
             GL11.glPopMatrix();

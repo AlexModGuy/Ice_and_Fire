@@ -91,7 +91,7 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
     }
 
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        this.checkFall(world, pos);
+        //this.checkFall(world, pos);
     }
 
     private boolean checkFall(World worldIn, BlockPos pos) {

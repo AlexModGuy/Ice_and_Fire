@@ -142,14 +142,13 @@ public class TileEntityJar extends TileEntity implements ITickable {
     @javax.annotation.Nullable
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing) {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            if (facing == EnumFacing.DOWN)
-                return (T) handlerBottom;
+            return (T) handlerBottom;
         return null;
     }
 
     @Override
     public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
-        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.hasPixie && this.hasProduced;
+        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.hasPixie;
     }
 
     private float updateRotation(float float1, float float2, float float3) {

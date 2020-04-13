@@ -36,7 +36,7 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        return ItemStack.EMPTY;
+        return stack;
     }
 
     @Nonnull
