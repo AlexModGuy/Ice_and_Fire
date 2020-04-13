@@ -30,6 +30,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -1139,10 +1140,10 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return false;
     }
 
-    public class HippogryphInventory extends ContainerHorseChest {
+    public class HippogryphInventory extends InventoryBasic {
 
         public HippogryphInventory(String inventoryTitle, int slotCount, EntityHippogryph hippogryph) {
-            super(inventoryTitle, slotCount);
+            super(inventoryTitle, false, slotCount);
             this.addInventoryChangeListener(new HippogryphInventoryListener(hippogryph));
         }
 
