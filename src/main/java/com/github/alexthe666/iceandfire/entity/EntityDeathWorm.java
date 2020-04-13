@@ -72,9 +72,11 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
     private boolean isSandNavigator;
     private float prevScale = 0.0F;
+    private EntityLookHelper lookHelper;
 
     public EntityDeathWorm(World worldIn) {
         super(worldIn);
+        this.lookHelper = new IAFLookHelper(this);
         this.ignoreFrustumCheck = true;
         this.stepHeight = 1;
         this.setSize(0.8F, 0.8F);
@@ -105,6 +107,11 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }));
         initSegments(1);
     }
+
+    public EntityLookHelper getLookHelper(){
+        return this.lookHelper;
+    }
+
 
     public boolean getCanSpawnHere() {
         int i = MathHelper.floor(this.posX);
