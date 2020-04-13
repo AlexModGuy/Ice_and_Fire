@@ -1422,7 +1422,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.roar();
         }
         if (i > 0) {
-            this.setSleeping(false);
+            if(this.isSleeping()){
+                this.setSleeping(false);
+                if(!this.isTamed()){
+                    if(dmg.getTrueSource() instanceof EntityPlayer){
+                        this.setAttackTarget((EntityPlayer)dmg.getTrueSource());
+                    }
+                }
+            }
         }
         return super.attackEntityFrom(dmg, i);
 
