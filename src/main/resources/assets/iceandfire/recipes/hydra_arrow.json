@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "X": {
+      "item": "iceandfire:hydra_fang"
+    },
+    "Y": {
+      "item": "minecraft:waterlily"
+    }
+  },
+  "result": {
+    "item": "iceandfire:hydra_arrow",
+    "count": 4
+  }
+}

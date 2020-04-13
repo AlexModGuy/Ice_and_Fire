@@ -48,6 +48,7 @@ public class StructureGenerator implements IWorldGenerator {
     private static final WorldGenIceDragonRoosts ICE_DRAGON_ROOST = new WorldGenIceDragonRoosts();
     private static final WorldGenCyclopsCave CYCLOPS_CAVE = new WorldGenCyclopsCave();
     private static final WorldGenSirenIsland SIREN_ISLAND = new WorldGenSirenIsland();
+    private static final WorldGenHydraCave HYDRA_CAVE = new WorldGenHydraCave();
     private static final ResourceLocation GORGON_TEMPLE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
     private BlockPos lastSnowVillage = null;
     private BlockPos lastPixieVillage = null;
@@ -58,6 +59,7 @@ public class StructureGenerator implements IWorldGenerator {
     private BlockPos lastSirenIsland = null;
     private BlockPos lastGorgonTemple = null;
     private BlockPos lastMausoleum = null;
+    private BlockPos lastHydraCave = null;
 
     public static BlockPos getHeight(World world, BlockPos pos) {
         return world.getHeight(pos);
@@ -301,6 +303,11 @@ public class StructureGenerator implements IWorldGenerator {
                     lastMausoleum = surface;
                 }
             }
+        }
+        if (IceAndFire.CONFIG.generateHydraCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP)
+                && random.nextInt(IceAndFire.CONFIG.generateHydraChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastHydraCave == null || lastHydraCave.distanceSq(height) >= spawnCheck)) {
+            HYDRA_CAVE.generate(world, random, height);
+            lastHydraCave = height;
         }
         if (!IceAndFire.CONFIG.logCascadingWorldGen) {
             net.minecraftforge.common.ForgeModContainer.logCascadingWorldGeneration = prevLogCascadingWorldGen;

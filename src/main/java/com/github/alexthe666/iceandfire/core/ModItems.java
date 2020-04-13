@@ -417,6 +417,12 @@ public class ModItems {
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_key")
     public static Item dread_key = new ItemGeneric("dread_key", "iceandfire.dread_key", 0);
 
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_fang")
+    public static Item hydra_fang = new ItemGeneric("hydra_fang", "iceandfire.hydra_fang", 0);
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_heart")
+    public static Item hydra_heart = new ItemHydraHeart();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_arrow")
+    public static Item hydra_arrow = new ItemHydraArrow();
     static {
         EnumDragonArmor.initArmors();
         EnumSeaSerpent.initArmors();

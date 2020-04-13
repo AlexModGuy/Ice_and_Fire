@@ -22,10 +22,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,6 +35,7 @@ import javax.annotation.Nullable;
 
 public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
 
+    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hydra"));
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
@@ -126,6 +129,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
                     this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3, false, false));
                     this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.posX - this.getAttackTarget().posX, this.posZ - this.getAttackTarget().posZ);
                 }
             }
@@ -286,6 +290,10 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         return 100 / getHeadCount();
     }
 
+    @Nullable
+    protected ResourceLocation getLootTable() {
+        return LOOT;
+    }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
@@ -322,7 +330,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(250D);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
     }
 
     @Override

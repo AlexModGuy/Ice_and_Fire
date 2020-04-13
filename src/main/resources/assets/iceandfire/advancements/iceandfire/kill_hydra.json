@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "iceandfire:hydra_fang"
+    },
+    "title": {
+      "translate": "advancements.iceandfire.kill_hydra.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.kill_hydra.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "killed_fire_dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:if_hydra"
+        }
+      }
+    }
+  }
+}

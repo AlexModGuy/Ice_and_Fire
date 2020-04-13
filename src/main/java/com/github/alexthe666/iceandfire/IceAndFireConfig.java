@@ -142,6 +142,8 @@ public class IceAndFireConfig {
     public int generateMausoleumChance = 800;
     public boolean spawnLiches = true;
     public int lichSpawnRate = 2;
+    public boolean generateHydraCaves = true;
+    public int generateHydraChance = 200;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -298,6 +300,7 @@ public class IceAndFireConfig {
         this.spawnLiches = config.getBoolean("Spawn Liches", "all", true, "True if dread liches are allowed to spawn");
         this.lichSpawnRate = config.getInt("Lich Spawn Weight", "all", 2, 1, 10000, "Dread Lich spawn weight. Lower = lower chance to spawn");
 
-        // this.dreadQueenMaxHealth = (double) config.getFloat("Dread Queen Max Health", "all", 750, 1, Integer.MAX_VALUE, "Maximum dread queen health");
+        this.generateHydraCaves = config.getBoolean("Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");
+        this.generateHydraChance = config.getInt("Hydra Caves Gen Chance", "all", 200, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
     }
 }
