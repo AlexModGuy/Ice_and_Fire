@@ -867,7 +867,7 @@ public class EventServer {
             }
             if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons) {
                 EntityCreature villager = (EntityCreature) event.getEntity();
-                villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 12.0F, 0.8D, 0.8D));
+                villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 8.0F, 0.8D, 0.8D));
             }
             if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons) {
                 EntityCreature animal = (EntityCreature) event.getEntity();
