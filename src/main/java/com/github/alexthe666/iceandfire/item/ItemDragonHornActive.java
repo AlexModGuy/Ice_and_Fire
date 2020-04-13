@@ -61,18 +61,6 @@ public class ItemDragonHornActive extends Item {
         itemStack.setTagCompound(new NBTTagCompound());
     }
 
-    @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
-        } else if (stack.getTagCompound().getBoolean("Released")) {
-            stack.shrink(1);
-            if (entity instanceof EntityPlayer) {
-                ((EntityPlayer) entity).inventory.setInventorySlotContents(f, new ItemStack(ModItems.dragon_horn));
-            }
-        }
-    }
-
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.BOW;
     }
@@ -120,6 +108,11 @@ public class ItemDragonHornActive extends Item {
                     if (!worldIn.isRemote) {
                         worldIn.spawnEntity(dragon);
                     }
+                    stack.shrink(1);
+                    ItemStack hornItem = new ItemStack(ModItems.dragon_horn);
+                    if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
+                        entityplayer.dropItem(hornItem, false);
+                    }
                 }
                 if (this == ModItems.dragon_horn_ice) {
                     EntityIceDragon dragon = new EntityIceDragon(worldIn);
@@ -134,8 +127,12 @@ public class ItemDragonHornActive extends Item {
                     if (!worldIn.isRemote) {
                         worldIn.spawnEntity(dragon);
                     }
+                    stack.shrink(1);
+                    ItemStack hornItem = new ItemStack(ModItems.dragon_horn);
+                    if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
+                        entityplayer.dropItem(hornItem, false);
+                    }
                 }
-                stack = new ItemStack(ModItems.dragon_horn);
                 entityplayer.addStat(StatList.getObjectUseStats(this));
             }
         }

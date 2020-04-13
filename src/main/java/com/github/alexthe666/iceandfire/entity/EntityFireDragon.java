@@ -418,7 +418,7 @@ public class EntityFireDragon extends EntityDragonBase {
         return new ItemStack(ModItems.dragon_skull);
     }
 
-    protected ItemStack getHorn() {
+    public ItemStack getHorn() {
         return new ItemStack(ModItems.dragon_horn_fire);
     }
 

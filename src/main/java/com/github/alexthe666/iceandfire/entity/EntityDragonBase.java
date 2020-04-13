@@ -1023,17 +1023,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             if (this.isOwner(player)) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                 if (stack.getItem() == ModItems.dragon_horn && (properties == null || !properties.isStone)) {
-                    stack.setCount(0);
-                    hasHadHornUse = true;
-                    this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
-                    ItemStack stack1 = getHorn().copy();
-                    stack1.setTagCompound(new NBTTagCompound());
-                    this.writeEntityToNBT(stack1.getTagCompound());
-                    if (!player.inventory.addItemStackToInventory(stack1)) {
-                        player.dropItem(stack1, false);
-                    }
-                    this.setDead();
-                    return true;
+                    return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (this.getDragonStage() < 2) {
@@ -1138,7 +1128,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return ItemStack.EMPTY;
     }
 
-    protected ItemStack getHorn() {
+    public ItemStack getHorn() {
         return ItemStack.EMPTY;
     }
 
