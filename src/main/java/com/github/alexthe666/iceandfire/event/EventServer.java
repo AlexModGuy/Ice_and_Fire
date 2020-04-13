@@ -301,7 +301,8 @@ public class EventServer {
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
-            event.getEntityLiving().dropItem(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2));
+            event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ,
+                    new ItemStack(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2))));
         }
 
         if (event.getEntityLiving() instanceof EntityLiving) {
