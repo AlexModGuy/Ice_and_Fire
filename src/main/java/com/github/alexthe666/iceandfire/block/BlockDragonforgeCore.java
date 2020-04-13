@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +44,11 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
         }
         this.isFire = isFire;
         this.activated = activated;
+    }
+
+    @Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.BLOCK;
     }
 
     public static void setState(boolean fire, boolean active, World worldIn, BlockPos pos) {

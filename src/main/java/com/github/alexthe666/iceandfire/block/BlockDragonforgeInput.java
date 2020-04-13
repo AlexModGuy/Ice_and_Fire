@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -35,6 +36,11 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_input");
         this.isFire = isFire;
         this.setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, Boolean.valueOf(false)));
+    }
+
+    @Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.BLOCK;
     }
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
