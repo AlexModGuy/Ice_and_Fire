@@ -36,7 +36,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
                 boolean generateGold = rand.nextInt(goldRand) == 0;
                 world.setBlockState(pos, generateGold ? ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
-                world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 3);
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = world.getTileEntity(pos);
                     if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {

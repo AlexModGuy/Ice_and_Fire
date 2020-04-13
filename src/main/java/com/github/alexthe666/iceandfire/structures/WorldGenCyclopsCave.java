@@ -90,7 +90,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                         worldIn.setBlockState(blockpos.up().south(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlockState(blockpos.up().west(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlockState(blockpos.up().east(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
+                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(2)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(2));
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {

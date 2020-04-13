@@ -91,7 +91,7 @@ public class WorldGenHydraCave extends WorldGenerator {
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l))) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
+                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(1)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(1));
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {

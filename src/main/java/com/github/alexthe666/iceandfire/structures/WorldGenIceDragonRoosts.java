@@ -95,7 +95,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
                         BlockPos height = StructureGenerator.degradeSurface(worldIn, worldIn.getHeight(blockpos));
-                        worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
+                        worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(height).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
