@@ -95,9 +95,7 @@ public class ClientProxy extends CommonProxy {
     private IRenderHandler dreadlandsWeatherRenderer = new RenderDreadlandsWeather();
     private IRenderHandler dreadlandsSkyRenderer = new RenderDreadlandsSky();
     private IRenderHandler dreadlandsAuroraRender = new RenderDreadlandsAurora();
-    public static List<LayerRenderer> strippedRenderLayers = new ArrayList<>();
-    public static String currentStrippedRender = "";
-    
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void registerModels(ModelRegistryEvent event) {
