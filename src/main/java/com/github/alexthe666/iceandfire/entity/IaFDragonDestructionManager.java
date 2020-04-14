@@ -188,6 +188,11 @@ public class IaFDragonDestructionManager {
                     }
                 }
             }
+            if(IceAndFire.CONFIG.explosiveDragonBreath){
+                BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
+                explosion.doExplosionA();
+                explosion.doExplosionB(true);
+            }
         }
     }
 
@@ -252,6 +257,11 @@ public class IaFDragonDestructionManager {
                         }
                     }
                 }
+            }
+            if(IceAndFire.CONFIG.explosiveDragonBreath){
+                BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
+                explosion.doExplosionA();
+                explosion.doExplosionB(true);
             }
         }
     }

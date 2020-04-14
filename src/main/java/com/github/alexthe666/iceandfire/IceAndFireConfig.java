@@ -144,6 +144,7 @@ public class IceAndFireConfig {
     public int lichSpawnRate = 2;
     public boolean generateHydraCaves = true;
     public int generateHydraChance = 200;
+    public boolean explosiveDragonBreath = false;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -190,6 +191,7 @@ public class IceAndFireConfig {
         this.dragonDropSkull = config.getBoolean("Dragons Drop Skull", "all", true, "True if dragons can drop their skull on death.");
         this.dragonDropHeart = config.getBoolean("Dragons Drop Heart", "all", true, "True if dragons can drop their heart on death.");
         this.dragonDropBlood = config.getBoolean("Dragons Drop Blood", "all", true, "True if dragons can drop their blood on death.");
+        this.explosiveDragonBreath = config.getBoolean("Explosive Dragon Breath", "all", false, "True if dragons fire/ice charges create secondary explosions that launch blocks everywhere. Turn this to true if you like unfair explosions. Or lag.");
         this.dragonTargetSearchLength = config.getInt("Dragon Target Search Length", "all", 128, 1, 10000, "How many blocks away can dragons spot potential prey. Note that increasing this could cause lag.");
         this.dragonWanderFromHomeDistance = config.getInt("Dragon Wander From Home Distance", "all", 40, 1, 10000, "How many blocks away can dragons wander from their defined \"home\" position.");
         this.dragonHungerTickRate = config.getInt("Dragon Hunger Tick Rate", "all", 3000, 1, 10000, "Every interval of this number in ticks, dragon hunger decreases.");

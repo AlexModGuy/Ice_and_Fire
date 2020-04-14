@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SandExplosion extends Explosion {
+public class BlockLaunchExplosion extends Explosion {
     private final World worldObj;
     private final double explosionX;
     private final double explosionY;
@@ -36,7 +36,7 @@ public class SandExplosion extends Explosion {
     private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
     private final Vec3d position;
 
-    public SandExplosion(World world, Entity entity, double x, double y, double z, float size) {
+    public BlockLaunchExplosion(World world, Entity entity, double x, double y, double z, float size) {
         super(world, entity, x, y, z, size, true, true);
         this.affectedBlockPositions = Lists.newArrayList();
         this.playerKnockbackMap = Maps.newHashMap();
@@ -175,7 +175,7 @@ public class SandExplosion extends Explosion {
                 double d5 = entity.posX - this.explosionX;
                 double d7 = entity.posY - this.explosionY;
                 double d9 = entity.posZ - this.explosionZ;
-                double d11 = 1.0D;
+                double d11 = 0.6D;
                 entity.motionX += d5 * d11;
                 entity.motionY += 0.7F;
                 entity.motionZ += d9 * d11;

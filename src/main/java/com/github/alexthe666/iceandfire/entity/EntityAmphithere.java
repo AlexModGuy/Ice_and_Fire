@@ -965,7 +965,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     @Override
     public boolean fliesLikeElytra() {
-        System.out.println(this.isFlying());
         return !this.onGround;
     }
 
