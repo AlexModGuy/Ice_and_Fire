@@ -133,21 +133,6 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 } else {
                     entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
                 }
-                SoundEvent deathSound = null;
-                Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR", null);
-                try {
-                    deathSound = (SoundEvent) deathSoundMethod.invoke(pointedEntity, null);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                if (deathSound != null) {
-                    entity.playSound(deathSound, 1, 1);
-
-                }
                 if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
                     stack.shrink(1);
                 }
