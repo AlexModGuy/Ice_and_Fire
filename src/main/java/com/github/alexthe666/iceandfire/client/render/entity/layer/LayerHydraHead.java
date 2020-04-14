@@ -54,6 +54,9 @@ public class LayerHydraHead implements LayerRenderer {
     public void doRenderLayer(EntityHydra entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         int heads = entity.getHeadCount();
         boolean stone = EntityGorgon.isStoneMob(entity);
+        if(entity.isInvisible()){
+            return;
+        }
         GlStateManager.pushMatrix();
         translateToBody();
         for (int head = 1; head <= heads; head++) {
@@ -64,11 +67,25 @@ public class LayerHydraHead implements LayerRenderer {
             if(stone){
                 renderer.bindTexture(TEXTURE_STONE);
                 f2 = 0;
+            }else{
+                renderer.bindTexture(getEntityTexture(entity));
+
             }
             modelArr[head - 1].render(entity, f, f1, f2, f3, f4, f5);
             GlStateManager.popMatrix();
         }
         GlStateManager.popMatrix();
+    }
+
+    protected ResourceLocation getEntityTexture(EntityHydra gorgon) {
+        switch (gorgon.getVariant()) {
+            default:
+                return RenderHydra.TEXUTURE_0;
+            case 1:
+                return RenderHydra.TEXUTURE_1;
+            case 2:
+                return RenderHydra.TEXUTURE_2;
+        }
     }
 
     protected void translateToBody() {
