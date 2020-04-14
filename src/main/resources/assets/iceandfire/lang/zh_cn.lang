@@ -560,6 +560,8 @@ bestiary.myrmex=恐蚁
 bestiary.amphithere=翼蚺
 bestiary.seaserpent=海蟒
 bestiary.dragonforge=龙息锻炉
+bestiary.hydra=九头蛇
+bestiary.dread_mobs=亡灵军团
 
 lectern.nopages=无法添加新的信息.
 silvertools.hurt=+2 亡灵克制
@@ -598,7 +600,7 @@ death.attack.gorgon.player_1=变成了蛇发女妖的戈尔贡佐拉干酪
 death.attack.gorgon.player_2=被蛇发女妖石化
 key.dragon_strike=龙袭
 key.dragon_fireAttack=龙吐息
-key.dragon_down=龙坐下/放下幼龙
+key.dragon_down=下龙
 key.dragon_change_view=切换第三人称视角以便骑乘
 
 tc.aspect.mythus=神秘生灵
