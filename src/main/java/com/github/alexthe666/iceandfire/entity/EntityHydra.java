@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.google.common.base.Predicate;
@@ -16,6 +17,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,6 +25,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
@@ -137,8 +140,9 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 EntityLivingBase entity = this.getAttackTarget();
                 if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
                     Vec3d vec3d = this.getLook(1.0F);
-
-
+                    if(rand.nextFloat() < 0.2F){
+                        this.playSound(ModSounds.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
+                    }
                     double headPosX = this.headBoxes[i].posX + vec3d.x * 1.0D;
                     double headPosY = this.headBoxes[i].posY + 1.3F;
                     double headPosZ = this.headBoxes[i].posZ + vec3d.z * 1.0D;
@@ -203,6 +207,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (this.isBurning()) {
                     this.setHeadCount(this.getHeadCount() - 1);
                 } else {
+                    this.playSound(ModSounds.HYDRA_REGEN_HEAD, this.getSoundVolume(), this.getSoundPitch());
                     if (!onlyRegrowOneHeadNotTwo) {
                         this.setHeadCount(this.getHeadCount() + 1);
                     }
@@ -345,6 +350,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
             headDamageTracker[headIndex] = 0;
             this.regrowHeadCooldown = 0;
             this.setSeveredHead(headIndex);
+            this.playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, this.getSoundVolume(), this.getSoundPitch());
         }
         if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.canHarmInCreative()) {
             amount = 0;
@@ -451,4 +457,20 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     public void triggerHeadFlags(int index) {
         lastHitHead = index;
     }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.HYDRA_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.HYDRA_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSounds.HYDRA_DIE;
+    }
+
 }

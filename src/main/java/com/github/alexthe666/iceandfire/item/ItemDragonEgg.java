@@ -43,7 +43,6 @@ public class ItemDragonEgg extends Item {
         tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
     }
 
-
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack itemstack = player.getHeldItem(hand);
         BlockPos offset = pos.offset(side);

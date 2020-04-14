@@ -1,4 +1,39 @@
 {
+  "hydra_regen_head": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hydra_regen_head"
+    ]
+  },
+  "hydra_spit": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hydra_spit_0",
+      "iceandfire:hydra_spit_1"
+    ]
+  },
+  "hydra_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hydra_idle_0",
+      "iceandfire:hydra_idle_1",
+      "iceandfire:hydra_idle_2"
+    ]
+  },
+  "hydra_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hydra_hurt_0",
+      "iceandfire:hydra_hurt_1",
+      "iceandfire:hydra_hurt_2"
+    ]
+  },
+  "hydra_die": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:hydra_die"
+    ]
+  },
   "bestiary_page": {
     "category": "neutral",
     "sounds": [
