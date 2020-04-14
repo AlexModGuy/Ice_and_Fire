@@ -74,7 +74,7 @@ public class EntityHydraArrow  extends EntityArrow {
         if (living instanceof EntityPlayer) {
             this.damageShield((EntityPlayer) living, (float) this.getDamage());
         }
-        living.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0));
+        living.addPotionEffect(new PotionEffect(MobEffects.POISON, 300, 0));
         if(this.shootingEntity instanceof EntityLivingBase){
             ((EntityLivingBase)this.shootingEntity).heal((float)this.getDamage());
         }
