@@ -303,10 +303,10 @@ public class ModelGorgon extends ModelDragonBase {
         AdvancedModelRenderer[] SNAKER4 = new AdvancedModelRenderer[]{SnakeBaseR4, SnakeBodyR4, SnakeHeadR4};
 
         this.chainFlap(TAIL, speed_walk, degree_walk * 0.75F, -3, f, f1);
-        this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.3F, entity.ticksExisted, 1);
-        this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.4F, true, 2, 0.3F, entity.ticksExisted, 1);
-        this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.2F, false, 2, 0.2F, entity.ticksExisted, 1);
-        this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.2F, true, 2, 0.2F, entity.ticksExisted, 1);
+        this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.3F, f2, 1);
+        this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.4F, true, 2, 0.3F, f2, 1);
+        this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.2F, false, 2, 0.2F, f2, 1);
+        this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.2F, true, 2, 0.2F, f2, 1);
         this.Right_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F + (float) Math.PI) * 2.0F * f1 * 0.5F / 1;
         this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 2.0F * f1 * 0.5F / 1;
 
@@ -321,29 +321,29 @@ public class ModelGorgon extends ModelDragonBase {
         this.Tail_2.rotateAngleX = this.Tail_2.rotateAngleX - f12 + (float) Math.toRadians(-13);
         f12 = 0.0F;
 
-        this.chainFlap(SNAKEL1, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKEL1, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKEL1, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKEL1, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKEL2, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKEL2, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKEL2, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKEL2, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKEL3, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKEL3, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKEL3, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKEL3, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKEL4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKEL4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKEL4, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKEL4, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKER1, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKER1, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKER1, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKER1, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKER2, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKER2, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKER2, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKER2, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKER3, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKER3, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKER3, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKER3, speed_idle, degree_idle * 0.75F, -3, f2, 1);
 
-        this.chainFlap(SNAKER4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
-        this.chainSwing(SNAKER4, speed_idle, degree_idle * 0.75F, -3, entity.ticksExisted, 1);
+        this.chainFlap(SNAKER4, speed_idle, degree_idle * 0.75F, -3, f2, 1);
+        this.chainSwing(SNAKER4, speed_idle, degree_idle * 0.75F, -3, f2, 1);
         this.faceTarget(f3, f4, 1, this.Head);
 
         float deathProg = Math.min(40, (float) entity.deathTime) / 2;

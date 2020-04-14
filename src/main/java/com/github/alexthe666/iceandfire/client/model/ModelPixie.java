@@ -144,8 +144,8 @@ public class ModelPixie extends ModelDragonBase {
             this.Left_Wing2.rotateAngleZ = (float) Math.toRadians(-8);
             this.Right_Wing2.rotateAngleZ = (float) Math.toRadians(8);
         } else {
-            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
-            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, entity.ticksExisted, 1);
+            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, f2, 1);
+            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, f2, 1);
         }
 
     }

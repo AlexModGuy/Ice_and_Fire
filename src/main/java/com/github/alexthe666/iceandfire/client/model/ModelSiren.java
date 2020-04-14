@@ -163,14 +163,14 @@ public class ModelSiren extends ModelDragonBase {
         float degree_idle = 0.5F;
         this.faceTarget(f3, f4, 2, Neck, Head);
         AdvancedModelRenderer[] TAIL_NO_BASE = {Tail_2, Tail_3};
-        this.walk(Hair1, speed_idle * 1F, degree_idle * 0.3F, false, 2, 0F, entity.ticksExisted, 1);
-        this.walk(Hair2, speed_idle * 1F, degree_idle * 0.2F, false, 2, 0F, entity.ticksExisted, 1);
-        this.swing(HairL, speed_idle, degree_idle * 0.4F, true, 0F, -0.4F, entity.ticksExisted, 1);
-        this.swing(HairR, speed_idle, degree_idle * 0.4F, false, 0F, -0.4F, entity.ticksExisted, 1);
-        this.walk(Body, speed_idle * 1F, degree_idle * 0.3F, false, 2, 0F, entity.ticksExisted, 1);
-        this.walk(Right_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, entity.ticksExisted, 1);
-        this.walk(Left_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, entity.ticksExisted, 1);
-        this.walk(Body, speed_idle * 1F, degree_idle * 0.2F, false, 0, -0.1F, entity.ticksExisted, 1);
+        this.walk(Hair1, speed_idle * 1F, degree_idle * 0.3F, false, 2, 0F, f2, 1);
+        this.walk(Hair2, speed_idle * 1F, degree_idle * 0.2F, false, 2, 0F, f2, 1);
+        this.swing(HairL, speed_idle, degree_idle * 0.4F, true, 0F, -0.4F, f2, 1);
+        this.swing(HairR, speed_idle, degree_idle * 0.4F, false, 0F, -0.4F, f2, 1);
+        this.walk(Body, speed_idle * 1F, degree_idle * 0.3F, false, 2, 0F, f2, 1);
+        this.walk(Right_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, f2, 1);
+        this.walk(Left_Arm, speed_idle * 1F, degree_idle * 0.2F, true, 0, 0.1F, f2, 1);
+        this.walk(Body, speed_idle * 1F, degree_idle * 0.2F, false, 0, -0.1F, f2, 1);
         this.progressRotation(Body, entity.swimProgress, (float) Math.toRadians(-2F), 0.0F, 0.0F);
         this.progressRotation(Head, entity.swimProgress, (float) Math.toRadians(-70), 0.0F, 0.0F);
         this.progressRotation(Left_Arm, entity.swimProgress, (float) Math.toRadians(-15), 0.0F, 0.0F);
@@ -197,12 +197,12 @@ public class ModelSiren extends ModelDragonBase {
                     this.progressRotation(Left_Arm, entity.singProgress, (float) Math.toRadians(-40F), (float) Math.toRadians(-28F), (float) Math.toRadians(-26F));
                     this.progressRotation(Right_Arm, entity.singProgress, (float) Math.toRadians(13F), (float) Math.toRadians(73F), (float) Math.toRadians(130F));
                     this.progressPosition(Head, entity.singProgress, 0, -12.0F, -0.5F);
-                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, entity.ticksExisted, 1);
-                    this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, entity.ticksExisted, 1);
+                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
+                    this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
                     if (entity.onGround) {
-                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, entity.ticksExisted, 1);
-                        this.swing(Tail_2, speed_idle, degree_idle * 0.4F, false, 0F, -0.4F, entity.ticksExisted, 1);
-                        this.swing(Tail_3, speed_idle, degree_idle * 0.4F, false, 0F, 0.6F, entity.ticksExisted, 1);
+                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, f2, 1);
+                        this.swing(Tail_2, speed_idle, degree_idle * 0.4F, false, 0F, -0.4F, f2, 1);
+                        this.swing(Tail_3, speed_idle, degree_idle * 0.4F, false, 0F, 0.6F, f2, 1);
                     }
                     break;
                 case 1:
@@ -214,10 +214,10 @@ public class ModelSiren extends ModelDragonBase {
                     this.progressRotation(Tail_2, entity.singProgress, (float) Math.toRadians(20F), 0.0F, (float) Math.toRadians(25F));
                     this.progressRotation(Tail_3, entity.singProgress, 0.0F, 0.0F, (float) Math.toRadians(18F));
                     this.progressPosition(Tail_1, entity.singProgress, 0.0F, 18.9F, -0.2F);
-                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, entity.ticksExisted, 1);
-                    this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, entity.ticksExisted, 1);
+                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
+                    this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
                     if (entity.onGround) {
-                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, entity.ticksExisted, 1);
+                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, f2, 1);
                     }
                     break;
                 default:
@@ -229,12 +229,12 @@ public class ModelSiren extends ModelDragonBase {
                     this.progressRotation(Tail_2, entity.singProgress, 0.0F, 0.0F, (float) Math.toRadians(-15));
                     this.progressRotation(Right_Arm, entity.singProgress, (float) Math.toRadians(-40F), (float) Math.toRadians(2F), (float) Math.toRadians(53F));
                     this.progressRotation(Left_Arm, entity.singProgress, (float) Math.toRadians(-80F), (float) Math.toRadians(-70F), 0.0F);
-                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, entity.ticksExisted, 1);
-                    this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, entity.ticksExisted, 1);
-                    this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, entity.ticksExisted, 1);
-                    this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, entity.ticksExisted, 1);
+                    this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
+                    this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
+                    this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
+                    this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
                     if (entity.onGround) {
-                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle * 0.5F, -1, entity.ticksExisted, 1);
+                        this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle * 0.5F, -1, f2, 1);
                     }
                     break;
             }

@@ -370,17 +370,17 @@ public class ModelMyrmexSentinel extends ModelMyrmexBase {
         if (entity.getPassengers().isEmpty()) {
             this.faceTarget(f3, f4, 2, NECK);
         }
-        this.chainWave(TAIL, speed_idle, degree_idle * 0.15F, 0, entity.ticksExisted, 1);
-        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, entity.ticksExisted, 1);
-        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, entity.ticksExisted, 1);
-        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, entity.ticksExisted, 1);
+        this.chainWave(TAIL, speed_idle, degree_idle * 0.15F, 0, f2, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, f2, 1);
+        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, f2, 1);
+        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, f2, 1);
         this.animateLeg(LEGR3, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR2, speed_walk, degree_walk, true, 0, 1, f, f1);
         this.animateLeg(LEGL3, speed_walk, degree_walk, false, 1, -1, f, f1);
         this.animateLeg(LEGL2, speed_walk, degree_walk, true, 1, -1, f, f1);
         this.bob(Body2, speed_walk, degree_walk, false, f, f1);
-        this.chainWave(ARML1, speed_idle, degree_idle * -0.25F, 0, entity.ticksExisted, 1);
-        this.chainWave(ARMR1, speed_idle, degree_idle * -0.25F, 0, entity.ticksExisted, 1);
+        this.chainWave(ARML1, speed_idle, degree_idle * -0.25F, 0, f2, 1);
+        this.chainWave(ARMR1, speed_idle, degree_idle * -0.25F, 0, f2, 1);
         this.progressRotation(legTopR1, myrmex.holdingProgress, (float) Math.toRadians(35F), (float) Math.toRadians(30F), (float) Math.toRadians(10F));
         this.progressRotation(legTopR1_1, myrmex.holdingProgress, (float) Math.toRadians(35F), (float) Math.toRadians(-30F), (float) Math.toRadians(-10F));
         this.progressRotation(legMidR1, myrmex.holdingProgress, (float) Math.toRadians(-133F), 0, 0);

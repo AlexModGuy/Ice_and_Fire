@@ -259,9 +259,9 @@ public class ModelMyrmexPupa extends ModelDragonBase {
         float speed_idle = 0.025F;
         float degree_idle = 0.25F;
         AdvancedModelRenderer[] PARTS = new AdvancedModelRenderer[]{Body1, Body2, Body3, Body4, Body5};
-        this.bob(Body2, speed_idle, degree_idle * 2.5F, true, entity.ticksExisted, 1);
-        this.chainSwing(PARTS, speed_idle, degree_idle * 0.15F, 1, entity.ticksExisted, 1);
-        this.chainFlap(PARTS, speed_idle, degree_idle * 0.15F, 1, entity.ticksExisted, 1);
+        this.bob(Body2, speed_idle, degree_idle * 2.5F, true, f2, 1);
+        this.chainSwing(PARTS, speed_idle, degree_idle * 0.15F, 1, f2, 1);
+        this.chainFlap(PARTS, speed_idle, degree_idle * 0.15F, 1, f2, 1);
     }
 
     @Override

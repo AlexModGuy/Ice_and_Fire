@@ -298,8 +298,8 @@ public class ModelHippocampus extends ModelDragonBase {
             this.walk(Tail_3, speed_swim, degree_swim * -0.5F, false, 0, 0, f, f1);
             this.chainWave(LEG_L, speed_swim, degree_swim * 0.75F, 1, f, f1);
             this.chainWave(LEG_R, speed_swim, degree_swim * 0.75F, 1, f, f1);
-            this.walk(Tail_1, speed_idle, degree_idle * 0.15F, false, 0, 0F, entity.ticksExisted, 1);
-            this.walk(Tail_2, speed_idle, degree_idle * 0.25F, false, 0, 0F, entity.ticksExisted, 1);
+            this.walk(Tail_1, speed_idle, degree_idle * 0.15F, false, 0, 0F, f2, 1);
+            this.walk(Tail_2, speed_idle, degree_idle * 0.25F, false, 0, 0F, f2, 1);
 
         } else {
             this.chainWave(LEG_L, speed_walk, degree_walk * 0.5F, 1, f, f1);
@@ -307,14 +307,14 @@ public class ModelHippocampus extends ModelDragonBase {
             this.walk(Body, speed_walk, degree_walk * 0.05F, false, 0, 0.1F, f, f1);
             this.walk(Tail_1, speed_walk, degree_walk * 0.05F, false, 1, 0.1F, f, f1);
             this.walk(Tail_2, speed_walk, degree_walk * 0.05F, false, 2, 0.1F, f, f1);
-            this.walk(FrontThighL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
-            this.walk(FrontThighR, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
-            this.walk(FrontLegL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
-            this.walk(FrontLegR, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
-            this.swing(FinLBack, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, entity.ticksExisted, 1);
-            this.swing(FinRBack, speed_idle, degree_idle * 0.25F, true, 0, -0.1F, entity.ticksExisted, 1);
+            this.walk(FrontThighL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, f2, 1);
+            this.walk(FrontThighR, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, f2, 1);
+            this.walk(FrontLegL, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, f2, 1);
+            this.walk(FrontLegR, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, f2, 1);
+            this.swing(FinLBack, speed_idle, degree_idle * 0.25F, false, 0, -0.1F, f2, 1);
+            this.swing(FinRBack, speed_idle, degree_idle * 0.25F, true, 0, -0.1F, f2, 1);
         }
-        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, f2, 1);
         hippo.tail_buffer.applyChainSwingBuffer(TAIL);
     }
 }

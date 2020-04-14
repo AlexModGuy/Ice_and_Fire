@@ -360,16 +360,16 @@ public class ModelTroll extends ModelDragonBase {
         this.swing(this.upperBody, speed_walk, degree_walk * -0.25F, true, 0, 0F, f, f1);
         this.walk(this.rightarm, speed_walk, degree_walk * -0.25F, false, 0, 0F, f, f1);
         this.walk(this.rightarm2, speed_walk, degree_walk * -0.125F, false, 1, -0.3F, f, f1);
-        this.walk(this.body, speed_idle, degree_idle * -0.1F, true, 0F, -0.1F, entity.ticksExisted, 1);
-        this.walk(this.rightleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, entity.ticksExisted, 1);
-        this.walk(this.leftleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, entity.ticksExisted, 1);
+        this.walk(this.body, speed_idle, degree_idle * -0.1F, true, 0F, -0.1F, f2, 1);
+        this.walk(this.rightleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, f2, 1);
+        this.walk(this.leftleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, f2, 1);
 
-        this.flap(this.leftarm, speed_idle, degree_idle * -0.1F, true, 0, 0F, entity.ticksExisted, 1);
-        this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, entity.ticksExisted, 1);
-        this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, entity.ticksExisted, 1);
-        this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, entity.ticksExisted, 1);
-        this.walk(this.jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, entity.ticksExisted, 1);
-        this.walk(this.mouth, speed_idle, degree_idle * -0.15F, false, 0F, -0.1F, entity.ticksExisted, 1);
+        this.flap(this.leftarm, speed_idle, degree_idle * -0.1F, true, 0, 0F, f2, 1);
+        this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, f2, 1);
+        this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, f2, 1);
+        this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, f2, 1);
+        this.walk(this.jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, f2, 1);
+        this.walk(this.mouth, speed_idle, degree_idle * -0.15F, false, 0F, -0.1F, f2, 1);
         this.faceTarget(f3, f4, 1, this.head);
 
     }

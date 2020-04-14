@@ -44,27 +44,18 @@ public class ItemDragonEgg extends Item {
     }
 
 
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (facing != EnumFacing.UP) {
-            return EnumActionResult.PASS;
-        } else {
-            EntityDragonEgg egg = new EntityDragonEgg(worldIn);
-            egg.setType(type);
-            egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-            egg.onPlayerPlace(player);
-            if (!worldIn.isRemote) {
-                worldIn.spawnEntity(egg);
-            }
-            ItemStack itemstack = player.getHeldItem(hand);
-
-            if (!player.capabilities.isCreativeMode) {
-                itemstack.shrink(1);
-                if (itemstack.getCount() <= 0) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
-                }
-            }
-            return EnumActionResult.SUCCESS;
-
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        BlockPos offset = pos.offset(side);
+        EntityDragonEgg egg = new EntityDragonEgg(worldIn);
+        egg.setType(type);
+        egg.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
+        egg.onPlayerPlace(player);
+        egg.enablePersistence();
+        if (!worldIn.isRemote) {
+            worldIn.spawnEntity(egg);
         }
+        itemstack.shrink(1);
+        return EnumActionResult.SUCCESS;
     }
 }

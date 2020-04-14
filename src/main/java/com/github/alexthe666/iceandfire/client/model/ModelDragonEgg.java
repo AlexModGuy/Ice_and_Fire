@@ -63,8 +63,8 @@ public class ModelDragonEgg extends AdvancedModelBase {
         if (entity instanceof EntityDragonEgg) {
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
             if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().dragonType == DragonType.FIRE) {
-                this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
-                this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
+                this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, f2, 1);
+                this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, f2, 1);
             }
         }
 

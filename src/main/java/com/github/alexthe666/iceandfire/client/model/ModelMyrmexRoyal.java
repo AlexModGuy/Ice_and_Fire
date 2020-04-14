@@ -324,15 +324,15 @@ public class ModelMyrmexRoyal extends ModelMyrmexBase {
         if (entity.getPassengers().isEmpty()) {
             this.faceTarget(f3, f4, 2, NECK);
         }
-        this.chainWave(GASTER, speed_idle, degree_idle * 0.25F, 0, entity.ticksExisted, 1);
-        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, entity.ticksExisted, 1);
-        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, entity.ticksExisted, 1);
-        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, entity.ticksExisted, 1);
+        this.chainWave(GASTER, speed_idle, degree_idle * 0.25F, 0, f2, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, f2, 1);
+        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, f2, 1);
+        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, f2, 1);
 
         EntityMyrmexRoyal myrmex = (EntityMyrmexRoyal) entity;
         if (myrmex.isFlying() && !myrmex.onGround) {
-            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 2, entity.ticksExisted, 1);
-            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 2, entity.ticksExisted, 1);
+            this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 2, f2, 1);
+            this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 2, f2, 1);
             this.bob(Body2, speed_fly, degree_fly * 10, false, 0, 0);
         } else {
             this.animateLeg(LEGR1, speed_walk, degree_walk, false, 0, 1, f, f1);

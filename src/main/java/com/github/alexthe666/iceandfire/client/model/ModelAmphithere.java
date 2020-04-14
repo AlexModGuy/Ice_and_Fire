@@ -447,12 +447,12 @@ public class ModelAmphithere extends ModelDragonBase {
             this.chainSwing(ENTIRE_BODY, speed_walk, 0.125F, 2, f, f1);
             this.chainSwing(NECK, speed_walk, -degree_walk, 4, f, f1);
         }
-        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, 4, entity.ticksExisted, 1);
-        this.chainSwing(TAIL, speed_idle, degree_idle * 0.1F, 2, entity.ticksExisted, 1);
-        this.flap(WingL, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
-        this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, entity.ticksExisted, 1);
-        this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, entity.ticksExisted, 1);
-        this.flap(WingR2, speed_fly, -degree_flap, false, 0, 0, entity.ticksExisted, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, 4, f2, 1);
+        this.chainSwing(TAIL, speed_idle, degree_idle * 0.1F, 2, f2, 1);
+        this.flap(WingL, speed_fly, degree_flap, false, 0, 0, f2, 1);
+        this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, f2, 1);
+        this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, f2, 1);
+        this.flap(WingR2, speed_fly, -degree_flap, false, 0, 0, f2, 1);
         {
             float sitProgress = amphithere.diveProgress;
             progressRotation(FingerR4, sitProgress, 0.2617993877991494F, 0.0F, 0.0F);

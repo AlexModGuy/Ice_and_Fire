@@ -366,21 +366,21 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
             this.Stinger.rotationPointZ += 20 * gasterSwell3;
         }
         if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_DIGNEST) {
-            this.animateLeg(LEGR1, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, entity.ticksExisted, 1);
-            this.animateLeg(LEGR3, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, entity.ticksExisted, 1);
-            this.animateLeg(LEGR2, speed_walk * 0.5F, degree_walk * 0.5F, true, 0, 1, entity.ticksExisted, 1);
+            this.animateLeg(LEGR1, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, f2, 1);
+            this.animateLeg(LEGR3, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, f2, 1);
+            this.animateLeg(LEGR2, speed_walk * 0.5F, degree_walk * 0.5F, true, 0, 1, f2, 1);
 
-            this.animateLeg(LEGL1, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, entity.ticksExisted, 1);
-            this.animateLeg(LEGL3, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, entity.ticksExisted, 1);
-            this.animateLeg(LEGL2, speed_walk * 0.5F, degree_walk * 0.5F, true, 1, -1, entity.ticksExisted, 1);
+            this.animateLeg(LEGL1, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, f2, 1);
+            this.animateLeg(LEGL3, speed_walk * 0.5F, degree_walk * 0.5F, false, 1, -1, f2, 1);
+            this.animateLeg(LEGL2, speed_walk * 0.5F, degree_walk * 0.5F, true, 1, -1, f2, 1);
         }
         if (entity.getPassengers().isEmpty()) {
             this.faceTarget(f3, f4, 2, NECK);
         }
-        this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, entity.ticksExisted, 1);
-        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, entity.ticksExisted, 1);
-        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, entity.ticksExisted, 1);
-        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, entity.ticksExisted, 1);
+        this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, f2, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, f2, 1);
+        this.swing(MandibleR, speed_idle * 2F, degree_idle * -0.75F, false, 1, 0.2F, f2, 1);
+        this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, f2, 1);
         this.animateLeg(LEGR1, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR3, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR2, speed_walk, degree_walk, true, 0, 1, f, f1);

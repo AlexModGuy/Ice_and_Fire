@@ -291,16 +291,16 @@ public class ModelCockatriceChick extends ModelDragonBase {
         float degree_idle = 0.5F;
         AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{neck, neck2, head};
         AdvancedModelRenderer[] TAIL = new AdvancedModelRenderer[]{tail1, tail2, tail3};
-        this.chainWave(NECK, speed_idle, degree_idle * 0.1F, 4, entity.ticksExisted, 1);
-        this.chainSwing(TAIL, speed_idle, degree_idle * 0.5F, 0, entity.ticksExisted, 1);
-        this.walk(lowerBody, speed_idle, degree_idle * 0.1F, false, 0, 0.1F, entity.ticksExisted, 1);
-        this.walk(upperBody, speed_idle, degree_idle * 0.05F, true, 1, 0F, entity.ticksExisted, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * 0.1F, 4, f2, 1);
+        this.chainSwing(TAIL, speed_idle, degree_idle * 0.5F, 0, f2, 1);
+        this.walk(lowerBody, speed_idle, degree_idle * 0.1F, false, 0, 0.1F, f2, 1);
+        this.walk(upperBody, speed_idle, degree_idle * 0.05F, true, 1, 0F, f2, 1);
 
-        this.walk(leftUpperArm, speed_idle, degree_idle * 0.2F, false, 1, 0.1F, entity.ticksExisted, 1);
-        this.walk(RightUpperArm, speed_idle, degree_idle * 0.2F, false, 1, 0.1F, entity.ticksExisted, 1);
+        this.walk(leftUpperArm, speed_idle, degree_idle * 0.2F, false, 1, 0.1F, f2, 1);
+        this.walk(RightUpperArm, speed_idle, degree_idle * 0.2F, false, 1, 0.1F, f2, 1);
 
-        this.flap(leftUpperArm, speed_idle, degree_idle * 0.2F, true, 2, -0.3F, entity.ticksExisted, 1);
-        this.flap(RightUpperArm, speed_idle, degree_idle * 0.2F, false, 2, -0.3F, entity.ticksExisted, 1);
+        this.flap(leftUpperArm, speed_idle, degree_idle * 0.2F, true, 2, -0.3F, f2, 1);
+        this.flap(RightUpperArm, speed_idle, degree_idle * 0.2F, false, 2, -0.3F, f2, 1);
         this.faceTarget(f3, f4, 2, head);
         this.faceTarget(f3, f4, 2, neck);
 
