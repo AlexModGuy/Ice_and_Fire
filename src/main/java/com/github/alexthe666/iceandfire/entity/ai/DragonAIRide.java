@@ -67,7 +67,7 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
         if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
             y += lookVec.y * 10;
         }
-        if(dragon.fliesLikeElytra() && lookVec.y == -1){
+        if(dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.onGround){
             y -= 1;
         }
         dragon.getMoveHelper().setMoveTo(x, y, z, speed);

@@ -871,7 +871,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         } else if (!hovering && hoverProgress > 0.0F) {
             hoverProgress -= 0.5F;
         }
-        boolean flying = this.isFlying() || !this.isHovering() && airBorneCounter > 50;
+        boolean flying = this.isFlying() || !this.isHovering() && airBorneCounter > 10;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
