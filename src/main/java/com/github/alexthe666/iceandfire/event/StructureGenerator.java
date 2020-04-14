@@ -12,6 +12,7 @@ import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
@@ -117,9 +118,28 @@ public class StructureGenerator implements IWorldGenerator {
         }
 
         if (IceAndFire.CONFIG.generateCyclopsCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)
-                && random.nextInt(IceAndFire.CONFIG.spawnCyclopsChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
+                && random.nextInt(IceAndFire.CONFIG.spawnCyclopsCaveChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
             CYCLOPS_CAVE.generate(world, random, height);
             lastCyclopsCave = height;
+        }
+        if (IceAndFire.CONFIG.generateWanderingCyclops && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.PLAINS) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
+            if (random.nextInt(IceAndFire.CONFIG.spawnWanderingCyclopsChance + 1) == 0) {
+                EntityCyclops cyclops = new EntityCyclops(world);
+                cyclops.setPosition(x, height.getY() + 1, z);
+                cyclops.setVariant(random.nextInt(3));
+                if (!world.isRemote) {
+                    world.spawnEntity(cyclops);
+                }
+                for(int i = 0; i < 3 + random.nextInt(3); i++){
+                    EntitySheep sheep = new EntitySheep(world);
+                    sheep.setPosition(x, height.getY() + 1, z);
+                    sheep.setFleeceColor(EntitySheep.getRandomSheepColor(random));
+                    if (!world.isRemote) {
+                        world.spawnEntity(sheep);
+                    }
+                }
+                lastCyclopsCave = height;
+            }
         }
         if (IceAndFire.CONFIG.spawnPixies && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastPixieVillage == null || lastPixieVillage.distanceSq(height) >= spawnCheck)) {
             boolean isSpookyForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST) && (BiomeDictionary.hasType(world.getBiome(height), Type.SPOOKY) || BiomeDictionary.hasType(world.getBiome(height), Type.MAGICAL));

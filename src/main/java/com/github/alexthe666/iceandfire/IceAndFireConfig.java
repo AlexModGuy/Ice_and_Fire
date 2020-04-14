@@ -62,7 +62,9 @@ public class IceAndFireConfig {
     public int pixieVillageSize = 5;
     public boolean pixiesStealItems = true;
     public boolean generateCyclopsCaves = true;
-    public int spawnCyclopsChance = 170;
+    public boolean generateWanderingCyclops = true;
+    public int spawnWanderingCyclopsChance = 400;
+    public int spawnCyclopsCaveChance = 170;
     public int cyclopesSheepSearchLength = 17;
     public double cyclopsMaxHealth = 150;
     public double cyclopsAttackStrength = 15;
@@ -100,7 +102,7 @@ public class IceAndFireConfig {
     public boolean stympahlianBirdAttackAnimals = false;
     public int stymphalianBirdSpawnChance = 100;
     public boolean spawnTrolls = true;
-    public int trollSpawnRate = 40;
+    public int trollSpawnRate = 60;
     public int trollSpawnCheckChance = 1;
     public boolean trollsDropWeapon = true;
     public double trollMaxHealth = 50;
@@ -217,8 +219,12 @@ public class IceAndFireConfig {
         this.pixieVillageSize = config.getInt("Pixie Village Size", "all", 5, 1, 10000, "size of pixie villages");
         this.pixiesStealItems = config.getBoolean("Pixies Steal Items", "all", true, "True if pixies are allowed to steal from players");
 
-        this.generateCyclopsCaves = config.getBoolean("Spawn Cyclopes", "all", true, "True if cyclops caves are allowed to spawn");
-        this.spawnCyclopsChance = config.getInt("Spawn Cyclops Chance", "all", 170, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.generateCyclopsCaves = config.getBoolean("Spawn Cyclopes Caves", "all", true, "True if cyclops caves are allowed to spawn");
+        this.spawnCyclopsCaveChance = config.getInt("Spawn Cyclops Cave Chance", "all", 170, 1, 10000, "1 out of this number chance per chunk for generation");
+
+        this.generateWanderingCyclops = config.getBoolean("Spawn Wandering Cyclopes", "all", true, "True if wandering cyclopes are allowed to spawn");
+        this.spawnWanderingCyclopsChance = config.getInt("Spawn Wandering Cyclops Chance", "all", 400, 1, 10000, "1 out of this number chance per chunk for generation");
+
         this.cyclopsMaxHealth = (double) config.getFloat("Cyclops Max Health", "all", 150, 1, 10000, "Maximum cyclops health");
         this.cyclopesSheepSearchLength = config.getInt("Cyclopes Sheep Search Length", "all", 17, 1, 10000, "How many blocks away can cyclopes detect sheep. Note that increasing this could cause lag.");
         this.cyclopsAttackStrength = (double) config.getFloat("Cyclops Attack Strength", "all", 15, 1, 10000, "Cyclops attack strength");
@@ -263,7 +269,7 @@ public class IceAndFireConfig {
 
         this.spawnTrolls = config.getBoolean("Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
         this.trollsDropWeapon = config.getBoolean("Trolls Drop Weapon", "all", true, "True if trolls are allowed to drop their weapon on death.");
-        this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 40, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
+        this.trollSpawnRate = config.getInt("Troll Spawn Weight", "all", 60, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
         this.trollSpawnCheckChance = config.getInt("Troll Spawn Check Chance", "all", 1, 1, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
         this.trollMaxHealth = (double) config.getFloat("Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
         this.trollAttackStrength = (double) config.getFloat("Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
