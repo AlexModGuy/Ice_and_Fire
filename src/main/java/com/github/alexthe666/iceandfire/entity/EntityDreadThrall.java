@@ -15,14 +15,18 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -230,4 +234,24 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     protected ResourceLocation getLootTable() {
         return LOOT;
     }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.ENTITY_STRAY_AMBIENT;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.ENTITY_STRAY_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.ENTITY_STRAY_DEATH;
+    }
+
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(SoundEvents.ENTITY_STRAY_STEP, 0.15F, 1.0F);
+    }
+
 }

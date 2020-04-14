@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.entity.ai.DreadLichAIStrife;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -21,9 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -40,10 +39,10 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     private static final DataParameter<Integer> MINION_COUNT = EntityDataManager.createKey(EntityDreadLich.class, DataSerializers.VARINT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_SUMMON = Animation.create(15);
-    private int animationTick;
-    private Animation currentAnimation;
     private final DreadLichAIStrife aiArrowAttack = new DreadLichAIStrife(this, 1.0D, 20, 15.0F);
     private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.0D, false);
+    private int animationTick;
+    private Animation currentAnimation;
     private int fireCooldown = 0;
     private int minionCooldown = 0;
 
@@ -82,7 +81,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
@@ -97,10 +96,10 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             IceAndFire.PROXY.spawnParticle("dread_torch", this.posX + (double) f1 * 0.6D, this.posY + 1.8D, this.posZ + (double) f2 * 0.6D, d0, d1, d2);
             IceAndFire.PROXY.spawnParticle("dread_torch", this.posX - (double) f1 * 0.6D, this.posY + 1.8D, this.posZ - (double) f2 * 0.6D, d0, d1, d2);
         }
-        if(fireCooldown > 0){
+        if (fireCooldown > 0) {
             fireCooldown--;
         }
-        if(minionCooldown > 0){
+        if (minionCooldown > 0) {
             minionCooldown--;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
@@ -218,8 +217,9 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
         boolean flag = false;
-        if(this.getMinionCount() < 5 && minionCooldown == 0){
+        if (this.getMinionCount() < 5 && minionCooldown == 0) {
             this.setAnimation(ANIMATION_SUMMON);
+            this.playSound(ModSounds.DREAD_LICH_SUMMON, this.getSoundVolume(), this.getSoundPitch());
             EntityLiving minion = getRandomNewMinion();
             int x = (int) (this.posX) - 5 + rand.nextInt(10);
             int z = (int) (this.posZ) - 5 + rand.nextInt(10);
@@ -227,50 +227,51 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             minion.setLocationAndAngles(x + 0.5D, y, z + 0.5D, this.rotationYaw, this.rotationPitch);
             minion.setAttackTarget(target);
             minion.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(this)), null);
-            if(minion instanceof EntityDreadMob){
+            if (minion instanceof EntityDreadMob) {
                 ((EntityDreadMob) minion).setCommanderId(this.getUniqueID());
             }
-            if(!world.isRemote){
+            if (!world.isRemote) {
                 world.spawnEntity(minion);
             }
             minionCooldown = 100;
             this.setMinionCount(this.getMinionCount() + 1);
             flag = true;
         }
-       if(fireCooldown == 0 && !flag){
-           this.swingArm(EnumHand.MAIN_HAND);
-           EntityDreadLichSkull skull = new EntityDreadLichSkull(world, this, 6);
-           double d0 = target.posX - this.posX;
-           double d1 = target.getEntityBoundingBox().minY + (double)(target.height * 2) - skull.posY;
-           double d2 = target.posZ - this.posZ;
-           double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-           skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, (float)(14 - this.world.getDifficulty().getId() * 4));
-           this.world.spawnEntity(skull);
-           fireCooldown = 100;
-       }
+        if (fireCooldown == 0 && !flag) {
+            this.swingArm(EnumHand.MAIN_HAND);
+            this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
+            EntityDreadLichSkull skull = new EntityDreadLichSkull(world, this, 6);
+            double d0 = target.posX - this.posX;
+            double d1 = target.getEntityBoundingBox().minY + (double) (target.height * 2) - skull.posY;
+            double d2 = target.posZ - this.posZ;
+            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+            skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, (float) (14 - this.world.getDifficulty().getId() * 4));
+            this.world.spawnEntity(skull);
+            fireCooldown = 100;
+        }
     }
 
     private EntityLiving getRandomNewMinion() {
         float chance = rand.nextFloat();
-        if(chance > 0.5F){
+        if (chance > 0.5F) {
             return new EntityDreadThrall(world);
-        }else if(chance > 0.35F){
+        } else if (chance > 0.35F) {
             return new EntityDreadGhoul(world);
-        }else if(chance > 0.15F){
+        } else if (chance > 0.15F) {
             return new EntityDreadBeast(world);
-        }else {
+        } else {
             return new EntityDreadScuttler(world);
         }
     }
 
     private double getHeightFromXZ(int x, int z) {
         BlockPos thisPos = new BlockPos(x, this.posY + 7, z);
-        while(world.isAirBlock(thisPos) && thisPos.getY() > 2){
+        while (world.isAirBlock(thisPos) && thisPos.getY() > 2) {
             thisPos = thisPos.down();
         }
         double height = thisPos.getY() + 1.0D;
         AxisAlignedBB bb = world.getBlockState(thisPos).getCollisionBoundingBox(world, thisPos);
-        if(bb != null){
+        if (bb != null) {
             height = thisPos.getY() + bb.maxY;
         }
         return height;
@@ -282,7 +283,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     @Override
-    public boolean isOnSameTeam(Entity entityIn){
+    public boolean isOnSameTeam(Entity entityIn) {
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 
@@ -290,4 +291,25 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     protected ResourceLocation getLootTable() {
         return LOOT;
     }
+
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.ENTITY_STRAY_AMBIENT;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.ENTITY_STRAY_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.ENTITY_STRAY_DEATH;
+    }
+
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(SoundEvents.ENTITY_STRAY_STEP, 0.15F, 1.0F);
+    }
+
 }

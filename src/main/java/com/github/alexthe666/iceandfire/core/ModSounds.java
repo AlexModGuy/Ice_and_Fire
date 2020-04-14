@@ -325,6 +325,12 @@ public final class ModSounds {
     @GameRegistry.ObjectHolder("pixie_wand")
     public static final SoundEvent PIXIE_WAND = createSoundEvent("pixie_wand");
 
+    @GameRegistry.ObjectHolder("dread_lich_summon")
+    public static final SoundEvent DREAD_LICH_SUMMON = createSoundEvent("dread_lich_summon");
+
+    @GameRegistry.ObjectHolder("dread_ghoul_idle")
+    public static final SoundEvent DREAD_GHOUL_IDLE = createSoundEvent("dread_ghoul_idle");
+
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
         return new SoundEvent(soundID).setRegistryName(soundID);

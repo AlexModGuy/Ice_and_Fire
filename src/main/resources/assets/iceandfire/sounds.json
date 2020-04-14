@@ -1,4 +1,19 @@
 {
+
+  "dread_ghoul_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dread_ghoul_idle_0",
+      "iceandfire:dread_ghoul_idle_1"
+    ]
+  },
+  "dread_lich_summon": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:dread_lich_summon_0",
+      "iceandfire:dread_lich_summon_1"
+    ]
+  },
   "hydra_regen_head": {
     "category": "neutral",
     "sounds": [

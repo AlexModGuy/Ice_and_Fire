@@ -112,14 +112,6 @@ public class ModelDreadThrall extends AdvancedModelBase {
         this.leftArmPose = ModelBiped.ArmPose.EMPTY;
         ItemStack itemstack = entitylivingbaseIn.getHeldItem(EnumHand.MAIN_HAND);
 
-        if (itemstack.getItem() == Items.BOW && ((AbstractSkeleton) entitylivingbaseIn).isSwingingArms()) {
-            if (entitylivingbaseIn.getPrimaryHand() == EnumHandSide.RIGHT) {
-                this.rightArmPose = ModelBiped.ArmPose.BOW_AND_ARROW;
-            } else {
-                this.leftArmPose = ModelBiped.ArmPose.BOW_AND_ARROW;
-            }
-        }
-
         super.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 

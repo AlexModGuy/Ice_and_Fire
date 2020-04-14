@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -14,6 +15,7 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -22,6 +24,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -169,7 +173,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
-        this.setScale(0.5F + rand.nextFloat() * 1.5F);
+        this.setScale(0.5F + rand.nextFloat() * 1.15F);
         return data;
     }
 
@@ -216,6 +220,29 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     @Override
     public boolean isOnSameTeam(Entity entityIn){
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
+    }
+
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.ENTITY_SPIDER_AMBIENT;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.ENTITY_SPIDER_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.ENTITY_SPIDER_DEATH;
+    }
+
+    protected float getSoundPitch() {
+        return super.getSoundPitch() * 0.70F;
+    }
+
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(ModSounds.MYRMEX_WALK, 0.25F, 1.0F);
     }
 
     @Nullable
