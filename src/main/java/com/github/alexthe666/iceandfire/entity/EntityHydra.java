@@ -74,11 +74,13 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     private int prevHeadCount = -1;
     private int regrowHeadCooldown = 0;
     private boolean onlyRegrowOneHeadNotTwo = false;
+    private float headDamageThreshold = 20;
 
     public EntityHydra(World worldIn) {
         super(worldIn);
         this.setSize(2.8F, 1.39F);
         resetParts();
+        headDamageThreshold = Math.max(5, (float)IceAndFire.CONFIG.hydraMaxHealth * 0.08F);
     }
 
     protected void initEntityAI() {
@@ -334,8 +336,9 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(250D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.generateHydraChance);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
+        this.getEntityAttribute(EntityLivingBase.SWIM_SPEED).setBaseValue(2.0D);
     }
 
     @Override
@@ -346,7 +349,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         int headIndex = lastHitHead;
         headDamageTracker[headIndex] += amount;
 
-        if (headDamageTracker[headIndex] > HEAD_HEALTH_THRESHOLD && (this.getSeveredHead() == -1 || this.getSeveredHead() >= this.getHeadCount())) {
+        if (headDamageTracker[headIndex] > headDamageThreshold && (this.getSeveredHead() == -1 || this.getSeveredHead() >= this.getHeadCount())) {
             headDamageTracker[headIndex] = 0;
             this.regrowHeadCooldown = 0;
             this.setSeveredHead(headIndex);
