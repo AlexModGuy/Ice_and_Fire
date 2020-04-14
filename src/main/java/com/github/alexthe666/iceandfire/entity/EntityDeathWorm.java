@@ -73,6 +73,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     private boolean isSandNavigator;
     private float prevScale = 0.0F;
     private EntityLookHelper lookHelper;
+    private int growthCounter = 0;
 
     public EntityDeathWorm(World worldIn) {
         super(worldIn);
@@ -258,6 +259,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
+        compound.setInteger("GrowthCounter", this.growthCounter);
         compound.setFloat("Scale", this.getScale());
         compound.setInteger("WormAge", this.getWormAge());
         compound.setLong("WormHome", this.getWormHome().toLong());
@@ -268,6 +270,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
+        this.growthCounter = compound.getInteger("GrowthCounter");
         this.setDeathWormScale(compound.getFloat("Scale"));
         this.setWormAge(compound.getInteger("WormAge"));
         this.setWormHome(BlockPos.fromLong(compound.getLong("WormHome")));
@@ -558,7 +561,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         if (this.ticksExisted == 1) {
             initSegments(this.getScaleForAge());
         }
-        if (this.ticksExisted % 1000 == 0 && this.getWormAge() < 5) {
+        if (growthCounter > 1000 && this.getWormAge() < 5) {
+            growthCounter = 0;
             this.setWormAge(Math.min(5, this.getWormAge() + 1));
             this.clearSegments();
             this.heal(15);
@@ -571,6 +575,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                     }
                 }
             }
+        }
+        if(this.getWormAge() < 5){
+            growthCounter++;
         }
         if (this.getControllingPassenger() != null) {
             if (this.isEntityInsideOpaqueBlock()) {
