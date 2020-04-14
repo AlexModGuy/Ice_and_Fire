@@ -57,7 +57,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {IDreadMob.class}));
         this.targetTasks.addTask(3, new DreadAITargetNonDread(this, EntityLivingBase.class, false));
     }
 
