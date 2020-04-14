@@ -281,6 +281,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     @Override
     public void onUpdate() {
         super.onUpdate();
+        System.out.println(this.tasks.taskEntries);
+
         this.setScaleForAge(true);
         onUpdateParts();
         if (this.isInWater()) {
@@ -422,6 +424,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     public void onLivingUpdate() {
+        super.onLivingUpdate();
         if (!world.isRemote) {
             if (isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()) {
                 motionY -= 0.25D;
@@ -434,7 +437,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 this.setAttackTarget(null);
             }
         }
-        super.onLivingUpdate();
         boolean breathing = isBreathing() && this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_ROAR;
         boolean jumping = !this.isInWater() && !this.onGround && this.motionY >= 0;
         boolean wantJumping = false; //(ticksSinceJump > TIME_BETWEEN_JUMPS) && this.isInWater();
@@ -504,7 +506,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             switchNavigator(true);
         }
         renderYawOffset = rotationYaw;
-        rotationPitch = (float) motionY * 20F;
+        rotationPitch = MathHelper.clamp((float) motionY * 20F, -90, 90);
         if (world.isRemote) {
             pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
 

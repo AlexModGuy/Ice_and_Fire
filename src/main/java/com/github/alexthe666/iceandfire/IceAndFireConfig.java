@@ -63,7 +63,7 @@ public class IceAndFireConfig {
     public boolean pixiesStealItems = true;
     public boolean generateCyclopsCaves = true;
     public boolean generateWanderingCyclops = true;
-    public int spawnWanderingCyclopsChance = 400;
+    public int spawnWanderingCyclopsChance = 900;
     public int spawnCyclopsCaveChance = 170;
     public int cyclopesSheepSearchLength = 17;
     public double cyclopsMaxHealth = 150;
@@ -223,7 +223,7 @@ public class IceAndFireConfig {
         this.spawnCyclopsCaveChance = config.getInt("Spawn Cyclops Cave Chance", "all", 170, 1, 10000, "1 out of this number chance per chunk for generation");
 
         this.generateWanderingCyclops = config.getBoolean("Spawn Wandering Cyclopes", "all", true, "True if wandering cyclopes are allowed to spawn");
-        this.spawnWanderingCyclopsChance = config.getInt("Spawn Wandering Cyclops Chance", "all", 400, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.spawnWanderingCyclopsChance = config.getInt("Spawn Wandering Cyclops Chance", "all", 900, 1, 10000, "1 out of this number chance per chunk for generation");
 
         this.cyclopsMaxHealth = (double) config.getFloat("Cyclops Max Health", "all", 150, 1, 10000, "Maximum cyclops health");
         this.cyclopesSheepSearchLength = config.getInt("Cyclopes Sheep Search Length", "all", 17, 1, 10000, "How many blocks away can cyclopes detect sheep. Note that increasing this could cause lag.");
