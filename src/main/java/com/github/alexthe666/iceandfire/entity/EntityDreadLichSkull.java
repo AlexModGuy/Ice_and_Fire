@@ -100,7 +100,7 @@ public class EntityDreadLichSkull extends EntityArrow {
                 flag  = false;
             }
         }
-        if ((sqrt < 0.1F || this.collided) && this.ticksExisted > 5 && flag) {
+        if ((sqrt < 0.1F || this.collided || this.inGround) && this.ticksExisted > 5 && flag) {
             this.setDead();
         }
         double d0 = 0;
