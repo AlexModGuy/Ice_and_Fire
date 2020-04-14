@@ -1,7 +1,7 @@
-一颗蛇头在受到足够多的伤害后就会
-断掉，并在原来的位置留下鲜血淋漓
-的残根。
-
+After a single head receives
+significant damage, it will be
+severed and a bloody stump will
+take its place.
 
 <image><drawings_2.png 40 70 0 210 114 44 1>
 
@@ -9,10 +9,10 @@
 
 
 
-但是，如果在断头后的几秒钟内，九头蛇没有
-遭受火焰的灼烧，在头颈的残根就会生长成两
-颗新的蛇头。
-
+but if the creature is not on fire
+within the next few seconds, the
+stump will result in two new heads
+on the beast.
 <image><drawings_2.png 40 160 0 255 114 48 1>
 
 
@@ -20,22 +20,22 @@
 
 
 
-若想在伤害这巨蛇的同时不让它随着自身的
-再生而愈加强大，唯一的办法就是用火焰
-焚烧它，被烈焰炙烤的九头蛇将不能再生
-出蛇头，而每个蛇头残根都会被火焰焚烧
-殆尽。在火焰中，它也会失去自己全部的
-再生能力。
+The only way to damage this snake
+without it growing in power
+afterwards is to make sure the
+Hydra is on fire. When on fire,
+the Hydra cannot regrow heads,
+and every stump will eventually
+burn away. It will also loose its
+regenerative effects overall.
 
+The Hydra can only truly die when
+it has one head. Otherwise, the
+creature will continue to survive.
 
-只有在九头蛇只剩一颗蛇头时，它才会真正
-死去，否则，它会一直再生，永远无法杀死。
-
-
-
-杀掉九头蛇后，你就能进入它的巢穴，取走
-那些不像你这么幸运的旅人的遗产。死去的
-九头蛇还会掉落两种特别的物品——它们的毒
-牙和罕见的九头蛇心脏。
-
-
+When slain, one can then freely
+access the spoils of less fortunate
+travellers in the lair of the Hydra.
+The dead hydra also has two unique
+drops: its fangs and rarely, its
+heart.
