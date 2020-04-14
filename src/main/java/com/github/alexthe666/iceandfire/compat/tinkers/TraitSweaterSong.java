@@ -22,7 +22,7 @@ public class TraitSweaterSong extends AbstractTrait {
     public float damage(ItemStack tool, EntityLivingBase player, EntityLivingBase target, float damage, float newDamage, boolean isCritical) {
         for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()){
             if (slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR && target.getItemStackFromSlot(slot) != ItemStack.EMPTY){
-                if(random.nextFloat() < 0.3F && isCritical){
+                if(random.nextFloat() < IceAndFire.CONFIG.weezerTinkersDisarmChance && isCritical){
                     ItemStack copy = target.getItemStackFromSlot(slot).copy();
                     copy.attemptDamageItem((int)Math.ceil(damage), random, null);
                     target.entityDropItem(copy, 1.0F);

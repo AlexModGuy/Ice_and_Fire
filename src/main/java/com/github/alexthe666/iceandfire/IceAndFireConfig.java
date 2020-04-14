@@ -148,6 +148,7 @@ public class IceAndFireConfig {
     public boolean generateHydraCaves = true;
     public int generateHydraChance = 200;
     public boolean explosiveDragonBreath = false;
+    public float weezerTinkersDisarmChance = 0.2F;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -303,6 +304,7 @@ public class IceAndFireConfig {
         this.dragonsteelBaseDurability = config.getInt("Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
         this.dragonMovedWronglyFix = config.getBoolean("Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
         this.weezerTinkers = config.getBoolean("Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
+        this.weezerTinkersDisarmChance = config.getFloat("Easter Egg Tinkers Tool Disarm chance", "all", 0.2F, 0F, 1F, "Percentage of critical strike that will disarm with easter egg tinkers material.");
 
         this.generateMausoleums = config.getBoolean("Generate Mausoleums", "all", true, "True if mausoleums are allowed to generate");
         this.generateMausoleumChance = config.getInt("Mausoleum Gen Chance", "all", 800, 1, 10000, "One out of this number chance per chunk to generate a mausoleum.");

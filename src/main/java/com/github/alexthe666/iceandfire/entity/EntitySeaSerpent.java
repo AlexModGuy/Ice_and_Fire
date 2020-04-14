@@ -281,8 +281,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     @Override
     public void onUpdate() {
         super.onUpdate();
-        System.out.println(this.tasks.taskEntries);
-
         this.setScaleForAge(true);
         onUpdateParts();
         if (this.isInWater()) {
