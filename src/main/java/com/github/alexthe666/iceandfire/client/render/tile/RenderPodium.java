@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
-import com.github.alexthe666.iceandfire.api.RenderPodiumItemEvent;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexEgg;

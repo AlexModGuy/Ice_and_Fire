@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,6 +39,7 @@ public class MyrmexAIForage extends EntityAIBase {
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
         for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS, RADIUS))) {
+            if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ()))) continue;
             if (EntityMyrmexBase.isEdibleBlock(this.myrmex.world.getBlockState(pos))) {
                 allBlocks.add(pos);
                 this.myrmex.keepSearching = false;

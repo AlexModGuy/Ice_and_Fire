@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
@@ -40,6 +41,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 
@@ -356,8 +358,11 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 float weaponY = (float) (posY + (this.getEyeHeight() / 2));
                 IBlockState state = world.getBlockState(new BlockPos(weaponX, weaponY, weaponZ));
                 BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, weaponX, weaponY, weaponZ, 1F + this.getRNG().nextFloat());
-                explosion.doExplosionA();
-                explosion.doExplosionB(true);
+                if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))){
+                    explosion.doExplosionA();
+                    explosion.doExplosionB(true);
+                }
+
                 this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1, 1);
 
             }

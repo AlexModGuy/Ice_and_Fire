@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
@@ -30,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
@@ -116,24 +118,26 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         } else if (this.canSeeSky()) {
             this.setAnimation(ANIMATION_DIGNEST);
             if (this.getAnimationTick() == 42) {
-                WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle());
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.posX, down, this.posZ);
-                hiveGen.generate(world, this.getRNG(), genPos);
-                this.setMadeHome(true);
-                this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);
-                this.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30));
-                this.setHive(hiveGen.hive);
-                for (int i = 0; i < 3; i++) {
-                    EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
-                    worker.copyLocationAndAnglesFrom(this);
-                    worker.setHive(this.getHive());
-                    worker.setJungleVariant(this.isJungle());
-                    if (!world.isRemote) {
-                        world.spawnEntity(worker);
+                if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))){
+                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle());
+                    hiveGen.generate(world, this.getRNG(), genPos);
+                    this.setMadeHome(true);
+                    this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);
+                    this.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30));
+                    this.setHive(hiveGen.hive);
+                    for (int i = 0; i < 3; i++) {
+                        EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
+                        worker.copyLocationAndAnglesFrom(this);
+                        worker.setHive(this.getHive());
+                        worker.setJungleVariant(this.isJungle());
+                        if (!world.isRemote) {
+                            world.spawnEntity(worker);
+                        }
                     }
+                    return;
                 }
-                return;
             }
         }
         if (!world.isRemote && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks && this.getHive() == null || !world.isRemote && this.getHive() != null && this.getHive().repopulate() && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks) {

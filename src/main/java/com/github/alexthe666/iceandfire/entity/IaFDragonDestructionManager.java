@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.event.DragonFireDamageWorldEvent;
 import com.github.alexthe666.iceandfire.block.BlockCharedPath;
 import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
@@ -12,15 +13,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class IaFDragonDestructionManager {
 
     public static void destroyAreaFire(World world, BlockPos center, EntityDragonBase destroyer) {
+        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageFire;
@@ -74,6 +76,7 @@ public class IaFDragonDestructionManager {
     }
 
     public static void destroyAreaIce(World world, BlockPos center, EntityDragonBase destroyer) {
+        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageIce;
@@ -134,6 +137,7 @@ public class IaFDragonDestructionManager {
 
     public static void destroyAreaFireCharge(World world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
+            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
@@ -198,6 +202,7 @@ public class IaFDragonDestructionManager {
 
     public static void destroyAreaIceCharge(World world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
+            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -16,7 +17,6 @@ import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.google.common.base.Predicate;
-import com.ibm.icu.text.Replaceable;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -38,7 +38,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
@@ -62,6 +61,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -1246,6 +1246,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         for (int a = (int) Math.floor(this.getEntityBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getEntityBoundingBox().maxX) + bounds; a++) {
                             for (int b = (int) Math.floor(this.getEntityBoundingBox().minY) + flightModifier; (b <= (int) Math.ceil(this.getEntityBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
                                 for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + bounds; c++) {
+                                    if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                                     BlockPos pos = new BlockPos(a, b, c);
                                     IBlockState state = world.getBlockState(pos);
                                     if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {

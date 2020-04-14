@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -43,6 +44,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -109,7 +111,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         initSegments(1);
     }
 
-    public EntityLookHelper getLookHelper(){
+    public EntityLookHelper getLookHelper() {
         return this.lookHelper;
     }
 
@@ -162,9 +164,11 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.playSound(this.getScaleForAge() > 3 ? ModSounds.DEATHWORM_GIANT_ATTACK : ModSounds.DEATHWORM_ATTACK, 1, 1);
         }
         if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1 && this.world.getGameRules().getBoolean("mobGriefing")) {
-            BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, entityIn.posX, entityIn.posY, entityIn.posZ, this.getScaleForAge());
-            explosion.doExplosionA();
-            explosion.doExplosionB(true);
+            if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, entityIn.posX, entityIn.posY, entityIn.posZ))) {
+                BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, entityIn.posX, entityIn.posY, entityIn.posZ, this.getScaleForAge());
+                explosion.doExplosionA();
+                explosion.doExplosionB(true);
+            }
         }
         return false;
     }
@@ -373,8 +377,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.rotationYaw = passenger.rotationYaw;
             float radius = -0.5F * this.getScaleForAge();
             float angle = (0.01745329251F * this.renderYawOffset);
-            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
             passenger.setPosition(this.posX + extraX, this.posY + this.getEyeHeight() - 0.55F, this.posZ + extraZ);
         }
     }
@@ -512,17 +516,17 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             float f1 = (float) enumfacing.getAxisDirection().getOffset();
 
             if (enumfacing.getAxis() == EnumFacing.Axis.X) {
-                this.motionX = (double) (f1 * f);
+                this.motionX = f1 * f;
                 this.motionY *= 0.75D;
                 this.motionZ *= 0.75D;
             } else if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
                 this.motionX *= 0.75D;
-                this.motionY = (double) (f1 * f);
+                this.motionY = f1 * f;
                 this.motionZ *= 0.75D;
             } else if (enumfacing.getAxis() == EnumFacing.Axis.Z) {
                 this.motionX *= 0.75D;
                 this.motionY *= 0.75D;
-                this.motionZ = (double) (f1 * f);
+                this.motionZ = f1 * f;
             }
             return true;
         }
@@ -548,12 +552,13 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
             this.setAttackTarget(null);
         }
         if (this.willExplode) {
             if (this.ticksTillExplosion == 0) {
-                world.newExplosion(null, this.posX, this.posY, this.posZ, 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this));
+                boolean b = !MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, posX, posY, posZ));
+                world.newExplosion(null, this.posX, this.posY, this.posZ, 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && b);
             } else {
                 this.ticksTillExplosion--;
             }
@@ -576,7 +581,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 }
             }
         }
-        if(this.getWormAge() < 5){
+        if (this.getWormAge() < 5) {
             growthCounter++;
         }
         if (this.getControllingPassenger() != null) {
@@ -668,8 +673,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1) {
                     float radius = 1.5F * this.getScaleForAge();
                     float angle = (0.01745329251F * this.renderYawOffset);
-                    double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                    double extraZ = (double) (radius * MathHelper.cos(angle));
+                    double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+                    double extraZ = radius * MathHelper.cos(angle);
                     BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, this.posX + extraX, this.posY - this.getEyeHeight(), this.posZ + extraZ, this.getScaleForAge() * 0.75F);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
@@ -864,12 +869,12 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
                 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-                this.motionX *= (double) f4;
+                this.motionX *= f4;
                 this.motionX *= 0.900000011920929D;
                 this.motionY *= 0.900000011920929D;
-                this.motionY *= (double) f4;
+                this.motionY *= f4;
                 this.motionZ *= 0.900000011920929D;
-                this.motionZ *= (double) f4;
+                this.motionZ *= f4;
             } else {
                 super.travel(strafe, vertical, forward);
             }
@@ -922,8 +927,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     @Nullable
     public EntityPlayer getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof EntityPlayer){
-            return (EntityPlayer)this.getControllingPassenger();
+        if (this.getControllingPassenger() instanceof EntityPlayer) {
+            return (EntityPlayer) this.getControllingPassenger();
         }
         return null;
     }
@@ -947,7 +952,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 double distanceY = this.posY - this.worm.posY;
                 double distanceZ = this.posZ - this.worm.posZ;
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
-                double distanceWithY = (double) MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
                 this.worm.rotationYaw = this.limitAngle(this.worm.rotationYaw, angle, 30.0F);
@@ -955,8 +960,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 this.worm.motionY += (double) this.worm.getAIMoveSpeed() * distanceY * 0.1D;
                 if (distance < (double) Math.max(1.0F, this.entity.width)) {
                     float f = this.worm.rotationYaw * 0.017453292F;
-                    this.worm.motionX -= (double) (MathHelper.sin(f) * 0.35F);
-                    this.worm.motionZ += (double) (MathHelper.cos(f) * 0.35F);
+                    this.worm.motionX -= MathHelper.sin(f) * 0.35F;
+                    this.worm.motionZ += MathHelper.cos(f) * 0.35F;
                 }
             } else if (this.action == EntityMoveHelper.Action.JUMPING) {
                 this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
