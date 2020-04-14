@@ -481,17 +481,19 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
         public void updateTask() {
             EntityLivingBase entitylivingbase = EntityMyrmexRoyal.this.getAttackTarget();
+            if(entitylivingbase != null){
+                if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox())) {
+                    EntityMyrmexRoyal.this.attackEntityAsMob(entitylivingbase);
+                } else {
+                    double d0 = EntityMyrmexRoyal.this.getDistanceSq(entitylivingbase);
 
-            if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox())) {
-                EntityMyrmexRoyal.this.attackEntityAsMob(entitylivingbase);
-            } else {
-                double d0 = EntityMyrmexRoyal.this.getDistanceSq(entitylivingbase);
-
-                if (d0 < 9.0D) {
-                    Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-                    EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+                    if (d0 < 9.0D) {
+                        Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+                        EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+                    }
                 }
             }
+
         }
     }
 }
