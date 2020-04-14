@@ -1,0 +1,45 @@
+wore in their past lives.
+<image><drawings_2.png 70 30 0 96 58 36 1>
+
+
+
+
+Dread Ghouls are fast moving
+undead zombies with extremely
+sharp claws, ready to rip
+and tear through their prey.
+
+<image><drawings_2.png 65 110 0 133 69 28 1>
+
+
+
+Dread Beasts are the mangled remains
+of animals converted by the dread
+lich. They move quickly and bite any
+living thing they can get their
+teeth on.
+
+<image><drawings_2.png 275 5 70 111 37 50 1>
+
+
+
+
+
+
+Dread Scuttlers are monstrous
+undead arthropods, ready to
+sink their massive fangs into
+anything their master commands
+them too.
+
+<item><iceandfire:dread_shard 0 95 43 1.25>
+<item><iceandfire:dread_key 0 125 43 1.25>
+
+
+
+All dread monsters drop dread
+shards, which can be used to
+craft decorative blocks. The Dread
+Lich also rarely drops a Dread Key,
+which can be used to open the gate
+of a Mausoleum...

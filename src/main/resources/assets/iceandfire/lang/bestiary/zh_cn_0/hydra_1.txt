@@ -1,0 +1,41 @@
+After a single head receives
+significant damage, it will be
+severed and a bloody stump will
+take its place.
+
+<image><drawings_2.png 40 70 0 210 114 44 1>
+
+
+
+
+
+but if the creature is not on fire
+within the next few seconds, the
+stump will result in two new heads
+on the beast.
+<image><drawings_2.png 40 160 0 255 114 48 1>
+
+
+
+
+
+
+The only way to damage this snake
+without it growing in power
+afterwards is to make sure the
+Hydra is on fire. When on fire,
+the Hydra cannot regrow heads,
+and every stump will eventually
+burn away. It will also loose its
+regenerative effects overall.
+
+The Hydra can only truly die when
+it has one head. Otherwise, the
+creature will continue to survive.
+
+When slain, one can then freely
+access the spoils of less fortunate
+travellers in the lair of the Hydra.
+The dead hydra also has two unique
+drops: its fangs and rarely, its
+heart.
