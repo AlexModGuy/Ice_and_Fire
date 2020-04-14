@@ -356,7 +356,7 @@ item.iceandfire.weezer_blue_album.desc_0=Weezer
 item.iceandfire.dragon_debug_stick.name=龙之修正权杖
 item.iceandfire.dragon_debug_stick.desc_0=仅供开发者使用······
 item.iceandfire.dread_shard.name=悚怖碎片
-item.iceandfire.dread_key.name=§b墓主之钥§r
+item.iceandfire.dread_key.name=§b悚陵之钥§r
 item.iceandfire.hydra_fang.name=九头蛇毒牙
 item.iceandfire.hydra_heart.name=九头蛇心脏
 item.iceandfire.hydra_heart.desc_0=在快捷栏中时，依据持有者受伤的严重度
@@ -560,6 +560,8 @@ bestiary.myrmex=恐蚁
 bestiary.amphithere=翼蚺
 bestiary.seaserpent=海蟒
 bestiary.dragonforge=龙息锻炉
+bestiary.hydra=九头蛇
+bestiary.dread_mobs=亡灵军团
 
 lectern.nopages=无法添加新的信息.
 silvertools.hurt=+2 亡灵克制
@@ -598,7 +600,7 @@ death.attack.gorgon.player_1=变成了蛇发女妖的戈尔贡佐拉干酪
 death.attack.gorgon.player_2=被蛇发女妖石化
 key.dragon_strike=龙袭
 key.dragon_fireAttack=龙吐息
-key.dragon_down=龙坐下/放下幼龙
+key.dragon_down=下龙
 key.dragon_change_view=切换第三人称视角以便骑乘
 
 tc.aspect.mythus=神秘生灵
