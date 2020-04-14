@@ -1,21 +1,21 @@
-In the coldest reaches of the
-overworld, a nefarious force has
-sealed away. Massive complexes
-known as Mausoleums, constructed
-of indestructible Dreadstone lock
-a great and ancient evil away.
+在主世界最寒冷的边缘地带，埋葬着一股
+极其强大的邪恶力量。在那里，坚不可摧
+的悚石构成了巨大的建筑群，名为悚陵的
+它们封印着一种强大而古老的邪魔。
 
-However, their power has been
-failing. Beings from another
-time and place have been seen
-emerging from these structures
-and scouting the frozen wastes.
 
-The most commonly seen one is
-the Dread Lich, an undead
-necromancer who will summon
-undead abominations to defend
-itself.
+
+但是，悚陵的力量正逐渐衰弱。来自
+其它时空的邪魔已然入侵主世界，
+它们冲出悚陵，寻找着某样冰封着的
+残迹。
+
+
+最常见的亡灵名为悚怖尸巫，永生
+不死的亡灵法师，会召唤和役使
+可憎的亡灵，让它们保护自己。
+
+
 
 <image><drawings_2.png 230 25 0 0 36 42 1>
 <image><drawings_2.png 300 10 37 0 38 59 1>
@@ -27,17 +27,17 @@ itself.
 
 
 
-Equiped with his staff, the
-necromancer will either fire
-a frozen soul skull at its target
-or summon one of the following:
+手持法杖，这种亡灵法师会向目标
+射出冰魂髑髅，或者召唤出以下生物：
+
+
 <image><drawings_2.png 250 120 0 60 87 35 1>
 
 
 
 
-Dread Thralls are slow, weak
-skeletons summoned by the
-necromancer. Emerging from the
-ground, they are equipped with
-broken swords and armor they
+悚怖尸奴是行动缓慢的弱小骷髅，当
+它们被尸巫从地下召唤而出时，会装备
+着破破烂烂的剑和铠甲，那是它们
+生前的装备。
+
