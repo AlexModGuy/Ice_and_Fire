@@ -1,25 +1,7 @@
-Explorers who venture into the deep
-jungles have often told tales of
-the great beasts that glide through
-the canopies above. These creatures
-could not be anything but
-amphitheres.
-
-
-
-
-
-
-
-Amphitheres are legendary beasts
-rooted in mythology. Said to be
-the protectors of jungles,
-Amphitheres are usually peaceful,
-but will attack anything that
-hurts villagers or others living
-in their home land.
-Amphitheres come in many different
-beautiful feather colorations.
+常穿行于丛林深处的冒险家常常会提到一种
+林间奇兽，它们乘风而行，翱翔于遮天蔽日
+的树冠之上。毫无疑问，这种在口耳相传的
+故事中颇为神秘的生物就是翼蚺。
 
 
 
@@ -29,13 +11,31 @@ beautiful feather colorations.
 
 
 
+翼蚺是来自于神话的奇兽，它们被认为
+是丛林的守护者。与神话中的形象类似，
+翼蚺是和平的守护者，却也会攻击那些
+袭击村民或是其它生活于它们家乡者的
+恶棍。
+翼蚺的羽毛色彩斑斓，美不胜收。
 
 
 
 
-Soaring through the tree line
-above, Amphitheres utilize the
-wind and never seem to need to
-rest. However, this reliance on
-the wind to fly makes them
-vulnerable to arrow attacks.
+
+
+
+
+
+
+
+
+
+
+
+
+翼蚺乘风而行，翱翔于林木线之上，
+似乎不知疲倦。但是，这种高度依赖
+风的飞行方式也让它们在面对箭矢的
+射击时显得极为脆弱。
+
+
