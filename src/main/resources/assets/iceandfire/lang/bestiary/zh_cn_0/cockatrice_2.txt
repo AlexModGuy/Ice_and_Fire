@@ -19,16 +19,14 @@
 
 
 出于天性，鸡蛇会保护它领地范围内的
-所有鸡。
-Cockatrices will naturally protect
-any chickens in their general area.
-If any being targets a nearby
-chicken, with the exception of the
-cockatrice's possible owner, they
-will immediately attack.
+所有鸡。除非是鸡蛇的主人，否则任何
+敢打鸡蛇附近的鸡的注意的生物都会立
+刻受到鸡蛇的攻击。
 
-A Cockatrice's greatest enemy is
-any weasel-like creature. These
-small animals could easily kill
-a cockatrice with just a few bites.
+
+
+黄鼠狼之类的动物是鸡蛇的天敌。只消
+稍微咬上那么两口，硕大的鸡蛇就会被
+这种小动物杀死。
+
 
