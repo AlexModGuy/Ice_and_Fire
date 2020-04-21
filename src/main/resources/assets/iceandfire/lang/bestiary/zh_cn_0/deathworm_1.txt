@@ -1,10 +1,8 @@
-Death Worms have two major
-attacks. The first and most
-common of which is the
-tongue grab. The Worm
-will shoot forwards its
-retractable tongue to grab
-and injure prey.
+死亡蠕虫有两种主要攻击方式。
+第一种较为常见，蠕虫会用它的
+长舌发动舐袭。它会迅猛地射出
+易于伸缩的舌头，抓住并伤害猎
+物。
 
 
 
@@ -12,18 +10,12 @@ and injure prey.
 
 
 
-The second and rarer attack
-is for the worm to spout
-forth nearby blocks into
-the air. These will push
-up those who stand on them
 
 
-
-
-
-
-
+第二种攻击方式较为罕见，死亡
+蠕虫会突然从地下钻出并高高跃
+起，此时站在周围方块上的猎物
+也会被一并击飞，而且后续落下
 
 
 
@@ -34,7 +26,15 @@ up those who stand on them
 
 
 
-and the falling blocks may
-injure the worm's prey.
-This attack scales with
-the worm's size.
+
+
+
+
+
+
+
+
+的方块也会伤到猎物。这种攻击
+的范围会受到蠕虫体型的影响。
+
+
