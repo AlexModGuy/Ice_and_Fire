@@ -21,7 +21,7 @@ import java.util.Map;
 public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
     private static EntityEquipmentSlot[] ARMOR_SLOTS = {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
     private final RenderLiving render;
-    private static final Map<String, ArrayLayeredTexture> LAYERED_ARMOR_CACHE = Maps.newHashMap();
+    private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
     public LayerDragonArmor(RenderLiving renderIn, boolean isFireDragon) {
         this.render = renderIn;
@@ -34,10 +34,9 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
         int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.FEET));
         String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
-            ResourceLocation resourcelocation = null;
-            ArrayLayeredTexture layeredBase = LAYERED_ARMOR_CACHE.get(armorTexture);
-            if(layeredBase == null){
-                resourcelocation = EnumDragonTextures.Armor.EMPTY.FIRETEXTURE;
+            ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
+            if(resourcelocation == null){
+                resourcelocation = new ResourceLocation("iceandfire", EnumDragonTextures.Armor.EMPTY.FIRETEXTURE.getPath());
                 List<String> tex = new ArrayList<String>();
                 for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
                     if (dragon.dragonType == DragonType.FIRE) {
@@ -46,13 +45,12 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).ICETEXTURE.toString());
                     }
                 }
-                layeredBase = new ArrayLayeredTexture(tex);
-                LAYERED_ARMOR_CACHE.put(armorTexture, layeredBase);
+                ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
+                Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
+                LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
             }
-            Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
             this.render.bindTexture(resourcelocation);
             this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-
         }
     }
 
