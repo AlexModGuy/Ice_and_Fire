@@ -691,12 +691,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     public void breakBlock() {
         if (IceAndFire.CONFIG.seaSerpentGriefing) {
             for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 2; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 2; a++) {
-                for (int b = (int) Math.round(this.getEntityBoundingBox().minY); (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
+                for (int b = (int) Math.round(this.getEntityBoundingBox().minY) - 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 2; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 2; c++) {
                         BlockPos pos = new BlockPos(a, b, c);
                         IBlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (state.getMaterial() != Material.AIR && !(block instanceof BlockLiquid) && state.getMaterial() == Material.PLANTS) {
+                        if (state.getMaterial() != Material.AIR && !(block instanceof BlockLiquid) && (state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.LEAVES)) {
                             if (block != Blocks.AIR) {
                                 if (!world.isRemote) {
                                     world.destroyBlock(pos, true);
