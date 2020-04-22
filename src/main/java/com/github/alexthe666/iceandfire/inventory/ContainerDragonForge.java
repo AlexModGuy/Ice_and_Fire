@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.recipe.IaFRecipeRegistry;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -53,11 +53,11 @@ public class ContainerDragonForge extends SyncedFieldContainer {
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (isFire && IaFRecipeRegistry.getFireForgeRecipe(itemstack1) != null || !isFire && IaFRecipeRegistry.getIceForgeRecipe(itemstack1) != null) {
+                if (isFire && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || !isFire && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isFire && IaFRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || !isFire && IaFRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null) {
+                } else if (isFire && IafRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || !isFire && IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }

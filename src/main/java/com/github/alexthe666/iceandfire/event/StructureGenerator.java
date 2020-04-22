@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
@@ -255,7 +255,7 @@ public class StructureGenerator implements IWorldGenerator {
                 int oreHeight = random.nextInt(32);
                 int xOre = (chunkX * 16) + random.nextInt(16);
                 int zOre = (chunkZ * 16) + random.nextInt(16);
-                new WorldGenMinable(IaFBlockRegistry.silverOre.getDefaultState(), 4 + random.nextInt(4)).generate(world, random, new BlockPos(xOre, oreHeight, zOre));
+                new WorldGenMinable(IafBlockRegistry.silverOre.getDefaultState(), 4 + random.nextInt(4)).generate(world, random, new BlockPos(xOre, oreHeight, zOre));
             }
         }
         if (IceAndFire.CONFIG.generateSapphireOre) {
@@ -268,7 +268,7 @@ public class StructureGenerator implements IWorldGenerator {
                     BlockPos pos = new BlockPos(xOre, oreHeight, zOre);
                     IBlockState state = world.getBlockState(pos);
                     if (state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE))) {
-                        world.setBlockState(pos, IaFBlockRegistry.sapphireOre.getDefaultState());
+                        world.setBlockState(pos, IafBlockRegistry.sapphireOre.getDefaultState());
                     }
                 }
             }
@@ -292,16 +292,16 @@ public class StructureGenerator implements IWorldGenerator {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-                    if (IaFBlockRegistry.frost_lily.canPlaceBlockAt(world, surface)) {
-                        world.setBlockState(surface, IaFBlockRegistry.frost_lily.getDefaultState());
+                    if (IafBlockRegistry.frost_lily.canPlaceBlockAt(world, surface)) {
+                        world.setBlockState(surface, IafBlockRegistry.frost_lily.getDefaultState());
                     }
                 }
             }
             if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))) {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-                    if (IaFBlockRegistry.fire_lily.canPlaceBlockAt(world, surface)) {
-                        world.setBlockState(surface, IaFBlockRegistry.fire_lily.getDefaultState());
+                    if (IafBlockRegistry.fire_lily.canPlaceBlockAt(world, surface)) {
+                        world.setBlockState(surface, IafBlockRegistry.fire_lily.getDefaultState());
                     }
                 }
             }
@@ -309,7 +309,7 @@ public class StructureGenerator implements IWorldGenerator {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = getNetherHeight(world, new BlockPos(x, 0, z));
                     if (surface != null) {
-                        world.setBlockState(surface.up(), IaFBlockRegistry.fire_lily.getDefaultState());
+                        world.setBlockState(surface.up(), IafBlockRegistry.fire_lily.getDefaultState());
                     }
                 }
             }

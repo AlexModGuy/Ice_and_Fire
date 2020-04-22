@@ -33,7 +33,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
         EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(IaFItemRegistry.hippogryph_egg, 1, eggType.ordinal());
+        ItemStack stack = new ItemStack(IafItemRegistry.hippogryph_egg, 1, eggType.ordinal());
         return stack;
     }
 

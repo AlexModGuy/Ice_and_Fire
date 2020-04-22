@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
@@ -66,7 +66,7 @@ public class ItemDeathwormGauntlet extends Item {
                     }
                     if (((EntityPlayer) player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
                         ((EntityPlayer) player).getCooldownTracker().setCooldown(this, 10);
-                        player.playSound(IaFSoundRegistry.DEATHWORM_ATTACK, 1F, 1F);
+                        player.playSound(IafSoundRegistry.DEATHWORM_ATTACK, 1F, 1F);
                         properties.deathwormReceded = false;
                         properties.deathwormLaunched = true;
                     }

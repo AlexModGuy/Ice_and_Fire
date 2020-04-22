@@ -5,9 +5,9 @@ import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.client.IaFKeybindRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -142,8 +142,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public double burnParticleY;
     public double burnParticleZ;
     public float prevDragonPitch;
-    public IaFDragonAttacks.Air airAttack;
-    public IaFDragonAttacks.Ground groundAttack;
+    public IafDragonAttacks.Air airAttack;
+    public IafDragonAttacks.Ground groundAttack;
     public boolean usingGroundAttack = true;
     public IafDragonLogic logic;
     public int hoverTicks;
@@ -159,7 +159,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
     protected int flyHovering;
-    protected IaFDragonFlightManager flightManager;
+    protected IafDragonFlightManager flightManager;
     protected boolean hasHadHornUse = false;
     protected int fireTicks;
     protected int blockBreakCounter;
@@ -208,7 +208,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             tail_buffer = new ChainBuffer();
         }
         legSolver = new LegSolverQuadruped(0.3F, 0.35F, 0.2F, 1.45F, 1.0F);
-        this.flightManager = new IaFDragonFlightManager(this);
+        this.flightManager = new IafDragonFlightManager(this);
         this.logic = createDragonLogic();
         this.ignoreFrustumCheck = true;
         switchNavigator(0);
@@ -223,7 +223,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
         this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, IaFItemRegistry.fire_stew, false));
+        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.fire_stew, false));
         this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(7, new DragonAILookIdle(this));
@@ -358,15 +358,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
-            this.moveHelper = new IaFDragonFlightManager.GroundMoveHelper(this);
+            this.moveHelper = new IafDragonFlightManager.GroundMoveHelper(this);
             this.navigator = createNavigator(world);
             this.navigatorType = 0;
         } else if (navigatorType == 1) {
-            this.moveHelper = new IaFDragonFlightManager.FlightMoveHelper(this);
+            this.moveHelper = new IafDragonFlightManager.FlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 1;
         } else {
-            this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+            this.moveHelper = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 2;
         }
@@ -455,22 +455,22 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public int getArmorOrdinal(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_iron) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_iron) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_gold) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_gold) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_diamond) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_diamond) {
             return 3;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_silver) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_silver) {
             return 4;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_dragonsteel_fire) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_dragonsteel_fire) {
             return 5;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.dragon_armor_dragonsteel_ice) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_dragonsteel_ice) {
             return 6;
         }
         return 0;
@@ -955,7 +955,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
-        if (stack.getItem() == IaFItemRegistry.dragon_debug_stick) {
+        if (stack.getItem() == IafItemRegistry.dragon_debug_stick) {
             logic.debug();
             return true;
         }
@@ -965,7 +965,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
-                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IaFItemRegistry.fire_dragon_blood : IaFItemRegistry.ice_dragon_blood, 1));
+                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_blood : IafItemRegistry.ice_dragon_blood, 1));
                 return true;
             } else if (!world.isRemote && stack.isEmpty() && IceAndFire.CONFIG.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
@@ -980,7 +980,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     }
                     this.setDead();
                 } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IceAndFire.CONFIG.dragonDropHeart) {
-                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IaFItemRegistry.fire_dragon_heart : IaFItemRegistry.ice_dragon_heart, 1);
+                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_heart : IafItemRegistry.ice_dragon_heart, 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(4)), 1);
                     if (!world.isRemote) {
                         this.entityDropItem(heart, 1);
@@ -1000,7 +1000,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             return true;
         }
         if (!this.isModelDead()) {
-            if (stack.getItem() == IaFItemRegistry.creative_dragon_meal) {
+            if (stack.getItem() == IafItemRegistry.creative_dragon_meal) {
                 this.setTamedBy(player);
                 this.setHunger(this.getHunger() + 20);
                 this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1022,7 +1022,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             }
             if (this.isOwner(player)) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (stack.getItem() == IaFItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
+                if (stack.getItem() == IafItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
                     return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
@@ -1057,7 +1057,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IaFItemRegistry.dragon_meal) {
+                    if (stack.getItem() == IafItemRegistry.dragon_meal) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + 20);
                         this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1071,7 +1071,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IaFItemRegistry.sickly_dragon_meal && !this.isAgingDisabled()) {
+                    if (stack.getItem() == IafItemRegistry.sickly_dragon_meal && !this.isAgingDisabled()) {
                         this.setHunger(this.getHunger() + 20);
                         this.heal(this.getMaxHealth());
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
@@ -1087,7 +1087,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IaFItemRegistry.dragon_stick) {
+                    if (stack.getItem() == IafItemRegistry.dragon_stick) {
                         if (player.isSneaking()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
@@ -1134,7 +1134,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     private ItemStack getRandomDrop() {
         ItemStack stack = getItemFromLootTable();
-        if (stack.getItem() == IaFItemRegistry.dragonbone) {
+        if (stack.getItem() == IafItemRegistry.dragonbone) {
             this.playSound(SoundEvents.ENTITY_SKELETON_AMBIENT, 1, 1);
         } else {
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
@@ -1305,7 +1305,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IaFDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
     }
 
     public abstract String getVariantName(int variant);
@@ -1705,9 +1705,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IaFKeybindRegistry.dragon_down.isKeyDown());
-            attack(IaFKeybindRegistry.dragon_fireAttack.isKeyDown());
-            strike(IaFKeybindRegistry.dragon_strike.isKeyDown());
+            down(IafKeybindRegistry.dragon_down.isKeyDown());
+            attack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
+            strike(IafKeybindRegistry.dragon_strike.isKeyDown());
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
@@ -1815,7 +1815,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
                             living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50 * size));
                         } else {
-                            if (living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != IaFItemRegistry.earplugs) {
+                            if (living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != IafItemRegistry.earplugs) {
                                 living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
                             }
                         }
@@ -1978,8 +1978,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public abstract void stimulateFire(double burnX, double burnY, double burnZ, int syncType);
 
     public void randomizeAttacks() {
-        this.airAttack = IaFDragonAttacks.Air.values()[getRNG().nextInt(IaFDragonAttacks.Air.values().length)];
-        this.groundAttack = IaFDragonAttacks.Ground.values()[getRNG().nextInt(IaFDragonAttacks.Ground.values().length)];
+        this.airAttack = IafDragonAttacks.Air.values()[getRNG().nextInt(IafDragonAttacks.Air.values().length)];
+        this.groundAttack = IafDragonAttacks.Ground.values()[getRNG().nextInt(IafDragonAttacks.Ground.values().length)];
 
     }
 
@@ -1992,7 +1992,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
                     if (this.ticksExisted % 5 == 0) {
-                        this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                        this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                     }
                     stimulateFire(this.posX + distX * this.fireTicks / 40, entity.posY, this.posZ + distZ * this.fireTicks / 40, 1);
                 }

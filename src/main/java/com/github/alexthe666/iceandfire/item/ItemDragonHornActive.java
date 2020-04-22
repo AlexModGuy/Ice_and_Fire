@@ -93,7 +93,7 @@ public class ItemDragonHornActive extends Item {
             } else {
                 BlockPos pos = raytraceresult.getBlockPos();
                 worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
-                if (this == IaFItemRegistry.dragon_horn_fire) {
+                if (this == IafItemRegistry.dragon_horn_fire) {
                     EntityFireDragon dragon = new EntityFireDragon(worldIn);
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     if (stack.getTagCompound() != null) {
@@ -107,12 +107,12 @@ public class ItemDragonHornActive extends Item {
                         worldIn.spawnEntity(dragon);
                     }
                     stack.shrink(1);
-                    ItemStack hornItem = new ItemStack(IaFItemRegistry.dragon_horn);
+                    ItemStack hornItem = new ItemStack(IafItemRegistry.dragon_horn);
                     if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
                         entityplayer.dropItem(hornItem, false);
                     }
                 }
-                if (this == IaFItemRegistry.dragon_horn_ice) {
+                if (this == IafItemRegistry.dragon_horn_ice) {
                     EntityIceDragon dragon = new EntityIceDragon(worldIn);
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     if (stack.getTagCompound() != null) {
@@ -126,7 +126,7 @@ public class ItemDragonHornActive extends Item {
                         worldIn.spawnEntity(dragon);
                     }
                     stack.shrink(1);
-                    ItemStack hornItem = new ItemStack(IaFItemRegistry.dragon_horn);
+                    ItemStack hornItem = new ItemStack(IafItemRegistry.dragon_horn);
                     if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
                         entityplayer.dropItem(hornItem, false);
                     }
@@ -168,7 +168,7 @@ public class ItemDragonHornActive extends Item {
         if (stack.getTagCompound() != null) {
             String fire = new TextComponentTranslation("entity.firedragon.name").getUnformattedText();
             String ice = new TextComponentTranslation("entity.icedragon.name").getUnformattedText();
-            tooltip.add("" + (this == IaFItemRegistry.dragon_horn_fire ? fire : ice));
+            tooltip.add("" + (this == IafItemRegistry.dragon_horn_fire ? fire : ice));
             String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
             tooltip.add("" + name);
             String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.structures.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -36,7 +36,7 @@ public class BlockSilverPile extends Block {
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.silverpile");
         this.setHardness(0.3F);
-        this.setSoundType(IaFBlockRegistry.SOUND_TYPE_GOLD);
+        this.setSoundType(IafBlockRegistry.SOUND_TYPE_GOLD);
         setRegistryName(IceAndFire.MODID, "silverpile");
     }
 
@@ -84,10 +84,10 @@ public class BlockSilverPile extends Block {
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
-                if (item.getItem() == Item.getItemFromBlock(IaFBlockRegistry.silverPile)) {
+                if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.silverPile)) {
                     if (!item.isEmpty()) {
                         if (this.getMetaFromState(state) < 7) {
-                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IaFBlockRegistry.silverPile, this.getMetaFromState(state) + 1, 3);
+                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.silverPile, this.getMetaFromState(state) + 1, 3);
                             if (!playerIn.capabilities.isCreativeMode) {
                                 item.shrink(1);
 
@@ -134,7 +134,7 @@ public class BlockSilverPile extends Block {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return IaFItemRegistry.silverNugget;
+        return IafItemRegistry.silverNugget;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class ItemBestiary extends Item {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
-            ItemStack stack = new ItemStack(IaFItemRegistry.bestiary);
+            ItemStack stack = new ItemStack(IafItemRegistry.bestiary);
             stack.setTagCompound(new NBTTagCompound());
             int[] pages = new int[EnumBestiaryPages.values().length];
             for (int i = 0; i < EnumBestiaryPages.values().length; i++) {

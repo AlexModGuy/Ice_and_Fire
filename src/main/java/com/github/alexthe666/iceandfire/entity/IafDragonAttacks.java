@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-public class IaFDragonAttacks {
+public class IafDragonAttacks {
     public enum Air {
         SCORCH_STREAM, HOVER_BLAST, TACKLE
     }

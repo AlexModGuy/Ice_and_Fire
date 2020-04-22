@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Optional;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -53,7 +53,7 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, IaFItemRegistry.frost_stew, false));
+        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, IafItemRegistry.frost_stew, false));
         this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(7, new DragonAILookIdle(this));
@@ -204,11 +204,11 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     }
 
     public Item getVariantScale(int variant) {
-        return IaFItemRegistry.dragonscales_blue;
+        return IafItemRegistry.dragonscales_blue;
     }
 
     public Item getVariantEgg(int variant) {
-        return IaFItemRegistry.dragonegg_blue;
+        return IafItemRegistry.dragonegg_blue;
     }
 
     public boolean isBreedingItem(@Nullable ItemStack stack) {

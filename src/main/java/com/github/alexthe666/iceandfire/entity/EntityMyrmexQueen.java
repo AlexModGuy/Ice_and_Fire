@@ -100,7 +100,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IaFVillagerRegistry.INSTANCE.jungleMyrmexQueen : IaFVillagerRegistry.INSTANCE.desertMyrmexQueen;
+        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexQueen : IafVillagerRegistry.INSTANCE.desertMyrmexQueen;
     }
 
     public void onLivingUpdate() {

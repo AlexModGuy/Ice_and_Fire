@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures.processor;
 
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -24,9 +24,9 @@ public class DreadPortalProcessor implements ITemplateProcessor {
     public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
         if (worldIn.rand.nextFloat() <= integrity) {
             if (blockInfoIn.blockState.getBlock() == Blocks.DIAMOND_BLOCK) {
-                return new Template.BlockInfo(pos, IaFBlockRegistry.dread_portal.getDefaultState(), null);
+                return new Template.BlockInfo(pos, IafBlockRegistry.dread_portal.getDefaultState(), null);
             }
-            if (blockInfoIn.blockState.getBlock() == IaFBlockRegistry.dread_stone_bricks) {
+            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_stone_bricks) {
                 IBlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
@@ -39,11 +39,11 @@ public class DreadPortalProcessor implements ITemplateProcessor {
     public static IBlockState getRandomCrackedBlock(@Nullable IBlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3) {
-            return IaFBlockRegistry.dread_stone_bricks.getDefaultState();
+            return IafBlockRegistry.dread_stone_bricks.getDefaultState();
         } else if (rand < 0.6) {
-            return IaFBlockRegistry.dread_stone_bricks_cracked.getDefaultState();
+            return IafBlockRegistry.dread_stone_bricks_cracked.getDefaultState();
         } else {
-            return IaFBlockRegistry.dread_stone_bricks_mossy.getDefaultState();
+            return IafBlockRegistry.dread_stone_bricks_mossy.getDefaultState();
         }
     }
 }

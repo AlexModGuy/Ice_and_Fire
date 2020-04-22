@@ -28,7 +28,7 @@ public class ItemGeneric extends Item {
 
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack) {
-        if (this == IaFItemRegistry.creative_dragon_meal) {
+        if (this == IafItemRegistry.creative_dragon_meal) {
             return true;
         } else {
             return super.hasEffect(stack);

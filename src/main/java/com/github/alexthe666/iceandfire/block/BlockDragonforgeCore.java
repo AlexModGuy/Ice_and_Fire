@@ -55,19 +55,19 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
 
         if (active) {
             if (fire) {
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
             } else {
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
             }
         } else {
             if (fire) {
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
             } else {
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
             }
         }
 
@@ -90,11 +90,11 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
     }
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return isFire ? Item.getItemFromBlock(IaFBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IaFBlockRegistry.dragonforge_ice_core_disabled);
+        return isFire ? Item.getItemFromBlock(IafBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IafBlockRegistry.dragonforge_ice_core_disabled);
     }
 
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-        return new ItemStack(isFire ? Item.getItemFromBlock(IaFBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IaFBlockRegistry.dragonforge_ice_core_disabled));
+        return new ItemStack(isFire ? Item.getItemFromBlock(IafBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IafBlockRegistry.dragonforge_ice_core_disabled));
     }
 
     public EnumBlockRenderType getRenderType(IBlockState state) {

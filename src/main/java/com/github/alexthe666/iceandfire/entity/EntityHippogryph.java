@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.client.IaFKeybindRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -110,7 +110,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     protected void switchNavigator(){
         if(this.isBeingRidden() && this.isOverAir()){
             if(navigatorType != 1){
-                this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+                this.moveHelper = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
                 this.navigator = new PathNavigateFlyingCreature(this, world);
                 navigatorType = 1;
             }
@@ -235,13 +235,13 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.iron_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.iron_hippogryph_armor) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.gold_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.gold_hippogryph_armor) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.diamond_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.diamond_hippogryph_armor) {
             return 3;
         }
         return 0;
@@ -685,17 +685,17 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.HIPPOGRYPH_IDLE;
+        return IafSoundRegistry.HIPPOGRYPH_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return IaFSoundRegistry.HIPPOGRYPH_HURT;
+        return IafSoundRegistry.HIPPOGRYPH_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.HIPPOGRYPH_DIE;
+        return IafSoundRegistry.HIPPOGRYPH_DIE;
     }
 
     @Override
@@ -718,8 +718,8 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IaFKeybindRegistry.dragon_down.isKeyDown());
-            attack(IaFKeybindRegistry.dragon_strike.isKeyDown());
+            down(IafKeybindRegistry.dragon_down.isKeyDown());
+            attack(IafKeybindRegistry.dragon_strike.isKeyDown());
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
@@ -761,7 +761,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         int i = MathHelper.floor(this.posX);
         int j = MathHelper.floor(this.posY);
         int k = MathHelper.floor(this.posZ);
-        ItemStack stack = new ItemStack(IaFItemRegistry.hippogryph_egg);
+        ItemStack stack = new ItemStack(IafItemRegistry.hippogryph_egg);
         EntityItem egg = new EntityItem(this.world, i, j, k, stack);
         return egg;
     }

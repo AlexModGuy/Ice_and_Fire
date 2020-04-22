@@ -259,7 +259,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IaFVillagerRegistry.INSTANCE.jungleMyrmexRoyal : IaFVillagerRegistry.INSTANCE.desertMyrmexRoyal;
+        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexRoyal : IafVillagerRegistry.INSTANCE.desertMyrmexRoyal;
     }
 
     public boolean shouldMoveThroughHive() {

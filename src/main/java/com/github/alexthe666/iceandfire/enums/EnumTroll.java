@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
@@ -19,9 +19,9 @@ import java.util.Random;
 
 
 public enum EnumTroll {
-    FOREST(BiomeDictionary.Type.FOREST, IaFItemRegistry.troll_forest, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
-    FROST(BiomeDictionary.Type.SNOWY, IaFItemRegistry.troll_frost, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
-    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, IaFItemRegistry.troll_mountain, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
+    FOREST(BiomeDictionary.Type.FOREST, IafItemRegistry.troll_forest, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
+    FROST(BiomeDictionary.Type.SNOWY, IafItemRegistry.troll_frost, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
+    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, IafItemRegistry.troll_mountain, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
 
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;

@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
@@ -110,7 +110,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
 
     public static boolean isWearingEarplugs(EntityLivingBase entity) {
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        return helmet.getItem() == IaFItemRegistry.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
+        return helmet.getItem() == IafItemRegistry.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 
     public static boolean isDrawnToSong(Entity entity) {
@@ -134,12 +134,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         if (this.getRNG().nextInt(2) == 0) {
             if (this.getAnimation() != ANIMATION_PULL) {
                 this.setAnimation(ANIMATION_PULL);
-                this.playSound(IaFSoundRegistry.NAGA_ATTACK, 1, 1);
+                this.playSound(IafSoundRegistry.NAGA_ATTACK, 1, 1);
             }
         } else {
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
-                this.playSound(IaFSoundRegistry.NAGA_ATTACK, 1, 1);
+                this.playSound(IafSoundRegistry.NAGA_ATTACK, 1, 1);
             }
         }
         return true;
@@ -288,7 +288,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             }
         }
         if (this.isActuallySinging() && !this.isInWater() && this.ticksExisted % 200 == 0) {
-            this.playSound(IaFSoundRegistry.SIREN_SONG, 2, 1);
+            this.playSound(IafSoundRegistry.SIREN_SONG, 2, 1);
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
@@ -480,17 +480,17 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return this.isAgressive() ? IaFSoundRegistry.NAGA_IDLE : IaFSoundRegistry.MERMAID_IDLE;
+        return this.isAgressive() ? IafSoundRegistry.NAGA_IDLE : IafSoundRegistry.MERMAID_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return this.isAgressive() ? IaFSoundRegistry.NAGA_HURT : IaFSoundRegistry.MERMAID_HURT;
+        return this.isAgressive() ? IafSoundRegistry.NAGA_HURT : IafSoundRegistry.MERMAID_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return this.isAgressive() ? IaFSoundRegistry.NAGA_DIE : IaFSoundRegistry.MERMAID_DIE;
+        return this.isAgressive() ? IafSoundRegistry.NAGA_DIE : IafSoundRegistry.MERMAID_DIE;
     }
 
     @Override

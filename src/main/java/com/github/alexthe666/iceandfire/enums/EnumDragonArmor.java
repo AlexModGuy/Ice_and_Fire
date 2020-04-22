@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -60,38 +60,38 @@ public enum EnumDragonArmor {
     public static Item getScaleItem(EnumDragonArmor armor) {
         switch (armor) {
             case armor_red:
-                return IaFItemRegistry.dragonscales_red;
+                return IafItemRegistry.dragonscales_red;
             case armor_bronze:
-                return IaFItemRegistry.dragonscales_bronze;
+                return IafItemRegistry.dragonscales_bronze;
             case armor_green:
-                return IaFItemRegistry.dragonscales_green;
+                return IafItemRegistry.dragonscales_green;
             case armor_gray:
-                return IaFItemRegistry.dragonscales_gray;
+                return IafItemRegistry.dragonscales_gray;
             case armor_blue:
-                return IaFItemRegistry.dragonscales_blue;
+                return IafItemRegistry.dragonscales_blue;
             case armor_white:
-                return IaFItemRegistry.dragonscales_white;
+                return IafItemRegistry.dragonscales_white;
             case armor_sapphire:
-                return IaFItemRegistry.dragonscales_sapphire;
+                return IafItemRegistry.dragonscales_sapphire;
             case armor_silver:
-                return IaFItemRegistry.dragonscales_silver;
+                return IafItemRegistry.dragonscales_silver;
             default:
-                return IaFItemRegistry.dragonscales_red;
+                return IafItemRegistry.dragonscales_red;
         }
     }
 
     public static Item getEggItem(EnumDragonArmor armor) {
         switch (armor) {
             case armor_red:
-                return IaFItemRegistry.dragonegg_red;
+                return IafItemRegistry.dragonegg_red;
             case armor_bronze:
-                return IaFItemRegistry.dragonegg_bronze;
+                return IafItemRegistry.dragonegg_bronze;
             case armor_green:
-                return IaFItemRegistry.dragonegg_green;
+                return IafItemRegistry.dragonegg_green;
             case armor_gray:
-                return IaFItemRegistry.dragonegg_gray;
+                return IafItemRegistry.dragonegg_gray;
             default:
-                return IaFItemRegistry.dragonegg_red;
+                return IafItemRegistry.dragonegg_red;
         }
     }
 }

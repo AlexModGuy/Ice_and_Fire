@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.google.common.base.Predicate;
@@ -90,7 +90,7 @@ public class ItemSirenFlute extends Item {
                 itemStackIn.damageItem(1, player);
             }
         }
-        player.playSound(IaFSoundRegistry.SIREN_SONG, 1, 1);
+        player.playSound(IafSoundRegistry.SIREN_SONG, 1, 1);
         return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 

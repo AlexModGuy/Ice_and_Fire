@@ -58,17 +58,17 @@ public class BlockGeneric extends Block {
 
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
-        return this == IaFBlockRegistry.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
+        return this == IafBlockRegistry.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
     }
 
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
-        return this != IaFBlockRegistry.dragon_ice;
+        return this != IafBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
-        return this != IaFBlockRegistry.dragon_ice;
+        return this != IafBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
@@ -76,7 +76,7 @@ public class BlockGeneric extends Block {
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-        if (this == IaFBlockRegistry.dragon_ice) {
+        if (this == IafBlockRegistry.dragon_ice) {
             if (blockState != iblockstate) {
                 return true;
             }
@@ -96,10 +96,10 @@ public class BlockGeneric extends Block {
 
 
     public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
-        return this == IaFBlockRegistry.silverBlock || this == IaFBlockRegistry.sapphireBlock;
+        return this == IafBlockRegistry.silverBlock || this == IafBlockRegistry.sapphireBlock;
     }
 
     public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
-        return this == IaFBlockRegistry.dragonforge_fire_brick;
+        return this == IafBlockRegistry.dragonforge_fire_brick;
     }
 }

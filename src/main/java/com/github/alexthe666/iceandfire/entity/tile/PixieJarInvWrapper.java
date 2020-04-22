@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -30,7 +30,7 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
     @Nonnull
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return this.tile.hasProduced ? new ItemStack(IaFItemRegistry.pixie_dust) : ItemStack.EMPTY;
+        return this.tile.hasProduced ? new ItemStack(IafItemRegistry.pixie_dust) : ItemStack.EMPTY;
     }
 
     @Nonnull
@@ -45,7 +45,7 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
         if (this.tile.hasProduced) {
             if (!simulate)
                 this.tile.hasProduced = false;
-            return new ItemStack(IaFItemRegistry.pixie_dust);
+            return new ItemStack(IafItemRegistry.pixie_dust);
         }
         return ItemStack.EMPTY;
     }

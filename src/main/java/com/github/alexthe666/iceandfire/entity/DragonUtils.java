@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
@@ -370,11 +370,11 @@ public class DragonUtils {
 
     public static boolean isDreadBlock(IBlockState state){
         Block block = state.getBlock();
-        return block == IaFBlockRegistry.dread_stone || block == IaFBlockRegistry.dread_stone_bricks || block == IaFBlockRegistry.dread_stone_bricks_chiseled ||
-                block == IaFBlockRegistry.dread_stone_bricks_cracked || block == IaFBlockRegistry.dread_stone_bricks_mossy || block == IaFBlockRegistry.dread_stone_tile ||
-                block == IaFBlockRegistry.dread_stone_face || block == IaFBlockRegistry.dread_torch || block == IaFBlockRegistry.dread_stone_bricks_stairs ||
-                block == IaFBlockRegistry.dread_stone_bricks_double_slab || block == IaFBlockRegistry.dread_stone_bricks_slab || block == IaFBlockRegistry.dreadwood_log ||
-                block == IaFBlockRegistry.dreadwood_planks || block == IaFBlockRegistry.dreadwood_planks_lock || block == IaFBlockRegistry.dread_portal ||
-                block == IaFBlockRegistry.dread_spawner;
+        return block == IafBlockRegistry.dread_stone || block == IafBlockRegistry.dread_stone_bricks || block == IafBlockRegistry.dread_stone_bricks_chiseled ||
+                block == IafBlockRegistry.dread_stone_bricks_cracked || block == IafBlockRegistry.dread_stone_bricks_mossy || block == IafBlockRegistry.dread_stone_tile ||
+                block == IafBlockRegistry.dread_stone_face || block == IafBlockRegistry.dread_torch || block == IafBlockRegistry.dread_stone_bricks_stairs ||
+                block == IafBlockRegistry.dread_stone_bricks_double_slab || block == IafBlockRegistry.dread_stone_bricks_slab || block == IafBlockRegistry.dreadwood_log ||
+                block == IafBlockRegistry.dreadwood_planks || block == IafBlockRegistry.dreadwood_planks_lock || block == IafBlockRegistry.dread_portal ||
+                block == IafBlockRegistry.dread_spawner;
     }
 }

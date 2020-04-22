@@ -117,7 +117,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                     return;
                 }
                 if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-                    IaFDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), dragon);
+                    IafDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), dragon);
                 }
                 if (dragon != null) {
                     dragon.randomizeAttacks();
@@ -137,7 +137,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                 movingObject.entityHit.setFire(5);
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
                 if(this.shootingEntity instanceof EntityDragonBase){
-                    IaFDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                    IafDragonDestructionManager.destroyAreaFireCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
                 }
                 this.setDead();
             }

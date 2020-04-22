@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockWall;
 import net.minecraft.entity.Entity;
@@ -118,7 +118,7 @@ public class EntityChainTie extends EntityHanging {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
                 chainProperties.removeChain(entityliving, this);
-                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IaFItemRegistry.chain));
+                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.chain));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
             }
@@ -150,7 +150,7 @@ public class EntityChainTie extends EntityHanging {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving1, this)) {
                             chainProperties.removeChain(entityliving1, this);
-                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IaFItemRegistry.chain));
+                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.chain));
                             entityitem.setDefaultPickupDelay();
                             this.world.spawnEntity(entityitem);
                         }

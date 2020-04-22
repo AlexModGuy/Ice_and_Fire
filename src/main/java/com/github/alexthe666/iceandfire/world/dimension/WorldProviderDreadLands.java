@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.world.IaFWorldRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -18,13 +18,13 @@ public class WorldProviderDreadLands extends WorldProvider {
     @Override
     public void init() {
         this.hasSkyLight = true;
-        this.biomeProvider = new BiomeProviderSingle(IaFWorldRegistry.DREADLANDS_BIOME);
+        this.biomeProvider = new BiomeProviderSingle(IafWorldRegistry.DREADLANDS_BIOME);
         this.nether = false;
     }
 
     @Override
     public DimensionType getDimensionType() {
-        return IaFWorldRegistry.DREADLANDS_DIM;
+        return IafWorldRegistry.DREADLANDS_DIM;
     }
 
     @SideOnly(Side.CLIENT)

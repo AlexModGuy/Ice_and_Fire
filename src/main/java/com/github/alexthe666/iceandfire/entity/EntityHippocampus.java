@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.IaFKeybindRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
@@ -637,7 +637,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            down(IaFKeybindRegistry.dragon_down.isKeyDown());
+            down(IafKeybindRegistry.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
@@ -646,7 +646,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
             byte previousState = getControlState();
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            down(IaFKeybindRegistry.dragon_down.isKeyDown());
+            down(IafKeybindRegistry.dragon_down.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
@@ -681,17 +681,17 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.HIPPOCAMPUS_IDLE;
+        return IafSoundRegistry.HIPPOCAMPUS_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return IaFSoundRegistry.HIPPOCAMPUS_HURT;
+        return IafSoundRegistry.HIPPOCAMPUS_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.HIPPOCAMPUS_DIE;
+        return IafSoundRegistry.HIPPOCAMPUS_DIE;
     }
 
     @Nullable

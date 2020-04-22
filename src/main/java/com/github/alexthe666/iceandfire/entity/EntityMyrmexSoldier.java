@@ -99,7 +99,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IaFVillagerRegistry.INSTANCE.jungleMyrmexSoldier : IaFVillagerRegistry.INSTANCE.desertMyrmexSoldier;
+        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexSoldier : IafVillagerRegistry.INSTANCE.desertMyrmexSoldier;
     }
 
     protected void applyEntityAttributes() {

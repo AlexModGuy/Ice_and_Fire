@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -36,7 +36,7 @@ public class EntityAmphithereArrow extends EntityArrow {
     public void onUpdate() {
         super.onUpdate();
         if ((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround) {
-            this.playSound(IaFSoundRegistry.AMPHITHERE_GUST, 1, 1);
+            this.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
         if (world.isRemote && !this.inGround) {
             double d0 = this.rand.nextGaussian() * 0.02D;
@@ -120,6 +120,6 @@ public class EntityAmphithereArrow extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IaFItemRegistry.amphithere_arrow);
+        return new ItemStack(IafItemRegistry.amphithere_arrow);
     }
 }

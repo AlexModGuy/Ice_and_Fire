@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.block.state.IBlockState;
@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class WorldGenMyrmexHive extends WorldGenerator {
 
-    private static final IBlockState DESERT_RESIN = IaFBlockRegistry.myrmex_resin.getDefaultState();
-    private static final IBlockState STICKY_DESERT_RESIN = IaFBlockRegistry.myrmex_resin_sticky.getDefaultState();
-    private static final IBlockState JUNGLE_RESIN = IaFBlockRegistry.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
-    private static final IBlockState STICKY_JUNGLE_RESIN = IaFBlockRegistry.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final IBlockState DESERT_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState();
+    private static final IBlockState STICKY_DESERT_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState();
+    private static final IBlockState JUNGLE_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final IBlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;
@@ -473,7 +473,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             int tuberLength = roomType == RoomType.ENTERANCE || roomType == RoomType.TUNNEL ? 1 : roomType == RoomType.QUEEN ? 1 + random.nextInt(5) : 1 + random.nextInt(3);
             for (int i = 0; i < tuberLength; i++) {
                 if (world.isAirBlock(blockpos.down(i))) {
-                    world.setBlockState(blockpos.down(i), jungle ? IaFBlockRegistry.myrmex_jungle_biolight.getDefaultState() : IaFBlockRegistry.myrmex_desert_biolight.getDefaultState());
+                    world.setBlockState(blockpos.down(i), jungle ? IafBlockRegistry.myrmex_jungle_biolight.getDefaultState() : IafBlockRegistry.myrmex_desert_biolight.getDefaultState());
                 }
             }
         }

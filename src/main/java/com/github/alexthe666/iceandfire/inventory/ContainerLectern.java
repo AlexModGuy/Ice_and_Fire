@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
@@ -32,7 +32,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IaFItemRegistry.manuscript;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.manuscript;
             }
         });
         for (int i = 0; i < 3; ++i) {
@@ -107,7 +107,7 @@ public class ContainerLectern extends SyncedFieldContainer {
 
     public int getManuscriptAmount() {
         ItemStack itemstack = this.tileFurnace.getStackInSlot(1);
-        return itemstack.isEmpty() || itemstack.getItem() != IaFItemRegistry.manuscript ? 0 : itemstack.getCount();
+        return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.manuscript ? 0 : itemstack.getCount();
     }
 
     public EnumBestiaryPages[] getPossiblePages() {
@@ -115,7 +115,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if (this.tileFurnace.getStackInSlot(0).getItem() == IaFItemRegistry.bestiary) {
+        if (this.tileFurnace.getStackInSlot(0).getItem() == IafItemRegistry.bestiary) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -148,7 +148,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
             if (page != null) {
-                if (itemstack.getItem() == IaFItemRegistry.bestiary) {
+                if (itemstack.getItem() == IafItemRegistry.bestiary) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (this.tileFurnace instanceof TileEntityLectern) {
@@ -164,7 +164,7 @@ public class ContainerLectern extends SyncedFieldContainer {
                 this.tileFurnace.markDirty();
                 //this.xpSeed = playerIn.getXPSeed();
                 this.onCraftMatrixChanged(this.tileFurnace);
-                playerIn.world.playSound(null, playerIn.getPosition(), IaFSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
+                playerIn.world.playSound(null, playerIn.getPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
             }
             onUpdate();
             return true;

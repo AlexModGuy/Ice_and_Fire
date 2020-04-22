@@ -119,7 +119,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
                         return;
                     }
                     if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
-                        IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                        IafDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
                     }
                     if (dragon != null) {
                         dragon.randomizeAttacks();
@@ -148,7 +148,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
                 }
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
                 if (this.shootingEntity instanceof EntityDragonBase) {
-                    IaFDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
+                    IafDragonDestructionManager.destroyAreaIceCharge(world, new BlockPos(posX, posY, posZ), ((EntityDragonBase) this.shootingEntity));
                 }
                 this.setDead();
             }

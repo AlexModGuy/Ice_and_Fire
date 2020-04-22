@@ -68,7 +68,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
         if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse) {
             meta = ((TileEntityPixieHouse) worldIn.getTileEntity(pos)).houseType;
         }
-        spawnAsEntity(worldIn, pos, new ItemStack(IaFBlockRegistry.pixieHouse, 1, meta));
+        spawnAsEntity(worldIn, pos, new ItemStack(IafBlockRegistry.pixieHouse, 1, meta));
         super.breakBlock(worldIn, pos, state);
     }
 

@@ -27,7 +27,7 @@ public class ItemSilverArmor extends ItemArmor {
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.getArmorMaterial().getRepairItemStack();
-        if (this.getArmorMaterial() == IaFItemRegistry.silverMetal) {
+        if (this.getArmorMaterial() == IafItemRegistry.silverMetal) {
             NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
             for (ItemStack ingot : silverItems) {
                 if (OreDictionary.itemMatches(repair, ingot, false)) {

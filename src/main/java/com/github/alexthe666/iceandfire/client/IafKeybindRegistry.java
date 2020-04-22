@@ -4,7 +4,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.input.Keyboard;
 
-public class IaFKeybindRegistry {
+public class IafKeybindRegistry {
     public static KeyBinding dragon_fireAttack;
     public static KeyBinding dragon_strike;
     public static KeyBinding dragon_down;

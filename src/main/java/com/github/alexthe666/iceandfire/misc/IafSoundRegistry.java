@@ -8,7 +8,7 @@ import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(MODID)
-public final class IaFSoundRegistry {
+public final class IafSoundRegistry {
 
     @GameRegistry.ObjectHolder("bestiary_page")
     public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");

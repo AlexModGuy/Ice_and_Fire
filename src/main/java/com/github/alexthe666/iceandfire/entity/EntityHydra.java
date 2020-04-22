@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -146,7 +146,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
                     Vec3d vec3d = this.getLook(1.0F);
                     if(rand.nextFloat() < 0.2F){
-                        this.playSound(IaFSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
+                        this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
                     }
                     double headPosX = this.headBoxes[i].posX + vec3d.x * 1.0D;
                     double headPosY = this.headBoxes[i].posY + 1.3F;
@@ -212,7 +212,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (this.isBurning()) {
                     this.setHeadCount(this.getHeadCount() - 1);
                 } else {
-                    this.playSound(IaFSoundRegistry.HYDRA_REGEN_HEAD, this.getSoundVolume(), this.getSoundPitch());
+                    this.playSound(IafSoundRegistry.HYDRA_REGEN_HEAD, this.getSoundVolume(), this.getSoundPitch());
                     if (!onlyRegrowOneHeadNotTwo) {
                         this.setHeadCount(this.getHeadCount() + 1);
                     }
@@ -466,17 +466,17 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.HYDRA_IDLE;
+        return IafSoundRegistry.HYDRA_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return IaFSoundRegistry.HYDRA_HURT;
+        return IafSoundRegistry.HYDRA_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.HYDRA_DIE;
+        return IafSoundRegistry.HYDRA_DIE;
     }
 
 }

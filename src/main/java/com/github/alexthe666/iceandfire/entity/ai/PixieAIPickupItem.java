@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
@@ -88,7 +88,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
                 }
             }
             this.targetEntity.getItem().shrink(1);
-            pixie.playSound(IaFSoundRegistry.PIXIE_TAUNT, 1F, 1F);
+            pixie.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
             resetTask();
         }
     }

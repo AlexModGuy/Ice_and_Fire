@@ -18,7 +18,7 @@ public class ItemLichStaff extends ItemGeneric {
     }
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return repair.getItem() == IaFItemRegistry.dread_shard || super.getIsRepairable(toRepair, repair);
+        return repair.getItem() == IafItemRegistry.dread_shard || super.getIsRepairable(toRepair, repair);
     }
 
     @Override

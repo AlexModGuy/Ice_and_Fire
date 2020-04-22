@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -82,7 +82,7 @@ public class PixieAISteal extends EntityAIBase {
             this.temptedEntity.setHeldItem(EnumHand.MAIN_HAND, randomItem);
             this.temptingPlayer.inventory.removeStackFromSlot(slot);
             this.temptedEntity.flipAI(true);
-            this.temptedEntity.playSound(IaFSoundRegistry.PIXIE_TAUNT, 1F, 1F);
+            this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
             this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
             if (temptingPlayer != null) {
                 this.temptingPlayer.addPotionEffect(new PotionEffect(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));

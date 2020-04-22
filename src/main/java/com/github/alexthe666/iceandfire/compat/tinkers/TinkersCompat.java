@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.compat.tinkers;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -63,8 +63,8 @@ public class TinkersCompat {
     private static void init() {
         TinkerMaterials.materials.add(MATERIAL_DRAGONBONE);
         TinkerRegistry.integrate(MATERIAL_DRAGONBONE).preInit();
-        MATERIAL_DRAGONBONE.addItem(IaFItemRegistry.dragonbone, 1, Material.VALUE_Ingot);
-        MATERIAL_DRAGONBONE.setRepresentativeItem(IaFItemRegistry.dragonbone);
+        MATERIAL_DRAGONBONE.addItem(IafItemRegistry.dragonbone, 1, Material.VALUE_Ingot);
+        MATERIAL_DRAGONBONE.setRepresentativeItem(IafItemRegistry.dragonbone);
         MATERIAL_DRAGONBONE.setCraftable(true);
         MATERIAL_DRAGONBONE.setCastable(false);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONBONE,
@@ -78,8 +78,8 @@ public class TinkersCompat {
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONBONE, new ArrowShaftMaterialStats(1.3f, 2));
         TinkerMaterials.materials.add(MATERIAL_DESERT_MYRMEX);
         TinkerRegistry.integrate(MATERIAL_DESERT_MYRMEX).preInit();
-        MATERIAL_DESERT_MYRMEX.addItem(IaFItemRegistry.myrmex_desert_chitin, 1, Material.VALUE_Ingot);
-        MATERIAL_DESERT_MYRMEX.setRepresentativeItem(IaFItemRegistry.myrmex_desert_chitin);
+        MATERIAL_DESERT_MYRMEX.addItem(IafItemRegistry.myrmex_desert_chitin, 1, Material.VALUE_Ingot);
+        MATERIAL_DESERT_MYRMEX.setRepresentativeItem(IafItemRegistry.myrmex_desert_chitin);
         MATERIAL_DESERT_MYRMEX.setCraftable(true);
         MATERIAL_DESERT_MYRMEX.setCastable(false);
         TinkerRegistry.addMaterialStats(MATERIAL_DESERT_MYRMEX,
@@ -92,8 +92,8 @@ public class TinkersCompat {
 
         TinkerMaterials.materials.add(MATERIAL_JUNGLE_MYRMEX);
         TinkerRegistry.integrate(MATERIAL_JUNGLE_MYRMEX).preInit();
-        MATERIAL_JUNGLE_MYRMEX.addItem(IaFItemRegistry.myrmex_jungle_chitin, 1, Material.VALUE_Ingot);
-        MATERIAL_JUNGLE_MYRMEX.setRepresentativeItem(IaFItemRegistry.myrmex_jungle_chitin);
+        MATERIAL_JUNGLE_MYRMEX.addItem(IafItemRegistry.myrmex_jungle_chitin, 1, Material.VALUE_Ingot);
+        MATERIAL_JUNGLE_MYRMEX.setRepresentativeItem(IafItemRegistry.myrmex_jungle_chitin);
         TinkerRegistry.addMaterialStats(MATERIAL_JUNGLE_MYRMEX,
                 new HeadMaterialStats(400, 4.00f, 5.50f, HarvestLevels.DIAMOND),
                 new HandleMaterialStats(0.7F, 300),
@@ -105,8 +105,8 @@ public class TinkersCompat {
 
         TinkerMaterials.materials.add(MATERIAL_DRAGONSTEEL_FIRE);
         TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_FIRE, MOLTEN_FIRE_DRAGONSTEEL, "FireDragonsteel").toolforge().preInit();
-        MATERIAL_DRAGONSTEEL_FIRE.addItem(IaFItemRegistry.dragonsteel_fire_ingot, 1, Material.VALUE_Ingot);
-        MATERIAL_DRAGONSTEEL_FIRE.setRepresentativeItem(IaFItemRegistry.dragonsteel_fire_ingot);
+        MATERIAL_DRAGONSTEEL_FIRE.addItem(IafItemRegistry.dragonsteel_fire_ingot, 1, Material.VALUE_Ingot);
+        MATERIAL_DRAGONSTEEL_FIRE.setRepresentativeItem(IafItemRegistry.dragonsteel_fire_ingot);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_FIRE,
                 new HeadMaterialStats(1500, 7.00f, (float) IceAndFire.CONFIG.dragonsteelBaseDamage - 8.0F, HarvestLevels.COBALT),
                 new HandleMaterialStats(0.4F, 400),
@@ -117,8 +117,8 @@ public class TinkersCompat {
 
         TinkerMaterials.materials.add(MATERIAL_DRAGONSTEEL_ICE);
         TinkerRegistry.integrate(MATERIAL_DRAGONSTEEL_ICE, MOLTEN_ICE_DRAGONSTEEL, "IceDragonsteel").toolforge().preInit();
-        MATERIAL_DRAGONSTEEL_ICE.addItem(IaFItemRegistry.dragonsteel_ice_ingot, 1, Material.VALUE_Ingot);
-        MATERIAL_DRAGONSTEEL_ICE.setRepresentativeItem(IaFItemRegistry.dragonsteel_ice_ingot);
+        MATERIAL_DRAGONSTEEL_ICE.addItem(IafItemRegistry.dragonsteel_ice_ingot, 1, Material.VALUE_Ingot);
+        MATERIAL_DRAGONSTEEL_ICE.setRepresentativeItem(IafItemRegistry.dragonsteel_ice_ingot);
         MATERIAL_DRAGONSTEEL_ICE.setCraftable(false);
         MATERIAL_DRAGONSTEEL_ICE.setCastable(true);
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE,
@@ -128,22 +128,22 @@ public class TinkersCompat {
         TinkerRegistry.addMaterialStats(MATERIAL_DRAGONSTEEL_ICE, new BowMaterialStats(0.9f, 3.0F, 6F));
         MATERIAL_DRAGONSTEEL_ICE.addTrait(FREEZE_II, HEAD);
         MATERIAL_DRAGONSTEEL_ICE.addTrait(sharp);
-        FREEZE_I.addItem(IaFItemRegistry.ice_dragon_blood);
-        FREEZE_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(IaFItemRegistry.ice_dragon_blood)));
-        BURN_I.addItem(IaFItemRegistry.fire_dragon_blood);
-        BURN_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(IaFItemRegistry.fire_dragon_blood)));
+        FREEZE_I.addItem(IafItemRegistry.ice_dragon_blood);
+        FREEZE_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(IafItemRegistry.ice_dragon_blood)));
+        BURN_I.addItem(IafItemRegistry.fire_dragon_blood);
+        BURN_I.addRecipeMatch(new RecipeMatch.ItemCombination(1, new ItemStack(IafItemRegistry.fire_dragon_blood)));
 
         TinkerMaterials.materials.add(MATERIAL_STYMPH_FEATHER);
         TinkerRegistry.integrate(MATERIAL_STYMPH_FEATHER).preInit();
-        MATERIAL_STYMPH_FEATHER.addItem(IaFItemRegistry.stymphalian_bird_feather, 1, Material.VALUE_Ingot);
-        MATERIAL_STYMPH_FEATHER.setRepresentativeItem(IaFItemRegistry.stymphalian_bird_feather);
+        MATERIAL_STYMPH_FEATHER.addItem(IafItemRegistry.stymphalian_bird_feather, 1, Material.VALUE_Ingot);
+        MATERIAL_STYMPH_FEATHER.setRepresentativeItem(IafItemRegistry.stymphalian_bird_feather);
         MATERIAL_STYMPH_FEATHER.addTrait(ANTIGRAVITY);
         TinkerRegistry.addMaterialStats(MATERIAL_STYMPH_FEATHER, new FletchingMaterialStats(1.0f, 1.1f));
 
         TinkerMaterials.materials.add(MATERIAL_AMPHITHERE_FEATHER);
         TinkerRegistry.integrate(MATERIAL_AMPHITHERE_FEATHER).preInit();
-        MATERIAL_AMPHITHERE_FEATHER.addItem(IaFItemRegistry.amphithere_feather, 1, Material.VALUE_Ingot);
-        MATERIAL_AMPHITHERE_FEATHER.setRepresentativeItem(IaFItemRegistry.amphithere_feather);
+        MATERIAL_AMPHITHERE_FEATHER.addItem(IafItemRegistry.amphithere_feather, 1, Material.VALUE_Ingot);
+        MATERIAL_AMPHITHERE_FEATHER.setRepresentativeItem(IafItemRegistry.amphithere_feather);
         MATERIAL_AMPHITHERE_FEATHER.addTrait(ARROW_KNOCKBACK);
         TinkerRegistry.addMaterialStats(MATERIAL_AMPHITHERE_FEATHER, new FletchingMaterialStats(0.9f, 0.7f));
 
@@ -152,8 +152,8 @@ public class TinkersCompat {
             TinkerRegistry.integrate(MATERIAL_WEEZER).preInit();
             MATERIAL_WEEZER.setCraftable(true);
             MATERIAL_WEEZER.setCastable(false);
-            MATERIAL_WEEZER.addItem(IaFItemRegistry.weezer_blue_album, 1, Material.VALUE_Ingot);
-            MATERIAL_WEEZER.setRepresentativeItem(IaFItemRegistry.weezer_blue_album);
+            MATERIAL_WEEZER.addItem(IafItemRegistry.weezer_blue_album, 1, Material.VALUE_Ingot);
+            MATERIAL_WEEZER.setRepresentativeItem(IafItemRegistry.weezer_blue_album);
             TinkerRegistry.addMaterialStats(MATERIAL_WEEZER,
                     new HeadMaterialStats(1500, 5.00f, 10.00f, HarvestLevels.COBALT),
                     new HandleMaterialStats(1.5F, 100),

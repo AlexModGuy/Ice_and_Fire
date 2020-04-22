@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.structures.WorldGenDreadRuin;
 import com.github.alexthe666.iceandfire.structures.WorldGenDreadSpike;
 import com.github.alexthe666.iceandfire.structures.WorldGenDreadwoodTree;
@@ -16,20 +16,20 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import java.util.Random;
 
 public class BiomeDreadLands extends Biome {
-    protected static final IBlockState STONE = IaFBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState ICE = IaFBlockRegistry.dragon_ice.getDefaultState();
-    protected static final IBlockState DIRT = IaFBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRASS = IaFBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRAVEL = IaFBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState DRAGON_ICE = IaFBlockRegistry.dragon_ice.getDefaultState();
+    protected static final IBlockState STONE = IafBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState ICE = IafBlockRegistry.dragon_ice.getDefaultState();
+    protected static final IBlockState DIRT = IafBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRASS = IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRAVEL = IafBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState DRAGON_ICE = IafBlockRegistry.dragon_ice.getDefaultState();
     private static final WorldGenDreadwoodTree DREADWOOD_TREE = new WorldGenDreadwoodTree();
     private static final WorldGenDreadSpike DREAD_SPIKE = new WorldGenDreadSpike();
     private static final WorldGenDreadRuin DREAD_RUIN = new WorldGenDreadRuin();
 
     public BiomeDreadLands() {
         super(new BiomeProperties("dreadlands").setTemperature(-1.0F).setBaseHeight(1.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(3.5F).setSnowEnabled());
-        this.topBlock = IaFBlockRegistry.frozenGrass.getDefaultState();
-        this.fillerBlock = IaFBlockRegistry.frozenDirt.getDefaultState();
+        this.topBlock = IafBlockRegistry.frozenGrass.getDefaultState();
+        this.fillerBlock = IafBlockRegistry.frozenDirt.getDefaultState();
         this.setRegistryName(IceAndFire.MODID, "Dreadlands");
         this.spawnableCreatureList.clear();
         this.spawnableMonsterList.clear();
@@ -90,7 +90,7 @@ public class BiomeDreadLands extends Biome {
 
                 if (iblockstate2.getMaterial() == Material.AIR) {
                     j = -1;
-                } else if (iblockstate2.getBlock() == IaFBlockRegistry.frozenStone) {
+                } else if (iblockstate2.getBlock() == IafBlockRegistry.frozenStone) {
                     if (j == -1) {
                         if (k <= 0) {
                             iblockstate = AIR;
@@ -123,7 +123,7 @@ public class BiomeDreadLands extends Biome {
                         --j;
                         chunkPrimerIn.setBlockState(i1, j1, l, iblockstate1);
 
-                        if (j == 0 && iblockstate1.getBlock() == IaFBlockRegistry.frozenDirt && k > 1) {
+                        if (j == 0 && iblockstate1.getBlock() == IafBlockRegistry.frozenDirt && k > 1) {
                             j = rand.nextInt(4) + Math.max(0, j1 - 63);
                             iblockstate1 = STONE;
                         }

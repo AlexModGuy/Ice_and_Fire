@@ -145,7 +145,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IaFVillagerRegistry.INSTANCE.jungleMyrmexSentinel : IaFVillagerRegistry.INSTANCE.desertMyrmexSentinel;
+        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexSentinel : IafVillagerRegistry.INSTANCE.desertMyrmexSentinel;
     }
 
     protected void entityInit() {

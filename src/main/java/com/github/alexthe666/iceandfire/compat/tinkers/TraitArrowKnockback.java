@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.compat.tinkers;
 
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,7 @@ public class TraitArrowKnockback extends AbstractProjectileTrait {
     @Override
     public void onMovement(EntityProjectileBase projectile, World world, double slowdown) {
         if ((projectile.ticksExisted == 1 || projectile.ticksExisted % 70 == 0) && !projectile.onGround) {
-            projectile.playSound(IaFSoundRegistry.AMPHITHERE_GUST, 1, 1);
+            projectile.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
         if (world.isRemote && !projectile.onGround) {
             double d0 = world.rand.nextGaussian() * 0.02D;

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -208,14 +208,14 @@ public class IceExplosion extends Explosion {
                 }
                 if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
                     if (block == Blocks.GRASS_PATH) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenGrassPath.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGrassPath.getDefaultState());
                     }
                     if (block instanceof BlockGrass) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenGrass.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGrass.getDefaultState());
                     }
 
                     if (block instanceof BlockDirt) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenDirt.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenDirt.getDefaultState());
                     }
 
                     if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
@@ -223,17 +223,17 @@ public class IceExplosion extends Explosion {
                     }
 
                     if (block instanceof BlockGravel) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenGravel.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGravel.getDefaultState());
                     }
 
                     if (state.getMaterial() == Material.WOOD) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenSplinters.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenSplinters.getDefaultState());
                     }
 
-                    if (state.getMaterial() == Material.ROCK && (block != IaFBlockRegistry.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenStone.getDefaultState());
+                    if (state.getMaterial() == Material.ROCK && (block != IafBlockRegistry.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenStone.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK) {
-                        worldObj.setBlockState(blockpos, IaFBlockRegistry.frozenCobblestone.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenCobblestone.getDefaultState());
                     }
                 }
             }

@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
@@ -70,7 +70,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
     }
 
     public static boolean isBlindfolded(EntityLivingBase attackTarget) {
-        return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IaFItemRegistry.blindfold;
+        return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IafItemRegistry.blindfold;
     }
 
     @Nullable
@@ -204,7 +204,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
             if (!blindness && this.deathTime == 0) {
                 if (this.getAnimation() != ANIMATION_SCARE) {
-                    this.playSound(IaFSoundRegistry.GORGON_ATTACK, 1, 1);
+                    this.playSound(IafSoundRegistry.GORGON_ATTACK, 1, 1);
                     this.setAnimation(ANIMATION_SCARE);
                 }
                 if (this.getAnimation() == ANIMATION_SCARE) {
@@ -239,7 +239,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
                                     } else {
                                         IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(attackTarget.getEntityId(), true));
                                     }
-                                    this.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                                    this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                                     this.setAttackTarget(null);
                                 }
 
@@ -318,17 +318,17 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.GORGON_IDLE;
+        return IafSoundRegistry.GORGON_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return IaFSoundRegistry.GORGON_HURT;
+        return IafSoundRegistry.GORGON_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.GORGON_DIE;
+        return IafSoundRegistry.GORGON_DIE;
     }
 
     @Override

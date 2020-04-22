@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.client.IaFKeybindRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
@@ -178,7 +178,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             return true;
         }
         if (!super.processInteract(player, hand)) {
-            if (itemstack != null && itemstack.getItem() == IaFItemRegistry.dragon_stick && this.isOwner(player)) {
+            if (itemstack != null && itemstack.getItem() == IafItemRegistry.dragon_stick && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = new BlockPos(this);
                     this.homePos = pos;
@@ -245,7 +245,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 1;
         }else{
-            this.moveHelper = new IaFDragonFlightManager.PlayerFlightMoveHelper(this);
+            this.moveHelper = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.navigatorType = 2;
         }
@@ -600,10 +600,10 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             }
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5) {
-            this.playSound(IaFSoundRegistry.AMPHITHERE_GUST, 1, 1);
+            this.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
         if ((this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_BITE_RIDER) && this.getAnimationTick() == 1) {
-            this.playSound(IaFSoundRegistry.AMPHITHERE_BITE, 1, 1);
+            this.playSound(IafSoundRegistry.AMPHITHERE_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAttackTarget() != null && this.getAnimationTick() > 5 && this.getAnimationTick() < 22) {
             double dist = this.getDistanceSq(this.getAttackTarget());
@@ -721,8 +721,8 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IaFKeybindRegistry.dragon_down.isKeyDown());
-            attack(IaFKeybindRegistry.dragon_strike.isKeyDown());
+            down(IafKeybindRegistry.dragon_down.isKeyDown());
+            attack(IafKeybindRegistry.dragon_strike.isKeyDown());
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
@@ -812,17 +812,17 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.AMPHITHERE_IDLE;
+        return IafSoundRegistry.AMPHITHERE_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return IaFSoundRegistry.AMPHITHERE_HURT;
+        return IafSoundRegistry.AMPHITHERE_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.AMPHITHERE_DIE;
+        return IafSoundRegistry.AMPHITHERE_DIE;
     }
 
     @Override

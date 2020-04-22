@@ -25,9 +25,9 @@ public class ItemDeathwormArmor extends ItemArmor {
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (this.getArmorMaterial() == IaFItemRegistry.red_deathworm) {
+        if (this.getArmorMaterial() == IafItemRegistry.red_deathworm) {
             return "iceandfire:textures/models/armor/armor_deathworm_red" + (renderIndex == 2 ? "_legs.png" : ".png");
-        } else if (this.getArmorMaterial() == IaFItemRegistry.white_deathworm) {
+        } else if (this.getArmorMaterial() == IafItemRegistry.white_deathworm) {
             return "iceandfire:textures/models/armor/armor_deathworm_white" + (renderIndex == 2 ? "_legs.png" : ".png");
         } else {
             return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (renderIndex == 2 ? "_legs.png" : ".png");

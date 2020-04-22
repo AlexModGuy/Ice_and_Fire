@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.BlockUtils;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Random;
 
 public class ChunkProviderDreadLands implements IChunkGenerator {
-    protected static final IBlockState STONE = IaFBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState ICE = IaFBlockRegistry.dragon_ice.getDefaultState();
-    protected static final IBlockState DIRT = IaFBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRASS = IaFBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRAVEL = IaFBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState STONE = IafBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState ICE = IafBlockRegistry.dragon_ice.getDefaultState();
+    protected static final IBlockState DIRT = IafBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRASS = IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRAVEL = IafBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
     private final Random rand;
     private final World world;
     private final WorldType terrainType;

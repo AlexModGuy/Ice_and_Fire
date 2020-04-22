@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
@@ -95,7 +95,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
         if (pointedEntity != null) {
             if (pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer) {
                 if (pointedEntity instanceof EntityPlayer) {
-                    pointedEntity.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                    pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                     pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
                     statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -126,9 +126,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 }
 
                 if (pointedEntity instanceof EntityGorgon) {
-                    entity.playSound(IaFSoundRegistry.GORGON_PETRIFY, 1, 1);
+                    entity.playSound(IafSoundRegistry.GORGON_PETRIFY, 1, 1);
                 } else {
-                    entity.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                    entity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                 }
                 if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
                     stack.shrink(1);

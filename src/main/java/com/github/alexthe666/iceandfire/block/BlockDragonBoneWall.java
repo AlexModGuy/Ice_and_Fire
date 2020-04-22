@@ -10,7 +10,7 @@ import net.minecraft.util.NonNullList;
 public class BlockDragonBoneWall extends BlockWall implements IDragonProof {
 
     public BlockDragonBoneWall() {
-        super(IaFBlockRegistry.dragon_bone_block);
+        super(IafBlockRegistry.dragon_bone_block);
         this.setHardness(20F);
         this.setResistance(500F);
         this.setSoundType(SoundType.WOOD);

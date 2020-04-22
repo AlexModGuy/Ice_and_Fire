@@ -13,16 +13,16 @@ import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
 
-public class IaFDragonFlightManager {
+public class IafDragonFlightManager {
     private EntityDragonBase dragon;
     private Vec3d target;
-    private IaFDragonAttacks.Air prevAirAttack;
+    private IafDragonAttacks.Air prevAirAttack;
     private Vec3d startAttackVec;
     private Vec3d startPreyVec;
     private boolean hasStartedToScorch = false;
     private EntityLivingBase prevAttackTarget = null;
 
-    public IaFDragonFlightManager(EntityDragonBase dragon) {
+    public IafDragonFlightManager(EntityDragonBase dragon) {
         this.dragon = dragon;
     }
 
@@ -44,16 +44,16 @@ public class IaFDragonFlightManager {
         if (dragon.getAttackTarget() != null && !dragon.getAttackTarget().isDead) {
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 if (dragon.getAttackTarget() == null) {
-                    dragon.airAttack = IaFDragonAttacks.Air.SCORCH_STREAM;
+                    dragon.airAttack = IafDragonAttacks.Air.SCORCH_STREAM;
                 } else {
-                    dragon.airAttack = IaFDragonAttacks.Air.TACKLE;
+                    dragon.airAttack = IafDragonAttacks.Air.TACKLE;
                 }
             }
             EntityLivingBase entity = dragon.getAttackTarget();
-            if (dragon.airAttack == IaFDragonAttacks.Air.TACKLE) {
+            if (dragon.airAttack == IafDragonAttacks.Air.TACKLE) {
                 target = new Vec3d(entity.posX, entity.posY + entity.height, entity.posZ);
             }
-            if (dragon.airAttack == IaFDragonAttacks.Air.HOVER_BLAST) {
+            if (dragon.airAttack == IafDragonAttacks.Air.HOVER_BLAST) {
                 float distY = 5 + dragon.getDragonStage() * 2;
                 int randomDist = 20;
                 if (dragon.getDistance(entity.posX, dragon.posY, entity.posZ) < 4 || dragon.getDistance(entity.posX, dragon.posY, entity.posZ) > 30) {
@@ -61,7 +61,7 @@ public class IaFDragonFlightManager {
                 }
                 dragon.stimulateFire(entity.posX, entity.posY, entity.posZ, 3);
             }
-            if (dragon.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM && startPreyVec != null && startAttackVec != null) {
+            if (dragon.airAttack == IafDragonAttacks.Air.SCORCH_STREAM && startPreyVec != null && startAttackVec != null) {
                 float distX = (float) (startPreyVec.x - startAttackVec.x);
                 float distY = 5 + dragon.getDragonStage() * 2;
                 float distZ = (float) (startPreyVec.z - startAttackVec.z);
@@ -228,12 +228,12 @@ public class IaFDragonFlightManager {
                 float atan = (float) MathHelper.atan2((double) distZ, (double) distX);
                 float yawTurn = MathHelper.wrapDegrees(dragon.rotationYaw + 90);
                 float yawTurnAtan = MathHelper.wrapDegrees(atan * 57.295776F);
-                dragon.rotationYaw = IaFDragonFlightManager.approachDegrees(yawTurn, yawTurnAtan, dragon.airAttack == IaFDragonAttacks.Air.TACKLE && dragon.getAttackTarget() != null ? 10 : 4.0F) - 90.0F;
+                dragon.rotationYaw = IafDragonFlightManager.approachDegrees(yawTurn, yawTurnAtan, dragon.airAttack == IafDragonAttacks.Air.TACKLE && dragon.getAttackTarget() != null ? 10 : 4.0F) - 90.0F;
                 dragon.renderYawOffset = dragon.rotationYaw;
-                if (IaFDragonFlightManager.degreesDifferenceAbs(yawCopy, dragon.rotationYaw) < 3.0F) {
-                    speed = IaFDragonFlightManager.approach((float) speed, 1.8F, 0.005F * (1.8F / (float) speed));
+                if (IafDragonFlightManager.degreesDifferenceAbs(yawCopy, dragon.rotationYaw) < 3.0F) {
+                    speed = IafDragonFlightManager.approach((float) speed, 1.8F, 0.005F * (1.8F / (float) speed));
                 } else {
-                    speed = IaFDragonFlightManager.approach((float) speed, 0.2F, 0.025F);
+                    speed = IafDragonFlightManager.approach((float) speed, 0.2F, 0.025F);
                     if (dist < 100D && dragon.getAttackTarget() != null) {
                         speed = speed * (dist / 100D);
                     }

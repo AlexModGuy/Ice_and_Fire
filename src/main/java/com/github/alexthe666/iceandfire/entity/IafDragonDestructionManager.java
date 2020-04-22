@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.block.BlockCharedPath;
 import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-public class IaFDragonDestructionManager {
+public class IafDragonDestructionManager {
 
     public static void destroyAreaFire(World world, BlockPos center, EntityDragonBase destroyer) {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
@@ -86,7 +86,7 @@ public class IaFDragonDestructionManager {
                     IBlockState transformState = transformBlockIce(world.getBlockState(pos));
                     world.setBlockState(pos, transformState);
                     if (world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
-                        world.setBlockState(pos.up(), IaFBlockRegistry.dragon_ice_spikes.getDefaultState());
+                        world.setBlockState(pos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
                     }
                 }
                 if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
@@ -115,7 +115,7 @@ public class IaFDragonDestructionManager {
                         IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                         world.setBlockState(blockpos, transformState);
                         if (world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
-                            world.setBlockState(blockpos.up(), IaFBlockRegistry.dragon_ice_spikes.getDefaultState());
+                            world.setBlockState(blockpos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
                         }
                     }
                 }
@@ -215,7 +215,7 @@ public class IaFDragonDestructionManager {
                         IBlockState transformState = transformBlockIce(world.getBlockState(pos));
                         world.setBlockState(pos, transformState);
                         if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
-                            world.setBlockState(pos.up(), IaFBlockRegistry.dragon_ice_spikes.getDefaultState());
+                            world.setBlockState(pos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
                         }
                     }
                 }
@@ -249,7 +249,7 @@ public class IaFDragonDestructionManager {
                         IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                         world.setBlockState(blockpos, transformState);
                         if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
-                            world.setBlockState(blockpos.up(), IaFBlockRegistry.dragon_ice_spikes.getDefaultState());
+                            world.setBlockState(blockpos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
                         }
                     }
                 }
@@ -276,19 +276,19 @@ public class IaFDragonDestructionManager {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return IaFBlockRegistry.charedGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.charedGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT) {
-            return IaFBlockRegistry.charedDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.charedDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.GRAVEL) {
-            return IaFBlockRegistry.charedGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.charedGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return IaFBlockRegistry.charedCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IaFBlockRegistry.charedCobblestone) {
-            return IaFBlockRegistry.charedStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.charedCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.charedCobblestone) {
+            return IafBlockRegistry.charedStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return IaFBlockRegistry.charedGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.charedGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IaFBlockRegistry.ash.getDefaultState();
+            return IafBlockRegistry.ash.getDefaultState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW_LAYER) {
             return Blocks.AIR.getDefaultState();
         }
@@ -300,19 +300,19 @@ public class IaFDragonDestructionManager {
             return in;
         }
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return IaFBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.CRAFTED_SNOW) {
-            return IaFBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.GRAVEL) {
-            return IaFBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return IaFBlockRegistry.frozenCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IaFBlockRegistry.frozenCobblestone) {
-            return IaFBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.frozenCobblestone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.frozenCobblestone) {
+            return IafBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return IaFBlockRegistry.frozenGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.frozenGrassPath.getDefaultState().withProperty(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IaFBlockRegistry.frozenSplinters.getDefaultState();
+            return IafBlockRegistry.frozenSplinters.getDefaultState();
         } else if (in.getMaterial() == Material.WATER) {
             return Blocks.ICE.getDefaultState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW_LAYER) {

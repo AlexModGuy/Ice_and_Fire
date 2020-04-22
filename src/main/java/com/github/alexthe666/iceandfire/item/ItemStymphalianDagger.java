@@ -19,7 +19,7 @@ import java.util.List;
 public class ItemStymphalianDagger extends ItemSword {
 
     public ItemStymphalianDagger() {
-        super(IaFItemRegistry.stymphalian_sword_tools);
+        super(IafItemRegistry.stymphalian_sword_tools);
         this.setTranslationKey("iceandfire.stymphalian_bird_dagger");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "stymphalian_bird_dagger");

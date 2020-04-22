@@ -34,7 +34,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 
     public boolean canStay(World worldIn, BlockPos pos) {
         IBlockState soil = worldIn.getBlockState(pos.down());
-        if (this == IaFBlockRegistry.fire_lily) {
+        if (this == IafBlockRegistry.fire_lily) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
         } else {
             return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;

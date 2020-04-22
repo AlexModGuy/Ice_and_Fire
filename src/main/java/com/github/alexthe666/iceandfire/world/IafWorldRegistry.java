@@ -8,7 +8,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 
-public class IaFWorldRegistry {
+public class IafWorldRegistry {
 
     public static DimensionType DREADLANDS_DIM;
     public static Biome GLACIER_BIOME = new BiomeGlacier();

@@ -11,7 +11,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.List;
 
-public class IaFEntityRegistry {
+public class IafEntityRegistry {
 
     public static void init() {
         EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);

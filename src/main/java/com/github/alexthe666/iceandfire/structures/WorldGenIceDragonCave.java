@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockSilverPile;
-import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
@@ -25,7 +25,7 @@ import java.util.Random;
 public class WorldGenIceDragonCave extends WorldGenerator {
     public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_female_cave"));
     public static final ResourceLocation ICEDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_male_cave"));
-    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IaFBlockRegistry.frozenStone);
+    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.frozenStone);
     private static boolean isMale;
 
     public static void setGoldPile(World world, BlockPos pos, Random rand) {
@@ -34,7 +34,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
             if (chance < 60) {
                 int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
-                world.setBlockState(pos, generateGold ? IaFBlockRegistry.silverPile.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+                world.setBlockState(pos, generateGold ? IafBlockRegistry.silverPile.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
                 world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
@@ -119,7 +119,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSilverOre ? IaFBlockRegistry.silverOre.getDefaultState() : IaFBlockRegistry.frozenStone.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSilverOre ? IafBlockRegistry.silverOre.getDefaultState() : IafBlockRegistry.frozenStone.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -134,10 +134,10 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
                         }
                         if (chance > 90 && chance < 1000) {
-                            worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSapphireOre ? IaFBlockRegistry.sapphireOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSapphireOre ? IafBlockRegistry.sapphireOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
-                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IaFBlockRegistry.frozenCobblestone.getDefaultState() : IaFBlockRegistry.frozenStone.getDefaultState());
+                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.frozenCobblestone.getDefaultState() : IafBlockRegistry.frozenStone.getDefaultState());
                     }
                 }
             }

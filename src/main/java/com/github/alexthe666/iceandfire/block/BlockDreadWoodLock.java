@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -39,7 +39,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if(stack.getItem() == IaFItemRegistry.dread_key){
+        if(stack.getItem() == IafItemRegistry.dread_key){
             if(!playerIn.isCreative()){
                 stack.shrink(1);
             }
@@ -52,7 +52,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     private void deleteNearbyWood(World worldIn, BlockPos pos, BlockPos startPos) {
         if(pos.getDistance(startPos.getX(), startPos.getY(), startPos.getZ()) < 32){
-            if(worldIn.getBlockState(pos).getBlock() == IaFBlockRegistry.dreadwood_planks || worldIn.getBlockState(pos).getBlock() == IaFBlockRegistry.dreadwood_planks_lock){
+            if(worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.dreadwood_planks || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.dreadwood_planks_lock){
                 worldIn.destroyBlock(pos, false);
                 for(EnumFacing facing : EnumFacing.values()){
                     deleteNearbyWood(worldIn, pos.offset(facing), startPos);

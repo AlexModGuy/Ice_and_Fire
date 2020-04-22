@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.DragonFireEvent;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -80,26 +80,26 @@ public class EntityFireDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IaFItemRegistry.dragonscales_red;
+                return IafItemRegistry.dragonscales_red;
             case 1:
-                return IaFItemRegistry.dragonscales_green;
+                return IafItemRegistry.dragonscales_green;
             case 2:
-                return IaFItemRegistry.dragonscales_bronze;
+                return IafItemRegistry.dragonscales_bronze;
             case 3:
-                return IaFItemRegistry.dragonscales_gray;
+                return IafItemRegistry.dragonscales_gray;
         }
     }
 
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IaFItemRegistry.dragonegg_red;
+                return IafItemRegistry.dragonegg_red;
             case 1:
-                return IaFItemRegistry.dragonegg_green;
+                return IafItemRegistry.dragonegg_green;
             case 2:
-                return IaFItemRegistry.dragonegg_bronze;
+                return IafItemRegistry.dragonegg_bronze;
             case 3:
-                return IaFItemRegistry.dragonegg_gray;
+                return IafItemRegistry.dragonegg_gray;
         }
     }
 
@@ -127,7 +127,7 @@ public class EntityFireDragon extends EntityDragonBase {
                         entityIn.startRiding(this);
                     }
                     if(!flag){
-                        groundAttack = IaFDragonAttacks.Ground.BITE;
+                        groundAttack = IafDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
                     }
                     break;
@@ -146,10 +146,10 @@ public class EntityFireDragon extends EntityDragonBase {
             if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
-            if (this.groundAttack == IaFDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
+            if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
                 shootFireAtMob(this.getAttackTarget());
             }
-            if (this.airAttack == IaFDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {
+            if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {
                 double difX = this.getAttackTarget().posX - this.posX;
                 double difY = this.getAttackTarget().posY + this.getAttackTarget().height - this.posY;
                 double difZ = this.getAttackTarget().posZ - this.posZ;
@@ -174,7 +174,7 @@ public class EntityFireDragon extends EntityDragonBase {
             if (this.isActuallyBreathingFire()) {
                 rotationYaw = renderYawOffset;
                 if (this.ticksExisted % 5 == 0) {
-                    this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                    this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                 }
                 stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 1);
             }
@@ -190,7 +190,7 @@ public class EntityFireDragon extends EntityDragonBase {
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
                 Vec3d headVec = this.getHeadPosition();
-                this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
                 double d4 = controller.getLookVec().z;
@@ -211,7 +211,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
                     if (this.ticksExisted % 5 == 0) {
-                        this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                        this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
@@ -234,8 +234,8 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     private void shootFireAtMob(EntityLivingBase entity) {
-        if (this.usingGroundAttack && this.groundAttack == IaFDragonAttacks.Ground.FIRE || !this.usingGroundAttack && (this.airAttack == IaFDragonAttacks.Air.SCORCH_STREAM || this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST)) {
-            if (this.usingGroundAttack && this.getRNG().nextInt(5) == 0 || !this.usingGroundAttack && this.airAttack == IaFDragonAttacks.Air.HOVER_BLAST) {
+        if (this.usingGroundAttack && this.groundAttack == IafDragonAttacks.Ground.FIRE || !this.usingGroundAttack && (this.airAttack == IafDragonAttacks.Air.SCORCH_STREAM || this.airAttack == IafDragonAttacks.Air.HOVER_BLAST)) {
+            if (this.usingGroundAttack && this.getRNG().nextInt(5) == 0 || !this.usingGroundAttack && this.airAttack == IafDragonAttacks.Air.HOVER_BLAST) {
                 if (this.getAnimation() != ANIMATION_FIRECHARGE) {
                     this.setAnimation(ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 20) {
@@ -248,7 +248,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                    this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                    this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                     EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setSizes(size, size);
@@ -266,7 +266,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     if (this.isActuallyBreathingFire()) {
                         rotationYaw = renderYawOffset;
                         if (this.ticksExisted % 5 == 0) {
-                            this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                            this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                         }
                         stimulateFire(entity.posX, entity.posY, entity.posZ, 1);
                         if (entity.isDead || entity == null) {
@@ -313,7 +313,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                 EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setSizes(size, size);
@@ -348,7 +348,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (!world.isRemote) {
                     RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
                     BlockPos pos = result.getBlockPos();
-                    IaFDragonDestructionManager.destroyAreaFire(world, pos, this);
+                    IafDragonDestructionManager.destroyAreaFire(world, pos, this);
                 }
             }
         }
@@ -357,29 +357,29 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnY = burnY + (rand.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (rand.nextFloat() * 3.0) - 1.5;
             if (!world.isRemote) {
-                IaFDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
             }
         }
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isTeen() ? IaFSoundRegistry.FIREDRAGON_TEEN_IDLE : this.isAdult() ? IaFSoundRegistry.FIREDRAGON_ADULT_IDLE : IaFSoundRegistry.FIREDRAGON_CHILD_IDLE;
+        return this.isTeen() ? IafSoundRegistry.FIREDRAGON_TEEN_IDLE : this.isAdult() ? IafSoundRegistry.FIREDRAGON_ADULT_IDLE : IafSoundRegistry.FIREDRAGON_CHILD_IDLE;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return this.isTeen() ? IaFSoundRegistry.FIREDRAGON_TEEN_HURT : this.isAdult() ? IaFSoundRegistry.FIREDRAGON_ADULT_HURT : IaFSoundRegistry.FIREDRAGON_CHILD_HURT;
+        return this.isTeen() ? IafSoundRegistry.FIREDRAGON_TEEN_HURT : this.isAdult() ? IafSoundRegistry.FIREDRAGON_ADULT_HURT : IafSoundRegistry.FIREDRAGON_CHILD_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return this.isTeen() ? IaFSoundRegistry.FIREDRAGON_TEEN_DEATH : this.isAdult() ? IaFSoundRegistry.FIREDRAGON_ADULT_DEATH : IaFSoundRegistry.FIREDRAGON_CHILD_DEATH;
+        return this.isTeen() ? IafSoundRegistry.FIREDRAGON_TEEN_DEATH : this.isAdult() ? IafSoundRegistry.FIREDRAGON_ADULT_DEATH : IafSoundRegistry.FIREDRAGON_CHILD_DEATH;
     }
 
     @Override
     public SoundEvent getRoarSound() {
-        return this.isTeen() ? IaFSoundRegistry.FIREDRAGON_TEEN_ROAR : this.isAdult() ? IaFSoundRegistry.FIREDRAGON_ADULT_ROAR : IaFSoundRegistry.FIREDRAGON_CHILD_ROAR;
+        return this.isTeen() ? IafSoundRegistry.FIREDRAGON_TEEN_ROAR : this.isAdult() ? IafSoundRegistry.FIREDRAGON_ADULT_ROAR : IafSoundRegistry.FIREDRAGON_CHILD_ROAR;
     }
 
     @Override
@@ -388,7 +388,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.fire_stew;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.fire_stew;
     }
 
     protected void spawnDeathParticles() {
@@ -413,11 +413,11 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     protected ItemStack getSkull() {
-        return new ItemStack(IaFItemRegistry.dragon_skull);
+        return new ItemStack(IafItemRegistry.dragon_skull);
     }
 
     public ItemStack getHorn() {
-        return new ItemStack(IaFItemRegistry.dragon_horn_fire);
+        return new ItemStack(IafItemRegistry.dragon_horn_fire);
     }
 
 }

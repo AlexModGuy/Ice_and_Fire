@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -287,7 +287,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
             this.setAnimation(ANIMATION_ROAR);
         }
         if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5) {
-            this.playSound(IaFSoundRegistry.TROLL_ROAR, 1, 1);
+            this.playSound(IafSoundRegistry.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
             this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
@@ -304,7 +304,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                     this.motionY = 0;
                     this.motionZ = 0;
                     this.setAnimation(NO_ANIMATION);
-                    this.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                    this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                 }
             }
         }
@@ -413,17 +413,17 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.TROLL_IDLE;
+        return IafSoundRegistry.TROLL_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return IaFSoundRegistry.TROLL_HURT;
+        return IafSoundRegistry.TROLL_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.TROLL_DIE;
+        return IafSoundRegistry.TROLL_DIE;
     }
 
 

@@ -99,7 +99,7 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-        return !iblockstate.isOpaqueCube() && block != IaFBlockRegistry.dread_portal;
+        return !iblockstate.isOpaqueCube() && block != IafBlockRegistry.dread_portal;
     }
 
     @Nullable

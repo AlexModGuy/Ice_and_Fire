@@ -32,7 +32,7 @@ public class ItemModShovel extends ItemSpade {
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.toolMaterial.getRepairItemStack();
-        if (this.toolMaterial == IaFItemRegistry.silverTools) {
+        if (this.toolMaterial == IafItemRegistry.silverTools) {
             NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
             for (ItemStack ingot : silverItems) {
                 if (OreDictionary.itemMatches(repair, ingot, false)) {
@@ -46,12 +46,12 @@ public class ItemModShovel extends ItemSpade {
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (this == IaFItemRegistry.silver_shovel) {
+        if (this == IafItemRegistry.silver_shovel) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);
             }
         }
-        if (this.toolMaterial == IaFItemRegistry.myrmexChitin) {
+        if (this.toolMaterial == IafItemRegistry.myrmexChitin) {
             if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
                 target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
@@ -59,11 +59,11 @@ public class ItemModShovel extends ItemSpade {
                 target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
         }
-        if (toolMaterial == IaFItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
             target.setFire(15);
             target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
         }
-        if (toolMaterial == IaFItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(300);
             target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
@@ -74,16 +74,16 @@ public class ItemModShovel extends ItemSpade {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (this == IaFItemRegistry.silver_shovel) {
+        if (this == IafItemRegistry.silver_shovel) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
         }
-        if (this == IaFItemRegistry.myrmex_desert_shovel || this == IaFItemRegistry.myrmex_jungle_shovel) {
+        if (this == IafItemRegistry.myrmex_desert_shovel || this == IafItemRegistry.myrmex_jungle_shovel) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
         }
-        if (toolMaterial == IaFItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
             tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
         }
-        if (toolMaterial == IaFItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
             tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
         }
     }

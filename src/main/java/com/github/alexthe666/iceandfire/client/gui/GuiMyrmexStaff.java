@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.gui;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.ChangePageButton;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
@@ -35,7 +35,7 @@ public class GuiMyrmexStaff extends GuiScreen {
 
     public GuiMyrmexStaff(ItemStack staff) {
         this.staff = staff;
-        this.jungle = staff.getItem() == IaFItemRegistry.myrmex_jungle_staff;
+        this.jungle = staff.getItem() == IafItemRegistry.myrmex_jungle_staff;
         initGui();
     }
 

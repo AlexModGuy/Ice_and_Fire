@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexEgg;
-import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
@@ -58,7 +58,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             } else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
-                boolean jungle = podium.getStackInSlot(0).getItem() == IaFItemRegistry.myrmex_jungle_egg;
+                boolean jungle = podium.getStackInSlot(0).getItem() == IafItemRegistry.myrmex_jungle_egg;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
                 GL11.glPushMatrix();

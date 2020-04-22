@@ -63,7 +63,7 @@ public class BlockCharedPath extends BlockGrassPath {
             case EAST:
                 IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
                 Block block = iblockstate.getBlock();
-                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != IaFBlockRegistry.charedGrassPath && block != IaFBlockRegistry.frozenGrassPath;
+                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != IafBlockRegistry.charedGrassPath && block != IafBlockRegistry.frozenGrassPath;
             default:
                 return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
         }
@@ -71,7 +71,7 @@ public class BlockCharedPath extends BlockGrassPath {
 
     @Nullable
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return isFire ? IaFBlockRegistry.charedDirt.getItemDropped(IaFBlockRegistry.charedDirt.getDefaultState(), rand, fortune) : IaFBlockRegistry.frozenDirt.getItemDropped(IaFBlockRegistry.frozenDirt.getDefaultState(), rand, fortune);
+        return isFire ? IafBlockRegistry.charedDirt.getItemDropped(IafBlockRegistry.charedDirt.getDefaultState(), rand, fortune) : IafBlockRegistry.frozenDirt.getItemDropped(IafBlockRegistry.frozenDirt.getDefaultState(), rand, fortune);
     }
 
     @Override
@@ -79,13 +79,13 @@ public class BlockCharedPath extends BlockGrassPath {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? IaFBlockRegistry.charedDirt.getDefaultState() : IaFBlockRegistry.frozenDirt.getDefaultState());
+            worldIn.setBlockState(pos, isFire ? IafBlockRegistry.charedDirt.getDefaultState() : IafBlockRegistry.frozenDirt.getDefaultState());
         }
     }
 
     private void updateBlockState(World worldIn, BlockPos pos) {
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? IaFBlockRegistry.charedDirt.getDefaultState() : IaFBlockRegistry.frozenDirt.getDefaultState());
+            worldIn.setBlockState(pos, isFire ? IafBlockRegistry.charedDirt.getDefaultState() : IafBlockRegistry.frozenDirt.getDefaultState());
         }
     }
 

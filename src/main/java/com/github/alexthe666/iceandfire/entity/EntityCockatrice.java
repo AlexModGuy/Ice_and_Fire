@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.event.EventServer;
 import com.google.common.base.Predicate;
@@ -691,17 +691,17 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return IaFSoundRegistry.COCKATRICE_IDLE;
+        return IafSoundRegistry.COCKATRICE_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return IaFSoundRegistry.COCKATRICE_HURT;
+        return IafSoundRegistry.COCKATRICE_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return IaFSoundRegistry.COCKATRICE_DIE;
+        return IafSoundRegistry.COCKATRICE_DIE;
     }
 
     @SideOnly(Side.CLIENT)

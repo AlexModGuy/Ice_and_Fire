@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemHippogryphSword extends ItemSword {
 
     public ItemHippogryphSword() {
-        super(IaFItemRegistry.hippogryph_sword_tools);
+        super(IafItemRegistry.hippogryph_sword_tools);
         this.setTranslationKey("iceandfire.hippogryph_sword");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "hippogryph_sword");

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
@@ -107,14 +107,14 @@ public class TileEntityJar extends TileEntity implements ITickable {
             if (!this.getWorld().isRemote) {
                 IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
             }
-            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IaFSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
+            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
         }
         prevRotationYaw = rotationYaw;
         if (rand.nextInt(30) == 0) {
             this.rotationYaw = (rand.nextFloat() * 360F) - 180F;
         }
         if (this.hasPixie && ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
-            this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, IaFSoundRegistry.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
+            this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, IafSoundRegistry.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
         }
         prevHasProduced = hasProduced;
     }
