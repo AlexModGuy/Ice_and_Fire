@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
@@ -69,7 +68,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
         if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse) {
             meta = ((TileEntityPixieHouse) worldIn.getTileEntity(pos)).houseType;
         }
-        spawnAsEntity(worldIn, pos, new ItemStack(ModBlocks.pixieHouse, 1, meta));
+        spawnAsEntity(worldIn, pos, new ItemStack(IaFBlockRegistry.pixieHouse, 1, meta));
         super.breakBlock(worldIn, pos, state);
     }
 

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
@@ -34,14 +33,14 @@ public class ItemAlchemySword extends ItemSword {
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (this == ModItems.dragonbone_sword_fire) {
+        if (this == IaFItemRegistry.dragonbone_sword_fire) {
             if (target instanceof EntityIceDragon) {
                 target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
             }
             target.setFire(5);
             target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
         }
-        if (this == ModItems.dragonbone_sword_ice) {
+        if (this == IaFItemRegistry.dragonbone_sword_ice) {
             if (target instanceof EntityFireDragon) {
                 target.attackEntityFrom(DamageSource.DROWN, 13.5F);
             }
@@ -57,11 +56,11 @@ public class ItemAlchemySword extends ItemSword {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-        if (this == ModItems.dragonbone_sword_fire) {
+        if (this == IaFItemRegistry.dragonbone_sword_fire) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_fire.hurt1"));
             tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
         }
-        if (this == ModItems.dragonbone_sword_ice) {
+        if (this == IaFItemRegistry.dragonbone_sword_ice) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt1"));
             tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
 

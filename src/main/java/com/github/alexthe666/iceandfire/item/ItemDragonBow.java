@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,7 +34,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
                     return 0.0F;
                 } else {
                     ItemStack itemstack = entityIn.getActiveItemStack();
-                    return !itemstack.isEmpty() && itemstack.getItem() == ModItems.dragonbone_bow ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+                    return !itemstack.isEmpty() && itemstack.getItem() == IaFItemRegistry.dragonbone_bow ? (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
                 }
             }
         });
@@ -78,7 +77,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
     }
 
     protected boolean func_185058_h_(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() == ModItems.dragonbone_arrow;
+        return !stack.isEmpty() && stack.getItem() == IaFItemRegistry.dragonbone_arrow;
     }
 
     @Override
@@ -94,7 +93,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 
             if (!itemstack.isEmpty() || flag) {
                 if (itemstack.isEmpty()) {
-                    itemstack = new ItemStack(ModItems.dragonbone_arrow);
+                    itemstack = new ItemStack(IaFItemRegistry.dragonbone_arrow);
                 }
 
                 float f = getArrowVelocity(i);
@@ -153,7 +152,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player) {
         int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.INFINITY, bow);
-        return enchant > 0 && stack.getItem() == ModItems.dragonbone_arrow;
+        return enchant > 0 && stack.getItem() == IaFItemRegistry.dragonbone_arrow;
     }
 
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

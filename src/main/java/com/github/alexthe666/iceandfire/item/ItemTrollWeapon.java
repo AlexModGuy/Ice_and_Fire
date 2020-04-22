@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -25,7 +24,7 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
     public EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
-        super(ModItems.trollWeapon);
+        super(IaFItemRegistry.trollWeapon);
         this.setTranslationKey("iceandfire.troll_weapon." + weapon.name().toLowerCase());
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "troll_weapon." + weapon.name().toLowerCase());

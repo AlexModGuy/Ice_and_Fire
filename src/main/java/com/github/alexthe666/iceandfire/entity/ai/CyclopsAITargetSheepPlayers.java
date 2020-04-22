@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
@@ -77,10 +77,10 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
                     ItemStack chestplate = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
                     ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
                     ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-                    double subHelm = helmet != null && helmet.getItem() != null && helmet.getItem() == ModItems.sheep_helmet ? 0.2D : 0;
-                    double subChest = chestplate != null && chestplate.getItem() != null && chestplate.getItem() == ModItems.sheep_chestplate ? 0.2D : 0;
-                    double subLegs = leggings != null && leggings.getItem() != null && leggings.getItem() == ModItems.sheep_leggings ? 0.2D : 0;
-                    double subBoots = boots != null && boots.getItem() != null && boots.getItem() == ModItems.sheep_boots ? 0.2D : 0;
+                    double subHelm = helmet != null && helmet.getItem() != null && helmet.getItem() == IaFItemRegistry.sheep_helmet ? 0.2D : 0;
+                    double subChest = chestplate != null && chestplate.getItem() != null && chestplate.getItem() == IaFItemRegistry.sheep_chestplate ? 0.2D : 0;
+                    double subLegs = leggings != null && leggings.getItem() != null && leggings.getItem() == IaFItemRegistry.sheep_leggings ? 0.2D : 0;
+                    double subBoots = boots != null && boots.getItem() != null && boots.getItem() == IaFItemRegistry.sheep_boots ? 0.2D : 0;
                     double subSneaking = player.isSneaking() ? 0.2D : 0;
                     return 1.0D - subHelm - subChest - subLegs - subBoots - subSneaking;
                 }

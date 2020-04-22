@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
@@ -100,7 +100,7 @@ public class EntityPixieCharge extends EntityFireball {
             }
             if (this.shootingEntity == null || !(shootingEntity instanceof EntityPlayer) || !((EntityPlayer) shootingEntity).isCreative()) {
                 if (rand.nextInt(3) == 0) {
-                    this.entityDropItem(new ItemStack(ModItems.pixie_dust, 1), 0.45F);
+                    this.entityDropItem(new ItemStack(IaFItemRegistry.pixie_dust, 1), 0.45F);
                 }
             }
         }

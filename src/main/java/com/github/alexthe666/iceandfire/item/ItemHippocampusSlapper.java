@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +17,7 @@ import java.util.List;
 public class ItemHippocampusSlapper extends ItemSword {
 
     public ItemHippocampusSlapper() {
-        super(ModItems.hippocampus_sword_tools);
+        super(IaFItemRegistry.hippocampus_sword_tools);
         this.setTranslationKey("iceandfire.hippocampus_slapper");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "hippocampus_slapper");

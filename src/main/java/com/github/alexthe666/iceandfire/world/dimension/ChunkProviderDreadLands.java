@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.BlockUtils;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Random;
 
 public class ChunkProviderDreadLands implements IChunkGenerator {
-    protected static final IBlockState STONE = ModBlocks.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState ICE = ModBlocks.dragon_ice.getDefaultState();
-    protected static final IBlockState DIRT = ModBlocks.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRASS = ModBlocks.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final IBlockState GRAVEL = ModBlocks.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState STONE = IaFBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState ICE = IaFBlockRegistry.dragon_ice.getDefaultState();
+    protected static final IBlockState DIRT = IaFBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRASS = IaFBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final IBlockState GRAVEL = IaFBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
     private final Random rand;
     private final World world;
     private final WorldType terrainType;

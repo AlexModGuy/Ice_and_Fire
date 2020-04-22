@@ -4,10 +4,10 @@ import com.github.alexthe666.iceandfire.compat.CraftTweakerCompatBridge;
 import com.github.alexthe666.iceandfire.compat.OneProbeCompatBridge;
 import com.github.alexthe666.iceandfire.compat.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
-import com.github.alexthe666.iceandfire.core.ModEntities;
-import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.core.ModVillagers;
-import com.github.alexthe666.iceandfire.core.ModWorld;
+import com.github.alexthe666.iceandfire.entity.IaFEntityRegistry;
+import com.github.alexthe666.iceandfire.recipe.IaFRecipeRegistry;
+import com.github.alexthe666.iceandfire.entity.IaFVillagerRegistry;
+import com.github.alexthe666.iceandfire.world.IaFWorldRegistry;
 import com.github.alexthe666.iceandfire.event.EventServer;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
@@ -24,7 +24,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -103,8 +102,8 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.register(new EventServer());
         TAB_ITEMS = new CreativeTab(MODID + "_items");
         TAB_BLOCKS = new CreativeTab(MODID + "_blocks");
-        ModEntities.init();
-        ModWorld.init();
+        IaFEntityRegistry.init();
+        IaFWorldRegistry.init();
         MinecraftForge.EVENT_BUS.register(PROXY);
         logger.info("A raven flies from the north to the sea");
         logger.info("A dragon whispers her name in the east");
@@ -119,7 +118,7 @@ public class IceAndFire {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        ModVillagers.INSTANCE.init();
+        IaFVillagerRegistry.INSTANCE.init();
         logger.info("The watcher waits on the northern wall");
         logger.info("A daughter picks up a warrior's sword");
         MapGenStructureIO.registerStructure(MapGenSnowVillage.Start.class, "SnowVillageStart");
@@ -166,7 +165,7 @@ public class IceAndFire {
     public void postInit(FMLPostInitializationEvent event) {
         PROXY.postRender();
         TinkersCompatBridge.loadTinkersPostInitCompat();
-        ModRecipes.postInit();
+        IaFRecipeRegistry.postInit();
         logger.info("A brother bound to a love he must hide");
         logger.info("The younger's armor is worn in the mind");
         logger.info("A cold iron throne holds a boy barely grown");

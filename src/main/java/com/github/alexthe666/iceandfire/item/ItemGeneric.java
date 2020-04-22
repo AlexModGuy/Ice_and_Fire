@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -29,7 +28,7 @@ public class ItemGeneric extends Item {
 
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack) {
-        if (this == ModItems.creative_dragon_meal) {
+        if (this == IaFItemRegistry.creative_dragon_meal) {
             return true;
         } else {
             return super.hasEffect(stack);

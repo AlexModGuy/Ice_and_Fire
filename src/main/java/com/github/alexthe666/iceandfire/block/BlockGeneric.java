@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDreadMob;
 import net.minecraft.block.Block;
@@ -59,17 +58,17 @@ public class BlockGeneric extends Block {
 
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
-        return this == ModBlocks.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
+        return this == IaFBlockRegistry.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
     }
 
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
-        return this != ModBlocks.dragon_ice;
+        return this != IaFBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
-        return this != ModBlocks.dragon_ice;
+        return this != IaFBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
@@ -77,7 +76,7 @@ public class BlockGeneric extends Block {
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-        if (this == ModBlocks.dragon_ice) {
+        if (this == IaFBlockRegistry.dragon_ice) {
             if (blockState != iblockstate) {
                 return true;
             }
@@ -97,10 +96,10 @@ public class BlockGeneric extends Block {
 
 
     public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
-        return this == ModBlocks.silverBlock || this == ModBlocks.sapphireBlock;
+        return this == IaFBlockRegistry.silverBlock || this == IaFBlockRegistry.sapphireBlock;
     }
 
     public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
-        return this == ModBlocks.dragonforge_fire_brick;
+        return this == IaFBlockRegistry.dragonforge_fire_brick;
     }
 }

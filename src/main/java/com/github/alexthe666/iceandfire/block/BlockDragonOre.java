@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +44,7 @@ public class BlockDragonOre extends Block {
     public int getExpDrop(IBlockState state, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
         Random rand = world instanceof World ? ((World) world).rand : new Random();
         if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this)) {
-            if (this == ModBlocks.sapphireOre) {
+            if (this == IaFBlockRegistry.sapphireOre) {
                 return MathHelper.getInt(rand, 3, 7);
             }
         }
@@ -54,6 +53,6 @@ public class BlockDragonOre extends Block {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
+        return this == IaFBlockRegistry.sapphireOre ? IaFItemRegistry.sapphireGem : Item.getItemFromBlock(IaFBlockRegistry.silverOre);
     }
 }

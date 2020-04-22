@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.resources.I18n;
@@ -20,7 +19,7 @@ import java.util.List;
 public class ItemStymphalianDagger extends ItemSword {
 
     public ItemStymphalianDagger() {
-        super(ModItems.stymphalian_sword_tools);
+        super(IaFItemRegistry.stymphalian_sword_tools);
         this.setTranslationKey("iceandfire.stymphalian_bird_dagger");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "stymphalian_bird_dagger");

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.IDragonFlute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,7 +53,7 @@ public class ItemDragonFlute extends Item {
                 }
             }*/
         }
-        worldIn.playSound(player, player.getPosition(), ModSounds.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
+        worldIn.playSound(player, player.getPosition(), IaFSoundRegistry.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }

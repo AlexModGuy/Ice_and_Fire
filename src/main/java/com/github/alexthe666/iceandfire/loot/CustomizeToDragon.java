@@ -1,12 +1,9 @@
 package com.github.alexthe666.iceandfire.loot;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.*;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
-import com.github.alexthe666.iceandfire.item.ItemDragonFlesh;
-import com.github.alexthe666.iceandfire.item.ItemDragonScales;
-import com.github.alexthe666.iceandfire.item.ItemDragonSkull;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -28,7 +25,7 @@ public class CustomizeToDragon extends LootFunction {
         if (!stack.isEmpty() && context.getLootedEntity() instanceof EntityDragonBase) {
             Random random = new Random();
             EntityDragonBase dragon = (EntityDragonBase) context.getLootedEntity();
-            if (stack.getItem() == ModItems.dragonbone) {
+            if (stack.getItem() == IaFItemRegistry.dragonbone) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
                 return stack;
             }
@@ -46,18 +43,18 @@ public class CustomizeToDragon extends LootFunction {
             }
             if (stack.getItem() instanceof ItemDragonFlesh) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? ModItems.fire_dragon_flesh : ModItems.ice_dragon_flesh, stack.getCount(), stack.getMetadata());
+                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IaFItemRegistry.fire_dragon_flesh : IaFItemRegistry.ice_dragon_flesh, stack.getCount(), stack.getMetadata());
             }
             if (stack.getItem() instanceof ItemDragonSkull) {
-                ItemStack stack1 = new ItemStack(dragon.dragonType == DragonType.FIRE ? ModItems.dragon_skull : ModItems.dragon_skull, stack.getCount(), stack.getMetadata());
+                ItemStack stack1 = new ItemStack(dragon.dragonType == DragonType.FIRE ? IaFItemRegistry.dragon_skull : IaFItemRegistry.dragon_skull, stack.getCount(), stack.getMetadata());
                 stack1.setTagCompound(stack.getTagCompound());
                 return stack1;
             }
-            if (stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood) {
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, stack.getCount(), stack.getMetadata());
+            if (stack.getItem() == IaFItemRegistry.fire_dragon_blood || stack.getItem() == IaFItemRegistry.ice_dragon_blood) {
+                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IaFItemRegistry.fire_dragon_blood : IaFItemRegistry.ice_dragon_blood, stack.getCount(), stack.getMetadata());
             }
-            if (stack.getItem() == ModItems.fire_dragon_heart || stack.getItem() == ModItems.ice_dragon_heart) {
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, stack.getCount(), stack.getMetadata());
+            if (stack.getItem() == IaFItemRegistry.fire_dragon_heart || stack.getItem() == IaFItemRegistry.ice_dragon_heart) {
+                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IaFItemRegistry.fire_dragon_heart : IaFItemRegistry.ice_dragon_heart, stack.getCount(), stack.getMetadata());
             }
         }
         return stack;

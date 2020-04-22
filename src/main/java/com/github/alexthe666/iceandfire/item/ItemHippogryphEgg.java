@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,7 +33,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
         EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(ModItems.hippogryph_egg, 1, eggType.ordinal());
+        ItemStack stack = new ItemStack(IaFItemRegistry.hippogryph_egg, 1, eggType.ordinal());
         return stack;
     }
 

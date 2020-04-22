@@ -1,10 +1,10 @@
-package com.github.alexthe666.iceandfire.core;
+package com.github.alexthe666.iceandfire.client;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.input.Keyboard;
 
-public class ModKeys {
+public class IaFKeybindRegistry {
     public static KeyBinding dragon_fireAttack;
     public static KeyBinding dragon_strike;
     public static KeyBinding dragon_down;

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -104,7 +104,7 @@ public class WorldGenMyrmexDecoration {
 
     public static void generateCocoon(World worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
-            worldIn.setBlockState(blockpos, jungle ? ModBlocks.jungle_myrmex_cocoon.getDefaultState() : ModBlocks.desert_myrmex_cocoon.getDefaultState(), 3);
+            worldIn.setBlockState(blockpos, jungle ? IaFBlockRegistry.jungle_myrmex_cocoon.getDefaultState() : IaFBlockRegistry.desert_myrmex_cocoon.getDefaultState(), 3);
 
             if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityLockableLoot && !worldIn.getTileEntity(blockpos).isInvalid()) {
                 TileEntity tileentity1 = worldIn.getTileEntity(blockpos);
@@ -121,7 +121,7 @@ public class WorldGenMyrmexDecoration {
     }
 
     public static void generateGold(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        IBlockState gold = rand.nextBoolean() ? ModBlocks.goldPile.getDefaultState() : ModBlocks.silverPile.getDefaultState();
+        IBlockState gold = rand.nextBoolean() ? IaFBlockRegistry.goldPile.getDefaultState() : IaFBlockRegistry.silverPile.getDefaultState();
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             worldIn.setBlockState(blockpos, gold.withProperty(BlockGoldPile.LAYERS, 8), 3);
             worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
@@ -180,11 +180,11 @@ public class WorldGenMyrmexDecoration {
             if (current == Blocks.DIRT || current == Blocks.SAND || current == Blocks.COBBLESTONE || current == Blocks.GRAVEL) {
                 Block ore = Blocks.REDSTONE_ORE;
                 if (rand.nextInt(3) == 0) {
-                    ore = rand.nextBoolean() ? Blocks.GOLD_ORE : ModBlocks.silverOre;
+                    ore = rand.nextBoolean() ? Blocks.GOLD_ORE : IaFBlockRegistry.silverOre;
                 } else if (rand.nextInt(3) == 0) {
                     ore = Blocks.DIAMOND_ORE;
                 } else if (rand.nextInt(2) == 0) {
-                    ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : ModBlocks.sapphireOre;
+                    ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : IaFBlockRegistry.sapphireOre;
                 }
                 worldIn.setBlockState(blockpos, ore.getDefaultState());
             }

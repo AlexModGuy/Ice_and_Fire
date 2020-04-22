@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world.village;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
@@ -163,7 +163,7 @@ public class PixieVillagePieces {
                 this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 9 - 1, 0);
             }
 
-            this.setBlockState(worldIn, ModBlocks.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, EnumFacing.NORTH), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IaFBlockRegistry.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, EnumFacing.NORTH), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);
@@ -751,7 +751,7 @@ public class PixieVillagePieces {
             }
             this.replaceAirAndLiquidDownwards(worldIn, Blocks.DIRT.getDefaultState(), 0, -1, 0, structureBoundingBoxIn);
 
-            this.setBlockState(worldIn, ModBlocks.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IaFBlockRegistry.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);

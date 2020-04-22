@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -14,7 +13,6 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -57,19 +55,19 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
 
         if (active) {
             if (fire) {
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_fire_core.getDefaultState(), 3);
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_fire_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core.getDefaultState(), 3);
             } else {
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_ice_core.getDefaultState(), 3);
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_ice_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core.getDefaultState(), 3);
             }
         } else {
             if (fire) {
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_fire_core_disabled.getDefaultState(), 3);
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_fire_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_fire_core_disabled.getDefaultState(), 3);
             } else {
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_ice_core_disabled.getDefaultState(), 3);
-                worldIn.setBlockState(pos, ModBlocks.dragonforge_ice_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IaFBlockRegistry.dragonforge_ice_core_disabled.getDefaultState(), 3);
             }
         }
 
@@ -92,11 +90,11 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
     }
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return isFire ? Item.getItemFromBlock(ModBlocks.dragonforge_fire_core_disabled) : Item.getItemFromBlock(ModBlocks.dragonforge_ice_core_disabled);
+        return isFire ? Item.getItemFromBlock(IaFBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IaFBlockRegistry.dragonforge_ice_core_disabled);
     }
 
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-        return new ItemStack(isFire ? Item.getItemFromBlock(ModBlocks.dragonforge_fire_core_disabled) : Item.getItemFromBlock(ModBlocks.dragonforge_ice_core_disabled));
+        return new ItemStack(isFire ? Item.getItemFromBlock(IaFBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IaFBlockRegistry.dragonforge_ice_core_disabled));
     }
 
     public EnumBlockRenderType getRenderType(IBlockState state) {

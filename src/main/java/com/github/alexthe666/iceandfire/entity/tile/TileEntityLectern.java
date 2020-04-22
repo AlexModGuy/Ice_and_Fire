@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,11 +77,11 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
             if (itemstack.isEmpty()) {
                 return false;
             }
-            if (itemstack.getItem() != ModItems.bestiary) {
+            if (itemstack.getItem() != IaFItemRegistry.bestiary) {
                 return false;
             }
 
-            if (itemstack.getItem() == ModItems.bestiary) {
+            if (itemstack.getItem() == IaFItemRegistry.bestiary) {
                 List list = EnumBestiaryPages.possiblePages(itemstack);
                 if (list == null || list.isEmpty()) {
                     return false;
@@ -150,7 +150,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     public EnumBestiaryPages[] randomizePages() {
-        if (stacks.get(0).getItem() == ModItems.bestiary) {
+        if (stacks.get(0).getItem() == IaFItemRegistry.bestiary) {
             List<EnumBestiaryPages> possibleList = getPossiblePages();
             localRand.setSeed(this.world.getWorldTime());
             Collections.shuffle(possibleList, localRand);

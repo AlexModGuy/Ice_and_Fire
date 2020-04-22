@@ -4,8 +4,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.util.IAFMath;
@@ -337,7 +337,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     public void verifySellingItem(ItemStack stack) {
         if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
             this.livingSoundTime = -this.getTalkInterval();
-            this.playSound(stack.isEmpty() ? ModSounds.MYRMEX_HURT : ModSounds.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(stack.isEmpty() ? IaFSoundRegistry.MYRMEX_HURT : IaFSoundRegistry.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
         }
     }
 
@@ -348,7 +348,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             this.getHive().setWorld(this.world);
             this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
         }
-        this.playSound(ModSounds.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
+        this.playSound(IaFSoundRegistry.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
         int i = 3 + this.rand.nextInt(4);
 
         if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
@@ -363,7 +363,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             i += 5;
         }
 
-        if (recipe.getItemToBuy().getItem() == ModItems.myrmex_desert_resin || recipe.getItemToBuy().getItem() == ModItems.myrmex_jungle_resin) {
+        if (recipe.getItemToBuy().getItem() == IaFItemRegistry.myrmex_desert_resin || recipe.getItemToBuy().getItem() == IaFItemRegistry.myrmex_jungle_resin) {
             this.wealth += recipe.getItemToBuy().getCount();
         }
 
@@ -545,7 +545,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         if (!shouldHaveNormalAI()) {
             return false;
         }
-        boolean flag2 = itemstack.getItem() == ModItems.myrmex_jungle_staff || itemstack.getItem() == ModItems.myrmex_desert_staff;
+        boolean flag2 = itemstack.getItem() == IaFItemRegistry.myrmex_jungle_staff || itemstack.getItem() == IaFItemRegistry.myrmex_desert_staff;
 
         if (flag2) {
             this.onStaffInteract(player, itemstack);
@@ -737,29 +737,29 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return ModSounds.MYRMEX_IDLE;
+        return IaFSoundRegistry.MYRMEX_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.MYRMEX_HURT;
+        return IaFSoundRegistry.MYRMEX_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return ModSounds.MYRMEX_DIE;
+        return IaFSoundRegistry.MYRMEX_DIE;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn) {
-        this.playSound(ModSounds.MYRMEX_WALK, 0.16F * this.getMyrmexPitch() * (this.getRNG().nextFloat() * 0.6F + 0.4F), 1.0F);
+        this.playSound(IaFSoundRegistry.MYRMEX_WALK, 0.16F * this.getMyrmexPitch() * (this.getRNG().nextFloat() * 0.6F + 0.4F), 1.0F);
     }
 
     protected void playBiteSound() {
-        this.playSound(ModSounds.MYRMEX_BITE, 1.0F * this.getMyrmexPitch(), 1.0F);
+        this.playSound(IaFSoundRegistry.MYRMEX_BITE, 1.0F * this.getMyrmexPitch(), 1.0F);
     }
 
     protected void playStingSound() {
-        this.playSound(ModSounds.MYRMEX_STING, 1.0F * this.getMyrmexPitch(), 0.6F);
+        this.playSound(IaFSoundRegistry.MYRMEX_STING, 1.0F * this.getMyrmexPitch(), 0.6F);
     }
 
     protected void playVillagerEffect() {

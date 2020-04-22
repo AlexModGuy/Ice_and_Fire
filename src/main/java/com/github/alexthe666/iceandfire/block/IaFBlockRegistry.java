@@ -1,7 +1,7 @@
-package com.github.alexthe666.iceandfire.core;
+package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.*;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.Block;
@@ -10,9 +10,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ModBlocks {
+public class IaFBlockRegistry {
 
-    public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, ModSounds.GOLD_PILE_BREAK, ModSounds.GOLD_PILE_STEP, ModSounds.GOLD_PILE_BREAK, ModSounds.GOLD_PILE_STEP, ModSounds.GOLD_PILE_STEP);
+    public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, IaFSoundRegistry.GOLD_PILE_BREAK, IaFSoundRegistry.GOLD_PILE_STEP, IaFSoundRegistry.GOLD_PILE_BREAK, IaFSoundRegistry.GOLD_PILE_STEP, IaFSoundRegistry.GOLD_PILE_STEP);
 
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":lectern")
     public static Block lectern = new BlockLectern();

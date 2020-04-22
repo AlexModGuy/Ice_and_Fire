@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -260,7 +259,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexRoyal : ModVillagers.INSTANCE.desertMyrmexRoyal;
+        return this.isJungle() ? IaFVillagerRegistry.INSTANCE.jungleMyrmexRoyal : IaFVillagerRegistry.INSTANCE.desertMyrmexRoyal;
     }
 
     public boolean shouldMoveThroughHive() {

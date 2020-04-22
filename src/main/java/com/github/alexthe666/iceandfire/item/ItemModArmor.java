@@ -2,15 +2,12 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Calendar;
@@ -27,7 +24,7 @@ public class ItemModArmor extends ItemArmor {
     }
 
     public String getTranslationKey(ItemStack stack) {
-        if (this == ModItems.earplugs) {
+        if (this == IaFItemRegistry.earplugs) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
@@ -39,7 +36,7 @@ public class ItemModArmor extends ItemArmor {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (this == ModItems.earplugs) {
+        if (this == IaFItemRegistry.earplugs) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {

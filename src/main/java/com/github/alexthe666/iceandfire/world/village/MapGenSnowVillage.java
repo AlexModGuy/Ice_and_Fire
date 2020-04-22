@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.village;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModWorld;
+import com.github.alexthe666.iceandfire.world.IaFWorldRegistry;
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 public class MapGenSnowVillage extends WorldGenerator {
-    public static List<Biome> VILLAGE_SPAWN_BIOMES = Arrays.asList(Biomes.ICE_MOUNTAINS, Biomes.ICE_PLAINS, Biomes.MUTATED_ICE_FLATS, ModWorld.GLACIER_BIOME, Biomes.COLD_TAIGA_HILLS, Biomes.FROZEN_OCEAN, Biomes.COLD_TAIGA);
+    public static List<Biome> VILLAGE_SPAWN_BIOMES = Arrays.asList(Biomes.ICE_MOUNTAINS, Biomes.ICE_PLAINS, Biomes.MUTATED_ICE_FLATS, IaFWorldRegistry.GLACIER_BIOME, Biomes.COLD_TAIGA_HILLS, Biomes.FROZEN_OCEAN, Biomes.COLD_TAIGA);
     private final int minTownSeparation;
     private int size;
     private int distance;

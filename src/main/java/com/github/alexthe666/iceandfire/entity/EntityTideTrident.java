@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
@@ -64,7 +64,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 6.0D;
         this.setSize(0.85F, 0.5F);
-        this.stack = new ItemStack(ModItems.tide_trident);
+        this.stack = new ItemStack(IaFItemRegistry.tide_trident);
     }
 
     public EntityTideTrident(World worldIn, double x, double y, double z, ItemStack stack) {

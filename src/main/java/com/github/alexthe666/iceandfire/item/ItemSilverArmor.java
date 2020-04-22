@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -29,7 +27,7 @@ public class ItemSilverArmor extends ItemArmor {
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.getArmorMaterial().getRepairItemStack();
-        if (this.getArmorMaterial() == ModItems.silverMetal) {
+        if (this.getArmorMaterial() == IaFItemRegistry.silverMetal) {
             NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
             for (ItemStack ingot : silverItems) {
                 if (OreDictionary.itemMatches(repair, ingot, false)) {

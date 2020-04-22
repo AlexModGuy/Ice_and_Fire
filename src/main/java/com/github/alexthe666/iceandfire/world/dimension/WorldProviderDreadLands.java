@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModWorld;
+import com.github.alexthe666.iceandfire.world.IaFWorldRegistry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -10,7 +10,6 @@ import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 
@@ -19,13 +18,13 @@ public class WorldProviderDreadLands extends WorldProvider {
     @Override
     public void init() {
         this.hasSkyLight = true;
-        this.biomeProvider = new BiomeProviderSingle(ModWorld.DREADLANDS_BIOME);
+        this.biomeProvider = new BiomeProviderSingle(IaFWorldRegistry.DREADLANDS_BIOME);
         this.nether = false;
     }
 
     @Override
     public DimensionType getDimensionType() {
-        return ModWorld.DREADLANDS_DIM;
+        return IaFWorldRegistry.DREADLANDS_DIM;
     }
 
     @SideOnly(Side.CLIENT)

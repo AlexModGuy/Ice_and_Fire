@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.loot;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import com.google.gson.JsonDeserializationContext;
@@ -29,7 +29,7 @@ public class CustomizeToSeaSerpent extends LootFunction {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 3 * ancientModifier)));
                 return new ItemStack(seaSerpent.getEnum().scale, stack.getCount(), stack.getMetadata());
             }
-            if (stack.getItem() == ModItems.sea_serpent_fang) {
+            if (stack.getItem() == IaFItemRegistry.sea_serpent_fang) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 2 * ancientModifier)));
                 return stack;
             }

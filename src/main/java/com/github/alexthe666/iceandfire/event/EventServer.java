@@ -2,15 +2,14 @@ package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockBurntTorch;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonRoosts;
 import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -302,7 +301,7 @@ public class EventServer {
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
             event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ,
-                    new ItemStack(ModItems.witherbone, event.getEntityLiving().getRNG().nextInt(2))));
+                    new ItemStack(IaFItemRegistry.witherbone, event.getEntityLiving().getRNG().nextInt(2))));
         }
 
         if (event.getEntityLiving() instanceof EntityLiving) {
@@ -397,7 +396,7 @@ public class EventServer {
                         if (ready) {
                             event.getTarget().setDead();
                             if (silkTouch) {
-                                ItemStack statuette = new ItemStack(ModItems.stone_statue);
+                                ItemStack statuette = new ItemStack(IaFItemRegistry.stone_statue);
                                 statuette.setTagCompound(new NBTTagCompound());
                                 statuette.getTagCompound().setBoolean("IAFStoneStatueEntityPlayer", stonePlayer);
                                 statuette.getTagCompound().setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
@@ -423,14 +422,14 @@ public class EventServer {
         if (chainProperties != null) {
             chainProperties.minimizeLists();
             if (!event.getEntity().world.isRemote) {
-                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(ModItems.chain, chainProperties.connectedEntities.size()));
+                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(IaFItemRegistry.chain, chainProperties.connectedEntities.size()));
                 entityitem.setDefaultPickupDelay();
                 event.getEntity().world.spawnEntity(entityitem);
             }
             chainProperties.clearChained();
         }
         if (event.getEntityLiving().getUniqueID().equals(EventServer.ALEX_UUID)) {
-            event.getEntityLiving().entityDropItem(new ItemStack(ModItems.weezer_blue_album), 1);
+            event.getEntityLiving().entityDropItem(new ItemStack(IaFItemRegistry.weezer_blue_album), 1);
         }
     }
 
@@ -446,7 +445,7 @@ public class EventServer {
         if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IceAndFire.CONFIG.dreadlandsDimensionId) {
             event.setCanceled(true);
             if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
-                IBlockState state = ModBlocks.burnt_torch.getDefaultState();
+                IBlockState state = IaFBlockRegistry.burnt_torch.getDefaultState();
                 for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
                     if (canTorchPlaceAt(event.getWorld(), event.getPos(), enumfacing)) {
                         state = state.withProperty(BlockBurntTorch.FACING, enumfacing);
@@ -528,7 +527,7 @@ public class EventServer {
                     if (event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().dropItem(ModItems.rotten_egg, 1);
+                        event.getEntityLiving().dropItem(IaFItemRegistry.rotten_egg, 1);
                     }
                     chickenProps.timeUntilNextEgg = chickenProps.generateTime();
                 } else if (chickenProps.timeUntilNextEgg > 0) {
@@ -570,7 +569,7 @@ public class EventServer {
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(ModBlocks.dragon_ice));
+                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(IaFBlockRegistry.dragon_ice));
                     }
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
@@ -744,7 +743,7 @@ public class EventServer {
             if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getEntityPlayer())) {
                 chainProperties.removeChain(event.getTarget(), event.getEntityPlayer());
                 if (!event.getWorld().isRemote) {
-                    event.getTarget().dropItem(ModItems.chain, 1);
+                    event.getTarget().dropItem(IaFItemRegistry.chain, 1);
                 }
             }
         }
@@ -788,7 +787,7 @@ public class EventServer {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == ModBlocks.goldPile || event.getState().getBlock() == ModBlocks.silverPile)) {
+        if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == IaFBlockRegistry.goldPile || event.getState().getBlock() == IaFBlockRegistry.silverPile)) {
             float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getEntityBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {
@@ -814,7 +813,7 @@ public class EventServer {
                 || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)) {
             LootCondition chance = new RandomChance(0.4f);
-            LootEntryItem item = new LootEntryItem(ModItems.manuscript, 20, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
+            LootEntryItem item = new LootEntryItem(IaFItemRegistry.manuscript, 20, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
@@ -824,8 +823,8 @@ public class EventServer {
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
                 || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH))) {
             LootCondition chance = new RandomChance(0.2f);
-            LootEntryItem silver = new LootEntryItem(ModItems.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
-            LootEntryItem nugget = new LootEntryItem(ModItems.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
+            LootEntryItem silver = new LootEntryItem(IaFItemRegistry.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
+            LootEntryItem nugget = new LootEntryItem(IaFItemRegistry.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
             event.getTable().addPool(pool);
         }
@@ -834,7 +833,7 @@ public class EventServer {
                 || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
                 || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
             LootCondition chance = new RandomChance(0.01f);
-            LootEntryItem silver = new LootEntryItem(ModItems.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
+            LootEntryItem silver = new LootEntryItem(IaFItemRegistry.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
             LootPool pool = new LootPool(new LootEntry[]{silver}, new LootCondition[]{chance}, new RandomValueRange(1, 1), new RandomValueRange(1, 1), "weezer");
             event.getTable().addPool(pool);
         }

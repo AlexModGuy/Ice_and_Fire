@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAIMountDragon;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -100,8 +100,8 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.dread_queen_sword));
-        this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.dread_queen_staff));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IaFItemRegistry.dread_queen_sword));
+        this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(IaFItemRegistry.dread_queen_staff));
     }
 
     @Override

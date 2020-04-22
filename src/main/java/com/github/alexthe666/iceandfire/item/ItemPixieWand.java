@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -60,7 +59,7 @@ public class ItemPixieWand extends Item {
             if (!worldIn.isRemote) {
                 worldIn.spawnEntity(charge);
             }
-            playerIn.playSound(ModSounds.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
+            playerIn.playSound(IaFSoundRegistry.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
             itemStackIn.damageItem(1, playerIn);
             playerIn.getCooldownTracker().setCooldown(this, 5);
         }
@@ -69,7 +68,7 @@ public class ItemPixieWand extends Item {
 
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player) {
         int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.INFINITY, bow);
-        return enchant > 0 && stack.getItem() == ModItems.pixie_dust;
+        return enchant > 0 && stack.getItem() == IaFItemRegistry.pixie_dust;
     }
 
     private ItemStack findAmmo(EntityPlayer player) {
@@ -91,7 +90,7 @@ public class ItemPixieWand extends Item {
     }
 
     protected boolean isAmmo(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() == ModItems.pixie_dust;
+        return !stack.isEmpty() && stack.getItem() == IaFItemRegistry.pixie_dust;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.structures.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -37,7 +36,7 @@ public class BlockGoldPile extends Block {
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.goldpile");
         this.setHardness(0.3F);
-        this.setSoundType(ModBlocks.SOUND_TYPE_GOLD);
+        this.setSoundType(IaFBlockRegistry.SOUND_TYPE_GOLD);
         setRegistryName(IceAndFire.MODID, "goldpile");
     }
 
@@ -85,10 +84,10 @@ public class BlockGoldPile extends Block {
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
-                if (item.getItem() == Item.getItemFromBlock(ModBlocks.goldPile)) {
+                if (item.getItem() == Item.getItemFromBlock(IaFBlockRegistry.goldPile)) {
                     if (!item.isEmpty()) {
                         if (this.getMetaFromState(state) < 7) {
-                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.goldPile, this.getMetaFromState(state) + 1, 3);
+                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IaFBlockRegistry.goldPile, this.getMetaFromState(state) + 1, 3);
                             if (!playerIn.capabilities.isCreativeMode) {
                                 item.shrink(1);
 

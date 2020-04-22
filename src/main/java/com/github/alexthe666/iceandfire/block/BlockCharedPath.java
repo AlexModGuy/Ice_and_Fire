@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.SoundType;
@@ -64,7 +63,7 @@ public class BlockCharedPath extends BlockGrassPath {
             case EAST:
                 IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
                 Block block = iblockstate.getBlock();
-                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != ModBlocks.charedGrassPath && block != ModBlocks.frozenGrassPath;
+                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != IaFBlockRegistry.charedGrassPath && block != IaFBlockRegistry.frozenGrassPath;
             default:
                 return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
         }
@@ -72,7 +71,7 @@ public class BlockCharedPath extends BlockGrassPath {
 
     @Nullable
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return isFire ? ModBlocks.charedDirt.getItemDropped(ModBlocks.charedDirt.getDefaultState(), rand, fortune) : ModBlocks.frozenDirt.getItemDropped(ModBlocks.frozenDirt.getDefaultState(), rand, fortune);
+        return isFire ? IaFBlockRegistry.charedDirt.getItemDropped(IaFBlockRegistry.charedDirt.getDefaultState(), rand, fortune) : IaFBlockRegistry.frozenDirt.getItemDropped(IaFBlockRegistry.frozenDirt.getDefaultState(), rand, fortune);
     }
 
     @Override
@@ -80,13 +79,13 @@ public class BlockCharedPath extends BlockGrassPath {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? ModBlocks.charedDirt.getDefaultState() : ModBlocks.frozenDirt.getDefaultState());
+            worldIn.setBlockState(pos, isFire ? IaFBlockRegistry.charedDirt.getDefaultState() : IaFBlockRegistry.frozenDirt.getDefaultState());
         }
     }
 
     private void updateBlockState(World worldIn, BlockPos pos) {
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? ModBlocks.charedDirt.getDefaultState() : ModBlocks.frozenDirt.getDefaultState());
+            worldIn.setBlockState(pos, isFire ? IaFBlockRegistry.charedDirt.getDefaultState() : IaFBlockRegistry.frozenDirt.getDefaultState());
         }
     }
 

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
@@ -23,11 +23,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 public class ItemGorgonHead extends Item implements ICustomRendered {
@@ -98,7 +95,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
         if (pointedEntity != null) {
             if (pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer) {
                 if (pointedEntity instanceof EntityPlayer) {
-                    pointedEntity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
+                    pointedEntity.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
                     pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
                     statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -129,9 +126,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 }
 
                 if (pointedEntity instanceof EntityGorgon) {
-                    entity.playSound(ModSounds.GORGON_PETRIFY, 1, 1);
+                    entity.playSound(IaFSoundRegistry.GORGON_PETRIFY, 1, 1);
                 } else {
-                    entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
+                    entity.playSound(IaFSoundRegistry.GORGON_TURN_STONE, 1, 1);
                 }
                 if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
                     stack.shrink(1);

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -13,7 +12,7 @@ import net.minecraft.world.World;
 public class ItemBlindfold extends ItemArmor {
 
     public ItemBlindfold() {
-        super(ModItems.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
+        super(IaFItemRegistry.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.blindfold");
         this.setRegistryName(IceAndFire.MODID, "blindfold");

@@ -1,23 +1,18 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockPlanks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
 public class WorldGenDreadwoodTree extends WorldGenerator {
 
-    private static final IBlockState TRUNK = ModBlocks.dreadwood_log.getDefaultState();
+    private static final IBlockState TRUNK = IaFBlockRegistry.dreadwood_log.getDefaultState();
 
     public WorldGenDreadwoodTree() {
     }

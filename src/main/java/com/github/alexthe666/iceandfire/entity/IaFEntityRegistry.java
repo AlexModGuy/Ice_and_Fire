@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.core;
+package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.List;
 
-public class ModEntities {
+public class IaFEntityRegistry {
 
     public static void init() {
         EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);

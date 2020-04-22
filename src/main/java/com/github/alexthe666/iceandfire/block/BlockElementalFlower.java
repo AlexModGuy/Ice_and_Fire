@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
@@ -35,7 +34,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 
     public boolean canStay(World worldIn, BlockPos pos) {
         IBlockState soil = worldIn.getBlockState(pos.down());
-        if (this == ModBlocks.fire_lily) {
+        if (this == IaFBlockRegistry.fire_lily) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
         } else {
             return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;

@@ -1,20 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
-import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class ItemLichStaff extends ItemGeneric {
@@ -26,7 +18,7 @@ public class ItemLichStaff extends ItemGeneric {
     }
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return repair.getItem() == ModItems.dread_shard || super.getIsRepairable(toRepair, repair);
+        return repair.getItem() == IaFItemRegistry.dread_shard || super.getIsRepairable(toRepair, repair);
     }
 
     @Override

@@ -1,18 +1,15 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
-import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -35,7 +32,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == ModItems.manuscript;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IaFItemRegistry.manuscript;
             }
         });
         for (int i = 0; i < 3; ++i) {
@@ -110,7 +107,7 @@ public class ContainerLectern extends SyncedFieldContainer {
 
     public int getManuscriptAmount() {
         ItemStack itemstack = this.tileFurnace.getStackInSlot(1);
-        return itemstack.isEmpty() || itemstack.getItem() != ModItems.manuscript ? 0 : itemstack.getCount();
+        return itemstack.isEmpty() || itemstack.getItem() != IaFItemRegistry.manuscript ? 0 : itemstack.getCount();
     }
 
     public EnumBestiaryPages[] getPossiblePages() {
@@ -118,7 +115,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if (this.tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
+        if (this.tileFurnace.getStackInSlot(0).getItem() == IaFItemRegistry.bestiary) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -151,7 +148,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
             if (page != null) {
-                if (itemstack.getItem() == ModItems.bestiary) {
+                if (itemstack.getItem() == IaFItemRegistry.bestiary) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (this.tileFurnace instanceof TileEntityLectern) {
@@ -167,7 +164,7 @@ public class ContainerLectern extends SyncedFieldContainer {
                 this.tileFurnace.markDirty();
                 //this.xpSeed = playerIn.getXPSeed();
                 this.onCraftMatrixChanged(this.tileFurnace);
-                playerIn.world.playSound(null, playerIn.getPosition(), ModSounds.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
+                playerIn.world.playSound(null, playerIn.getPosition(), IaFSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
             }
             onUpdate();
             return true;

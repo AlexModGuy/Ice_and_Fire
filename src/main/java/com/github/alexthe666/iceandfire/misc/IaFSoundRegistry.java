@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.core;
+package com.github.alexthe666.iceandfire.misc;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -8,7 +8,7 @@ import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(MODID)
-public final class ModSounds {
+public final class IaFSoundRegistry {
 
     @GameRegistry.ObjectHolder("bestiary_page")
     public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");

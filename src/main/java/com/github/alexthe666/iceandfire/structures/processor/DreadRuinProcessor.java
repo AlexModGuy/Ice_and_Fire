@@ -1,16 +1,13 @@
 package com.github.alexthe666.iceandfire.structures.processor;
 
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,7 +32,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
     @Override
     public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
         if (worldIn.rand.nextFloat() <= integrity) {
-            if (blockInfoIn.blockState.getBlock() == ModBlocks.dread_stone_bricks) {
+            if (blockInfoIn.blockState.getBlock() == IaFBlockRegistry.dread_stone_bricks) {
                 IBlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
@@ -48,7 +45,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, Blocks.CHEST.getDefaultState(), tag);
                 return newInfo;
             }
-            if (blockInfoIn.blockState.getBlock() == ModBlocks.dread_spawner) {
+            if (blockInfoIn.blockState.getBlock() == IaFBlockRegistry.dread_spawner) {
                 NBTTagCompound tag = blockInfoIn.tileentityData == null ? new NBTTagCompound() : blockInfoIn.tileentityData;
                 NBTTagCompound spawnData = new NBTTagCompound();
                 Random rand = new Random(worldIn.getSeed() + pos.toLong());
@@ -57,7 +54,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
                     spawnData.setString("id", spawnerMobId.toString());
                     tag.setTag("SpawnData", spawnData.copy());
                 }
-                Template.BlockInfo newInfo = new Template.BlockInfo(pos, ModBlocks.dread_spawner.getDefaultState(), tag);
+                Template.BlockInfo newInfo = new Template.BlockInfo(pos, IaFBlockRegistry.dread_spawner.getDefaultState(), tag);
                 return newInfo;
 
             }
@@ -84,11 +81,11 @@ public class DreadRuinProcessor implements ITemplateProcessor {
     public static IBlockState getRandomCrackedBlock(@Nullable IBlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
-            return ModBlocks.dread_stone_bricks.getDefaultState();
+            return IaFBlockRegistry.dread_stone_bricks.getDefaultState();
         } else if (rand < 0.9) {
-            return ModBlocks.dread_stone_bricks_cracked.getDefaultState();
+            return IaFBlockRegistry.dread_stone_bricks_cracked.getDefaultState();
         } else {
-            return ModBlocks.dread_stone_bricks_mossy.getDefaultState();
+            return IaFBlockRegistry.dread_stone_bricks_mossy.getDefaultState();
         }
     }
 }

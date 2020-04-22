@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
-import com.github.alexthe666.iceandfire.world.dimension.TeleporterDreadLands;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -15,8 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -106,7 +99,7 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-        return !iblockstate.isOpaqueCube() && block != ModBlocks.dread_portal;
+        return !iblockstate.isOpaqueCube() && block != IaFBlockRegistry.dread_portal;
     }
 
     @Nullable

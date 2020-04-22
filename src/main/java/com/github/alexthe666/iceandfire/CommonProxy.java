@@ -1,15 +1,17 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.*;
-import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
-import com.github.alexthe666.iceandfire.world.BiomeGlacier;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
+import com.github.alexthe666.iceandfire.recipe.IaFRecipeRegistry;
+import com.github.alexthe666.iceandfire.world.IaFWorldRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -37,7 +39,7 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
         try {
-            for (Field f : ModSounds.class.getDeclaredFields()) {
+            for (Field f : IaFSoundRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof SoundEvent) {
                     event.getRegistry().register((SoundEvent) obj);
@@ -55,7 +57,7 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         try {
-            for (Field f : ModBlocks.class.getDeclaredFields()) {
+            for (Field f : IaFBlockRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof Block) {
                     event.getRegistry().register((Block) obj);
@@ -162,11 +164,11 @@ public class CommonProxy {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         // ItemBlocks
         try {
-            for (Field f : ModBlocks.class.getDeclaredFields()) {
+            for (Field f : IaFBlockRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof Block) {
                     ItemBlock itemBlock;
-                    if (obj == ModBlocks.jar_pixie) {
+                    if (obj == IaFBlockRegistry.jar_pixie) {
                         itemBlock = ((BlockJar) obj).new ItemBlockJar((Block) obj);
                     } else if (obj instanceof BlockPixieHouse) {
                         itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
@@ -200,7 +202,7 @@ public class CommonProxy {
 
         // Items
         try {
-            for (Field f : ModItems.class.getDeclaredFields()) {
+            for (Field f : IaFItemRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof Item) {
                     event.getRegistry().register((Item) obj);
@@ -239,17 +241,17 @@ public class CommonProxy {
         for (EnumSkullType skull : EnumSkullType.values()) {
             event.getRegistry().register(skull.skull_item);
         }
-        ModRecipes.preInit();
+        IaFRecipeRegistry.preInit();
     }
 
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
-        event.getRegistry().register(ModWorld.GLACIER_BIOME);
-        BiomeDictionary.addTypes(ModWorld.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        event.getRegistry().register(IaFWorldRegistry.GLACIER_BIOME);
+        BiomeDictionary.addTypes(IaFWorldRegistry.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         //BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         if (IceAndFire.CONFIG.spawnGlaciers) {
-            BiomeManager.addSpawnBiome(ModWorld.GLACIER_BIOME);
-            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(ModWorld.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));
+            BiomeManager.addSpawnBiome(IaFWorldRegistry.GLACIER_BIOME);
+            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IaFWorldRegistry.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));
 
         }
     }

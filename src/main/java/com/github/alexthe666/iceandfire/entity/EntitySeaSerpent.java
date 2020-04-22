@@ -2,13 +2,12 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIWatchClosestIgnoreRider;
 import com.github.alexthe666.iceandfire.entity.ai.FlyingAITarget;
 import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIGetInWater;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -447,10 +446,10 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.ticksSinceRoar = 0;
         }
         if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 1) {
-            this.playSound(ModSounds.SEA_SERPENT_ROAR, this.getSoundVolume() + 1, 1);
+            this.playSound(IaFSoundRegistry.SEA_SERPENT_ROAR, this.getSoundVolume() + 1, 1);
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5) {
-            this.playSound(ModSounds.SEA_SERPENT_BITE, this.getSoundVolume(), 1);
+            this.playSound(IaFSoundRegistry.SEA_SERPENT_BITE, this.getSoundVolume(), 1);
         }
         if (isJumpingOutOfWater()) {
             ticksJumping++;
@@ -490,7 +489,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             jumpRot -= 0.1F;
         }
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
-            this.playSound(ModSounds.SEA_SERPENT_SPLASH, 5F, 0.75F);
+            this.playSound(IaFSoundRegistry.SEA_SERPENT_SPLASH, 5F, 0.75F);
             spawnSlamParticles(EnumParticleTypes.FIREWORKS_SPARK);
             spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
             spawnSlamParticles(EnumParticleTypes.WATER_BUBBLE);
@@ -771,17 +770,17 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return ModSounds.SEA_SERPENT_IDLE;
+        return IaFSoundRegistry.SEA_SERPENT_IDLE;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.SEA_SERPENT_HURT;
+        return IaFSoundRegistry.SEA_SERPENT_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return ModSounds.SEA_SERPENT_DIE;
+        return IaFSoundRegistry.SEA_SERPENT_DIE;
     }
 
     public void playLivingSound() {
@@ -832,7 +831,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             }
             if (this.isBreathing()) {
                 if (this.ticksExisted % 40 == 0) {
-                    this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
+                    this.playSound(IaFSoundRegistry.SEA_SERPENT_BREATH, 4, 1);
                 }
                 if (this.ticksExisted % 5 == 0) {
                     rotationYaw = renderYawOffset;

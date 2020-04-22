@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.item;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDeathWormGauntlet;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
-import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -16,9 +16,9 @@ public class RenderDeathWormGauntlet {
     public void renderItem(ItemStack stack, double x, double y, double z, float f, int f1, float alpha) {
         ResourceLocation texture;
 
-        if (stack.getItem() == ModItems.deathworm_gauntlet_red) {
+        if (stack.getItem() == IaFItemRegistry.deathworm_gauntlet_red) {
             texture = RenderDeathWorm.TEXTURE_RED;
-        } else if (stack.getItem() == ModItems.deathworm_gauntlet_white) {
+        } else if (stack.getItem() == IaFItemRegistry.deathworm_gauntlet_white) {
             texture = RenderDeathWorm.TEXTURE_WHITE;
         } else {
             texture = RenderDeathWorm.TEXTURE_YELLOW;

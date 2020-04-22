@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,9 +25,9 @@ public class ItemDeathwormArmor extends ItemArmor {
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (this.getArmorMaterial() == ModItems.red_deathworm) {
+        if (this.getArmorMaterial() == IaFItemRegistry.red_deathworm) {
             return "iceandfire:textures/models/armor/armor_deathworm_red" + (renderIndex == 2 ? "_legs.png" : ".png");
-        } else if (this.getArmorMaterial() == ModItems.white_deathworm) {
+        } else if (this.getArmorMaterial() == IaFItemRegistry.white_deathworm) {
             return "iceandfire:textures/models/armor/armor_deathworm_white" + (renderIndex == 2 ? "_legs.png" : ".png");
         } else {
             return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (renderIndex == 2 ? "_legs.png" : ".png");

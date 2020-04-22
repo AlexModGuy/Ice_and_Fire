@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
@@ -348,7 +347,7 @@ public class IafDragonLogic {
         if (dragon.flightCycle == 2 && !dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
             float dragonSoundVolume = IceAndFire.CONFIG.dragonFlapNoiseDistance;
             float dragonSoundPitch = dragon.getSoundPitch();
-            dragon.playSound(ModSounds.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
+            dragon.playSound(IaFSoundRegistry.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
         }
         if (dragon.flightCycle == 11) {
             dragon.spawnGroundEffects();

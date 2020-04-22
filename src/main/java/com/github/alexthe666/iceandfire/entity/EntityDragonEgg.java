@@ -1,19 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.BlockEggInIce;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.google.common.base.Optional;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -22,7 +15,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -146,21 +138,21 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     private ItemStack getItem() {
         switch (getType().ordinal()) {
             default:
-                return new ItemStack(ModItems.dragonegg_red);
+                return new ItemStack(IaFItemRegistry.dragonegg_red);
             case 1:
-                return new ItemStack(ModItems.dragonegg_green);
+                return new ItemStack(IaFItemRegistry.dragonegg_green);
             case 2:
-                return new ItemStack(ModItems.dragonegg_bronze);
+                return new ItemStack(IaFItemRegistry.dragonegg_bronze);
             case 3:
-                return new ItemStack(ModItems.dragonegg_gray);
+                return new ItemStack(IaFItemRegistry.dragonegg_gray);
             case 4:
-                return new ItemStack(ModItems.dragonegg_blue);
+                return new ItemStack(IaFItemRegistry.dragonegg_blue);
             case 5:
-                return new ItemStack(ModItems.dragonegg_white);
+                return new ItemStack(IaFItemRegistry.dragonegg_white);
             case 6:
-                return new ItemStack(ModItems.dragonegg_sapphire);
+                return new ItemStack(IaFItemRegistry.dragonegg_sapphire);
             case 7:
-                return new ItemStack(ModItems.dragonegg_silver);
+                return new ItemStack(IaFItemRegistry.dragonegg_silver);
 
         }
     }

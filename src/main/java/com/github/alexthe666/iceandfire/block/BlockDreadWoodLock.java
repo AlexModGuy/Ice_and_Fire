@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -13,13 +10,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -44,7 +39,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if(stack.getItem() == ModItems.dread_key){
+        if(stack.getItem() == IaFItemRegistry.dread_key){
             if(!playerIn.isCreative()){
                 stack.shrink(1);
             }
@@ -57,7 +52,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     private void deleteNearbyWood(World worldIn, BlockPos pos, BlockPos startPos) {
         if(pos.getDistance(startPos.getX(), startPos.getY(), startPos.getZ()) < 32){
-            if(worldIn.getBlockState(pos).getBlock() == ModBlocks.dreadwood_planks || worldIn.getBlockState(pos).getBlock() == ModBlocks.dreadwood_planks_lock){
+            if(worldIn.getBlockState(pos).getBlock() == IaFBlockRegistry.dreadwood_planks || worldIn.getBlockState(pos).getBlock() == IaFBlockRegistry.dreadwood_planks_lock){
                 worldIn.destroyBlock(pos, false);
                 for(EnumFacing facing : EnumFacing.values()){
                     deleteNearbyWood(worldIn, pos.offset(facing), startPos);

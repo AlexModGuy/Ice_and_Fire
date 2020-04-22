@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.core.ModRecipes;
+import com.github.alexthe666.iceandfire.recipe.IaFRecipeRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -8,8 +8,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerDragonForge extends SyncedFieldContainer {
 
@@ -55,11 +53,11 @@ public class ContainerDragonForge extends SyncedFieldContainer {
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (isFire && ModRecipes.getFireForgeRecipe(itemstack1) != null || !isFire && ModRecipes.getIceForgeRecipe(itemstack1) != null) {
+                if (isFire && IaFRecipeRegistry.getFireForgeRecipe(itemstack1) != null || !isFire && IaFRecipeRegistry.getIceForgeRecipe(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isFire && ModRecipes.getFireForgeRecipeForBlood(itemstack1) != null || !isFire && ModRecipes.getIceForgeRecipeForBlood(itemstack1) != null) {
+                } else if (isFire && IaFRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || !isFire && IaFRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }

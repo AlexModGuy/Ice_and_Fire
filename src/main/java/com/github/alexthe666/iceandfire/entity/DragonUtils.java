@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
@@ -370,11 +370,11 @@ public class DragonUtils {
 
     public static boolean isDreadBlock(IBlockState state){
         Block block = state.getBlock();
-        return block == ModBlocks.dread_stone || block == ModBlocks.dread_stone_bricks || block == ModBlocks.dread_stone_bricks_chiseled ||
-                block == ModBlocks.dread_stone_bricks_cracked || block == ModBlocks.dread_stone_bricks_mossy || block == ModBlocks.dread_stone_tile ||
-                block == ModBlocks.dread_stone_face || block == ModBlocks.dread_torch || block == ModBlocks.dread_stone_bricks_stairs ||
-                block == ModBlocks.dread_stone_bricks_double_slab || block == ModBlocks.dread_stone_bricks_slab || block == ModBlocks.dreadwood_log ||
-                block == ModBlocks.dreadwood_planks || block == ModBlocks.dreadwood_planks_lock || block == ModBlocks.dread_portal ||
-                block == ModBlocks.dread_spawner;
+        return block == IaFBlockRegistry.dread_stone || block == IaFBlockRegistry.dread_stone_bricks || block == IaFBlockRegistry.dread_stone_bricks_chiseled ||
+                block == IaFBlockRegistry.dread_stone_bricks_cracked || block == IaFBlockRegistry.dread_stone_bricks_mossy || block == IaFBlockRegistry.dread_stone_tile ||
+                block == IaFBlockRegistry.dread_stone_face || block == IaFBlockRegistry.dread_torch || block == IaFBlockRegistry.dread_stone_bricks_stairs ||
+                block == IaFBlockRegistry.dread_stone_bricks_double_slab || block == IaFBlockRegistry.dread_stone_bricks_slab || block == IaFBlockRegistry.dreadwood_log ||
+                block == IaFBlockRegistry.dreadwood_planks || block == IaFBlockRegistry.dreadwood_planks_lock || block == IaFBlockRegistry.dread_portal ||
+                block == IaFBlockRegistry.dread_spawner;
     }
 }

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.block.IaFBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.state.IBlockState;
@@ -80,11 +80,11 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     }
 
     private IBlockState getDeactivatedState() {
-        return isFire() ? ModBlocks.dragonforge_fire_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false) : ModBlocks.dragonforge_ice_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false);
+        return isFire() ? IaFBlockRegistry.dragonforge_fire_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false) : IaFBlockRegistry.dragonforge_ice_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false);
     }
 
     private boolean isFire() {
-        return world.getBlockState(pos).getBlock() == ModBlocks.dragonforge_fire_input;
+        return world.getBlockState(pos).getBlock() == IaFBlockRegistry.dragonforge_fire_input;
     }
 
     private boolean isActive() {

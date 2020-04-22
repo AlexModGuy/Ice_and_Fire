@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.core;
+package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.BiomeDreadLands;
@@ -8,7 +8,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 
-public class ModWorld {
+public class IaFWorldRegistry {
 
     public static DimensionType DREADLANDS_DIM;
     public static Biome GLACIER_BIOME = new BiomeGlacier();

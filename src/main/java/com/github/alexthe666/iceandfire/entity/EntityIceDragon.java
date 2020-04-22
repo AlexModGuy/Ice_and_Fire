@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.DragonFireEvent;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -89,26 +89,26 @@ public class EntityIceDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return ModItems.dragonscales_blue;
+                return IaFItemRegistry.dragonscales_blue;
             case 1:
-                return ModItems.dragonscales_white;
+                return IaFItemRegistry.dragonscales_white;
             case 2:
-                return ModItems.dragonscales_sapphire;
+                return IaFItemRegistry.dragonscales_sapphire;
             case 3:
-                return ModItems.dragonscales_silver;
+                return IaFItemRegistry.dragonscales_silver;
         }
     }
 
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return ModItems.dragonegg_blue;
+                return IaFItemRegistry.dragonegg_blue;
             case 1:
-                return ModItems.dragonegg_white;
+                return IaFItemRegistry.dragonegg_white;
             case 2:
-                return ModItems.dragonegg_sapphire;
+                return IaFItemRegistry.dragonegg_sapphire;
             case 3:
-                return ModItems.dragonegg_silver;
+                return IaFItemRegistry.dragonegg_silver;
         }
     }
 
@@ -255,7 +255,7 @@ public class EntityIceDragon extends EntityDragonBase {
             } else if (this.getAnimationTick() == 15) {
                 rotationYaw = renderYawOffset;
                 Vec3d headVec = this.getHeadPosition();
-                this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                this.playSound(IaFSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
                 double d4 = controller.getLookVec().z;
@@ -277,7 +277,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
                     if (this.ticksExisted % 5 == 0) {
-                        this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                        this.playSound(IaFSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
@@ -318,7 +318,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                    this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                    this.playSound(IaFSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                     EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setSizes(size, size);
@@ -336,7 +336,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     if (this.isActuallyBreathingFire()) {
                         rotationYaw = renderYawOffset;
                         if (this.ticksExisted % 5 == 0) {
-                            this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                            this.playSound(IaFSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                         }
                         stimulateFire(entity.posX, entity.posY, entity.posZ, 1);
                         if (entity.isDead || entity == null) {
@@ -383,7 +383,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                this.playSound(ModSounds.FIREDRAGON_BREATH, 4, 1);
+                this.playSound(IaFSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                 EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setSizes(size, size);
@@ -450,22 +450,22 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_IDLE : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_IDLE : ModSounds.ICEDRAGON_CHILD_IDLE;
+        return this.isTeen() ? IaFSoundRegistry.ICEDRAGON_TEEN_IDLE : this.isAdult() ? IaFSoundRegistry.ICEDRAGON_ADULT_IDLE : IaFSoundRegistry.ICEDRAGON_CHILD_IDLE;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_HURT : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_HURT : ModSounds.ICEDRAGON_CHILD_HURT;
+        return this.isTeen() ? IaFSoundRegistry.ICEDRAGON_TEEN_HURT : this.isAdult() ? IaFSoundRegistry.ICEDRAGON_ADULT_HURT : IaFSoundRegistry.ICEDRAGON_CHILD_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_DEATH : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_DEATH : ModSounds.ICEDRAGON_CHILD_DEATH;
+        return this.isTeen() ? IaFSoundRegistry.ICEDRAGON_TEEN_DEATH : this.isAdult() ? IaFSoundRegistry.ICEDRAGON_ADULT_DEATH : IaFSoundRegistry.ICEDRAGON_CHILD_DEATH;
     }
 
     @Override
     public SoundEvent getRoarSound() {
-        return this.isTeen() ? ModSounds.ICEDRAGON_TEEN_ROAR : this.isAdult() ? ModSounds.ICEDRAGON_ADULT_ROAR : ModSounds.ICEDRAGON_CHILD_ROAR;
+        return this.isTeen() ? IaFSoundRegistry.ICEDRAGON_TEEN_ROAR : this.isAdult() ? IaFSoundRegistry.ICEDRAGON_ADULT_ROAR : IaFSoundRegistry.ICEDRAGON_CHILD_ROAR;
     }
 
     @Override
@@ -474,7 +474,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(@Nullable ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.frost_stew;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IaFItemRegistry.frost_stew;
     }
 
     @Override
@@ -483,7 +483,7 @@ public class EntityIceDragon extends EntityDragonBase {
             if (this.isActuallyBreathingFire()) {
                 rotationYaw = renderYawOffset;
                 if (this.ticksExisted % 5 == 0) {
-                    this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
+                    this.playSound(IaFSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                 }
                 stimulateFire(burningTarget.getX(), burningTarget.getY(), burningTarget.getZ(), 1);
             }
@@ -533,11 +533,11 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     protected ItemStack getSkull() {
-        return new ItemStack(ModItems.dragon_skull, 1, 1);
+        return new ItemStack(IaFItemRegistry.dragon_skull, 1, 1);
     }
 
     public ItemStack getHorn() {
-        return new ItemStack(ModItems.dragon_horn_ice);
+        return new ItemStack(IaFItemRegistry.dragon_horn_ice);
     }
 
     public boolean useFlyingPathFinder() {

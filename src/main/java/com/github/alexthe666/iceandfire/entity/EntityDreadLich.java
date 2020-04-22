@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.item.IaFItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IaFSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.entity.ai.DreadLichAIStrife;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -11,10 +11,8 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -107,7 +105,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.lich_staff));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IaFItemRegistry.lich_staff));
     }
 
     @Nullable
@@ -204,7 +202,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             this.tasks.removeTask(this.aiAttackOnCollide);
             this.tasks.removeTask(this.aiArrowAttack);
             ItemStack itemstack = this.getHeldItemMainhand();
-            if (itemstack.getItem() == ModItems.lich_staff) {
+            if (itemstack.getItem() == IaFItemRegistry.lich_staff) {
                 int i = 100;
                 this.aiArrowAttack.setAttackCooldown(i);
                 this.tasks.addTask(4, this.aiArrowAttack);
@@ -219,7 +217,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         boolean flag = false;
         if (this.getMinionCount() < 5 && minionCooldown == 0) {
             this.setAnimation(ANIMATION_SUMMON);
-            this.playSound(ModSounds.DREAD_LICH_SUMMON, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(IaFSoundRegistry.DREAD_LICH_SUMMON, this.getSoundVolume(), this.getSoundPitch());
             EntityLiving minion = getRandomNewMinion();
             int x = (int) (this.posX) - 5 + rand.nextInt(10);
             int z = (int) (this.posZ) - 5 + rand.nextInt(10);
