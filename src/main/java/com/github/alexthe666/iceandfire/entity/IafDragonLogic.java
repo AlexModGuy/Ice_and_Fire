@@ -177,6 +177,7 @@ public class IafDragonLogic {
         if ((properties != null && properties.isStone || dragon.isRiding())) {
             dragon.setFlying(false);
             dragon.setHovering(false);
+            dragon.setSleeping(false);
         }
         if (dragon.isFlying() && dragon.ticksExisted % 40 == 0 || dragon.isFlying() && dragon.isSleeping()) {
             dragon.setSleeping(false);

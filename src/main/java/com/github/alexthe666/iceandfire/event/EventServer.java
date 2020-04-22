@@ -412,6 +412,7 @@ public class EventServer {
                                     event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
                                 }
                             }
+                            event.getTarget().world.removeEntityDangerously(event.getTarget());
                         }
                     }
                 }
