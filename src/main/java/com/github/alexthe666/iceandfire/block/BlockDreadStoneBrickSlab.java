@@ -9,6 +9,7 @@ public class BlockDreadStoneBrickSlab {
     public static class Double extends BlockGenericSlab implements IDreadBlock {
         public Double(String name, float hardness, float resistance, SoundType soundType) {
             super(name, hardness, resistance, soundType, Material.WOOD, IafBlockRegistry.dread_stone_bricks);
+
         }
 
         @Override
@@ -23,7 +24,7 @@ public class BlockDreadStoneBrickSlab {
 
         @Override
         public ItemBlock getItemBlock() {
-            return new FossilSlabBlockItem(this, IafBlockRegistry.dread_stone_bricks_slab, IafBlockRegistry.dread_stone_bricks_double_slab);
+            return new GenericSlabBlockItem(this, IafBlockRegistry.dread_stone_bricks_slab, IafBlockRegistry.dread_stone_bricks_double_slab);
         }
     }
 
@@ -44,7 +45,7 @@ public class BlockDreadStoneBrickSlab {
 
         @Override
         public ItemBlock getItemBlock() {
-            return new FossilSlabBlockItem(this, IafBlockRegistry.dread_stone_bricks_slab, IafBlockRegistry.dread_stone_bricks_double_slab);
+            return new GenericSlabBlockItem(this, IafBlockRegistry.dread_stone_bricks_slab, IafBlockRegistry.dread_stone_bricks_double_slab);
         }
     }
 }

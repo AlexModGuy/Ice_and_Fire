@@ -141,11 +141,11 @@ public abstract class BlockGenericSlab extends BlockSlab {
 
 	}
 
-	class FossilSlabBlockItem extends ItemBlock {
+	class GenericSlabBlockItem extends ItemBlock {
 		private final BlockSlab singleSlab;
 		private final BlockSlab doubleSlab;
 
-		public FossilSlabBlockItem(Block block, BlockSlab singleSlab, BlockSlab doubleSlab) {
+		public GenericSlabBlockItem(Block block, BlockSlab singleSlab, BlockSlab doubleSlab) {
 			super(block);
 			this.singleSlab = singleSlab;
 			this.doubleSlab = doubleSlab;

@@ -157,9 +157,9 @@ public class IafBlockRegistry {
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_stairs")
     public static Block dread_stone_bricks_stairs = new BlockGenericStairs(dread_stone_bricks.getDefaultState(), "dread_stone_stairs").setHardness(20F);
      @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_double_slab")
-    public static BlockGenericSlab dread_stone_bricks_double_slab = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 20.0F, 10000F, SoundType.STONE);
+    public static BlockGenericSlab dread_stone_bricks_double_slab = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_slab")
-    public static BlockGenericSlab dread_stone_bricks_slab = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 20.0F, 10000F, SoundType.STONE);
+    public static BlockGenericSlab dread_stone_bricks_slab = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_log")
     public static Block dreadwood_log = new BlockDreadWoodLog();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_planks")
