@@ -35,8 +35,12 @@ public class LayerStoneEntity implements LayerRenderer {
             if (properties != null && properties.isStone) {
                 float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
                 float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2
+                GlStateManager.enableBlend();
+                GlStateManager.enableCull();
+                GlStateManager.disableAlpha();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                GlStateManager.depthMask(true);
 
-                GL11.glEnable(GL11.GL_CULL_FACE);
                 this.renderer.bindTexture(STONE_TEXTURE);
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
@@ -57,7 +61,9 @@ public class LayerStoneEntity implements LayerRenderer {
                 GlStateManager.loadIdentity();
                 GlStateManager.matrixMode(5888);
 
-                GL11.glDisable(GL11.GL_CULL_FACE);
+                GlStateManager.disableBlend();
+                GlStateManager.disableCull();
+                GlStateManager.enableAlpha();
             }
         }
     }

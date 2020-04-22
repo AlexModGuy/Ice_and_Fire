@@ -266,13 +266,15 @@ public class EventClient {
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
-            boolean invisibleByDefault = event.getEntity().isPotionActive(MobEffects.INVISIBILITY);
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
             }
         }
-
+        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), StoneEntityProperties.class);
+        if (properties != null && properties.isStone) {
+            event.getRenderer().renderMarker = false;
+        }
     }
 
     @SubscribeEvent
@@ -361,7 +363,7 @@ public class EventClient {
                 }
             }
         }
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), FrozenEntityProperties.class);
+        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
         if (frozenProps != null && frozenProps.isFrozen) {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableNormalize();
@@ -374,7 +376,6 @@ public class EventClient {
             GlStateManager.disableBlend();
             GlStateManager.disableNormalize();
         }
-
         MiscEntityProperties miscProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
         if (miscProps != null && miscProps.glarers.size() > 0) {
             float f = 1.0F;// ((float) miscProps.clientSideAttackTime + event.getPartialRenderTick()) / (float) 80;
@@ -448,6 +449,10 @@ public class EventClient {
             GlStateManager.disableBlend();
             GlStateManager.enableCull();
             GlStateManager.popMatrix();
+        }
+        StoneEntityProperties stoneProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+        if (stoneProps != null && stoneProps.isStone) {
+            event.getRenderer().renderMarker = true;
         }
     }
 

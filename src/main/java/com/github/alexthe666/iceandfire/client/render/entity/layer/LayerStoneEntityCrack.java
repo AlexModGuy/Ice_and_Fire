@@ -36,10 +36,12 @@ public class LayerStoneEntityCrack implements LayerRenderer {
                 float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
                 float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2
 
-                GlStateManager.enableNormalize();
                 GlStateManager.enableBlend();
+                GlStateManager.enableCull();
+                GlStateManager.disableAlpha();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GL11.glEnable(GL11.GL_CULL_FACE);
+                GlStateManager.depthMask(true);
+
                 this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
@@ -58,12 +60,13 @@ public class LayerStoneEntityCrack implements LayerRenderer {
                     this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 }
                 GlStateManager.disableBlend();
-                GlStateManager.disableNormalize();
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
                 GlStateManager.matrixMode(5888);
 
-                GL11.glDisable(GL11.GL_CULL_FACE);
+                GlStateManager.disableBlend();
+                GlStateManager.disableCull();
+                GlStateManager.enableAlpha();
             }
         }
     }
