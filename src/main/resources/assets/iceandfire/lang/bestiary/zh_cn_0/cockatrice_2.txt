@@ -1,32 +1,32 @@
-A tame cockatrice can be made to sit,
-follow or patrol by interacting with
-it with an open palm. Feeding the
-creature seeds will heal it. They can
-also eat rotten flesh off of the
-ground. Tamed cockatrices will also
-fight to the death to protect their
-owner.
-
-Wild, hostile cockatrices can also be
-tamed, albeit in a more dangerous
-manner. By continuously staring at
-the beast, it can be broken and made
-to serve its better. The best method
-to do this would be to trap the
-creature, then look at it for short
-periods so the capturer's soul does
-not wither away.
+通过空手右击，鸡蛇的主人可以命令鸡蛇坐下、
+跟随或者巡逻。用任意种子喂食鸡蛇可以促使
+它疗伤，它们也会主动搜寻并食用地上的腐肉。
+为了保护它们的主人，鸡蛇会战斗不息，直至
+死亡。
 
 
-Cockatrices will naturally protect
-any chickens in their general area.
-If any being targets a nearby
-chicken, with the exception of the
-cockatrice's possible owner, they
-will immediately attack.
 
-A Cockatrice's greatest enemy is
-any weasel-like creature. These
-small animals could easily kill
-a cockatrice with just a few bites.
+
+野生而对玩家抱有敌意的鸡蛇也是可以驯化的，
+但驯化方式万分危险。如果玩家敢于持续地
+凝视鸡蛇，鸡蛇最终便会向玩家屈服，忠实于
+意志更加坚定的玩家。比较好的办法是用陷阱
+困住它，然后断断续续地凝视鸡蛇，以免你的
+灵魂彻底凋零。
+
+
+
+
+
+出于天性，鸡蛇会保护它领地范围内的
+所有鸡。除非是鸡蛇的主人，否则任何
+敢打鸡蛇附近的鸡的注意的生物都会立
+刻受到鸡蛇的攻击。
+
+
+
+黄鼠狼之类的动物是鸡蛇的天敌。只消
+稍微咬上那么两口，硕大的鸡蛇就会被
+这种小动物杀死。
+
 

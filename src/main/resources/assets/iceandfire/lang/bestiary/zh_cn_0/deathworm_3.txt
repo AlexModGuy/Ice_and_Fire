@@ -1,20 +1,18 @@
-These "tamed" worms are not
-controllable in the general
-sense, but they will refuse to
-attack their owner or their
-livestock. They grow extremely
-fast, and attack most hostile
-creatures. They do not follow
-or abate any commands, rather
-they stalk a general 50-block
-radius around their spawning
-ground.
+这种被驯化的蠕虫并不像一般意义
+上的家养动物那么可控，但至少它
+们不会攻击自己的主人及其家畜。
+幼小的死亡蠕虫长得飞快，并且会
+主动攻击大多数敌对生物。虽说不
+会听从任何命令，但它们也不会离
+开自己的出生地超过五十米远。
 
-Legends even speak of rare eggs
-that can spawn giant death worms.
-There might be a reason deserts
-are full of dragon skeletons.
 
+
+
+
+传说中，还有一种能孵出巨型死亡
+蠕虫的稀有虫卵，这或许就是为什
+么沙漠中遍布火龙的尸骸。
 
 
 
@@ -22,8 +20,10 @@ are full of dragon skeletons.
 
 
 
-As legends tell it, there is even
-a way to mount wild and tame worms.
-Using two fishing poles, one can safely
-guide a worm from above the creature,
-and even order it to attack.
+
+
+相传，还有一种骑乘家养甚至野生死
+亡蠕虫的办法。双手握紧吊杆，玩家
+可以安全地在蠕虫的身上引导它的运
+动，甚至命令它攻击。
+

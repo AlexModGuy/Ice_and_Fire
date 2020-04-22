@@ -4,34 +4,34 @@
 
 
 
-If either the cockatrice or its prey
-is blinded, it will be forced to use
-its weaker melee attacks.
+在战斗时，只要双方的一方失明，鸡蛇就只
+能用弱得多的近战攻击攻击玩家了。
 
-Cockatrices can be a good supply of
-wither bones, of which they drop on
-death.
 
+鸡蛇死亡后会掉落凋灵之骨，也就是说，
+鸡蛇是非常不错的凋灵之骨来源。
 
 
 
 
-Although they inhabit savannas by
 
 
-nature, there are other ways for
-cockatrices to appear in the
-world.
+鸡蛇确实仅自然生成于热带草原地区，
+
+
+但还是有其它诞生鸡蛇的方法的。
 
 
 
 
-Very rarely, a chicken can lay a
-rotten egg. These eggs are of
-little value to a farmer, as they
-cannot be prepared into food.
-However, when thrown there is a
-very rare chance to spawn a baby
-cockatrice. These cockatrice chicks
-imprint on the thrower of the egg
-and will serve them for life.
+
+
+一只平凡的家鸡有非常非常低的可能
+产下一枚烂鸡蛋。对于农民来说，这种
+烂鸡蛋毫无价值，因为它们并不能做成
+食物；但如果你把它掷出，烂鸡蛋落地
+时就可能诞生出一只小鸡蛇。这些鸡蛇
+会记住掷蛋者，并终身忠实于他。
+
+
+
