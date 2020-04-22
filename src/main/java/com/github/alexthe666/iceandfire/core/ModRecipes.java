@@ -185,6 +185,12 @@ public class ModRecipes {
         OreDictionary.registerOre("toolAxe", ModItems.dragonsteel_fire_axe);
         OreDictionary.registerOre("toolAxe", ModItems.dragonsteel_ice_axe);
 
+        OreDictionary.registerOre("dragonSkull",  new ItemStack(ModItems.dragon_skull, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("mythicalSkull",  new ItemStack(ModItems.dragon_skull, 1, OreDictionary.WILDCARD_VALUE));
+        for(EnumSkullType skullType : EnumSkullType.values()){
+            OreDictionary.registerOre("mythicalSkull", skullType.skull_item);
+        }
+
         addBanner("fire", new ItemStack(ModItems.fire_dragon_heart));
         addBanner("ice", new ItemStack(ModItems.ice_dragon_heart));
         addBanner("fire_head", new ItemStack(ModItems.dragon_skull, 1, 0));
