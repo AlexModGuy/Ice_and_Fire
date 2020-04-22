@@ -11,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockDreadBase extends BlockGeneric {
+public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
     public static final PropertyBool PLAYER_PLACED = PropertyBool.create("player_placed");
 
     public BlockDreadBase(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {

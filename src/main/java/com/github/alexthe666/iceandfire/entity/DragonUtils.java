@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
 import net.minecraft.world.EnumDifficulty;
@@ -269,17 +270,17 @@ public class DragonUtils {
     }
 
     public static boolean canDragonBreak(Block block) {
-        return block != net.minecraft.init.Blocks.BARRIER &&
-                block != net.minecraft.init.Blocks.OBSIDIAN &&
-                block != net.minecraft.init.Blocks.END_STONE &&
-                block != net.minecraft.init.Blocks.BEDROCK &&
-                block != net.minecraft.init.Blocks.END_PORTAL &&
-                block != net.minecraft.init.Blocks.END_PORTAL_FRAME &&
-                block != net.minecraft.init.Blocks.COMMAND_BLOCK &&
-                block != net.minecraft.init.Blocks.REPEATING_COMMAND_BLOCK &&
-                block != net.minecraft.init.Blocks.CHAIN_COMMAND_BLOCK &&
-                block != net.minecraft.init.Blocks.IRON_BARS &&
-                block != net.minecraft.init.Blocks.END_GATEWAY &&
+        return block != Blocks.BARRIER &&
+                block != Blocks.OBSIDIAN &&
+                block != Blocks.END_STONE &&
+                block != Blocks.BEDROCK &&
+                block != Blocks.END_PORTAL &&
+                block != Blocks.END_PORTAL_FRAME &&
+                block != Blocks.COMMAND_BLOCK &&
+                block != Blocks.REPEATING_COMMAND_BLOCK &&
+                block != Blocks.CHAIN_COMMAND_BLOCK &&
+                block != Blocks.IRON_BARS &&
+                block != Blocks.END_GATEWAY &&
                 !isBlacklistedBlock(block);
     }
 
