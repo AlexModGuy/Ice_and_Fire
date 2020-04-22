@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
@@ -271,10 +272,6 @@ public class EventClient {
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
             }
         }
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
-            event.getRenderer().renderMarker = false;
-        }
     }
 
     @SubscribeEvent
@@ -449,10 +446,6 @@ public class EventClient {
             GlStateManager.disableBlend();
             GlStateManager.enableCull();
             GlStateManager.popMatrix();
-        }
-        StoneEntityProperties stoneProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-        if (stoneProps != null && stoneProps.isStone) {
-            event.getRenderer().renderMarker = true;
         }
     }
 

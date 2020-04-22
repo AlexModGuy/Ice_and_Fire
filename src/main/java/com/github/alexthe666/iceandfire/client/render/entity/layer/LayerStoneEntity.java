@@ -70,6 +70,6 @@ public class LayerStoneEntity implements LayerRenderer {
 
     @Override
     public boolean shouldCombineTextures() {
-        return true;
+        return false;
     }
 }
