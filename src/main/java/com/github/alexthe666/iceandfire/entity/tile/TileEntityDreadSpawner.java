@@ -43,27 +43,6 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         }
     };
 
-    public static void registerFixesMobSpawner(DataFixer fixer) {
-        fixer.registerWalker(FixTypes.BLOCK_ENTITY, new IDataWalker() {
-            public NBTTagCompound process(IDataFixer fixer, NBTTagCompound compound, int versionIn) {
-                if (TileEntity.getKey(TileEntityDreadSpawner.class).equals(new ResourceLocation(compound.getString("id")))) {
-                    if (compound.hasKey("SpawnPotentials", 9)) {
-                        NBTTagList nbttaglist = compound.getTagList("SpawnPotentials", 10);
-
-                        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                            nbttagcompound.setTag("Entity", fixer.process(FixTypes.ENTITY, nbttagcompound.getCompoundTag("Entity"), versionIn));
-                        }
-                    }
-
-                    compound.setTag("SpawnData", fixer.process(FixTypes.ENTITY, compound.getCompoundTag("SpawnData"), versionIn));
-                }
-
-                return compound;
-            }
-        });
-    }
-
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.spawnerLogic.readFromNBT(compound);

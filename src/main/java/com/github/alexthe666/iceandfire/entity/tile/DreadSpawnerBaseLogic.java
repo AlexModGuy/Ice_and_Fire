@@ -141,7 +141,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         }
 
         if (!this.potentialSpawns.isEmpty()) {
-            this.setNextSpawnData(WeightedRandom.getRandomItem(this.getSpawnerWorld().rand, this.potentialSpawns));
+            this.setNextSpawnData(spawnData);
         }
 
         this.broadcastEvent(1);

@@ -52,6 +52,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
                 ResourceLocation spawnerMobId = EntityList.getKey(getRandomMobForMobSpawner(rand));
                 if(spawnerMobId != null){
                     spawnData.setString("id", spawnerMobId.toString());
+                    tag.removeTag("SpawnPotentials");
                     tag.setTag("SpawnData", spawnData.copy());
                 }
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, IafBlockRegistry.dread_spawner.getDefaultState(), tag);
