@@ -54,7 +54,7 @@ public class LayerHydraHead implements LayerRenderer {
     public void doRenderLayer(EntityHydra entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         int heads = entity.getHeadCount();
         boolean stone = EntityGorgon.isStoneMob(entity);
-        if(entity.isInvisible()){
+        if(entity.isInvisible() && !stone){
             return;
         }
         GlStateManager.pushMatrix();
