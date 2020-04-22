@@ -388,12 +388,15 @@ public class EventServer {
                             properties.breakLvl++;
                             ready = properties.breakLvl > 9;
                         }
+                        event.getTarget().playSound(SoundEvents.BLOCK_STONE_HIT, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
+                        event.setCanceled(true);
                         if (stonePlayer) {
                             EntityStoneStatue statue = (EntityStoneStatue) event.getTarget();
                             statue.setCrackAmount(statue.getCrackAmount() + 1);
                             ready = statue.getCrackAmount() > 9;
                         }
                         if (ready) {
+                            event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
                             event.getTarget().setDead();
                             if (silkTouch) {
                                 ItemStack statuette = new ItemStack(IafItemRegistry.stone_statue);
