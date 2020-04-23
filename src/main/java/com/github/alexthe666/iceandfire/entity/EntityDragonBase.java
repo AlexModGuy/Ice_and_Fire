@@ -1480,6 +1480,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if(this.isBeingRidden() && this.isModelDead()){
             this.removePassengers();
         }
+        if(this.isModelDead()){
+            this.setHovering(false);
+            this.setFlying(false);
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
         if (animationTick > this.getAnimation().getDuration() && !world.isRemote) {
             animationTick = 0;

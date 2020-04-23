@@ -173,10 +173,6 @@ public class EntityIceDragon extends EntityDragonBase {
         if (!isFlying() && !isHovering() && isSwimming() && !world.isRemote) {
             this.flightManager.update();
         }
-        if(this.isModelDead()){
-            this.setHovering(false);
-            this.setFlying(false);
-        }
         if (!world.isRemote && this.isInLava() && this.isAllowedToTriggerFlight() && !this.isModelDead()) {
             this.setHovering(true);
             this.setSleeping(false);
