@@ -4,10 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -23,7 +20,7 @@ public class PathNavigateCyclops extends PathNavigateGround {
     }
 
     protected PathFinder getPathFinder() {
-        this.nodeProcessor = new NodeProcessorDragon();
+        this.nodeProcessor = new WalkNodeProcessor();
         this.nodeProcessor.setCanEnterDoors(true);
         this.nodeProcessor.setCanSwim(true);
         return new PathFinder(this.nodeProcessor);

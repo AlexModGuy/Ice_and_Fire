@@ -1474,6 +1474,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        this.stepHeight = this.getDragonStage() > 1 ? 1.5F : 1F;
         if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
             this.setAttackTarget(null);
         }
