@@ -55,9 +55,9 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
         String baseTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {
-            resourcelocation = new ResourceLocation("iceandfire", EnumDragonTextures.getTextureFromDragon(entity).getPath());
+            resourcelocation = new ResourceLocation("iceandfire:" + "dragonTexture_" + baseTexture);
             List<String> tex = new ArrayList<String>();
-            tex.add(resourcelocation.toString());
+            tex.add(EnumDragonTextures.getTextureFromDragon(entity).toString());
             if (entity.isMale() && !entity.isSkeletal()) {
                 if (fire) {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).FIRE_MALE_OVERLAY.toString());

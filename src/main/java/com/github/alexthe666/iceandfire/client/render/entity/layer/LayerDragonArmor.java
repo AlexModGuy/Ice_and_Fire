@@ -36,7 +36,7 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
         if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
             if(resourcelocation == null){
-                resourcelocation = new ResourceLocation("iceandfire", EnumDragonTextures.Armor.EMPTY.FIRETEXTURE.getPath());
+                resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
                 List<String> tex = new ArrayList<String>();
                 for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
                     if (dragon.dragonType == DragonType.FIRE) {
