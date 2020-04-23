@@ -6,6 +6,8 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAITargetSheepPlayers;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateCyclops;
+import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -33,6 +35,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -75,6 +78,11 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         ANIMATION_ROAR = Animation.create(30);
 
     }
+
+    protected PathNavigate createNavigator(World worldIn) {
+        return new PathNavigateCyclops(this, world);
+    }
+
 
     protected int getExperiencePoints(EntityPlayer player) {
         return 40;
