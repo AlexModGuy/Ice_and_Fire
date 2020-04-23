@@ -93,6 +93,8 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     private boolean hasChestVarChanged = false;
     private int navigatorType = -1;
     private boolean isOverAir;
+    public int feedings = 0;
+
     public EntityHippogryph(World worldIn) {
         super(worldIn);
         ANIMATION_EAT = Animation.create(25);
@@ -422,6 +424,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         compound.setBoolean("Hovering", this.isHovering());
         compound.setBoolean("Flying", this.isFlying());
         compound.setInteger("Armor", this.getArmor());
+        compound.setInteger("Feedings", feedings);
         if (hippogryphInventory != null) {
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.hippogryphInventory.getSizeInventory(); ++i) {
@@ -456,6 +459,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         this.setHovering(compound.getBoolean("Hovering"));
         this.setFlying(compound.getBoolean("Flying"));
         this.setArmor(compound.getInteger("Armor"));
+        feedings = compound.getInteger("Feedings");
         if (hippogryphInventory != null) {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippogryphInv();
