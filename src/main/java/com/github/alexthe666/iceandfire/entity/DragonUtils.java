@@ -293,7 +293,7 @@ public class DragonUtils {
     }
 
     public static boolean isAlive(EntityLivingBase entity) {
-        return !(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead();
+        return (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
     }
 
 
