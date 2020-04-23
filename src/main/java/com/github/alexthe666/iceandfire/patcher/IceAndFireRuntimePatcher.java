@@ -5,7 +5,9 @@ import net.ilexiconn.llibrary.server.asm.InsnPredicate;
 import net.ilexiconn.llibrary.server.asm.RuntimePatcher;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.CPacketVehicleMove;
-
+/*
+    ASM reimplemented in 1.9.1 due to server crashing by vehicle code
+*/
 public class IceAndFireRuntimePatcher extends RuntimePatcher {
     @Override
     public void onInit() {
