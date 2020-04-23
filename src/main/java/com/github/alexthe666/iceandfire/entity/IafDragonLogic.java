@@ -340,16 +340,7 @@ public class IafDragonLogic {
             dragon.spawnGroundEffects();
         }
         dragon.legSolver.update(dragon, dragon.getRenderSize() / 3F);
-        if (dragon.flightCycle < 58) {
-            dragon.flightCycle += 2;
-        } else {
-            dragon.flightCycle = 0;
-        }
-        if (dragon.flightCycle == 2 && !dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
-            float dragonSoundVolume = IceAndFire.CONFIG.dragonFlapNoiseDistance;
-            float dragonSoundPitch = dragon.getSoundPitch();
-            dragon.playSound(IafSoundRegistry.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
-        }
+
         if (dragon.flightCycle == 11) {
             dragon.spawnGroundEffects();
         }
@@ -366,6 +357,16 @@ public class IafDragonLogic {
             dragon.burnProgress++;
         } else if (!dragon.isBreathingFire()) {
             dragon.burnProgress = 0;
+        }
+        if (dragon.flightCycle == 2 && !dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
+            float dragonSoundVolume = IceAndFire.CONFIG.dragonFlapNoiseDistance;
+            float dragonSoundPitch = dragon.getSoundPitch();
+            dragon.playSound(IafSoundRegistry.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
+        }
+        if (dragon.flightCycle < 58) {
+            dragon.flightCycle += 2;
+        } else {
+            dragon.flightCycle = 0;
         }
         boolean sitting = dragon.isSitting() && !dragon.isModelDead() && !dragon.isSleeping() && !dragon.isHovering() && !dragon.isFlying();
         if (sitting && dragon.sitProgress < 20.0F) {
