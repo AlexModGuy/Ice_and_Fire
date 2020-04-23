@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,11 +45,14 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
             if (entity != null && entity instanceof EntityLivingBase) {
+                double dist = player.getDistance(entity);
                 EntityLivingBase mob = (EntityLivingBase) entity;
-                if (message.dmg > 0F) {
-                    mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-                } else {
-                    mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                if(dist < 100) {
+                    if (message.dmg > 0F) {
+                        mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
+                    } else {
+                        mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                    }
                 }
             }
         }
@@ -59,11 +63,14 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
             if (entity != null && entity instanceof EntityLivingBase) {
+                double dist = player.getDistance(entity);
                 EntityLivingBase mob = (EntityLivingBase) entity;
-                if (message.dmg > 0F) {
-                    mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-                } else {
-                    mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                if(dist < 100) {
+                    if (message.dmg > 0F) {
+                        mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
+                    } else {
+                        mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                    }
                 }
             }
         }

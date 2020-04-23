@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -54,11 +55,14 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
     @Override
     public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.entityId);
-            if (entity != null && entity instanceof EntityLiving) {
-                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                properties.isStone = message.isStone;
+            if(player.getHeldItemMainhand().getItem() == IafItemRegistry.gorgon_head){
+                Entity entity = player.world.getEntityByID(message.entityId);
+                if (entity != null && entity instanceof EntityLiving) {
+                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                    properties.isStone = message.isStone;
+                }
             }
+
         }
     }
 }

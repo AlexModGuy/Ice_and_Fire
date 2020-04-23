@@ -60,34 +60,36 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
     public void onServerReceived(MinecraftServer server, MessageDragonControl message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity != null && entity instanceof EntityDragonBase) {
-                EntityDragonBase dragon = (EntityDragonBase) entity;
-                if (dragon.isOwner(player)) {
-                    dragon.setControlState(message.controlState);
+            if (entity.isRidingOrBeingRiddenBy(player)) {
+                if (entity != null && entity instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) entity;
+                    if (dragon.isOwner(player)) {
+                        dragon.setControlState(message.controlState);
+                    }
+                    dragon.setPosition(message.posX, message.posY, message.posZ);
+                } else if (entity instanceof EntityHippogryph) {
+                    EntityHippogryph hippo = (EntityHippogryph) entity;
+                    if (hippo.isOwner(player)) {
+                        hippo.setControlState(message.controlState);
+                    }
+                    hippo.setPosition(message.posX, message.posY, message.posZ);
+                } else if (entity instanceof EntityHippocampus) {
+                    EntityHippocampus hippo = (EntityHippocampus) entity;
+                    if (hippo.isOwner(player)) {
+                        hippo.setControlState(message.controlState);
+                    }
+                    hippo.setPosition(message.posX, message.posY, message.posZ);
+                } else if (entity instanceof EntityDeathWorm) {
+                    EntityDeathWorm deathworm = (EntityDeathWorm) entity;
+                    deathworm.setControlState(message.controlState);
+                    deathworm.setPosition(message.posX, message.posY, message.posZ);
+                } else if (entity instanceof EntityAmphithere) {
+                    EntityAmphithere amphi = (EntityAmphithere) entity;
+                    if (amphi.isOwner(player)) {
+                        amphi.setControlState(message.controlState);
+                    }
+                    amphi.setPosition(message.posX, message.posY, message.posZ);
                 }
-                dragon.setPosition(message.posX, message.posY, message.posZ);
-            } else if (entity instanceof EntityHippogryph) {
-                EntityHippogryph hippo = (EntityHippogryph) entity;
-                if (hippo.isOwner(player)) {
-                    hippo.setControlState(message.controlState);
-                }
-                hippo.setPosition(message.posX, message.posY, message.posZ);
-            } else if (entity instanceof EntityHippocampus) {
-                EntityHippocampus hippo = (EntityHippocampus) entity;
-                if (hippo.isOwner(player)) {
-                    hippo.setControlState(message.controlState);
-                }
-                hippo.setPosition(message.posX, message.posY, message.posZ);
-            } else if (entity instanceof EntityDeathWorm) {
-                EntityDeathWorm deathworm = (EntityDeathWorm) entity;
-                deathworm.setControlState(message.controlState);
-                deathworm.setPosition(message.posX, message.posY, message.posZ);
-            } else if (entity instanceof EntityAmphithere) {
-                EntityAmphithere amphi = (EntityAmphithere) entity;
-                if (amphi.isOwner(player)) {
-                    amphi.setControlState(message.controlState);
-                }
-                amphi.setPosition(message.posX, message.posY, message.posZ);
             }
         }
     }

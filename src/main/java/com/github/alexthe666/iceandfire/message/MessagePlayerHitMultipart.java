@@ -48,10 +48,13 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
             if (entity != null && entity instanceof EntityLivingBase) {
+                double dist = player.getDistance(entity);
                 EntityLivingBase mob = (EntityLivingBase) entity;
-                player.attackTargetEntityWithCurrentItem(mob);
-                if(mob instanceof EntityHydra){
-                    ((EntityHydra) mob).triggerHeadFlags(message.extraData);
+                if(dist < 100) {
+                    player.attackTargetEntityWithCurrentItem(mob);
+                    if (mob instanceof EntityHydra) {
+                        ((EntityHydra) mob).triggerHeadFlags(message.extraData);
+                    }
                 }
             }
         }
@@ -62,10 +65,13 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
             if (entity != null && entity instanceof EntityLivingBase) {
+                double dist = player.getDistance(entity);
                 EntityLivingBase mob = (EntityLivingBase) entity;
-                player.attackTargetEntityWithCurrentItem(mob);
-                if(mob instanceof EntityHydra){
-                    ((EntityHydra) mob).triggerHeadFlags(message.extraData);
+                if(dist < 100) {
+                    player.attackTargetEntityWithCurrentItem(mob);
+                    if (mob instanceof EntityHydra) {
+                        ((EntityHydra) mob).triggerHeadFlags(message.extraData);
+                    }
                 }
             }
         }
