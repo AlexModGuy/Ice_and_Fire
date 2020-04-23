@@ -1021,6 +1021,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             }
             if (this.isOwner(player)) {
+                this.setTamedBy(player);
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                 if (stack.getItem() == IafItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
                     return super.processInteract(player, hand);
