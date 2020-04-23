@@ -21,12 +21,12 @@ import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
 import com.github.alexthe666.iceandfire.compat.TinkersCompatBridge;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.*;
-import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -301,7 +301,7 @@ public class ClientProxy extends CommonProxy {
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this.bestiaryFontRenderer);
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new RenderModCapes());
-        MinecraftForge.EVENT_BUS.register(new EventClient());
+        MinecraftForge.EVENT_BUS.register(new ClientEvents());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHead.class, new RenderGorgonHead(false));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHeadActive.class, new RenderGorgonHead(true));
         ForgeHooksClient.registerTESRItemStack(IafItemRegistry.gorgon_head, 0, TileEntityDummyGorgonHead.class);
@@ -313,7 +313,7 @@ public class ClientProxy extends CommonProxy {
 
     @SideOnly(Side.CLIENT)
     public void postRender() {
-        EventClient.initializeStoneLayer();
+        ClientEvents.initializeStoneLayer();
         for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
             weapon.item.setTileEntityItemStackRenderer(TEISR);
         }

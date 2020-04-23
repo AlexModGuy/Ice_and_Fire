@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.event.EventServer;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -69,7 +69,7 @@ public class RenderModCapes {
                 }
             }
         }
-        if(event.getEntityPlayer().getUniqueID().equals(EventServer.ALEX_UUID)){
+        if(event.getEntityPlayer().getUniqueID().equals(ServerEvents.ALEX_UUID)){
             GL11.glPushMatrix();
             float f2 = ((float) event.getEntityPlayer().ticksExisted - 1 +  event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;

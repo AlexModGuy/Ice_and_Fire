@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.structures;
+package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.BlockSilverPile;

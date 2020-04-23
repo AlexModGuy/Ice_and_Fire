@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.structures;
+package com.github.alexthe666.iceandfire.world.gen;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

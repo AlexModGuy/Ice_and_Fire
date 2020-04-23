@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.structures.processor;
+package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.block.state.IBlockState;

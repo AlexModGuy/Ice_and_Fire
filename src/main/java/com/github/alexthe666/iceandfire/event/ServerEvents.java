@@ -9,8 +9,8 @@ import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import com.github.alexthe666.iceandfire.structures.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.structures.WorldGenIceDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.*;
@@ -61,7 +61,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class EventServer {
+public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
     private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>() {
@@ -432,7 +432,7 @@ public class EventServer {
             }
             chainProperties.clearChained();
         }
-        if (event.getEntityLiving().getUniqueID().equals(EventServer.ALEX_UUID)) {
+        if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
             event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.weezer_blue_album), 1);
         }
     }

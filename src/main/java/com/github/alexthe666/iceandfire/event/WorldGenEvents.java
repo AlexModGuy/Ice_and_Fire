@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.structures.*;
+import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
 import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StructureGenerator implements IWorldGenerator {
+public class WorldGenEvents implements IWorldGenerator {
 
     public static final MapGenSnowVillage SNOW_VILLAGE = new MapGenSnowVillage();
     public static final MapGenPixieVillage PIXIE_VILLAGE = new MapGenPixieVillage();
@@ -91,23 +91,13 @@ public class StructureGenerator implements IWorldGenerator {
         int x = (chunkX * 16) + 8;
         int z = (chunkZ * 16) + 8;
         BlockPos height = getHeight(world, new BlockPos(x, 0, z));
-        if (IceAndFire.CONFIG.spawnGorgons && isFarEnoughFromSpawn(world, height) && (lastGorgonTemple == null || lastGorgonTemple.distanceSq(height) >= spawnCheck)) {
-            IBlockState blockState = world.getBlockState(height.down());
-            lastGorgonTemple = height;
-            if (blockState.isFullBlock() && world.isAirBlock(height.up()) && random.nextInt(IceAndFire.CONFIG.spawnGorgonsChance + 1) == 0 && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH) && !isDimensionBlacklisted(world.provider.getDimension(), false)) {
-                Rotation rotation = Rotation.values()[random.nextInt(Rotation.values().length)];
-                Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
-                MinecraftServer server = world.getMinecraftServer();
-                TemplateManager templateManager = world.getSaveHandler().getStructureTemplateManager();
-                PlacementSettings settings = new PlacementSettings().setRotation(rotation).setMirror(mirror);
-                Template template = templateManager.getTemplate(server, GORGON_TEMPLE);
-                BlockPos center = height.add(template.getSize().getX() / 2, -9, template.getSize().getZ() / 2);
-                BlockPos corner1 = height.down();
-                BlockPos corner2 = height.add(template.getSize().getX(), -1, 0);
-                BlockPos corner3 = height.add(template.getSize().getX(), -1, template.getSize().getZ());
-                BlockPos corner4 = height.add(0, -1, template.getSize().getZ());
-                if (world.getBlockState(center).isOpaqueCube() && world.getBlockState(corner1).isOpaqueCube() && world.getBlockState(corner2).isOpaqueCube() && world.getBlockState(corner3).isOpaqueCube() && world.getBlockState(corner4).isOpaqueCube()) {
-                    template.addBlocksToWorldChunk(world, center, settings);
+        if (IceAndFire.CONFIG.spawnGorgons && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastGorgonTemple == null || lastGorgonTemple.distanceSq(height) >= spawnCheck)) {
+            if (BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
+                if (random.nextInt(IceAndFire.CONFIG.spawnGorgonsChance + 1) == 0) {
+                    BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
+                    surface = degradeSurface(world, surface);
+                    new WorldGenGorgonTemple(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
+                    lastGorgonTemple = surface;
                 }
             }
         }

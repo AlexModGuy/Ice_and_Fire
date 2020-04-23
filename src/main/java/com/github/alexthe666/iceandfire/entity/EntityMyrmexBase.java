@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
-import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.ilexiconn.llibrary.server.animation.Animation;

@@ -1,11 +1,8 @@
-package com.github.alexthe666.iceandfire.structures;
+package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.structures.processor.DreadPortalProcessor;
-import com.github.alexthe666.iceandfire.structures.processor.DreadRuinProcessor;
-import net.minecraft.init.Blocks;
+import com.github.alexthe666.iceandfire.world.gen.processor.DreadPortalProcessor;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;

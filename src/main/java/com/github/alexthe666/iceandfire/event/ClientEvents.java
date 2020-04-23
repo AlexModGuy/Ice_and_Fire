@@ -48,7 +48,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Random;
 
-public class EventClient {
+public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
     private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/blocks/frosted_ice_0.png");

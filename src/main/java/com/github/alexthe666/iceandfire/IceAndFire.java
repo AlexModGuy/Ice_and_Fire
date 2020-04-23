@@ -8,8 +8,8 @@ import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import com.github.alexthe666.iceandfire.event.EventServer;
-import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
+import com.github.alexthe666.iceandfire.event.WorldGenEvents;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.message.*;
@@ -99,7 +99,7 @@ public class IceAndFire {
     public void preInit(FMLPreInitializationEvent event) {
         loadConfig();
         syncConfig();
-        MinecraftForge.EVENT_BUS.register(new EventServer());
+        MinecraftForge.EVENT_BUS.register(new ServerEvents());
         TAB_ITEMS = new CreativeTab(MODID + "_items");
         TAB_BLOCKS = new CreativeTab(MODID + "_blocks");
         IafEntityRegistry.init();
@@ -125,7 +125,7 @@ public class IceAndFire {
         MapGenStructureIO.registerStructureComponent(ComponentAnimalFarm.class, "AnimalFarm");
         VillagerRegistry.instance().registerVillageCreationHandler(new VillageAnimalFarmCreator());
         PROXY.render();
-        GameRegistry.registerWorldGenerator(new StructureGenerator(), 0);
+        GameRegistry.registerWorldGenerator(new WorldGenEvents(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new com.github.alexthe666.iceandfire.client.GuiHandler());
         dragon = new DamageSource("dragon") {
             @Override

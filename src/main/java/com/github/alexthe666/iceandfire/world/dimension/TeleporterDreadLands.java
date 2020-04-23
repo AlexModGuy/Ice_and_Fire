@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.world.dimension;
 
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.structures.WorldGenDreadExitPortal;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenDreadExitPortal;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ITeleporter;
