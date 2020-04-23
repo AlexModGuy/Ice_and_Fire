@@ -55,7 +55,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
         String baseTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {
-            resourcelocation = EnumDragonTextures.getTextureFromDragon(entity);
+            resourcelocation = new ResourceLocation("iceandfire", EnumDragonTextures.getTextureFromDragon(entity).getPath());
             List<String> tex = new ArrayList<String>();
             tex.add(resourcelocation.toString());
             if (entity.isMale() && !entity.isSkeletal()) {
@@ -64,6 +64,9 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
                 } else {
                     tex.add(EnumDragonTextures.getDragonEnum(entity).ICE_MALE_OVERLAY.toString());
                 }
+            }else{
+                tex.add(EnumDragonTextures.Armor.EMPTY.FIRETEXTURE.toString());
+
             }
             ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
             Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
