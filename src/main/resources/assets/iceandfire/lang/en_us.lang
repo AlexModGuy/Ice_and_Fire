@@ -366,7 +366,7 @@ item.iceandfire.hydra_arrow.desc=Poisons and leeches life from target
 item.iceandfire.summoning_crystal_ice.name=Ice Dragon Summoning Crystal
 item.iceandfire.summoning_crystal_fire.name=Fire Dragon Summoning Crystal
 item.iceandfire.summoning_crystal.desc_0=Right click on a dragon to bind it
-item.iceandfire.summoning_crystal.desc_1=Right when bound to teleport dragon
+item.iceandfire.summoning_crystal.desc_1=Use when bound to teleport dragon
 item.iceandfire.summoning_crystal.bound=Bound to %s
 
 entity.firedragon.name=Fire Dragon

@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "HHH",
+    "HBH",
+    "HHH"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonbone",
+      "data": 0
+    },
+    "H": {
+      "item": "minecraft:hay_block",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "iceandfire:nest",
+    "count": 8
+  }
+}
