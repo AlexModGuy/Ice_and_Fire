@@ -4,9 +4,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ISyncMount;
 import net.minecraft.network.NetHandlerPlayServer;
 
-/*
-    ASM removed in 1.9.0... due to popular request.
- */
 public class IceAndFireCoreUtils {
 
     private static int index = 0;
