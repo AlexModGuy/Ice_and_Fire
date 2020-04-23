@@ -44,7 +44,7 @@ public class ItemDragonHornStatic extends Item {
             playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
             ItemStack hornItem = new ItemStack(dragon.getHorn().getItem(), 1);
             hornItem.setTagCompound(new NBTTagCompound());
-            dragon.writeEntityToNBT(hornItem.getTagCompound());
+            dragon.writeToNBT(hornItem.getTagCompound());
             if (!playerIn.inventory.addItemStackToInventory(hornItem)) {
                 playerIn.dropItem(hornItem, false);
             }

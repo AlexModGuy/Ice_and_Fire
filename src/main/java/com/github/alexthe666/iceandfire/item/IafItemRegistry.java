@@ -178,6 +178,10 @@ public class IafItemRegistry {
     public static Item dragon_horn_ice = new ItemDragonHornActive("dragon_horn_ice");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_flute")
     public static Item dragon_flute = new ItemDragonFlute();
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":summoning_crystal_fire")
+    public static Item summoning_crystal_fire = new ItemSummoningCrystal("fire");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":summoning_crystal_ice")
+    public static Item summoning_crystal_ice = new ItemSummoningCrystal("ice");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_egg")
     public static Item hippogryph_egg = new ItemHippogryphEgg();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":iron_hippogryph_armor")

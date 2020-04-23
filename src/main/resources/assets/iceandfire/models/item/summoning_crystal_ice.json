@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "iceandfire:items/summon_crystal_ice"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "has_dragon": 1
+      },
+      "model": "iceandfire:item/summoning_crystal_ice_active"
+    }
+  ]
+}

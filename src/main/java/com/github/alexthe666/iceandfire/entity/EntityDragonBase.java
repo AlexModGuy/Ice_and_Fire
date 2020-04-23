@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
+import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
@@ -1021,6 +1022,20 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 return true;
             }
             if (this.isOwner(player)) {
+                if(stack.getItem() == getSummoningCrystal() && !ItemSummoningCrystal.hasDragon(stack)){
+                    NBTTagCompound compound = stack.getTagCompound();
+                    if (compound == null) {
+                        compound = new NBTTagCompound();
+                        stack.setTagCompound(compound);
+                    }
+                    NBTTagCompound dragonTag = new NBTTagCompound();
+                    dragonTag.setUniqueId("DragonUUID", this.getUniqueID());
+                    dragonTag.setString("CustomName", this.getCustomNameTag());
+                    compound.setTag("Dragon", dragonTag);
+                    this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+                    player.swingArm(hand);
+                    return true;
+                }
                 this.setTamedBy(player);
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                 if (stack.getItem() == IafItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
@@ -1707,6 +1722,8 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public abstract Item getVariantScale(int variant);
 
     public abstract Item getVariantEgg(int variant);
+
+    public abstract Item getSummoningCrystal();
 
     @SideOnly(Side.CLIENT)
     protected void updateClientControls() {

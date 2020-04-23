@@ -95,10 +95,10 @@ public class ItemDragonHornActive extends Item {
                 worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
                 if (this == IafItemRegistry.dragon_horn_fire) {
                     EntityFireDragon dragon = new EntityFireDragon(worldIn);
-                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     if (stack.getTagCompound() != null) {
-                        dragon.readEntityFromNBT(stack.getTagCompound());
+                        dragon.readFromNBT(stack.getTagCompound());
                     }
+                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     dragon.setFlying(false);
                     dragon.setHovering(false);
                     dragon.getNavigator().clearPath();

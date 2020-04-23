@@ -102,6 +102,11 @@ public class EntityFireDragon extends EntityDragonBase {
         }
     }
 
+    @Override
+    public Item getSummoningCrystal() {
+        return IafItemRegistry.summoning_crystal_fire;
+    }
+
     public boolean canBeSteered() {
         return true;
     }

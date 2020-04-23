@@ -542,4 +542,9 @@ public class EntityIceDragon extends EntityDragonBase {
     public boolean useFlyingPathFinder() {
         return this.isFlying() || this.isInMaterialWater();
     }
+
+    @Override
+    public Item getSummoningCrystal() {
+        return IafItemRegistry.summoning_crystal_ice;
+    }
 }
