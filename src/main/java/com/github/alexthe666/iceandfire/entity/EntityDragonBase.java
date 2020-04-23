@@ -444,11 +444,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             case 2:
                 return 20;
             case 3:
-                return 50;
-            case 4:
-                return 100;
-            case 5:
                 return 150;
+            case 4:
+                return 300;
+            case 5:
+                return 650;
             default:
                 return 5;
         }
