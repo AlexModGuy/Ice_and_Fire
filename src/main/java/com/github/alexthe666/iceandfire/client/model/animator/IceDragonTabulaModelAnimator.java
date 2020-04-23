@@ -177,10 +177,10 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
             }
         }
         float speed_walk = 0.2F;
-        float speed_idle = 0.05F;
+        float speed_idle = entity.isSleeping() ? 0.025F : 0.05F;
         float speed_fly = 0.2F;
         float degree_walk = 0.5F;
-        float degree_idle = 0.5F;
+        float degree_idle = entity.isSleeping() ? 0.25F : 0.5F;
         float degree_fly = 0.5F;
         if (!entity.isAIDisabled()) {
             if (!walking) {
