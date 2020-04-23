@@ -1476,6 +1476,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
             this.setAttackTarget(null);
         }
+        if(this.isBeingRidden() && this.isModelDead()){
+            this.removePassengers();
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
         if (animationTick > this.getAnimation().getDuration() && !world.isRemote) {
             animationTick = 0;
