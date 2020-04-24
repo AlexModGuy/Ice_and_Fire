@@ -151,7 +151,7 @@ public class ItemSummoningCrystal extends Item {
                                             }
                                         }
                                         if (flag && lastChunkTicket != null && dragonChunkPos != null) {
-                                            ForgeChunkManager.unforceChunk(lastChunkTicket, new ChunkPos(dragonChunkPos));
+                                            ForgeChunkManager.releaseTicket(lastChunkTicket);
                                             lastChunkTicket = null;
                                         }
                                     } catch (Exception e){

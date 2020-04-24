@@ -141,7 +141,7 @@ public class IceAndFireConfig {
     public boolean dragonAuto3rdPerson = true;
     public double dreadQueenMaxHealth = 750;
     public boolean generateMausoleums = true;
-    public int generateMausoleumChance = 800;
+    public int generateMausoleumChance = 1800;
     public boolean spawnLiches = true;
     public int lichSpawnRate = 2;
     public double hydraMaxHealth = 250D;
@@ -308,7 +308,7 @@ public class IceAndFireConfig {
         this.weezerTinkersDisarmChance = config.getFloat("Easter Egg Tinkers Tool Disarm chance", "all", 0.2F, 0F, 1F, "Percentage of critical strike that will disarm with easter egg tinkers material.");
 
         this.generateMausoleums = config.getBoolean("Generate Mausoleums", "all", true, "True if mausoleums are allowed to generate");
-        this.generateMausoleumChance = config.getInt("Mausoleum Gen Chance", "all", 800, 1, 10000, "One out of this number chance per chunk to generate a mausoleum.");
+        this.generateMausoleumChance = config.getInt("Mausoleum Gen Chance", "all", 1800, 1, 10000, "One out of this number chance per chunk to generate a mausoleum.");
         this.spawnLiches = config.getBoolean("Spawn Liches", "all", true, "True if dread liches are allowed to spawn");
         this.lichSpawnRate = config.getInt("Lich Spawn Weight", "all", 2, 1, 10000, "Dread Lich spawn weight. Lower = lower chance to spawn");
 
