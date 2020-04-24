@@ -585,6 +585,7 @@ message.iceandfire.dragonSit=This dragon is now Staying.
 message.iceandfire.dragonSleep=This dragon is now Sleeping.
 message.iceandfire.knownAs=The dragon known as
 message.iceandfire.dragonTeleport=This dragon has been teleported.
+message.iceandfire.noDragonTeleport=§cCould not find a dragon bound to this crystal.
 message.iceandfire.dragonWanderName= is now Wandering.
 message.iceandfire.dragonFollowName= is now Following.
 message.iceandfire.dragonSitName= is now Staying.

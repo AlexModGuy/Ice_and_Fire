@@ -149,6 +149,7 @@ public class IceAndFireConfig {
     public int generateHydraChance = 200;
     public boolean explosiveDragonBreath = false;
     public float weezerTinkersDisarmChance = 0.2F;
+    public boolean chunkLoadSummonCrystal = true;
 
     public void init(Configuration config) {
         this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -314,5 +315,7 @@ public class IceAndFireConfig {
         this.hydraMaxHealth = (double) config.getFloat("Hydra Max Health", "all", 250, 1, 10000, "Maximum hydra health");
         this.generateHydraCaves = config.getBoolean("Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");
         this.generateHydraChance = config.getInt("Hydra Caves Gen Chance", "all", 200, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
+
+        this.chunkLoadSummonCrystal = config.getBoolean("Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
     }
 }

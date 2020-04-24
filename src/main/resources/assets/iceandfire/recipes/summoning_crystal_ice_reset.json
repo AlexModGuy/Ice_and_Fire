@@ -1,0 +1,13 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:summoning_crystal_ice"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:summoning_crystal_ice",
+    "data": 0,
+    "count": 1
+  }
+}

@@ -17,6 +17,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
+import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -89,6 +90,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     private static final DataParameter<Boolean> AGINGDISABLED = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Float> DRAGON_PITCH = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> CRYSTAL_BOUND = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     public static Animation ANIMATION_EAT;
     public static Animation ANIMATION_SPEAK;
     public static Animation ANIMATION_BITE;
@@ -501,6 +503,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.dataManager.register(AGINGDISABLED, Boolean.valueOf(false));
         this.dataManager.register(COMMAND, Integer.valueOf(0));
         this.dataManager.register(DRAGON_PITCH, Float.valueOf(0));
+        this.dataManager.register(CRYSTAL_BOUND, Boolean.valueOf(false));
     }
 
     public boolean up() {
@@ -630,6 +633,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             }
             compound.setTag("Items", nbttaglist);
         }
+        compound.setBoolean("CrystalBound", this.isBoundToCrystal());
     }
 
     @Override
@@ -677,6 +681,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 dragonInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
             }
         }
+        this.setCrystalBound(compound.getBoolean("CrystalBound"));
     }
 
     private void initInventory() {
@@ -1023,6 +1028,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             }
             if (this.isOwner(player)) {
                 if(stack.getItem() == getSummoningCrystal() && !ItemSummoningCrystal.hasDragon(stack)){
+                    this.setCrystalBound(true);
                     NBTTagCompound compound = stack.getTagCompound();
                     if (compound == null) {
                         compound = new NBTTagCompound();
@@ -1712,6 +1718,16 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.dataManager.set(AGINGDISABLED, isAgingDisabled);
     }
 
+
+    public boolean isBoundToCrystal() {
+        return this.dataManager.get(CRYSTAL_BOUND).booleanValue();
+    }
+
+    public void setCrystalBound(boolean crystalBound) {
+        this.dataManager.set(CRYSTAL_BOUND, crystalBound);
+    }
+
+
     public float getDistanceSquared(Vec3d vec3d) {
         float f = (float) (this.posX - vec3d.x);
         float f1 = (float) (this.posY - vec3d.y);
@@ -2150,5 +2166,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     protected int getFlightChancePerTick(){
         return FLIGHT_CHANCE_PER_TICK;
+    }
+
+    public void onRemovedFromWorld() {
+        if(IceAndFire.CONFIG.chunkLoadSummonCrystal) {
+            if (this.isBoundToCrystal()) {
+                DragonPosWorldData.get(world).addDragon(this.getUniqueID(), this.getPosition());
+            }
+        }
+        super.onRemovedFromWorld();
     }
 }

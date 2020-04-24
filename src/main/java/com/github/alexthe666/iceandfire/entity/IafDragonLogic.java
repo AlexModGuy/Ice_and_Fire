@@ -280,7 +280,7 @@ public class IafDragonLogic {
                 dragon.growDragon(0);
             }
         }
-        if (dragon.getAgeInTicks() % IceAndFire.CONFIG.dragonHungerTickRate == 0) {
+        if (dragon.ticksExisted % IceAndFire.CONFIG.dragonHungerTickRate == 0 && IceAndFire.CONFIG.dragonHungerTickRate > 0) {
             if (dragon.getHunger() > 0) {
                 dragon.setHunger(dragon.getHunger() - 1);
             }
