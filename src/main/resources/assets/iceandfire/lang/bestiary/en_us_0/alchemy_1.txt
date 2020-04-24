@@ -1,0 +1,26 @@
+When combined with a diamond, ender
+pearl, and a emerald or sapphire,
+one can create a summoning crystal.
+
+<item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
+<item><iceandfire:summoning_crystal_ice 0 45 22 1.25>
+
+
+
+
+When right clicked on a dragon,
+the crystal is bound to it.
+When clicked anywhere again
+while in the same dimension,
+the crystal will teleport
+and unbound the dragon.
+
+If the dragon is slain or somehow
+not located, the crystal will not
+unbind.
+
+
+
+To unbind the crystal manually,
+place it in the crafting grid
+by itself.

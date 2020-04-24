@@ -33,3 +33,8 @@ slow down their target, and do
 extra damage to Fire Dragons.
 Both swords also have large
 knockback effects.
+
+
+
+Dragon blood can also be used
+to preserve dragons.
