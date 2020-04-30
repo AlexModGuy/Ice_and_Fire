@@ -368,6 +368,7 @@ item.iceandfire.summoning_crystal_fire.name=唤龙火晶石
 item.iceandfire.summoning_crystal.desc_0=右击一条龙与之绑定
 item.iceandfire.summoning_crystal.desc_1=绑定后右击可将龙唤至身边
 item.iceandfire.summoning_crystal.bound=已与%s绑定
+
 entity.firedragon.name=火龙
 entity.icedragon.name=冰龙
 entity.dragonegg.name=龙蛋
