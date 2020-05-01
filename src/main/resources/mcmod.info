@@ -1,18 +1,22 @@
-[
-{
-  "modid": "iceandfire",
-  "name": "Ice and Fire",
-  "description": "Ice and Fire adds dragons and other mythological creatures to Minecraft.",
-  "version": "1.9.1",
-  "mcversion": "1.12.2",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["Alexthe666", "Raptorfarian"],
-  "credits": "gegy1000, Paul Fulham, Zyranna, 4f6f3b, iLexiconn, Sunconure11, Elucent",
-  "logoFile": "assets/iceandfire/textures/logo.png",
-  "screenshots": [],
-  "requiredMods": [ "llibrary", "forge" ],
-  "dependencies": [ "llibrary", "forge" ],
-  "useDependencyInformation": true
-}
-]
+modLoader="javafml" #mandatory
+loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+issueTrackerURL="https://github.com/Alex-the-666/Rats/issues" #optional
+[[mods]] #mandatory
+modId="iceandfire" #mandatory
+version="2.0.0" #mandatory
+displayName="Ice and Fire" #mandatory
+displayURL="https://www.curseforge.com/minecraft/mc-mods/rats" #optional
+logoFile="rats_logo.png" #optional
+authors="Alexthe666" #optional
+description='''Dragons and other mythological creatures in minecraft.'''
+[[dependencies.iceandfire]] #optional
+    # the modid of the dependency
+    modId="citadel" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[1.1.4,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="AFTER"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
