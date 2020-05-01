@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,7 +27,7 @@ public class DreadPortalProcessor implements ITemplateProcessor {
                 return new Template.BlockInfo(pos, IafBlockRegistry.dread_portal.getDefaultState(), null);
             }
             if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_stone_bricks) {
-                IBlockState state = getRandomCrackedBlock(null, worldIn.rand);
+                BlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
             return blockInfoIn;
@@ -36,7 +36,7 @@ public class DreadPortalProcessor implements ITemplateProcessor {
 
     }
 
-    public static IBlockState getRandomCrackedBlock(@Nullable IBlockState prev, Random random) {
+    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3) {
             return IafBlockRegistry.dread_stone_bricks.getDefaultState();

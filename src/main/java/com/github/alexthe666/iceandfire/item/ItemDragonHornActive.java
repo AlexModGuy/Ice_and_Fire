@@ -35,7 +35,7 @@ public class ItemDragonHornActive extends Item {
         this.setRegistryName(IceAndFire.MODID, name);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
                 if (entityIn == null) {
                     return 0.0F;
@@ -47,7 +47,7 @@ public class ItemDragonHornActive extends Item {
         });
         this.addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
             @Override
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
                 return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
             }

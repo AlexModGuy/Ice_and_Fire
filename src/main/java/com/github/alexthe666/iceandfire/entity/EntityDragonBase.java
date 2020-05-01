@@ -27,7 +27,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
@@ -125,15 +125,15 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public int flightCycle;
     public BlockPos homePos;
     public boolean hasHomePosition = false;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer_body;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ReversedBuffer turn_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     public int spacebarTicks;
     public float[][] growth_stages;
@@ -729,7 +729,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 
     }
@@ -966,14 +966,14 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             return true;
         }
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage && player.capabilities.allowEdit) {
-            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFire.CONFIG.dragonDropBlood) {
+            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IafConfig.dragonDropBlood) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
                 player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_blood : IafItemRegistry.ice_dragon_blood, 1));
                 return true;
-            } else if (!world.isRemote && stack.isEmpty() && IceAndFire.CONFIG.dragonDropSkull) {
+            } else if (!world.isRemote && stack.isEmpty() && IafConfig.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = getSkull().copy();
                     skull.setTagCompound(new NBTTagCompound());
@@ -985,7 +985,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         this.entityDropItem(skull, 1);
                     }
                     this.setDead();
-                } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IceAndFire.CONFIG.dragonDropHeart) {
+                } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IafConfig.dragonDropHeart) {
                     ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_heart : IafItemRegistry.ice_dragon_heart, 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(4)), 1);
                     if (!world.isRemote) {
@@ -1189,7 +1189,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     protected void despawnEntity() {
-        if (!IceAndFire.CONFIG.canDragonsDespawn) {
+        if (!IafConfig.canDragonsDespawn) {
             super.despawnEntity();
         }
     }
@@ -1253,30 +1253,30 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         if (this.posY > this.world.getHeight()) {
             return true;
         }
-        return this.posY > IceAndFire.CONFIG.maxDragonFlight;
+        return this.posY > IafConfig.maxDragonFlight;
     }
 
     public void breakBlock() {
-        if (this.blockBreakCounter > 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) {
+        if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
             int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
             int flightModifier = isFlying() && this.getAttackTarget() != null ? -1 : 1;
-            if ((this.blockBreakCounter == 0 || IceAndFire.CONFIG.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
-                if (IceAndFire.CONFIG.dragonGriefing != 2 && (!this.isTamed() || IceAndFire.CONFIG.tamedDragonGriefing)) {
-                    float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
+            if ((this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+                if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
+                    float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                         for (int a = (int) Math.floor(this.getEntityBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getEntityBoundingBox().maxX) + bounds; a++) {
                             for (int b = (int) Math.floor(this.getEntityBoundingBox().minY) + flightModifier; (b <= (int) Math.ceil(this.getEntityBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
                                 for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + bounds; c++) {
                                     if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                                     BlockPos pos = new BlockPos(a, b, c);
-                                    IBlockState state = world.getBlockState(pos);
+                                    BlockState state = world.getBlockState(pos);
                                     if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                         this.motionX *= 0.6D;
                                         this.motionZ *= 0.6D;
 
                                         if (!world.isRemote) {
-                                            world.destroyBlock(pos, rand.nextFloat() <= IceAndFire.CONFIG.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
+                                            world.destroyBlock(pos, rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
                                         }
                                     }
                                 }
@@ -1300,10 +1300,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 double extraY = 0.8F;
                 double extraZ = radius * MathHelper.cos(angle);
                 BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
-                IBlockState iblockstate = this.world.getBlockState(ground);
-                if (iblockstate.getMaterial() != Material.AIR) {
+                BlockState BlockState = this.world.getBlockState(ground);
+                if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, ground.getY() + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(iblockstate));
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, ground.getY() + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
                     }
                 }
             }
@@ -1529,7 +1529,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         lastScale = scale;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     public float getRenderSize() {
@@ -1741,9 +1741,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     public abstract Item getSummoningCrystal();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
@@ -1923,7 +1923,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return chainProperties != null && chainProperties.isChained();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean shouldRender(ICamera camera) {
         boolean render = false;
         return inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
@@ -2169,7 +2169,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public void onRemovedFromWorld() {
-        if(IceAndFire.CONFIG.chunkLoadSummonCrystal) {
+        if(IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
                 DragonPosWorldData.get(world).addDragon(this.getUniqueID(), this.getPosition());
             }

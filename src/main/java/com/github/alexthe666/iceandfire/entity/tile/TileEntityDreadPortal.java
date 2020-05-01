@@ -42,7 +42,7 @@ public class TileEntityDreadPortal extends TileEntity {
         this.exactTeleport = compound.getBoolean("ExactTeleport");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public double getMaxRenderDistanceSquared() {
         return 65536.0D;
     }
@@ -60,7 +60,7 @@ public class TileEntityDreadPortal extends TileEntity {
         return this.writeToNBT(new NBTTagCompound());
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderFace(EnumFacing p_184313_1_) {
         return this.getBlockType().getDefaultState().shouldSideBeRendered(this.world, this.getPos(), p_184313_1_);
     }

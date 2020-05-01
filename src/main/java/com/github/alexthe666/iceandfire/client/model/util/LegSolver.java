@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -79,7 +79,7 @@ public class LegSolver {
         }
 
         private float getDistance(World world, BlockPos pos) {
-            IBlockState state = world.getBlockState(pos);
+            BlockState state = world.getBlockState(pos);
             AxisAlignedBB aabb = state.getCollisionBoundingBox(world, pos);
             return aabb == null ? 1 : 1 - Math.min((float) aabb.maxY, 1);
         }

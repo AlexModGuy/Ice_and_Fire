@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -50,7 +50,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         this.isFire = isFire;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static boolean isBurning(IInventory inventory) {
         return inventory.getField(0) > 0;
     }
@@ -73,7 +73,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos grillPos = this.getPos().offset(facing);
             if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.dragonforge_fire_brick || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.dragonforge_ice_brick) {
-                IBlockState grillState = isFire ? IafBlockRegistry.dragonforge_fire_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.dragonforge_ice_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill);
+                BlockState grillState = isFire ? IafBlockRegistry.dragonforge_fire_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.dragonforge_ice_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill);
                 if (world.getBlockState(grillPos) != grillState) {
                     world.setBlockState(grillPos, grillState);
                 }

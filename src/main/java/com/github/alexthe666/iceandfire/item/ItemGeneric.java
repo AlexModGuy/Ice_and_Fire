@@ -26,7 +26,7 @@ public class ItemGeneric extends Item {
         this.description = textLength;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         if (this == IafItemRegistry.creative_dragon_meal) {
             return true;

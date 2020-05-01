@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.Map;
 import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderModCapes {
     public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
     public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
@@ -78,7 +78,7 @@ public class RenderModCapes {
             GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
             GL11.glPushMatrix();
             GL11.glScalef(1.4F, 1.4F, 1.4F);
-            Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, new ItemStack(IafItemRegistry.weezer_blue_album), ItemCameraTransforms.TransformType.GROUND);
+            Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.weezer_blue_album), ItemCameraTransforms.TransformType.GROUND);
             GL11.glPopMatrix();
             GL11.glPopMatrix();
 

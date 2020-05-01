@@ -10,7 +10,7 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -25,12 +25,12 @@ public class IafDragonDestructionManager {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
-        float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageFire;
+        float dmgScale = (float) IafConfig.dragonAttackDamageFire;
         if (stage <= 3) {
             for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))) {
-                if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()) {
+                if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
                     if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                        IBlockState transformState = transformBlockFire(world.getBlockState(pos));
+                        BlockState transformState = transformBlockFire(world.getBlockState(pos));
                         world.setBlockState(pos, transformState);
                         if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
                             world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
@@ -56,9 +56,9 @@ public class IafDragonDestructionManager {
             damageRadius = 2.5F + f * 1.2F;
             for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
+                    if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
-                            IBlockState transformState = transformBlockFire(world.getBlockState(blockpos));
+                            BlockState transformState = transformBlockFire(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
                             if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
                                 world.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
@@ -83,12 +83,12 @@ public class IafDragonDestructionManager {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
-        float dmgScale = (float) IceAndFire.CONFIG.dragonAttackDamageIce;
+        float dmgScale = (float) IafConfig.dragonAttackDamageIce;
         if (stage <= 3) {
             for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1))) {
-                if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextBoolean()) {
+                if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
                     if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                        IBlockState transformState = transformBlockIce(world.getBlockState(pos));
+                        BlockState transformState = transformBlockIce(world.getBlockState(pos));
                         world.setBlockState(pos, transformState);
                         if (world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
                             world.setBlockState(pos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
@@ -117,9 +117,9 @@ public class IafDragonDestructionManager {
             damageRadius = 2.5F + f * 1.2F;
             for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
-                    if (IceAndFire.CONFIG.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
+                    if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
-                            IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
+                            BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
                             if (world.rand.nextInt(9) == 0 && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
                                 world.setBlockState(blockpos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
@@ -156,7 +156,7 @@ public class IafDragonDestructionManager {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
                     if (world.rand.nextBoolean()) {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                            IBlockState transformState = transformBlockFire(world.getBlockState(pos));
+                            BlockState transformState = transformBlockFire(world.getBlockState(pos));
                             world.setBlockState(pos, transformState);
                             if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
                                 world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
@@ -189,7 +189,7 @@ public class IafDragonDestructionManager {
                 for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
-                            IBlockState transformState = transformBlockFire(world.getBlockState(blockpos));
+                            BlockState transformState = transformBlockFire(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
                             if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
                                 world.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
@@ -204,7 +204,7 @@ public class IafDragonDestructionManager {
                     }
                 }
             }
-            if(IceAndFire.CONFIG.explosiveDragonBreath){
+            if(IafConfig.explosiveDragonBreath){
                 BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);
@@ -225,7 +225,7 @@ public class IafDragonDestructionManager {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2))) {
                     if (world.rand.nextBoolean()) {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                            IBlockState transformState = transformBlockIce(world.getBlockState(pos));
+                            BlockState transformState = transformBlockIce(world.getBlockState(pos));
                             world.setBlockState(pos, transformState);
                             if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(pos.up())) {
                                 world.setBlockState(pos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
@@ -261,7 +261,7 @@ public class IafDragonDestructionManager {
                 for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l))) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
-                            IBlockState transformState = transformBlockIce(world.getBlockState(blockpos));
+                            BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
                             if (world.rand.nextBoolean() && transformState.isFullBlock() && world.isAirBlock(blockpos.up())) {
                                 world.setBlockState(blockpos.up(), IafBlockRegistry.dragon_ice_spikes.getDefaultState());
@@ -279,7 +279,7 @@ public class IafDragonDestructionManager {
                     }
                 }
             }
-            if(IceAndFire.CONFIG.explosiveDragonBreath){
+            if(IafConfig.explosiveDragonBreath){
                 BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);
@@ -287,7 +287,7 @@ public class IafDragonDestructionManager {
         }
     }
 
-    public static IBlockState transformBlockFire(IBlockState in) {
+    public static BlockState transformBlockFire(BlockState in) {
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
             return IafBlockRegistry.charedGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT) {
@@ -308,7 +308,7 @@ public class IafDragonDestructionManager {
         return in;
     }
 
-    public static IBlockState transformBlockIce(IBlockState in) {
+    public static BlockState transformBlockIce(BlockState in) {
         if (in.getMaterial() == Material.GRASS || in.getMaterial() == Material.CRAFTED_SNOW) {
             return IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.GROUND && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.CRAFTED_SNOW) {

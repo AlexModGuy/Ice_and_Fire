@@ -37,7 +37,7 @@ public class ParticleDragonFrost extends ParticleFlame {
     private EntityDragonBase dragon;
     private boolean big;
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ParticleDragonFrost(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float dragonSize) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.particleMaxAge = 30;
@@ -100,9 +100,9 @@ public class ParticleDragonFrost extends ParticleFlame {
             avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
         }
         if (big) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE_BIG);
+            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE_BIG);
         } else {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE);
+            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE);
 
         }
         GlStateManager.disableLighting();

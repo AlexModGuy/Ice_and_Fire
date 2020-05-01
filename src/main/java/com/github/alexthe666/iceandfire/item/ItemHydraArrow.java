@@ -29,7 +29,7 @@ public class ItemHydraArrow extends ItemArrow {
         return new EntityHydraArrow(worldIn, shooter);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(I18n.format("item.iceandfire.hydra_arrow.desc"));
     }

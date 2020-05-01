@@ -66,7 +66,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BYTE);
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     public float singProgress;
     public float swimProgress;
@@ -429,7 +429,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.sirenMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
     }
 
     @Override

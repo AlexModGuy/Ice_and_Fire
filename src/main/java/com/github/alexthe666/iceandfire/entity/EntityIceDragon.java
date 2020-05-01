@@ -49,7 +49,7 @@ public class EntityIceDragon extends EntityDragonBase {
     public int swimCycle;
 
     public EntityIceDragon(World worldIn) {
-        super(worldIn, DragonType.ICE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+        super(worldIn, DragonType.ICE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
         this.setSize(0.78F, 1.2F);
         ANIMATION_SPEAK = Animation.create(20);
         ANIMATION_BITE = Animation.create(35);

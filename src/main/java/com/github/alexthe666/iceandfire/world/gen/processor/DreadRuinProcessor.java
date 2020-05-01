@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
@@ -33,7 +33,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
     public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
         if (worldIn.rand.nextFloat() <= integrity) {
             if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_stone_bricks) {
-                IBlockState state = getRandomCrackedBlock(null, worldIn.rand);
+                BlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
             if (blockInfoIn.blockState.getBlock() instanceof BlockChest) {
@@ -79,7 +79,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
         return EntityDreadKnight.class;
     }
 
-    public static IBlockState getRandomCrackedBlock(@Nullable IBlockState prev, Random random) {
+    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
             return IafBlockRegistry.dread_stone_bricks.getDefaultState();

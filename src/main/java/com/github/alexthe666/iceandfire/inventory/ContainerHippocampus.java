@@ -29,7 +29,7 @@ public class ContainerHippocampus extends SyncedFieldContainer {
                 return stack.getItem() == Items.SADDLE && !this.getHasStack();
             }
 
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
@@ -43,7 +43,7 @@ public class ContainerHippocampus extends SyncedFieldContainer {
                 ContainerHippocampus.this.hippocampus.refreshInventory();
             }
 
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
@@ -58,7 +58,7 @@ public class ContainerHippocampus extends SyncedFieldContainer {
                 return 1;
             }
 
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
@@ -67,7 +67,7 @@ public class ContainerHippocampus extends SyncedFieldContainer {
         for (int k = 0; k < 3; ++k) {
             for (int l = 0; l < 5; ++l) {
                 this.addSlotToContainer(new Slot(hippocampusInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
-                    @SideOnly(Side.CLIENT)
+                    @OnlyIn(Dist.CLIENT)
                     public boolean isEnabled() {
                         return ContainerHippocampus.this.hippocampus.isChested();
                     }

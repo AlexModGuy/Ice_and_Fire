@@ -67,7 +67,7 @@ public class ItemAlchemySword extends ItemSword {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         return true;
     }

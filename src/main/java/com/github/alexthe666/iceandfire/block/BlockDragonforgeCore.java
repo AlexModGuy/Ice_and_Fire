@@ -6,7 +6,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
@@ -45,7 +45,7 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
     }
 
     @Override
-    public EnumPushReaction getPushReaction(IBlockState state) {
+    public EnumPushReaction getPushReaction(BlockState state) {
         return EnumPushReaction.BLOCK;
     }
 
@@ -80,7 +80,7 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking()) {
             return false;
         } else {
@@ -89,15 +89,15 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
         }
     }
 
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return isFire ? Item.getItemFromBlock(IafBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IafBlockRegistry.dragonforge_ice_core_disabled);
     }
 
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+    public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {
         return new ItemStack(isFire ? Item.getItemFromBlock(IafBlockRegistry.dragonforge_fire_core_disabled) : Item.getItemFromBlock(IafBlockRegistry.dragonforge_ice_core_disabled));
     }
 
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public EnumBlockRenderType getRenderType(BlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
@@ -105,7 +105,7 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
         return isFire;
     }
 
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.activated) {
 
         }
@@ -115,7 +115,7 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
         return new TileEntityDragonforge(isFire);
     }
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
         if (!keepInventory) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof TileEntityDragonforge) {
@@ -127,11 +127,11 @@ public class BlockDragonforgeCore extends BlockContainer implements IDragonProof
         super.breakBlock(worldIn, pos, state);
     }
 
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+    public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
         return Container.calcRedstone(worldIn.getTileEntity(pos));
     }
 
-    public boolean hasComparatorInputOverride(IBlockState state) {
+    public boolean hasComparatorInputOverride(BlockState state) {
         return true;
     }
 

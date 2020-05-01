@@ -55,7 +55,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private net.minecraft.client.renderer.vertex.VertexBuffer getSkyVBO() {
         try {
-            return (net.minecraft.client.renderer.vertex.VertexBuffer) SKY_VBO.get(Minecraft.getMinecraft().renderGlobal);
+            return (net.minecraft.client.renderer.vertex.VertexBuffer) SKY_VBO.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private net.minecraft.client.renderer.vertex.VertexBuffer getSky2VBO() {
         try {
-            return (net.minecraft.client.renderer.vertex.VertexBuffer) SKY_2_VBO.get(Minecraft.getMinecraft().renderGlobal);
+            return (net.minecraft.client.renderer.vertex.VertexBuffer) SKY_2_VBO.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -73,7 +73,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private net.minecraft.client.renderer.vertex.VertexBuffer getStarVBO() {
         try {
-            return (net.minecraft.client.renderer.vertex.VertexBuffer) STAR_VBO.get(Minecraft.getMinecraft().renderGlobal);
+            return (net.minecraft.client.renderer.vertex.VertexBuffer) STAR_VBO.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -82,7 +82,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private int getSkyCallist() {
         try {
-            return (Integer) SKY_LIST.get(Minecraft.getMinecraft().renderGlobal);
+            return (Integer) SKY_LIST.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -91,7 +91,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private int getSky2CallList() {
         try {
-            return (Integer) SKY_2_LIST.get(Minecraft.getMinecraft().renderGlobal);
+            return (Integer) SKY_2_LIST.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private int getStarCallList() {
         try {
-            return (Integer) STAR_LIST.get(Minecraft.getMinecraft().renderGlobal);
+            return (Integer) STAR_LIST.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -109,7 +109,7 @@ public class RenderDreadlandsAurora extends IRenderHandler {
 
     private int getCloudTickCounter() {
         try {
-            return (Integer) CLOUD_TICK_COUNTER.get(Minecraft.getMinecraft().renderGlobal);
+            return (Integer) CLOUD_TICK_COUNTER.get(Minecraft.getInstance().renderGlobal);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }

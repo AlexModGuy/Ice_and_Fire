@@ -24,7 +24,7 @@ public enum EnumSeaSerpentAnimations {
     JUMPING1("Jumping1"),
     JUMPING2("Jumping2");
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IceAndFireTabulaModel seaserpent_model;
     private String fileSuffix;
 
@@ -32,7 +32,7 @@ public enum EnumSeaSerpentAnimations {
         this.fileSuffix = fileSuffix;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void initializeSerpentModels() {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             for (EnumSeaSerpentAnimations animation : values()) {

@@ -29,7 +29,6 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     public EntityDragonEgg(World worldIn) {
         super(worldIn);
         this.isImmuneToFire = true;
-        this.setSize(0.45F, 0.55F);
     }
 
     @Override

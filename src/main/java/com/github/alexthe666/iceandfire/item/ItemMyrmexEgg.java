@@ -35,7 +35,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1, 0));
@@ -47,7 +47,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String caste;
         switch (stack.getMetadata()) {
@@ -98,7 +98,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         return super.hasEffect(stack) || stack.getMetadata() == 4;
     }

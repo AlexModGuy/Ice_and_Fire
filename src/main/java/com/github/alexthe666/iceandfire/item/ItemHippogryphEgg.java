@@ -43,7 +43,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
@@ -74,7 +74,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String type = EnumHippogryphTypes.values()[MathHelper.clamp(stack.getMetadata(), 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
         tooltip.add(StatCollector.translateToLocal("entity.hippogryph." + type));

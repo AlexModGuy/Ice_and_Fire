@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.pathfinding;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
@@ -85,7 +85,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
     private int getPathablePosY() {
         if (this.worm.isInSand()) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
-            IBlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
+            BlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
             int j = 0;
 
             while (blockstate.getMaterial() == Material.SAND) {

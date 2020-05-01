@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderDragonFireCharge extends Render {
 
     public boolean isFire;
@@ -31,7 +31,7 @@ public class RenderDragonFireCharge extends Render {
 
     @Override
     public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         this.bindEntityTexture(entity);

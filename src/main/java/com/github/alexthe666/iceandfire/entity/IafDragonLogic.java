@@ -115,7 +115,7 @@ public class IafDragonLogic {
         } else {
             dragon.setDragonPitch(0);
         }
-        if (IceAndFire.CONFIG.doDragonsSleep && !dragon.isInWater() && !dragon.isSleeping() && dragon.onGround && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null && !dragon.isDaytime() && dragon.getRNG().nextInt(250) == 0 && dragon.getAttackTarget() == null && dragon.getPassengers().isEmpty()) {
+        if (IafConfig.doDragonsSleep && !dragon.isInWater() && !dragon.isSleeping() && dragon.onGround && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null && !dragon.isDaytime() && dragon.getRNG().nextInt(250) == 0 && dragon.getAttackTarget() == null && dragon.getPassengers().isEmpty()) {
             dragon.setSleeping(true);
         }
         if (dragon.isSleeping() && (dragon.isFlying() || dragon.isHovering() || dragon.isInWater() || (dragon.world.canBlockSeeSky(new BlockPos(dragon)) && dragon.isDaytime() && !dragon.isTamed() || dragon.isDaytime() && dragon.isTamed()) || dragon.getAttackTarget() != null || !dragon.getPassengers().isEmpty())) {
@@ -128,7 +128,7 @@ public class IafDragonLogic {
             dragon.setFlying(false);
         }
         if (dragon.blockBreakCounter <= 0) {
-            dragon.blockBreakCounter = IceAndFire.CONFIG.dragonBreakBlockCooldown;
+            dragon.blockBreakCounter = IafConfig.dragonBreakBlockCooldown;
         }
         dragon.updateBurnTarget();
         if (dragon.isSitting() && (dragon.getCommand() != 1 || dragon.getControllingPassenger() != null)) {
@@ -280,7 +280,7 @@ public class IafDragonLogic {
                 dragon.growDragon(0);
             }
         }
-        if (dragon.ticksExisted % IceAndFire.CONFIG.dragonHungerTickRate == 0 && IceAndFire.CONFIG.dragonHungerTickRate > 0) {
+        if (dragon.ticksExisted % IafConfig.dragonHungerTickRate == 0 && IafConfig.dragonHungerTickRate > 0) {
             if (dragon.getHunger() > 0) {
                 dragon.setHunger(dragon.getHunger() - 1);
             }
@@ -359,7 +359,7 @@ public class IafDragonLogic {
             dragon.burnProgress = 0;
         }
         if (dragon.flightCycle == 2 && !dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
-            float dragonSoundVolume = IceAndFire.CONFIG.dragonFlapNoiseDistance;
+            float dragonSoundVolume = IafConfig.dragonFlapNoiseDistance;
             float dragonSoundPitch = dragon.getSoundPitch();
             dragon.playSound(IafSoundRegistry.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
         }

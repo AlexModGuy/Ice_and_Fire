@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 public class DragonAIMate extends EntityAIBase {
-    private static final IBlockState NEST = IafBlockRegistry.nest.getDefaultState();
+    private static final BlockState NEST = IafBlockRegistry.nest.getDefaultState();
     private final EntityDragonBase dragon;
     World theWorld;
     int spawnBabyDelay;

@@ -27,7 +27,7 @@ public class WorldProviderDreadLands extends WorldProvider {
         return IafWorldRegistry.DREADLANDS_DIM;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks) {
         float cestialAngle = cameraEntity.world.getCelestialAngle(partialTicks);
         float f = MathHelper.clamp(MathHelper.cos(cestialAngle * ((float) Math.PI * 2F)) * 2.0F + 0.5F, 0.2F, 1F);
@@ -41,7 +41,7 @@ public class WorldProviderDreadLands extends WorldProvider {
         return new Vec3d((double) nightR + (dayR - nightR) * transitional, (double) nightG + (dayG - nightG) * transitional, (double) nightB + (dayB - nightB) * transitional);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public Vec3d getFogColor(float p_76562_1_, float p_76562_2_) {
         float f = MathHelper.clamp(MathHelper.cos(p_76562_1_ * ((float) Math.PI * 2F)) * 2.0F + 0.5F, 0.3F, 1F);
         float dayR = 0.71F;
@@ -96,19 +96,19 @@ public class WorldProviderDreadLands extends WorldProvider {
     }
 
     @Nullable
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public net.minecraftforge.client.IRenderHandler getWeatherRenderer() {
         return (net.minecraftforge.client.IRenderHandler) IceAndFire.PROXY.getDreadlandsRender(1);
     }
 
     @Nullable
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public net.minecraftforge.client.IRenderHandler getSkyRenderer() {
         return (net.minecraftforge.client.IRenderHandler) IceAndFire.PROXY.getDreadlandsRender(0);
     }
 
     @Nullable
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public net.minecraftforge.client.IRenderHandler getCloudRenderer() {
         return (net.minecraftforge.client.IRenderHandler) IceAndFire.PROXY.getDreadlandsRender(2);
     }

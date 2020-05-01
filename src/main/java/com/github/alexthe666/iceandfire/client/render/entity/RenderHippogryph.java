@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
     public RenderHippogryph(RenderManager renderManager) {
@@ -35,7 +35,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
         return entity.isBlinking() ? entity.getEnumVariant().TEXTURE_BLINK : entity.getEnumVariant().TEXTURE;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippogriffSaddle implements LayerRenderer {
         private final RenderHippogryph renderer;
         private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png");
@@ -62,7 +62,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippogriffBridle implements LayerRenderer {
         private final RenderHippogryph renderer;
         private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png");
@@ -89,7 +89,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippogriffChest implements LayerRenderer {
         private final RenderHippogryph renderer;
         private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png");
@@ -116,7 +116,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippogriffArmor implements LayerRenderer {
         private final RenderHippogryph renderer;
         private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_diamond.png");

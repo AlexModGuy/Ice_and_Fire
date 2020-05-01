@@ -6,7 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -33,7 +33,7 @@ public class BlockMyrmexBiolight extends BlockBush {
     }
 
 
-    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+    public boolean canBlockStay(World worldIn, BlockPos pos, BlockState state) {
         return worldIn.getBlockState(pos.up()).isOpaqueCube() || worldIn.getBlockState(pos.up()).getBlock() == this;
     }
 
@@ -45,15 +45,15 @@ public class BlockMyrmexBiolight extends BlockBush {
         return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && canBlockStay(worldIn, pos);
     }
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return BUSH_AABB;
     }
 
-    protected boolean canSustainBush(IBlockState state) {
+    protected boolean canSustainBush(BlockState state) {
         return true;
     }
 
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
         return state.withProperty(CONNECTED_DOWN, worldIn.getBlockState(pos.down()).getBlock() == this);
     }
 
@@ -61,7 +61,7 @@ public class BlockMyrmexBiolight extends BlockBush {
         return new BlockStateContainer(this, CONNECTED_DOWN);
     }
 
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return 0;
     }
 }

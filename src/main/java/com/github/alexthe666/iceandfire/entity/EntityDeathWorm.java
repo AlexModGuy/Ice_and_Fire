@@ -17,7 +17,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -65,7 +65,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     private static final DataParameter<Integer> WORM_AGE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
     public static Animation ANIMATION_BITE = Animation.create(10);
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     private int animationTick;
     private boolean willExplode = false;
@@ -104,7 +104,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof EntityMob;
                 } else {
-                    return (IceAndFire.CONFIG.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return (IafConfig.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
         }));
@@ -121,7 +121,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         int j = MathHelper.floor(this.getEntityBoundingBox().minY);
         int k = MathHelper.floor(this.posZ);
         BlockPos blockpos = new BlockPos(i, j, k);
-        return this.world.getBlockState(blockpos.down()).getBlock() == this.spawnableBlock && this.getRNG().nextInt(1 + IceAndFire.CONFIG.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
+        return this.world.getBlockState(blockpos.down()).getBlock() == this.spawnableBlock && this.getRNG().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
     }
 
     public void onUpdateParts() {
@@ -364,9 +364,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.deathWormAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.deathWormMaxHealth);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.deathWormTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.deathWormAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.deathWormMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.deathWormTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
     }
 
@@ -440,8 +440,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         for (int l3 = j2; l3 < k2; ++l3) {
             for (int i4 = l2; i4 < i3; ++i4) {
                 for (int j4 = j3; j4 < k3; ++j4) {
-                    IBlockState iblockstate1 = this.world.getBlockState(blockpos$pooledmutableblockpos.setPos(l3, i4, j4));
-                    if (iblockstate1.getMaterial() != Material.AIR && iblockstate1.getMaterial() != Material.SAND) {
+                    BlockState BlockState1 = this.world.getBlockState(blockpos$pooledmutableblockpos.setPos(l3, i4, j4));
+                    if (BlockState1.getMaterial() != Material.AIR && BlockState1.getMaterial() != Material.SAND) {
                         blockpos$pooledmutableblockpos.release();
                         return true;
                     }
@@ -539,8 +539,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     private void updateAttributes() {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getScaleForAge()));
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFire.CONFIG.deathWormAttackStrength * this.getScaleForAge()));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFire.CONFIG.deathWormMaxHealth * this.getScaleForAge()));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IafConfig.deathWormAttackStrength * this.getScaleForAge()));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IafConfig.deathWormMaxHealth * this.getScaleForAge()));
         this.setHealth((float) this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
     }
 
@@ -622,7 +622,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX), 0, MathHelper.floor(this.posZ));
 
@@ -687,7 +687,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         if (!this.isInSand()) {
             this.noClip = false;
         } else {
-            IBlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
+            BlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
             int blockId = Block.getStateId(state);
             if (state.isOpaqueCube()) {
                 if (world.isRemote) {
@@ -731,9 +731,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
@@ -783,8 +783,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         int j = MathHelper.floor(this.posY - 1);
         int k = MathHelper.floor(this.posZ);
         BlockPos blockpos = new BlockPos(i, j, k);
-        IBlockState iblockstate = this.world.getBlockState(blockpos);
-        return iblockstate.getMaterial() == Material.SAND;
+        BlockState BlockState = this.world.getBlockState(blockpos);
+        return BlockState.getMaterial() == Material.SAND;
     }
 
     public boolean isInSand() {
@@ -906,7 +906,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         return world.getBlockState(pos).getMaterial() == Material.SAND;
     }
 
-    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, IBlockState blockStateIn, float p_174816_5_) {
+    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
         float hardness = blockStateIn.getBlockHardness(worldIn, pos);
         return hardness != -1.0F && hardness < 1.5F;
     }

@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderChainTie extends Render<EntityChainTie> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_tie.png");
     private final ModelChainTie leashKnotModel = new ModelChainTie();

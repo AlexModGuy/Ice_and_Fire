@@ -39,7 +39,7 @@ public class MessageUpdatePixieHouseModel extends AbstractMessage<MessageUpdateP
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePixieHouseModel message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);

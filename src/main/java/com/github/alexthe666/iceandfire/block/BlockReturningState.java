@@ -6,7 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,9 +16,9 @@ import java.util.Random;
 public class BlockReturningState extends Block {
     public static final PropertyBool REVERTS = PropertyBool.create("revert");
     public Item itemBlock;
-    private IBlockState returnState;
+    private BlockState returnState;
 
-    public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, IBlockState returnToState) {
+    public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, BlockState returnToState) {
         super(materialIn);
         this.setTranslationKey(name);
         this.setHarvestLevel(toolUsed, toolStrength);
@@ -33,7 +33,7 @@ public class BlockReturningState extends Block {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, IBlockState returnToState) {
+    public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
         super(materialIn);
         this.setTranslationKey(name);
         this.setHarvestLevel(toolUsed, toolStrength);
@@ -50,7 +50,7 @@ public class BlockReturningState extends Block {
         this.setTickRandomly(true);
     }
 
-    public BlockReturningState(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound, IBlockState returnToState) {
+    public BlockReturningState(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound, BlockState returnToState) {
         super(materialIn);
         this.setTranslationKey(name);
         this.setHardness(hardness);
@@ -63,7 +63,7 @@ public class BlockReturningState extends Block {
         this.setTickRandomly(true);
     }
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!worldIn.isRemote) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;
@@ -73,11 +73,11 @@ public class BlockReturningState extends Block {
         }
     }
 
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(REVERTS, meta == 1);
     }
 
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(REVERTS) ? 1 : 0;
     }
 

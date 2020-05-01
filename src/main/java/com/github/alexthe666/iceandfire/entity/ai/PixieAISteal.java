@@ -32,7 +32,7 @@ public class PixieAISteal extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!IceAndFire.CONFIG.pixiesStealItems) {
+        if (!IafConfig.pixiesStealItems) {
             return false;
         }
         if (temptedEntity.getRNG().nextInt(3) == 0) {

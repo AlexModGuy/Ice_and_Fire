@@ -8,7 +8,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -42,40 +42,40 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         this.sticky = sticky;
     }
 
-    public float getSlipperiness(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
+    public float getSlipperiness(BlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
         return entity != null && entity instanceof EntityMyrmexBase ? slipperiness : 0.75F;
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
+    public int damageDropped(BlockState state) {
         return ((EnumType) state.getValue(VARIANT)).ordinal();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this, 1, 0));
         items.add(new ItemStack(this, 1, 1));
     }
 
     @Deprecated
-    public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+    public boolean canEntitySpawn(BlockState state, Entity entityIn) {
         return false;
     }
 
 
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(VARIANT, EnumType.values()[MathHelper.clamp(meta, 0, 1)]);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return ((EnumType) state.getValue(VARIANT)).ordinal();
     }
 
-    protected ItemStack getSilkTouchDrop(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(BlockState state) {
         Item item = Item.getItemFromBlock(this);
         int i = this.getMetaFromState(state);
         return new ItemStack(item, 1, i);
@@ -87,12 +87,12 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
     }
 
     @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return super.getCollisionBoundingBox(blockState, worldIn, pos);
     }
 
 
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
         if (sticky) {
             if ((entityIn instanceof EntityMyrmexBase)) {
                 entityIn.motionX *= 1.2D;

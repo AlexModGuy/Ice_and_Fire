@@ -43,7 +43,7 @@ public class MessageHippogryphArmor extends AbstractMessage<MessageHippogryphArm
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageHippogryphArmor message, EntityPlayer player, MessageContext messageContext) {
 
     }

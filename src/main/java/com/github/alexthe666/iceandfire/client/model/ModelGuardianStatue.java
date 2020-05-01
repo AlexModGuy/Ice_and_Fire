@@ -9,7 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelGuardianStatue extends ModelBase {
     private final ModelRenderer guardianBody;
     private final ModelRenderer guardianEye;
@@ -77,7 +77,7 @@ public class ModelGuardianStatue extends ModelBase {
         }
 
         this.guardianEye.rotationPointZ = -8.25F;
-        Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity entity = Minecraft.getInstance().getRenderViewEntity();
 
         if (entityguardian.hasTargetedEntity()) {
             entity = entityguardian.getTargetedEntity();

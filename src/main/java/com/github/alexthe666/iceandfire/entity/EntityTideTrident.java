@@ -5,7 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -89,7 +89,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         registerFixesArrow(fixer, "Arrow");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
         double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
 
@@ -140,7 +140,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.ticksInGround = 0;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
         if (!inGround) {
             this.setPosition(x, y, z);
@@ -149,7 +149,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setVelocity(double x, double y, double z) {
         this.motionX = x;
         this.motionY = y;
@@ -179,11 +179,11 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
-        IBlockState iblockstate = this.world.getBlockState(blockpos);
-        Block block = iblockstate.getBlock();
+        BlockState BlockState = this.world.getBlockState(blockpos);
+        Block block = BlockState.getBlock();
 
-        if (iblockstate.getMaterial() != Material.AIR) {
-            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
+        if (BlockState.getMaterial() != Material.AIR) {
+            AxisAlignedBB axisalignedbb = BlockState.getCollisionBoundingBox(this.world, blockpos);
 
             if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).contains(new Vec3d(this.posX, this.posY, this.posZ))) {
                 this.inGround = true;
@@ -195,7 +195,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
 
         if (this.inGround) {
-            int j = block.getMetaFromState(iblockstate);
+            int j = block.getMetaFromState(BlockState);
             if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().grow(0.05D))) {
                 this.inGround = false;
                 this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
@@ -366,9 +366,9 @@ public class EntityTideTrident extends Entity implements IProjectile {
             this.xTile = blockpos.getX();
             this.yTile = blockpos.getY();
             this.zTile = blockpos.getZ();
-            IBlockState iblockstate = this.world.getBlockState(blockpos);
-            this.inTile = iblockstate.getBlock();
-            this.inData = this.inTile.getMetaFromState(iblockstate);
+            BlockState BlockState = this.world.getBlockState(blockpos);
+            this.inTile = BlockState.getBlock();
+            this.inData = this.inTile.getMetaFromState(BlockState);
             this.motionX = (double) ((float) (raytraceResultIn.hitVec.x - this.posX));
             this.motionY = (double) ((float) (raytraceResultIn.hitVec.y - this.posY));
             this.motionZ = (double) ((float) (raytraceResultIn.hitVec.z - this.posZ));
@@ -381,8 +381,8 @@ public class EntityTideTrident extends Entity implements IProjectile {
             this.arrowShake = 7;
             this.setIsCritical(false);
 
-            if (iblockstate.getMaterial() != Material.AIR) {
-                this.inTile.onEntityCollision(this.world, blockpos, iblockstate, this);
+            if (BlockState.getMaterial() != Material.AIR) {
+                this.inTile.onEntityCollision(this.world, blockpos, BlockState, this);
             }
         }
     }

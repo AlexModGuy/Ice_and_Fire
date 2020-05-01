@@ -29,9 +29,9 @@ public class LayerTrollEyes implements LayerRenderer<EntityTroll> {
             GlStateManager.depthFunc(514);
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.0F);
             GlStateManager.enableLighting();
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+            Minecraft.getInstance().entityRenderer.setupFogColor(true);
             this.renderer.getMainModel().render(troll, f, f1, f2, f3, f4, f5);
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+            Minecraft.getInstance().entityRenderer.setupFogColor(false);
             this.renderer.setLightmap(troll);
             GlStateManager.disableBlend();
             GlStateManager.depthFunc(515);

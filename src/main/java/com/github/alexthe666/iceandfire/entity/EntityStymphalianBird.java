@@ -12,7 +12,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -75,7 +75,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.setSize(1.3F, 1.2F);
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Nullable
@@ -102,7 +102,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.stymphalianBirdTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
     }
 
@@ -182,7 +182,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if (this.deathTime == 20 && !this.world.isRemote && IceAndFire.CONFIG.stymphalianBirdsOreDictDrops) {
+        if (this.deathTime == 20 && !this.world.isRemote && IafConfig.stymphalianBirdsOreDictDrops) {
             NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
             NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
             if (!bronzeItems.isEmpty()) {
@@ -402,8 +402,8 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (this.posY > IceAndFire.CONFIG.stymphalianBirdFlightHeight) {
-            this.setPosition(this.posX, IceAndFire.CONFIG.stymphalianBirdFlightHeight, this.posZ);
+        if (this.posY > IafConfig.stymphalianBirdFlightHeight) {
+            this.setPosition(this.posX, IafConfig.stymphalianBirdFlightHeight, this.posZ);
         }
     }
 
@@ -550,7 +550,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     @Override
     public boolean shouldAnimalsFear(Entity entity) {
-        return IceAndFire.CONFIG.stympahlianBirdAttackAnimals;
+        return IafConfig.stympahlianBirdAttackAnimals;
     }
 
     @Override

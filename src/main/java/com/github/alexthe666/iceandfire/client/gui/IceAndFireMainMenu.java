@@ -160,7 +160,7 @@ public class IceAndFireMainMenu extends GuiMainMenu {
             } else {
                 x = 30 + random.nextInt(30);
             }
-            String s1 = generateNewRandomName(Minecraft.getMinecraft().standardGalacticFontRenderer, 50, random);
+            String s1 = generateNewRandomName(Minecraft.getInstance().standardGalacticFontRenderer, 50, random);
             drawnEnscriptions[i] = new Enscription(s1, x, y, random.nextFloat() * 0.5F + 0.5F, 0X9C8B7B);
         }
     }

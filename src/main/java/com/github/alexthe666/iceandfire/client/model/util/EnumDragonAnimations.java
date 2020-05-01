@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public enum EnumDragonAnimations {
     MALE("BaseMale"),
     FEMALE("BaseFemale"),
@@ -68,9 +68,9 @@ public enum EnumDragonAnimations {
     TACKLE("AttackTackle"),
     SIT_ON_PLAYER_POSE("SittingShoulder", 1);
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IceAndFireTabulaModel firedragon_model;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IceAndFireTabulaModel icedragon_model;
     private String fileSuffix;
     private int dragonType;
@@ -84,7 +84,7 @@ public enum EnumDragonAnimations {
         this.dragonType = iceOrFire;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void initializeDragonModels() {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             for (EnumDragonAnimations animation : values()) {

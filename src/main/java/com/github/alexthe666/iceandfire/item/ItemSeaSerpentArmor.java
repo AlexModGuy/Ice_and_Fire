@@ -27,7 +27,7 @@ public class ItemSeaSerpentArmor extends ItemArmor {
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
         return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 9 : 8);
     }
@@ -37,7 +37,7 @@ public class ItemSeaSerpentArmor extends ItemArmor {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(armor_type.color + StatCollector.translateToLocal("sea_serpent." + armor_type.resourceName));
         tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_0"));

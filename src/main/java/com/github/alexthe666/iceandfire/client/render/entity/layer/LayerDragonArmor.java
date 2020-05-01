@@ -46,7 +46,7 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
                     }
                 }
                 ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
-                Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
+                Minecraft.getInstance().getTextureManager().loadTexture(resourcelocation, layeredBase);
                 LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
             }
             this.render.bindTexture(resourcelocation);

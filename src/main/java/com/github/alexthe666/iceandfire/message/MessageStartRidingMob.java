@@ -39,7 +39,7 @@ public class MessageStartRidingMob extends AbstractMessage<MessageStartRidingMob
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageStartRidingMob message, EntityPlayer player, MessageContext messageContext) {
     }
 

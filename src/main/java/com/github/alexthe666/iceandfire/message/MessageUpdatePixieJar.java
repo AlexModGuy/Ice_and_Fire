@@ -38,7 +38,7 @@ public class MessageUpdatePixieJar extends AbstractMessage<MessageUpdatePixieJar
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
         if (client.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);

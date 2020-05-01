@@ -77,7 +77,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                     float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
                     GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
                     GL11.glPushMatrix();
-                    Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, podium.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
+                    Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, podium.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
                     GL11.glPopMatrix();
                     GL11.glPopMatrix();
                 //}

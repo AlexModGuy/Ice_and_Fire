@@ -25,7 +25,7 @@ public class MessageSetMyrmexHiveNull extends AbstractMessage<MessageSetMyrmexHi
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
         ClientProxy.setReferedClientHive(null);
     }

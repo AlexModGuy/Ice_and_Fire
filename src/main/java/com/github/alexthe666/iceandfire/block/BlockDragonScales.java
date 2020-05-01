@@ -32,7 +32,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
     }

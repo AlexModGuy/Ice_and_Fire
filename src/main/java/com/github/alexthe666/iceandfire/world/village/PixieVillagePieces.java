@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.google.common.collect.Lists;
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -298,10 +298,10 @@ public class PixieVillagePieces {
          * Mineshafts at the end, it adds Fences...
          */
         public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
-            IBlockState iblockstate = this.getBiomeSpecificBlockState(Blocks.GRASS_PATH.getDefaultState());
-            IBlockState iblockstate1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
-            IBlockState iblockstate2 = this.getBiomeSpecificBlockState(Blocks.GRAVEL.getDefaultState());
-            IBlockState iblockstate3 = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
+            BlockState BlockState = this.getBiomeSpecificBlockState(Blocks.GRASS_PATH.getDefaultState());
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.GRAVEL.getDefaultState());
+            BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
 
             for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i) {
                 for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j) {
@@ -315,27 +315,27 @@ public class PixieVillagePieces {
                         }
 
                         while (blockpos.getY() >= worldIn.getSeaLevel() - 1) {
-                            IBlockState iblockstate4 = worldIn.getBlockState(blockpos);
+                            BlockState BlockState4 = worldIn.getBlockState(blockpos);
 
-                            if (iblockstate4.getBlock() == Blocks.GRASS) {
+                            if (BlockState4.getBlock() == Blocks.GRASS) {
                                 if (!worldIn.isAirBlock(blockpos.up())) {
                                     worldIn.setBlockToAir(blockpos.up());
                                 }
                                 if (!worldIn.isAirBlock(blockpos.up(2))) {
                                     worldIn.setBlockToAir(blockpos.up(2));
                                 }
-                                worldIn.setBlockState(blockpos, iblockstate, 2);
+                                worldIn.setBlockState(blockpos, BlockState, 2);
                                 break;
                             }
 
-                            if (iblockstate4.getMaterial().isLiquid() || iblockstate4.getBlock() == Blocks.ICE) {
-                                worldIn.setBlockState(blockpos, iblockstate1, 2);
+                            if (BlockState4.getMaterial().isLiquid() || BlockState4.getBlock() == Blocks.ICE) {
+                                worldIn.setBlockState(blockpos, BlockState1, 2);
                                 break;
                             }
 
-                            if (iblockstate4.getBlock() == Blocks.SAND || iblockstate4.getBlock() == Blocks.SANDSTONE || iblockstate4.getBlock() == Blocks.RED_SANDSTONE) {
-                                worldIn.setBlockState(blockpos, iblockstate2, 2);
-                                worldIn.setBlockState(blockpos.down(), iblockstate3, 2);
+                            if (BlockState4.getBlock() == Blocks.SAND || BlockState4.getBlock() == Blocks.SANDSTONE || BlockState4.getBlock() == Blocks.RED_SANDSTONE) {
+                                worldIn.setBlockState(blockpos, BlockState2, 2);
+                                worldIn.setBlockState(blockpos.down(), BlockState3, 2);
                                 break;
                             }
 
@@ -573,7 +573,7 @@ public class PixieVillagePieces {
         }
 
         @SuppressWarnings("deprecation")
-        protected IBlockState getBiomeSpecificBlockState(IBlockState blockstateIn) {
+        protected BlockState getBiomeSpecificBlockState(BlockState blockstateIn) {
             net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID event = new net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID(startPiece == null ? null : startPiece.biome, blockstateIn);
             net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.post(event);
             if (event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY)
@@ -643,9 +643,9 @@ public class PixieVillagePieces {
             return blockstateIn;
         }
 
-        protected void replaceAirAndLiquidDownwards(World worldIn, IBlockState blockstateIn, int x, int y, int z, StructureBoundingBox boundingboxIn) {
-            IBlockState iblockstate = this.getBiomeSpecificBlockState(blockstateIn);
-            super.replaceAirAndLiquidDownwards(worldIn, iblockstate, x, y, z, boundingboxIn);
+        protected void replaceAirAndLiquidDownwards(World worldIn, BlockState blockstateIn, int x, int y, int z, StructureBoundingBox boundingboxIn) {
+            BlockState BlockState = this.getBiomeSpecificBlockState(blockstateIn);
+            super.replaceAirAndLiquidDownwards(worldIn, BlockState, x, y, z, boundingboxIn);
         }
 
         protected void func_189924_a(int p_189924_1_) {

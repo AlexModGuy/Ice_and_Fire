@@ -88,7 +88,7 @@ public class EntityAmphithereArrow extends EntityArrow {
     /**
      * Handler for {@link World#setEntityState}
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 20) {
             this.spawnExplosionParticle();

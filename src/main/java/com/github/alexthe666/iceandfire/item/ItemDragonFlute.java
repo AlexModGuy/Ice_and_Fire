@@ -29,7 +29,7 @@ public class ItemDragonFlute extends Item {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.getCooldownTracker().setCooldown(this, 60);
 
-        float chunksize = 16 * IceAndFire.CONFIG.dragonFluteDistance;
+        float chunksize = 16 * IafConfig.dragonFluteDistance;
         List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, (new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)).grow(chunksize, 256, chunksize));
         Collections.sort(list, new Sorter(player));
         List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();

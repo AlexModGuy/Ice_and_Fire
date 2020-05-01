@@ -21,13 +21,13 @@ public class EntityStymphalianFeather extends EntityArrow {
 
     public EntityStymphalianFeather(World worldIn, EntityLivingBase shooter) {
         super(worldIn, shooter);
-        this.setDamage(IceAndFire.CONFIG.stymphalianBirdFeatherAttackStength);
+        this.setDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
 
     public void setDead() {
         super.setDead();
-        if (IceAndFire.CONFIG.stymphalianBirdFeatherDropChance > 0) {
-            if (!world.isRemote && this.rand.nextInt(IceAndFire.CONFIG.stymphalianBirdFeatherDropChance) == 0) {
+        if (IafConfig.stymphalianBirdFeatherDropChance > 0) {
+            if (!world.isRemote && this.rand.nextInt(IafConfig.stymphalianBirdFeatherDropChance) == 0) {
                 this.entityDropItem(getArrowStack(), 0.1F);
             }
         }

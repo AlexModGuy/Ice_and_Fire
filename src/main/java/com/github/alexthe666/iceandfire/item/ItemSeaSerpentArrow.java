@@ -27,7 +27,7 @@ public class ItemSeaSerpentArrow extends ItemArrow {
         return new EntitySeaSerpentArrow(worldIn, shooter);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(I18n.format("item.iceandfire.sea_serpent_arrow.desc"));
     }

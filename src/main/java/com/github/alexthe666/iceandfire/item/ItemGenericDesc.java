@@ -15,7 +15,7 @@ public class ItemGenericDesc extends ItemGeneric {
         super(gameName, name);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(I18n.format(stack.getTranslationKey() + ".desc"));
     }

@@ -15,7 +15,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -72,7 +72,7 @@ public class ServerEvents {
     private Random rand = new Random();
 
     private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
-        float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+        float d0 = IafConfig.cockatriceChickenSearchLength;
         List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
         if (!list.isEmpty()) {
@@ -97,7 +97,7 @@ public class ServerEvents {
     }
 
     private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker) {
-        float d0 = IceAndFire.CONFIG.amphithereVillagerSearchLength;
+        float d0 = IafConfig.amphithereVillagerSearchLength;
         List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
         if (!list.isEmpty()) {
@@ -358,7 +358,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onPlayerAttack(AttackEntityEvent event) {
         if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
-            float dist = IceAndFire.CONFIG.cyclopesSheepSearchLength;
+            float dist = IafConfig.cyclopesSheepSearchLength;
             List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
             Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
             if (!list.isEmpty()) {
@@ -446,10 +446,10 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityRightClickBlock(PlayerInteractEvent.RightClickItem event) {
-        if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IceAndFire.CONFIG.dreadlandsDimensionId) {
+        if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IafConfig.dreadlandsDimensionId) {
             event.setCanceled(true);
             if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
-                IBlockState state = IafBlockRegistry.burnt_torch.getDefaultState();
+                BlockState state = IafBlockRegistry.burnt_torch.getDefaultState();
                 for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
                     if (canTorchPlaceAt(event.getWorld(), event.getPos(), enumfacing)) {
                         state = state.withProperty(BlockBurntTorch.FACING, enumfacing);
@@ -462,9 +462,9 @@ public class ServerEvents {
 
     private boolean canTorchPlaceAt(World worldIn, BlockPos pos, EnumFacing facing) {
         BlockPos blockpos = pos.offset(facing.getOpposite());
-        IBlockState iblockstate = worldIn.getBlockState(blockpos);
-        Block block = iblockstate.getBlock();
-        BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, blockpos, facing);
+        BlockState BlockState = worldIn.getBlockState(blockpos);
+        Block block = BlockState.getBlock();
+        BlockFaceShape blockfaceshape = BlockState.getBlockFaceShape(worldIn, blockpos, facing);
 
         if (facing.equals(EnumFacing.UP) && this.canPlaceTorchOn(worldIn, blockpos)) {
             return true;
@@ -476,7 +476,7 @@ public class ServerEvents {
     }
 
     private boolean canPlaceTorchOn(World worldIn, BlockPos pos) {
-        IBlockState state = worldIn.getBlockState(pos);
+        BlockState state = worldIn.getBlockState(pos);
         return state.getBlock().canPlaceTorchOnTop(state, worldIn, pos);
     }
 
@@ -521,14 +521,14 @@ public class ServerEvents {
 
             }
         }
-        if (IceAndFire.CONFIG.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal) {
+        if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal) {
             ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
             if (chickenProps != null) {
                 if (chickenProps.timeUntilNextEgg < 0) {
                     chickenProps.timeUntilNextEgg = 0;
                 }
                 if (chickenProps.timeUntilNextEgg == 0) {
-                    if (event.getEntityLiving().getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
+                    if (event.getEntityLiving().getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                         event.getEntityLiving().dropItem(IafItemRegistry.rotten_egg, 1);
@@ -585,11 +585,11 @@ public class ServerEvents {
             if (sirenProps != null && sirenProps.sirenID != 0) {
                 EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
                 if (closestSiren != null && closestSiren.isActuallySinging()) {
-                    if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IceAndFire.CONFIG.sirenMaxSingTime) {
+                    if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IafConfig.sirenMaxSingTime) {
                         sirenProps.isCharmed = false;
                         sirenProps.sirenID = 0;
                         sirenProps.singTime = 0;
-                        closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
+                        closestSiren.singCooldown = IafConfig.sirenTimeBetweenSongs;
                     } else {
                         sirenProps.isCharmed = true;
                         sirenProps.singTime++;
@@ -627,7 +627,7 @@ public class ServerEvents {
                             sirenProps.isCharmed = false;
                             sirenProps.sirenID = 0;
                             sirenProps.singTime = 0;
-                            closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
+                            closestSiren.singCooldown = IafConfig.sirenTimeBetweenSongs;
                             closestSiren.setSinging(false);
                             closestSiren.setAttackTarget(entity);
                             closestSiren.setAggressive(true);
@@ -767,7 +767,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
         if (event.getEntityPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
-            float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+            float dist = IafConfig.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {
                 Iterator<Entity> itr = list.iterator();
@@ -792,7 +792,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
         if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == IafBlockRegistry.goldPile || event.getState().getBlock() == IafBlockRegistry.silverPile)) {
-            float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+            float dist = IafConfig.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getEntityBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {
                 Iterator<Entity> itr = list.iterator();
@@ -821,7 +821,7 @@ public class ServerEvents {
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
-        if (IceAndFire.CONFIG.generateSilverOre && (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+        if (IafConfig.generateSilverOre && (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) || event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
                 || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
@@ -870,11 +870,11 @@ public class ServerEvents {
                 EntityAnimal animal = (EntityAnimal) event.getEntity();
                 animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
             }
-            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons) {
+            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.villagersFearDragons) {
                 EntityCreature villager = (EntityCreature) event.getEntity();
                 villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 8.0F, 0.8D, 0.8D));
             }
-            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons) {
+            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.animalsFearDragons) {
                 EntityCreature animal = (EntityCreature) event.getEntity();
                 animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
                     public boolean apply(@Nullable EntityLivingBase entity) {

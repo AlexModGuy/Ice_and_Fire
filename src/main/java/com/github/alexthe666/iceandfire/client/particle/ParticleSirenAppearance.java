@@ -30,10 +30,10 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
         super.onUpdate();
 
         if (this.entity == null) {
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getMinecraft().player, SirenEntityProperties.class);
+            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getInstance().player, SirenEntityProperties.class);
             EntitySiren siren = new EntitySiren(this.world);
-            if (sirenProps != null && sirenProps.getSiren(Minecraft.getMinecraft().player.world) != null) {
-                siren = sirenProps.getSiren(Minecraft.getMinecraft().player.world);
+            if (sirenProps != null && sirenProps.getSiren(Minecraft.getInstance().player.world) != null) {
+                siren = sirenProps.getSiren(Minecraft.getInstance().player.world);
             }
             this.entity = siren;
         }
@@ -41,7 +41,7 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
 
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         if (this.entity != null) {
-            RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+            RenderManager rendermanager = Minecraft.getInstance().getRenderManager();
             rendermanager.setRenderPosition(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
             float f = 0.42553192F;
             float f1 = ((float) this.particleAge + partialTicks) / (float) this.particleMaxAge;

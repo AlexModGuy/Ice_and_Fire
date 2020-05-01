@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class WorldGenDreadwoodTree extends WorldGenerator {
 
-    private static final IBlockState TRUNK = IafBlockRegistry.dreadwood_log.getDefaultState();
+    private static final BlockState TRUNK = IafBlockRegistry.dreadwood_log.getDefaultState();
 
     public WorldGenDreadwoodTree() {
     }
@@ -52,7 +52,7 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
                 return false;
             } else {
                 BlockPos down = position.down();
-                IBlockState state = worldIn.getBlockState(down);
+                BlockState state = worldIn.getBlockState(down);
                 boolean isSoil = state.isFullBlock();
 
                 if (isSoil && position.getY() < worldIn.getHeight() - i - 1) {
@@ -141,7 +141,7 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
     }
 
     public boolean isReplaceable(World world, BlockPos pos) {
-        net.minecraft.block.state.IBlockState state = world.getBlockState(pos);
+        net.minecraft.block.state.BlockState state = world.getBlockState(pos);
         return state.getBlock().isAir(state, world, pos) || state.getBlock().isLeaves(state, world, pos) || state.getBlock().isWood(world, pos);
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
     private final RenderLiving render;
 
@@ -35,9 +35,9 @@ public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
             int k = i / 65536;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+            Minecraft.getInstance().entityRenderer.setupFogColor(true);
             this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+            Minecraft.getInstance().entityRenderer.setupFogColor(false);
             i = dragon.getBrightnessForRender();
             j = i % 65536;
             k = i / 65536;

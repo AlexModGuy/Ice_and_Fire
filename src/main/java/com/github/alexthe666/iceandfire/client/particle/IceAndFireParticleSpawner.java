@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class IceAndFireParticleSpawner {
     private Minecraft mc;
 
@@ -34,7 +34,7 @@ public class IceAndFireParticleSpawner {
 
     private Particle spawnParticle0(Particle particleID, boolean ignoreRange, boolean ingoreLimit, boolean minParticles, double xCoord, double yCoord, double zCoord) {
         if (mc == null) {
-            mc = Minecraft.getMinecraft();
+            mc = Minecraft.getInstance();
         }
 
         Entity entity = this.mc.getRenderViewEntity();

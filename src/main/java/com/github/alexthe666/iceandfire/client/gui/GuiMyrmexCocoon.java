@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiMyrmexCocoon extends GuiContainer {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
     private final IInventory upperChestInventory;
@@ -17,7 +17,7 @@ public class GuiMyrmexCocoon extends GuiContainer {
     private final int inventoryRows;
 
     public GuiMyrmexCocoon(IInventory upperInv, IInventory lowerInv) {
-        super(new ContainerMyrmexCocoon(upperInv, lowerInv, Minecraft.getMinecraft().player));
+        super(new ContainerMyrmexCocoon(upperInv, lowerInv, Minecraft.getInstance().player));
         this.upperChestInventory = upperInv;
         this.lowerChestInventory = lowerInv;
         this.allowUserInput = false;

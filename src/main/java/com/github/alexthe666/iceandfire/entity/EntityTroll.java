@@ -10,7 +10,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -85,7 +85,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public boolean getCanSpawnHere() {
         BlockPos pos = new BlockPos(this);
-        return this.getRNG().nextInt(IceAndFire.CONFIG.trollSpawnCheckChance) == 0 && !this.world.canSeeSky(pos.up()) && super.getCanSpawnHere();
+        return this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0 && !this.world.canSeeSky(pos.up()) && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {
@@ -104,8 +104,8 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.trollAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.trollMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.trollAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.trollMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
 
@@ -213,7 +213,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
-            if (IceAndFire.CONFIG.trollsDropWeapon) {
+            if (IafConfig.trollsDropWeapon) {
                 if (this.getRNG().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
                     weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
@@ -312,7 +312,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
             float weaponX = (float) (posX + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
             float weaponZ = (float) (posZ + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
             float weaponY = (float) (posY + (0.2F));
-            IBlockState state = world.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
+            BlockState state = world.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;
                 double motionY = getRNG().nextGaussian() * 0.07D;
@@ -356,7 +356,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 float weaponX = (float) (posX + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
                 float weaponZ = (float) (posZ + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
                 float weaponY = (float) (posY + (this.getEyeHeight() / 2));
-                IBlockState state = world.getBlockState(new BlockPos(weaponX, weaponY, weaponZ));
+                BlockState state = world.getBlockState(new BlockPos(weaponX, weaponY, weaponZ));
                 BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, weaponX, weaponY, weaponZ, 1F + this.getRNG().nextFloat());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))){
                     explosion.doExplosionA();

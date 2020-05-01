@@ -10,7 +10,7 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -41,11 +41,11 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
     }
 
     @Override
-    public EnumPushReaction getPushReaction(IBlockState state) {
+    public EnumPushReaction getPushReaction(BlockState state) {
         return EnumPushReaction.BLOCK;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (this.getConnectedTileEntity(worldIn, pos) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, pos);
             if (forge.isFire == isFire) {
@@ -56,11 +56,11 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         return false;
     }
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
     }
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!worldIn.isRemote) {
             this.checkGrill(worldIn, pos);
         }
@@ -71,7 +71,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
     }
 
     private void checkGrill(World worldIn, BlockPos pos) {
-        IBlockState state = worldIn.getBlockState(pos);
+        BlockState state = worldIn.getBlockState(pos);
         boolean missingFurnace = getConnectedTileEntity(worldIn, pos) == null;
         worldIn.setBlockState(pos, state.withProperty(GRILL, !missingFurnace));
 
@@ -89,11 +89,11 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         return null;
     }
 
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(GRILL, Boolean.valueOf(meta > 0));
     }
 
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(GRILL).booleanValue() ? 1 : 0;
     }
 
@@ -101,7 +101,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         return new BlockStateContainer(this, GRILL);
     }
 
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public EnumBlockRenderType getRenderType(BlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 

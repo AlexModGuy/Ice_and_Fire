@@ -18,7 +18,7 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -116,7 +116,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return false;
     }
 
-    public static boolean isEdibleBlock(IBlockState blockState) {
+    public static boolean isEdibleBlock(BlockState blockState) {
         Block block = blockState.getBlock();
         if (block instanceof BlockMyrmexBiolight) {
             return false;
@@ -254,7 +254,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
         if (this.getGrowthStage() < 2) {
             growthTicks++;
-            if (growthTicks == IceAndFire.CONFIG.myrmexLarvaTicks) {
+            if (growthTicks == IafConfig.myrmexLarvaTicks) {
                 this.setGrowthStage(this.getGrowthStage() + 1);
                 growthTicks = 0;
             }
@@ -402,7 +402,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setRecipes(@Nullable MerchantRecipeList recipeList) {
     }
 
@@ -674,8 +674,8 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         while (world.isAirBlock(blockpos) && blockpos.getY() > 1) {
             blockpos = blockpos.down();
         }
-        IBlockState iblockstate = this.world.getBlockState(blockpos);
-        return iblockstate.getBlock() instanceof BlockMyrmexResin || iblockstate.getBlock() instanceof BlockMyrmexConnectedResin;
+        BlockState BlockState = this.world.getBlockState(blockpos);
+        return BlockState.getBlock() instanceof BlockMyrmexResin || BlockState.getBlock() instanceof BlockMyrmexConnectedResin;
     }
 
     public boolean isInNursery() {
@@ -726,7 +726,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 76) {
             this.playVillagerEffect();

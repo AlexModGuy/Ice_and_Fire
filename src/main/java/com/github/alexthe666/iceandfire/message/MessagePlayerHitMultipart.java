@@ -43,7 +43,7 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerChainedEntity;
@@ -59,7 +58,7 @@ public class ClientEvents {
     private Random rand = new Random();
 
     public static void initializeStoneLayer() {
-        for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getMinecraft().getRenderManager().entityRenderMap.entrySet()) {
+        for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getInstance().getRenderManager().entityRenderMap.entrySet()) {
             Render render = entry.getValue();
             if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
@@ -94,7 +93,7 @@ public class ClientEvents {
                 for (Map.Entry<Class<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
                     if (entry.getValue() != null) {
                         try {
-                            Render render = entry.getValue().createRenderFor(Minecraft.getMinecraft().getRenderManager());
+                            Render render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
                             if (render != null && render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                                 LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
                                 LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
@@ -183,13 +182,13 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getInstance().player;
         if (player.getRidingEntity() != null) {
             if (player.getRidingEntity() instanceof EntityDragonBase) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
                 float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
-                if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 1) {
+                if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
                         GL11.glTranslatef(scale * 0.5F, 0F, -scale * 3F);
@@ -199,7 +198,7 @@ public class ClientEvents {
                         GL11.glTranslatef(scale * 0.5F, 0F, -scale * 0.5F);
                     }
                 }
-                if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 2) {
+                if (Minecraft.getInstance().gameSettings.thirdPersonView == 2) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
                         GL11.glTranslatef(-scale * 1.2F, 0F, 5);
@@ -242,7 +241,7 @@ public class ClientEvents {
 
             SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
             if (player.world.isRemote && sirenProps != null) {
-                EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
+                EntityRenderer renderer = Minecraft.getInstance().entityRenderer;
                 EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
                 if (siren == null) {
                     sirenProps.isCharmed = false;
@@ -252,12 +251,12 @@ public class ClientEvents {
                         IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
                     }
 
-                    if (IceAndFire.CONFIG.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {
+                    if (IafConfig.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {
                         renderer.loadShader(SIREN_SHADER);
                     }
 
                 }
-                if (IceAndFire.CONFIG.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
+                if (IafConfig.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
                     renderer.stopUseShader();
                 }
             }
@@ -267,7 +266,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
-            if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+            if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
             }
@@ -296,9 +295,9 @@ public class ClientEvents {
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder bufferbuilder = tessellator.getBuffer();
                 event.getRenderer().bindTexture(CHAIN_TEXTURE);
-                double posX = Minecraft.getMinecraft().player.prevPosX + (Minecraft.getMinecraft().player.posX - Minecraft.getMinecraft().player.prevPosX) * (double) event.getPartialRenderTick();
-                double posY = Minecraft.getMinecraft().player.prevPosY + (Minecraft.getMinecraft().player.posY - Minecraft.getMinecraft().player.prevPosY) * (double) event.getPartialRenderTick();
-                double posZ = Minecraft.getMinecraft().player.prevPosZ + (Minecraft.getMinecraft().player.posZ - Minecraft.getMinecraft().player.prevPosZ) * (double) event.getPartialRenderTick();
+                double posX = Minecraft.getInstance().player.prevPosX + (Minecraft.getInstance().player.posX - Minecraft.getInstance().player.prevPosX) * (double) event.getPartialRenderTick();
+                double posY = Minecraft.getInstance().player.prevPosY + (Minecraft.getInstance().player.posY - Minecraft.getInstance().player.prevPosY) * (double) event.getPartialRenderTick();
+                double posZ = Minecraft.getInstance().player.prevPosZ + (Minecraft.getInstance().player.posZ - Minecraft.getInstance().player.prevPosZ) * (double) event.getPartialRenderTick();
                 for (Entity chainer : properties.connectedEntities) {
                     GlStateManager.pushMatrix();
                     double chainPosX = chainer.prevPosX + (chainer.posX - chainer.prevPosX) * (double) event.getPartialRenderTick();
@@ -462,22 +461,22 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
-        if (IceAndFire.CONFIG.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
+        if (IafConfig.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
             event.setGui(new IceAndFireMainMenu());
         }
     }
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-        if (IceAndFire.CONFIG.dragonAuto3rdPerson) {
-            if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getMinecraft().player) {
+        if (IafConfig.dragonAuto3rdPerson) {
+            if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isRemote && event.getEntityMounting() == Minecraft.getInstance().player) {
                 EntityDragonBase dragon = (EntityDragonBase)event.getEntityBeingMounted();
-                if(dragon.isTamed() && dragon.isOwner(Minecraft.getMinecraft().player)){
+                if(dragon.isTamed() && dragon.isOwner(Minecraft.getInstance().player)){
                     if (event.isDismounting()) {
-                        Minecraft.getMinecraft().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
+                        Minecraft.getInstance().gameSettings.thirdPersonView = IceAndFire.PROXY.getPreviousViewType();
                     } else {
-                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getMinecraft().gameSettings.thirdPersonView);
-                        Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
+                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getInstance().gameSettings.thirdPersonView);
+                        Minecraft.getInstance().gameSettings.thirdPersonView = 1;
                         IceAndFire.PROXY.setDragon3rdPersonView(2);
                     }
                 }

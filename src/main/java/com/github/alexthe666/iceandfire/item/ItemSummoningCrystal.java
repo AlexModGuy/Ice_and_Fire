@@ -40,7 +40,7 @@ public class ItemSummoningCrystal extends Item {
         this.setRegistryName(IceAndFire.MODID, "summoning_crystal_" + variant);
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.addPropertyOverride(new ResourceLocation("has_dragon"), new IItemPropertyGetter() {
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
                 return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
             }
@@ -122,7 +122,7 @@ public class ItemSummoningCrystal extends Item {
                                 if(data != null) {
                                     dragonChunkPos = data.getDragonPos(id);
                                 }
-                                if(IceAndFire.CONFIG.chunkLoadSummonCrystal){
+                                if(IafConfig.chunkLoadSummonCrystal){
                                     try {
                                         boolean flag2 = false;
                                         if (!flag) {//server side but couldn't find dragon
@@ -183,7 +183,7 @@ public class ItemSummoningCrystal extends Item {
         if(entity instanceof EntityDragonBase){
             ((EntityDragonBase) entity).setCrystalBound(false);
         }
-        if(IceAndFire.CONFIG.chunkLoadSummonCrystal) {
+        if(IafConfig.chunkLoadSummonCrystal) {
             DragonPosWorldData data = DragonPosWorldData.get(worldIn);
             if (data != null) {
                 data.removeDragon(entity.getUniqueID());

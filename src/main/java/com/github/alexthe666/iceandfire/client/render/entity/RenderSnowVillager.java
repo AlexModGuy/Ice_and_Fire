@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderSnowVillager extends RenderVillager {
 
     public RenderSnowVillager(RenderManager renderManager) {
@@ -27,7 +27,7 @@ public class RenderSnowVillager extends RenderVillager {
             GL11.glRotatef(-80, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(10, 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(90, 0.0F, 0.0F, 1.0F);
-            Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(IafItemRegistry.fishing_spear), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND);
+            Minecraft.getInstance().getRenderItem().renderItem(new ItemStack(IafItemRegistry.fishing_spear), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND);
             GL11.glPopMatrix();
         }
     }

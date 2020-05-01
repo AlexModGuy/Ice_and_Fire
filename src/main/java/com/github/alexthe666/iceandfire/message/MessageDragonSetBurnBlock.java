@@ -51,7 +51,7 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageDragonSetBurnBlock message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);

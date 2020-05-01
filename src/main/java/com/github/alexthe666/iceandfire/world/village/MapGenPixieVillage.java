@@ -24,7 +24,7 @@ public class MapGenPixieVillage extends WorldGenerator {
     public MapGenPixieVillage() {
         this.distance = 9;
         this.minTownSeparation = 4;
-        this.size = IceAndFire.CONFIG.pixieVillageSize;
+        this.size = IafConfig.pixieVillageSize;
     }
 
     public MapGenPixieVillage(Map<String, String> map) {

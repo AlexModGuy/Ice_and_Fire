@@ -40,7 +40,7 @@ public class MessageUpdatePodium extends AbstractMessage<MessageUpdatePodium> {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageUpdatePodium message, EntityPlayer player, MessageContext messageContext) {
         if (client.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);

@@ -23,7 +23,7 @@ public class RenderTrollWeapon extends TileEntitySpecialRenderer {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y - 0.75F, (float) z + 0.5F);
         GL11.glPushMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(weapon.TEXTURE);
+        Minecraft.getInstance().getTextureManager().bindTexture(weapon.TEXTURE);
         GL11.glPushMatrix();
         MODEL.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GL11.glPopMatrix();

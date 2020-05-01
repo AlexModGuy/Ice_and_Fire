@@ -41,7 +41,7 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
         ClientProxy.setReferedClientHive(message.hive);
     }

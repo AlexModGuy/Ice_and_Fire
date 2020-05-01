@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,8 +39,8 @@ public class BlockFallingGeneric extends BlockFalling {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getDustColor(IBlockState blkst) {
+    @OnlyIn(Dist.CLIENT)
+    public int getDustColor(BlockState blkst) {
         return -8356741;
     }
 }

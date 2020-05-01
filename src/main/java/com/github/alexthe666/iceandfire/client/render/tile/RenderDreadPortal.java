@@ -39,16 +39,16 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             float f1 = 2.0F / (float) (18 - j);
 
             if (j == 0) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(END_SKY_TEXTURE);
+                Minecraft.getInstance().getTextureManager().bindTexture(END_SKY_TEXTURE);
                 f1 = 0.85F;
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             }
 
             if (j >= 1) {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(END_PORTAL_TEXTURE);
+                Minecraft.getInstance().getTextureManager().bindTexture(END_PORTAL_TEXTURE);
                 flag = true;
-                Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+                Minecraft.getInstance().entityRenderer.setupFogColor(true);
             }
 
             if (j == 1) {
@@ -72,9 +72,9 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             GlStateManager.translate(0.5F, 0.5F, 0.0F);
             GlStateManager.scale(0.5F, 0.5F, 1.0F);
             float f2 = (float) (j + 1);
-            float time = (Minecraft.getMinecraft().player.ticksExisted - 1 + (1 * partialTicks)) % 800.0F / 800.0F;
+            float time = (Minecraft.getInstance().player.ticksExisted - 1 + (1 * partialTicks)) % 800.0F / 800.0F;
             if (te == null) {
-                time = (Minecraft.getMinecraft().frameTimer.getIndex() - 1 + (1 * partialTicks)) % 3200F / 3200F;
+                time = (Minecraft.getInstance().frameTimer.getIndex() - 1 + (1 * partialTicks)) % 3200F / 3200F;
             }
             GlStateManager.translate((j == 0 ? 7 : 17.0F) / f2 * time * RANDOM.nextGaussian(), j == 0 ? 0 : (2.0F + f2 / 1.5F) * -time, 0.0F);
             GlStateManager.rotate(180, 0.0F, 0.0F, 1.0F);
@@ -134,21 +134,21 @@ public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDread
             tessellator.draw();
             GlStateManager.popMatrix();
             GlStateManager.matrixMode(5888);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(END_SKY_TEXTURE);
+            Minecraft.getInstance().getTextureManager().bindTexture(END_SKY_TEXTURE);
         }
 
         GlStateManager.disableBlend();
         GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
         GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
         GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-        int lightI = Minecraft.getMinecraft().world.getCombinedLight(new BlockPos(x, y, z), Minecraft.getMinecraft().world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)));
+        int lightI = Minecraft.getInstance().world.getCombinedLight(new BlockPos(x, y, z), Minecraft.getInstance().world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)));
         int j = lightI % 65536;
         int k = lightI / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         if (flag) {
-            Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+            Minecraft.getInstance().entityRenderer.setupFogColor(false);
         }
     }
 

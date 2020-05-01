@@ -142,7 +142,7 @@ public class GuiMyrmexStaff extends GuiScreen {
             } else {
                 this.fontRenderer.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color, true);
             }
-            int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getMinecraft().player.getUniqueID());
+            int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getInstance().player.getUniqueID());
             this.fontRenderer.drawString(I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color, true);
             this.fontRenderer.drawString(I18n.format("myrmex.message.rooms"), i, j + 25, color, true);
             /*int hiveCount = 0;

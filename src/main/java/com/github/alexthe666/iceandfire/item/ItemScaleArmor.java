@@ -30,7 +30,7 @@ public class ItemScaleArmor extends ItemArmor implements IProtectAgainstDragonIt
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
         return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (renderIndex == 2 ? 1 : 0) : (renderIndex == 2 ? 3 : 2)));
     }
@@ -40,7 +40,7 @@ public class ItemScaleArmor extends ItemArmor implements IProtectAgainstDragonIt
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(eggType.color + I18n.format("dragon." + eggType.toString().toLowerCase()));
         tooltip.add(I18n.format("item.dragonscales_armor.desc"));

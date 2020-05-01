@@ -37,7 +37,7 @@ public class EntityDeathWormEgg extends EntityThrowable {
         EntityThrowable.registerFixesThrowable(fixer, "ThrownEgg");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
             double d0 = 0.08D;

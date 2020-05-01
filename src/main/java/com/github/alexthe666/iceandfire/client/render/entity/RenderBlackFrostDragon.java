@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderBlackFrostDragon extends RenderLiving<EntityDragonBase> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/dread/black_frost.png");
@@ -35,7 +35,7 @@ public class RenderBlackFrostDragon extends RenderLiving<EntityDragonBase> {
 
     public boolean shouldRender(EntityDragonBase dragon, ICamera camera, double camX, double camY, double camZ) {
         return true;
-        //return super.shouldRender(dragon, camera, camX, camY, camZ) ||  dragon.shouldRender(camera)|| Minecraft.getMinecraft().player.isRidingOrBeingRiddenBy(dragon);
+        //return super.shouldRender(dragon, camera, camX, camY, camZ) ||  dragon.shouldRender(camera)|| Minecraft.getInstance().player.isRidingOrBeingRiddenBy(dragon);
     }
 
     @Override

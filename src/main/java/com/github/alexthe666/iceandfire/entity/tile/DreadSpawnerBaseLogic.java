@@ -226,7 +226,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public Entity getCachedEntity() {
         if (this.cachedEntity == null) {
             this.cachedEntity = AnvilChunkLoader.readWorldEntity(this.spawnData.getNbt(), this.getSpawnerWorld(), false);
@@ -249,12 +249,12 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
 
     public abstract BlockPos getSpawnerPosition();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public double getMobRotation() {
         return this.mobRotation;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public double getPrevMobRotation() {
         return this.prevMobRotation;
     }

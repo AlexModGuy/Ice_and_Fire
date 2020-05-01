@@ -16,7 +16,7 @@ import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -75,13 +75,13 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     };
     public int swimCycle;
     public float orbitRadius = 0.0F;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer tail_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer head_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer;
     @Nullable
     public BlockPos orbitPos = null;
@@ -223,7 +223,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
 
     public void resetParts(float scale) {
@@ -359,8 +359,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     private void updateAttributes() {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IceAndFire.CONFIG.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IceAndFire.CONFIG.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IafConfig.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IafConfig.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.heal(30F * this.getSeaSerpentScale());
     }
 
@@ -689,12 +689,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     public void breakBlock() {
-        if (IceAndFire.CONFIG.seaSerpentGriefing) {
+        if (IafConfig.seaSerpentGriefing) {
             for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 2; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 2; a++) {
                 for (int b = (int) Math.round(this.getEntityBoundingBox().minY) - 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 2; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 2; c++) {
                         BlockPos pos = new BlockPos(a, b, c);
-                        IBlockState state = world.getBlockState(pos);
+                        BlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();
                         if (state.getMaterial() != Material.AIR && !(block instanceof BlockLiquid) && (state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.LEAVES)) {
                             if (block != Blocks.AIR) {

@@ -36,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiBestiary extends GuiScreen {
     protected static final int X = 390;
     protected static final int Y = 245;
@@ -73,8 +73,8 @@ public class GuiBestiary extends GuiScreen {
 
     private FontRenderer getFont() {
         FontRenderer font;
-        if (IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")) {
-            font = Minecraft.getMinecraft().fontRenderer;
+        if (IafConfig.useVanillaFont || !Minecraft.getInstance().gameSettings.language.equalsIgnoreCase("en_us")) {
+            font = Minecraft.getInstance().fontRenderer;
         } else {
             font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
         }
@@ -159,7 +159,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    boolean drawGold = Minecraft.getMinecraft().player.ticksExisted % 20 < 10;
+                    boolean drawGold = Minecraft.getInstance().player.ticksExisted % 20 < 10;
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.silverNugget), 144, 34, 1.5F);
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.silverNugget), 161, 34, 1.5F);
                     drawItemStack(new ItemStack(drawGold ? IafBlockRegistry.goldPile : IafBlockRegistry.silverPile), 151, 7, 2F);
@@ -301,7 +301,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    boolean drawFire = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
+                    boolean drawFire = Minecraft.getInstance().player.ticksExisted % 40 < 20;
                     drawItemStack(new ItemStack(drawFire ? IafBlockRegistry.fire_lily : IafBlockRegistry.frost_lily), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(Items.BOWL), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? Items.BLAZE_ROD : Items.PRISMARINE_CRYSTALS), 177, 17, 1.5F);
@@ -392,7 +392,7 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(IafItemRegistry.fire_dragon_blood), 10, 24, 2.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.ice_dragon_blood), 26, 24, 2.5F);
                     GL11.glPopMatrix();
-                    boolean drawFire = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
+                    boolean drawFire = Minecraft.getInstance().player.ticksExisted % 40 < 20;
                     drawItemStack(new ItemStack(IafItemRegistry.dragonbone_sword), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? IafItemRegistry.fire_dragon_blood : IafItemRegistry.ice_dragon_blood), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? IafItemRegistry.dragonbone_sword_fire : IafItemRegistry.dragonbone_sword_ice), 151, 10, 2F);
@@ -448,7 +448,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Items.FEATHER), 160, 31, 1.5F);
-                    int drawType = Minecraft.getMinecraft().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getMinecraft().player.ticksExisted % 60 > 20 ? 1 : 0;
+                    int drawType = Minecraft.getInstance().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getInstance().player.ticksExisted % 60 > 20 ? 1 : 0;
                     drawItemStack(new ItemStack(drawType == 0 ? Items.IRON_HORSE_ARMOR : drawType == 1 ? Items.GOLDEN_HORSE_ARMOR : Items.DIAMOND_HORSE_ARMOR), 180, 31, 1.5F);
                     drawItemStack(new ItemStack(Items.FEATHER), 199, 31, 1.5F);
                     GL11.glPopMatrix();
@@ -730,7 +730,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPopMatrix();
                 }
                 if (bookPages == 2) {
-                    int drawType = Minecraft.getMinecraft().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getMinecraft().player.ticksExisted % 60 > 20 ? 1 : 0;
+                    int drawType = Minecraft.getInstance().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getInstance().player.ticksExisted % 60 > 20 ? 1 : 0;
                     GL11.glPushMatrix();
                     GL11.glScalef(2.5F, 2.5F, 1F);
                     drawItemStack(new ItemStack(IafItemRegistry.deathworm_chitin, 1, drawType), 17, 30, 1.5F);
@@ -817,14 +817,14 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPopMatrix();
                 }
                 if (bookPages == 1) {
-                    int i = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.Weapon.values().length * 20)) / 20;
+                    int i = (Minecraft.getInstance().player.ticksExisted % (EnumTroll.Weapon.values().length * 20)) / 20;
                     drawItemStack(new ItemStack(EnumTroll.Weapon.values()[i].item), 30, 7, 2.5F);
-                    int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20)) / 20;
+                    int j = (Minecraft.getInstance().player.ticksExisted % (EnumTroll.values().length * 20)) / 20;
                     drawItemStack(new ItemStack(EnumTroll.values()[j].leather), 100, 30, 2.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.troll_tusk), 120, 30, 2.5F);
                 }
                 if (bookPages == 2) {
-                    int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumTroll.values().length * 20)) / 20;
+                    int j = (Minecraft.getInstance().player.ticksExisted % (EnumTroll.values().length * 20)) / 20;
                     drawItemStack(new ItemStack(EnumTroll.values()[j].helmet), 27, 15, 1.5F);
                     drawItemStack(new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
                     drawItemStack(new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
@@ -859,7 +859,7 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(IafItemRegistry.myrmex_desert_chitin), 125, 43, 2F);
                     drawItemStack(new ItemStack(IafItemRegistry.myrmex_jungle_chitin), 155, 43, 2F);
                     int i = 133;
-                    boolean jungle = Minecraft.getMinecraft().player.ticksExisted % 60 > 30;
+                    boolean jungle = Minecraft.getInstance().player.ticksExisted % 60 > 30;
                     drawItemStack(new ItemStack(jungle ? IafItemRegistry.myrmex_jungle_shovel : IafItemRegistry.myrmex_desert_shovel), i += 16, 100, 1.51F);
                     drawItemStack(new ItemStack(jungle ? IafItemRegistry.myrmex_jungle_pickaxe : IafItemRegistry.myrmex_desert_pickaxe), i += 16, 100, 1.5F);
                     drawItemStack(new ItemStack(jungle ? IafItemRegistry.myrmex_jungle_axe : IafItemRegistry.myrmex_desert_axe), i += 16, 100, 1.5F);
@@ -925,7 +925,7 @@ public class GuiBestiary extends GuiScreen {
                 }
                 if (bookPages == 1) {
                     drawImage(DRAWINGS_1, 60, 90, 337, 0, 70, 83, 512F);
-                    int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20)) / 20;
+                    int j = (Minecraft.getInstance().player.ticksExisted % (EnumSeaSerpent.values().length * 20)) / 20;
                     drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 130, 40, 2.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.sea_serpent_fang), 90, 40, 2.5F);
                 }
@@ -934,7 +934,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 18, 30, 389, 1, 50, 50, 512F);
                     GL11.glScalef(0.65F, 0.65F, 0.65F);
-                    int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20)) / 20;
+                    int j = (Minecraft.getInstance().player.ticksExisted % (EnumSeaSerpent.values().length * 20)) / 20;
                     drawItemStack(new ItemStack(IafItemRegistry.sea_serpent_fang), 36, 32, 1.5F);
                     drawItemStack(new ItemStack(Items.STICK), 36, 48, 1.5F);
                     drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 36, 66, 1.5F);
@@ -952,15 +952,15 @@ public class GuiBestiary extends GuiScreen {
 
     public void imageFromTxt() {
         String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "_0/" + fileName);
+        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
         IResource resource = null;
 
         try {
-            resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
+            resource = Minecraft.getInstance().getResourceManager().getResource(fileLoc);
         } catch (IOException e) {
             try {
-                resource = Minecraft.getMinecraft().getResourceManager().getResource(backupLoc);
+                resource = Minecraft.getInstance().getResourceManager().getResource(backupLoc);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -1034,15 +1034,15 @@ public class GuiBestiary extends GuiScreen {
 
     public void writeFromTxt() {
         String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
-        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "_0/" + fileName);
+        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
         IResource resource = null;
 
         try {
-            resource = Minecraft.getMinecraft().getResourceManager().getResource(fileLoc);
+            resource = Minecraft.getInstance().getResourceManager().getResource(fileLoc);
         } catch (IOException e) {
             try {
-                resource = Minecraft.getMinecraft().getResourceManager().getResource(backupLoc);
+                resource = Minecraft.getInstance().getResourceManager().getResource(backupLoc);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -1079,7 +1079,7 @@ public class GuiBestiary extends GuiScreen {
     }
 
     private boolean usingVanillaFont() {
-        return font == Minecraft.getMinecraft().fontRenderer;
+        return font == Minecraft.getInstance().fontRenderer;
     }
 
     public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
@@ -1108,11 +1108,11 @@ public class GuiBestiary extends GuiScreen {
         if (button.id == 0 && (this.index ? this.indexPages > 0 : this.pageType != null)) {
             if (this.index) {
                 this.indexPages--;
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
             } else {
                 if (this.bookPages > 0) {
                     this.bookPages--;
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                    Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                 } else {
                     this.index = true;
                 }
@@ -1121,14 +1121,14 @@ public class GuiBestiary extends GuiScreen {
         if (button.id == 1 && (this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
             if (this.index) {
                 this.indexPages++;
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
             } else {
                 this.bookPages++;
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
             }
         }
         if (button.id >= 2 && this.indexButtons.get(button.id - 2) != null && allPageTypes.get(button.id - 2) != null && button instanceof IndexPageButton) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+            Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
             this.index = false;
             this.indexPages = 0;
             this.bookPages = 0;

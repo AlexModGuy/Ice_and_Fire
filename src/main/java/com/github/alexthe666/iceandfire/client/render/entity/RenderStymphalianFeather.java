@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderStymphalianFeather extends Render {
     private static final ResourceLocation arrowTextures = new ResourceLocation("iceandfire:textures/models/stymphalianbird/feather.png");
 

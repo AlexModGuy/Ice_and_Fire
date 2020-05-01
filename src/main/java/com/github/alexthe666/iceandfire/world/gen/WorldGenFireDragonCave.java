@@ -32,7 +32,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
         int chance = rand.nextInt(99) + 1;
         if (!(world.getBlockState(pos).getBlock() instanceof BlockContainer)) {
             if (chance < 60) {
-                int goldRand = Math.max(1, IceAndFire.CONFIG.dragonDenGoldAmount) * (isMale ? 1 : 2);
+                int goldRand = Math.max(1, IafConfig.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
                 world.setBlockState(pos, generateGold ? IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
@@ -109,7 +109,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
             if (blockpos.distanceSq(position) <= (double) (f * f)) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof BlockContainer) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
-                    boolean doOres = rand.nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
+                    boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
                     if (doOres) {
                         int chance = rand.nextInt(199) + 1;
                         if (chance < 30) {
@@ -119,7 +119,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IceAndFire.CONFIG.generateSilverOre ? IafBlockRegistry.silverOre.getDefaultState() : IafBlockRegistry.charedStone.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.silverOre.getDefaultState() : IafBlockRegistry.charedStone.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);

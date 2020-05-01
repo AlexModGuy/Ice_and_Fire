@@ -10,7 +10,7 @@ import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Biomes;
@@ -67,7 +67,7 @@ public class WorldGenEvents implements IWorldGenerator {
     }
 
     private static boolean canHeightSkipBlock(BlockPos pos, World world) {
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         return state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLiquid;
     }
 
@@ -80,20 +80,20 @@ public class WorldGenEvents implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        if (world.getWorldType() == WorldType.FLAT && !IceAndFire.CONFIG.spawnStructuresOnSuperflat) {
+        if (world.getWorldType() == WorldType.FLAT && !IafConfig.spawnStructuresOnSuperflat) {
             return;
         }
         boolean prevLogCascadingWorldGen = net.minecraftforge.common.ForgeModContainer.logCascadingWorldGeneration;
-        double spawnCheck = IceAndFire.CONFIG.worldGenDistance * IceAndFire.CONFIG.worldGenDistance;
-        if (!IceAndFire.CONFIG.logCascadingWorldGen) {
+        double spawnCheck = IafConfig.worldGenDistance * IafConfig.worldGenDistance;
+        if (!IafConfig.logCascadingWorldGen) {
             net.minecraftforge.common.ForgeModContainer.logCascadingWorldGeneration = false;
         }
         int x = (chunkX * 16) + 8;
         int z = (chunkZ * 16) + 8;
         BlockPos height = getHeight(world, new BlockPos(x, 0, z));
-        if (IceAndFire.CONFIG.spawnGorgons && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastGorgonTemple == null || lastGorgonTemple.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.spawnGorgons && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastGorgonTemple == null || lastGorgonTemple.distanceSq(height) >= spawnCheck)) {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
-                if (random.nextInt(IceAndFire.CONFIG.spawnGorgonsChance + 1) == 0) {
+                if (random.nextInt(IafConfig.spawnGorgonsChance + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
                     new WorldGenGorgonTemple(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
@@ -101,19 +101,19 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateSirenIslands && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD)
-                && random.nextInt(IceAndFire.CONFIG.generateSirenChance + 1) == 0 && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastSirenIsland == null || lastSirenIsland.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateSirenIslands && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD)
+                && random.nextInt(IafConfig.generateSirenChance + 1) == 0 && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastSirenIsland == null || lastSirenIsland.distanceSq(height) >= spawnCheck)) {
             SIREN_ISLAND.generate(world, random, height);
             lastSirenIsland = height;
         }
 
-        if (IceAndFire.CONFIG.generateCyclopsCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)
-                && random.nextInt(IceAndFire.CONFIG.spawnCyclopsCaveChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateCyclopsCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)
+                && random.nextInt(IafConfig.spawnCyclopsCaveChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
             CYCLOPS_CAVE.generate(world, random, height);
             lastCyclopsCave = height;
         }
-        if (IceAndFire.CONFIG.generateWanderingCyclops && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.PLAINS) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
-            if (random.nextInt(IceAndFire.CONFIG.spawnWanderingCyclopsChance + 1) == 0) {
+        if (IafConfig.generateWanderingCyclops && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.PLAINS) && (lastCyclopsCave == null || lastCyclopsCave.distanceSq(height) >= spawnCheck)) {
+            if (random.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0) {
                 EntityCyclops cyclops = new EntityCyclops(world);
                 cyclops.setPosition(x, height.getY() + 1, z);
                 cyclops.setVariant(random.nextInt(3));
@@ -131,17 +131,17 @@ public class WorldGenEvents implements IWorldGenerator {
                 lastCyclopsCave = height;
             }
         }
-        if (IceAndFire.CONFIG.spawnPixies && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastPixieVillage == null || lastPixieVillage.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.spawnPixies && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastPixieVillage == null || lastPixieVillage.distanceSq(height) >= spawnCheck)) {
             boolean isSpookyForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST) && (BiomeDictionary.hasType(world.getBiome(height), Type.SPOOKY) || BiomeDictionary.hasType(world.getBiome(height), Type.MAGICAL));
-            if (isSpookyForest && random.nextInt(IceAndFire.CONFIG.spawnPixiesChance + 1) == 0) {
+            if (isSpookyForest && random.nextInt(IafConfig.spawnPixiesChance + 1) == 0) {
                 PIXIE_VILLAGE.generate(world, random, height);
                 lastPixieVillage = height;
             }
         }
-        if (IceAndFire.CONFIG.generateDragonRoosts && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), true) && (lastDragonRoost == null || lastDragonRoost.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateDragonRoosts && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), true) && (lastDragonRoost == null || lastDragonRoost.distanceSq(height) >= spawnCheck)) {
             boolean isHills = BiomeDictionary.hasType(world.getBiome(height), Type.HILLS) || BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY);
             if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getDefaultTemperature() > 0.0 && world.getBiome(height) != Biomes.ICE_PLAINS && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER)) {
-                if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
+                if (random.nextInt((isHills ? IafConfig.generateDragonRoostChance : IafConfig.generateDragonRoostChance * 2) + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
                     FIRE_DRAGON_ROOST.generate(world, random, surface);
@@ -149,7 +149,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
-                if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonRoostChance : IceAndFire.CONFIG.generateDragonRoostChance * 2) + 1) == 0) {
+                if (random.nextInt((isHills ? IafConfig.generateDragonRoostChance : IafConfig.generateDragonRoostChance * 2) + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
                     ICE_DRAGON_ROOST.generate(world, random, surface);
@@ -157,8 +157,8 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateDragonSkeletons && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
-            if (BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY) && random.nextInt(IceAndFire.CONFIG.generateDragonSkeletonChance + 1) == 0) {
+        if (IafConfig.generateDragonSkeletons && !isDimensionBlacklisted(world.provider.getDimension(), true)) {
+            if (BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY) && random.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityFireDragon firedragon = new EntityFireDragon(world);
                 firedragon.setPosition(x, height.getY() + 1, z);
                 int dragonage = 10 + random.nextInt(100);
@@ -171,7 +171,7 @@ public class WorldGenEvents implements IWorldGenerator {
                     world.spawnEntity(firedragon);
                 }
             }
-            if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && random.nextInt(IceAndFire.CONFIG.generateDragonSkeletonChance + 1) == 0) {
+            if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && random.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityIceDragon icedragon = new EntityIceDragon(world);
                 icedragon.setPosition(x, height.getY() + 1, z);
                 int dragonage = 10 + random.nextInt(100);
@@ -185,7 +185,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.hippocampusSpawnChance + 1) == 0) {
+        if (IafConfig.spawnHippocampus && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < random.nextInt(5); i++) {
                 BlockPos pos = new BlockPos(x + random.nextInt(10) - 5, 20 + random.nextInt(40), z + random.nextInt(10) - 5);
                 if (world.getBlockState(pos).getMaterial() == Material.WATER) {
@@ -198,7 +198,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.spawnSeaSerpents && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IceAndFire.CONFIG.seaSerpentSpawnChance + 1) == 0) {
+        if (IafConfig.spawnSeaSerpents && BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && random.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos = new BlockPos(x + random.nextInt(10) - 5, 20 + random.nextInt(40), z + random.nextInt(10) - 5);
             if (world.getBlockState(pos).getMaterial() == Material.WATER) {
                 EntitySeaSerpent serpent = new EntitySeaSerpent(world);
@@ -207,7 +207,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 world.spawnEntity(serpent);
             }
         }
-        if (IceAndFire.CONFIG.spawnStymphalianBirds && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP) && random.nextInt(IceAndFire.CONFIG.stymphalianBirdSpawnChance + 1) == 0) {
+        if (IafConfig.spawnStymphalianBirds && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP) && random.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
             for (int i = 0; i < 4 + random.nextInt(4); i++) {
                 BlockPos pos = height.add(random.nextInt(10) - 5, 0, random.nextInt(10) - 5);
                 if (world.getBlockState(pos.down()).isOpaqueCube()) {
@@ -219,10 +219,10 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateDragonDens && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), true) && (lastDragonCave == null || lastDragonCave.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateDragonDens && isFarEnoughFromSpawn(world, height) && !isDimensionBlacklisted(world.provider.getDimension(), true) && (lastDragonCave == null || lastDragonCave.distanceSq(height) >= spawnCheck)) {
             boolean isHills = BiomeDictionary.hasType(world.getBiome(height), Type.HILLS) || BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN);
             if (!world.getBiome(height).getEnableSnow() && world.getBiome(height).getDefaultTemperature() > 0.0 && !BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && !BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.WET) && !BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN) && !BiomeDictionary.hasType(world.getBiome(height), Type.RIVER) && !BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
-                if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
+                if (random.nextInt((isHills ? IafConfig.generateDragonDenChance : IafConfig.generateDragonDenChance * 2) + 1) == 0) {
                     int newY = 20 + random.nextInt(20);
                     BlockPos pos = new BlockPos(x, newY, z);
                     if (!world.canBlockSeeSky(pos)) {
@@ -232,7 +232,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && !BiomeDictionary.hasType(world.getBiome(height), Type.BEACH)) {
-                if (random.nextInt((isHills ? IceAndFire.CONFIG.generateDragonDenChance : IceAndFire.CONFIG.generateDragonDenChance * 2) + 1) == 0) {
+                if (random.nextInt((isHills ? IafConfig.generateDragonDenChance : IafConfig.generateDragonDenChance * 2) + 1) == 0) {
                     int newY = 20 + random.nextInt(20);
                     BlockPos pos = new BlockPos(x, newY, z);
                     ICE_DRAGON_CAVE.generate(world, random, pos);
@@ -240,7 +240,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateSilverOre) {
+        if (IafConfig.generateSilverOre) {
             for (int silverAmount = 0; silverAmount < 2; silverAmount++) {
                 int oreHeight = random.nextInt(32);
                 int xOre = (chunkX * 16) + random.nextInt(16);
@@ -248,7 +248,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 new WorldGenMinable(IafBlockRegistry.silverOre.getDefaultState(), 4 + random.nextInt(4)).generate(world, random, new BlockPos(xOre, oreHeight, zOre));
             }
         }
-        if (IceAndFire.CONFIG.generateSapphireOre) {
+        if (IafConfig.generateSapphireOre) {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
                 int count = 3 + random.nextInt(6);
                 for (int sapphireAmount = 0; sapphireAmount < count; sapphireAmount++) {
@@ -256,18 +256,18 @@ public class WorldGenEvents implements IWorldGenerator {
                     int xOre = (chunkX * 16) + random.nextInt(16);
                     int zOre = (chunkZ * 16) + random.nextInt(16);
                     BlockPos pos = new BlockPos(xOre, oreHeight, zOre);
-                    IBlockState state = world.getBlockState(pos);
+                    BlockState state = world.getBlockState(pos);
                     if (state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE))) {
                         world.setBlockState(pos, IafBlockRegistry.sapphireOre.getDefaultState());
                     }
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateSnowVillages && !isDimensionBlacklisted(world.provider.getDimension(), false) && BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && (lastSnowVillage == null || lastSnowVillage.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateSnowVillages && !isDimensionBlacklisted(world.provider.getDimension(), false) && BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY) && (lastSnowVillage == null || lastSnowVillage.distanceSq(height) >= spawnCheck)) {
             SNOW_VILLAGE.generate(world, random, height);
             lastSnowVillage = height;
         }
-        if (IceAndFire.CONFIG.generateMyrmexColonies && random.nextInt(IceAndFire.CONFIG.myrmexColonyGenChance) == 0 && isFarEnoughFromSpawn(world, height) && MyrmexWorldData.get(world).getNearestHive(height, 500) == null && (BiomeDictionary.hasType(world.getBiome(height), Type.JUNGLE) || BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))
+        if (IafConfig.generateMyrmexColonies && random.nextInt(IafConfig.myrmexColonyGenChance) == 0 && isFarEnoughFromSpawn(world, height) && MyrmexWorldData.get(world).getNearestHive(height, 500) == null && (BiomeDictionary.hasType(world.getBiome(height), Type.JUNGLE) || BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && BiomeDictionary.hasType(world.getBiome(height), Type.DRY) && BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))
                 && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMyrmexHive == null || lastMyrmexHive.distanceSq(height) >= spawnCheck)) {
             BlockPos lowestHeight = new BlockPos(height.getX(), world.getChunksLowestHorizon(height.getX(), height.getZ()), height.getZ());
             int down = Math.max(15, lowestHeight.getY() - 20 + random.nextInt(10));
@@ -304,9 +304,9 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateMausoleums && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMausoleum == null || lastMausoleum.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateMausoleums && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastMausoleum == null || lastMausoleum.distanceSq(height) >= spawnCheck)) {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
-                if (random.nextInt(IceAndFire.CONFIG.generateMausoleumChance + 1) == 0) {
+                if (random.nextInt(IafConfig.generateMausoleumChance + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
                     new WorldGenMausoleum(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
@@ -314,23 +314,23 @@ public class WorldGenEvents implements IWorldGenerator {
                 }
             }
         }
-        if (IceAndFire.CONFIG.generateHydraCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP)
-                && random.nextInt(IceAndFire.CONFIG.generateHydraChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastHydraCave == null || lastHydraCave.distanceSq(height) >= spawnCheck)) {
+        if (IafConfig.generateHydraCaves && isFarEnoughFromSpawn(world, height) && BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP)
+                && random.nextInt(IafConfig.generateHydraChance + 1) == 0 && world.getBlockState(height.down()).isOpaqueCube() && !isDimensionBlacklisted(world.provider.getDimension(), false) && (lastHydraCave == null || lastHydraCave.distanceSq(height) >= spawnCheck)) {
             HYDRA_CAVE.generate(world, random, height);
             lastHydraCave = height;
         }
-        if (!IceAndFire.CONFIG.logCascadingWorldGen) {
+        if (!IafConfig.logCascadingWorldGen) {
             net.minecraftforge.common.ForgeModContainer.logCascadingWorldGeneration = prevLogCascadingWorldGen;
         }
     }
 
     private boolean isDimensionBlacklisted(int id, boolean dragons) {
-        if(id == IceAndFire.CONFIG.dreadlandsDimensionId){
+        if(id == IafConfig.dreadlandsDimensionId){
             return true;
         }
-        boolean useBlackOrWhiteLists = IceAndFire.CONFIG.useDimensionBlackList;
-        int[] blacklistedArray = dragons ? IceAndFire.CONFIG.dragonBlacklistedDimensions : IceAndFire.CONFIG.structureBlacklistedDimensions;
-        int[] whitelistedArray = dragons ? IceAndFire.CONFIG.dragonWhitelistedDimensions : IceAndFire.CONFIG.structureWhitelistedDimensions;
+        boolean useBlackOrWhiteLists = IafConfig.useDimensionBlackList;
+        int[] blacklistedArray = dragons ? IafConfig.dragonBlacklistedDimensions : IafConfig.structureBlacklistedDimensions;
+        int[] whitelistedArray = dragons ? IafConfig.dragonWhitelistedDimensions : IafConfig.structureWhitelistedDimensions;
         int[] array = useBlackOrWhiteLists ? blacklistedArray : whitelistedArray;
         List<Integer> dimList = new ArrayList<Integer>();
         for (int dimension : array) {
@@ -356,13 +356,13 @@ public class WorldGenEvents implements IWorldGenerator {
 
     private boolean isFarEnoughFromSpawn(World world, BlockPos pos) {
         BlockPos spawnRelative = new BlockPos(world.getSpawnPoint().getX(), pos.getY(), world.getSpawnPoint().getZ());
-        boolean spawnCheck = spawnRelative.distanceSq(pos) > IceAndFire.CONFIG.dangerousWorldGenDistanceLimit * IceAndFire.CONFIG.dangerousWorldGenDistanceLimit;
+        boolean spawnCheck = spawnRelative.distanceSq(pos) > IafConfig.dangerousWorldGenDistanceLimit * IafConfig.dangerousWorldGenDistanceLimit;
         return spawnCheck;
     }
 
     //private boolean isAether(World world) {
-    //	if (IceAndFire.CONFIG.useAetherCompat) {
-    //		if (world.provider.getDimension() == IceAndFire.CONFIG.aetherDimensionID) {
+    //	if (IafConfig.useAetherCompat) {
+    //		if (world.provider.getDimension() == IafConfig.aetherDimensionID) {
     //			return true;
     //		}
     //	}

@@ -160,7 +160,7 @@ public class PathNavigateDragon extends PathNavigateGround {
             double d3 = 1.0D / Math.sqrt(d2);
             d0 = d0 * d3;
             d1 = d1 * d3;
-            if(IceAndFire.CONFIG.completeDragonPathfinding){
+            if(IafConfig.completeDragonPathfinding){
                 sizeX = sizeX + 2;
                 sizeZ = sizeZ + 2;
             }else{

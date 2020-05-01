@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +30,7 @@ public class WorldGenGorgonTemple extends WorldGenerator {
         this.facing = facing;
     }
 
-    public static boolean isPartOfRuin(IBlockState state) {
+    public static boolean isPartOfRuin(BlockState state) {
         return false;
     }
 
@@ -60,7 +60,7 @@ public class WorldGenGorgonTemple extends WorldGenerator {
     }
 
     private static boolean canHeightSkipBlock(BlockPos pos, World world) {
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         return state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves || state.getBlock() instanceof BlockLiquid;
     }
 
@@ -68,7 +68,7 @@ public class WorldGenGorgonTemple extends WorldGenerator {
         position = position.add(rand.nextInt(8) - 4, 1, rand.nextInt(8) - 4);
         MinecraftServer server = worldIn.getMinecraftServer();
         BlockPos height = getGround(position, worldIn);
-        IBlockState dirt = worldIn.getBlockState(height.down(2));
+        BlockState dirt = worldIn.getBlockState(height.down(2));
         TemplateManager templateManager = worldIn.getSaveHandler().getStructureTemplateManager();
         Template template = templateManager.getTemplate(server, STRUCTURE);
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing));

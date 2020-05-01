@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -42,7 +42,7 @@ public class BlockGoldPile extends Block {
 
     @Override
     @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return SNOW_AABB[state.getValue(LAYERS)];
     }
 
@@ -52,19 +52,19 @@ public class BlockGoldPile extends Block {
     }
 
     @Deprecated
-    public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+    public boolean canEntitySpawn(BlockState state, Entity entityIn) {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isTopSolid(IBlockState state) {
+    public boolean isTopSolid(BlockState state) {
         return state.getValue(LAYERS) == 7;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(BlockState blockState, World worldIn, BlockPos pos) {
         int i = blockState.getValue(LAYERS) - 1;
         float f = 0.125F;
         AxisAlignedBB axisalignedbb = blockState.getBoundingBox(worldIn, pos);
@@ -73,13 +73,13 @@ public class BlockGoldPile extends Block {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        Block block = iblockstate.getBlock();
-        return (block != Blocks.ICE && block != Blocks.PACKED_ICE) && (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) || (block == this && iblockstate.getValue(LAYERS) >= 7 || iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement()));
+        BlockState BlockState = worldIn.getBlockState(pos.down());
+        Block block = BlockState.getBlock();
+        return (block != Blocks.ICE && block != Blocks.PACKED_ICE) && (BlockState.getBlock().isLeaves(BlockState, worldIn, pos.down()) || (block == this && BlockState.getValue(LAYERS) >= 7 || BlockState.isOpaqueCube() && BlockState.getMaterial().blocksMovement()));
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack item = playerIn.inventory.getCurrentItem();
 
         if (!item.isEmpty()) {
@@ -108,13 +108,13 @@ public class BlockGoldPile extends Block {
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState blockstate) {
+    public boolean isOpaqueCube(BlockState blockstate) {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState blockstate) {
+    public boolean isFullCube(BlockState blockstate) {
         return false;
     }
 
@@ -125,7 +125,7 @@ public class BlockGoldPile extends Block {
         }
     }
 
-    private boolean checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+    private boolean checkAndDropBlock(World worldIn, BlockPos pos, BlockState state) {
         if (!this.canPlaceBlockAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
             return false;
@@ -135,20 +135,20 @@ public class BlockGoldPile extends Block {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return Items.GOLD_NUGGET;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         return side == EnumFacing.UP || super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(LAYERS, (meta & 7) + 1);
     }
 
@@ -158,12 +158,12 @@ public class BlockGoldPile extends Block {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(LAYERS) - 1;
     }
 
     @Override
-    public int quantityDropped(IBlockState state, int fortune, Random random) {
+    public int quantityDropped(BlockState state, int fortune, Random random) {
         return (state.getValue(LAYERS)) + 1;
     }
 

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.*;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
@@ -17,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderMobSkull extends Render<EntityMobSkull> {
 
     private static final Map<String, ResourceLocation> SKULL_TEXTURE_CACHE = Maps.newHashMap();

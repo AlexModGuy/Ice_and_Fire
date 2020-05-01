@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -50,7 +50,7 @@ public class WorldGenSirenIsland extends WorldGenerator {
         return layer > up ? (int) (layer * 0.25) + up : layer;
     }
 
-    private IBlockState getStone(Random random) {
+    private BlockState getStone(Random random) {
         int chance = random.nextInt(100);
         if (chance > 90) {
             return Blocks.MOSSY_COBBLESTONE.getDefaultState();

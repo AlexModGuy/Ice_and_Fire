@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiDragon extends GuiContainer {
     private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
     private IInventory playerInventory;
@@ -25,7 +25,7 @@ public class GuiDragon extends GuiContainer {
     private float mousePosY;
 
     public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
-        super(new ContainerDragon(dragon, Minecraft.getMinecraft().player));
+        super(new ContainerDragon(dragon, Minecraft.getInstance().player));
         this.playerInventory = playerInv;
         this.dragonInv = dragon.dragonInventory;
         this.dragon = dragon;
@@ -56,7 +56,7 @@ public class GuiDragon extends GuiContainer {
         entity.rotationYawHead = entity.rotationYaw;
         entity.prevRotationYawHead = entity.rotationYaw;
         GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+        RenderManager rendermanager = Minecraft.getInstance().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
         rendermanager.renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);

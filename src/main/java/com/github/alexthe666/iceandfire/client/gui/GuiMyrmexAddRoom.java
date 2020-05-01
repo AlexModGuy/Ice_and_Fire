@@ -52,7 +52,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
         if (ClientProxy.getReferedClientHive() == null) {
             return;
         }
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getInstance().player;
         switch (button.id) {
             case 0:
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
@@ -71,7 +71,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
                 break;
         }
         onGuiClosed();
-        Minecraft.getMinecraft().displayGuiScreen(null);
+        Minecraft.getInstance().displayGuiScreen(null);
     }
 
     public void drawDefaultBackground() {

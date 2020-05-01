@@ -31,7 +31,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1, 0));
@@ -42,7 +42,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String words;
         switch (stack.getMetadata()) {

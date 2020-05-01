@@ -21,7 +21,7 @@ public class StymphalianBirdAITarget<T extends EntityLivingBase> extends EntityA
         super(entityIn, classTarget, 0, checkSight, false, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityAnimal && IceAndFire.CONFIG.stympahlianBirdAttackAnimals);
+                return !EntityGorgon.isStoneMob(entity) && (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityAnimal && IafConfig.stympahlianBirdAttackAnimals);
             }
         });
         this.bird = entityIn;

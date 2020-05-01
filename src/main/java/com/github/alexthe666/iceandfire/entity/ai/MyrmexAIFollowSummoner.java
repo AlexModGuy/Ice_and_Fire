@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -65,8 +65,8 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
     }
 
     private boolean isEmptyBlock(BlockPos pos) {
-        IBlockState iblockstate = this.world.getBlockState(pos);
-        return iblockstate.getMaterial() == Material.AIR || !iblockstate.isFullCube();
+        BlockState BlockState = this.world.getBlockState(pos);
+        return BlockState.getMaterial() == Material.AIR || !BlockState.isFullCube();
     }
 
     @SuppressWarnings("deprecation")

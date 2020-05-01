@@ -14,10 +14,11 @@ import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -25,11 +26,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
 import java.lang.reflect.Field;
 
@@ -77,8 +75,23 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event, EntityDragonEgg.class, "dragonegg", 1);
+    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        try {
+            for (Field f : IafEntityRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof EntityType) {
+                    event.getRegistry().register((EntityType) obj);
+                } else if (obj instanceof EntityType[]) {
+                    for (EntityType type : (EntityType[]) obj) {
+                        event.getRegistry().register(type);
+
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        /*registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event, EntityDragonEgg.class, "dragonegg", 1);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonArrow>create(), event, EntityDragonArrow.class, "dragonarrow", 2);
         registerUnspawnable(EntityEntryBuilder.<EntityDragonSkull>create(), event, EntityDragonSkull.class, "dragonskull", 3);
         registerSpawnable(EntityEntryBuilder.<EntityFireDragon>create(), event, EntityFireDragon.class, "firedragon", 5, 0X340000, 0XA52929, 256, 3);
@@ -129,35 +142,8 @@ public class CommonProxy {
         registerSpawnable(EntityEntryBuilder.<EntityHydra>create(), event, EntityHydra.class, "if_hydra", 52, 0X8B8B78, 0X2E372B, 256, 3);
         registerUnspawnable(EntityEntryBuilder.<EntityHydraBreath>create(), event, EntityHydraBreath.class, "hydra_breath", 53);
         registerUnspawnable(EntityEntryBuilder.<EntityHydraArrow>create(), event, EntityHydraArrow.class, "hydra_arrow", 54);
-    }
 
-    public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
-        id += 900;
-        builder.entity(entityClass);
-        builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
-        builder.name(name);
-        builder.egg(mainColor, subColor);
-        builder.tracker(64, 1, true);
-        event.getRegistry().register(builder.build());
-    }
-
-    public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor, int range, int frequency) {
-        id += 900;
-        builder.entity(entityClass);
-        builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
-        builder.name(name);
-        builder.egg(mainColor, subColor);
-        builder.tracker(range, frequency, true);
-        event.getRegistry().register(builder.build());
-    }
-
-    public static void registerUnspawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id) {
-        id += 900;
-        builder.entity(entityClass);
-        builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
-        builder.name(name);
-        builder.tracker(64, 1, true);
-        event.getRegistry().register(builder.build());
+         */
     }
 
     @SubscribeEvent
@@ -167,25 +153,14 @@ public class CommonProxy {
             for (Field f : IafBlockRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof Block) {
-                    ItemBlock itemBlock;
-                    if (obj == IafBlockRegistry.jar_pixie) {
-                        itemBlock = ((BlockJar) obj).new ItemBlockJar((Block) obj);
-                    } else if (obj instanceof BlockPixieHouse) {
-                        itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
-                    } else if (obj instanceof BlockPodium) {
-                        itemBlock = new ItemBlockPodium((Block) obj);
-                    } else if (obj instanceof BlockMyrmexResin) {
-                        itemBlock = new ItemBlockMyrmexResin((Block) obj);
-                    } else if (obj instanceof BlockGenericSlab) {
-                        itemBlock = ((BlockGenericSlab)obj).getItemBlock();
-                    } else {
-                        itemBlock = new ItemBlock((Block) obj);
-                    }
+                    Item.Properties props = new Item.Properties();
+                    BlockItem itemBlock = new BlockItem((Block) obj, props);
                     itemBlock.setRegistryName(((Block) obj).getRegistryName());
                     event.getRegistry().register(itemBlock);
                 } else if (obj instanceof Block[]) {
                     for (Block block : (Block[]) obj) {
-                        ItemBlock itemBlock = new ItemBlock(block);
+                        Item.Properties props = new Item.Properties();
+                        BlockItem itemBlock = new BlockItem(block, props);
                         itemBlock.setRegistryName(block.getRegistryName());
                         event.getRegistry().register(itemBlock);
                     }
@@ -195,7 +170,8 @@ public class CommonProxy {
             throw new RuntimeException(e);
         }
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
-            ItemBlock itemBlock = new ItemBlock(color.scaleBlock);
+            Item.Properties props = new Item.Properties();
+            BlockItem itemBlock = new BlockItem(color.scaleBlock, props);
             itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
             event.getRegistry().register(itemBlock);
         }
@@ -249,9 +225,9 @@ public class CommonProxy {
         event.getRegistry().register(IafWorldRegistry.GLACIER_BIOME);
         BiomeDictionary.addTypes(IafWorldRegistry.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
         //BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-        if (IceAndFire.CONFIG.spawnGlaciers) {
+        if (IafConfig.spawnGlaciers) {
             BiomeManager.addSpawnBiome(IafWorldRegistry.GLACIER_BIOME);
-            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IafWorldRegistry.GLACIER_BIOME, IceAndFire.CONFIG.glacierSpawnChance));
+            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IafWorldRegistry.GLACIER_BIOME, IafConfig.glacierSpawnChance));
 
         }
     }
@@ -290,13 +266,6 @@ public class CommonProxy {
         return null;
     }
 
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equalsIgnoreCase(IceAndFire.MODID)) {
-            IceAndFire.syncConfig();
-        }
-    }
-
     public int getDragon3rdPersonView() {
         return 0;
     }
@@ -304,7 +273,7 @@ public class CommonProxy {
     public void setDragon3rdPersonView(int view) {
     }
 
-    public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
+    public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, Direction facing) {
     }
 
 

@@ -6,7 +6,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,9 +33,9 @@ public class DragonUtils {
         BlockPos ground = dragon.world.getHeight(escortPos);
         int distFromGround = escortPos.getY() - ground.getY();
         for (int i = 0; i < 10; i++) {
-            BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2,
+            BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2,
                     (distFromGround > 16 ? escortPos.getY() : escortPos.getY() + 8 + dragon.getRNG().nextInt(16)),
-                    (escortPos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance / 2));
+                    (escortPos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2));
             if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
                 return pos;
             }
@@ -52,7 +52,7 @@ public class DragonUtils {
             BlockPos ground = dragon.world.getHeight(dragonPos);
             int distFromGround = (int) dragon.posY - ground.getY();
             for (int i = 0; i < 10; i++) {
-                BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
+                BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
                 if (!dragon.isTargetBlocked(new Vec3d(pos)) && dragon.getDistanceSqToCenter(pos) > 6) {
                     return pos;
                 }
@@ -64,7 +64,7 @@ public class DragonUtils {
         BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
         BlockPos ground = dragon.world.getHeight(radialPos);
         int distFromGround = (int) dragon.posY - ground.getY();
-        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
+        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
         if (!dragon.isTargetBlocked(new Vec3d(newPos)) && dragon.getDistanceSqToCenter(newPos) > 6) {
             return pos;
@@ -81,7 +81,7 @@ public class DragonUtils {
         BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
         BlockPos ground = dragon.world.getHeight(radialPos);
         int distFromGround = (int) dragon.posY - ground.getY();
-        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
+        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
         BlockPos surface = dragon.world.getBlockState(newPos.down(2)).getMaterial() != Material.WATER ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
         if (dragon.getDistanceSqToCenter(surface) > 6 && dragon.world.getBlockState(surface).getMaterial() == Material.WATER) {
@@ -144,7 +144,7 @@ public class DragonUtils {
             BlockPos ground = hippo.world.getHeight(dragonPos);
             int distFromGround = (int) hippo.posY - ground.getY();
             for (int i = 0; i < 10; i++) {
-                BlockPos pos = new BlockPos(hippo.homePos.getX() + hippo.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance) - IceAndFire.CONFIG.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1), (hippo.homePos.getZ() + hippo.getRNG().nextInt(IceAndFire.CONFIG.dragonWanderFromHomeDistance * 2) - IceAndFire.CONFIG.dragonWanderFromHomeDistance));
+                BlockPos pos = new BlockPos(hippo.homePos.getX() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1), (hippo.homePos.getZ() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
                 if (!hippo.isTargetBlocked(new Vec3d(pos)) && hippo.getDistanceSqToCenter(pos) > 6) {
                     return pos;
                 }
@@ -153,7 +153,7 @@ public class DragonUtils {
         BlockPos radialPos = new BlockPos(hippo.posX + extraX, 0, hippo.posZ + extraZ);
         BlockPos ground = hippo.world.getHeight(radialPos);
         int distFromGround = (int) hippo.posY - ground.getY();
-        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1);
+        BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1);
         BlockPos pos = hippo.doesWantToLand() ? ground : newPos;
         if (!hippo.isTargetBlocked(new Vec3d(newPos)) && hippo.getDistanceSqToCenter(newPos) > 6) {
             return newPos;
@@ -171,7 +171,7 @@ public class DragonUtils {
         BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ));
         BlockPos ground = bird.world.getHeight(radialPos);
         int distFromGround = (int) bird.posY - ground.getY();
-        int flightHeight = Math.min(IceAndFire.CONFIG.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16) : ground.getY() + bird.getRNG().nextInt(16));
+        int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16) : ground.getY() + bird.getRNG().nextInt(16));
         BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.posY + bird.getRNG().nextInt(16) + 1);
         BlockPos pos = bird.doesWantToLand() ? ground : newPos;
         if (!bird.isTargetBlocked(new Vec3d(newPos)) && bird.getDistanceSqToCenter(newPos) > 6) {
@@ -182,7 +182,7 @@ public class DragonUtils {
 
     private static BlockPos getStymphalianFearPos(EntityStymphalianBird bird, BlockPos fallback) {
         if (bird.getVictor() != null && bird.getVictor() instanceof EntityCreature) {
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature) bird.getVictor(), 16, IceAndFire.CONFIG.stymphalianBirdFlightHeight, new Vec3d(bird.getVictor().posX, bird.getVictor().posY, bird.getVictor().posZ));
+            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature) bird.getVictor(), 16, IafConfig.stymphalianBirdFlightHeight, new Vec3d(bird.getVictor().posX, bird.getVictor().posY, bird.getVictor().posZ));
             if (vec3d != null) {
                 BlockPos pos = new BlockPos(vec3d);
                 return new BlockPos(pos.getX(), 0, pos.getZ());
@@ -299,23 +299,23 @@ public class DragonUtils {
 
     public static boolean canGrief(boolean weak) {
         if (weak) {
-            return IceAndFire.CONFIG.dragonGriefing == 0;
+            return IafConfig.dragonGriefing == 0;
 
         } else {
-            return IceAndFire.CONFIG.dragonGriefing < 2;
+            return IafConfig.dragonGriefing < 2;
         }
     }
 
     public static boolean isBlacklistedBlock(Block block) {
-        if (IceAndFire.CONFIG.blacklistBreakBlocksIsWhiteList) {
-            for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
+        if (IafConfig.blacklistBreakBlocksIsWhiteList) {
+            for (String name : IafConfig.blacklistedBreakBlocks) {
                 if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
                     return false;
                 }
             }
             return true;
         } else {
-            for (String name : IceAndFire.CONFIG.blacklistedBreakBlocks) {
+            for (String name : IafConfig.blacklistedBreakBlocks) {
                 if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
                     return true;
                 }
@@ -360,8 +360,8 @@ public class DragonUtils {
         return def;
     }
 
-    public static boolean canDropFromDragonBlockBreak(IBlockState state) {
-        for (String name : IceAndFire.CONFIG.noDropBreakBlocks) {
+    public static boolean canDropFromDragonBlockBreak(BlockState state) {
+        for (String name : IafConfig.noDropBreakBlocks) {
             if (name.equalsIgnoreCase(state.getBlock().getRegistryName().toString())) {
                 return false;
             }
@@ -369,7 +369,7 @@ public class DragonUtils {
         return true;
     }
 
-    public static boolean isDreadBlock(IBlockState state){
+    public static boolean isDreadBlock(BlockState state){
         Block block = state.getBlock();
         return block == IafBlockRegistry.dread_stone || block == IafBlockRegistry.dread_stone_bricks || block == IafBlockRegistry.dread_stone_bricks_chiseled ||
                 block == IafBlockRegistry.dread_stone_bricks_cracked || block == IafBlockRegistry.dread_stone_bricks_mossy || block == IafBlockRegistry.dread_stone_tile ||

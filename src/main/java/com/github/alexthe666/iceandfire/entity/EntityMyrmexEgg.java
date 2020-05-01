@@ -102,7 +102,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         if (!canSeeSky()) {
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
-        if (this.getMyrmexAge() > IceAndFire.CONFIG.myrmexEggTicks) {
+        if (this.getMyrmexAge() > IafConfig.myrmexEggTicks) {
             this.setDead();
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {

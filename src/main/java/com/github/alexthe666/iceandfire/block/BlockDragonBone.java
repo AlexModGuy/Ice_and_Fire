@@ -5,7 +5,7 @@ import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 
 public class BlockDragonBone extends BlockRotatedPillar implements IDragonProof {
 
@@ -20,7 +20,7 @@ public class BlockDragonBone extends BlockRotatedPillar implements IDragonProof 
     }
 
     @Override
-    public EnumPushReaction getPushReaction(IBlockState state) {
+    public EnumPushReaction getPushReaction(BlockState state) {
         return EnumPushReaction.BLOCK;
     }
 }

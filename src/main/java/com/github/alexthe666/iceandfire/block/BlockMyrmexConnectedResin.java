@@ -6,7 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +47,7 @@ public class BlockMyrmexConnectedResin extends Block {
 
     }
 
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
         return state.withProperty(UP, canFenceConnectTo(worldIn, pos, EnumFacing.UP))
                 .withProperty(DOWN, canFenceConnectTo(worldIn, pos, EnumFacing.DOWN))
                 .withProperty(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
@@ -60,7 +60,7 @@ public class BlockMyrmexConnectedResin extends Block {
         return new BlockStateContainer(this, UP, DOWN, NORTH, SOUTH, EAST, WEST);
     }
 
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return 0;
     }
 
@@ -70,15 +70,15 @@ public class BlockMyrmexConnectedResin extends Block {
         return block == this;
     }
 
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
 
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
-        Block block = iblockstate.getBlock();
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
+        Block block = BlockState.getBlock();
 
         if (block == this) {
             return false;
@@ -88,7 +88,7 @@ public class BlockMyrmexConnectedResin extends Block {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }

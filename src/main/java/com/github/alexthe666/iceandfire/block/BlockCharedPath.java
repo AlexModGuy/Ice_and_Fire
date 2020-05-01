@@ -6,7 +6,7 @@ import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
@@ -42,7 +42,7 @@ public class BlockCharedPath extends BlockGrassPath {
         this.setTickRandomly(true);
     }
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!worldIn.isRemote) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;
@@ -52,8 +52,8 @@ public class BlockCharedPath extends BlockGrassPath {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         switch (side) {
             case UP:
                 return true;
@@ -61,21 +61,21 @@ public class BlockCharedPath extends BlockGrassPath {
             case SOUTH:
             case WEST:
             case EAST:
-                IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
-                Block block = iblockstate.getBlock();
-                return !iblockstate.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != IafBlockRegistry.charedGrassPath && block != IafBlockRegistry.frozenGrassPath;
+                BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
+                Block block = BlockState.getBlock();
+                return !BlockState.isOpaqueCube() && block != Blocks.FARMLAND && block != Blocks.GRASS_PATH && block != IafBlockRegistry.charedGrassPath && block != IafBlockRegistry.frozenGrassPath;
             default:
                 return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
         }
     }
 
     @Nullable
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public Item getItemDropped(BlockState state, Random rand, int fortune) {
         return isFire ? IafBlockRegistry.charedDirt.getItemDropped(IafBlockRegistry.charedDirt.getDefaultState(), rand, fortune) : IafBlockRegistry.frozenDirt.getItemDropped(IafBlockRegistry.frozenDirt.getDefaultState(), rand, fortune);
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
@@ -89,11 +89,11 @@ public class BlockCharedPath extends BlockGrassPath {
         }
     }
 
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(REVERTS, meta == 1);
     }
 
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(REVERTS) ? 1 : 0;
     }
 

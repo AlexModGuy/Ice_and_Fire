@@ -40,7 +40,7 @@ public class EntityFireDragon extends EntityDragonBase {
     public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
-        super(worldIn, DragonType.FIRE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+        super(worldIn, DragonType.FIRE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
         this.setSize(0.78F, 1.2F);
         this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);

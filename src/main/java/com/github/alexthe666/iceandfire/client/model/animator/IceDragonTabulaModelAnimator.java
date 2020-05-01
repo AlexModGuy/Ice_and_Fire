@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -13,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntityIceDragon> {
 
     private IceAndFireTabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
@@ -237,7 +235,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                     model.getCube("armL1"), model.getCube("armL2"), clawL,
                     model.getCube("armR1"), model.getCube("armR2"), clawR,
                     1.0F, 0.5F, 0.5F, -0.15F, -0.15F, 0F,
-                    Minecraft.getMinecraft().getRenderPartialTicks()
+                    Minecraft.getInstance().getRenderPartialTicks()
             );
         }
     }

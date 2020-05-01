@@ -76,7 +76,7 @@ public class ItemTideTrident extends Item {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
         tooltip.add(I18n.format("item.iceandfire.tide_trident.desc_0"));

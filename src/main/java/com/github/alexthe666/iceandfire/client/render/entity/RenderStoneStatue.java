@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
     private static final ModelStonePlayer MODEL = new ModelStonePlayer(0, false);
@@ -40,7 +40,7 @@ public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
     @Override
     protected void renderModel(EntityStoneStatue entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
         boolean flag = !entity.isInvisible() || this.renderOutlines;
-        boolean flag1 = !flag && !entity.isInvisibleToPlayer(Minecraft.getMinecraft().player);
+        boolean flag1 = !flag && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
 
         if (flag || flag1) {
             if (!this.bindEntityTexture(entity)) {

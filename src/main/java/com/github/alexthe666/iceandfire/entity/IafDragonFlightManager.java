@@ -86,8 +86,8 @@ public class IafDragonFlightManager {
             }
         }
         if (target != null) {
-            if (target.y > IceAndFire.CONFIG.maxDragonFlight) {
-                target = new Vec3d(target.x, IceAndFire.CONFIG.maxDragonFlight, target.z);
+            if (target.y > IafConfig.maxDragonFlight) {
+                target = new Vec3d(target.x, IafConfig.maxDragonFlight, target.z);
             }
             if (target.y >= dragon.posY && !dragon.isModelDead()) {
                 dragon.motionY += 0.1D;

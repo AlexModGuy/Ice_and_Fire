@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -37,8 +37,8 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
             super.setNextSpawnData(p_184993_1_);
 
             if (this.getSpawnerWorld() != null) {
-                IBlockState iblockstate = this.getSpawnerWorld().getBlockState(this.getSpawnerPosition());
-                this.getSpawnerWorld().notifyBlockUpdate(TileEntityDreadSpawner.this.pos, iblockstate, iblockstate, 4);
+                BlockState BlockState = this.getSpawnerWorld().getBlockState(this.getSpawnerPosition());
+                this.getSpawnerWorld().notifyBlockUpdate(TileEntityDreadSpawner.this.pos, BlockState, BlockState, 4);
             }
         }
     };

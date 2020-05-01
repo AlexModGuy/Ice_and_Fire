@@ -28,7 +28,7 @@ public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDr
         this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
         if (material == IafItemRegistry.dragonsteel_fire_armor) {
             return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 11 : 10);
@@ -38,7 +38,7 @@ public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDr
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(I18n.format("item.dragonscales_armor.desc"));
     }

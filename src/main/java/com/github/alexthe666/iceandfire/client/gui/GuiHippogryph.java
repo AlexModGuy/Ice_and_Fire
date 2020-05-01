@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiHippogryph extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
     private final IInventory playerInventory;
@@ -21,7 +21,7 @@ public class GuiHippogryph extends GuiContainer {
     private float mousePosY;
 
     public GuiHippogryph(IInventory playerInv, EntityHippogryph hippogryph) {
-        super(new ContainerHippogryph(hippogryph, Minecraft.getMinecraft().player));
+        super(new ContainerHippogryph(hippogryph, Minecraft.getInstance().player));
         this.playerInventory = playerInv;
         this.hippogryphInv = hippogryph.hippogryphInventory;
         this.hippogryph = hippogryph;

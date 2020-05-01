@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
     private Map<String, ResourceLocation> LAYERED_TEXTURE_CACHE = Maps.newHashMap();
@@ -39,7 +39,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
     public boolean shouldRender(EntityDragonBase dragon, ICamera camera, double camX, double camY, double camZ) {
         return true;
-        //return super.shouldRender(dragon, camera, camX, camY, camZ) ||  dragon.shouldRender(camera)|| Minecraft.getMinecraft().player.isRidingOrBeingRiddenBy(dragon);
+        //return super.shouldRender(dragon, camera, camX, camY, camZ) ||  dragon.shouldRender(camera)|| Minecraft.getInstance().player.isRidingOrBeingRiddenBy(dragon);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 
             }
             ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
-            Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
+            Minecraft.getInstance().getTextureManager().loadTexture(resourcelocation, layeredBase);
             LAYERED_TEXTURE_CACHE.put(baseTexture, resourcelocation);
         }
         return resourcelocation;

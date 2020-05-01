@@ -39,7 +39,7 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageAddChainedEntity message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.chainedId);
         Entity toChain = player.world.getEntityByID(message.addedEntityId);

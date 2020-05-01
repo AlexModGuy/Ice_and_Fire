@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -47,29 +47,29 @@ public class BlockEggInIce extends BlockContainer {
         return new TileEntityEggInIce();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public Item getItem(World worldIn, BlockPos pos) {
         return Item.getItemFromBlock(Blocks.ICE);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public EnumBlockRenderType getRenderType(BlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(IBlockState blockstate, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        Block block = iblockstate.getBlock();
-        if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate) {
+    public boolean shouldSideBeRendered(BlockState blockstate, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        BlockState BlockState = worldIn.getBlockState(pos);
+        Block block = BlockState.getBlock();
+        if (worldIn.getBlockState(pos.offset(side.getOpposite())) != BlockState) {
             return true;
         }
 
@@ -77,11 +77,11 @@ public class BlockEggInIce extends BlockContainer {
             return false;
         }
 
-        return block != this && super.shouldSideBeRendered(iblockstate, worldIn, pos, side);
+        return block != this && super.shouldSideBeRendered(BlockState, worldIn, pos, side);
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack) {
         if (worldIn.getTileEntity(pos) != null) {
             if (worldIn.getTileEntity(pos) instanceof TileEntityEggInIce) {
                 TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getTileEntity(pos);
@@ -131,13 +131,13 @@ public class BlockEggInIce extends BlockContainer {
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState blockstate) {
+    public boolean isOpaqueCube(BlockState blockstate) {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState blockstate) {
+    public boolean isFullCube(BlockState blockstate) {
         return false;
     }
 

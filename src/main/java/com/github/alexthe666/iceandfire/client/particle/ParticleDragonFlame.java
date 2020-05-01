@@ -31,7 +31,7 @@ public class ParticleDragonFlame extends ParticleFlame {
     @Nullable
     private EntityDragonBase dragon;
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ParticleDragonFlame(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float dragonSize) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.particleMaxAge = 30;

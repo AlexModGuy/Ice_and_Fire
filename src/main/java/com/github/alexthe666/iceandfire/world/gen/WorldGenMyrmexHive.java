@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class WorldGenMyrmexHive extends WorldGenerator {
 
-    private static final IBlockState DESERT_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState();
-    private static final IBlockState STICKY_DESERT_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState();
-    private static final IBlockState JUNGLE_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
-    private static final IBlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState DESERT_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState();
+    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState();
+    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;
@@ -53,8 +53,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     private void generateMainRoom(World world, Random rand, BlockPos position) {
         hive = new MyrmexHive(world, position, 100);
         MyrmexWorldData.addHive(world, hive);
-        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, position, 14, 7, resin, sticky_resin);
         generateSphere(world, rand, position, 12, 5, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, position, 12, 5, RoomType.QUEEN);
@@ -146,8 +146,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     }
 
     private void generateRoom(World world, Random rand, BlockPos position, int size, int height, int roomChance, EnumFacing direction) {
-        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         RoomType type = RoomType.random(rand);
         if (!hasFoodRoom) {
             type = RoomType.FOOD;
@@ -183,8 +183,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
         }
-        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphereRespectAir(world, rand, up, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, up.up(), size, height - 1, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, up.up(), size, height - 1, RoomType.ENTERANCE);
@@ -193,8 +193,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     }
 
     private void generateCircle(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
-        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
         {
             for (float i = 0; i < radius; i += 0.5) {
@@ -229,8 +229,8 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     }
 
     private void generateCircleRespectSky(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
-        IBlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
-        IBlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
+        BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
+        BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
         {
             for (float i = 0; i < radius; i += 0.5) {
@@ -288,7 +288,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         decorateCircle(world, rand, position, size, height, direction);
     }
 
-    public void generateSphere(World world, Random rand, BlockPos position, int size, int height, IBlockState fill) {
+    public void generateSphere(World world, Random rand, BlockPos position, int size, int height, BlockState fill) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -302,7 +302,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    public void generateSphere(World world, Random rand, BlockPos position, int size, int height, IBlockState fill, IBlockState fill2) {
+    public void generateSphere(World world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -316,7 +316,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    public void generateSphereRespectResin(World world, Random rand, BlockPos position, int size, int height, IBlockState fill, IBlockState fill2) {
+    public void generateSphereRespectResin(World world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -331,7 +331,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    public void generateSphereRespectAir(World world, Random rand, BlockPos position, int size, int height, IBlockState fill, IBlockState fill2) {
+    public void generateSphereRespectAir(World world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);

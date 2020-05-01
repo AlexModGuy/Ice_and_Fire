@@ -81,7 +81,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public boolean getCanSpawnHere() {
-        return this.getRNG().nextInt(IceAndFire.CONFIG.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
+        return this.getRNG().nextInt(IafConfig.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {
@@ -181,7 +181,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.cockatriceMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.cockatriceMaxHealth);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
@@ -585,7 +585,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if (this.getAttackTarget() == null) {
             return 0;
         }
-        float dist = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+        float dist = IafConfig.cockatriceChickenSearchLength;
         List<EntityCockatrice> list = world.getEntitiesWithinAABB(EntityCockatrice.class, this.getEntityBoundingBox().expand(dist, dist, dist));
         int i = 0;
         for (EntityCockatrice cockatrice : list) {
@@ -704,7 +704,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         return IafSoundRegistry.COCKATRICE_DIE;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 45) {
             this.playEffect(true);

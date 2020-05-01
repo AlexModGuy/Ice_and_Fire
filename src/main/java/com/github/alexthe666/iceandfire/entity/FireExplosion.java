@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -83,14 +83,14 @@ public class FireExplosion extends Explosion {
 
                         for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
-                            IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+                            BlockState BlockState = this.worldObj.getBlockState(blockpos);
 
-                            if (iblockstate.getMaterial() != Material.AIR) {
-                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
+                            if (BlockState.getMaterial() != Material.AIR) {
+                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, BlockState) : BlockState.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
 
-                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f)) && iblockstate.getBlock().canEntityDestroy(iblockstate, this.worldObj, blockpos, this.exploder)) {
+                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, BlockState, f)) && BlockState.getBlock().canEntityDestroy(BlockState, this.worldObj, blockpos, this.exploder)) {
                                 set.add(blockpos);
                             }
 
@@ -174,7 +174,7 @@ public class FireExplosion extends Explosion {
     public void doExplosionB(boolean spawnParticles) {
         if (this.isSmoking) {
             for (BlockPos blockpos : this.affectedBlockPositions) {
-                IBlockState state = this.worldObj.getBlockState(blockpos);
+                BlockState state = this.worldObj.getBlockState(blockpos);
                 Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
                 if (spawnParticles) {

@@ -7,8 +7,8 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 
 public class GuiIceAndFireConfig extends GuiConfig {
     public GuiIceAndFireConfig(GuiScreen parent) {
-        super(parent, new ConfigElement(IceAndFire.config.getCategory("all")).getChildElements(), IceAndFire.MODID, false, false, "Ice And Fire Confg");
-        titleLine2 = IceAndFire.config.getConfigFile().getAbsolutePath();
+        super(parent, new ConfigElement(IafConfig.getCategory("all")).getChildElements(), IceAndFire.MODID, false, false, "Ice And Fire Confg");
+        titleLine2 = IafConfig.getConfigFile().getAbsolutePath();
     }
 
     @Override

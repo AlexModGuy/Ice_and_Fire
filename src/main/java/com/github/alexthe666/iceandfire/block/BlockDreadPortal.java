@@ -8,7 +8,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,14 +37,14 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
         GameRegistry.registerTileEntity(TileEntityDreadPortal.class, "dread_portal");
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
+    @OnlyIn(Dist.CLIENT)
+    public int getPackedLightmapCoords(BlockState state, IBlockAccess source, BlockPos pos) {
         return 15728880;
     }
 
     @Override
-    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-       /* if(entity.dimension != IceAndFire.CONFIG.dreadlandsDimensionId){
+    public void onEntityCollision(World world, BlockPos pos, BlockState state, Entity entity) {
+       /* if(entity.dimension != IafConfig.dreadlandsDimensionId){
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
             if (properties != null) {
                 properties.lastEnteredDreadPortalX = pos.getX();
@@ -57,9 +57,9 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
             EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
             if (thePlayer.timeUntilPortal > 0) {
                 thePlayer.timeUntilPortal = 10;
-            } else if (thePlayer.dimension != IceAndFire.CONFIG.dreadlandsDimensionId) {
+            } else if (thePlayer.dimension != IafConfig.dreadlandsDimensionId) {
                 thePlayer.timeUntilPortal = 10;
-                thePlayer.changeDimension(IceAndFire.CONFIG.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IceAndFire.CONFIG.dreadlandsDimensionId), false));
+                thePlayer.changeDimension(IafConfig.dreadlandsDimensionId, new TeleporterDreadLands(thePlayer.server.getWorld(IafConfig.dreadlandsDimensionId), false));
             } else {
                 MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(thePlayer, MiscEntityProperties.class);
                 BlockPos setPos = BlockPos.ORIGIN;
@@ -75,13 +75,13 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
     }
 
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!this.canSurviveAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
         }
     }
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (!this.canSurviveAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
         }
@@ -95,23 +95,23 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
         return new TileEntityDreadPortal();
     }
 
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
-        Block block = iblockstate.getBlock();
-        return !iblockstate.isOpaqueCube() && block != IafBlockRegistry.dread_portal;
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
+        Block block = BlockState.getBlock();
+        return !BlockState.isOpaqueCube() && block != IafBlockRegistry.dread_portal;
     }
 
     @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return NULL_AABB;
     }
 
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
@@ -119,8 +119,8 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
         return 0;
     }
 
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
         if (tileentity instanceof TileEntityDreadPortal) {
@@ -139,15 +139,15 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
         }
     }
 
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+    public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {
         return ItemStack.EMPTY;
     }
 
-    public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public MapColor getMapColor(BlockState state, IBlockAccess worldIn, BlockPos pos) {
         return MapColor.LIGHT_BLUE;
     }
 
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 }

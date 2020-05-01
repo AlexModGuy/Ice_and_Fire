@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDreadMob;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
@@ -56,28 +56,28 @@ public class BlockGeneric extends Block {
         setRegistryName(IceAndFire.MODID, gameName);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return this == IafBlockRegistry.dragon_ice ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
     }
 
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return this != IafBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(BlockState state) {
         return this != IafBlockRegistry.dragon_ice;
     }
 
     @SuppressWarnings("deprecation")
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
-        Block block = iblockstate.getBlock();
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
+        Block block = BlockState.getBlock();
         if (this == IafBlockRegistry.dragon_ice) {
-            if (blockState != iblockstate) {
+            if (blockState != BlockState) {
                 return true;
             }
             if (block == this) {
@@ -90,7 +90,7 @@ public class BlockGeneric extends Block {
     }
 
     @Deprecated
-    public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+    public boolean canEntitySpawn(BlockState state, Entity entityIn) {
         return entityIn instanceof EntityDreadMob || !DragonUtils.isDreadBlock(state);
     }
 

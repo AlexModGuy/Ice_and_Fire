@@ -16,7 +16,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -73,7 +73,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     public static Animation ANIMATION_SCRATCH;
     public static Animation ANIMATION_BITE;
     public HippogryphInventory hippogryphInventory;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
     public float sitProgress;
     public float hoverProgress;
@@ -178,7 +178,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
 
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Override
@@ -716,9 +716,9 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
@@ -881,7 +881,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             flyProgress -= 0.5F;
         }
         if ((flying || hovering) && ticksExisted % 20 == 0 && this.isOverAir()) {
-            this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IceAndFire.CONFIG.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
+            this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IafConfig.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
         }
         if (!this.isOverAir() && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);

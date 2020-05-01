@@ -94,7 +94,7 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
     public void animate(ItemStack stack, float partialTick) {
         this.resetToDefaultPose();
         if (stack.getTagCompound() != null) {
-            Entity holder = Minecraft.getMinecraft().world.getEntityByID(stack.getTagCompound().getInteger("HolderID"));
+            Entity holder = Minecraft.getInstance().world.getEntityByID(stack.getTagCompound().getInteger("HolderID"));
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscEntityProperties.class);
             if (properties != null) {
                 int lungeTicks = properties.deathwormLungeTicks;

@@ -38,7 +38,7 @@ public class ItemBestiary extends Item {
 
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
@@ -72,7 +72,7 @@ public class ItemBestiary extends Item {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         if (stack.getTagCompound() != null) {
             if(IceAndFire.PROXY.shouldSeeBestiaryContents()){

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.ClientProxy;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
@@ -22,7 +21,7 @@ import net.minecraft.util.ReportedException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
     private final RenderLiving render;
     private final boolean excludeDreadQueenMob;
@@ -53,7 +52,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                 if (prey) {
                     if (animationTicks == 0 || animationTicks >= 15 || dragon.isFlying()) {
                         translateToHead();
-                        Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(passenger);
+                        Render render = Minecraft.getInstance().getRenderManager().getEntityRenderObject(passenger);
                         ModelBase modelBase = null;
                         if (render instanceof RenderLiving) {
                             modelBase = ((RenderLiving) render).getMainModel();
@@ -122,7 +121,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 
     public void renderEntity(Entity entityIn, double x, double y, double z, float yaw, float partialTicks, boolean p_188391_10_) {
         Render<Entity> render = null;
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+        RenderManager manager = Minecraft.getInstance().getRenderManager();
         try {
             render = manager.getEntityRenderObject(entityIn);
 

@@ -101,7 +101,7 @@ public class EntityChainTie extends EntityHanging {
         return 0F;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
         return distance < 1024.0D;
     }

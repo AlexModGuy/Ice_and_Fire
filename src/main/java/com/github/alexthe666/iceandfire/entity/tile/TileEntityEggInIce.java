@@ -88,7 +88,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
     @Override
     public void update() {
         age++;
-        if (age >= IceAndFire.CONFIG.dragonEggTime && type != null) {
+        if (age >= IafConfig.dragonEggTime && type != null) {
             world.destroyBlock(pos, false);
             world.setBlockState(pos, Blocks.WATER.getDefaultState());
             EntityIceDragon dragon = new EntityIceDragon(world);

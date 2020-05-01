@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
     private static final ResourceLocation VARIANT_0 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0.png");
@@ -62,7 +62,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippocampusSaddle implements LayerRenderer {
         private final RenderHippocampus renderer;
 
@@ -127,7 +127,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippocampusBridle implements LayerRenderer {
         private final RenderHippocampus renderer;
         private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png");
@@ -154,7 +154,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippocampusChest implements LayerRenderer {
         private final RenderHippocampus renderer;
         private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippocampus/chest.png");
@@ -181,7 +181,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private class LayerHippocampusArmor implements LayerRenderer {
         private final RenderHippocampus renderer;
         private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippocampus/armor_diamond.png");

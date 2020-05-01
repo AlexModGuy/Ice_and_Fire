@@ -13,7 +13,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerPixieItem implements LayerRenderer<EntityPixie> {
 
     RenderPixie renderer;
@@ -39,7 +39,7 @@ public class LayerPixieItem implements LayerRenderer<EntityPixie> {
             GlStateManager.translate(-0.0625F, 0.53125F, 0.21875F);
 
             Item item = itemstack.getItem();
-            Minecraft minecraft = Minecraft.getMinecraft();
+            Minecraft minecraft = Minecraft.getInstance();
             if (!(item instanceof ItemBlock)) {
                 GlStateManager.translate(-0.075F, 0, -0.05F);
             } else {

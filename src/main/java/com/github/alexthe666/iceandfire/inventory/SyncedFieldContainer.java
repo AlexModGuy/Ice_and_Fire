@@ -35,7 +35,7 @@ public abstract class SyncedFieldContainer extends Container {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int data) {
         this.inventory.setField(id, data);
     }

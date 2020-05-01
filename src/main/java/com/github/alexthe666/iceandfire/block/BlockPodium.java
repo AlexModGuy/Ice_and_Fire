@@ -10,7 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,12 +45,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityPodium) {
             TileEntityPodium podium = (TileEntityPodium) worldIn.getTileEntity(pos);
             if (!podium.getStackInSlot(0).isEmpty()) {
@@ -61,12 +61,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
+    public int damageDropped(BlockState state) {
         return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking()) {
             return false;
         } else {
@@ -76,7 +76,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     }
 
     @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
         if (face == EnumFacing.UP) {
             return BlockFaceShape.SOLID;
         } else if (face == EnumFacing.DOWN) {
@@ -87,7 +87,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
         int i = aenumtype.length;
@@ -99,12 +99,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(VARIANT, BlockPodium.EnumType.byMetadata(meta));
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
     }
 
@@ -115,28 +115,28 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState blockstate) {
+    public boolean isOpaqueCube(BlockState blockstate) {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState blockstate) {
+    public boolean isFullCube(BlockState blockstate) {
         return false;
     }
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
+        BlockState BlockState = worldIn.getBlockState(pos.down());
+        return BlockState.isSideSolid(worldIn, pos, EnumFacing.UP);
     }
 
     @Deprecated
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
     }
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
 
@@ -150,13 +150,13 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public EnumBlockRenderType getRenderType(BlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 

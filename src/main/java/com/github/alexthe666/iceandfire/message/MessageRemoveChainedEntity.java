@@ -39,7 +39,7 @@ public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveCha
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageRemoveChainedEntity message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.chainedId);

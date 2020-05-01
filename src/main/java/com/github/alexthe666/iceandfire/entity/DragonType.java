@@ -44,7 +44,7 @@ public class DragonType {
             if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
-            if (egg.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {
+            if (egg.getDragonAge() > IafConfig.dragonEggTime) {
                 if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
                     egg.world.setBlockToAir(pos);
                     EntityFireDragon dragon = new EntityFireDragon(egg.world);

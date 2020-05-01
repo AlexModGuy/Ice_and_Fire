@@ -38,7 +38,7 @@ public class MessageSirenSong extends AbstractMessage<MessageSirenSong> {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onClientReceived(Minecraft client, MessageSirenSong message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.sirenId);

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -65,7 +65,7 @@ public class WorldGenMyrmexDecoration {
 
     public static void generateLeaves(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
-            IBlockState leaf = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.DECAYABLE, Boolean.valueOf(false));
+            BlockState leaf = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.DECAYABLE, Boolean.valueOf(false));
             for (BiomeDictionary.Type type : BiomeDictionary.getTypes(worldIn.getBiome(blockpos))) {
                 if (type == BiomeDictionary.Type.SANDY || type == BiomeDictionary.Type.SAVANNA || type == BiomeDictionary.Type.WASTELAND) {
                     leaf = Blocks.LEAVES2.getDefaultState().withProperty(BlockNewLeaf.VARIANT, BlockPlanks.EnumType.ACACIA).withProperty(BlockLeaves.DECAYABLE, Boolean.valueOf(false));
@@ -121,7 +121,7 @@ public class WorldGenMyrmexDecoration {
     }
 
     public static void generateGold(World worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        IBlockState gold = rand.nextBoolean() ? IafBlockRegistry.goldPile.getDefaultState() : IafBlockRegistry.silverPile.getDefaultState();
+        BlockState gold = rand.nextBoolean() ? IafBlockRegistry.goldPile.getDefaultState() : IafBlockRegistry.silverPile.getDefaultState();
         if (worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
             worldIn.setBlockState(blockpos, gold.withProperty(BlockGoldPile.LAYERS, 8), 3);
             worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);

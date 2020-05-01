@@ -10,14 +10,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiPodium extends GuiContainer {
 
     private IInventory playerInventory;
     private IInventory podiumInventory;
 
     public GuiPodium(InventoryPlayer playerInv, IInventory podiumInv) {
-        super(new ContainerPodium(playerInv, podiumInv, Minecraft.getMinecraft().player));
+        super(new ContainerPodium(playerInv, podiumInv, Minecraft.getInstance().player));
         this.playerInventory = playerInv;
         this.podiumInventory = podiumInv;
         this.allowUserInput = false;

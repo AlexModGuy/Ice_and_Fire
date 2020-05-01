@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -85,14 +85,14 @@ public class FireChargeExplosion extends Explosion {
 
                         for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
-                            IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+                            BlockState BlockState = this.worldObj.getBlockState(blockpos);
 
-                            if (iblockstate.getMaterial() != Material.AIR) {
-                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
+                            if (BlockState.getMaterial() != Material.AIR) {
+                                float f2 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, blockpos, BlockState) : BlockState.getBlock().getExplosionResistance(worldObj, blockpos, null, this);
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
 
-                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, iblockstate, f)) && iblockstate.getBlock().canEntityDestroy(iblockstate, this.worldObj, blockpos, this.exploder)) {
+                            if (f > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.worldObj, blockpos, BlockState, f)) && BlockState.getBlock().canEntityDestroy(BlockState, this.worldObj, blockpos, this.exploder)) {
                                 set.add(blockpos);
                             }
 
@@ -183,8 +183,8 @@ public class FireChargeExplosion extends Explosion {
 
         if (this.isSmoking) {
             for (BlockPos blockpos : this.affectedBlockPositions) {
-                IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
-                Block block = iblockstate.getBlock();
+                BlockState BlockState = this.worldObj.getBlockState(blockpos);
+                Block block = BlockState.getBlock();
 
                 if (spawnParticles) {
                     double d0 = (double) ((float) blockpos.getX() + this.worldObj.rand.nextFloat());
@@ -226,7 +226,7 @@ public class FireChargeExplosion extends Explosion {
                     }
                 }
 
-                if (iblockstate.getMaterial() != Material.AIR) {
+                if (BlockState.getMaterial() != Material.AIR) {
                     if (block.canDropFromExplosion(this)) {
                         block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
                     }

@@ -58,9 +58,9 @@ public class ParticleDreadTorch extends ParticleFlame {
             avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
         }
         if (big) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE_BIG);
+            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE_BIG);
         } else {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(SNOWFLAKE);
+            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE);
         }
         GlStateManager.disableLighting();
         double currentMinU = 0.25D * particleTextureIndexX;

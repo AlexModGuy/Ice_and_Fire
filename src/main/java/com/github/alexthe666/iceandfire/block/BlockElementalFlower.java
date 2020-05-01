@@ -5,7 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +33,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
     }
 
     public boolean canStay(World worldIn, BlockPos pos) {
-        IBlockState soil = worldIn.getBlockState(pos.down());
+        BlockState soil = worldIn.getBlockState(pos.down());
         if (this == IafBlockRegistry.fire_lily) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
         } else {
@@ -42,11 +42,11 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
     }
 
     @Deprecated
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         worldIn.scheduleUpdate(pos, this, 1);
     }
 
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
 
@@ -59,7 +59,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
         }
     }
 
-    protected boolean canSustainBush(IBlockState state) {
+    protected boolean canSustainBush(BlockState state) {
         return true;
     }
 

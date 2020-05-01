@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author rafa_mv
  * @since 1.0.0
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class IFChainBuffer {
     private int yawTimer;
     private float yawVariation;

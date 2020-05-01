@@ -9,10 +9,10 @@ public class IceAndFireCoreUtils {
     private static int index = 0;
 
     public static double getMoveThreshold(NetHandlerPlayServer e) {
-        return IceAndFire.CONFIG.dragonMovedWronglyFix && e.player.getLowestRidingEntity() instanceof ISyncMount ? 1.5D : 0.0625D;
+        return IafConfig.dragonMovedWronglyFix && e.player.getLowestRidingEntity() instanceof ISyncMount ? 1.5D : 0.0625D;
     }
 
     public static double getFastestEntityMotionSpeed(NetHandlerPlayServer e) {
-        return IceAndFire.CONFIG.dragonMovedWronglyFix && e.player.getLowestRidingEntity() instanceof ISyncMount ? 1000.0D : 100.0D;
+        return IafConfig.dragonMovedWronglyFix && e.player.getLowestRidingEntity() instanceof ISyncMount ? 1000.0D : 100.0D;
     }
 }

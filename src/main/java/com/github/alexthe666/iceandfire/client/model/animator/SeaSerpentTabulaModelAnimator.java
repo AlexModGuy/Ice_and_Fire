@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.IIceAndFireTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.LLibrary;

@@ -77,7 +77,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         super(worldIn);
         this.setSize(2.8F, 1.39F);
         resetParts();
-        headDamageThreshold = Math.max(5, (float)IceAndFire.CONFIG.hydraMaxHealth * 0.08F);
+        headDamageThreshold = Math.max(5, (float)IafConfig.hydraMaxHealth * 0.08F);
     }
 
     protected void initEntityAI() {
@@ -339,7 +339,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.generateHydraChance);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
         this.getEntityAttribute(EntityLivingBase.SWIM_SPEED).setBaseValue(2.0D);
     }
@@ -436,7 +436,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.dataManager.set(SEVERED_HEAD, MathHelper.clamp(count, -1, HEADS));
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id >= 40 && id <= 48) {
             int index = id - 40;

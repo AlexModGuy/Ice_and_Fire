@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.event.WorldGenEvents;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -127,7 +127,7 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
         return false;
     }
 
-    private void transformState(World world, BlockPos blockpos, IBlockState state) {
+    private void transformState(World world, BlockPos blockpos, BlockState state) {
         float hardness = state.getBlock().getBlockHardness(state, world, blockpos);
         if (hardness != -1.0F) {
             if (state.getBlock() instanceof BlockContainer) {

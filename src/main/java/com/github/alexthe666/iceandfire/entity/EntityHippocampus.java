@@ -58,7 +58,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BYTE);
     public static Animation ANIMATION_SPEAK;
     public float onLandProgress;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     public EntityHippocampus.HippocampusInventory hippocampusInventory;
     public float sitProgress;
@@ -630,9 +630,9 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());

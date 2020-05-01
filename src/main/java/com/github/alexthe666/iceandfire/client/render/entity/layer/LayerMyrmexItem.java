@@ -39,14 +39,14 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
             this.translateToHand(handSide);
-            if (Minecraft.getMinecraft().getRenderItem().shouldRenderItemIn3D(stack)) {
+            if (Minecraft.getInstance().getRenderItem().shouldRenderItemIn3D(stack)) {
                 GlStateManager.translate(0F, 0.25F, -1.65F);
             } else {
                 GlStateManager.translate(0F, 1F, -2F);
             }
             GlStateManager.rotate(160, 1, 0, 0);
             GlStateManager.rotate(180, 0, 1, 0);
-            Minecraft.getMinecraft().getItemRenderer().renderItem(myrmex, stack, transform);
+            Minecraft.getInstance().getItemRenderer().renderItem(myrmex, stack, transform);
             GlStateManager.popMatrix();
         }
     }

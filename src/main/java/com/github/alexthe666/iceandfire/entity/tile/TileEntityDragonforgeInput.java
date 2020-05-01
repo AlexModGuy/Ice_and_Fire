@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -79,7 +79,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         return false;
     }
 
-    private IBlockState getDeactivatedState() {
+    private BlockState getDeactivatedState() {
         return isFire() ? IafBlockRegistry.dragonforge_fire_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false) : IafBlockRegistry.dragonforge_ice_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false);
     }
 

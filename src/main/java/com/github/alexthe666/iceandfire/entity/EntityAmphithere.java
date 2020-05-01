@@ -14,7 +14,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -63,11 +63,11 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     public float groundProgress = 0;
     public float sitProgress = 0;
     public float diveProgress = 0;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer tail_buffer;
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer;
     @Nullable
     public BlockPos orbitPos = null;
@@ -138,7 +138,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return radialPos;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     public float getBlockPathWeight(BlockPos pos) {
@@ -252,7 +252,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     public boolean onLeaves() {
-        IBlockState state = world.getBlockState(this.getPosition().down());
+        BlockState state = world.getBlockState(this.getPosition().down());
         return state.getBlock().isLeaves(state, world, this.getPosition().down());
     }
 
@@ -362,7 +362,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (this.getUntamedRider() == null) {
             ridingTime = 0;
         }
-        if (!this.isTamed() && ridingTime > IceAndFire.CONFIG.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof EntityPlayer) {
+        if (!this.isTamed() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof EntityPlayer) {
             this.world.setEntityState(this, (byte) 45);
             this.setTamedBy((EntityPlayer) this.getUntamedRider());
         }
@@ -534,9 +534,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.amphithereMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.amphithereMaxHealth);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.amphithereAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.amphithereAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
     }
 
@@ -715,9 +715,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
             up(mc.gameSettings.keyBindJump.isKeyDown());
@@ -911,7 +911,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return this.getControllingPassenger() == null && sitProgress == 0 && !this.isSitting();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 45) {
             this.playEffect();

@@ -37,7 +37,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
         ticksExisted++;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
         return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 3, 1));
     }
