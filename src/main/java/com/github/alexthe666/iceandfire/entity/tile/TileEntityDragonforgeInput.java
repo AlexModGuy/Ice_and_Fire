@@ -80,20 +80,20 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     }
 
     private BlockState getDeactivatedState() {
-        return isFire() ? IafBlockRegistry.dragonforge_fire_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false) : IafBlockRegistry.dragonforge_ice_input.getDefaultState().withProperty(BlockDragonforgeInput.ACTIVE, false);
+        return isFire() ? IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false) : IafBlockRegistry.DRAGONFORGE_ICE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
     }
 
     private boolean isFire() {
-        return world.getBlockState(pos).getBlock() == IafBlockRegistry.dragonforge_fire_input;
+        return world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT;
     }
 
     private boolean isActive() {
-        return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput && world.getBlockState(pos).getValue(BlockDragonforgeInput.ACTIVE);
+        return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput && world.getBlockState(pos).get(BlockDragonforgeInput.ACTIVE);
     }
 
     private void setActive() {
         TileEntity tileentity = world.getTileEntity(pos);
-        world.setBlockState(this.pos, getDeactivatedState().withProperty(BlockDragonforgeInput.ACTIVE, true));
+        world.setBlockState(this.pos, getDeactivatedState().with(BlockDragonforgeInput.ACTIVE, true));
         if (tileentity != null) {
             tileentity.validate();
             world.setTileEntity(pos, tileentity);

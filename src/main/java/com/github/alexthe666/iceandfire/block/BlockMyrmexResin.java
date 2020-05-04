@@ -33,7 +33,7 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     public BlockMyrmexResin(boolean sticky) {
         super(Material.CLAY);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumType.DESERT));
+        this.setDefaultState(this.blockState.getBaseState().with(VARIANT, EnumType.DESERT));
         this.setHardness(2.5F);
         this.setTranslationKey(sticky ? "iceandfire.myrmex_resin_sticky" : "iceandfire.myrmex_resin");
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
@@ -48,7 +48,7 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     @Override
     public int damageDropped(BlockState state) {
-        return ((EnumType) state.getValue(VARIANT)).ordinal();
+        return ((EnumType) state.get(VARIANT)).ordinal();
     }
 
     @Override
@@ -67,12 +67,12 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, EnumType.values()[MathHelper.clamp(meta, 0, 1)]);
+        return this.getDefaultState().with(VARIANT, EnumType.values()[MathHelper.clamp(meta, 0, 1)]);
     }
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return ((EnumType) state.getValue(VARIANT)).ordinal();
+        return ((EnumType) state.get(VARIANT)).ordinal();
     }
 
     protected ItemStack getSilkTouchDrop(BlockState state) {

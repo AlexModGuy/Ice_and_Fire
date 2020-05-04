@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.TorchBlock;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockBurntTorch extends BlockTorch implements IDreadBlock {
+public class BlockBurntTorch extends TorchBlock implements IDreadBlock {
 
     public BlockBurntTorch() {
         super();

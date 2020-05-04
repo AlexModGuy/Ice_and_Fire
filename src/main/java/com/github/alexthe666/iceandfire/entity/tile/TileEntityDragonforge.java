@@ -72,8 +72,8 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private void updateGrills(boolean grill) {
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             BlockPos grillPos = this.getPos().offset(facing);
-            if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.dragonforge_fire_brick || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.dragonforge_ice_brick) {
-                BlockState grillState = isFire ? IafBlockRegistry.dragonforge_fire_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.dragonforge_ice_brick.getDefaultState().withProperty(BlockDragonforgeBricks.GRILL, grill);
+            if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_BRICK) {
+                BlockState grillState = isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.DRAGONFORGE_ICE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
                 if (world.getBlockState(grillPos) != grillState) {
                     world.setBlockState(grillPos, grillState);
                 }
@@ -133,7 +133,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     public void update() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
-        isFire = this.getBlockType().getTranslationKey().equals(IafBlockRegistry.dragonforge_fire_core.getTranslationKey());
+        isFire = this.getBlockType().getTranslationKey().equals(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getTranslationKey());
         if (lastDragonFlameTimer > 0) {
             lastDragonFlameTimer--;
         }
@@ -183,7 +183,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
 
     public int getMaxCookTime() {
         ItemStack stack = getCurrentResult();
-        if (stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.ash) || stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.dragon_ice)) {
+        if (stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.ASH) || stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.DRAGON_ICE)) {
             return 100;
         }
         return 1000;
@@ -202,9 +202,9 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         }
         if (itemstack == ItemStack.EMPTY) {
             if (this.isFire) {
-                itemstack = new ItemStack(IafBlockRegistry.ash);
+                itemstack = new ItemStack(IafBlockRegistry.ASH);
             } else {
-                itemstack = new ItemStack(IafBlockRegistry.dragon_ice);
+                itemstack = new ItemStack(IafBlockRegistry.DRAGON_ICE);
             }
         }
         return itemstack;
@@ -363,10 +363,10 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     }
 
     private boolean checkBoneCorners(BlockPos pos) {
-        return doesBlockEqual(pos.north().east(), IafBlockRegistry.dragon_bone_block) &&
-                doesBlockEqual(pos.north().west(), IafBlockRegistry.dragon_bone_block) &&
-                doesBlockEqual(pos.south().east(), IafBlockRegistry.dragon_bone_block) &&
-                doesBlockEqual(pos.south().west(), IafBlockRegistry.dragon_bone_block);
+        return doesBlockEqual(pos.north().east(), IafBlockRegistry.DRAGON_BONE_BLOCK) &&
+                doesBlockEqual(pos.north().west(), IafBlockRegistry.DRAGON_BONE_BLOCK) &&
+                doesBlockEqual(pos.south().east(), IafBlockRegistry.DRAGON_BONE_BLOCK) &&
+                doesBlockEqual(pos.south().west(), IafBlockRegistry.DRAGON_BONE_BLOCK);
     }
 
     private boolean checkBrickCorners(BlockPos pos) {
@@ -395,7 +395,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     }
 
     private Block getBrick() {
-        return isFire ? IafBlockRegistry.dragonforge_fire_brick : IafBlockRegistry.dragonforge_ice_brick;
+        return isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK : IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
     }
 
     private boolean doesBlockEqual(BlockPos pos, Block block) {

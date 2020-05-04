@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class WorldGenMyrmexHive extends WorldGenerator {
 
-    private static final BlockState DESERT_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState();
-    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState();
-    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.myrmex_resin.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
-    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.myrmex_resin_sticky.getDefaultState().withProperty(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_RESIN.getDefaultState();
+    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_RESIN_STICKY.getDefaultState();
+    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_RESIN.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_RESIN_STICKY.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;
@@ -473,7 +473,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
             int tuberLength = roomType == RoomType.ENTERANCE || roomType == RoomType.TUNNEL ? 1 : roomType == RoomType.QUEEN ? 1 + random.nextInt(5) : 1 + random.nextInt(3);
             for (int i = 0; i < tuberLength; i++) {
                 if (world.isAirBlock(blockpos.down(i))) {
-                    world.setBlockState(blockpos.down(i), jungle ? IafBlockRegistry.myrmex_jungle_biolight.getDefaultState() : IafBlockRegistry.myrmex_desert_biolight.getDefaultState());
+                    world.setBlockState(blockpos.down(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.getDefaultState() : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.getDefaultState());
                 }
             }
         }

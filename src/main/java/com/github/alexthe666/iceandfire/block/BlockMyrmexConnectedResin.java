@@ -25,12 +25,12 @@ public class BlockMyrmexConnectedResin extends Block {
 
     public BlockMyrmexConnectedResin(boolean jungle, boolean glass) {
         super(Material.ROCK);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.valueOf(false))
-                .withProperty(DOWN, Boolean.valueOf(false))
-                .withProperty(NORTH, Boolean.valueOf(false))
-                .withProperty(EAST, Boolean.valueOf(false))
-                .withProperty(SOUTH, Boolean.valueOf(false))
-                .withProperty(WEST, Boolean.valueOf(false))
+        this.setDefaultState(this.blockState.getBaseState().with(UP, Boolean.valueOf(false))
+                .with(DOWN, Boolean.valueOf(false))
+                .with(NORTH, Boolean.valueOf(false))
+                .with(EAST, Boolean.valueOf(false))
+                .with(SOUTH, Boolean.valueOf(false))
+                .with(WEST, Boolean.valueOf(false))
         );
         if (glass) {
             this.setHardness(1.5F);
@@ -48,12 +48,12 @@ public class BlockMyrmexConnectedResin extends Block {
     }
 
     public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.withProperty(UP, canFenceConnectTo(worldIn, pos, EnumFacing.UP))
-                .withProperty(DOWN, canFenceConnectTo(worldIn, pos, EnumFacing.DOWN))
-                .withProperty(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
-                .withProperty(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
-                .withProperty(EAST, canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
-                .withProperty(WEST, canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
+        return state.with(UP, canFenceConnectTo(worldIn, pos, EnumFacing.UP))
+                .with(DOWN, canFenceConnectTo(worldIn, pos, EnumFacing.DOWN))
+                .with(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
+                .with(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
+                .with(EAST, canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
+                .with(WEST, canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
     }
 
     protected BlockStateContainer createBlockState() {

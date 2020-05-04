@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -25,7 +24,7 @@ import java.util.Random;
 public class WorldGenFireDragonCave extends WorldGenerator {
     public static final ResourceLocation FIREDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_female_cave"));
     public static final ResourceLocation FIREDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "fire_dragon_male_cave"));
-    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.charedStone);
+    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE);
     private static boolean isMale;
 
     public static void setGoldPile(World world, BlockPos pos, Random rand) {
@@ -34,9 +33,9 @@ public class WorldGenFireDragonCave extends WorldGenerator {
             if (chance < 60) {
                 int goldRand = Math.max(1, IafConfig.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
-                world.setBlockState(pos, generateGold ? IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+                world.setBlockState(pos, generateGold ? IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
-                world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = world.getTileEntity(pos);
                     if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -119,7 +118,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.silverOre.getDefaultState() : IafBlockRegistry.charedStone.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -137,7 +136,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
-                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.charedCobblestone.getDefaultState() : IafBlockRegistry.charedStone.getDefaultState());
+                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState());
                     }
                 }
             }

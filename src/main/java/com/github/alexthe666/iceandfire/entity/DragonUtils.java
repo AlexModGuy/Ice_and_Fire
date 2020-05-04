@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EntitySelectors;
@@ -371,11 +370,11 @@ public class DragonUtils {
 
     public static boolean isDreadBlock(BlockState state){
         Block block = state.getBlock();
-        return block == IafBlockRegistry.dread_stone || block == IafBlockRegistry.dread_stone_bricks || block == IafBlockRegistry.dread_stone_bricks_chiseled ||
-                block == IafBlockRegistry.dread_stone_bricks_cracked || block == IafBlockRegistry.dread_stone_bricks_mossy || block == IafBlockRegistry.dread_stone_tile ||
-                block == IafBlockRegistry.dread_stone_face || block == IafBlockRegistry.dread_torch || block == IafBlockRegistry.dread_stone_bricks_stairs ||
-                block == IafBlockRegistry.dread_stone_bricks_double_slab || block == IafBlockRegistry.dread_stone_bricks_slab || block == IafBlockRegistry.dreadwood_log ||
-                block == IafBlockRegistry.dreadwood_planks || block == IafBlockRegistry.dreadwood_planks_lock || block == IafBlockRegistry.dread_portal ||
-                block == IafBlockRegistry.dread_spawner;
+        return block == IafBlockRegistry.DREAD_STONE || block == IafBlockRegistry.DREAD_STONE_BRICKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY || block == IafBlockRegistry.DREAD_STONE_TILE ||
+                block == IafBlockRegistry.DREAD_STONE_FACE || block == IafBlockRegistry.DREAD_TORCH || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_DOUBLE_SLAB || block == IafBlockRegistry.DREAD_STONE_BRICKS_SLAB || block == IafBlockRegistry.DREADWOOD_LOG ||
+                block == IafBlockRegistry.DREADWOOD_PLANKS || block == IafBlockRegistry.DREADWOOD_PLANKS_LOCK || block == IafBlockRegistry.DREAD_PORTAL ||
+                block == IafBlockRegistry.DREAD_SPAWNER;
     }
 }

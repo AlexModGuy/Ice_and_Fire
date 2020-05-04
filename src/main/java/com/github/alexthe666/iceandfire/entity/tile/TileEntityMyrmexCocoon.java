@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
@@ -21,7 +22,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
+public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
 
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);

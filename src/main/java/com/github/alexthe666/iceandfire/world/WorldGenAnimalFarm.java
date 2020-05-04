@@ -79,14 +79,14 @@ public class WorldGenAnimalFarm extends WorldGenerator {
                     worldIn.setBlockState(position.add(x, 0, z), Blocks.GRASS_PATH.getDefaultState());
                 }
                 if (x == 0) {
-                    worldIn.setBlockState(position.add(0, 1, 4), fence_gate.getDefaultState().withProperty(BlockFenceGate.FACING, EnumFacing.SOUTH));
-                    worldIn.setBlockState(position.add(0, 1, -4), fence_gate.getDefaultState().withProperty(BlockFenceGate.FACING, EnumFacing.NORTH));
+                    worldIn.setBlockState(position.add(0, 1, 4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.SOUTH));
+                    worldIn.setBlockState(position.add(0, 1, -4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.NORTH));
                     worldIn.setBlockState(position.add(0, 0, 4), Blocks.GRASS_PATH.getDefaultState());
                     worldIn.setBlockState(position.add(0, 0, -4), Blocks.GRASS_PATH.getDefaultState());
                 }
                 if (z == 0) {
-                    worldIn.setBlockState(position.add(4, 1, 0), fence_gate.getDefaultState().withProperty(BlockFenceGate.FACING, EnumFacing.EAST));
-                    worldIn.setBlockState(position.add(-4, 1, 0), fence_gate.getDefaultState().withProperty(BlockFenceGate.FACING, EnumFacing.WEST));
+                    worldIn.setBlockState(position.add(4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.EAST));
+                    worldIn.setBlockState(position.add(-4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.WEST));
                     worldIn.setBlockState(position.add(4, 0, 0), Blocks.GRASS_PATH.getDefaultState());
                     worldIn.setBlockState(position.add(-4, 0, 0), Blocks.GRASS_PATH.getDefaultState());
                 }

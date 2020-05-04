@@ -10,7 +10,7 @@ public class ItemBlockMyrmexResin extends ItemBlock {
 
     public ItemBlockMyrmexResin(Block block) {
         super(block);
-        sticky = block == IafBlockRegistry.myrmex_resin_sticky;
+        sticky = block == IafBlockRegistry.MYRMEX_RESIN_STICKY;
         this.setHasSubtypes(true);
     }
 

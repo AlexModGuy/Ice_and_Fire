@@ -29,12 +29,12 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.dreadwood_planks_lock");
         this.setRegistryName(IceAndFire.MODID, "dreadwood_planks_lock");
-        this.setDefaultState(this.blockState.getBaseState().withProperty(PLAYER_PLACED, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
     @Override
     public float getBlockHardness(BlockState blockState, World worldIn, BlockPos pos) {
-        return blockState.getValue(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
+        return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
     }
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -52,7 +52,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     private void deleteNearbyWood(World worldIn, BlockPos pos, BlockPos startPos) {
         if(pos.getDistance(startPos.getX(), startPos.getY(), startPos.getZ()) < 32){
-            if(worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.dreadwood_planks || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.dreadwood_planks_lock){
+            if(worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK){
                 worldIn.destroyBlock(pos, false);
                 for(EnumFacing facing : EnumFacing.values()){
                     deleteNearbyWood(worldIn, pos.offset(facing), startPos);
@@ -62,11 +62,11 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(PLAYER_PLACED, Boolean.valueOf(meta > 0));
+        return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));
     }
 
     public int getMetaFromState(BlockState state) {
-        return state.getValue(PLAYER_PLACED).booleanValue() ? 1 : 0;
+        return state.get(PLAYER_PLACED).booleanValue() ? 1 : 0;
     }
 
     protected BlockStateContainer createBlockState() {
@@ -74,6 +74,6 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     }
 
     public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(PLAYER_PLACED, true);
+        return this.getDefaultState().with(PLAYER_PLACED, true);
     }
 }

@@ -397,7 +397,7 @@ public class MyrmexHive {
             nbttagcompound.setInteger("X", entry.getKey().getX());
             nbttagcompound.setInteger("Y", entry.getKey().getY());
             nbttagcompound.setInteger("Z", entry.getKey().getZ());
-            nbttagcompound.setInteger("Facing", entry.getValue().getHorizontalIndex());
+            nbttagcompound.setInteger("Facing", entry.get().getHorizontalIndex());
             entrancesList.appendTag(nbttagcompound);
         }
         compound.setTag("Entrances", entrancesList);
@@ -408,7 +408,7 @@ public class MyrmexHive {
             nbttagcompound.setInteger("X", entry.getKey().getX());
             nbttagcompound.setInteger("Y", entry.getKey().getY());
             nbttagcompound.setInteger("Z", entry.getKey().getZ());
-            nbttagcompound.setInteger("Facing", entry.getValue().getHorizontalIndex());
+            nbttagcompound.setInteger("Facing", entry.get().getHorizontalIndex());
             entranceBottomsList.appendTag(nbttagcompound);
         }
         compound.setTag("EntranceBottoms", entranceBottomsList);
@@ -524,10 +524,10 @@ public class MyrmexHive {
         Map.Entry<BlockPos, EnumFacing> closest = getClosestEntrance(entity);
         if (closest != null) {
             if (randomize) {
-                BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
+                BlockPos pos = closest.getKey().offset(closest.get(), random.nextInt(7) + 7).up(4);
                 return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
             } else {
-                return closest.getKey().offset(closest.getValue(), 3);
+                return closest.getKey().offset(closest.get(), 3);
             }
         }
         return entity.getPosition();

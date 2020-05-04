@@ -59,7 +59,7 @@ public class ClientEvents {
 
     public static void initializeStoneLayer() {
         for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getInstance().getRenderManager().entityRenderMap.entrySet()) {
-            Render render = entry.getValue();
+            Render render = entry.get();
             if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
@@ -91,9 +91,9 @@ public class ClientEvents {
             }
             if (entityRenders != null) {
                 for (Map.Entry<Class<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
-                    if (entry.getValue() != null) {
+                    if (entry.get() != null) {
                         try {
-                            Render render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
+                            Render render = entry.get().createRenderFor(Minecraft.getInstance().getRenderManager());
                             if (render != null && render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                                 LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
                                 LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
@@ -110,7 +110,7 @@ public class ClientEvents {
             }
             if (entityRendersOld != null) {
                 for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : entityRendersOld.entrySet()) {
-                    Render render = entry.getValue();
+                    Render render = entry.get();
                     if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
                         LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
                         LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);

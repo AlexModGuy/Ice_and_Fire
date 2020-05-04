@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockEggInIce extends BlockContainer {
+public class BlockEggInIce extends ContainerBlock {
     public Item itemBlock;
 
     @SuppressWarnings("deprecation")

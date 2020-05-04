@@ -245,7 +245,7 @@ public class FireChargeExplosion extends Explosion {
         } else {
             for (BlockPos blockpos1 : this.affectedBlockPositions) {
                 if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
-                    this.worldObj.setBlockState(blockpos1, new Random().nextBoolean() ? Blocks.SNOW_LAYER.getDefaultState() : IafBlockRegistry.dragon_ice_spikes.getDefaultState());
+                    this.worldObj.setBlockState(blockpos1, new Random().nextBoolean() ? Blocks.SNOW_LAYER.getDefaultState() : IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
                 }
             }
         }

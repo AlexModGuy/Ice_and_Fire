@@ -35,9 +35,9 @@ public class MapGenSnowVillage extends WorldGenerator {
         this();
         for (Entry<String, String> entry : map.entrySet()) {
             if (entry.getKey().equals("size")) {
-                this.size = MathHelper.getInt(entry.getValue(), this.size, 0);
+                this.size = MathHelper.getInt(entry.get(), this.size, 0);
             } else if (entry.getKey().equals("distance")) {
-                this.distance = MathHelper.getInt(entry.getValue(), this.distance, 9);
+                this.distance = MathHelper.getInt(entry.get(), this.distance, 9);
             }
         }
     }

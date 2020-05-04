@@ -208,14 +208,14 @@ public class IceExplosion extends Explosion {
                 }
                 if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
                     if (block == Blocks.GRASS_PATH) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGrassPath.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRASS_PATH.getDefaultState());
                     }
                     if (block instanceof BlockGrass) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGrass.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRASS.getDefaultState());
                     }
 
                     if (block instanceof BlockDirt) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenDirt.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_DIRT.getDefaultState());
                     }
 
                     if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
@@ -223,17 +223,17 @@ public class IceExplosion extends Explosion {
                     }
 
                     if (block instanceof BlockGravel) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenGravel.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRAVEL.getDefaultState());
                     }
 
                     if (state.getMaterial() == Material.WOOD) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenSplinters.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_SPLINTERS.getDefaultState());
                     }
 
-                    if (state.getMaterial() == Material.ROCK && (block != IafBlockRegistry.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenStone.getDefaultState());
+                    if (state.getMaterial() == Material.ROCK && (block != IafBlockRegistry.FROZEN_COBBLESTONE && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_STONE.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK) {
-                        worldObj.setBlockState(blockpos, IafBlockRegistry.frozenCobblestone.getDefaultState());
+                        worldObj.setBlockState(blockpos, IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState());
                     }
                 }
             }
@@ -241,7 +241,7 @@ public class IceExplosion extends Explosion {
 
         for (BlockPos blockpos1 : this.affectedBlockPositions) {
             if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0 && mobGreifing) {
-                this.worldObj.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, explosionRNG.nextInt(7) + 1));
+                this.worldObj.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().with(BlockSnow.LAYERS, explosionRNG.nextInt(7) + 1));
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -70,7 +69,7 @@ public class DragonType {
         if(this == ICE){
             if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
                 egg.setDead();
-                egg.world.setBlockState(pos, IafBlockRegistry.eggInIce.getDefaultState());
+                egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
                 egg.world.playSound(egg.posX, egg.posY + egg.getEyeHeight(), egg.posZ, SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getType();

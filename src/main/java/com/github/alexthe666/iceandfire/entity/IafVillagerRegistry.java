@@ -60,7 +60,7 @@ public class IafVillagerRegistry {
             //over 30 words for ice
             career.addTrade(1, new SapphireForItems(Item.getItemFromBlock(Blocks.SNOW), new EntityVillager.PriceInfo(1, 32)));
             career.addTrade(2, new ListItemForSapphires(Item.getItemFromBlock(Blocks.PACKED_ICE), new EntityVillager.PriceInfo(1, 3)));
-            career.addTrade(3, new ListItemForSapphires(Item.getItemFromBlock(IafBlockRegistry.dragon_ice), new EntityVillager.PriceInfo(4, 1)));
+            career.addTrade(3, new ListItemForSapphires(Item.getItemFromBlock(IafBlockRegistry.DRAGON_ICE), new EntityVillager.PriceInfo(4, 1)));
             career.addTrade(1, new ListItemForSapphires(Items.IRON_SHOVEL, new EntityVillager.PriceInfo(1, 4)));
             career.addTrade(2, new ListItemForSapphires(IafItemRegistry.silver_shovel, new EntityVillager.PriceInfo(1, 5)));
             career.addTrade(3, new ListItemForSapphires(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(1, 9)));

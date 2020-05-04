@@ -22,7 +22,6 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
@@ -449,10 +448,10 @@ public class ServerEvents {
         if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IafConfig.dreadlandsDimensionId) {
             event.setCanceled(true);
             if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
-                BlockState state = IafBlockRegistry.burnt_torch.getDefaultState();
+                BlockState state = IafBlockRegistry.BURNT_TORCH.getDefaultState();
                 for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
                     if (canTorchPlaceAt(event.getWorld(), event.getPos(), enumfacing)) {
-                        state = state.withProperty(BlockBurntTorch.FACING, enumfacing);
+                        state = state.with(BlockBurntTorch.FACING, enumfacing);
                     }
                 }
                 event.getWorld().setBlockState(event.getPos(), state);
@@ -573,7 +572,7 @@ public class ServerEvents {
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.dragon_ice));
+                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
                     }
                     event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
@@ -791,7 +790,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == IafBlockRegistry.goldPile || event.getState().getBlock() == IafBlockRegistry.silverPile)) {
+        if (event.getPlayer() != null && (event.getState().getBlock() instanceof BlockChest || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE)) {
             float dist = IafConfig.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getEntityBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {

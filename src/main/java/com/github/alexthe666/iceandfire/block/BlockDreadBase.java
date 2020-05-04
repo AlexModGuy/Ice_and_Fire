@@ -1,53 +1,50 @@
 package com.github.alexthe666.iceandfire.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
-    public static final PropertyBool PLAYER_PLACED = PropertyBool.create("player_placed");
+    public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
-    public BlockDreadBase(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
-        super(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(PLAYER_PLACED, Boolean.valueOf(false)));
+    public BlockDreadBase(Material materialIn, String gameName, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
+        super(materialIn, gameName, toolUsed, toolStrength, hardness, resistance, sound);
+        this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
     public BlockDreadBase(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, slippery);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(PLAYER_PLACED, Boolean.valueOf(false)));
+        super(materialIn, gameName, toolUsed, toolStrength, hardness, resistance, sound, slippery);
+        this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
-    public BlockDreadBase(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound) {
-        super(materialIn, gameName, name, hardness, resistance, sound);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(PLAYER_PLACED, Boolean.valueOf(false)));
-    }
 
     @Override
-    public float getBlockHardness(BlockState blockState, World worldIn, BlockPos pos) {
-        return blockState.getValue(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
+    public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
+        return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(PLAYER_PLACED, Boolean.valueOf(meta > 0));
+        return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));
     }
 
     public int getMetaFromState(BlockState state) {
-        return state.getValue(PLAYER_PLACED).booleanValue() ? 1 : 0;
+        return state.get(PLAYER_PLACED) ? 1 : 0;
     }
 
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, PLAYER_PLACED);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(PLAYER_PLACED);
     }
 
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(PLAYER_PLACED, true);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(PLAYER_PLACED, true);
     }
 
 }

@@ -1,185 +1,106 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class IafBlockRegistry {
 
     public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_STEP);
 
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":lectern")
-    public static Block lectern = new BlockLectern();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":podium")
-    public static Block podium = new BlockPodium();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_lily")
-    public static Block fire_lily = new BlockElementalFlower(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frost_lily")
-    public static Block frost_lily = new BlockElementalFlower(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":goldpile")
-    public static Block goldPile = new BlockGoldPile();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silverpile")
-    public static Block silverPile = new BlockSilverPile();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_ore")
-    public static Block silverOre = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sapphire_ore")
-    public static Block sapphireOre = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_block")
-    public static Block silverBlock = new BlockGeneric(Material.IRON, "silver_block", "iceandfire.silverBlock", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sapphire_block")
-    public static Block sapphireBlock = new BlockGeneric(Material.IRON, "sapphire_block", "iceandfire.sapphireBlock", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_dirt")
-    public static Block charedDirt = new BlockReturningState(Material.GROUND, "chared_dirt", "iceandfire.charedDirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_grass")
-    public static Block charedGrass = new BlockReturningState(Material.GRASS, "chared_grass", "iceandfire.charedGrass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_stone")
-    public static Block charedStone = new BlockReturningState(Material.ROCK, "chared_stone", "iceandfire.charedStone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_cobblestone")
-    public static Block charedCobblestone = new BlockReturningState(Material.ROCK, "chared_cobblestone", "iceandfire.charedCobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_gravel")
-    public static Block charedGravel = new BlockFallingReturningState(Material.GROUND, "chared_gravel", "iceandfire.charedGravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chared_grass_path")
-    public static Block charedGrassPath = new BlockCharedPath(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":ash")
-    public static Block ash = new BlockFallingGeneric(Material.SAND, "ash", "iceandfire.ash", "shovel", 0, 0.5F, 0F, SoundType.SAND);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_dirt")
-    public static Block frozenDirt = new BlockReturningState(Material.GROUND, "frozen_dirt", "iceandfire.frozenDirt", "shovel", 0, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_grass")
-    public static Block frozenGrass = new BlockReturningState(Material.GRASS, "frozen_grass", "iceandfire.frozenGrass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_stone")
-    public static Block frozenStone = new BlockReturningState(Material.ROCK, "frozen_stone", "iceandfire.frozenStone", "pickaxe", 0, 1.5F, 10.0F, SoundType.GLASS, true, Blocks.STONE.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_cobblestone")
-    public static Block frozenCobblestone = new BlockReturningState(Material.ROCK, "frozen_cobblestone", "iceandfire.frozenCobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.getDefaultState());
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_gravel")
-    public static Block frozenGravel = new BlockFallingReturningState(Material.GROUND, "frozen_gravel", "iceandfire.frozenGravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_grass_path")
-    public static Block frozenGrassPath = new BlockCharedPath(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frozen_splinters")
-    public static Block frozenSplinters = new BlockGeneric(Material.WOOD, "frozen_splinters", "iceandfire.frozenSplinters", "pickaxe", 0, 2.0F, 10.0F, SoundType.GLASS, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_ice")
-    public static Block dragon_ice = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "iceandfire.dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_ice_spikes")
-    public static Block dragon_ice_spikes = new BlockIceSpikes();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":nest")
-    public static Block nest = new BlockGeneric(Material.GRASS, "nest", "iceandfire.nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
+    public static final Block LECTERN = new BlockLectern();
+    public static final Block PODIUM_OAK = new BlockPodium("oak");
+    public static final Block PODIUM_BIRCH = new BlockPodium("birch");
+    public static final Block PODIUM_SPRUCE = new BlockPodium("spruce");
+    public static final Block PODIUM_JUNGLE = new BlockPodium("jungle");
+    public static final Block PODIUM_DARK_OAK = new BlockPodium("dark_oak");
+    public static final Block PODIUM_ACACIA = new BlockPodium("acacia");
+    public static final Block FIRE_LILY = new BlockElementalFlower(true);
+    public static final Block FROST_LILY = new BlockElementalFlower(false);
+    public static final Block GOLD_PILE = new BlockGoldPile();
+    public static final Block SILVER_PILE = new BlockSilverPile();
+    public static final Block SILVER_ORE = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
+    public static final Block SAPPHIRE_ORE = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
+    public static final Block SILVER_BLOCK = new BlockGeneric(Material.IRON, "silver_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
+    public static final Block SAPPHIRE_BLOCK = new BlockGeneric(Material.IRON, "sapphire_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
+    public static final Block CHARRED_DIRT = new BlockReturningState(Material.EARTH, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
+    public static final Block CHARRED_GRASS = new BlockReturningState(Material.PLANTS, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS.getDefaultState());
+    public static final Block CHARRED_STONE = new BlockReturningState(Material.ROCK, "chared_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
+    public static final Block CHARRED_COBBLESTONE = new BlockReturningState(Material.ROCK, "chared_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
+    public static final Block CHARRED_GRAVEL = new BlockFallingReturningState(Material.EARTH, "chared_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND, Blocks.GRAVEL.getDefaultState());
+    public static final Block CHARRED_GRASS_PATH = new BlockCharedPath(true);
+    public static final Block ASH = new BlockFallingGeneric(Material.SAND, "ash", "shovel", 0, 0.5F, 0F, SoundType.SAND);
+    public static final Block FROZEN_DIRT = new BlockReturningState(Material.EARTH, "frozen_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.getDefaultState());
+    public static final Block FROZEN_GRASS = new BlockReturningState(Material.PLANTS, "frozen_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS.getDefaultState());
+    public static final Block FROZEN_STONE = new BlockReturningState(Material.ROCK, "frozen_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.GLASS, true, Blocks.STONE.getDefaultState());
+    public static final Block FROZEN_COBBLESTONE = new BlockReturningState(Material.ROCK, "frozen_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.getDefaultState());
+    public static final Block FROZEN_GRAVEL = new BlockFallingReturningState(Material.EARTH, "frozen_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.getDefaultState());
+    public static final Block FROZEN_GRASS_PATH = new BlockCharedPath(false);
+    public static final Block FROZEN_SPLINTERS = new BlockGeneric(Material.WOOD, "frozen_splinters", "pickaxe", 0, 2.0F, 10.0F, SoundType.GLASS, true);
+    public static final Block DRAGON_ICE = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
+    public static final Block DRAGON_ICE_SPIKES = new BlockIceSpikes();
+    public static final Block NEST = new BlockGeneric(Material.PLANTS, "nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
 
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_red")
-    public static Block dragonscale_red = new BlockDragonScales("dragonscale_red", EnumDragonEgg.RED);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_green")
-    public static Block dragonscale_green = new BlockDragonScales("dragonscale_green", EnumDragonEgg.GREEN);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_bronze")
-    public static Block dragonscale_bronze = new BlockDragonScales("dragonscale_bronze", EnumDragonEgg.BRONZE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_gray")
-    public static Block dragonscale_gray = new BlockDragonScales("dragonscale_gray", EnumDragonEgg.GRAY);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_blue")
-    public static Block dragonscale_blue = new BlockDragonScales("dragonscale_blue", EnumDragonEgg.BLUE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_white")
-    public static Block dragonscale_white = new BlockDragonScales("dragonscale_white", EnumDragonEgg.WHITE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_sapphire")
-    public static Block dragonscale_sapphire = new BlockDragonScales("dragonscale_sapphire", EnumDragonEgg.SAPPHIRE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscale_silver")
-    public static Block dragonscale_silver = new BlockDragonScales("dragonscale_silver", EnumDragonEgg.SILVER);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_bone_block")
-    public static Block dragon_bone_block = new BlockDragonBone();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_bone_wall")
-    public static Block dragon_bone_block_wall = new BlockDragonBoneWall();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_brick")
-    public static Block dragonforge_fire_brick = new BlockDragonforgeBricks(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_brick")
-    public static Block dragonforge_ice_brick = new BlockDragonforgeBricks(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_input")
-    public static Block dragonforge_fire_input = new BlockDragonforgeInput(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_input")
-    public static Block dragonforge_ice_input = new BlockDragonforgeInput(false);
+    public static final Block DRAGON_SCALE_RED = new BlockDragonScales("dragonscale_red", EnumDragonEgg.RED);
+    public static final Block DRAGON_SCALE_GREEN = new BlockDragonScales("dragonscale_green", EnumDragonEgg.GREEN);
+    public static final Block DRAGON_SCALE_BRONZE = new BlockDragonScales("dragonscale_bronze", EnumDragonEgg.BRONZE);
+    public static final Block DRAGON_SCALE_GRAY = new BlockDragonScales("dragonscale_gray", EnumDragonEgg.GRAY);
+    public static final Block DRAGON_SCALE_BLUE = new BlockDragonScales("dragonscale_blue", EnumDragonEgg.BLUE);
+    public static final Block DRAGON_SCALE_WHITE = new BlockDragonScales("dragonscale_white", EnumDragonEgg.WHITE);
+    public static final Block DRAGON_SCALE_SAPPHIRE = new BlockDragonScales("dragonscale_sapphire", EnumDragonEgg.SAPPHIRE);
+    public static final Block DRAGON_SCALE_SILVER = new BlockDragonScales("dragonscale_silver", EnumDragonEgg.SILVER);
+    public static final Block DRAGON_BONE_BLOCK = new BlockDragonBone();
+    public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(Block.Properties.from(IafBlockRegistry.DRAGON_BONE_BLOCK));
+    public static final Block DRAGONFORGE_FIRE_BRICK = new BlockDragonforgeBricks(true);
+    public static final Block DRAGONFORGE_ICE_BRICK = new BlockDragonforgeBricks(false);
+    public static final Block DRAGONFORGE_FIRE_INPUT = new BlockDragonforgeInput(true);
+    public static final Block DRAGONFORGE_ICE_INPUT = new BlockDragonforgeInput(false);
 
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core_disabled")
-    public static Block dragonforge_fire_core = new BlockDragonforgeCore(true, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core_disabled")
-    public static Block dragonforge_ice_core = new BlockDragonforgeCore(false, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_fire_core")
-    public static Block dragonforge_fire_core_disabled = new BlockDragonforgeCore(true, false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonforge_ice_core")
-    public static Block dragonforge_ice_core_disabled = new BlockDragonforgeCore(false, false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":egginice")
-    public static Block eggInIce = new BlockEggInIce();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_house")
-    public static Block pixieHouse = new BlockPixieHouse();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_empty")
-    public static Block jar_empty = new BlockJar(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":jar_pixie")
-    public static Block jar_pixie = new BlockJar(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin")
-    public static Block myrmex_resin = new BlockMyrmexResin(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_resin_sticky")
-    public static Block myrmex_resin_sticky = new BlockMyrmexResin(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":desert_myrmex_cocoon")
-    public static Block desert_myrmex_cocoon = new BlockMyrmexCocoon(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":jungle_myrmex_cocoon")
-    public static Block jungle_myrmex_cocoon = new BlockMyrmexCocoon(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_biolight")
-    public static Block myrmex_desert_biolight = new BlockMyrmexBiolight(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_biolight")
-    public static Block myrmex_jungle_biolight = new BlockMyrmexBiolight(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_block")
-    public static Block myrmex_desert_resin_block = new BlockMyrmexConnectedResin(false, false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_block")
-    public static Block myrmex_jungle_resin_block = new BlockMyrmexConnectedResin(true, false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin_glass")
-    public static Block myrmex_desert_resin_glass = new BlockMyrmexConnectedResin(false, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin_glass")
-    public static Block myrmex_jungle_resin_glass = new BlockMyrmexConnectedResin(true, true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_block")
-    public static Block dragonsteel_fire_block = new BlockGeneric(Material.IRON, "dragonsteel_fire_block", "iceandfire.dragonsteel_fire_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_block")
-    public static Block dragonsteel_ice_block = new BlockGeneric(Material.IRON, "dragonsteel_ice_block", "iceandfire.dragonsteel_ice_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone")
-    public static BlockDreadBase dread_stone = new BlockDreadBase(Material.ROCK, "dread_stone", "iceandfire.dread_stone", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_bricks")
-    public static BlockDreadBase dread_stone_bricks = new BlockDreadBase(Material.ROCK, "dread_stone_bricks", "iceandfire.dread_stone_bricks", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_bricks_chiseled")
-    public static BlockDreadBase dread_stone_bricks_chiseled = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_chiseled", "iceandfire.dread_stone_bricks_chiseled", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_bricks_cracked")
-    public static BlockDreadBase dread_stone_bricks_cracked = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_cracked", "iceandfire.dread_stone_bricks_cracked", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_bricks_mossy")
-    public static BlockDreadBase dread_stone_bricks_mossy = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_mossy", "iceandfire.dread_stone_bricks_mossy", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_tile")
-    public static BlockDreadBase dread_stone_tile = new BlockDreadBase(Material.ROCK, "dread_stone_tile", "iceandfire.dread_stone_tile", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_face")
-    public static Block dread_stone_face = new BlockDreadStoneFace();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_torch")
-    public static Block dread_torch = new BlockDreadTorch();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_stairs")
-    public static Block dread_stone_bricks_stairs = new BlockGenericStairs(dread_stone_bricks.getDefaultState(), "dread_stone_stairs").setHardness(20F);
-     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_double_slab")
-    public static BlockGenericSlab dread_stone_bricks_double_slab = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_stone_slab")
-    public static BlockGenericSlab dread_stone_bricks_slab = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_log")
-    public static Block dreadwood_log = new BlockDreadWoodLog();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_planks")
-    public static BlockDreadBase dreadwood_planks = new BlockDreadBase(Material.WOOD, "dreadwood_planks", "iceandfire.dreadwood_planks", "axe", 3, 20.0F, 100000.0F, SoundType.WOOD);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dreadwood_planks_lock")
-    public static Block dreadwood_planks_lock = new BlockDreadWoodLock();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_portal")
-    public static Block dread_portal = new BlockDreadPortal();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_spawner")
-    public static Block dread_spawner = new BlockDreadSpawner();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":burnt_torch")
-    public static Block burnt_torch = new BlockBurntTorch();
-
-    static {
-        GameRegistry.registerTileEntity(TileEntityDummyGorgonHead.class, "dummyGorgonHeadIdle");
-        GameRegistry.registerTileEntity(TileEntityDummyGorgonHeadActive.class, "dummyGorgonHeadActive");
-        GameRegistry.registerTileEntity(TileEntityMyrmexCocoon.class, "myrmexCocoon");
-        GameRegistry.registerTileEntity(TileEntityDragonforge.class, "dragonforge");
-        GameRegistry.registerTileEntity(TileEntityDragonforgeInput.class, "dragonforgeInput");
-        GameRegistry.registerTileEntity(TileEntityDragonforgeBrick.class, "dragonforgeBrick");
-    }
-
+    public static final Block DRAGONFORGE_FIRE_CORE = new BlockDragonforgeCore(true, true);
+    public static final Block DRAGONFORGE_ICE_CORE = new BlockDragonforgeCore(false, true);
+    public static final Block DRAGONFORGE_FIRE_CORE_DISABLED = new BlockDragonforgeCore(true, false);
+    public static final Block DRAGONFORGE_ICE_CORE_DISABLED = new BlockDragonforgeCore(false, false);
+    public static final Block EGG_IN_ICE = new BlockEggInIce();
+    public static final Block PIXIE_HOUSE_MUSHROOM_RED = new BlockPixieHouse("mushroom_red");
+    public static final Block PIXIE_HOUSE_MUSHROOM_BROWN = new BlockPixieHouse("mushroom_brown");
+    public static final Block PIXIE_HOUSE_OAK = new BlockPixieHouse("oak");
+    public static final Block PIXIE_HOUSE_BIRCH = new BlockPixieHouse("birch");
+    public static final Block PIXIE_HOUSE_SPRUCE = new BlockPixieHouse("spruce");
+    public static final Block PIXIE_HOUSE_DARK_OAK = new BlockPixieHouse("dark_oak");
+    public static final Block JAR_EMPTY = new BlockJar(true);
+    public static final Block JAR_PIXIE = new BlockJar(false);
+    public static final Block MYRMEX_RESIN = new BlockMyrmexResin(false);
+    public static final Block MYRMEX_RESIN_STICKY = new BlockMyrmexResin(true);
+    public static final Block DESERT_MYRMEX_COCOON = new BlockMyrmexCocoon(false);
+    public static final Block JUNGLE_MYRMEX_COCOON = new BlockMyrmexCocoon(true);
+    public static final Block MYRMEX_DESERT_BIOLIGHT = new BlockMyrmexBiolight(false);
+    public static final Block MYRMEX_JUNGLE_BIOLIGHT = new BlockMyrmexBiolight(true);
+    public static final Block MYRMEX_DESERT_RESIN_BLOCK = new BlockMyrmexConnectedResin(false, false);
+    public static final Block MYRMEX_JUNGLE_RESIN_BLOCK = new BlockMyrmexConnectedResin(true, false);
+    public static final Block MYRMEX_DESERT_RESIN_GLASS = new BlockMyrmexConnectedResin(false, true);
+    public static final Block MYRMEX_JUNGLE_RESIN_GLASS = new BlockMyrmexConnectedResin(true, true);
+    public static final Block DRAGONSTEEL_FIRE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_fire_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final Block DRAGONSTEEL_ICE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_ice_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final BlockDreadBase DREAD_STONE = new BlockDreadBase(Material.ROCK, "dread_stone", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS = new BlockDreadBase(Material.ROCK, "dread_stone_bricks", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_CHISELED = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_chiseled", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_CRACKED = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_cracked", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_MOSSY = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_mossy", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_TILE = new BlockDreadBase(Material.ROCK, "dread_stone_tile", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
+    public static final Block DREAD_STONE_FACE = new BlockDreadStoneFace();
+    public static final Block DREAD_TORCH = new BlockDreadTorch();
+    public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.getDefaultState(), "dread_stone_stairs");
+    public static final BlockGenericSlab DREAD_STONE_BRICKS_DOUBLE_SLAB = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
+    public static final BlockGenericSlab DREAD_STONE_BRICKS_SLAB = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
+    public static final Block DREADWOOD_LOG = new BlockDreadWoodLog();
+    public static final BlockDreadBase DREADWOOD_PLANKS = new BlockDreadBase(Material.WOOD, "dreadwood_planks", "axe", 3, 20.0F, 100000.0F, SoundType.WOOD);
+    public static final Block DREADWOOD_PLANKS_LOCK = new BlockDreadWoodLock();
+    public static final Block DREAD_PORTAL = new BlockDreadPortal();
+    public static final Block DREAD_SPAWNER = new BlockDreadSpawner();
+    public static final Block BURNT_TORCH = new BlockBurntTorch();
 }

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockDragonforgeInput extends BlockContainer implements IDragonProof {
+public class BlockDragonforgeInput extends ContainerBlock implements IDragonProof {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
     private boolean isFire;
 
@@ -35,7 +35,7 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
         this.setTranslationKey("iceandfire.dragonforge_" + (isFire ? "fire" : "ice") + "_input");
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_input");
         this.isFire = isFire;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().with(ACTIVE, Boolean.valueOf(false)));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(ACTIVE, Boolean.valueOf(meta > 0));
+        return this.getDefaultState().with(ACTIVE, Boolean.valueOf(meta > 0));
     }
 
     public EnumBlockRenderType getRenderType(BlockState state) {
@@ -72,7 +72,7 @@ public class BlockDragonforgeInput extends BlockContainer implements IDragonProo
     }
 
     public int getMetaFromState(BlockState state) {
-        return state.getValue(ACTIVE).booleanValue() ? 1 : 0;
+        return state.get(ACTIVE).booleanValue() ? 1 : 0;
     }
 
     protected BlockStateContainer createBlockState() {

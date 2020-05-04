@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 public class DragonAIMate extends EntityAIBase {
-    private static final BlockState NEST = IafBlockRegistry.nest.getDefaultState();
+    private static final BlockState NEST = IafBlockRegistry.NEST.getDefaultState();
     private final EntityDragonBase dragon;
     World theWorld;
     int spawnBabyDelay;

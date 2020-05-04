@@ -84,9 +84,9 @@ public class DragonPosWorldData extends WorldSavedData {
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             nbttagcompound.setUniqueId("DragonUUID", pair.getKey());
-            nbttagcompound.setInteger("DragonPosX", pair.getValue().getX());
-            nbttagcompound.setInteger("DragonPosY", pair.getValue().getY());
-            nbttagcompound.setInteger("DragonPosZ", pair.getValue().getZ());
+            nbttagcompound.setInteger("DragonPosX", pair.get().getX());
+            nbttagcompound.setInteger("DragonPosY", pair.get().getY());
+            nbttagcompound.setInteger("DragonPosZ", pair.get().getZ());
             nbttaglist.appendTag(nbttagcompound);
         }
         compound.setTag("DragonMap", nbttaglist);

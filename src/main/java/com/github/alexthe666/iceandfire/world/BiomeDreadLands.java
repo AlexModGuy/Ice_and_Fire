@@ -16,20 +16,20 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import java.util.Random;
 
 public class BiomeDreadLands extends Biome {
-    protected static final BlockState STONE = IafBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState ICE = IafBlockRegistry.dragon_ice.getDefaultState();
-    protected static final BlockState DIRT = IafBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState GRASS = IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState GRAVEL = IafBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState DRAGON_ICE = IafBlockRegistry.dragon_ice.getDefaultState();
+    protected static final BlockState STONE = IafBlockRegistry.FROZEN_STONE.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState ICE = IafBlockRegistry.DRAGON_ICE.getDefaultState();
+    protected static final BlockState DIRT = IafBlockRegistry.FROZEN_DIRT.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState GRASS = IafBlockRegistry.FROZEN_GRASS.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState GRAVEL = IafBlockRegistry.FROZEN_GRAVEL.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState DRAGON_ICE = IafBlockRegistry.DRAGON_ICE.getDefaultState();
     private static final WorldGenDreadwoodTree DREADWOOD_TREE = new WorldGenDreadwoodTree();
     private static final WorldGenDreadSpike DREAD_SPIKE = new WorldGenDreadSpike();
     private static final WorldGenDreadRuin DREAD_RUIN = new WorldGenDreadRuin();
 
     public BiomeDreadLands() {
         super(new BiomeProperties("dreadlands").setTemperature(-1.0F).setBaseHeight(1.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(3.5F).setSnowEnabled());
-        this.topBlock = IafBlockRegistry.frozenGrass.getDefaultState();
-        this.fillerBlock = IafBlockRegistry.frozenDirt.getDefaultState();
+        this.topBlock = IafBlockRegistry.FROZEN_GRASS.getDefaultState();
+        this.fillerBlock = IafBlockRegistry.FROZEN_DIRT.getDefaultState();
         this.setRegistryName(IceAndFire.MODID, "Dreadlands");
         this.spawnableCreatureList.clear();
         this.spawnableMonsterList.clear();
@@ -90,7 +90,7 @@ public class BiomeDreadLands extends Biome {
 
                 if (BlockState2.getMaterial() == Material.AIR) {
                     j = -1;
-                } else if (BlockState2.getBlock() == IafBlockRegistry.frozenStone) {
+                } else if (BlockState2.getBlock() == IafBlockRegistry.FROZEN_STONE) {
                     if (j == -1) {
                         if (k <= 0) {
                             BlockState = AIR;
@@ -123,7 +123,7 @@ public class BiomeDreadLands extends Biome {
                         --j;
                         chunkPrimerIn.setBlockState(i1, j1, l, BlockState1);
 
-                        if (j == 0 && BlockState1.getBlock() == IafBlockRegistry.frozenDirt && k > 1) {
+                        if (j == 0 && BlockState1.getBlock() == IafBlockRegistry.FROZEN_DIRT && k > 1) {
                             j = rand.nextInt(4) + Math.max(0, j1 - 63);
                             BlockState1 = STONE;
                         }

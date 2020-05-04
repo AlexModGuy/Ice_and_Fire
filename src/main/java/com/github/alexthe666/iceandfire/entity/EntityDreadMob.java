@@ -8,6 +8,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityDreadMob extends EntityMob implements IDreadMob {
+public class EntityDreadMob extends MonsterEntity implements IDreadMob {
 
     protected static final DataParameter<Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.createKey(EntityDreadMob.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 

@@ -32,7 +32,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
     @Override
     public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
         if (worldIn.rand.nextFloat() <= integrity) {
-            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_stone_bricks) {
+            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
                 BlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
@@ -45,7 +45,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, Blocks.CHEST.getDefaultState(), tag);
                 return newInfo;
             }
-            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_spawner) {
+            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
                 NBTTagCompound tag = blockInfoIn.tileentityData == null ? new NBTTagCompound() : blockInfoIn.tileentityData;
                 NBTTagCompound spawnData = new NBTTagCompound();
                 Random rand = new Random(worldIn.getSeed() + pos.toLong());
@@ -55,7 +55,7 @@ public class DreadRuinProcessor implements ITemplateProcessor {
                     tag.removeTag("SpawnPotentials");
                     tag.setTag("SpawnData", spawnData.copy());
                 }
-                Template.BlockInfo newInfo = new Template.BlockInfo(pos, IafBlockRegistry.dread_spawner.getDefaultState(), tag);
+                Template.BlockInfo newInfo = new Template.BlockInfo(pos, IafBlockRegistry.DREAD_SPAWNER.getDefaultState(), tag);
                 return newInfo;
 
             }
@@ -82,11 +82,11 @@ public class DreadRuinProcessor implements ITemplateProcessor {
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
-            return IafBlockRegistry.dread_stone_bricks.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
         } else if (rand < 0.9) {
-            return IafBlockRegistry.dread_stone_bricks_cracked.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
         } else {
-            return IafBlockRegistry.dread_stone_bricks_mossy.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
         }
     }
 }

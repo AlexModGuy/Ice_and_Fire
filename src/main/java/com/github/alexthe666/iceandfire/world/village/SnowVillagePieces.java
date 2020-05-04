@@ -181,11 +181,11 @@ public class SnowVillagePieces {
             }
 
             BlockState BlockState = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
-            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-            BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.SOUTH));
+            BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.EAST));
             BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState());
-            BlockState BlockState5 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState5 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
             BlockState BlockState6 = this.getBiomeSpecificBlockState(Blocks.OAK_FENCE.getDefaultState());
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 5, 4, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 8, 0, 5, BlockState, BlockState, false);
@@ -251,7 +251,7 @@ public class SnowVillagePieces {
             if (this.getBlockStateFromPos(worldIn, 1, 0, -1, structureBoundingBoxIn).getMaterial() == Material.AIR && this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getMaterial() != Material.AIR) {
                 this.setBlockState(worldIn, BlockState5, 1, 0, -1, structureBoundingBoxIn);
 
-                if (this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.frozenGrassPath) {
+                if (this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.FROZEN_GRASS_PATH) {
                     this.setBlockState(worldIn, Blocks.GRASS.getDefaultState(), 1, -1, -1, structureBoundingBoxIn);
                 }
             }
@@ -327,10 +327,10 @@ public class SnowVillagePieces {
             }
 
             BlockState BlockState = Blocks.COBBLESTONE.getDefaultState();
-            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.WEST));
             BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState());
-            BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
             BlockState BlockState5 = this.getBiomeSpecificBlockState(Blocks.LOG.getDefaultState());
             BlockState BlockState6 = this.getBiomeSpecificBlockState(Blocks.OAK_FENCE.getDefaultState());
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 0, 9, 4, 6, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
@@ -378,7 +378,7 @@ public class SnowVillagePieces {
                 if (this.getBlockStateFromPos(worldIn, i, 0, -1, structureBoundingBoxIn).getMaterial() == Material.AIR && this.getBlockStateFromPos(worldIn, i, -1, -1, structureBoundingBoxIn).getMaterial() != Material.AIR) {
                     this.setBlockState(worldIn, BlockState4, i, 0, -1, structureBoundingBoxIn);
 
-                    if (this.getBlockStateFromPos(worldIn, i, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.frozenGrassPath) {
+                    if (this.getBlockStateFromPos(worldIn, i, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.FROZEN_GRASS_PATH) {
                         this.setBlockState(worldIn, Blocks.GRASS.getDefaultState(), i, -1, -1, structureBoundingBoxIn);
                     }
                 }
@@ -436,10 +436,10 @@ public class SnowVillagePieces {
             }
 
             BlockState BlockState = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
-            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-            BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
-            BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.SOUTH));
+            BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.EAST));
+            BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.OAK_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.WEST));
             BlockState BlockState5 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState());
             BlockState BlockState6 = this.getBiomeSpecificBlockState(Blocks.LOG.getDefaultState());
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 4, 4, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
@@ -534,7 +534,7 @@ public class SnowVillagePieces {
             if (this.getBlockStateFromPos(worldIn, 2, 0, -1, structureBoundingBoxIn).getMaterial() == Material.AIR && this.getBlockStateFromPos(worldIn, 2, -1, -1, structureBoundingBoxIn).getMaterial() != Material.AIR) {
                 this.setBlockState(worldIn, BlockState7, 2, 0, -1, structureBoundingBoxIn);
 
-                if (this.getBlockStateFromPos(worldIn, 2, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.frozenGrassPath) {
+                if (this.getBlockStateFromPos(worldIn, 2, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.FROZEN_GRASS_PATH) {
                     this.setBlockState(worldIn, Blocks.GRASS.getDefaultState(), 2, -1, -1, structureBoundingBoxIn);
                 }
             }
@@ -670,8 +670,8 @@ public class SnowVillagePieces {
          * Mineshafts at the end, it adds Fences...
          */
         public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
-            BlockState BlockState = this.getBiomeSpecificBlockState(IafBlockRegistry.frozenGrassPath.getDefaultState());
-            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+            BlockState BlockState = this.getBiomeSpecificBlockState(IafBlockRegistry.FROZEN_GRASS_PATH.getDefaultState());
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
             BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.GRAVEL.getDefaultState());
             BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
 
@@ -1017,11 +1017,11 @@ public class SnowVillagePieces {
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SANDSTONE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.STONE_STAIRS) {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SANDSTONE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.GRAVEL) {
@@ -1029,15 +1029,15 @@ public class SnowVillagePieces {
                 }
             } else if (this.field_189928_h == 3) {
                 if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2) {
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLog.LOG_AXIS, blockstateIn.getValue(BlockLog.LOG_AXIS));
+                    return Blocks.LOG.getDefaultState().with(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).with(BlockLog.LOG_AXIS, blockstateIn.get(BlockLog.LOG_AXIS));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.PLANKS) {
-                    return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE);
+                    return Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.SPRUCE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SPRUCE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_FENCE) {
@@ -1045,19 +1045,19 @@ public class SnowVillagePieces {
                 }
             } else if (this.field_189928_h == 2) {
                 if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2) {
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).withProperty(BlockLog.LOG_AXIS, blockstateIn.getValue(BlockLog.LOG_AXIS));
+                    return Blocks.LOG2.getDefaultState().with(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).with(BlockLog.LOG_AXIS, blockstateIn.get(BlockLog.LOG_AXIS));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.PLANKS) {
-                    return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA);
+                    return Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.ACACIA_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.ACACIA_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.COBBLESTONE) {
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
+                    return Blocks.LOG2.getDefaultState().with(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_FENCE) {
@@ -1080,7 +1080,7 @@ public class SnowVillagePieces {
 
         protected void func_189926_a(World p_189926_1_, EnumFacing p_189926_2_, int p_189926_3_, int p_189926_4_, int p_189926_5_, StructureBoundingBox p_189926_6_) {
             if (!this.field_189929_i) {
-                this.setBlockState(p_189926_1_, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, p_189926_2_), p_189926_3_, p_189926_4_, p_189926_5_, p_189926_6_);
+                this.setBlockState(p_189926_1_, Blocks.TORCH.getDefaultState().with(BlockTorch.FACING, p_189926_2_), p_189926_3_, p_189926_4_, p_189926_5_, p_189926_6_);
             }
         }
 
@@ -1258,9 +1258,9 @@ public class SnowVillagePieces {
                 this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 6 - 1, 0);
             }
 
-            BlockState BlockState = this.getBiomeSpecificBlockState(IafBlockRegistry.frozenCobblestone.getDefaultState());
+            BlockState BlockState = this.getBiomeSpecificBlockState(IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState());
             BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.SNOW.getDefaultState());
-            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
+            BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.STONE_STAIRS.getDefaultState().with(BlockStairs.FACING, EnumFacing.NORTH));
             BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.PACKED_ICE.getDefaultState());
             BlockState BlockState4 = this.getBiomeSpecificBlockState(Blocks.OAK_FENCE.getDefaultState());
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 1, 3, 5, 4, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
@@ -1289,8 +1289,8 @@ public class SnowVillagePieces {
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 1, 3, 3, 3, BlockState1, BlockState1, false);
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 0, 2, 3, 0, BlockState1, BlockState1, false);
             this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 4, 2, 3, 4, BlockState1, BlockState1, false);
-            this.setBlockState(worldIn, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockStainedGlassPane.COLOR, EnumDyeColor.LIGHT_BLUE), 0, 2, 2, structureBoundingBoxIn);
-            this.setBlockState(worldIn, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockStainedGlassPane.COLOR, EnumDyeColor.LIGHT_BLUE), 3, 2, 2, structureBoundingBoxIn);
+            this.setBlockState(worldIn, Blocks.STAINED_GLASS_PANE.getDefaultState().with(BlockStainedGlassPane.COLOR, EnumDyeColor.LIGHT_BLUE), 0, 2, 2, structureBoundingBoxIn);
+            this.setBlockState(worldIn, Blocks.STAINED_GLASS_PANE.getDefaultState().with(BlockStainedGlassPane.COLOR, EnumDyeColor.LIGHT_BLUE), 3, 2, 2, structureBoundingBoxIn);
 
             if (this.tablePosition > 0) {
                 this.setBlockState(worldIn, BlockState4, this.tablePosition, 1, 3, structureBoundingBoxIn);
@@ -1304,7 +1304,7 @@ public class SnowVillagePieces {
             if (this.getBlockStateFromPos(worldIn, 1, 0, -1, structureBoundingBoxIn).getMaterial() == Material.AIR && this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getMaterial() != Material.AIR) {
                 this.setBlockState(worldIn, BlockState2, 1, 0, -1, structureBoundingBoxIn);
 
-                if (this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.frozenGrassPath) {
+                if (this.getBlockStateFromPos(worldIn, 1, -1, -1, structureBoundingBoxIn).getBlock() == IafBlockRegistry.FROZEN_GRASS_PATH) {
                     this.setBlockState(worldIn, Blocks.GRASS.getDefaultState(), 1, -1, -1, structureBoundingBoxIn);
                 }
             }

@@ -153,7 +153,7 @@ public class GuiBestiary extends GuiScreen {
         switch (this.pageType) {
             case INTRODUCTION:
                 if (bookPages == 1) {
-                    drawItemStack(new ItemStack(IafBlockRegistry.sapphireOre), 30, 20, 2.5F);
+                    drawItemStack(new ItemStack(IafBlockRegistry.SAPPHIRE_ORE), 30, 20, 2.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.sapphireGem), 40, 60, 2F);
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
@@ -162,7 +162,7 @@ public class GuiBestiary extends GuiScreen {
                     boolean drawGold = Minecraft.getInstance().player.ticksExisted % 20 < 10;
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.silverNugget), 144, 34, 1.5F);
                     drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.silverNugget), 161, 34, 1.5F);
-                    drawItemStack(new ItemStack(drawGold ? IafBlockRegistry.goldPile : IafBlockRegistry.silverPile), 151, 7, 2F);
+                    drawItemStack(new ItemStack(drawGold ? IafBlockRegistry.GOLD_PILE : IafBlockRegistry.SILVER_PILE), 151, 7, 2F);
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
@@ -170,7 +170,7 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(Blocks.PLANKS), 161, 124, 1.5F);
                     drawItemStack(new ItemStack(Blocks.PLANKS), 161, 107, 1.5F);
                     drawItemStack(new ItemStack(Items.BOOK), 161, 91, 1.5F);
-                    drawItemStack(new ItemStack(IafBlockRegistry.lectern), 151, 78, 2F);
+                    drawItemStack(new ItemStack(IafBlockRegistry.LECTERN), 151, 78, 2F);
                 }
                 break;
             case FIREDRAGON:
@@ -294,15 +294,15 @@ public class GuiBestiary extends GuiScreen {
                 if (bookPages == 2) {
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawItemStack(new ItemStack(IafBlockRegistry.fire_lily), 5, 14, 2.5F);
-                    drawItemStack(new ItemStack(IafBlockRegistry.frost_lily), 30, 14, 2.5F);
+                    drawItemStack(new ItemStack(IafBlockRegistry.FIRE_LILY), 5, 14, 2.5F);
+                    drawItemStack(new ItemStack(IafBlockRegistry.FROST_LILY), 30, 14, 2.5F);
                     GL11.glPopMatrix();
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
                     boolean drawFire = Minecraft.getInstance().player.ticksExisted % 40 < 20;
-                    drawItemStack(new ItemStack(drawFire ? IafBlockRegistry.fire_lily : IafBlockRegistry.frost_lily), 161, 17, 1.5F);
+                    drawItemStack(new ItemStack(drawFire ? IafBlockRegistry.FIRE_LILY : IafBlockRegistry.FROST_LILY), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(Items.BOWL), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? Items.BLAZE_ROD : Items.PRISMARINE_CRYSTALS), 177, 17, 1.5F);
                     drawItemStack(new ItemStack(drawFire ? IafItemRegistry.fire_stew : IafItemRegistry.frost_stew), 151, 10, 2F);
@@ -531,7 +531,7 @@ public class GuiBestiary extends GuiScreen {
                     drawItemStack(new ItemStack(Blocks.GLASS), 160, 150, 1.5F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 199, 150, 1.5F);
                     GL11.glPopMatrix();
-                    drawItemStack(new ItemStack(IafBlockRegistry.jar_empty), 171, 85, 2F);
+                    drawItemStack(new ItemStack(IafBlockRegistry.JAR_EMPTY), 171, 85, 2F);
                     GL11.glPopMatrix();
                     GL11.glPopMatrix();
 

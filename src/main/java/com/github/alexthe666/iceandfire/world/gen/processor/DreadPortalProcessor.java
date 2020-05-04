@@ -24,9 +24,9 @@ public class DreadPortalProcessor implements ITemplateProcessor {
     public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
         if (worldIn.rand.nextFloat() <= integrity) {
             if (blockInfoIn.blockState.getBlock() == Blocks.DIAMOND_BLOCK) {
-                return new Template.BlockInfo(pos, IafBlockRegistry.dread_portal.getDefaultState(), null);
+                return new Template.BlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.getDefaultState(), null);
             }
-            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.dread_stone_bricks) {
+            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
                 BlockState state = getRandomCrackedBlock(null, worldIn.rand);
                 return new Template.BlockInfo(pos, state, null);
             }
@@ -39,11 +39,11 @@ public class DreadPortalProcessor implements ITemplateProcessor {
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3) {
-            return IafBlockRegistry.dread_stone_bricks.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
         } else if (rand < 0.6) {
-            return IafBlockRegistry.dread_stone_bricks_cracked.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
         } else {
-            return IafBlockRegistry.dread_stone_bricks_mossy.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
         }
     }
 }

@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockLectern extends BlockContainer {
+public class BlockLectern extends ContainerBlock {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public Item itemBlock;
 
@@ -37,7 +37,7 @@ public class BlockLectern extends BlockContainer {
         super(Material.WOOD);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH));
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.lectern");
@@ -100,18 +100,18 @@ public class BlockLectern extends BlockContainer {
 
     @SuppressWarnings("deprecation")
     public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+        return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
     }
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
+        return state.get(FACING).getHorizontalIndex();
     }
 
     @Override

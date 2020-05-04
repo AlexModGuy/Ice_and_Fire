@@ -38,7 +38,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 			setTranslationKey("iceandfire." + name + "_double");
 			this.setRegistryName(name + "_double");
 		} else {
-			BlockState = BlockState.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
+			BlockState = BlockState.with(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
 			setTranslationKey("iceandfire." + name);
 			this.setRegistryName(name);
 			setCreativeTab(IceAndFire.TAB_BLOCKS);
@@ -71,7 +71,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
     public BlockState getStateFromMeta(int meta) {
 		BlockState BlockState = this.getDefaultState();
 		if (!this.isDouble()) {
-			return BlockState.withProperty(HALF, meta == 0 ? BlockSlab.EnumBlockHalf.BOTTOM : BlockSlab.EnumBlockHalf.TOP);
+			return BlockState.with(HALF, meta == 0 ? BlockSlab.EnumBlockHalf.BOTTOM : BlockSlab.EnumBlockHalf.TOP);
 		} else {
 			return BlockState;
 		}
@@ -81,7 +81,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
     public int getMetaFromState(BlockState state) {
 		int i = 0;
 
-		if (!this.isDouble() && state.getValue(HALF) == BlockSlab.EnumBlockHalf.TOP) {
+		if (!this.isDouble() && state.get(HALF) == BlockSlab.EnumBlockHalf.TOP) {
 			i = 1;
 		}
 
@@ -173,7 +173,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 				Comparable<?> comparable = this.singleSlab.getTypeForItem(stack);
 				BlockState BlockState = worldIn.getBlockState(pos);
 				if (BlockState.getBlock() == this.singleSlab) {
-					BlockSlab.EnumBlockHalf blockslab$enumblockhalf = BlockState.getValue(BlockSlab.HALF);
+					BlockSlab.EnumBlockHalf blockslab$enumblockhalf = BlockState.get(BlockSlab.HALF);
 					if ((facing == EnumFacing.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP)) {
 						BlockState BlockState1 = this.doubleSlab.getDefaultState();
 						AxisAlignedBB axisalignedbb = BlockState1.getCollisionBoundingBox(worldIn, pos);
@@ -198,7 +198,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 			BlockState BlockState = worldIn.getBlockState(pos);
 
 			if (BlockState.getBlock() == this.singleSlab) {
-				boolean flag = BlockState.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP;
+				boolean flag = BlockState.get(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP;
 				if ((side == EnumFacing.UP && !flag || side == EnumFacing.DOWN && flag)) {
 					return true;
 				}

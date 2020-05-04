@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -28,15 +28,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
+public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public Item itemBlock;
 
-    public BlockPixieHouse() {
+    public BlockPixieHouse(String type) {
         super(Material.WOOD);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH));
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.pixie_house");
@@ -68,7 +68,7 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
         if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse) {
             meta = ((TileEntityPixieHouse) worldIn.getTileEntity(pos)).houseType;
         }
-        spawnAsEntity(worldIn, pos, new ItemStack(IafBlockRegistry.pixieHouse, 1, meta));
+        spawnAsEntity(worldIn, pos, new ItemStack(IafBlockRegistry.PIXIE_HOUSE, 1, meta));
         super.breakBlock(worldIn, pos, state);
     }
 
@@ -103,18 +103,18 @@ public class BlockPixieHouse extends BlockContainer implements ICustomRendered {
 
     @SuppressWarnings("deprecation")
     public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+        return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
     }
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
+        return state.get(FACING).getHorizontalIndex();
     }
 
     @Override

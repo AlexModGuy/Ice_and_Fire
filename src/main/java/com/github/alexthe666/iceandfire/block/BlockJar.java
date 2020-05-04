@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockJar extends BlockContainer implements ICustomRendered {
+public class BlockJar extends ContainerBlock implements ICustomRendered {
     private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
     public Item itemBlock;
     private boolean empty;
@@ -110,11 +110,11 @@ public class BlockJar extends BlockContainer implements ICustomRendered {
     }
 
     public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(IafBlockRegistry.jar_empty);
+        return Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY);
     }
 
     protected ItemStack getSilkTouchDrop(BlockState state) {
-        return new ItemStack(IafBlockRegistry.jar_empty);
+        return new ItemStack(IafBlockRegistry.JAR_EMPTY);
     }
 
     public boolean onBlockActivated(World world, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

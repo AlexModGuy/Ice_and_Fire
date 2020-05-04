@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BushBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
@@ -15,8 +16,7 @@ import thaumcraft.api.crafting.IInfusionStabiliser;
 
 import java.util.Random;
 
-@Optional.Interface(iface = "thaumcraft.api.crafting.IInfusionStabiliser", modid = "thaumcraft")
-public class BlockElementalFlower extends BlockBush implements IInfusionStabiliser {
+public class BlockElementalFlower extends BushBlock {
     public Item itemBlock;
 
     public BlockElementalFlower(boolean isFire) {
@@ -34,7 +34,7 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
 
     public boolean canStay(World worldIn, BlockPos pos) {
         BlockState soil = worldIn.getBlockState(pos.down());
-        if (this == IafBlockRegistry.fire_lily) {
+        if (this == IafBlockRegistry.FIRE_LILY) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
         } else {
             return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;
@@ -63,9 +63,4 @@ public class BlockElementalFlower extends BlockBush implements IInfusionStabilis
         return true;
     }
 
-    @Override
-    @Optional.Method(modid = "thaumcraft")
-    public boolean canStabaliseInfusion(World world, BlockPos pos) {
-        return true;
-    }
 }

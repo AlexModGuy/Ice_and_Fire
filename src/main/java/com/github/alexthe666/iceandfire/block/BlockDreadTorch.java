@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.TorchBlock;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockDreadTorch extends BlockTorch implements IDreadBlock {
+public class BlockDreadTorch extends TorchBlock implements IDreadBlock {
 
     public BlockDreadTorch() {
         super();
@@ -27,7 +28,7 @@ public class BlockDreadTorch extends BlockTorch implements IDreadBlock {
 
     @OnlyIn(Dist.CLIENT)
     public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        EnumFacing enumfacing = stateIn.getValue(FACING);
+        EnumFacing enumfacing = stateIn.get(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.6D;
         double d2 = (double) pos.getZ() + 0.5D;

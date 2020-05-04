@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
+public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
 
     public BlockDreadPortal() {
         super(Material.PORTAL);
@@ -99,7 +99,7 @@ public class BlockDreadPortal extends BlockContainer implements IDreadBlock {
     public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
         Block block = BlockState.getBlock();
-        return !BlockState.isOpaqueCube() && block != IafBlockRegistry.dread_portal;
+        return !BlockState.isOpaqueCube() && block != IafBlockRegistry.DREAD_PORTAL;
     }
 
     @Nullable

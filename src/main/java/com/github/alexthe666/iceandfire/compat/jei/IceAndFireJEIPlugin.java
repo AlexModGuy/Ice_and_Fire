@@ -35,13 +35,13 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.addRecipeHandlers(new FireDragonForgeRecipeHandler());
         registry.handleRecipes(DragonForgeRecipe.class, new FireDragonForgeFactory(), FIRE_DRAGON_FORGE_ID);
         registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.dragonforge_fire_core_disabled), FIRE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.dragonforge_fire_core), FIRE_DRAGON_FORGE_ID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE), FIRE_DRAGON_FORGE_ID);
 
         registry.addRecipes(IafRecipeRegistry.ICE_FORGE_RECIPES, ICE_DRAGON_FORGE_ID);
         registry.addRecipeHandlers(new IceDragonForgeRecipeHandler());
         registry.handleRecipes(DragonForgeRecipe.class, new IceDragonForgeFactory(), ICE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.dragonforge_ice_core_disabled), ICE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.dragonforge_ice_core), ICE_DRAGON_FORGE_ID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED), ICE_DRAGON_FORGE_ID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE), ICE_DRAGON_FORGE_ID);
         addDescription(registry, new ItemStack(IafItemRegistry.fire_dragon_blood));
         addDescription(registry, new ItemStack(IafItemRegistry.ice_dragon_blood));
         addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_red));

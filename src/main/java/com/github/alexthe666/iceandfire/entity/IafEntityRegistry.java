@@ -5,16 +5,19 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafEntityRegistry {
 
     public static final EntityType<EntityDragonEgg> DRAGON_EGG = registerEntity(EntityType.Builder.create(EntityDragonEgg::new, EntityClassification.MISC).size(0.45F, 0.55F), "dragon_egg");
@@ -82,5 +85,25 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
+    }
+
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        try {
+            for (Field f : IafEntityRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof EntityType) {
+                    event.getRegistry().register((EntityType) obj);
+                } else if (obj instanceof EntityType[]) {
+                    for (EntityType type : (EntityType[]) obj) {
+                        event.getRegistry().register(type);
+
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

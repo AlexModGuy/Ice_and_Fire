@@ -163,7 +163,7 @@ public class PixieVillagePieces {
                 this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 9 - 1, 0);
             }
 
-            this.setBlockState(worldIn, IafBlockRegistry.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, EnumFacing.NORTH), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, EnumFacing.NORTH), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);
@@ -299,7 +299,7 @@ public class PixieVillagePieces {
          */
         public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
             BlockState BlockState = this.getBiomeSpecificBlockState(Blocks.GRASS_PATH.getDefaultState());
-            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+            BlockState BlockState1 = this.getBiomeSpecificBlockState(Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
             BlockState BlockState2 = this.getBiomeSpecificBlockState(Blocks.GRAVEL.getDefaultState());
             BlockState BlockState3 = this.getBiomeSpecificBlockState(Blocks.COBBLESTONE.getDefaultState());
 
@@ -592,11 +592,11 @@ public class PixieVillagePieces {
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SANDSTONE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.STONE_STAIRS) {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SANDSTONE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.GRAVEL) {
@@ -604,15 +604,15 @@ public class PixieVillagePieces {
                 }
             } else if (this.field_189928_h == 3) {
                 if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2) {
-                    return Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).withProperty(BlockLog.LOG_AXIS, blockstateIn.getValue(BlockLog.LOG_AXIS));
+                    return Blocks.LOG.getDefaultState().with(BlockOldLog.VARIANT, BlockPlanks.EnumType.SPRUCE).with(BlockLog.LOG_AXIS, blockstateIn.get(BlockLog.LOG_AXIS));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.PLANKS) {
-                    return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE);
+                    return Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.SPRUCE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.SPRUCE_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_FENCE) {
@@ -620,19 +620,19 @@ public class PixieVillagePieces {
                 }
             } else if (this.field_189928_h == 2) {
                 if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2) {
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).withProperty(BlockLog.LOG_AXIS, blockstateIn.getValue(BlockLog.LOG_AXIS));
+                    return Blocks.LOG2.getDefaultState().with(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).with(BlockLog.LOG_AXIS, blockstateIn.get(BlockLog.LOG_AXIS));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.PLANKS) {
-                    return Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA);
+                    return Blocks.PLANKS.getDefaultState().with(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_STAIRS) {
-                    return Blocks.ACACIA_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+                    return Blocks.ACACIA_STAIRS.getDefaultState().with(BlockStairs.FACING, blockstateIn.get(BlockStairs.FACING));
                 }
 
                 if (blockstateIn.getBlock() == Blocks.COBBLESTONE) {
-                    return Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
+                    return Blocks.LOG2.getDefaultState().with(BlockNewLog.VARIANT, BlockPlanks.EnumType.ACACIA).with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
                 }
 
                 if (blockstateIn.getBlock() == Blocks.OAK_FENCE) {
@@ -751,7 +751,7 @@ public class PixieVillagePieces {
             }
             this.replaceAirAndLiquidDownwards(worldIn, Blocks.DIRT.getDefaultState(), 0, -1, 0, structureBoundingBoxIn);
 
-            this.setBlockState(worldIn, IafBlockRegistry.pixieHouse.getDefaultState().withProperty(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);

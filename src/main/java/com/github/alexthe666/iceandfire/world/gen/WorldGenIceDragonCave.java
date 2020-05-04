@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -25,7 +24,7 @@ import java.util.Random;
 public class WorldGenIceDragonCave extends WorldGenerator {
     public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_female_cave"));
     public static final ResourceLocation ICEDRAGON_MALE_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_male_cave"));
-    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.frozenStone);
+    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE);
     private static boolean isMale;
 
     public static void setGoldPile(World world, BlockPos pos, Random rand) {
@@ -34,9 +33,9 @@ public class WorldGenIceDragonCave extends WorldGenerator {
             if (chance < 60) {
                 int goldRand = Math.max(1, IafConfig.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
-                world.setBlockState(pos, generateGold ? IafBlockRegistry.silverPile.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+                world.setBlockState(pos, generateGold ? IafBlockRegistry.SILVER_PILE.getDefaultState().with(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
-                world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = world.getTileEntity(pos);
                     if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -119,7 +118,7 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.silverOre.getDefaultState() : IafBlockRegistry.frozenStone.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.FROZEN_STONE.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -134,10 +133,10 @@ public class WorldGenIceDragonCave extends WorldGenerator {
                             worldIn.setBlockState(blockpos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
                         }
                         if (chance > 90 && chance < 1000) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateSapphireOre ? IafBlockRegistry.sapphireOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateSapphireOre ? IafBlockRegistry.SAPPHIRE_ORE.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
-                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.frozenCobblestone.getDefaultState() : IafBlockRegistry.frozenStone.getDefaultState());
+                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState() : IafBlockRegistry.FROZEN_STONE.getDefaultState());
                     }
                 }
             }

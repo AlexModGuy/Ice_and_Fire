@@ -17,18 +17,17 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
 public class ChunkProviderDreadLands implements IChunkGenerator {
-    protected static final BlockState STONE = IafBlockRegistry.frozenStone.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState ICE = IafBlockRegistry.dragon_ice.getDefaultState();
-    protected static final BlockState DIRT = IafBlockRegistry.frozenDirt.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState GRASS = IafBlockRegistry.frozenGrass.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
-    protected static final BlockState GRAVEL = IafBlockRegistry.frozenGravel.getDefaultState().withProperty(BlockReturningState.REVERTS, false);
+    protected static final BlockState STONE = IafBlockRegistry.FROZEN_STONE.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState ICE = IafBlockRegistry.DRAGON_ICE.getDefaultState();
+    protected static final BlockState DIRT = IafBlockRegistry.FROZEN_DIRT.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState GRASS = IafBlockRegistry.FROZEN_GRASS.getDefaultState().with(BlockReturningState.REVERTS, false);
+    protected static final BlockState GRAVEL = IafBlockRegistry.FROZEN_GRAVEL.getDefaultState().with(BlockReturningState.REVERTS, false);
     private final Random rand;
     private final World world;
     private final WorldType terrainType;
@@ -315,11 +314,11 @@ public class ChunkProviderDreadLands implements IChunkGenerator {
 
                     if (this.world.canSnowAt(blockpos1, true)) {
                         if(!BlockUtils.canSnowUpon(this.world.getBlockState(blockpos1.down()))){
-                            this.world.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(2)), 2);
+                            this.world.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState().with(BlockSnow.LAYERS, 1 + rand.nextInt(2)), 2);
                         }else{
                             this.world.setBlockState(blockpos1, Blocks.SNOW.getDefaultState(), 2);
                             this.world.setBlockState(blockpos1.up(), Blocks.SNOW.getDefaultState(), 2);
-                            this.world.setBlockState(blockpos1.up(2), Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, 1 + rand.nextInt(4)), 2);
+                            this.world.setBlockState(blockpos1.up(2), Blocks.SNOW_LAYER.getDefaultState().with(BlockSnow.LAYERS, 1 + rand.nextInt(4)), 2);
                         }
 
                     }

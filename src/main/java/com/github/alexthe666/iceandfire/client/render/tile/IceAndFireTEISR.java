@@ -25,7 +25,7 @@ public class IceAndFireTEISR extends TileEntityItemStackRenderer {
         if (itemStackIn.getItem() instanceof ItemDeathwormGauntlet) {
             renderDeathWormGauntlet.renderItem(itemStackIn, 0, 0, 0, 0.0F, 0, 0.0F);
         }
-        if (itemStackIn.getItem() == Item.getItemFromBlock(IafBlockRegistry.dread_portal)) {
+        if (itemStackIn.getItem() == Item.getItemFromBlock(IafBlockRegistry.DREAD_PORTAL)) {
             renderDreadPortal.render(null, 0, 0, 0, 0.0F, 0, 0.0F);
         }
     }

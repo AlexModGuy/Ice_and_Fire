@@ -371,15 +371,15 @@ public class NodeProcessorMyrmex extends NodeProcessor {
                 return PathNodeType.DAMAGE_FIRE;
             } else if (block == Blocks.CACTUS) {
                 return PathNodeType.DAMAGE_CACTUS;
-            } else if (block instanceof BlockDoor && material == Material.WOOD && !BlockState.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.WOOD && !BlockState.get(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_WOOD_CLOSED;
-            } else if (block instanceof BlockDoor && material == Material.IRON && !BlockState.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.IRON && !BlockState.get(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_IRON_CLOSED;
-            } else if (block instanceof BlockDoor && BlockState.getValue(BlockDoor.OPEN).booleanValue()) {
+            } else if (block instanceof BlockDoor && BlockState.get(BlockDoor.OPEN).booleanValue()) {
                 return PathNodeType.DOOR_OPEN;
             } else if (block instanceof BlockRailBase) {
                 return PathNodeType.RAIL;
-            } else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || BlockState.getValue(BlockFenceGate.OPEN).booleanValue())) {
+            } else if (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || BlockState.get(BlockFenceGate.OPEN).booleanValue())) {
                 if (material == Material.WATER) {
                     return PathNodeType.WATER;
                 } else if (material == Material.LAVA) {

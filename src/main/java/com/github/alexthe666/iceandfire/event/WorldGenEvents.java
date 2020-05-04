@@ -15,11 +15,8 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -245,7 +242,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 int oreHeight = random.nextInt(32);
                 int xOre = (chunkX * 16) + random.nextInt(16);
                 int zOre = (chunkZ * 16) + random.nextInt(16);
-                new WorldGenMinable(IafBlockRegistry.silverOre.getDefaultState(), 4 + random.nextInt(4)).generate(world, random, new BlockPos(xOre, oreHeight, zOre));
+                new WorldGenMinable(IafBlockRegistry.SILVER_ORE.getDefaultState(), 4 + random.nextInt(4)).generate(world, random, new BlockPos(xOre, oreHeight, zOre));
             }
         }
         if (IafConfig.generateSapphireOre) {
@@ -258,7 +255,7 @@ public class WorldGenEvents implements IWorldGenerator {
                     BlockPos pos = new BlockPos(xOre, oreHeight, zOre);
                     BlockState state = world.getBlockState(pos);
                     if (state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE))) {
-                        world.setBlockState(pos, IafBlockRegistry.sapphireOre.getDefaultState());
+                        world.setBlockState(pos, IafBlockRegistry.SAPPHIRE_ORE.getDefaultState());
                     }
                 }
             }
@@ -282,16 +279,16 @@ public class WorldGenEvents implements IWorldGenerator {
             if (BiomeDictionary.hasType(world.getBiome(height), Type.COLD) && BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY)) {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-                    if (IafBlockRegistry.frost_lily.canPlaceBlockAt(world, surface)) {
-                        world.setBlockState(surface, IafBlockRegistry.frost_lily.getDefaultState());
+                    if (IafBlockRegistry.FROST_LILY.canPlaceBlockAt(world, surface)) {
+                        world.setBlockState(surface, IafBlockRegistry.FROST_LILY.getDefaultState());
                     }
                 }
             }
             if (BiomeDictionary.hasType(world.getBiome(height), Type.HOT) && (BiomeDictionary.hasType(world.getBiome(height), Type.SANDY))) {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
-                    if (IafBlockRegistry.fire_lily.canPlaceBlockAt(world, surface)) {
-                        world.setBlockState(surface, IafBlockRegistry.fire_lily.getDefaultState());
+                    if (IafBlockRegistry.FIRE_LILY.canPlaceBlockAt(world, surface)) {
+                        world.setBlockState(surface, IafBlockRegistry.FIRE_LILY.getDefaultState());
                     }
                 }
             }
@@ -299,7 +296,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 if (random.nextInt(15) == 0) {
                     BlockPos surface = getNetherHeight(world, new BlockPos(x, 0, z));
                     if (surface != null) {
-                        world.setBlockState(surface.up(), IafBlockRegistry.fire_lily.getDefaultState());
+                        world.setBlockState(surface.up(), IafBlockRegistry.FIRE_LILY.getDefaultState());
                     }
                 }
             }

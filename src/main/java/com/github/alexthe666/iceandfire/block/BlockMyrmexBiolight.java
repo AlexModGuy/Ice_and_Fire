@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BushBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -12,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockMyrmexBiolight extends BlockBush {
+public class BlockMyrmexBiolight extends BushBlock {
 
     public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("down");
     protected static final AxisAlignedBB BUSH_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
@@ -25,7 +26,7 @@ public class BlockMyrmexBiolight extends BlockBush {
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setSoundType(SoundType.PLANT);
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
-        this.setDefaultState(this.blockState.getBaseState().withProperty(CONNECTED_DOWN, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
@@ -54,7 +55,7 @@ public class BlockMyrmexBiolight extends BlockBush {
     }
 
     public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.withProperty(CONNECTED_DOWN, worldIn.getBlockState(pos.down()).getBlock() == this);
+        return state.with(CONNECTED_DOWN, worldIn.getBlockState(pos.down()).getBlock() == this);
     }
 
     protected BlockStateContainer createBlockState() {

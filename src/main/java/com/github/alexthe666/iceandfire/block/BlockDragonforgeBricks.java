@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeBrick;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDragonforgeBricks extends BlockContainer implements IDragonProof {
+public class BlockDragonforgeBricks extends ContainerBlock implements IDragonProof {
 
     public static final PropertyBool GRILL = PropertyBool.create("grill");
     private final boolean isFire;
@@ -37,7 +37,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
         this.setTranslationKey("iceandfire.dragonforge_" + (isFire ? "fire" : "ice") + "_brick");
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_brick");
         this.isFire = isFire;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(GRILL, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().with(GRILL, Boolean.valueOf(false)));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
     private void checkGrill(World worldIn, BlockPos pos) {
         BlockState state = worldIn.getBlockState(pos);
         boolean missingFurnace = getConnectedTileEntity(worldIn, pos) == null;
-        worldIn.setBlockState(pos, state.withProperty(GRILL, !missingFurnace));
+        worldIn.setBlockState(pos, state.with(GRILL, !missingFurnace));
 
     }
 
@@ -90,11 +90,11 @@ public class BlockDragonforgeBricks extends BlockContainer implements IDragonPro
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(GRILL, Boolean.valueOf(meta > 0));
+        return this.getDefaultState().with(GRILL, Boolean.valueOf(meta > 0));
     }
 
     public int getMetaFromState(BlockState state) {
-        return state.getValue(GRILL).booleanValue() ? 1 : 0;
+        return state.get(GRILL).booleanValue() ? 1 : 0;
     }
 
     protected BlockStateContainer createBlockState() {

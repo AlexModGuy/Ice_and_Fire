@@ -85,12 +85,12 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                         sheepPenCount++;
                     }
                     if (rand.nextInt(80) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 8), 3);
-                        worldIn.setBlockState(blockpos.up().north(), IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().south(), IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().west(), IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().east(), IafBlockRegistry.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
+                        worldIn.setBlockState(blockpos.up(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 8), 3);
+                        worldIn.setBlockState(blockpos.up().north(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().south(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().west(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().east(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(2)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(2));
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -170,30 +170,30 @@ public class WorldGenCyclopsCave extends WorldGenerator {
         for (int spine = 0; spine < 5 + rand.nextInt(2) * 2; spine++) {
             BlockPos segment = blockpos.offset(direction, spine);
             if (origin.distanceSq(segment) <= (double) (radius * radius)) {
-                worldIn.setBlockState(segment, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, direction.getAxis()));
+                worldIn.setBlockState(segment, Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, direction.getAxis()));
             }
             if (spine % 2 != 0) {
                 BlockPos rightRib = segment.offset(direction.rotateYCCW());
                 BlockPos leftRib = segment.offset(direction.rotateY());
                 if (origin.distanceSq(rightRib) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, oppositeAxis));
                 }
                 if (origin.distanceSq(leftRib) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(leftRib, Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    worldIn.setBlockState(leftRib, Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, oppositeAxis));
                 }
                 for (int ribHeight = 1; ribHeight < maxRibHeight + 2; ribHeight++) {
                     if (origin.distanceSq(rightRib.up(ribHeight).offset(direction.rotateYCCW())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, EnumFacing.Axis.Y));
                     }
                     if (origin.distanceSq(leftRib.up(ribHeight).offset(direction.rotateY())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, EnumFacing.Axis.Y));
                     }
                 }
                 if (origin.distanceSq(rightRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(rightRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    worldIn.setBlockState(rightRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, oppositeAxis));
                 }
                 if (origin.distanceSq(leftRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().withProperty(BlockBone.AXIS, oppositeAxis));
+                    worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, oppositeAxis));
                 }
             }
 

@@ -1,22 +1,15 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraftforge.common.ToolType;
 
-public class BlockGenericStairs extends BlockStairs {
+public class BlockGenericStairs extends StairsBlock {
 
     public BlockGenericStairs(BlockState modelState, String name) {
-        super(modelState);
-        this.setLightOpacity(0);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setTranslationKey("iceandfire." + name);
+        super(modelState, Block.Properties.create(modelState.getMaterial()).harvestTool(ToolType.PICKAXE).hardnessAndResistance(20F));
         this.setRegistryName(name);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
     }
 }

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,13 +28,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class BlockPodium extends BlockContainer implements ICustomRendered {
+public class BlockPodium extends ContainerBlock implements ICustomRendered {
     public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
     public Item itemBlock;
 
-    public BlockPodium() {
+    public BlockPodium(String type) {
         super(Material.WOOD);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
+        this.setDefaultState(this.blockState.getBaseState().with(VARIANT, BlockPodium.EnumType.OAK));
         this.setHardness(2.0F);
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
@@ -62,7 +62,7 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     public int damageDropped(BlockState state) {
-        return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
+        return ((BlockPodium.EnumType) state.get(VARIANT)).getMetadata();
     }
 
     @Override
@@ -100,12 +100,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, BlockPodium.EnumType.byMetadata(meta));
+        return this.getDefaultState().with(VARIANT, BlockPodium.EnumType.byMetadata(meta));
     }
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
+        return ((BlockPodium.EnumType) state.get(VARIANT)).getMetadata();
     }
 
     @Override

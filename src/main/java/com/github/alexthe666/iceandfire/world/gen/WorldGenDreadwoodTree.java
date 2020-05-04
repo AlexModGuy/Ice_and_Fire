@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class WorldGenDreadwoodTree extends WorldGenerator {
 
-    private static final BlockState TRUNK = IafBlockRegistry.dreadwood_log.getDefaultState();
+    private static final BlockState TRUNK = IafBlockRegistry.DREADWOOD_LOG.getDefaultState();
 
     public WorldGenDreadwoodTree() {
     }
@@ -128,12 +128,12 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
         this.setBlockAndNotifyAdequately(worldIn, pos, TRUNK);
         for(EnumFacing facing : EnumFacing.HORIZONTALS){
             if(worldIn.rand.nextFloat() < 0.1F){
-                this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing), TRUNK.withProperty(BlockRotatedPillar.AXIS, facing.getAxis()));
+                this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing), TRUNK.with(BlockRotatedPillar.AXIS, facing.getAxis()));
                 if(worldIn.rand.nextBoolean()){
-                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing, 2), TRUNK.withProperty(BlockRotatedPillar.AXIS, facing.getAxis()));
-                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing, 3).up(), TRUNK.withProperty(BlockRotatedPillar.AXIS, facing.getAxis()));
+                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing, 2), TRUNK.with(BlockRotatedPillar.AXIS, facing.getAxis()));
+                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing, 3).up(), TRUNK.with(BlockRotatedPillar.AXIS, facing.getAxis()));
                 }else{
-                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing).up(), TRUNK.withProperty(BlockRotatedPillar.AXIS, facing.getAxis()));
+                    this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing).up(), TRUNK.with(BlockRotatedPillar.AXIS, facing.getAxis()));
                 }
             }
         }

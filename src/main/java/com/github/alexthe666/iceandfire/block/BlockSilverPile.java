@@ -31,7 +31,7 @@ public class BlockSilverPile extends Block {
 
     public BlockSilverPile() {
         super(Material.GROUND);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(LAYERS, 1));
+        this.setDefaultState(this.blockState.getBaseState().with(LAYERS, 1));
         this.setTickRandomly(true);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.silverpile");
@@ -43,12 +43,12 @@ public class BlockSilverPile extends Block {
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return SNOW_AABB[state.getValue(LAYERS)];
+        return SNOW_AABB[state.get(LAYERS)];
     }
 
     @Override
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).getValue(LAYERS) < 5;
+        return worldIn.getBlockState(pos).get(LAYERS) < 5;
     }
 
     @Deprecated
@@ -59,13 +59,13 @@ public class BlockSilverPile extends Block {
     @Override
     @SuppressWarnings("deprecation")
     public boolean isTopSolid(BlockState state) {
-        return state.getValue(LAYERS) == 7;
+        return state.get(LAYERS) == 7;
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(BlockState blockState, World worldIn, BlockPos pos) {
-        int i = blockState.getValue(LAYERS) - 1;
+        int i = blockState.get(LAYERS) - 1;
         float f = 0.125F;
         AxisAlignedBB axisalignedbb = blockState.getBoundingBox(worldIn, pos);
         return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, i * f, axisalignedbb.maxZ);
@@ -75,7 +75,7 @@ public class BlockSilverPile extends Block {
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.down());
         Block block = BlockState.getBlock();
-        return (block != Blocks.ICE && block != Blocks.PACKED_ICE) && (BlockState.getBlock().isLeaves(BlockState, worldIn, pos.down()) || (block == this && BlockState.getValue(LAYERS) >= 7 || BlockState.isOpaqueCube() && BlockState.getMaterial().blocksMovement()));
+        return (block != Blocks.ICE && block != Blocks.PACKED_ICE) && (BlockState.getBlock().isLeaves(BlockState, worldIn, pos.down()) || (block == this && BlockState.get(LAYERS) >= 7 || BlockState.isOpaqueCube() && BlockState.getMaterial().blocksMovement()));
     }
 
     @Override
@@ -84,10 +84,10 @@ public class BlockSilverPile extends Block {
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
-                if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.silverPile)) {
+                if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.SILVER_PILE)) {
                     if (!item.isEmpty()) {
                         if (this.getMetaFromState(state) < 7) {
-                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.silverPile, this.getMetaFromState(state) + 1, 3);
+                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.SILVER_PILE, this.getMetaFromState(state) + 1, 3);
                             if (!playerIn.capabilities.isCreativeMode) {
                                 item.shrink(1);
 
@@ -147,22 +147,22 @@ public class BlockSilverPile extends Block {
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(LAYERS, (meta & 7) + 1);
+        return this.getDefaultState().with(LAYERS, (meta & 7) + 1);
     }
 
     @Override
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).getValue(LAYERS) == 1;
+        return worldIn.getBlockState(pos).get(LAYERS) == 1;
     }
 
     @Override
     public int getMetaFromState(BlockState state) {
-        return state.getValue(LAYERS) - 1;
+        return state.get(LAYERS) - 1;
     }
 
     @Override
     public int quantityDropped(BlockState state, int fortune, Random random) {
-        return (state.getValue(LAYERS)) + 1;
+        return (state.get(LAYERS)) + 1;
     }
 
     @Override

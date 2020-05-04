@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -169,11 +168,11 @@ public class EntityPixie extends EntityTameable {
                 this.setSitting(!this.isSitting());
                 return true;
             }
-        } else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(IafBlockRegistry.jar_empty) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
+        } else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY) && player.getHeldItem(hand).getMetadata() == 0 && !this.isTamed()) {
             if (!player.isCreative()) {
                 player.getHeldItem(hand).shrink(1);
             }
-            ItemStack stack = new ItemStack(IafBlockRegistry.jar_pixie, 1, this.getColor());
+            ItemStack stack = new ItemStack(IafBlockRegistry.JAR_PIXIE, 1, this.getColor());
             if (!world.isRemote) {
                 if (!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
                     this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);

@@ -76,26 +76,6 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
-        try {
-            for (Field f : IafEntityRegistry.class.getDeclaredFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof EntityType) {
-                    event.getRegistry().register((EntityType) obj);
-                } else if (obj instanceof EntityType[]) {
-                    for (EntityType type : (EntityType[]) obj) {
-                        event.getRegistry().register(type);
-
-                    }
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         // ItemBlocks
         try {

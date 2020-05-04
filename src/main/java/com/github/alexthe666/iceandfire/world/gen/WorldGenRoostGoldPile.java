@@ -28,17 +28,17 @@ public class WorldGenRoostGoldPile {
                     blockpos = worldIn.getHeight(blockpos);
                     if (block instanceof BlockGoldPile) {
                         if (worldIn.isAirBlock(blockpos)) {
-                            worldIn.setBlockState(blockpos, block.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)));
+                            worldIn.setBlockState(blockpos, block.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)));
                             if (worldIn.getBlockState(blockpos.down()).getBlock() instanceof BlockGoldPile) {
-                                worldIn.setBlockState(blockpos.down(), block.getDefaultState().withProperty(BlockGoldPile.LAYERS, 8));
+                                worldIn.setBlockState(blockpos.down(), block.getDefaultState().with(BlockGoldPile.LAYERS, 8));
                             }
                         }
                     }
                     if (block instanceof BlockSilverPile) {
                         if (worldIn.isAirBlock(blockpos)) {
-                            worldIn.setBlockState(blockpos, block.getDefaultState().withProperty(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)));
+                            worldIn.setBlockState(blockpos, block.getDefaultState().with(BlockSilverPile.LAYERS, 1 + rand.nextInt(7)));
                             if (worldIn.getBlockState(blockpos.down()).getBlock() instanceof BlockGoldPile) {
-                                worldIn.setBlockState(blockpos.down(), block.getDefaultState().withProperty(BlockSilverPile.LAYERS, 8));
+                                worldIn.setBlockState(blockpos.down(), block.getDefaultState().with(BlockSilverPile.LAYERS, 8));
                             }
                         }
                     }
