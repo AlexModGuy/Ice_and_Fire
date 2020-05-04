@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Random;
 
-public class ChickenEntityProperties extends EntityProperties<EntityAnimal> {
+public class ChickenEntityProperties extends EntityProperties<LivingEntity> {
 
     private static Random rand = new Random();
     public int timeUntilNextEgg = 1;

@@ -50,7 +50,6 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
     public EntityMyrmexQueen(World worldIn) {
         super(worldIn);
-        this.setSize(2.9F, 1.86F);
     }
 
     @Nullable

@@ -61,7 +61,6 @@ public class EntityPixie extends EntityTameable {
     public EntityPixie(World worldIn) {
         super(worldIn);
         this.moveHelper = new EntityPixie.AIMoveControl(this);
-        this.setSize(0.4F, 0.8F);
         this.experienceValue = 3;
         this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
     }

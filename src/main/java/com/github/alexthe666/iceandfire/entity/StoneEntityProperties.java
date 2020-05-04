@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class StoneEntityProperties extends EntityProperties<EntityLiving> {
+public class StoneEntityProperties extends EntityProperties<LivingEntity> {
 
     public boolean isStone;
     public int breakLvl;

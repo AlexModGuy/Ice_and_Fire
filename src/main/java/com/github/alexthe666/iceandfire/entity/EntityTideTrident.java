@@ -63,7 +63,6 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.zTile = -1;
         this.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 6.0D;
-        this.setSize(0.85F, 0.5F);
         this.stack = new ItemStack(IafItemRegistry.tide_trident);
     }
 

@@ -58,7 +58,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     public EntityMyrmexRoyal(World worldIn) {
         super(worldIn);
-        this.setSize(1.9F, 1.86F);
         this.switchNavigator(true);
     }
 

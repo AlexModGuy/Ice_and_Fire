@@ -63,7 +63,6 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public EntityTroll(World worldIn) {
         super(worldIn);
-        this.setSize(1.2F, 3.5F);
     }
 
     private void setAvoidSun(boolean day) {

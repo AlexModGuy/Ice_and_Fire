@@ -47,7 +47,6 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
 
     public EntityDreadLich(World worldIn) {
         super(worldIn);
-        this.setSize(0.6F, 1.8F);
     }
 
     protected void initEntityAI() {

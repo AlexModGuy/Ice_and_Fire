@@ -75,7 +75,6 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
 
     public EntityHydra(World worldIn) {
         super(worldIn);
-        this.setSize(2.8F, 1.39F);
         resetParts();
         headDamageThreshold = Math.max(5, (float)IafConfig.hydraMaxHealth * 0.08F);
     }

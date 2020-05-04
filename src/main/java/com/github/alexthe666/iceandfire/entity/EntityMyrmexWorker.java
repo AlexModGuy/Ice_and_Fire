@@ -42,7 +42,6 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public EntityMyrmexWorker(World worldIn) {
         super(worldIn);
-        this.setSize(0.99F, 0.95F);
     }
 
     @Nullable

@@ -1,15 +1,17 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiscEntityProperties extends EntityProperties<EntityLivingBase> {
+public class MiscEntityProperties extends EntityProperties<LivingEntity> {
 
     public boolean hasDismountedDragon;
     public int deathwormLungeTicks = 0;

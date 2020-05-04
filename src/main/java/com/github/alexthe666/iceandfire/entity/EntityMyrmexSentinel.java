@@ -46,7 +46,6 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     public EntityMyrmexSentinel(World worldIn) {
         super(worldIn);
-        this.setSize(1.3F, 1.95F);
     }
 
     @Nullable

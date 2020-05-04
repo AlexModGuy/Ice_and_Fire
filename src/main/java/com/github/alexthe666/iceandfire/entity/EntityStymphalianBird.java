@@ -72,7 +72,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     public EntityStymphalianBird(World worldIn) {
         super(worldIn);
-        this.setSize(1.3F, 1.2F);
     }
 
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {

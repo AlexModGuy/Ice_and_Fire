@@ -109,7 +109,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     public EntitySeaSerpent(World worldIn) {
         super(worldIn);
         switchNavigator(true);
-        this.setSize(0.5F, 0.5F);
         this.ignoreFrustumCheck = true;
         resetParts(1.0F);
         if (FMLCommonHandler.instance().getSide().isClient()) {

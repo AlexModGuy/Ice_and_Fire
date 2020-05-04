@@ -44,7 +44,6 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
 
     public EntityDreadThrall(World worldIn) {
         super(worldIn);
-        this.setSize(0.6F, 1.8F);
     }
 
     protected void initEntityAI() {

@@ -42,7 +42,6 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
     public EntityGorgon(World worldIn) {
         super(worldIn);
-        this.setSize(0.8F, 1.99F);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
     }

@@ -82,7 +82,6 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.lookHelper = new IAFLookHelper(this);
         this.ignoreFrustumCheck = true;
         this.stepHeight = 1;
-        this.setSize(0.8F, 0.8F);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             tail_buffer = new ChainBuffer();
         }

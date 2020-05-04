@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
+import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
@@ -7,12 +8,11 @@ import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 
-public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements IIceAndFireTabulaModelAnimator<EntitySeaSerpent> {
+public class SeaSerpentTabulaModelAnimator implements ITabulaModelAnimator<EntitySeaSerpent> {
 
     public IceAndFireTabulaModel[] swimPose = {EnumSeaSerpentAnimations.SWIM1.seaserpent_model, EnumSeaSerpentAnimations.SWIM3.seaserpent_model, EnumSeaSerpentAnimations.SWIM4.seaserpent_model, EnumSeaSerpentAnimations.SWIM6.seaserpent_model};
 
     public SeaSerpentTabulaModelAnimator() {
-        super(EnumSeaSerpentAnimations.T_POSE.seaserpent_model);
     }
 
     @Override

@@ -74,7 +74,6 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         this.stepHeight = 1;
         this.spawnableBlock = Blocks.WATER;
         ANIMATION_SPEAK = Animation.create(15);
-        this.setSize(1.95F, 0.95F);
         this.switchNavigator(true);
         this.tasks.addTask(0, new HippocampusAIRide(this));
         this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));

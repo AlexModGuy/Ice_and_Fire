@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class SirenEntityProperties extends EntityProperties<EntityLivingBase> {
+public class SirenEntityProperties extends EntityProperties<LivingEntity> {
 
     public boolean isCharmed;
     public int sirenID;

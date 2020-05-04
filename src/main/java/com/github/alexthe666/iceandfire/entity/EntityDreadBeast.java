@@ -47,7 +47,6 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
 
     public EntityDreadBeast(World worldIn) {
         super(worldIn);
-        this.setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
     }
 
     protected void initEntityAI() {

@@ -80,7 +80,6 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
 
     public EntitySiren(World worldIn) {
         super(worldIn);
-        this.setSize(1.6F, 0.9F);
         this.switchNavigator(true);
         this.stepHeight = 2;
         this.tasks.addTask(0, new SirenAIFindWaterTarget(this));

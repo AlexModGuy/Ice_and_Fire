@@ -96,7 +96,6 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     public EntityAmphithere(World worldIn) {
         super(worldIn);
-        this.setSize(2.5F, 1.25F);
         this.stepHeight = 1;
         if (FMLCommonHandler.instance().getSide().isClient()) {
             roll_buffer = new IFChainBuffer();

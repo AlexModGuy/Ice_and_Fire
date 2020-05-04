@@ -66,7 +66,6 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     public EntityCyclops(World worldIn) {
         super(worldIn);
-        this.setSize(1.95F, 7.4F);
         this.stepHeight = 2.5F;
         this.setPathPriority(PathNodeType.WATER, -1.0F);
         this.setPathPriority(PathNodeType.FENCE, 0.0F);

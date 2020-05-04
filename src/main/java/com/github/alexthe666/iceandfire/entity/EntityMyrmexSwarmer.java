@@ -35,7 +35,6 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.moveHelper = new EntityMyrmexRoyal.FlyMoveHelper(this);
         this.navigator = new PathNavigateFlying(this, world);
         switchNavigator(false);
-        this.setSize(0.5F, 0.5F);
     }
 
     protected int getExperiencePoints(EntityPlayer player) {

@@ -31,7 +31,6 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     public EntityMyrmexEgg(World worldIn) {
         super(worldIn);
         this.isImmuneToFire = true;
-        this.setSize(0.45F, 0.55F);
     }
 
     @Override
