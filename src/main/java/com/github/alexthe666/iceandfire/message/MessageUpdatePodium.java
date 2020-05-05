@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +41,7 @@ public class MessageUpdatePodium extends AbstractMessage<MessageUpdatePodium> {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageUpdatePodium message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageUpdatePodium message, PlayerEntity player, MessageContext messageContext) {
         if (client.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);
             if (client.world.getTileEntity(pos) != null) {
@@ -54,7 +54,7 @@ public class MessageUpdatePodium extends AbstractMessage<MessageUpdatePodium> {
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageUpdatePodium message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageUpdatePodium message, PlayerEntity player, MessageContext messageContext) {
 
     }
 }

@@ -11,8 +11,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -37,7 +37,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTagCompound(new CompoundNBT());
     }
 
@@ -53,7 +53,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entity, int timeLeft) {
         double dist = 32;
         Vec3d vec3d = entity.getPositionEyes(1.0F);
         Vec3d vec3d1 = entity.getLook(1.0F);
@@ -62,8 +62,8 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
         Entity pointedEntity = null;
         List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-                return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
+                boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof PlayerEntity || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
             }
         }));
         double d2 = d1;
@@ -93,8 +93,8 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
             }
         }
         if (pointedEntity != null) {
-            if (pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer) {
-                if (pointedEntity instanceof EntityPlayer) {
+            if (pointedEntity instanceof EntityLiving || pointedEntity instanceof PlayerEntity) {
+                if (pointedEntity instanceof PlayerEntity) {
                     pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                     pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                     EntityStoneStatue statue = new EntityStoneStatue(worldIn);
@@ -130,7 +130,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 } else {
                     entity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                 }
-                if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
+                if (!(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative())) {
                     stack.shrink(1);
                 }
             }
@@ -139,14 +139,14 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         playerIn.setActiveHand(hand);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         int i = this.getMaxItemUseDuration(stack) - count;
         if (i > 20 && stack.getMetadata() == 0) {
             stack.setItemDamage(1);

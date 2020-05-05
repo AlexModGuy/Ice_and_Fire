@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.item.Item;
@@ -55,15 +55,15 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
         this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, IafItemRegistry.FROST_STEW, false));
         this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
-        this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(7, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.tasks.addTask(7, new DragonAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new DreadAITargetNonDread(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(4, new DreadAITargetNonDread(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase && DragonUtils.canHostilesTarget(entity);
+                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
             }
         }));
         this.targetTasks.addTask(5, new DragonAITargetItems(this, false));
@@ -186,13 +186,13 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            EntityLivingBase player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            LivingEntity player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
             if (player != null) {
                 return player;
             } else {
                 if (!world.isRemote) {
                     Entity entity = world.getMinecraftServer().getWorld(this.dimension).getEntityFromUuid(uuid);
-                    if (entity instanceof EntityLivingBase) {
+                    if (entity instanceof LivingEntity) {
                         return entity;
                     }
                 }

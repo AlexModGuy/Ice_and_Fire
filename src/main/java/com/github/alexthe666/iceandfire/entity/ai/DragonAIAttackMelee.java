@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -30,37 +30,37 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
+        LivingEntity LivingEntity = this.dragon.getAttackTarget();
 
-        if (entitylivingbase == null) {
+        if (LivingEntity == null) {
             return false;
-        } else if (!entitylivingbase.isEntityAlive()) {
+        } else if (!LivingEntity.isEntityAlive()) {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(entitylivingbase);
+                    this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(LivingEntity);
                     this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
                     return this.entityPathEntity != null;
                 } else {
                     return true;
                 }
             }
-            this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(entitylivingbase);
+            this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(LivingEntity);
             return this.entityPathEntity != null;
         }
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-        if (entitylivingbase != null && entitylivingbase.isDead) {
+        LivingEntity LivingEntity = this.dragon.getAttackTarget();
+        if (LivingEntity != null && LivingEntity.isDead) {
             this.resetTask();
             return false;
         }
-        return entitylivingbase != null && (entitylivingbase.isEntityAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)) && (!(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative()))));
+        return LivingEntity != null && (LivingEntity.isEntityAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
     }
 
     @Override
@@ -71,8 +71,8 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
     @Override
     public void resetTask() {
-        EntityLivingBase entitylivingbase = this.dragon.getAttackTarget();
-        if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
+        LivingEntity LivingEntity = this.dragon.getAttackTarget();
+        if (LivingEntity instanceof PlayerEntity && (((PlayerEntity) LivingEntity).isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.dragon.setAttackTarget(null);
         }
         this.dragon.getNavigator().clearPath();
@@ -80,7 +80,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        EntityLivingBase entity = this.dragon.getAttackTarget();
+        LivingEntity entity = this.dragon.getAttackTarget();
         if (entity != null) {
             if (!dragon.isPassenger(entity)) {
                 this.dragon.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
@@ -131,7 +131,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
         }
     }
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+    protected double getAttackReachSqr(LivingEntity attackTarget) {
         return this.dragon.width * 2.0F * this.dragon.width * 2.0F + attackTarget.width;
     }
 }

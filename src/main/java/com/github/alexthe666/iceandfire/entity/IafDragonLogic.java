@@ -4,9 +4,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
@@ -31,7 +31,7 @@ public class IafDragonLogic {
     logic done exclusively on server.
     */
     public void updateDragonServer() {
-        EntityPlayer ridingPlayer = dragon.getRidingPlayer();
+        PlayerEntity ridingPlayer = dragon.getRidingPlayer();
         if (dragon.up()) {
             if (!dragon.isFlying() && !dragon.isHovering()) {
                 dragon.spacebarTicks += 2;
@@ -51,8 +51,8 @@ public class IafDragonLogic {
             dragon.riderShootFire(dragon.getControllingPassenger());
             dragon.fireStopTicks = 10;
         }
-        if (dragon.strike() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof EntityPlayer) {
-            EntityLivingBase target = DragonUtils.riderLookingAtEntity(dragon, (EntityPlayer) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getEntityBoundingBox().maxX - dragon.getEntityBoundingBox().minX));
+        if (dragon.strike() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
+            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getEntityBoundingBox().maxX - dragon.getEntityBoundingBox().minX));
             if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
@@ -418,7 +418,7 @@ public class IafDragonLogic {
         } else if (!modeldead && dragon.modelDeadProgress > 0.0F) {
             dragon.modelDeadProgress -= 0.5F;
         }
-        boolean riding = dragon.isRiding() && dragon.getRidingEntity() != null && dragon.getRidingEntity() instanceof EntityPlayer;
+        boolean riding = dragon.isRiding() && dragon.getRidingEntity() != null && dragon.getRidingEntity() instanceof PlayerEntity;
         if (riding && dragon.ridingProgress < 20.0F) {
             dragon.ridingProgress += 0.5F;
         } else if (!riding && dragon.ridingProgress > 0.0F) {
@@ -441,7 +441,7 @@ public class IafDragonLogic {
     */
     public void updateDragonAttack() {
         if (dragon.isPlayingAttackAnimation() && dragon.getAttackTarget() != null && dragon.canEntityBeSeen(dragon.getAttackTarget())) {
-            EntityLivingBase target = dragon.getAttackTarget();
+            LivingEntity target = dragon.getAttackTarget();
             double dist = dragon.getDistance(target);
             if(dist < dragon.getRenderSize() * 0.2574 * 2 + 2){
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {

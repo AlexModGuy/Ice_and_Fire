@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityAmphithereArrow;
 import com.github.alexthe666.iceandfire.entity.EntityHydraArrow;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
@@ -25,7 +25,7 @@ public class ItemHydraArrow extends ItemArrow {
         this.setRegistryName(IceAndFire.MODID, "hydra_arrow");
     }
 
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
+    public EntityArrow createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
         return new EntityHydraArrow(worldIn, shooter);
     }
 

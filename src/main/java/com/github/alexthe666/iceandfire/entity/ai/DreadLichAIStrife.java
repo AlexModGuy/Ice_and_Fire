@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -56,11 +56,11 @@ public class DreadLichAIStrife extends EntityAIBase {
     }
 
     public void updateTask() {
-        EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
+        LivingEntity LivingEntity = this.entity.getAttackTarget();
 
-        if (entitylivingbase != null) {
-            double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
-            boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
+        if (LivingEntity != null) {
+            double d0 = this.entity.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
@@ -77,7 +77,7 @@ public class DreadLichAIStrife extends EntityAIBase {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.moveSpeedAmp);
+                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 
@@ -101,16 +101,16 @@ public class DreadLichAIStrife extends EntityAIBase {
                 }
 
                 this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.entity.faceEntity(entitylivingbase, 30.0F, 30.0F);
+                this.entity.faceEntity(LivingEntity, 30.0F, 30.0F);
             } else {
-                this.entity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
+                this.entity.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
             }
 
             if (!flag && this.seeTime < -60) {
                 this.entity.resetActiveHand();
             } else if (flag) {
                 this.entity.resetActiveHand();
-                ((IRangedAttackMob) this.entity).attackEntityWithRangedAttack(entitylivingbase, 0);
+                ((IRangedAttackMob) this.entity).attackEntityWithRangedAttack(LivingEntity, 0);
                 this.attackTime = this.attackCooldown;
             }
         }

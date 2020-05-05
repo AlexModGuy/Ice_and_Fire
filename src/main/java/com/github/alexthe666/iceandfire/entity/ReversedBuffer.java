@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.util.ClientUtils;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +33,7 @@ public class ReversedBuffer {
      * @param divisor        the amount to divide the swing amount by
      * @param entity         the entity with this ChainBuffer
      */
-    public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, EntityLivingBase entity) {
+    public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevYawVariation = this.yawVariation;
         if (entity.renderYawOffset != entity.prevRenderYawOffset && MathHelper.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += (entity.prevRenderYawOffset - entity.renderYawOffset) / divisor;
@@ -70,7 +70,7 @@ public class ReversedBuffer {
      * @param divisor        the amount to divide the wave amount by
      * @param entity         the entity with this ChainBuffer
      */
-    public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, EntityLivingBase entity) {
+    public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevPitchVariation = this.pitchVariation;
         if (entity.rotationPitch != entity.prevRotationPitch && MathHelper.abs(this.pitchVariation) < maxAngle) {
             this.pitchVariation += (entity.prevRotationPitch - entity.rotationPitch) / divisor;
@@ -106,7 +106,7 @@ public class ReversedBuffer {
      * @param angleDecrement the angle to decrement by for each model piece
      * @param entity         the entity with this ChainBuffer
      */
-    public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, EntityLivingBase entity) {
+    public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, LivingEntity entity) {
         this.calculateChainSwingBuffer(maxAngle, bufferTime, angleDecrement, 1.0F, entity);
     }
 
@@ -118,7 +118,7 @@ public class ReversedBuffer {
      * @param angleDecrement the angle to decrement by for each model piece
      * @param entity         the entity with this ChainBuffer
      */
-    public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, EntityLivingBase entity) {
+    public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, LivingEntity entity) {
         this.calculateChainWaveBuffer(maxAngle, bufferTime, angleDecrement, 1.0F, entity);
     }
 

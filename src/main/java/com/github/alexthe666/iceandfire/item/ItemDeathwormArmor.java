@@ -1,36 +1,40 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemDeathwormArmor extends ItemArmor {
+import javax.annotation.Nullable;
 
-    public ItemDeathwormArmor(ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot, String gameName, String name) {
-        super(material, renderIndex, slot);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey(name);
-        this.setRegistryName(IceAndFire.MODID, gameName);
+public class ItemDeathwormArmor extends ArmorItem {
+
+    public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlotType slot, String name) {
+        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
-        return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 5 : 4);
+    @Nullable
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 5 : 4);
     }
 
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         if (this.getArmorMaterial() == IafItemRegistry.DEATHWORM_2_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_deathworm_red" + (renderIndex == 2 ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_red" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         } else if (this.getArmorMaterial() == IafItemRegistry.DEATHWORM_1_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_deathworm_white" + (renderIndex == 2 ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_white" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         } else {
-            return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (renderIndex == 2 ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         }
     }
 }

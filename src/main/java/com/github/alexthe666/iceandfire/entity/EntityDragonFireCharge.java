@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -130,7 +130,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                 }
                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
                     movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
-                    if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
+                    if (movingObject.entityHit instanceof LivingEntity && ((LivingEntity) movingObject.entityHit).getHealth() == 0) {
                         ((EntityDragonBase) this.shootingEntity).randomizeAttacks();
                     }
                 }

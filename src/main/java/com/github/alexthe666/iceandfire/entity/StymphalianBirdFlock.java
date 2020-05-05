@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +71,7 @@ public class StymphalianBirdFlock {
         }
     }
 
-    public void onLeaderAttack(EntityLivingBase attackTarget) {
+    public void onLeaderAttack(LivingEntity attackTarget) {
         for (EntityStymphalianBird bird : members) {
             if (bird.getAttackTarget() == null && !isLeader(bird)) {
                 bird.setAttackTarget(attackTarget);
@@ -101,7 +101,7 @@ public class StymphalianBirdFlock {
         }
     }
 
-    public void setFearTarget(EntityLivingBase living) {
+    public void setFearTarget(LivingEntity living) {
         for (EntityStymphalianBird bird : members) {
             bird.setVictor(living);
         }

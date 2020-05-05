@@ -19,7 +19,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -29,7 +29,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -83,7 +83,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 40;
     }
 
@@ -93,16 +93,16 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
         this.tasks.addTask(3, new CyclopsAIAttackMelee(this, 1.0D, false));
         this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true, true, new Predicate<EntityLivingBase>() {
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, true, new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer) && !(entity instanceof EntityCyclops) && !ServerEvents.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
+            public boolean apply(@Nullable LivingEntity entity) {
+                return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof EntityWaterMob) && !(entity instanceof PlayerEntity) && !(entity instanceof EntityCyclops) && !ServerEvents.isAnimaniaSheep(entity) && !(entity instanceof EntityAnimal && !(entity instanceof EntityWolf || entity instanceof EntityPolarBear || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof EntityVillager;
             }
         }));
-        this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, EntityPlayer.class, 0, true, true, new Predicate<Entity>() {
+        this.targetTasks.addTask(3, new CyclopsAITargetSheepPlayers(this, PlayerEntity.class, 0, true, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return true;
@@ -201,7 +201,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             double extraY = raiseUp;
             passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
                 passenger.dismountRidingEntity();
             }
         }
@@ -235,7 +235,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6) {

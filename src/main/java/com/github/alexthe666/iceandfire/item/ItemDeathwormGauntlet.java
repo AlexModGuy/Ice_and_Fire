@@ -1,71 +1,66 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDeathwormGauntlet extends Item {
 
     public ItemDeathwormGauntlet(String color) {
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.deathworm_gauntlet_" + color);
-        this.maxStackSize = 1;
-        this.setMaxDamage(500);
+        super(new Item.Properties().maxStackSize(1).maxDamage(500).group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "deathworm_gauntlet_" + color);
     }
 
     @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack) {
         return 1;
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.BOW;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         playerIn.setActiveHand(hand);
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+        return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
     }
 
-    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscEntityProperties.class);
-        if (stack.getTagCompound() != null) {
+        if (stack.getTag() != null) {
             if (properties.deathwormReceded || properties.deathwormLaunched) {
                 return;
             } else {
-                if (player instanceof EntityPlayer) {
-                    if (stack.getTagCompound().getInteger("HolderID") != player.getEntityId()) {
-                        stack.getTagCompound().setInteger("HolderID", player.getEntityId());
+                if (player instanceof PlayerEntity) {
+                    if (stack.getTag().getInt("HolderID") != player.getEntityId()) {
+                        stack.getTag().putInt("HolderID", player.getEntityId());
                     }
-                    if (((EntityPlayer) player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
-                        ((EntityPlayer) player).getCooldownTracker().setCooldown(this, 10);
+                    if (((PlayerEntity) player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
+                        ((PlayerEntity) player).getCooldownTracker().setCooldown(this, 10);
                         player.playSound(IafSoundRegistry.DEATHWORM_ATTACK, 1F, 1F);
                         properties.deathwormReceded = false;
                         properties.deathwormLaunched = true;
@@ -75,14 +70,16 @@ public class ItemDeathwormGauntlet extends Item {
         }
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscEntityProperties.class);
         if (properties != null && properties.specialWeaponDmg > 0) {
-            stack.damageItem(properties.specialWeaponDmg, entityLiving);
+            stack.damageItem(properties.specialWeaponDmg, entityLiving, (p_219999_1_) -> {
+                p_219999_1_.sendBreakAnimation(entityLiving.getActiveHand());
+            });
             properties.specialWeaponDmg = 0;
         }
-        if (stack.getTagCompound().getInteger("HolderID") != -1) {
-            stack.getTagCompound().setInteger("HolderID", -1);
+        if (stack.getTag().getInt("HolderID") != -1) {
+            stack.getTag().putInt("HolderID", -1);
         }
     }
 
@@ -91,10 +88,10 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int unused, boolean unused2) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
         boolean hitMob = false;
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new CompoundNBT());
+        if (stack.getTag() == null) {
+            stack.setTag(new CompoundNBT());
         } else {
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
             if (properties != null) {
@@ -115,20 +112,20 @@ public class ItemDeathwormGauntlet extends Item {
                 }
 
                 if (properties.prevDeathwormLungeTicks == 20) {
-                    if (entity instanceof EntityPlayer) {
-                        EntityPlayer player = (EntityPlayer) entity;
+                    if (entity instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) entity;
                         Vec3d vec3d = player.getLook(1.0F).normalize();
                         double range = 5;
-                        for (EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(player.posX - range, player.posY - range, player.posZ - range, player.posX + range, player.posY + range, player.posZ + range))) {
-                            Vec3d vec3d1 = new Vec3d(entityliving.posX - player.posX, entityliving.posY - player.posY, entityliving.posZ - player.posZ);
+                        for (LivingEntity entityliving : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
+                            Vec3d vec3d1 = new Vec3d(entityliving.getPosX() - player.getPosX(), entityliving.getPosY() - player.getPosY(), entityliving.getPosZ() - player.getPosZ());
                             double d0 = vec3d1.length();
                             vec3d1 = vec3d1.normalize();
                             double d1 = vec3d.dotProduct(vec3d1);
                             boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(entityliving);
                             if (canSee) {
                                 properties.specialWeaponDmg++;
-                                entityliving.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) entity), 3F);
-                                entityliving.knockBack(entityliving, 0.5F, entityliving.posX - player.posX, entityliving.posZ - player.posZ);
+                                entityliving.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
+                                entityliving.knockBack(entityliving, 0.5F, entityliving.getPosX() - player.getPosX(), entityliving.getPosZ() - player.getPosZ());
                             }
                         }
                     }
@@ -139,10 +136,9 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(I18n.format("item.iceandfire.deathworm_gauntlet.desc_0"));
-        tooltip.add(I18n.format("item.iceandfire.deathworm_gauntlet.desc_1"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_0").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_1").applyTextStyle(TextFormatting.GRAY));
     }
 }

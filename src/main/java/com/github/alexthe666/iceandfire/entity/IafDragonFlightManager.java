@@ -20,7 +20,7 @@ public class IafDragonFlightManager {
     private Vec3d startAttackVec;
     private Vec3d startPreyVec;
     private boolean hasStartedToScorch = false;
-    private EntityLivingBase prevAttackTarget = null;
+    private LivingEntity prevAttackTarget = null;
 
     public IafDragonFlightManager(EntityDragonBase dragon) {
         this.dragon = dragon;
@@ -49,7 +49,7 @@ public class IafDragonFlightManager {
                     dragon.airAttack = IafDragonAttacks.Air.TACKLE;
                 }
             }
-            EntityLivingBase entity = dragon.getAttackTarget();
+            LivingEntity entity = dragon.getAttackTarget();
             if (dragon.airAttack == IafDragonAttacks.Air.TACKLE) {
                 target = new Vec3d(entity.posX, entity.posY + entity.height, entity.posZ);
             }
@@ -108,16 +108,16 @@ public class IafDragonFlightManager {
         return f * f + f2 * f2;
     }
 
-    public void onSetAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
-        if (prevAttackTarget != entitylivingbaseIn) {
-            if (entitylivingbaseIn != null) {
-                startPreyVec = new Vec3d(entitylivingbaseIn.posX, entitylivingbaseIn.posY, entitylivingbaseIn.posZ);
+    public void onSetAttackTarget(@Nullable LivingEntity LivingEntityIn) {
+        if (prevAttackTarget != LivingEntityIn) {
+            if (LivingEntityIn != null) {
+                startPreyVec = new Vec3d(LivingEntityIn.posX, LivingEntityIn.posY, LivingEntityIn.posZ);
             } else {
                 startPreyVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
             }
             startAttackVec = new Vec3d(dragon.posX, dragon.posY, dragon.posZ);
         }
-        prevAttackTarget = entitylivingbaseIn;
+        prevAttackTarget = LivingEntityIn;
     }
 
     protected static class GroundMoveHelper extends EntityMoveHelper {

@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -103,8 +103,8 @@ public class EntityHydraBreath extends FireballEntity implements IDragonProjecti
     protected void onImpact(RayTraceResult result) {
         if (result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity) && !(result.entityHit instanceof EntityHydraHead) && !(result.entityHit instanceof EntityHydraBreath)) {
             result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 1F);
-            if(result.entityHit instanceof EntityLivingBase){
-                ((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
+            if(result.entityHit instanceof LivingEntity){
+                ((LivingEntity) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
             }
             this.setDead();
         }

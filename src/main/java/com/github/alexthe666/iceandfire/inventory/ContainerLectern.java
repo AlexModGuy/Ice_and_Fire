@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -69,12 +69,12 @@ public class ContainerLectern extends SyncedFieldContainer {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return this.tileFurnace.isUsableByPlayer(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
@@ -135,7 +135,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         return pages;
     }
 
-    public boolean enchantItem(EntityPlayer playerIn, int id) {
+    public boolean enchantItem(PlayerEntity playerIn, int id) {
         possiblePagesInt[0] = this.tileFurnace.getField(0);
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);

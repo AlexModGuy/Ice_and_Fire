@@ -6,8 +6,8 @@ import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
@@ -40,7 +40,7 @@ public class ItemSummoningCrystal extends Item {
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.addPropertyOverride(new ResourceLocation("has_dragon"), new IItemPropertyGetter() {
             @OnlyIn(Dist.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
                 return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
             }
         });
@@ -48,7 +48,7 @@ public class ItemSummoningCrystal extends Item {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTagCompound(new CompoundNBT());
     }
 
@@ -59,7 +59,7 @@ public class ItemSummoningCrystal extends Item {
         }
     }
 
-    public ItemStack onItemUseFinish(World worldIn, EntityLivingBase entityLiving) {
+    public ItemStack onItemUseFinish(World worldIn, LivingEntity entityLiving) {
         return new ItemStack(this);
     }
 
@@ -89,7 +89,7 @@ public class ItemSummoningCrystal extends Item {
 
     }
 
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         boolean flag = false;
         BlockPos offsetPos = pos.offset(facing);

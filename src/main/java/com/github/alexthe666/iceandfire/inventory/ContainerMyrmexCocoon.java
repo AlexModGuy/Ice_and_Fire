@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -10,7 +10,7 @@ public class ContainerMyrmexCocoon extends Container {
     private final IInventory lowerChestInventory;
     private final int numRows;
 
-    public ContainerMyrmexCocoon(IInventory playerInventory, IInventory chestInventory, EntityPlayer player) {
+    public ContainerMyrmexCocoon(IInventory playerInventory, IInventory chestInventory, PlayerEntity player) {
         this.lowerChestInventory = chestInventory;
         this.numRows = chestInventory.getSizeInventory() / 9;
         chestInventory.openInventory(player);
@@ -33,11 +33,11 @@ public class ContainerMyrmexCocoon extends Container {
         }
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return this.lowerChestInventory.isUsableByPlayer(playerIn);
     }
 
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
@@ -63,7 +63,7 @@ public class ContainerMyrmexCocoon extends Container {
         return itemstack;
     }
 
-    public void onContainerClosed(EntityPlayer playerIn) {
+    public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.lowerChestInventory.closeInventory(playerIn);
     }

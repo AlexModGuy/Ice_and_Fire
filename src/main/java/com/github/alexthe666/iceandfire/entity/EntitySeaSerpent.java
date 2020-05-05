@@ -24,7 +24,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -70,7 +70,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     private static final DataParameter<Boolean> ANCIENT = EntityDataManager.createKey(EntitySeaSerpent.class, DataSerializers.BOOLEAN);
     private static final Predicate NOT_SEA_SERPENT = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity entity) {
-            return entity instanceof EntityLivingBase && !(entity instanceof EntitySeaSerpent) && DragonUtils.isAlive((EntityLivingBase) entity);
+            return entity instanceof LivingEntity && !(entity instanceof EntitySeaSerpent) && DragonUtils.isAlive((LivingEntity) entity);
         }
     };
     public int swimCycle;
@@ -190,12 +190,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.tasks.addTask(1, new EntitySeaSerpent.AISwimWander());
         this.tasks.addTask(1, new EntitySeaSerpent.AISwimCircle());
         this.tasks.addTask(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(3, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(3, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new FlyingAITarget(this, EntityLivingBase.class, 0, true, false, NOT_SEA_SERPENT));
+        this.targetTasks.addTask(2, new FlyingAITarget(this, LivingEntity.class, 0, true, false, NOT_SEA_SERPENT));
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return this.isAncient() ? 30 : 15;
     }
 
@@ -429,7 +429,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     this.ticksSinceJump = 0;
                 }
             }
-            if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
+            if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
                 this.setAttackTarget(null);
             }
         }
@@ -596,7 +596,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         double width = 2D * this.getSeaSerpentScale();
         List<Entity> list = world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(width, width * 0.5D, width), NOT_SEA_SERPENT);
         for (Entity entity : list) {
-            if (entity instanceof EntityLivingBase) {
+            if (entity instanceof LivingEntity) {
                 entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                 destroyBoat(entity);
                 double xRatio = this.posX - entity.posX;
@@ -645,7 +645,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return false;
     }
 
-    private void hurtMob(EntityLivingBase entity) {
+    private void hurtMob(LivingEntity entity) {
         if (this.getAnimation() == ANIMATION_BITE && entity != null && this.getAnimationTick() > 6) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
             EntitySeaSerpent.this.attackDecision = this.getRNG().nextBoolean();
@@ -822,7 +822,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         return isWaterBlock(world, pos.down()) && !isWaterBlock(world, pos.up());
     }
 
-    private void shoot(EntityLivingBase entity) {
+    private void shoot(LivingEntity entity) {
         if (!this.attackDecision) {
             if (!this.isInWater()) {
                 this.setBreathing(false);
@@ -931,7 +931,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     @Override
-    public void onKillEntity(EntityLivingBase entity) {
+    public void onKillEntity(LivingEntity entity) {
         super.onKillEntity(entity);
         this.attackDecision = this.getRNG().nextBoolean();
     }

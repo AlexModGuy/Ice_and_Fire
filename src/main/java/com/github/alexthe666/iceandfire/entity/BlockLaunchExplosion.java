@@ -8,10 +8,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -33,7 +33,7 @@ public class BlockLaunchExplosion extends Explosion {
     private final Entity exploder;
     private final float explosionSize;
     private final List<BlockPos> affectedBlockPositions;
-    private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
+    private final Map<PlayerEntity, Vec3d> playerKnockbackMap;
     private final Vec3d position;
 
     public BlockLaunchExplosion(World world, Entity entity, double x, double y, double z, float size) {
@@ -122,22 +122,22 @@ public class BlockLaunchExplosion extends Explosion {
                             if (entity instanceof EntityDeathWorm && ((EntityDeathWorm) entity).isOwner(((EntityDeathWorm) exploder).getOwner())) {
                                 return;
                             }
-                            if (!(entity instanceof EntityLivingBase && ((EntityDeathWorm) exploder).isOwner((EntityLivingBase) entity))) {
+                            if (!(entity instanceof LivingEntity && ((EntityDeathWorm) exploder).isOwner((LivingEntity) entity))) {
                                 entity.attackEntityFrom(DamageSource.FALLING_BLOCK, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 6);
                             }
                         }
                     }
                     double d11 = 0.5D;
 
-                    if (entity instanceof EntityLivingBase) {
-                        d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+                    if (entity instanceof LivingEntity) {
+                        d11 = EnchantmentProtection.getBlastDamageReduction((LivingEntity) entity, d10);
                     }
                     entity.motionX += d5 * d11 * 0.25;
                     entity.motionY += d7 * d11 * 0.25;
                     entity.motionZ += d9 * d11 * 0.25;
 
-                    if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
-                        this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+                    if (entity instanceof PlayerEntity && !((PlayerEntity) entity).capabilities.disableDamage) {
+                        this.playerKnockbackMap.put((PlayerEntity) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                     }
                 }
             }
@@ -185,13 +185,13 @@ public class BlockLaunchExplosion extends Explosion {
     }
 
     @Override
-    public Map<EntityPlayer, Vec3d> getPlayerKnockbackMap() {
+    public Map<PlayerEntity, Vec3d> getPlayerKnockbackMap() {
         return this.playerKnockbackMap;
     }
 
     @Override
-    public EntityLivingBase getExplosivePlacedBy() {
-        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof EntityLivingBase ? (EntityLivingBase) this.exploder : null));
+    public LivingEntity getExplosivePlacedBy() {
+        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof LivingEntity ? (LivingEntity) this.exploder : null));
     }
 
     public void func_180342_d() {

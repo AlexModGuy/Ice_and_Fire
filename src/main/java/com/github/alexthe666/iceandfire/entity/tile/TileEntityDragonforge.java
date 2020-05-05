@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -234,7 +234,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         }
     }
 
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         if (this.world.getTileEntity(this.pos) != this) {
             return false;
         } else {
@@ -261,10 +261,10 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         }
     }
 
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
     }
 
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
     }
 
     public boolean isItemValidForSlot(int index, ItemStack stack) {
@@ -306,7 +306,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return true;
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
         return new ContainerDragonForge(playerInventory, this);
     }
 

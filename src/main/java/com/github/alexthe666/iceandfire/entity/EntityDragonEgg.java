@@ -5,8 +5,9 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
+public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.VARINT);
@@ -170,7 +171,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
         return false;
     }
 
-    public void onPlayerPlace(EntityPlayer player) {
+    public void onPlayerPlace(PlayerEntity player) {
         this.setOwnerId(player.getUniqueID());
     }
 

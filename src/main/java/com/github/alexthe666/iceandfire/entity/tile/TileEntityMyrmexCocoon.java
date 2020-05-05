@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.inventory.ContainerMyrmexCocoon;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
@@ -76,7 +76,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         return 64;
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
         this.fillWithLoot(playerIn);
         return new ContainerMyrmexCocoon(playerInventory, this, playerIn);
     }
@@ -90,12 +90,12 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         return this.chestContents;
     }
 
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
         this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
     }
 
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
         this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
     }
@@ -112,7 +112,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         return this.writeToNBT(new CompoundNBT());
     }
 
-    public void fillWithLoot(@Nullable EntityPlayer player) {
+    public void fillWithLoot(@Nullable PlayerEntity player) {
         if (this.lootTable != null && this.world != null && this.world.getLootTableManager() != null) {
             LootTable loottable = this.world.getLootTableManager().getLootTableFromLocation(this.lootTable);
             this.lootTable = null;

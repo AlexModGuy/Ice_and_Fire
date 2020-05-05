@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
 import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
@@ -137,8 +137,8 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public Class<EntityLivingBase> getEntityClass() {
-        return EntityLivingBase.class;
+    public Class<LivingEntity> getEntityClass() {
+        return LivingEntity.class;
     }
 
     public boolean isConnectedToEntity(Entity parent, Entity entity) {

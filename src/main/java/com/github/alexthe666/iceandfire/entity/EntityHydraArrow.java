@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -27,7 +27,7 @@ public class EntityHydraArrow  extends EntityArrow {
         this.setDamage(5F);
     }
 
-    public EntityHydraArrow(World worldIn, EntityLivingBase shooter) {
+    public EntityHydraArrow(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
         this.setDamage(5F);
     }
@@ -47,7 +47,7 @@ public class EntityHydraArrow  extends EntityArrow {
         }
     }
 
-    protected void damageShield(EntityPlayer player, float damage) {
+    protected void damageShield(PlayerEntity player, float damage) {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);
@@ -68,13 +68,13 @@ public class EntityHydraArrow  extends EntityArrow {
         }
     }
 
-    protected void arrowHit(EntityLivingBase living) {
-        if (living instanceof EntityPlayer) {
-            this.damageShield((EntityPlayer) living, (float) this.getDamage());
+    protected void arrowHit(LivingEntity living) {
+        if (living instanceof PlayerEntity) {
+            this.damageShield((PlayerEntity) living, (float) this.getDamage());
         }
         living.addPotionEffect(new PotionEffect(MobEffects.POISON, 300, 0));
-        if(this.shootingEntity instanceof EntityLivingBase){
-            ((EntityLivingBase)this.shootingEntity).heal((float)this.getDamage());
+        if(this.shootingEntity instanceof LivingEntity){
+            ((LivingEntity)this.shootingEntity).heal((float)this.getDamage());
         }
     }
 

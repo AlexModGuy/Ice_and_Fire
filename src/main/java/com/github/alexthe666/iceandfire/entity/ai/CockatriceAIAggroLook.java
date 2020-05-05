@@ -4,18 +4,18 @@ import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import javax.annotation.Nullable;
 
-public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<EntityPlayer> {
+public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<PlayerEntity> {
     private final EntityCockatrice cockatrice;
-    private EntityPlayer player;
+    private PlayerEntity player;
     private int aggroTime;
     private int teleportTime;
 
     public CockatriceAIAggroLook(EntityCockatrice p_i45842_1_) {
-        super(p_i45842_1_, EntityPlayer.class, false);
+        super(p_i45842_1_, PlayerEntity.class, false);
         this.cockatrice = p_i45842_1_;
     }
 
@@ -27,8 +27,8 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Entit
             return false;
         }
         double d0 = this.getTargetDistance();
-        this.player = this.cockatrice.world.getNearestAttackablePlayer(this.cockatrice.posX, this.cockatrice.posY, this.cockatrice.posZ, d0, d0, null, new Predicate<EntityPlayer>() {
-            public boolean apply(@Nullable EntityPlayer p_apply_1_) {
+        this.player = this.cockatrice.world.getNearestAttackablePlayer(this.cockatrice.posX, this.cockatrice.posY, this.cockatrice.posZ, d0, d0, null, new Predicate<PlayerEntity>() {
+            public boolean apply(@Nullable PlayerEntity p_apply_1_) {
                 return p_apply_1_ != null && EntityGorgon.isEntityLookingAt(p_apply_1_, CockatriceAIAggroLook.this.cockatrice, EntityCockatrice.VIEW_RADIUS);
             }
         });

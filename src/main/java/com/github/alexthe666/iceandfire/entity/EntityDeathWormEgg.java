@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public class EntityDeathWormEgg extends EntityThrowable {
+public class EntityDeathWormEgg extends ThrowableEntity {
 
     private boolean giant;
 
@@ -23,7 +24,7 @@ public class EntityDeathWormEgg extends EntityThrowable {
         super(worldIn);
     }
 
-    public EntityDeathWormEgg(World worldIn, EntityLivingBase throwerIn, boolean giant) {
+    public EntityDeathWormEgg(World worldIn, LivingEntity throwerIn, boolean giant) {
         super(worldIn, throwerIn);
         this.giant = giant;
     }

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -18,11 +18,11 @@ public class LayerStonePlayerEntityCrack implements LayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (entitylivingbaseIn instanceof EntityStoneStatue) {
+    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+        if (LivingEntityIn instanceof EntityStoneStatue) {
             float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
             float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2
-            int breakCount = ((EntityStoneStatue) entitylivingbaseIn).getCrackAmount();
+            int breakCount = ((EntityStoneStatue) LivingEntityIn).getCrackAmount();
             if (breakCount > 0) {
                 GlStateManager.enableNormalize();
                 GlStateManager.enableBlend();
@@ -33,7 +33,7 @@ public class LayerStonePlayerEntityCrack implements LayerRenderer {
                 GlStateManager.loadIdentity();
                 GlStateManager.scale(x, y, 1);
                 GlStateManager.matrixMode(5888);
-                this.renderer.getMainModel().render(entitylivingbaseIn, f, f1, f2, f3, f4, f5);
+                this.renderer.getMainModel().render(LivingEntityIn, f, f1, f2, f3, f4, f5);
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
                 GlStateManager.matrixMode(5888);

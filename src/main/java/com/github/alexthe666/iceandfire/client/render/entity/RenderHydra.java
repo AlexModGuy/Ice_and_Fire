@@ -23,7 +23,7 @@ public class RenderHydra extends RenderLiving<EntityHydra> {
     }
 
     @Override
-    public void preRenderCallback(EntityHydra entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityHydra LivingEntityIn, float partialTickTime) {
         GL11.glScalef(1.75F, 1.75F, 1.75F);
     }
 

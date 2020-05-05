@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -53,7 +53,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 8;
     }
 
@@ -131,7 +131,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(3, new MyrmexAILeaveHive(this, 1.0D));
         this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));

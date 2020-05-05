@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotLectern extends Slot {
-    private EntityPlayer thePlayer;
+    private PlayerEntity thePlayer;
     private int field_75228_b;
 
-    public SlotLectern(EntityPlayer player, IInventory inv, int slotIndex, int xPosition, int yPosition) {
+    public SlotLectern(PlayerEntity player, IInventory inv, int slotIndex, int xPosition, int yPosition) {
         super(inv, slotIndex, xPosition, yPosition);
         this.thePlayer = player;
     }
@@ -29,7 +29,7 @@ public class SlotLectern extends Slot {
     }
 
     @Override
-    public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
+    public ItemStack onTake(PlayerEntity playerIn, ItemStack stack) {
         this.onCrafting(stack);
         return super.onTake(playerIn, stack);
     }

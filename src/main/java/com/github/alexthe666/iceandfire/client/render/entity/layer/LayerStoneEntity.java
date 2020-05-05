@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityLlama;
@@ -29,9 +29,9 @@ public class LayerStoneEntity implements LayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (entitylivingbaseIn instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
+    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+        if (LivingEntityIn instanceof EntityLiving) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntityIn, StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
                 float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2
@@ -49,12 +49,12 @@ public class LayerStoneEntity implements LayerRenderer {
 
                 if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
                     ((ICustomStatueModel) this.renderer.getMainModel()).renderStatue();
-                } else if (entitylivingbaseIn instanceof AbstractHorse && !(entitylivingbaseIn instanceof EntityLlama)) {
-                    HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
-                } else if (entitylivingbaseIn instanceof EntityGuardian) {
-                    GUARDIAN_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                } else if (LivingEntityIn instanceof AbstractHorse && !(LivingEntityIn instanceof EntityLlama)) {
+                    HORSE_MODEL.render(LivingEntityIn, f, 0, 0, f3, f4, f5);
+                } else if (LivingEntityIn instanceof EntityGuardian) {
+                    GUARDIAN_MODEL.render(LivingEntityIn, f, 0, 0, f3, f4, f5);
                 } else {
-                    this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
+                    this.renderer.getMainModel().render(LivingEntityIn, f, 0, 0, f3, f4, f5);
                 }
 
                 GlStateManager.matrixMode(5890);

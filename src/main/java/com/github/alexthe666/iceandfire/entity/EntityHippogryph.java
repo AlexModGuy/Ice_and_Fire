@@ -22,7 +22,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -133,7 +133,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ));
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
@@ -148,16 +148,16 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
         this.tasks.addTask(6, new HippogryphAIAirTarget(this));
         this.tasks.addTask(7, new HippogryphAIWander(this, 1.0D));
-        this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(8, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new HippogryphAITargetItems(this, false));
-        this.targetTasks.addTask(5, new HippogryphAITarget(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(5, new HippogryphAITarget(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase && !(entity instanceof AbstractHorse) && DragonUtils.isAlive((EntityLivingBase) entity);
+                return entity instanceof LivingEntity && !(entity instanceof AbstractHorse) && DragonUtils.isAlive((LivingEntity) entity);
             }
         }));
 
@@ -225,8 +225,8 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
-                EntityPlayer player = (EntityPlayer) passenger;
+            if (passenger instanceof PlayerEntity && this.getAttackTarget() != passenger) {
+                PlayerEntity player = (PlayerEntity) passenger;
                 if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
                     return player;
                 }
@@ -252,7 +252,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         return this.ticksExisted % 50 > 43;
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         String s = TextFormatting.getTextWithoutFormattingCodes(player.getName());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
@@ -346,7 +346,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
 
-    public void openGUI(EntityPlayer playerEntity) {
+    public void openGUI(PlayerEntity playerEntity) {
         if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 4, this.world, this.getEntityId(), 0, 0);
         }
@@ -561,14 +561,14 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
+    public boolean isRidingPlayer(PlayerEntity player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
     }
 
     @Nullable
-    public EntityPlayer getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof EntityPlayer){
-            return (EntityPlayer)this.getControllingPassenger();
+    public PlayerEntity getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof PlayerEntity){
+            return (PlayerEntity)this.getControllingPassenger();
         }
         return null;
     }
@@ -776,7 +776,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     public void onLivingUpdate() {
         super.onLivingUpdate();
         switchNavigator();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (!this.world.isRemote) {
@@ -974,9 +974,9 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
                 this.setHovering(false);
             }
         }
-        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
+        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
 
-            EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
+            LivingEntity target = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 3);
             if (this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_SCRATCH) {
                 this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
             }
@@ -1101,7 +1101,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void onHearFlute(EntityPlayer player) {
+    public void onHearFlute(PlayerEntity player) {
         if (this.isTamed() && this.isOwner(player)) {
             if (this.isFlying() || this.isHovering()) {
                 this.airTarget = null;

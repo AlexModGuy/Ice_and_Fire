@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
@@ -98,15 +98,15 @@ public class DragonAIMate extends EntityAIBase {
         EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
 
         if (egg != null) {
-            EntityPlayer entityplayer = this.dragon.getLoveCause();
+            PlayerEntity PlayerEntity = this.dragon.getLoveCause();
 
-            if (entityplayer == null && this.targetMate.getLoveCause() != null) {
-                entityplayer = this.targetMate.getLoveCause();
+            if (PlayerEntity == null && this.targetMate.getLoveCause() != null) {
+                PlayerEntity = this.targetMate.getLoveCause();
             }
 
-            if (entityplayer != null) {
-                entityplayer.addStat(StatList.ANIMALS_BRED);
-                //entityplayer.addStat(ModAchievements.dragonBreed);
+            if (PlayerEntity != null) {
+                PlayerEntity.addStat(StatList.ANIMALS_BRED);
+                //PlayerEntity.addStat(ModAchievements.dragonBreed);
             }
 
             this.dragon.setGrowingAge(6000);

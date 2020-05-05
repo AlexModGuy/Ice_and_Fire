@@ -1,25 +1,14 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.World;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 
-public class ItemBlindfold extends ItemArmor {
+public class ItemBlindfold extends ArmorItem {
 
     public ItemBlindfold() {
-        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.blindfold");
+        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, EquipmentSlotType.HEAD, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "blindfold");
     }
-
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20, 2, true, false));
-    }
-
 }

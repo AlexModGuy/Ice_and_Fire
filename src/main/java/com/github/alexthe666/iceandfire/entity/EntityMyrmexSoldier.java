@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -42,7 +42,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 5;
     }
 
@@ -84,7 +84,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
         this.tasks.addTask(5, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(6, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIFindGaurdingEntity(this));

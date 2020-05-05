@@ -7,11 +7,11 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -38,14 +38,14 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(3, new DreadAITargetNonDread(this, EntityLivingBase.class, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, true));
+        this.targetTasks.addTask(3, new DreadAITargetNonDread(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityLivingBase && DragonUtils.canHostilesTarget(entity);
+                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
             }
         }));
     }
@@ -78,12 +78,12 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
     }
 
-    public void addTrackingPlayer(EntityPlayerMP player) {
+    public void addTrackingPlayer(PlayerEntityMP player) {
         super.addTrackingPlayer(player);
         this.bossInfo.addPlayer(player);
     }
 
-    public void removeTrackingPlayer(EntityPlayerMP player) {
+    public void removeTrackingPlayer(PlayerEntityMP player) {
         super.removeTrackingPlayer(player);
         this.bossInfo.removePlayer(player);
     }

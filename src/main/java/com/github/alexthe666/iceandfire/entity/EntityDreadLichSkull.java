@@ -3,10 +3,10 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -40,13 +40,13 @@ public class EntityDreadLichSkull extends EntityArrow {
         this.setDamage(6F);
     }
 
-    public EntityDreadLichSkull(World worldIn, EntityLivingBase shooter, double x, double y, double z) {
+    public EntityDreadLichSkull(World worldIn, LivingEntity shooter, double x, double y, double z) {
         super(worldIn, shooter);
         this.setDamage(6);
         targetSorter = new EntityAINearestAttackableTarget.Sorter(shooter);
     }
 
-    public EntityDreadLichSkull(World worldIn, EntityLivingBase shooter, double dmg) {
+    public EntityDreadLichSkull(World worldIn, LivingEntity shooter, double dmg) {
         super(worldIn, shooter);
         this.setDamage(dmg);
         targetSorter = new EntityAINearestAttackableTarget.Sorter(shooter);
@@ -65,7 +65,7 @@ public class EntityDreadLichSkull extends EntityArrow {
         float sqrt = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
         boolean flag = true;
         if(this.shootingEntity != null && this.shootingEntity instanceof EntityLiving && ((EntityLiving) this.shootingEntity).getAttackTarget() != null){
-            EntityLivingBase target = ((EntityLiving) this.shootingEntity).getAttackTarget();
+            LivingEntity target = ((EntityLiving) this.shootingEntity).getAttackTarget();
             double minusX = target.posX - this.posX;
             double minusY = target.posY - this.posY;
             double minusZ = target.posZ - this.posZ;
@@ -74,11 +74,11 @@ public class EntityDreadLichSkull extends EntityArrow {
             this.motionY += minusY * speed * 0.1D;
             this.motionZ += minusZ * speed * 0.1D;
         }
-        if(this.shootingEntity instanceof EntityPlayer){
-            EntityLivingBase target = ((EntityPlayer) this.shootingEntity).getAttackingEntity();
+        if(this.shootingEntity instanceof PlayerEntity){
+            LivingEntity target = ((PlayerEntity) this.shootingEntity).getAttackingEntity();
             if(target == null || !target.isEntityAlive()){
                 double d0 = 10;
-                List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, (new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D)).grow(d0, 10.0D, d0), IMob.VISIBLE_MOB_SELECTOR);
+                List<LivingEntity> list = world.getEntitiesWithinAABB(LivingEntity.class, (new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D)).grow(d0, 10.0D, d0), IMob.VISIBLE_MOB_SELECTOR);
                 if(targetSorter != null){
                     Collections.sort(list, targetSorter);
                 }
@@ -139,16 +139,16 @@ public class EntityDreadLichSkull extends EntityArrow {
         }
         super.onHit(raytraceResultIn);
     }
-    protected void arrowHit(EntityLivingBase living) {
+    protected void arrowHit(LivingEntity living) {
         super.arrowHit(living);
         if (living != null && (this.shootingEntity == null || !living.isEntityEqual(this.shootingEntity))){
-            if (living instanceof EntityPlayer) {
-                this.damageShield((EntityPlayer) living, (float) this.getDamage());
+            if (living instanceof PlayerEntity) {
+                this.damageShield((PlayerEntity) living, (float) this.getDamage());
             }
         }
     }
 
-    protected void damageShield(EntityPlayer player, float damage) {
+    protected void damageShield(PlayerEntity player, float damage) {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);

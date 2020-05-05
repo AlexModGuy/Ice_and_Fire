@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
@@ -83,7 +83,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
 
         @Override
-        public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
             this.doRenderLayer((EntityHippocampus) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }
@@ -97,20 +97,20 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
             this.renderer = renderer;
         }
 
-        public void doRenderLayer(EntityHippocampus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-            if (entitylivingbaseIn.hasCustomName() && entitylivingbaseIn.getCustomNameTag().toLowerCase().contains("rainbow")) {
+        public void doRenderLayer(EntityHippocampus LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+            if (LivingEntityIn.hasCustomName() && LivingEntityIn.getCustomNameTag().toLowerCase().contains("rainbow")) {
                 GL11.glPushMatrix();
-                this.renderer.bindTexture(entitylivingbaseIn.isBlinking() ? TEXTURE_BLINK : TEXTURE);
+                this.renderer.bindTexture(LivingEntityIn.isBlinking() ? TEXTURE_BLINK : TEXTURE);
                 int i1 = 25;
-                int i = entitylivingbaseIn.ticksExisted / 25 + entitylivingbaseIn.getEntityId();
+                int i = LivingEntityIn.ticksExisted / 25 + LivingEntityIn.getEntityId();
                 int j = EnumDyeColor.values().length;
                 int k = i % j;
                 int l = (i + 1) % j;
-                float f = ((float) (entitylivingbaseIn.ticksExisted % 25) + partialTicks) / 25.0F;
+                float f = ((float) (LivingEntityIn.ticksExisted % 25) + partialTicks) / 25.0F;
                 float[] afloat1 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(k));
                 float[] afloat2 = EntitySheep.getDyeRgb(EnumDyeColor.byMetadata(l));
                 GlStateManager.color(afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f);
-                this.renderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+                this.renderer.getMainModel().render(LivingEntityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                 GL11.glPopMatrix();
             }
         }
@@ -121,7 +121,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
 
         @Override
-        public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
             this.doRenderLayer((EntityHippocampus) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }
@@ -149,7 +149,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
 
         @Override
-        public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
             this.doRenderLayer((EntityHippocampus) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }
@@ -176,7 +176,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
 
         @Override
-        public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
             this.doRenderLayer((EntityHippocampus) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }
@@ -218,7 +218,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
         }
 
         @Override
-        public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
             this.doRenderLayer((EntityHippocampus) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }

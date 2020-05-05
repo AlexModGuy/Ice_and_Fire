@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -33,10 +33,10 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
         super(renderManager, new ModelCockatrice(), 0.6F);
     }
 
-    private Vec3d getPosition(EntityLivingBase entityLivingBaseIn, double p_177110_2_, float p_177110_4_) {
-        double d0 = entityLivingBaseIn.lastTickPosX + (entityLivingBaseIn.posX - entityLivingBaseIn.lastTickPosX) * (double) p_177110_4_;
-        double d1 = p_177110_2_ + entityLivingBaseIn.lastTickPosY + (entityLivingBaseIn.posY - entityLivingBaseIn.lastTickPosY) * (double) p_177110_4_;
-        double d2 = entityLivingBaseIn.lastTickPosZ + (entityLivingBaseIn.posZ - entityLivingBaseIn.lastTickPosZ) * (double) p_177110_4_;
+    private Vec3d getPosition(LivingEntity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.posX - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.posY - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.posZ - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
         return new Vec3d(d0, d1, d2);
     }
 
@@ -45,9 +45,9 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             return true;
         } else {
             if (livingEntity.hasTargetedEntity()) {
-                EntityLivingBase entitylivingbase = livingEntity.getTargetedEntity();
-                if (entitylivingbase != null) {
-                    Vec3d vec3d = this.getPosition(entitylivingbase, (double) entitylivingbase.height * 0.5D, 1.0F);
+                LivingEntity LivingEntity = livingEntity.getTargetedEntity();
+                if (LivingEntity != null) {
+                    Vec3d vec3d = this.getPosition(LivingEntity, (double) LivingEntity.height * 0.5D, 1.0F);
                     Vec3d vec3d1 = this.getPosition(livingEntity, (double) livingEntity.getEyeHeight(), 1.0F);
                     return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
                 }
@@ -59,10 +59,10 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
 
     public void doRender(EntityCockatrice entity, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
-        EntityLivingBase entitylivingbase = entity.getTargetedEntity();
+        LivingEntity LivingEntity = entity.getTargetedEntity();
 
-        boolean blindness = entity.isPotionActive(MobEffects.BLINDNESS) || entitylivingbase != null && entitylivingbase.isPotionActive(MobEffects.BLINDNESS);
-        if (!blindness && entitylivingbase != null && EntityGorgon.isEntityLookingAt(entity, entitylivingbase, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
+        boolean blindness = entity.isPotionActive(MobEffects.BLINDNESS) || LivingEntity != null && LivingEntity.isPotionActive(MobEffects.BLINDNESS);
+        if (!blindness && LivingEntity != null && EntityGorgon.isEntityLookingAt(entity, LivingEntity, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS)) {
             float f = entity.getAttackAnimationScale(partialTicks);
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -80,7 +80,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             float f4 = entity.getEyeHeight();
             GlStateManager.pushMatrix();
             GlStateManager.translate((float) x, (float) y + f4, (float) z);
-            Vec3d vec3d = this.getPosition(entitylivingbase, (double) entitylivingbase.height * 0.5D, partialTicks);
+            Vec3d vec3d = this.getPosition(LivingEntity, (double) LivingEntity.height * 0.5D, partialTicks);
             Vec3d vec3d1 = this.getPosition(entity, (double) f4, partialTicks);
             Vec3d vec3d2 = vec3d.subtract(vec3d1);
             double d0 = vec3d2.length() + 1.0D;

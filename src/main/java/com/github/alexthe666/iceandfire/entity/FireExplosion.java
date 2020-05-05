@@ -10,9 +10,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -37,7 +37,7 @@ public class FireExplosion extends Explosion {
     private final Entity exploder;
     private final float explosionSize;
     private final List<BlockPos> affectedBlockPositions;
-    private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
+    private final Map<PlayerEntity, Vec3d> playerKnockbackMap;
     private final Vec3d position;
     private boolean mobGreifing;
 
@@ -135,15 +135,15 @@ public class FireExplosion extends Explosion {
                             if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
                                 return;
                             }
-                            if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
+                            if (entity instanceof LivingEntity && ((EntityDragonBase) exploder).isOwner((LivingEntity) entity)) {
                                 entity.attackEntityFrom(IceAndFire.dragonFire, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
-                                if (entity.isDead && entity instanceof EntityPlayer) {
-                                    //((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+                                if (entity.isDead && entity instanceof PlayerEntity) {
+                                    //((PlayerEntity) entity).addStat(ModAchievements.dragonSlayer, 1);
                                 }
                             } else if (!entity.isEntityEqual(exploder)) {
                                 entity.attackEntityFrom(IceAndFire.dragonFire, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
-                                //if (entity.isDead && entity instanceof EntityPlayer) {
-                                //	((EntityPlayer) entity).addStat(ModAchievements.dragonSlayer, 1);
+                                //if (entity.isDead && entity instanceof PlayerEntity) {
+                                //	((PlayerEntity) entity).addStat(ModAchievements.dragonSlayer, 1);
                             }
                         }
                         if (entity.isDead && this.exploder != null && this.exploder instanceof EntityDragonBase) {
@@ -152,15 +152,15 @@ public class FireExplosion extends Explosion {
                     }
                     double d11 = 1.0D;
 
-                    if (entity instanceof EntityLivingBase) {
-                        d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+                    if (entity instanceof LivingEntity) {
+                        d11 = EnchantmentProtection.getBlastDamageReduction((LivingEntity) entity, d10);
                     }
                     entity.motionX += d5 * d11;
                     entity.motionY += d7 * d11;
                     entity.motionZ += d9 * d11;
 
-                    if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.disableDamage) {
-                        this.playerKnockbackMap.put((EntityPlayer) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+                    if (entity instanceof PlayerEntity && !((PlayerEntity) entity).capabilities.disableDamage) {
+                        this.playerKnockbackMap.put((PlayerEntity) entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                     }
                 }
             }
@@ -239,7 +239,7 @@ public class FireExplosion extends Explosion {
     }
 
     @Override
-    public Map<EntityPlayer, Vec3d> getPlayerKnockbackMap() {
+    public Map<PlayerEntity, Vec3d> getPlayerKnockbackMap() {
         return this.playerKnockbackMap;
     }
 
@@ -248,8 +248,8 @@ public class FireExplosion extends Explosion {
      * that caused the explosion or null.
      */
     @Override
-    public EntityLivingBase getExplosivePlacedBy() {
-        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof EntityLivingBase ? (EntityLivingBase) this.exploder : null));
+    public LivingEntity getExplosivePlacedBy() {
+        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof LivingEntity ? (LivingEntity) this.exploder : null));
     }
 
     public void func_180342_d() {

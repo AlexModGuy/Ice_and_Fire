@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
@@ -191,11 +191,11 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
     }
 
     @Override
@@ -248,7 +248,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return true;
     }
 
@@ -291,7 +291,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         return "iceandfire:lectern";
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
         return new ContainerLectern(playerInventory, this);
     }
 

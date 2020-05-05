@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -41,12 +41,12 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageMultipartInteract message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof EntityLivingBase) {
+            if (entity != null && entity instanceof LivingEntity) {
                 double dist = player.getDistance(entity);
-                EntityLivingBase mob = (EntityLivingBase) entity;
+                LivingEntity mob = (LivingEntity) entity;
                 if(dist < 100) {
                     if (message.dmg > 0F) {
                         mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
@@ -59,12 +59,12 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageMultipartInteract message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageMultipartInteract message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof EntityLivingBase) {
+            if (entity != null && entity instanceof LivingEntity) {
                 double dist = player.getDistance(entity);
-                EntityLivingBase mob = (EntityLivingBase) entity;
+                LivingEntity mob = (LivingEntity) entity;
                 if(dist < 100) {
                     if (message.dmg > 0F) {
                         mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);

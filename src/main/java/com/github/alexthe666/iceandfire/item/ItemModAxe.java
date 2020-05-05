@@ -8,7 +8,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemAxe;
@@ -50,7 +50,7 @@ public class ItemModAxe extends ItemAxe {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (this == IafItemRegistry.SILVER_AXE) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);
@@ -105,7 +105,7 @@ public class ItemModAxe extends ItemAxe {
         return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
     }
 
-    public boolean canDisableShield(ItemStack stack, ItemStack shield, EntityLivingBase entity, EntityLivingBase attacker) {
+    public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
         return true;
     }
 }

@@ -42,8 +42,8 @@ public class RenderModCapes {
 
     @SubscribeEvent
     public void playerRender(RenderPlayerEvent.Pre event) {
-        if (event.getEntityPlayer() instanceof AbstractClientPlayer) {
-            NetworkPlayerInfo info = ((AbstractClientPlayer)event.getEntityPlayer()).getPlayerInfo();
+        if (event.getPlayerEntity() instanceof AbstractClientPlayer) {
+            NetworkPlayerInfo info = ((AbstractClientPlayer)event.getPlayerEntity()).getPlayerInfo();
             if (info != null) {
                 Map<Type, ResourceLocation> textureMap = null;
                 try {
@@ -54,26 +54,26 @@ public class RenderModCapes {
                     e.printStackTrace();
                 }
                 if (textureMap != null) {
-                    if (hasBetaCape(event.getEntityPlayer().getUniqueID())) {
+                    if (hasBetaCape(event.getPlayerEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, betaTex);
                         textureMap.put(Type.ELYTRA, betaElytraTex);
                     }
-                    if (hasRedCape(event.getEntityPlayer().getUniqueID())) {
+                    if (hasRedCape(event.getPlayerEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, redTex);
                         textureMap.put(Type.ELYTRA, redElytraTex);
                     }
-                    if (hasBlueCape(event.getEntityPlayer().getUniqueID())) {
+                    if (hasBlueCape(event.getPlayerEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, blueTex);
                         textureMap.put(Type.ELYTRA, blueElytraTex);
                     }
                 }
             }
         }
-        if(event.getEntityPlayer().getUniqueID().equals(ServerEvents.ALEX_UUID)){
+        if(event.getPlayerEntity().getUniqueID().equals(ServerEvents.ALEX_UUID)){
             GL11.glPushMatrix();
-            float f2 = ((float) event.getEntityPlayer().ticksExisted - 1 +  event.getPartialRenderTick());
+            float f2 = ((float) event.getPlayerEntity().ticksExisted - 1 +  event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            GL11.glTranslatef((float) 0, (float) 1.3F * event.getEntityPlayer().height, (float) 0);
+            GL11.glTranslatef((float) 0, (float) 1.3F * event.getPlayerEntity().height, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
             GL11.glPushMatrix();

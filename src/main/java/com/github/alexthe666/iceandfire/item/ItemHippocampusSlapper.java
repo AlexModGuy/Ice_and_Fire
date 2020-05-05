@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,7 @@ public class ItemHippocampusSlapper extends ItemSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase targetEntity, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity targetEntity, LivingEntity attacker) {
         targetEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
         targetEntity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 2));
         targetEntity.playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, 3, 1);

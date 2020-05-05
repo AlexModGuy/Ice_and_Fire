@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.MobEffects;
@@ -36,7 +36,7 @@ public class EntityPixieCharge extends EntityFireball {
         this.setSize(1.5F, 1.5F);
     }
 
-    public EntityPixieCharge(World worldIn, EntityPlayer shooter, double accelX, double accelY, double accelZ) {
+    public EntityPixieCharge(World worldIn, PlayerEntity shooter, double accelX, double accelY, double accelZ) {
         super(worldIn, shooter, accelX, accelY, accelZ);
         double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -88,9 +88,9 @@ public class EntityPixieCharge extends EntityFireball {
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         if (!this.world.isRemote) {
-            if (movingObject.entityHit instanceof EntityLivingBase) {
-                ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 0));
-                ((EntityLivingBase) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 0));
+            if (movingObject.entityHit instanceof LivingEntity) {
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 0));
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 0));
                 movingObject.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
             }
             if (this.world.isRemote) {
@@ -98,7 +98,7 @@ public class EntityPixieCharge extends EntityFireball {
                     IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
                 }
             }
-            if (this.shootingEntity == null || !(shootingEntity instanceof EntityPlayer) || !((EntityPlayer) shootingEntity).isCreative()) {
+            if (this.shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
                 if (rand.nextInt(3) == 0) {
                     this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
                 }

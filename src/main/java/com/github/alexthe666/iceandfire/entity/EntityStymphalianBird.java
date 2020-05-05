@@ -15,12 +15,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -63,7 +63,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public StymphalianBirdFlock flock;
     private int animationTick;
     private Animation currentAnimation;
-    private EntityLivingBase victorEntity;
+    private LivingEntity victorEntity;
     private boolean isFlying;
     private int flyTicks;
     private int launchTicks;
@@ -88,10 +88,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
         this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(6, new StymphalianBirdAIAirTarget(this));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(2, new StymphalianBirdAITarget(this, EntityLivingBase.class, true));
+        this.targetTasks.addTask(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
@@ -170,10 +170,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     public void onDeath(DamageSource cause) {
-        if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase && !world.isRemote) {
+        if (cause.getTrueSource() != null && cause.getTrueSource() instanceof LivingEntity && !world.isRemote) {
             this.setVictorId(cause.getTrueSource().getUniqueID());
             if (this.flock != null) {
-                this.flock.setFearTarget((EntityLivingBase) cause.getTrueSource());
+                this.flock.setFearTarget((LivingEntity) cause.getTrueSource());
             }
         }
         super.onDeath(cause);
@@ -228,7 +228,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     @Nullable
-    public EntityLivingBase getVictor() {
+    public LivingEntity getVictor() {
         try {
             UUID uuid = this.getVictorId();
             return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
@@ -237,11 +237,11 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         }
     }
 
-    public void setVictor(EntityLivingBase player) {
+    public void setVictor(LivingEntity player) {
         this.setVictorId(player.getUniqueID());
     }
 
-    public boolean isVictor(EntityLivingBase entityIn) {
+    public boolean isVictor(LivingEntity entityIn) {
         return entityIn == this.getVictor();
     }
 
@@ -270,10 +270,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() != null && (this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))) {
+        if (this.getAttackTarget() != null && (this.getAttackTarget() instanceof PlayerEntity && ((PlayerEntity) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))) {
             this.setAttackTarget(null);
         }
         if (this.flock == null) {
@@ -317,7 +317,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 this.setAnimation(ANIMATION_SHOOT_ARROWS);
             }
             if (this.getAnimation() == ANIMATION_SHOOT_ARROWS) {
-                EntityLivingBase target = this.getAttackTarget();
+                LivingEntity target = this.getAttackTarget();
                 this.faceEntity(target, 360, 360);
                 if (this.isFlying()) {
                     rotationYaw = renderYawOffset;
@@ -492,7 +492,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase entity) {
+    public void setAttackTarget(LivingEntity entity) {
         if (this.isVictor(entity) && entity != null) {
             return;
         }

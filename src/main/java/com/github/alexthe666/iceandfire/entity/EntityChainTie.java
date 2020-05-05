@@ -7,7 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.HangingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityChainTie extends EntityHanging {
+public class EntityChainTie extends HangingEntity {
 
     public EntityChainTie(World worldIn) {
         super(worldIn);
@@ -71,7 +72,7 @@ public class EntityChainTie extends EntityHanging {
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
+        if (source.getTrueSource() != null && source.getTrueSource() instanceof PlayerEntity) {
             return super.attackEntityFrom(source, amount);
         }
         return false;
@@ -124,7 +125,7 @@ public class EntityChainTie extends EntityHanging {
         }
     }
 
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
         if (this.world.isRemote) {
             return true;
         } else {

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -52,7 +52,7 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDragonSetBurnBlock message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageDragonSetBurnBlock message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {
@@ -64,7 +64,7 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageDragonSetBurnBlock message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageDragonSetBurnBlock message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {

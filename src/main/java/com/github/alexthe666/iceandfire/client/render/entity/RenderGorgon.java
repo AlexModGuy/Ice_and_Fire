@@ -23,7 +23,7 @@ public class RenderGorgon extends RenderLiving<EntityGorgon> {
     }
 
     @Override
-    public void preRenderCallback(EntityGorgon entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityGorgon LivingEntityIn, float partialTickTime) {
         GL11.glScalef(0.85F, 0.85F, 0.85F);
     }
 

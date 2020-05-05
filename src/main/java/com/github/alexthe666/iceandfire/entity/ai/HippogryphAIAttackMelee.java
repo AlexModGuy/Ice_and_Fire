@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -36,28 +36,28 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
      * Returns whether the EntityAIBase should begin execution.
      */
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+        LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null) {
+        if (LivingEntity == null) {
             return false;
-        } else if (!entitylivingbase.isEntityAlive()) {
+        } else if (!LivingEntity.isEntityAlive()) {
             return false;
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.path = this.attacker.getNavigator().getPathToEntityLiving(entitylivingbase);
+                    this.path = this.attacker.getNavigator().getPathToEntityLiving(LivingEntity);
                     this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
                     return this.path != null;
                 } else {
                     return true;
                 }
             }
-            this.path = this.attacker.getNavigator().getPathToEntityLiving(entitylivingbase);
+            this.path = this.attacker.getNavigator().getPathToEntityLiving(LivingEntity);
 
             if (this.path != null) {
                 return true;
             } else {
-                return this.getAttackReachSqr(entitylivingbase) >= this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
+                return this.getAttackReachSqr(LivingEntity) >= this.attacker.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
             }
         }
     }
@@ -66,18 +66,18 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     public boolean shouldContinueExecuting() {
-        EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+        LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null) {
+        if (LivingEntity == null) {
             return false;
-        } else if (!entitylivingbase.isEntityAlive()) {
+        } else if (!LivingEntity.isEntityAlive()) {
             return false;
         } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
-        } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase))) {
+        } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity))) {
             return false;
         } else {
-            return !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative();
+            return !(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
         }
     }
 
@@ -93,9 +93,9 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     public void resetTask() {
-        EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+        LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
+        if (LivingEntity instanceof PlayerEntity && (((PlayerEntity) LivingEntity).isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.attacker.setAttackTarget(null);
         }
 
@@ -106,23 +106,23 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
      * Keep ticking a continuous task that has already been started
      */
     public void updateTask() {
-        EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
-        if (entitylivingbase != null) {
-            this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
-            double d0 = this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
+        LivingEntity LivingEntity = this.attacker.getAttackTarget();
+        if (LivingEntity != null) {
+            this.attacker.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+            double d0 = this.attacker.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
             --this.delayCounter;
 
-            if ((this.longMemory || this.attacker.getEntitySenses().canSee(entitylivingbase)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entitylivingbase.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
-                this.targetX = entitylivingbase.posX;
-                this.targetY = entitylivingbase.getEntityBoundingBox().minY;
-                this.targetZ = entitylivingbase.posZ;
+            if ((this.longMemory || this.attacker.getEntitySenses().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
+                this.targetX = LivingEntity.posX;
+                this.targetY = LivingEntity.getEntityBoundingBox().minY;
+                this.targetZ = LivingEntity.posZ;
                 this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
 
                 if (this.canPenalize) {
                     this.delayCounter += failedPathFindingPenalty;
                     if (this.attacker.getNavigator().getPath() != null) {
                         net.minecraft.pathfinding.PathPoint finalPathPoint = this.attacker.getNavigator().getPath().getFinalPathPoint();
-                        if (finalPathPoint != null && entitylivingbase.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
+                        if (finalPathPoint != null && LivingEntity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                             failedPathFindingPenalty = 0;
                         else
                             failedPathFindingPenalty += 10;
@@ -137,17 +137,17 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
                     this.delayCounter += 5;
                 }
 
-                if (!this.attacker.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.speedTowardsTarget)) {
+                if (!this.attacker.getNavigator().tryMoveToEntityLiving(LivingEntity, this.speedTowardsTarget)) {
                     this.delayCounter += 15;
                 }
             }
 
             this.attackTick = Math.max(this.attackTick - 1, 0);
-            this.checkAndPerformAttack(entitylivingbase, d0);
+            this.checkAndPerformAttack(LivingEntity, d0);
         }
     }
 
-    protected void checkAndPerformAttack(EntityLivingBase enemy, double distToEnemySqr) {
+    protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
         double d0 = this.getAttackReachSqr(enemy);
 
         if (distToEnemySqr <= d0) {
@@ -157,7 +157,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
         }
     }
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+    protected double getAttackReachSqr(LivingEntity attackTarget) {
         return (double) (this.attacker.width * 4.0F * this.attacker.width * 4.0F + attackTarget.width);
     }
 }

@@ -23,9 +23,9 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -182,7 +182,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
-        EntityPlayer player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
         if (player.getRidingEntity() != null) {
             if (player.getRidingEntity() instanceof EntityDragonBase) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
@@ -227,8 +227,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isPressed()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
@@ -275,7 +275,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onPostRenderLiving(RenderLivingEvent.Post event) {
-        EntityLivingBase entity = event.getEntity();
+        LivingEntity entity = event.getEntity();
         ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
         if (properties != null) {
             if (!properties.connectedEntities.isEmpty()) {
@@ -391,8 +391,8 @@ public class ClientEvents {
             float f4 = entity.getEyeHeight();
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 1.2F, 0);
-            for (Entity entitylivingbase : miscProps.glarers) {
-                Vec3d vec3d = this.getChainPosition(entitylivingbase, (double) entitylivingbase.getEyeHeight() * 0.75D, event.getPartialRenderTick());
+            for (Entity LivingEntity : miscProps.glarers) {
+                Vec3d vec3d = this.getChainPosition(LivingEntity, (double) LivingEntity.getEyeHeight() * 0.75D, event.getPartialRenderTick());
                 Vec3d vec3d1 = this.getChainPosition(entity, f4, event.getPartialRenderTick());
                 Vec3d vec3d2 = vec3d1.subtract(vec3d);
                 double d0 = vec3d2.length() + 1.0D;
@@ -452,10 +452,10 @@ public class ClientEvents {
         return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
     }
 
-    private Vec3d getChainPosition(Entity entityLivingBaseIn, double p_177110_2_, float p_177110_4_) {
-        double d0 = entityLivingBaseIn.lastTickPosX + (entityLivingBaseIn.posX - entityLivingBaseIn.lastTickPosX) * (double) p_177110_4_;
-        double d1 = p_177110_2_ + entityLivingBaseIn.lastTickPosY + (entityLivingBaseIn.posY - entityLivingBaseIn.lastTickPosY) * (double) p_177110_4_;
-        double d2 = entityLivingBaseIn.lastTickPosZ + (entityLivingBaseIn.posZ - entityLivingBaseIn.lastTickPosZ) * (double) p_177110_4_;
+    private Vec3d getChainPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.posX - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.posY - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.posZ - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
         return new Vec3d(d0, d1, d2);
     }
 

@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.AbstractSkeleton;
@@ -11,7 +11,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -96,14 +96,14 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            EntityLivingBase player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            LivingEntity player = uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
             if (player != null) {
                 return player;
             } else {
                 if (!world.isRemote) {
                     Entity entity = world.getMinecraftServer().getWorld(this.dimension).getEntityFromUuid(uuid);
-                    if (entity instanceof EntityLivingBase) {
-                        return (EntityLivingBase) entity;
+                    if (entity instanceof LivingEntity) {
+                        return (LivingEntity) entity;
                     }
                 }
             }
@@ -113,7 +113,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         return null;
     }
 
-    public void onKillEntity(EntityLivingBase entityLivingIn) {
+    public void onKillEntity(LivingEntity entityLivingIn) {
         Entity commander = this instanceof EntityDreadLich ? this : this.getCommander();
         if(commander != null && !(entityLivingIn instanceof EntityDragonBase)){// zombie dragons!!!!
             Entity summoned = necromancyEntity(entityLivingIn);
@@ -133,7 +133,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
 
     }
 
-    public static Entity necromancyEntity(EntityLivingBase entity) {
+    public static Entity necromancyEntity(LivingEntity entity) {
         Entity lichSummoned = null;
         if(entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD){
             lichSummoned = new EntityDreadScuttler(entity.world);
@@ -149,7 +149,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             ((EntityDreadGhoul)lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
-        if(entity.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD || entity instanceof AbstractSkeleton || entity instanceof EntityPlayer) {
+        if(entity.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD || entity instanceof AbstractSkeleton || entity instanceof PlayerEntity) {
             lichSummoned = new EntityDreadThrall(entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall)lichSummoned;
             thrall.onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);

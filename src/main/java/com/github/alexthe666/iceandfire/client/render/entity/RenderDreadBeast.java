@@ -21,8 +21,8 @@ public class RenderDreadBeast extends RenderLiving<EntityDreadBeast> {
     }
 
     @Override
-    public void preRenderCallback(EntityDreadBeast entitylivingbaseIn, float partialTickTime) {
-        GlStateManager.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
+    public void preRenderCallback(EntityDreadBeast LivingEntityIn, float partialTickTime) {
+        GlStateManager.scale(LivingEntityIn.getScale(), LivingEntityIn.getScale(), LivingEntityIn.getScale());
     }
 
     @Override

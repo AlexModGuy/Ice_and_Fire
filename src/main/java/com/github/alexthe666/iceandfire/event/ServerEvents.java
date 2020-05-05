@@ -22,7 +22,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -63,14 +63,14 @@ import java.util.*;
 public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
-    private static final Predicate VILLAGER_FEAR = new Predicate<EntityLivingBase>() {
-        public boolean apply(@Nullable EntityLivingBase entity) {
+    private static final Predicate VILLAGER_FEAR = new Predicate<LivingEntity>() {
+        public boolean apply(@Nullable LivingEntity entity) {
             return entity != null && entity instanceof IVillagerFear;
         }
     };
     private Random rand = new Random();
 
-    private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker) {
+    private static void signalChickenAlarm(LivingEntity chicken, LivingEntity attacker) {
         float d0 = IafConfig.cockatriceChickenSearchLength;
         List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
@@ -81,8 +81,8 @@ public class ServerEvents {
                 if (entity instanceof EntityCockatrice && !(attacker instanceof EntityCockatrice)) {
                     EntityCockatrice cockatrice = (EntityCockatrice) entity;
                     if (!DragonUtils.hasSameOwner(cockatrice, attacker)) {
-                        if (attacker instanceof EntityPlayer) {
-                            EntityPlayer player = (EntityPlayer) attacker;
+                        if (attacker instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) attacker;
                             if (!player.isCreative() && !cockatrice.isOwner(player)) {
                                 cockatrice.setAttackTarget(player);
                             }
@@ -95,7 +95,7 @@ public class ServerEvents {
         }
     }
 
-    private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker) {
+    private static void signalAmphithereAlarm(LivingEntity villager, LivingEntity attacker) {
         float d0 = IafConfig.amphithereVillagerSearchLength;
         List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
@@ -106,8 +106,8 @@ public class ServerEvents {
                 if (entity instanceof EntityAmphithere && !(attacker instanceof EntityAmphithere)) {
                     EntityAmphithere amphithere = (EntityAmphithere) entity;
                     if (!DragonUtils.hasSameOwner(amphithere, attacker)) {
-                        if (attacker instanceof EntityPlayer) {
-                            EntityPlayer player = (EntityPlayer) attacker;
+                        if (attacker instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) attacker;
                             if (!player.isCreative() && !amphithere.isOwner(player)) {
                                 amphithere.setAttackTarget(player);
                             }
@@ -175,7 +175,7 @@ public class ServerEvents {
             if (event.getRayTraceResult() != null && event.getRayTraceResult().entityHit != null) {
                 Entity shootingEntity = ((EntityArrow) event.getEntity()).shootingEntity;
                 Entity shotEntity = event.getRayTraceResult().entityHit;
-                if (shootingEntity instanceof EntityLivingBase && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)) {
+                if (shootingEntity instanceof LivingEntity && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)) {
                     if (shotEntity instanceof EntityTameable && ((EntityTameable) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
                         event.setCanceled(true);
                     }
@@ -186,10 +186,10 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerAttackMob(AttackEntityEvent event) {
-        if (event.getTarget() instanceof EntityMutlipartPart && event.getEntity() instanceof EntityPlayer) {
+        if (event.getTarget() instanceof EntityMutlipartPart && event.getEntity() instanceof PlayerEntity) {
             event.setCanceled(true);
-            EntityLivingBase parent = ((EntityMutlipartPart) event.getTarget()).getParent();
-            ((EntityPlayer) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
+            LivingEntity parent = ((EntityMutlipartPart) event.getTarget()).getParent();
+            ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
             int extraData = 0;
             if(event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra){
                 extraData = ((EntityHydraHead)event.getTarget()).headIndex;
@@ -216,7 +216,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityFall(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
+        if (event.getEntityLiving() instanceof PlayerEntity) {
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
             if (properties.hasDismountedDragon) {
                 event.setDamageMultiplier(0);
@@ -230,9 +230,9 @@ public class ServerEvents {
         /*
         if (event.getEntityBeingMounted() instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
-            if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote) {
-                EntityPlayer player = (EntityPlayer) event.getEntityMounting();
-                if (dragon.isOwner((EntityPlayer) event.getEntityMounting())) {
+            if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote) {
+                PlayerEntity player = (PlayerEntity) event.getEntityMounting();
+                if (dragon.isOwner((PlayerEntity) event.getEntityMounting())) {
                     dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
                     player.fallDistance = -dragon.height;
                 } else {
@@ -252,8 +252,8 @@ public class ServerEvents {
         }
         if (event.getEntityBeingMounted() instanceof EntityHippogryph) {
             EntityHippogryph hippogryph = (EntityHippogryph) event.getEntityBeingMounted();
-            if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((EntityPlayer) event.getEntityMounting())) {
-                EntityPlayer player = (EntityPlayer) event.getEntityMounting();
+            if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((PlayerEntity) event.getEntityMounting())) {
+                PlayerEntity player = (PlayerEntity) event.getEntityMounting();
                 hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             }
         }
@@ -330,11 +330,11 @@ public class ServerEvents {
             if (properties != null && properties.inLoveTicks > 0) {
                 event.setCanceled(true);
             }
-            if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
-                signalChickenAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+            if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof LivingEntity) {
+                signalChickenAlarm(event.getEntityLiving(), (LivingEntity) attacker);
             }
-            if (DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof EntityLivingBase) {
-                signalAmphithereAlarm(event.getEntityLiving(), (EntityLivingBase) attacker);
+            if (DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof LivingEntity) {
+                signalAmphithereAlarm(event.getEntityLiving(), (LivingEntity) attacker);
             }
 
         }
@@ -344,7 +344,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
         if (event.getTarget() != null) {
-            EntityLivingBase attacker = event.getEntityLiving();
+            LivingEntity attacker = event.getEntityLiving();
             if (isAnimaniaChicken(event.getTarget())) {
                 signalChickenAlarm(event.getTarget(), attacker);
             }
@@ -358,16 +358,16 @@ public class ServerEvents {
     public void onPlayerAttack(AttackEntityEvent event) {
         if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
             float dist = IafConfig.cyclopesSheepSearchLength;
-            List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
-            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
+            List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getPlayerEntity(), event.getPlayerEntity().getEntityBoundingBox().expand(dist, dist, dist));
+            Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(event.getPlayerEntity()));
             if (!list.isEmpty()) {
                 Iterator<Entity> itr = list.iterator();
                 while (itr.hasNext()) {
                     Entity entity = itr.next();
                     if (entity instanceof EntityCyclops) {
                         EntityCyclops cyclops = (EntityCyclops) entity;
-                        if (!cyclops.isBlinded() && !event.getEntityPlayer().capabilities.isCreativeMode) {
-                            cyclops.setAttackTarget(event.getEntityPlayer());
+                        if (!cyclops.isBlinded() && !event.getPlayerEntity().capabilities.isCreativeMode) {
+                            cyclops.setAttackTarget(event.getPlayerEntity());
                         }
                     }
                 }
@@ -378,8 +378,8 @@ public class ServerEvents {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone || stonePlayer) {
                 ((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
-                if (event.getEntityPlayer() != null) {
-                    ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+                if (event.getPlayerEntity() != null) {
+                    ItemStack stack = event.getPlayerEntity().getHeldItemMainhand();
                     if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
                         boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
                         boolean ready = false;
@@ -400,7 +400,7 @@ public class ServerEvents {
                             if (silkTouch) {
                                 ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
                                 statuette.setTagCompound(new CompoundNBT());
-                                statuette.getTagCompound().setBoolean("IAFStoneStatueEntityPlayer", stonePlayer);
+                                statuette.getTagCompound().setBoolean("IAFStoneStatuePlayerEntity", stonePlayer);
                                 statuette.getTagCompound().setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
                                 ((EntityLiving) event.getTarget()).writeEntityToNBT(statuette.getTagCompound());
                                 if (!event.getTarget().world.isRemote) {
@@ -445,7 +445,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityRightClickBlock(PlayerInteractEvent.RightClickItem event) {
-        if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getEntityPlayer().dimension == IafConfig.dreadlandsDimensionId) {
+        if (event.getItemStack().getItem() == Item.getItemFromBlock(Blocks.TORCH) && event.getPlayerEntity().dimension == IafConfig.dreadlandsDimensionId) {
             event.setCanceled(true);
             if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
                 BlockState state = IafBlockRegistry.BURNT_TORCH.getDefaultState();
@@ -481,8 +481,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
-            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((EntityPlayer) event.getEntityLiving(), event.getHand());
+        if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
+            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((PlayerEntity) event.getEntityLiving(), event.getHand());
         }
     }
 
@@ -560,7 +560,7 @@ public class ServerEvents {
                     frozenProps.isFrozen = false;
                 }
             }
-            if (frozenProps.isFrozen && !(event.getEntityLiving() instanceof EntityPlayer && ((EntityPlayer) event.getEntityLiving()).isCreative())) {
+            if (frozenProps.isFrozen && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
                 event.getEntityLiving().motionX *= 0.25;
                 event.getEntityLiving().motionZ *= 0.25;
                 if (!(event.getEntityLiving() instanceof EntityDragon) && !event.getEntityLiving().onGround) {
@@ -579,7 +579,7 @@ public class ServerEvents {
             }
         }
 
-        if (event.getEntityLiving() instanceof EntityPlayer || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
+        if (event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
             SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
             if (sirenProps != null && sirenProps.sirenID != 0) {
                 EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
@@ -597,7 +597,7 @@ public class ServerEvents {
                                 event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                             }
                         }
-                        EntityLivingBase entity = event.getEntityLiving();
+                        LivingEntity entity = event.getEntityLiving();
                         if (entity.collidedHorizontally) {
                             if (entity instanceof EntityLiving) {
                                 ((EntityLiving) entity).getJumpHelper().setJumping();
@@ -618,7 +618,7 @@ public class ServerEvents {
                         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                         float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                         float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                        if(!(entity instanceof EntityPlayer)){
+                        if(!(entity instanceof PlayerEntity)){
                             entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
                             entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
                         }
@@ -632,7 +632,7 @@ public class ServerEvents {
                             closestSiren.setAggressive(true);
                             closestSiren.triggerOtherSirens(entity);
                         }
-                        if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
+                        if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
                             sirenProps.isCharmed = false;
                             sirenProps.sirenID = 0;
                             sirenProps.singTime = 0;
@@ -696,7 +696,7 @@ public class ServerEvents {
                     d4 += 1.0D;
                     event.getEntityLiving().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getEntityLiving().posX + d0 * d4, event.getEntityLiving().posY + d1 * d4 + (double) event.getEntityLiving().getEyeHeight() * 0.5D, event.getEntityLiving().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
-                ((EntityLivingBase) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
+                ((LivingEntity) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
                 if (event.getEntityLiving().ticksExisted % 20 == 0) {
                     properties.specialWeaponDmg++;
                     next.attackEntityFrom(DamageSource.WITHER, 2);
@@ -710,7 +710,7 @@ public class ServerEvents {
             Iterator<Entity> itr = properties.glarers.iterator();
             while (itr.hasNext()) {
                 Entity next = itr.next();
-                if (next instanceof EntityLivingBase && !EntityGorgon.isEntityLookingAt((EntityLivingBase) next, event.getEntityLiving(), 0.2F)) {
+                if (next instanceof LivingEntity && !EntityGorgon.isEntityLookingAt((LivingEntity) next, event.getEntityLiving(), 0.2F)) {
                     MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscEntityProperties.class);
                     theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
                     itr.remove();
@@ -743,8 +743,8 @@ public class ServerEvents {
         if (chainProperties != null) {
             //chainProperties.debug();
             chainProperties.updateConnectedEntities(event.getTarget());
-            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getEntityPlayer())) {
-                chainProperties.removeChain(event.getTarget(), event.getEntityPlayer());
+            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getPlayerEntity())) {
+                chainProperties.removeChain(event.getTarget(), event.getPlayerEntity());
                 if (!event.getWorld().isRemote) {
                     event.getTarget().dropItem(IafItemRegistry.CHAIN, 1);
                 }
@@ -765,26 +765,26 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getEntityPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
+        if (event.getPlayerEntity() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
             float dist = IafConfig.dragonGoldSearchLength;
-            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
+            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayerEntity(), event.getPlayerEntity().getEntityBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {
                 Iterator<Entity> itr = list.iterator();
                 while (itr.hasNext()) {
                     Entity entity = itr.next();
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
-                        if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getEntityPlayer()) && !event.getEntityPlayer().capabilities.isCreativeMode) {
+                        if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayerEntity()) && !event.getPlayerEntity().capabilities.isCreativeMode) {
                             dragon.setSleeping(false);
                             dragon.setSitting(false);
-                            dragon.setAttackTarget(event.getEntityPlayer());
+                            dragon.setAttackTarget(event.getPlayerEntity());
                         }
                     }
                 }
             }
         }
         if (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockWall) {
-            ItemChain.attachToFence(event.getEntityPlayer(), event.getWorld(), event.getPos());
+            ItemChain.attachToFence(event.getPlayerEntity(), event.getWorld(), event.getPos());
         }
     }
 
@@ -855,7 +855,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         try {
-            if (event.getEntity() instanceof EntityLivingBase) {
+            if (event.getEntity() instanceof LivingEntity) {
                 try {
                     ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
                     if (properties != null) {
@@ -871,12 +871,12 @@ public class ServerEvents {
             }
             if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.villagersFearDragons) {
                 EntityCreature villager = (EntityCreature) event.getEntity();
-                villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, VILLAGER_FEAR, 8.0F, 0.8D, 0.8D));
+                villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, LivingEntity.class, VILLAGER_FEAR, 8.0F, 0.8D, 0.8D));
             }
             if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.animalsFearDragons) {
                 EntityCreature animal = (EntityCreature) event.getEntity();
-                animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, new Predicate<EntityLivingBase>() {
-                    public boolean apply(@Nullable EntityLivingBase entity) {
+                animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, LivingEntity.class, new Predicate<LivingEntity>() {
+                    public boolean apply(@Nullable LivingEntity entity) {
                         return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
                     }
                 }, 12.0F, 1.2D, 1.5D));

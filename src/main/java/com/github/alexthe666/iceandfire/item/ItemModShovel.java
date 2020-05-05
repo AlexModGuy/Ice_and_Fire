@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemSpade;
@@ -45,7 +45,7 @@ public class ItemModShovel extends ItemSpade {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (this == IafItemRegistry.SILVER_SHOVEL) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);

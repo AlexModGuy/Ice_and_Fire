@@ -21,7 +21,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -53,7 +53,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
-            return (p_apply_1_ instanceof EntityPlayer && !((EntityPlayer) p_apply_1_).isCreative() && !((EntityPlayer) p_apply_1_).isSpectator()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
+            return (p_apply_1_ instanceof PlayerEntity && !((PlayerEntity) p_apply_1_).isCreative() && !((PlayerEntity) p_apply_1_).isSpectator()) || p_apply_1_ instanceof EntityVillager || p_apply_1_ instanceof IHearsSiren;
         }
     };
     private static final DataParameter<Integer> HAIR_COLOR = EntityDataManager.createKey(EntitySiren.class, DataSerializers.VARINT);
@@ -87,11 +87,11 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         this.tasks.addTask(2, new SirenAIWander(this, 1));
         this.tasks.addTask(3, new EntityAILookIdle(this));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
+        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
             @Override
-            public boolean apply(@Nullable EntityPlayer entity) {
+            public boolean apply(@Nullable PlayerEntity entity) {
                 return EntitySiren.this.isAgressive() && !(entity.isCreative() || entity.isSpectator());
             }
         }));
@@ -106,16 +106,16 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         }
     }
 
-    public static boolean isWearingEarplugs(EntityLivingBase entity) {
+    public static boolean isWearingEarplugs(LivingEntity entity) {
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         return helmet.getItem() == IafItemRegistry.EARPLUGS || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 
     public static boolean isDrawnToSong(Entity entity) {
-        return entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof IHearsSiren;
+        return entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative() || entity instanceof EntityVillager || entity instanceof IHearsSiren;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 8;
     }
 
@@ -245,7 +245,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         if ((!this.isInWater() || pathOnHighGround) && !this.isLandNavigator) {
             switchNavigator(true);
         }
-        if (this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer && ((EntityPlayer) this.getAttackTarget()).isCreative()) {
+        if (this.getAttackTarget() != null && this.getAttackTarget() instanceof PlayerEntity && ((PlayerEntity) this.getAttackTarget()).isCreative()) {
             this.setAttackTarget(null);
             this.setAggressive(false);
         }
@@ -296,13 +296,13 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
-            this.triggerOtherSirens((EntityLivingBase) source.getTrueSource());
+        if (source.getTrueSource() != null && source.getTrueSource() instanceof LivingEntity) {
+            this.triggerOtherSirens((LivingEntity) source.getTrueSource());
         }
         return super.attackEntityFrom(source, amount);
     }
 
-    public void triggerOtherSirens(EntityLivingBase aggressor) {
+    public void triggerOtherSirens(LivingEntity aggressor) {
         List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(12, 12, 12));
         for (Entity entity : entities) {
             if (entity instanceof EntitySiren) {
@@ -316,8 +316,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
 
     public void updateLure() {
         if (this.ticksExisted % 20 == 0) {
-            List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
-            for (EntityLivingBase entity : entities) {
+            List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
+            for (LivingEntity entity : entities) {
                 SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
                 if (!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)) {
                     sirenProps.isCharmed = true;

@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.api;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -18,7 +18,7 @@ public class FoodUtils {
         if (entity instanceof EntityAgeable) {
             return foodPoints;
         }
-        if (entity instanceof EntityPlayer) {
+        if (entity instanceof PlayerEntity) {
             return 15;
         }
         return 0;

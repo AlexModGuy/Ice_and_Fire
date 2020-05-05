@@ -4,13 +4,13 @@ import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.IFlyingMount;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class HippocampusAIRide extends EntityAIBase {
 
     private EntityHippocampus dragon;
-    private EntityPlayer player;
+    private PlayerEntity player;
 
     public HippocampusAIRide(EntityHippocampus dragon) {
         this.dragon = dragon;

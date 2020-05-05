@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -30,7 +30,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
         this.setMutexBits(3);
     }
 
-    public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
+    public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         Vec3d vec3d = looker.getLook(1.0F).normalize();
         Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
         double d0 = vec3d1.length();
@@ -61,27 +61,27 @@ public class CockatriceAIStareAttack extends EntityAIBase {
     }
 
     public void updateTask() {
-        EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
-        if (entitylivingbase != null) {
+        LivingEntity LivingEntity = this.entity.getAttackTarget();
+        if (LivingEntity != null) {
 
-            if (EntityGorgon.isStoneMob(entitylivingbase) || entitylivingbase.isDead) {
+            if (EntityGorgon.isStoneMob(LivingEntity) || LivingEntity.isDead) {
                 entity.setAttackTarget(null);
                 this.entity.setTargetedEntity(0);
                 resetTask();
                 return;
             }
-            if (!isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS) || (entitylivingbase.prevPosX != entity.posX || entitylivingbase.prevPosY != entity.posY || entitylivingbase.prevPosZ != entity.posZ)) {
+            if (!isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS) || (LivingEntity.prevPosX != entity.posX || LivingEntity.prevPosY != entity.posY || LivingEntity.prevPosZ != entity.posZ)) {
                 this.entity.getNavigator().clearPath();
-                this.prevYaw = entitylivingbase.rotationYaw;
-                BlockPos pos = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, entitylivingbase);
+                this.prevYaw = LivingEntity.rotationYaw;
+                BlockPos pos = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, LivingEntity);
                 if (target == null || pos.distanceSq(target) > 4) {
                     target = pos;
                 }
             }
-            this.entity.setTargetedEntity(entitylivingbase.getEntityId());
+            this.entity.setTargetedEntity(LivingEntity.getEntityId());
 
-            double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
-            boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
+            double d0 = this.entity.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
@@ -94,12 +94,12 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 --this.seeTime;
             }
             if (target != null) {
-                if (this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
+                if (this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS)) {
                     this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), moveSpeedAmp);
                 }
 
             }
-            this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double) entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+            this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
         }
     }
 

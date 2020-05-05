@@ -16,7 +16,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -68,7 +68,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     private CockatriceAIStareAttack aiStare;
     private EntityAIAttackMelee aiMelee;
     private boolean isMeleeMode = false;
-    private EntityLivingBase targetedEntity;
+    private LivingEntity targetedEntity;
     private int clientSideAttackTime;
 
     public EntityCockatrice(World worldIn) {
@@ -76,7 +76,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.setSize(0.95F, 0.95F);
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
@@ -92,16 +92,16 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         this.tasks.addTask(3, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(4, new CockatriceAIWander(this, 1.0D));
         this.tasks.addTask(5, new CockatriceAIAggroLook(this));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new CockatriceAITargetItems(this, false));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(3, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(5, new CockatriceAITarget(this, EntityLivingBase.class, true, new Predicate<Entity>() {
+        this.targetTasks.addTask(5, new CockatriceAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof EntityPlayer || ServerEvents.isAnimaniaFerret(entity)) && !ServerEvents.isAnimaniaChicken(entity);
+                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof PlayerEntity || ServerEvents.isAnimaniaFerret(entity)) && !ServerEvents.isAnimaniaChicken(entity);
             }
         }));
         this.tasks.removeTask(aiMelee);
@@ -221,8 +221,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 return this.targetedEntity;
             } else {
                 Entity entity = this.world.getEntityByID(this.dataManager.get(TAMING_PLAYER).intValue());
-                if (entity instanceof EntityLivingBase) {
-                    this.targetedEntity = (EntityLivingBase) entity;
+                if (entity instanceof LivingEntity) {
+                    this.targetedEntity = (LivingEntity) entity;
                     return this.targetedEntity;
                 } else {
                     return null;
@@ -238,7 +238,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     @Nullable
-    public EntityLivingBase getTargetedEntity() {
+    public LivingEntity getTargetedEntity() {
         boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) || EntityGorgon.isBlindfolded(this.getAttackTarget());
         if (blindness) {
             return null;
@@ -250,8 +250,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 return this.targetedEntity;
             } else {
                 Entity entity = this.world.getEntityByID(this.dataManager.get(TARGET_ENTITY).intValue());
-                if (entity instanceof EntityLivingBase) {
-                    this.targetedEntity = (EntityLivingBase) entity;
+                if (entity instanceof LivingEntity) {
+                    this.targetedEntity = (LivingEntity) entity;
                     return this.targetedEntity;
                 } else {
                     return null;
@@ -379,7 +379,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
         if (flag) {
             player.getHeldItem(hand).interactWithEntity(player, this, hand);
@@ -426,7 +426,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityPlayer) {
+        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() != null && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if (this.isSitting() && this.getCommand() != 1) {
@@ -496,7 +496,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getAttackTarget() != null) {
             this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-            if (!shouldMelee() && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
+            if (!shouldMelee() && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof PlayerEntity)) {
                 forcePreyToLook((EntityLiving) this.getAttackTarget());
             }
         }
@@ -520,7 +520,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                         this.getAttackTarget().attackEntityFrom(DamageSource.WITHER, attackStrength - 1);
                     }
                     this.getAttackTarget().setRevengeTarget(this);
-                    if (!this.isTamed() && this.getAttackTarget() instanceof EntityPlayer) {
+                    if (!this.isTamed() && this.getAttackTarget() instanceof PlayerEntity) {
                         this.setTamingPlayer(this.getAttackTarget().getEntityId());
                         this.setTamingLevel(this.getTamingLevel() + 1);
                         if (this.getTamingLevel() % 100 == 0) {
@@ -528,8 +528,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                         }
                         if (this.getTamingLevel() >= 1000) {
                             this.world.setEntityState(this, (byte) 45);
-                            if (this.getTamingPlayer() != null && this.getTamingPlayer() instanceof EntityPlayer)
-                                this.setTamedBy((EntityPlayer) this.getTamingPlayer());
+                            if (this.getTamingPlayer() != null && this.getTamingPlayer() instanceof PlayerEntity)
+                                this.setTamedBy((PlayerEntity) this.getTamingPlayer());
                             this.setAttackTarget(null);
                             this.setTamingPlayer(0);
                             this.setTargetedEntity(0);
@@ -556,15 +556,15 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                     ++this.clientSideAttackTime;
                 }
 
-                EntityLivingBase entitylivingbase = this.getTargetedEntity();
+                LivingEntity LivingEntity = this.getTargetedEntity();
 
-                if (entitylivingbase != null) {
-                    this.getLookHelper().setLookPositionWithEntity(entitylivingbase, 90.0F, 90.0F);
+                if (LivingEntity != null) {
+                    this.getLookHelper().setLookPositionWithEntity(LivingEntity, 90.0F, 90.0F);
                     this.getLookHelper().onUpdateLook();
                     double d5 = (double) this.getAttackAnimationScale(0.0F);
-                    double d0 = entitylivingbase.posX - this.posX;
-                    double d1 = entitylivingbase.posY + (double) (entitylivingbase.height * 0.5F) - (this.posY + (double) this.getEyeHeight());
-                    double d2 = entitylivingbase.posZ - this.posZ;
+                    double d0 = LivingEntity.posX - this.posX;
+                    double d1 = LivingEntity.posY + (double) (LivingEntity.height * 0.5F) - (this.posY + (double) this.getEyeHeight());
+                    double d2 = LivingEntity.posZ - this.posZ;
                     double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                     d0 = d0 / d3;
                     d1 = d1 / d3;
@@ -581,7 +581,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    private int getFriendsCount(EntityLivingBase attackTarget) {
+    private int getFriendsCount(LivingEntity attackTarget) {
         if (this.getAttackTarget() == null) {
             return 0;
         }

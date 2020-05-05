@@ -6,7 +6,7 @@ import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,11 +40,11 @@ public class MessageStartRidingMob extends AbstractMessage<MessageStartRidingMob
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageStartRidingMob message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageStartRidingMob message, PlayerEntity player, MessageContext messageContext) {
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageStartRidingMob message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageStartRidingMob message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof ISyncMount && entity instanceof EntityTameable) {

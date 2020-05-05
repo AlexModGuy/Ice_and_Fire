@@ -7,7 +7,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
@@ -35,8 +35,8 @@ public class BlockIceSpikes extends Block {
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
         if (!(entityIn instanceof EntityIceDragon)) {
             entityIn.attackEntityFrom(DamageSource.CACTUS, 1);
-            if (entityIn instanceof EntityLivingBase && entityIn.motionX != 0 && entityIn.motionZ != 0) {
-                ((EntityLivingBase) entityIn).knockBack(entityIn, 0.5F, entityIn.motionX, entityIn.motionZ);
+            if (entityIn instanceof LivingEntity && entityIn.motionX != 0 && entityIn.motionZ != 0) {
+                ((LivingEntity) entityIn).knockBack(entityIn, 0.5F, entityIn.motionX, entityIn.motionZ);
             }
         }
     }

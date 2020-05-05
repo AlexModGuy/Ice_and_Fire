@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -42,12 +42,12 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, PlayerEntity player, MessageContext messageContext) {
         ClientProxy.setReferedClientHive(message.hive);
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
             if (serverHive != null) {

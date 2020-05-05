@@ -13,7 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -48,7 +48,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 3;
     }
 
@@ -105,7 +105,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.tasks.addTask(6, new MyrmexAIForage(this));
         this.tasks.addTask(7, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(8, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(10, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIForageForItems(this));
@@ -232,7 +232,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         Item item = itemEntity.getItem().getItem();
         if (item == IafItemRegistry.MYRMEX_JUNGLE_RESIN && this.isJungle() || item == IafItemRegistry.MYRMEX_DESERT_RESIN && !this.isJungle()) {
 
-            EntityPlayer owner = null;
+            PlayerEntity owner = null;
             try {
                 owner = this.world.getPlayerEntityByName(itemEntity.getThrower());
             } catch (Exception e) {

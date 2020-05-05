@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class MyrmexAITradePlayer extends EntityAIBase {
     private final EntityMyrmexBase myrmex;
@@ -25,14 +25,14 @@ public class MyrmexAITradePlayer extends EntityAIBase {
         } else if (this.myrmex.velocityChanged) {
             return false;
         } else {
-            EntityPlayer entityplayer = this.myrmex.getCustomer();
+            PlayerEntity PlayerEntity = this.myrmex.getCustomer();
 
-            if (entityplayer == null) {
+            if (PlayerEntity == null) {
                 return false;
-            } else if (this.myrmex.getDistanceSq(entityplayer) > 16.0D) {
+            } else if (this.myrmex.getDistanceSq(PlayerEntity) > 16.0D) {
                 return false;
             } else {
-                return entityplayer.openContainer != null;
+                return PlayerEntity.openContainer != null;
             }
         }
     }

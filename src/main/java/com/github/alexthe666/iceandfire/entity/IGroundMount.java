@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public interface IGroundMount {
-    EntityPlayer getRidingPlayer();
+    PlayerEntity getRidingPlayer();
     double getRideSpeedModifier();
 }

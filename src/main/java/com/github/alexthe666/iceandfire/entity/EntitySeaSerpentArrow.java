@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -25,7 +25,7 @@ public class EntitySeaSerpentArrow extends EntityArrow {
         this.setDamage(3F);
     }
 
-    public EntitySeaSerpentArrow(World worldIn, EntityLivingBase shooter) {
+    public EntitySeaSerpentArrow(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
         this.setDamage(3F);
     }
@@ -49,7 +49,7 @@ public class EntitySeaSerpentArrow extends EntityArrow {
         return false;
     }
 
-    protected void damageShield(EntityPlayer player, float damage) {
+    protected void damageShield(PlayerEntity player, float damage) {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);

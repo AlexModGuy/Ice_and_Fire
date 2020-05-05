@@ -7,12 +7,12 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -76,7 +76,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
@@ -223,7 +223,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.tasks.addTask(5, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.tasks.addTask(5, new MyrmexAIWanderHiveCenter(this, 1.0D));
         this.tasks.addTask(6, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new MyrmexAIFindMate(this));
@@ -468,8 +468,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
 
         public void startExecuting() {
-            EntityLivingBase entitylivingbase = EntityMyrmexRoyal.this.getAttackTarget();
-            Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+            LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
+            Vec3d vec3d = LivingEntity.getPositionEyes(1.0F);
             EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
         }
 
@@ -478,15 +478,15 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
 
         public void updateTask() {
-            EntityLivingBase entitylivingbase = EntityMyrmexRoyal.this.getAttackTarget();
-            if(entitylivingbase != null){
-                if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox())) {
-                    EntityMyrmexRoyal.this.attackEntityAsMob(entitylivingbase);
+            LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
+            if(LivingEntity != null){
+                if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(LivingEntity.getEntityBoundingBox())) {
+                    EntityMyrmexRoyal.this.attackEntityAsMob(LivingEntity);
                 } else {
-                    double d0 = EntityMyrmexRoyal.this.getDistanceSq(entitylivingbase);
+                    double d0 = EntityMyrmexRoyal.this.getDistanceSq(LivingEntity);
 
                     if (d0 < 9.0D) {
-                        Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+                        Vec3d vec3d = LivingEntity.getPositionEyes(1.0F);
                         EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                     }
                 }

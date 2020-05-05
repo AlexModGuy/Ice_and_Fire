@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -19,7 +19,7 @@ public class AquaticAITempt extends EntityAIBase {
     private double targetZ;
     private double pitch;
     private double yaw;
-    private EntityPlayer temptingPlayer;
+    private PlayerEntity temptingPlayer;
     private int delayTemptCounter;
     private boolean isRunning;
 

@@ -30,7 +30,7 @@ public class RenderCyclops extends RenderLiving<EntityCyclops> {
     }
 
     @Override
-    public void preRenderCallback(EntityCyclops entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityCyclops LivingEntityIn, float partialTickTime) {
         GL11.glScalef(2.25F, 2.25F, 2.25F);
 
     }

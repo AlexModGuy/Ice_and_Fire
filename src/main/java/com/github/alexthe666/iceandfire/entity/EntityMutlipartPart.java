@@ -4,8 +4,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 
@@ -15,7 +15,7 @@ public class EntityMutlipartPart extends PartEntity {
         super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
         if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));
         }
@@ -24,13 +24,13 @@ public class EntityMutlipartPart extends PartEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if(world.isRemote && source.getTrueSource() instanceof EntityPlayer) {
+        if(world.isRemote && source.getTrueSource() instanceof PlayerEntity) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
         }
         return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
     }
 
-    public EntityLivingBase getParent() {
+    public LivingEntity getParent() {
         return this.parent;
     }
 

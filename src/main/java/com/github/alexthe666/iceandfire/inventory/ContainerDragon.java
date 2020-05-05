@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,7 +13,7 @@ public class ContainerDragon extends Container {
     private IInventory dragonInventory;
     private EntityDragonBase dragon;
 
-    public ContainerDragon(final EntityDragonBase dragon, EntityPlayer player) {
+    public ContainerDragon(final EntityDragonBase dragon, PlayerEntity player) {
 
         this.dragonInventory = dragon.dragonInventory;
         this.dragon = dragon;
@@ -84,12 +84,12 @@ public class ContainerDragon extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return this.dragonInventory.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 8.0F;
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
@@ -136,7 +136,7 @@ public class ContainerDragon extends Container {
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer playerIn) {
+    public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.dragonInventory.closeInventory(playerIn);
     }

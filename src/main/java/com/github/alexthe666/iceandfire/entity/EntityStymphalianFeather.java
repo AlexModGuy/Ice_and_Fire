@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -18,7 +18,7 @@ public class EntityStymphalianFeather extends EntityArrow {
         super(worldIn);
     }
 
-    public EntityStymphalianFeather(World worldIn, EntityLivingBase shooter) {
+    public EntityStymphalianFeather(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
         this.setDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
@@ -45,19 +45,19 @@ public class EntityStymphalianFeather extends EntityArrow {
             return;
         } else {
             super.onHit(raytraceResultIn);
-            if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityLivingBase) {
-                EntityLivingBase entitylivingbase = (EntityLivingBase) raytraceResultIn.entityHit;
-                entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() - 1);
-                ItemStack itemstack1 = entitylivingbase.isHandActive() ? entitylivingbase.getActiveItemStack() : ItemStack.EMPTY;
-                if (itemstack1.getItem().isShield(itemstack1, entitylivingbase)) {
-                    damageShield(entitylivingbase, 1.0F);
+            if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof LivingEntity) {
+                LivingEntity LivingEntity = (LivingEntity) raytraceResultIn.entityHit;
+                LivingEntity.setArrowCountInEntity(LivingEntity.getArrowCountInEntity() - 1);
+                ItemStack itemstack1 = LivingEntity.isHandActive() ? LivingEntity.getActiveItemStack() : ItemStack.EMPTY;
+                if (itemstack1.getItem().isShield(itemstack1, LivingEntity)) {
+                    damageShield(LivingEntity, 1.0F);
                 }
             }
 
         }
     }
 
-    protected void damageShield(EntityLivingBase entity, float damage) {
+    protected void damageShield(LivingEntity entity, float damage) {
         if (damage >= 3.0F && entity.getActiveItemStack().getItem().isShield(entity.getActiveItemStack(), entity)) {
             ItemStack copyBeforeUse = entity.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);
@@ -65,8 +65,8 @@ public class EntityStymphalianFeather extends EntityArrow {
 
             if (entity.getActiveItemStack().isEmpty()) {
                 EnumHand enumhand = entity.getActiveHand();
-                if (entity instanceof EntityPlayer) {
-                    net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer) entity, copyBeforeUse, enumhand);
+                if (entity instanceof PlayerEntity) {
+                    net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((PlayerEntity) entity, copyBeforeUse, enumhand);
                 }
 
                 if (enumhand == EnumHand.MAIN_HAND) {

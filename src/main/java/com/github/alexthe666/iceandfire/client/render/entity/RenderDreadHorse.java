@@ -30,10 +30,10 @@ public class RenderDreadHorse extends RenderLiving<EntityDreadHorse> {
         this.scale = scaleIn;
     }
 
-    protected void preRenderCallback(EntityDreadHorse entitylivingbaseIn, float partialTickTime)
+    protected void preRenderCallback(EntityDreadHorse LivingEntityIn, float partialTickTime)
     {
         GlStateManager.scale(this.scale, this.scale, this.scale);
-        super.preRenderCallback(entitylivingbaseIn, partialTickTime);
+        super.preRenderCallback(LivingEntityIn, partialTickTime);
     }
 
     protected ResourceLocation getEntityTexture(EntityDreadHorse entity)

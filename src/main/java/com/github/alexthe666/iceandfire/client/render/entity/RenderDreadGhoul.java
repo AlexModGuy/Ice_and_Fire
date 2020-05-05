@@ -36,8 +36,8 @@ public class RenderDreadGhoul extends RenderLiving<EntityDreadGhoul> {
     }
 
     @Override
-    public void preRenderCallback(EntityDreadGhoul entitylivingbaseIn, float partialTickTime) {
-        GlStateManager.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
+    public void preRenderCallback(EntityDreadGhoul LivingEntityIn, float partialTickTime) {
+        GlStateManager.scale(LivingEntityIn.getScale(), LivingEntityIn.getScale(), LivingEntityIn.getScale());
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,16 +17,16 @@ import java.util.List;
 
 public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityLivingBase> targetEntitySelector;
+    protected final Predicate<? super LivingEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
-    protected EntityLivingBase targetEntity;
+    protected LivingEntity targetEntity;
 
     public MyrmexAIPickupBabies(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
-        this.targetEntitySelector = new Predicate<EntityLivingBase>() {
+        this.targetEntitySelector = new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(@Nullable EntityLivingBase myrmex) {
+            public boolean apply(@Nullable LivingEntity myrmex) {
                 return myrmex != null && (myrmex instanceof EntityMyrmexBase && ((EntityMyrmexBase) myrmex).getGrowthStage() < 2 && !((EntityMyrmexBase) myrmex).isInNursery() || myrmex instanceof EntityMyrmexEgg && !((EntityMyrmexEgg) myrmex).isInNursery());
             }
         };
@@ -39,7 +39,7 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends EntityAITarget {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
         }
-        List<EntityLivingBase> listBabies = this.taskOwner.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<LivingEntity> listBabies = this.taskOwner.world.getEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (listBabies.isEmpty()) {
             return false;
         } else {

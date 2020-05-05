@@ -9,7 +9,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.inventory.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiHandler implements IGuiHandler {
 
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getServerGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
         Entity entity = world.getEntityByID(x);
         TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 
@@ -89,7 +89,7 @@ public class GuiHandler implements IGuiHandler {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getClientGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
         Entity entity = world.getEntityByID(x);
         TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         switch (id) {

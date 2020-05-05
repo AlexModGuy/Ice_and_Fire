@@ -24,7 +24,7 @@ public class RenderTroll extends RenderLiving<EntityTroll> implements ICustomSto
     }
 
     @Override
-    public void preRenderCallback(EntityTroll entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityTroll LivingEntityIn, float partialTickTime) {
     }
 
     @Override

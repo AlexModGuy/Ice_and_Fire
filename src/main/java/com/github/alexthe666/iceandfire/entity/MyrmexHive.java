@@ -6,8 +6,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EntitySelectors;
@@ -124,25 +124,25 @@ public class MyrmexHive {
         return false;
     }
 
-    public void addOrRenewAgressor(EntityLivingBase entitylivingbaseIn, int agressiveLevel) {
+    public void addOrRenewAgressor(LivingEntity LivingEntityIn, int agressiveLevel) {
         for (HiveAggressor hive$villageaggressor : this.villageAgressors) {
-            if (hive$villageaggressor.agressor == entitylivingbaseIn) {
+            if (hive$villageaggressor.agressor == LivingEntityIn) {
                 hive$villageaggressor.agressionTime = this.tickCounter;
                 return;
             }
         }
 
-        this.villageAgressors.add(new HiveAggressor(entitylivingbaseIn, this.tickCounter, agressiveLevel));
+        this.villageAgressors.add(new HiveAggressor(LivingEntityIn, this.tickCounter, agressiveLevel));
     }
 
     @Nullable
-    public EntityLivingBase findNearestVillageAggressor(EntityLivingBase entitylivingbaseIn) {
+    public LivingEntity findNearestVillageAggressor(LivingEntity LivingEntityIn) {
         double d0 = Double.MAX_VALUE;
         int previousAgressionLevel = 0;
         HiveAggressor hive$villageaggressor = null;
         for (int i = 0; i < this.villageAgressors.size(); ++i) {
             HiveAggressor hive$villageaggressor1 = this.villageAgressors.get(i);
-            double d1 = hive$villageaggressor1.agressor.getDistanceSq(entitylivingbaseIn);
+            double d1 = hive$villageaggressor1.agressor.getDistanceSq(LivingEntityIn);
             int agressionLevel = hive$villageaggressor1.agressionLevel;
 
             if (d1 <= d0 || agressionLevel > previousAgressionLevel) {
@@ -155,26 +155,26 @@ public class MyrmexHive {
         return hive$villageaggressor == null ? null : hive$villageaggressor.agressor;
     }
 
-    public EntityPlayer getNearestTargetPlayer(EntityLivingBase villageDefender, World world) {
+    public PlayerEntity getNearestTargetPlayer(LivingEntity villageDefender, World world) {
         double d0 = Double.MAX_VALUE;
-        EntityPlayer entityplayer = null;
+        PlayerEntity PlayerEntity = null;
 
         for (UUID s : this.playerReputation.keySet()) {
             if (this.isPlayerReputationTooLowToFight(s)) {
-                EntityPlayer entityplayer1 = world.getPlayerEntityByUUID(s);
+                PlayerEntity PlayerEntity1 = world.getPlayerEntityByUUID(s);
 
-                if (entityplayer1 != null) {
-                    double d1 = entityplayer1.getDistanceSq(villageDefender);
+                if (PlayerEntity1 != null) {
+                    double d1 = PlayerEntity1.getDistanceSq(villageDefender);
 
                     if (d1 <= d0) {
-                        entityplayer = entityplayer1;
+                        PlayerEntity = PlayerEntity1;
                         d0 = d1;
                     }
                 }
             }
         }
 
-        return entityplayer;
+        return PlayerEntity;
     }
 
     private void removeDeadAndOldAgressors() {
@@ -196,9 +196,9 @@ public class MyrmexHive {
 
     private UUID findUUID(String name) {
         if (this.world == null || this.world.getMinecraftServer() == null)
-            return EntityPlayer.getOfflineUUID(name);
+            return PlayerEntity.getOfflineUUID(name);
         GameProfile profile = this.world.getMinecraftServer().getPlayerProfileCache().getGameProfileForUsername(name);
-        return profile == null ? EntityPlayer.getOfflineUUID(name) : profile.getId();
+        return profile == null ? PlayerEntity.getOfflineUUID(name) : profile.getId();
     }
 
     public int modifyPlayerReputation(UUID playerName, int reputation) {
@@ -207,7 +207,7 @@ public class MyrmexHive {
         if (this.hasOwner && playerName.equals(ownerUUID)) {
             j = 100;
         }
-        EntityPlayer player = null;
+        PlayerEntity player = null;
         try {
             player = world.getPlayerEntityByUUID(playerName);
         } catch (Exception e) {
@@ -443,7 +443,7 @@ public class MyrmexHive {
         this.allRooms.add(center);
     }
 
-    public void addRoomWithMessage(EntityPlayer player, BlockPos center, WorldGenMyrmexHive.RoomType roomType) {
+    public void addRoomWithMessage(PlayerEntity player, BlockPos center, WorldGenMyrmexHive.RoomType roomType) {
         List<BlockPos> allCurrentRooms = new ArrayList<>(getAllRooms());
         allCurrentRooms.addAll(this.getEntrances().keySet());
         allCurrentRooms.addAll(this.getEntranceBottoms().keySet());
@@ -470,7 +470,7 @@ public class MyrmexHive {
         }
     }
 
-    public void addEnteranceWithMessage(EntityPlayer player, boolean bottom, BlockPos center, EnumFacing facing) {
+    public void addEnteranceWithMessage(PlayerEntity player, boolean bottom, BlockPos center, EnumFacing facing) {
         List<BlockPos> allCurrentRooms = new ArrayList<>(getAllRooms());
         allCurrentRooms.addAll(this.getEntrances().keySet());
         allCurrentRooms.addAll(this.getEntranceBottoms().keySet());
@@ -543,7 +543,7 @@ public class MyrmexHive {
         return closest != null ? closest.getKey() : entity.getPosition();
     }
 
-    public EntityPlayer getOwner(World world) {
+    public PlayerEntity getOwner(World world) {
         if (hasOwner) {
             return world.getPlayerEntityByUUID(ownerUUID);
         }
@@ -603,11 +603,11 @@ public class MyrmexHive {
     }
 
     class HiveAggressor {
-        public EntityLivingBase agressor;
+        public LivingEntity agressor;
         public int agressionTime;
         public int agressionLevel;
 
-        HiveAggressor(EntityLivingBase agressorIn, int agressionTimeIn, int agressionLevel) {
+        HiveAggressor(LivingEntity agressorIn, int agressionTimeIn, int agressionLevel) {
             this.agressor = agressorIn;
             this.agressionTime = agressionTimeIn;
             this.agressionLevel = agressionLevel;

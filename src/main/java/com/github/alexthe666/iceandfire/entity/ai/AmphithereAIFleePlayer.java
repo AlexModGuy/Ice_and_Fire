@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.Vec3d;
@@ -15,7 +15,7 @@ public class AmphithereAIFleePlayer extends EntityAIBase {
     private final double nearSpeed;
     private final float avoidDistance;
     protected EntityAmphithere entity;
-    protected EntityPlayer closestLivingEntity;
+    protected PlayerEntity closestLivingEntity;
     private Path path;
 
     public AmphithereAIFleePlayer(EntityAmphithere entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
@@ -29,7 +29,7 @@ public class AmphithereAIFleePlayer extends EntityAIBase {
 
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
-            List<EntityPlayer> list = this.entity.world.getEntitiesWithinAABB(EntityPlayer.class, this.entity.getEntityBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
+            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getEntityBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
             if (list.isEmpty()) {
                 return false;
             } else {

@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AbstractChestHorse;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.util.math.MathHelper;
@@ -319,11 +319,11 @@ public class ModelHorseStatue extends ModelBase {
         return f1 + f3 * f;
     }
 
-    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        super.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTickTime);
-        float f = this.updateHorseRotation(entitylivingbaseIn.prevRenderYawOffset, entitylivingbaseIn.renderYawOffset, partialTickTime);
-        float f1 = this.updateHorseRotation(entitylivingbaseIn.prevRotationYawHead, entitylivingbaseIn.rotationYawHead, partialTickTime);
-        float f2 = entitylivingbaseIn.prevRotationPitch + (entitylivingbaseIn.rotationPitch - entitylivingbaseIn.prevRotationPitch) * partialTickTime;
+    public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+        super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
+        float f = this.updateHorseRotation(LivingEntityIn.prevRenderYawOffset, LivingEntityIn.renderYawOffset, partialTickTime);
+        float f1 = this.updateHorseRotation(LivingEntityIn.prevRotationYawHead, LivingEntityIn.rotationYawHead, partialTickTime);
+        float f2 = LivingEntityIn.prevRotationPitch + (LivingEntityIn.rotationPitch - LivingEntityIn.prevRotationPitch) * partialTickTime;
         float f3 = f1 - f;
         float f4 = f2 * 0.017453292F;
 
@@ -339,7 +339,7 @@ public class ModelHorseStatue extends ModelBase {
             f4 += MathHelper.cos(limbSwing * 0.4F) * 0.15F * limbSwingAmount;
         }
 
-        AbstractHorse abstracthorse = (AbstractHorse) entitylivingbaseIn;
+        AbstractHorse abstracthorse = (AbstractHorse) LivingEntityIn;
         float f5 = abstracthorse.getGrassEatingAmount(partialTickTime);
         float f6 = abstracthorse.getRearingAmount(partialTickTime);
         float f7 = 1.0F - f6;
@@ -347,7 +347,7 @@ public class ModelHorseStatue extends ModelBase {
         boolean flag = abstracthorse.tailCounter != 0;
         boolean flag1 = abstracthorse.isHorseSaddled();
         boolean flag2 = abstracthorse.isBeingRidden();
-        float f9 = (float) entitylivingbaseIn.ticksExisted + partialTickTime;
+        float f9 = (float) LivingEntityIn.ticksExisted + partialTickTime;
         float f10 = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI);
         float f11 = f10 * 0.8F * limbSwingAmount;
         this.head.rotationPointY = 4.0F;

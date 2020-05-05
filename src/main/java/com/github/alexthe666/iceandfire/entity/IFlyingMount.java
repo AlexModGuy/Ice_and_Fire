@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public interface IFlyingMount {
 
-    EntityPlayer getRidingPlayer();
+    PlayerEntity getRidingPlayer();
     double getFlightSpeedModifier();
     default boolean fliesLikeElytra() { return false; }
     boolean isFlying();

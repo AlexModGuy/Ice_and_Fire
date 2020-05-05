@@ -4,8 +4,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -53,7 +53,7 @@ public class ItemTideTrident extends Item {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entity, int timeLeft) {
         int i = this.getMaxItemUseDuration(stack) - timeLeft;
         if (i < 0) return;
         float f = getArrowVelocity(i) * 3.0F;
@@ -63,13 +63,13 @@ public class ItemTideTrident extends Item {
         if (!worldIn.isRemote) {
             worldIn.spawnEntity(feather);
         }
-        if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
+        if (!(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative())) {
             stack.shrink(1);
         }
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, EnumHand hand) {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.setActiveHand(hand);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);

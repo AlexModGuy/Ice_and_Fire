@@ -2,54 +2,37 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWormEgg;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 public class ItemDeathwormEgg extends Item implements ICustomRendered {
+    private boolean gigantic;
 
-    public ItemDeathwormEgg() {
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setHasSubtypes(true);
-        this.setMaxDamage(0);
-        this.setTranslationKey("deathworm_egg");
-        this.setRegistryName(IceAndFire.MODID, "iceandfire.deathworm_egg");
-        this.maxStackSize = 1;
+    public ItemDeathwormEgg(boolean gigantic) {
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        this.setRegistryName(IceAndFire.MODID, gigantic ? "deathworm_egg_giant" : "deathworm_egg");
+        this.gigantic = gigantic;
     }
 
 
-    public String getTranslationKey(ItemStack stack) {
-        return stack.getMetadata() == 1 ? "item.iceandfire.deathworm_egg_giant" : "item.iceandfire.deathworm_egg";
-    }
-
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            items.add(new ItemStack(this, 1, 0));
-            items.add(new ItemStack(this, 1, 1));
-        }
-    }
-
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
 
-        if (!playerIn.capabilities.isCreativeMode) {
+        if (!playerIn.isCreative()) {
             itemstack.shrink(1);
         }
 
-        worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
-            EntityDeathWormEgg entityegg = new EntityDeathWormEgg(worldIn, playerIn, itemstack.getMetadata() == 1);
+            EntityDeathWormEgg entityegg = new EntityDeathWormEgg(worldIn, playerIn, gigantic);
             entityegg.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-            worldIn.spawnEntity(entityegg);
+            worldIn.addEntity(entityegg);
         }
 
-        playerIn.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemstack);
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -81,7 +81,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends EntityAITarget {
             }
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.CAKE) {
                 if (!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
-                    EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
+                    PlayerEntity owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                     pixie.setTamed(true);
                     pixie.setOwnerId(owner.getUniqueID());
                     pixie.setSitting(true);

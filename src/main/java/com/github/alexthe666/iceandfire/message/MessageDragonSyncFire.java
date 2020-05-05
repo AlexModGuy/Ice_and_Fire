@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,7 +50,7 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDragonSyncFire message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageDragonSyncFire message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {
@@ -61,7 +61,7 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageDragonSyncFire message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageDragonSyncFire message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {

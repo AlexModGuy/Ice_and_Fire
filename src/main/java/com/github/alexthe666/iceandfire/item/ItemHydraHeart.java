@@ -5,9 +5,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,8 +37,8 @@ public class ItemHydraHeart extends Item {
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean unused2) {
-        if(entity instanceof EntityPlayer && slot >= 0 && slot <= 8){
-            double healthPercentage = ((EntityPlayer) entity).getHealth() / Math.max(1, ((EntityPlayer) entity).getMaxHealth());
+        if(entity instanceof PlayerEntity && slot >= 0 && slot <= 8){
+            double healthPercentage = ((PlayerEntity) entity).getHealth() / Math.max(1, ((PlayerEntity) entity).getMaxHealth());
             if(healthPercentage < 1.0D){
                 int level = 0;
                 if(healthPercentage < 0.25D){
@@ -48,8 +48,8 @@ public class ItemHydraHeart extends Item {
                 }else if(healthPercentage < 0.75D){
                     level = 1;
                 }
-                if(!((EntityPlayer) entity).isPotionActive(MobEffects.REGENERATION))
-                ((EntityPlayer) entity).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, level, true, false));
+                if(!((PlayerEntity) entity).isPotionActive(MobEffects.REGENERATION))
+                ((PlayerEntity) entity).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, level, true, false));
 
             }
             //In hotbar

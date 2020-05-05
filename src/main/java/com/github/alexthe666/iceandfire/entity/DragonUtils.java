@@ -9,11 +9,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
@@ -89,7 +89,7 @@ public class DragonUtils {
         return null;
     }
 
-    public static EntityLivingBase riderLookingAtEntity(EntityLivingBase dragon, EntityLivingBase rider, double dist) {
+    public static LivingEntity riderLookingAtEntity(LivingEntity dragon, LivingEntity rider, double dist) {
         Vec3d vec3d = rider.getPositionEyes(1.0F);
         Vec3d vec3d1 = rider.getLook(1.0F);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
@@ -100,7 +100,7 @@ public class DragonUtils {
                 if (onSameTeam(dragon, entity)) {
                     return false;
                 }
-                return entity != null && entity.canBeCollidedWith() && entity instanceof EntityLivingBase && !entity.isEntityEqual(dragon) && !entity.isOnSameTeam(dragon) && (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead());
+                return entity != null && entity.canBeCollidedWith() && entity instanceof LivingEntity && !entity.isEntityEqual(dragon) && !entity.isOnSameTeam(dragon) && (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead());
             }
         }));
         double d2 = d1;
@@ -129,7 +129,7 @@ public class DragonUtils {
                 }
             }
         }
-        return (EntityLivingBase) pointedEntity;
+        return (LivingEntity) pointedEntity;
     }
 
     public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo) {
@@ -206,7 +206,7 @@ public class DragonUtils {
         }
     }
 
-    public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, EntityLivingBase target) {
+    public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, LivingEntity target) {
         float radius = 10 + cockatrice.getRNG().nextInt(10);
         float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
@@ -220,7 +220,7 @@ public class DragonUtils {
         return target.getPosition();
     }
 
-    public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, EntityLivingBase target) {
+    public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, LivingEntity target) {
         float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
         float neg = serpent.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
@@ -239,7 +239,7 @@ public class DragonUtils {
         if (className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")) {
             return false;
         }
-        if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityPlayer) {
+        if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof PlayerEntity) {
             return false;
         }
         if (entity instanceof EntityTameable) {
@@ -291,7 +291,7 @@ public class DragonUtils {
         return false;
     }
 
-    public static boolean isAlive(EntityLivingBase entity) {
+    public static boolean isAlive(LivingEntity entity) {
         return (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
     }
 
@@ -324,10 +324,10 @@ public class DragonUtils {
     }
 
     public static boolean canHostilesTarget(Entity entity) {
-        if (entity instanceof EntityPlayer && entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+        if (entity instanceof PlayerEntity && entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             return false;
         } else {
-            return entity instanceof EntityLivingBase && isAlive((EntityLivingBase) entity);
+            return entity instanceof LivingEntity && isAlive((LivingEntity) entity);
         }
     }
 

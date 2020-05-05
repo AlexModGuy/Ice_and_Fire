@@ -5,10 +5,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntitySelectors;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends EntityAITarget {
+public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityAITarget {
     protected final Class<T> targetClass;
     protected final CyclopsAITargetSheepPlayers.Sorter sorter;
     protected final Predicate<? super T> targetEntitySelector;
@@ -59,7 +59,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
     public boolean shouldExecute() {
         if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
             return false;
-        } else if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class) {
+        } else if (this.targetClass != PlayerEntity.class && this.targetClass != PlayerEntityMP.class) {
             List<T> list = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
@@ -70,9 +70,9 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
                 return true;
             }
         } else {
-            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double) this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>() {
+            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double) this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<PlayerEntity, Double>() {
                 @Nullable
-                public Double apply(@Nullable EntityPlayer player) {
+                public Double apply(@Nullable PlayerEntity player) {
                     ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
                     ItemStack chestplate = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
                     ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
@@ -84,7 +84,7 @@ public class CyclopsAITargetSheepPlayers<T extends EntityLivingBase> extends Ent
                     double subSneaking = player.isSneaking() ? 0.2D : 0;
                     return 1.0D - subHelm - subChest - subLegs - subBoots - subSneaking;
                 }
-            }, (Predicate<EntityPlayer>) this.targetEntitySelector);
+            }, (Predicate<PlayerEntity>) this.targetEntitySelector);
             return this.targetEntity != null;
         }
     }

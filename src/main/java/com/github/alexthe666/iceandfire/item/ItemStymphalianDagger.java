@@ -5,7 +5,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -35,7 +35,7 @@ public class ItemStymphalianDagger extends ItemSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase targetEntity, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity targetEntity, LivingEntity attacker) {
         return super.hitEntity(stack, targetEntity, attacker);
     }
 

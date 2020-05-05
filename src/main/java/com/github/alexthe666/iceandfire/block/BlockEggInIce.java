@@ -8,7 +8,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
@@ -81,7 +81,7 @@ public class BlockEggInIce extends ContainerBlock {
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack) {
+    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack) {
         if (worldIn.getTileEntity(pos) != null) {
             if (worldIn.getTileEntity(pos) instanceof TileEntityEggInIce) {
                 TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getTileEntity(pos);

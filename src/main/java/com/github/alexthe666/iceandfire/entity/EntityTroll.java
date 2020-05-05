@@ -19,7 +19,7 @@ import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -92,11 +92,11 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         this.tasks.addTask(2, new TrollAIFleeSun(this, 1.0D));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
+        this.tasks.addTask(5, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
         this.tasks.addTask(5, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, false));
         setAvoidSun(true);
     }
 
@@ -205,7 +205,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         return null;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 15;
     }
 
@@ -273,7 +273,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         boolean stone = EntityGorgon.isStoneMob(this);

@@ -52,9 +52,9 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
                 properties.lastEnteredDreadPortalZ = pos.getZ();
             }
         }
-        if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty()) && (entity instanceof EntityPlayerMP)) {
-            CriteriaTriggers.ENTER_BLOCK.trigger((EntityPlayerMP) entity, world.getBlockState(pos));
-            EntityPlayerMP thePlayer = (EntityPlayerMP) entity;
+        if ((!entity.isBeingRidden()) && (entity.getPassengers().isEmpty()) && (entity instanceof PlayerEntityMP)) {
+            CriteriaTriggers.ENTER_BLOCK.trigger((PlayerEntityMP) entity, world.getBlockState(pos));
+            PlayerEntityMP thePlayer = (PlayerEntityMP) entity;
             if (thePlayer.timeUntilPortal > 0) {
                 thePlayer.timeUntilPortal = 10;
             } else if (thePlayer.dimension != IafConfig.dreadlandsDimensionId) {

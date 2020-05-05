@@ -3,49 +3,35 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonArmor extends Item implements ICustomRendered {
 
     public int type;
+    public int dragonSlot;
     public String name;
 
-    public ItemDragonArmor(int type, String name) {
+    public ItemDragonArmor(int type, int dragonSlot, String name) {
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.type = type;
+        this.dragonSlot = dragonSlot;
         this.name = name;
-        this.setHasSubtypes(true);
-        this.setTranslationKey("iceandfire." + name);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.maxStackSize = 1;
         this.setRegistryName(IceAndFire.MODID, name);
 
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            items.add(new ItemStack(this, 1, 0));
-            items.add(new ItemStack(this, 1, 1));
-            items.add(new ItemStack(this, 1, 2));
-            items.add(new ItemStack(this, 1, 3));
-        }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String words;
-        switch (stack.getMetadata()) {
+        switch (dragonSlot) {
             default:
                 words = "dragon.armor_head";
                 break;
@@ -59,6 +45,6 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
                 words = "dragon.armor_tail";
                 break;
         }
-        tooltip.add(StatCollector.translateToLocal(words));
+        tooltip.add(new TranslationTextComponent(words).applyTextStyle(TextFormatting.GRAY));
     }
 }

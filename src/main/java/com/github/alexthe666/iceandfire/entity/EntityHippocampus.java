@@ -18,7 +18,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -88,7 +88,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         initHippocampusInv();
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 2;
     }
 
@@ -152,8 +152,8 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
-                EntityPlayer player = (EntityPlayer) passenger;
+            if (passenger instanceof PlayerEntity && this.getAttackTarget() != passenger) {
+                PlayerEntity player = (PlayerEntity) passenger;
                 return player;
             }
         }
@@ -245,8 +245,8 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase && this.ticksExisted % 20 == 0) {
-            ((EntityLivingBase) getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
+        if (getControllingPassenger() != null && getControllingPassenger() instanceof LivingEntity && this.ticksExisted % 20 == 0) {
+            ((LivingEntity) getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
         }
         if (!this.onGround) {
             airBorneCounter++;
@@ -567,7 +567,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         super.playHurtSound(source);
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
             this.setSitting(false);
@@ -623,7 +623,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         return super.processInteract(player, hand);
     }
 
-    public void openGUI(EntityPlayer playerEntity) {
+    public void openGUI(PlayerEntity playerEntity) {
         if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
             playerEntity.openGui(IceAndFire.INSTANCE, 5, this.world, this.getEntityId(), 0, 0);
         }
@@ -729,14 +729,14 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         return true;
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
+    public boolean isRidingPlayer(PlayerEntity player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
     }
 
     @Nullable
-    public EntityPlayer getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof EntityPlayer){
-            return (EntityPlayer)this.getControllingPassenger();
+    public PlayerEntity getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof PlayerEntity){
+            return (PlayerEntity)this.getControllingPassenger();
         }
         return null;
     }

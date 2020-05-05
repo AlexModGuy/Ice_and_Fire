@@ -1,44 +1,42 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.SwordItem;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemAlchemySword extends ItemSword {
+public class ItemAlchemySword extends SwordItem {
 
-    public ItemAlchemySword(ToolMaterial toolmaterial, String gameName, String name) {
-        super(toolmaterial);
-        this.setTranslationKey(name);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setRegistryName(IceAndFire.MODID, gameName);
+    public ItemAlchemySword(IItemTier toolmaterial, String name) {
+        super(toolmaterial, 3, -2.4F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+           this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE) {
             if (target instanceof EntityIceDragon) {
                 target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
             }
             target.setFire(5);
-            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
             if (target instanceof EntityFireDragon) {
@@ -46,28 +44,27 @@ public class ItemAlchemySword extends ItemSword {
             }
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(200);
-            target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
-            target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
-            target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+            target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
+            target.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 100, 2));
+            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         return super.hitEntity(stack, target, attacker);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE) {
-            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_fire.hurt1"));
-            tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
+            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt1").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").applyTextStyle(TextFormatting.DARK_RED));
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
-            tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt1"));
-            tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
+            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt1").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").applyTextStyle(TextFormatting.AQUA));
 
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         return true;
     }

@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -83,7 +83,7 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
             hippo.feedings++;
             hippo.heal(4);
             if (hippo.feedings > 3 &&(hippo.feedings > 7 || hippo.getRNG().nextInt(3) == 0) && !hippo.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
-                EntityPlayer owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
+                PlayerEntity owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                 hippo.setTamed(true);
                 hippo.setOwnerId(owner.getUniqueID());
                 hippo.setAttackTarget(null);

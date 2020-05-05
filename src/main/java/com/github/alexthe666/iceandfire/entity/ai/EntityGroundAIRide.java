@@ -3,13 +3,13 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.IGroundMount;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityGroundAIRide<T extends EntityCreature & IGroundMount> extends EntityAIBase {
 
     private T dragon;
-    private EntityPlayer player;
+    private PlayerEntity player;
 
     public EntityGroundAIRide(T dragon) {
         this.dragon = dragon;

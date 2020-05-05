@@ -28,7 +28,7 @@ public class RenderAmphithere extends RenderLiving<EntityAmphithere> {
     }
 
     @Override
-    public void preRenderCallback(EntityAmphithere entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityAmphithere LivingEntityIn, float partialTickTime) {
         GL11.glScalef(2.0F, 2.0F, 2.0F);
 
     }

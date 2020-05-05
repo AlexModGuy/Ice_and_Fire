@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -14,9 +14,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerHippogryph extends SyncedFieldContainer {
     private final IInventory hippogryphInventory;
     private final EntityHippogryph hippogryph;
-    private final EntityPlayer player;
+    private final PlayerEntity player;
 
-    public ContainerHippogryph(final EntityHippogryph hippogryph, EntityPlayer player) {
+    public ContainerHippogryph(final EntityHippogryph hippogryph, PlayerEntity player) {
         super(hippogryph.hippogryphInventory);
         this.hippogryphInventory = hippogryph.hippogryphInventory;
         this.hippogryph = hippogryph;
@@ -90,11 +90,11 @@ public class ContainerHippogryph extends SyncedFieldContainer {
         }
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isEntityAlive() && this.hippogryph.getDistance(playerIn) < 8.0F;
     }
 
-    public void onContainerClosed(EntityPlayer playerIn) {
+    public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.hippogryphInventory.closeInventory(playerIn);
     }

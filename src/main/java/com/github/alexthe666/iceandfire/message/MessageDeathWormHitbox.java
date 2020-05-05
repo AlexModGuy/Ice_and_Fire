@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +38,7 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageDeathWormHitbox message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.deathWormId);
             if (entity != null && entity instanceof EntityDeathWorm) {
@@ -50,7 +50,7 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageDeathWormHitbox message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageDeathWormHitbox message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.deathWormId);
             if (entity != null && entity instanceof EntityDeathWorm) {

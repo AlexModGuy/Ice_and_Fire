@@ -2,8 +2,10 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityAmphithereArrow extends EntityArrow {
+public class EntityAmphithereArrow extends AbstractArrowEntity {
 
     public EntityAmphithereArrow(World worldIn) {
         super(worldIn);
@@ -28,7 +30,7 @@ public class EntityAmphithereArrow extends EntityArrow {
         this.setDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(World worldIn, EntityLivingBase shooter) {
+    public EntityAmphithereArrow(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
         this.setDamage(2.5F);
     }
@@ -50,9 +52,9 @@ public class EntityAmphithereArrow extends EntityArrow {
         }
     }
 
-    protected void arrowHit(EntityLivingBase living) {
-        if (living instanceof EntityPlayer) {
-            this.damageShield((EntityPlayer) living, (float) this.getDamage());
+    protected void arrowHit(LivingEntity living) {
+        if (living instanceof PlayerEntity) {
+            this.damageShield((PlayerEntity) living, (float) this.getDamage());
         }
         living.isAirBorne = true;
         double xRatio = motionX;
@@ -97,7 +99,7 @@ public class EntityAmphithereArrow extends EntityArrow {
         }
     }
 
-    protected void damageShield(EntityPlayer player, float damage) {
+    protected void damageShield(PlayerEntity player, float damage) {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);

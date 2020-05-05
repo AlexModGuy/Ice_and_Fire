@@ -19,7 +19,7 @@ public class RenderStymphalianBird extends RenderLiving<EntityStymphalianBird> {
     }
 
     @Override
-    public void preRenderCallback(EntityStymphalianBird entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityStymphalianBird LivingEntityIn, float partialTickTime) {
         GL11.glScalef(0.75F, 0.75F, 0.75F);
     }
 

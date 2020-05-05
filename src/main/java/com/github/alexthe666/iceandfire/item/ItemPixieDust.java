@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class ItemPixieDust extends ItemFood {
         this.setRegistryName(IceAndFire.MODID, "pixie_dust");
     }
 
-    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+    protected void onFoodEaten(ItemStack stack, World worldIn, PlayerEntity player) {
         player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 1));
         player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 1));
     }

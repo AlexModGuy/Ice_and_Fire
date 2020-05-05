@@ -24,7 +24,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -79,7 +79,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     private Animation currentAnimation;
     private MyrmexHive hive;
     @Nullable
-    private EntityPlayer buyingPlayer;
+    private PlayerEntity buyingPlayer;
     @Nullable
     private MerchantRecipeList buyingList;
     private java.util.UUID lastBuyingPlayer;
@@ -183,7 +183,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         super.updateAITasks();
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return (this.getCasteImportance() * 7) + this.world.rand.nextInt(3);
     }
 
@@ -237,7 +237,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     public void onUpdate() {
         super.onUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer){
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase) {
@@ -262,12 +262,12 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             this.setAnimation(ANIMATION_PUPA_WIGGLE);
         }
 
-        if (this.getAttackTarget() != null && !(this.getAttackTarget() instanceof EntityPlayer) && this.getNavigator().noPath()) {
+        if (this.getAttackTarget() != null && !(this.getAttackTarget() instanceof PlayerEntity) && this.getNavigator().noPath()) {
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
                 this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable) this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof EntityPlayer && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
+                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
 
@@ -312,11 +312,11 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     @Nullable
-    public EntityPlayer getCustomer() {
+    public PlayerEntity getCustomer() {
         return this.buyingPlayer;
     }
 
-    public void setCustomer(@Nullable EntityPlayer player) {
+    public void setCustomer(@Nullable PlayerEntity player) {
         this.buyingPlayer = player;
     }
 
@@ -325,7 +325,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     @Nullable
-    public MerchantRecipeList getRecipes(EntityPlayer player) {
+    public MerchantRecipeList getRecipes(PlayerEntity player) {
         if (this.buyingList == null) {
             this.populateBuyingList();
         }
@@ -509,15 +509,15 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         return new Animation[]{ANIMATION_PUPA_WIGGLE};
     }
 
-    public void setRevengeTarget(@Nullable EntityLivingBase livingBase) {
-        if (this.getHive() == null || livingBase == null || livingBase instanceof EntityPlayer && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
+    public void setRevengeTarget(@Nullable LivingEntity livingBase) {
+        if (this.getHive() == null || livingBase == null || livingBase instanceof PlayerEntity && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
             super.setRevengeTarget(livingBase);
         }
         if (this.getHive() != null && livingBase != null) {
             this.getHive().addOrRenewAgressor(livingBase, this.getImportance());
         }
         if (this.getHive() != null && livingBase != null) {
-            if (livingBase instanceof EntityPlayer) {
+            if (livingBase instanceof PlayerEntity) {
                 int i = -5 * this.getCasteImportance();
                 this.getHive().setWorld(this.world);
                 this.getHive().modifyPlayerReputation(livingBase.getUniqueID(), i);
@@ -539,7 +539,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         super.onDeath(cause);
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (!shouldHaveNormalAI()) {
             return false;
@@ -577,7 +577,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
     }
 
-    public void onStaffInteract(EntityPlayer player, ItemStack itemstack) {
+    public void onStaffInteract(PlayerEntity player, ItemStack itemstack) {
         UUID staffUUID = itemstack.getTagCompound().getUniqueId("HiveUUID");
         if (world.isRemote) {
             return;

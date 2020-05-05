@@ -3,10 +3,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,7 +18,7 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
     World world;
     float maxDist;
     float minDist;
-    private EntityLivingBase owner;
+    private LivingEntity owner;
     private int timeToRecalcPath;
     private float oldWaterCost;
 
@@ -32,18 +32,18 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.tameable.getSummoner();
+        LivingEntity LivingEntity = this.tameable.getSummoner();
         if (tameable.getAttackTarget() != null) {
             return false;
         }
-        if (entitylivingbase == null) {
+        if (LivingEntity == null) {
             return false;
-        } else if (entitylivingbase instanceof EntityPlayer && ((EntityPlayer) entitylivingbase).isSpectator()) {
+        } else if (LivingEntity instanceof PlayerEntity && ((PlayerEntity) LivingEntity).isSpectator()) {
             return false;
-        } else if (this.tameable.getDistanceSq(entitylivingbase) < (double) (this.minDist * this.minDist)) {
+        } else if (this.tameable.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
             return false;
         } else {
-            this.owner = entitylivingbase;
+            this.owner = LivingEntity;
             return true;
         }
     }

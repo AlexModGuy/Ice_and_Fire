@@ -3,9 +3,9 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
@@ -109,7 +109,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
             if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
                 return;
             }
-            if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer) movingObject.entityHit)) {
+            if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof PlayerEntity && ((EntityDragonBase) this.shootingEntity).isOwner((PlayerEntity) movingObject.entityHit)) {
                 return;
             }
             if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
@@ -133,18 +133,18 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
                 }
                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
                     movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
-                    if (movingObject.entityHit instanceof EntityLivingBase) {
+                    if (movingObject.entityHit instanceof LivingEntity) {
                         FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, FrozenEntityProperties.class);
                         if (frozenProps != null) {
                             frozenProps.setFrozenFor(200);
                         }
                     }
-                    if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
+                    if (movingObject.entityHit instanceof LivingEntity && ((LivingEntity) movingObject.entityHit).getHealth() == 0) {
                         ((EntityDragonBase) this.shootingEntity).usingGroundAttack = true;
                     }
                 }
-                if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-                    //((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
+                if (movingObject.entityHit.isDead && movingObject.entityHit instanceof PlayerEntity) {
+                    //((PlayerEntity) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
                 }
                 this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
                 if (this.shootingEntity instanceof EntityDragonBase) {

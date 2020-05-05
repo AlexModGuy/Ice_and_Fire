@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.message.MessageSetMyrmexHiveNull;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,7 +34,7 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTagCompound(new CompoundNBT());
     }
 
@@ -47,7 +47,7 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (playerIn.isSneaking()) {
             return super.onItemRightClick(worldIn, playerIn, hand);
@@ -69,7 +69,7 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!player.isSneaking()) {
             return super.onItemUse(player, worldIn, pos, hand, side, hitX, hitY, hitZ);
         } else {

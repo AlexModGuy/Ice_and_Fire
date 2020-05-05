@@ -11,8 +11,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -41,7 +41,7 @@ public class ItemSirenFlute extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, EnumHand hand) {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.setActiveHand(hand);
         player.getCooldownTracker().setCooldown(this, 900);
@@ -53,7 +53,7 @@ public class ItemSirenFlute extends Item {
         Entity pointedEntity = null;
         List<Entity> list = player.world.getEntitiesInAABBexcluding(player, player.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity != null && entity.canBeCollidedWith() && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
+                return entity != null && entity.canBeCollidedWith() && (entity instanceof PlayerEntity || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
             }
         }));
         double d2 = d1;
@@ -82,7 +82,7 @@ public class ItemSirenFlute extends Item {
             }
         }
         if (pointedEntity != null) {
-            if (pointedEntity instanceof EntityLivingBase) {
+            if (pointedEntity instanceof LivingEntity) {
                 MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscEntityProperties.class);
                 if (theirProperties != null) {
                     theirProperties.inLoveTicks = 600;

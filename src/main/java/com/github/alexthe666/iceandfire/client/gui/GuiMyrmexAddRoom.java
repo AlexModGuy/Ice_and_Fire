@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -52,7 +52,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
         if (ClientProxy.getReferedClientHive() == null) {
             return;
         }
-        EntityPlayer player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
         switch (button.id) {
             case 0:
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);

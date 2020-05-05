@@ -10,9 +10,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -41,7 +41,7 @@ public class FireChargeExplosion extends Explosion {
     private final Entity exploder;
     private final float explosionSize;
     private final List<BlockPos> affectedBlockPositions;
-    private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
+    private final Map<PlayerEntity, Vec3d> playerKnockbackMap;
     private final Vec3d position;
 
     public FireChargeExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, boolean flaming, boolean smoking) {
@@ -141,7 +141,7 @@ public class FireChargeExplosion extends Explosion {
                             if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
                                 return;
                             }
-                            if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
+                            if (entity instanceof LivingEntity && ((EntityDragonBase) exploder).isOwner((LivingEntity) entity)) {
                                 entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 3);
                             } else {
                                 entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
@@ -152,18 +152,18 @@ public class FireChargeExplosion extends Explosion {
                         }
                         double d11 = 1.0D;
 
-                        if (entity instanceof EntityLivingBase) {
-                            d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
+                        if (entity instanceof LivingEntity) {
+                            d11 = EnchantmentProtection.getBlastDamageReduction((LivingEntity) entity, d10);
                         }
 
                         entity.motionX += d5 * d11;
                         entity.motionY += d7 * d11;
                         entity.motionZ += d9 * d11;
 
-                        if (entity instanceof EntityPlayer) {
-                            EntityPlayer entityplayer = (EntityPlayer) entity;
-                            if (!entityplayer.isSpectator() && (!entityplayer.isCreative() || !entityplayer.capabilities.isFlying)) {
-                                this.playerKnockbackMap.put(entityplayer, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+                        if (entity instanceof PlayerEntity) {
+                            PlayerEntity PlayerEntity = (PlayerEntity) entity;
+                            if (!PlayerEntity.isSpectator() && (!PlayerEntity.isCreative() || !PlayerEntity.capabilities.isFlying)) {
+                                this.playerKnockbackMap.put(PlayerEntity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                             }
                         }
                     }
@@ -251,15 +251,15 @@ public class FireChargeExplosion extends Explosion {
         }
     }
 
-    public Map<EntityPlayer, Vec3d> getPlayerKnockbackMap() {
+    public Map<PlayerEntity, Vec3d> getPlayerKnockbackMap() {
         return this.playerKnockbackMap;
     }
 
     /**
      * Returns either the entity that placed the explosive block, the entity that caused the explosion or null.
      */
-    public EntityLivingBase getExplosivePlacedBy() {
-        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof EntityLivingBase ? (EntityLivingBase) this.exploder : null));
+    public LivingEntity getExplosivePlacedBy() {
+        return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.exploder).getTntPlacedBy() : (this.exploder instanceof LivingEntity ? (LivingEntity) this.exploder : null));
     }
 
     public void clearAffectedBlockPositions() {

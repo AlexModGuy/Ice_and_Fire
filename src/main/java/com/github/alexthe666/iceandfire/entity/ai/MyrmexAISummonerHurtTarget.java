@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 
 public class MyrmexAISummonerHurtTarget extends EntityAITarget {
     EntityMyrmexSwarmer tameable;
-    EntityLivingBase attacker;
+    LivingEntity attacker;
     private int timestamp;
 
     public MyrmexAISummonerHurtTarget(EntityMyrmexSwarmer theEntityMyrmexSwarmerIn) {
@@ -16,23 +16,23 @@ public class MyrmexAISummonerHurtTarget extends EntityAITarget {
     }
 
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.tameable.getSummoner();
+        LivingEntity LivingEntity = this.tameable.getSummoner();
 
-        if (entitylivingbase == null) {
+        if (LivingEntity == null) {
             return false;
         } else {
-            this.attacker = entitylivingbase.getLastAttackedEntity();
-            int i = entitylivingbase.getLastAttackedEntityTime();
-            return i != this.timestamp && this.isSuitableTarget(this.attacker, false) && this.tameable.shouldAttackEntity(this.attacker, entitylivingbase);
+            this.attacker = LivingEntity.getLastAttackedEntity();
+            int i = LivingEntity.getLastAttackedEntityTime();
+            return i != this.timestamp && this.isSuitableTarget(this.attacker, false) && this.tameable.shouldAttackEntity(this.attacker, LivingEntity);
         }
     }
 
     public void startExecuting() {
         this.taskOwner.setAttackTarget(this.attacker);
-        EntityLivingBase entitylivingbase = this.tameable.getSummoner();
+        LivingEntity LivingEntity = this.tameable.getSummoner();
 
-        if (entitylivingbase != null) {
-            this.timestamp = entitylivingbase.getLastAttackedEntityTime();
+        if (LivingEntity != null) {
+            this.timestamp = LivingEntity.getLastAttackedEntityTime();
         }
 
         super.startExecuting();

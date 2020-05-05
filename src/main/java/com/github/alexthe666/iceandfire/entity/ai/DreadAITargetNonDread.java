@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
 import com.github.alexthe666.iceandfire.entity.IDreadMob;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
@@ -17,11 +17,11 @@ import javax.annotation.Nullable;
 
 public class DreadAITargetNonDread extends EntityAINearestAttackableTarget {
 
-    public DreadAITargetNonDread(EntityCreature entityIn, Class<EntityLivingBase> classTarget, boolean checkSight, Predicate<? super EntityLivingBase> targetSelector) {
+    public DreadAITargetNonDread(EntityCreature entityIn, Class<LivingEntity> classTarget, boolean checkSight, Predicate<? super LivingEntity> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
     }
 
-    protected boolean isSuitableTarget(@Nullable EntityLivingBase target, boolean includeInvincibles) {
+    protected boolean isSuitableTarget(@Nullable LivingEntity target, boolean includeInvincibles) {
         if(super.isSuitableTarget(target, includeInvincibles)){
             if(target instanceof IDreadMob || !DragonUtils.isAlive(target)){
                 return false;

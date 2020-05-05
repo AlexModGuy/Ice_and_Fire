@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public class EntityHippogryphEgg extends EntityEgg {
     }
 
 
-    public EntityHippogryphEgg(World world, EntityPlayer player, ItemStack itemstack) {
+    public EntityHippogryphEgg(World world, PlayerEntity player, ItemStack itemstack) {
         super(world, player);
         this.itemstack = itemstack;
     }

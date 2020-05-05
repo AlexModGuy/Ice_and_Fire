@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -44,7 +44,7 @@ public class MessageUpdatePixieHouse extends AbstractMessage<MessageUpdatePixieH
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageUpdatePixieHouse message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageUpdatePixieHouse message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);
             if (client.world.getTileEntity(pos) != null && client.world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
@@ -60,7 +60,7 @@ public class MessageUpdatePixieHouse extends AbstractMessage<MessageUpdatePixieH
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageUpdatePixieHouse message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageUpdatePixieHouse message, PlayerEntity player, MessageContext messageContext) {
 
     }
 }

@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -35,19 +35,19 @@ public class ItemFishingSpear extends Item {
         return EnumAction.BOW;
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-            boolean flag = entityplayer.capabilities.isCreativeMode;
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+        if (entityLiving instanceof PlayerEntity) {
+            PlayerEntity PlayerEntity = (PlayerEntity) entityLiving;
+            boolean flag = PlayerEntity.capabilities.isCreativeMode;
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
             if (i < 20) {
                 return;
             }
-            double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-            double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight();
-            double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
-            float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
-            float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
+            double d0 = PlayerEntity.prevPosX + (PlayerEntity.posX - PlayerEntity.prevPosX) * 1.0D;
+            double d1 = PlayerEntity.prevPosY + (PlayerEntity.posY - PlayerEntity.prevPosY) * 1.0D + (double) PlayerEntity.getEyeHeight();
+            double d2 = PlayerEntity.prevPosZ + (PlayerEntity.posZ - PlayerEntity.prevPosZ) * 1.0D;
+            float f1 = PlayerEntity.prevRotationPitch + (PlayerEntity.rotationPitch - PlayerEntity.prevRotationPitch) * 1.0F;
+            float f2 = PlayerEntity.prevRotationYaw + (PlayerEntity.rotationYaw - PlayerEntity.prevRotationYaw) * 1.0F;
             Vec3d vec3d = new Vec3d(d0, d1, d2);
             float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
             float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
@@ -68,18 +68,18 @@ public class ItemFishingSpear extends Item {
                 if (!flag1) {
                     return;
                 }
-                if (!entityplayer.capabilities.isCreativeMode) {
-                    stack.damageItem(1, entityplayer);
+                if (!PlayerEntity.capabilities.isCreativeMode) {
+                    stack.damageItem(1, PlayerEntity);
                 }
-                entityplayer.addStat(StatList.getObjectUseStats(this));
+                PlayerEntity.addStat(StatList.getObjectUseStats(this));
                 if (!worldIn.isRemote) {
                     EntityItem item = new EntityItem(worldIn, raytraceresult.getBlockPos().getX() + 0.5D, raytraceresult.getBlockPos().getY() + 1.5D, raytraceresult.getBlockPos().getZ() + 0.5D, new ItemStack(Items.FISH, 1, itemRand.nextInt(4)));
                     worldIn.spawnEntity(item);
                 }
-                worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.1F);
+                worldIn.playSound(null, PlayerEntity.posX, PlayerEntity.posY, PlayerEntity.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.1F);
             }
 
-            entityplayer.addStat(StatList.getObjectUseStats(this));
+            PlayerEntity.addStat(StatList.getObjectUseStats(this));
         }
 
     }
@@ -88,14 +88,14 @@ public class ItemFishingSpear extends Item {
         return 72000;
     }
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer entityplayer, EnumHand hand) {
-        ItemStack itemStackIn = entityplayer.getHeldItem(hand);
-        double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * 1.0D;
-        double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * 1.0D + (double) entityplayer.getEyeHeight();
-        double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * 1.0D;
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity PlayerEntity, EnumHand hand) {
+        ItemStack itemStackIn = PlayerEntity.getHeldItem(hand);
+        double d0 = PlayerEntity.prevPosX + (PlayerEntity.posX - PlayerEntity.prevPosX) * 1.0D;
+        double d1 = PlayerEntity.prevPosY + (PlayerEntity.posY - PlayerEntity.prevPosY) * 1.0D + (double) PlayerEntity.getEyeHeight();
+        double d2 = PlayerEntity.prevPosZ + (PlayerEntity.posZ - PlayerEntity.prevPosZ) * 1.0D;
         float f = 1.0F;
-        float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * 1.0F;
-        float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * 1.0F;
+        float f1 = PlayerEntity.prevRotationPitch + (PlayerEntity.rotationPitch - PlayerEntity.prevRotationPitch) * 1.0F;
+        float f2 = PlayerEntity.prevRotationYaw + (PlayerEntity.rotationYaw - PlayerEntity.prevRotationYaw) * 1.0F;
         Vec3d vec3d = new Vec3d(d0, d1, d2);
         float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
         float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
@@ -104,7 +104,7 @@ public class ItemFishingSpear extends Item {
         float f7 = f4 * f5;
         float f8 = f3 * f5;
         double d3 = 5.0D;
-        entityplayer.setActiveHand(hand);
+        PlayerEntity.setActiveHand(hand);
         Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
         RayTraceResult raytraceresult = worldIn.rayTraceBlocks(vec3d, vec3d1, true);
         if (raytraceresult == null) {
@@ -118,7 +118,7 @@ public class ItemFishingSpear extends Item {
             if (!flag1) {
                 return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
             }
-            entityplayer.addStat(StatList.getObjectUseStats(this));
+            PlayerEntity.addStat(StatList.getObjectUseStats(this));
             return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
         }
     }

@@ -8,8 +8,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -37,7 +37,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if(stack.getItem() == IafItemRegistry.DREAD_KEY){
             if(!playerIn.isCreative()){
@@ -73,7 +73,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         return new BlockStateContainer(this, PLAYER_PLACED);
     }
 
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         return this.getDefaultState().with(PLAYER_PLACED, true);
     }
 }

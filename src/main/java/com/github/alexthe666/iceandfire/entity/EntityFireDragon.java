@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
@@ -236,7 +236,7 @@ public class EntityFireDragon extends EntityDragonBase {
         }
     }
 
-    private void shootFireAtMob(EntityLivingBase entity) {
+    private void shootFireAtMob(LivingEntity entity) {
         if (this.usingGroundAttack && this.groundAttack == IafDragonAttacks.Ground.FIRE || !this.usingGroundAttack && (this.airAttack == IafDragonAttacks.Air.SCORCH_STREAM || this.airAttack == IafDragonAttacks.Air.HOVER_BLAST)) {
             if (this.usingGroundAttack && this.getRNG().nextInt(5) == 0 || !this.usingGroundAttack && this.airAttack == IafDragonAttacks.Air.HOVER_BLAST) {
                 if (this.getAnimation() != ANIMATION_FIRECHARGE) {

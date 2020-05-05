@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -164,7 +164,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 		}
 
 		@Override
-        public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        public EnumActionResult onItemUse(PlayerEntity playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			ItemStack stack = playerIn.getHeldItem(hand);
 			if(stack.getItem() == Item.getItemFromBlock(doubleSlab)){
 				return EnumActionResult.SUCCESS;
@@ -193,7 +193,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 
 		@Override
         @OnlyIn(Dist.CLIENT)
-		public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
+		public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack) {
 			BlockPos blockpos = pos;
 			BlockState BlockState = worldIn.getBlockState(pos);
 
@@ -208,7 +208,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 			return BlockState1.getBlock() == this.singleSlab || super.canPlaceBlockOnSide(worldIn, blockpos, side, player, stack);
 		}
 
-		private boolean tryPlace(EntityPlayer player, ItemStack stack, World worldIn, BlockPos pos, Object itemSlabType) {
+		private boolean tryPlace(PlayerEntity player, ItemStack stack, World worldIn, BlockPos pos, Object itemSlabType) {
 			BlockState BlockState = worldIn.getBlockState(pos);
 			if (BlockState.getBlock() == this.singleSlab) {
 				BlockState BlockState1 = this.doubleSlab.getDefaultState();

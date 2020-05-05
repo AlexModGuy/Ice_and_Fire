@@ -3,12 +3,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-public class HippogryphAITarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
+public class HippogryphAITarget<T extends LivingEntity> extends EntityAINearestAttackableTarget<T> {
     private EntityHippogryph hippogryph;
 
     public HippogryphAITarget(EntityHippogryph entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
@@ -23,7 +23,7 @@ public class HippogryphAITarget<T extends EntityLivingBase> extends EntityAINear
         }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.hippogryph.getClass())) {
             if (this.hippogryph.width >= this.targetEntity.width) {
-                if (this.targetEntity instanceof EntityPlayer) {
+                if (this.targetEntity instanceof PlayerEntity) {
                     return !hippogryph.isTamed();
                 } else {
                     if (!hippogryph.isOwner(this.targetEntity) && hippogryph.canMove() && this.targetEntity instanceof EntityAnimal) {

@@ -2,12 +2,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 
 public class MyrmexAIDefendHive extends EntityAITarget {
     EntityMyrmexBase myrmex;
-    EntityLivingBase villageAgressorTarget;
+    LivingEntity villageAgressorTarget;
 
     public MyrmexAIDefendHive(EntityMyrmexBase myrmex) {
         super(myrmex, false, true);

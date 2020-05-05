@@ -6,8 +6,8 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,11 +40,11 @@ public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveCha
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageRemoveChainedEntity message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageRemoveChainedEntity message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.chainedId);
             Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-            if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+            if (entity != null && entity instanceof LivingEntity && toChain != null) {
                 ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
                 properties.connectedEntities.remove(toChain);
             }
@@ -52,11 +52,11 @@ public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveCha
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageRemoveChainedEntity message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageRemoveChainedEntity message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.chainedId);
             Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-            if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+            if (entity != null && entity instanceof LivingEntity && toChain != null) {
                 ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
                 properties.connectedEntities.remove(toChain);
             }

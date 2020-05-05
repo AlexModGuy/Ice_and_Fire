@@ -6,8 +6,8 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,10 +40,10 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageAddChainedEntity message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageAddChainedEntity message, PlayerEntity player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.chainedId);
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
-        if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+        if (entity != null && entity instanceof LivingEntity && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
             if (!properties.connectedEntities.contains(toChain)) {
                 properties.connectedEntities.add(toChain);
@@ -52,10 +52,10 @@ public class MessageAddChainedEntity extends AbstractMessage<MessageAddChainedEn
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageAddChainedEntity message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageAddChainedEntity message, PlayerEntity player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.chainedId);
         Entity toChain = player.world.getEntityByID(message.addedEntityId);
-        if (entity != null && entity instanceof EntityLivingBase && toChain != null) {
+        if (entity != null && entity instanceof LivingEntity && toChain != null) {
             ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
             if (!properties.connectedEntities.contains(toChain)) {
                 properties.connectedEntities.add(toChain);

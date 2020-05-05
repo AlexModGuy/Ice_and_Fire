@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +33,7 @@ public class ItemPixieWand extends Item {
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         boolean flag = playerIn.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemStackIn) > 0;
         ItemStack itemstack = this.findAmmo(playerIn);
@@ -66,12 +66,12 @@ public class ItemPixieWand extends Item {
         return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
-    public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player) {
+    public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.PlayerEntity player) {
         int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.INFINITY, bow);
         return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST;
     }
 
-    private ItemStack findAmmo(EntityPlayer player) {
+    private ItemStack findAmmo(PlayerEntity player) {
         if (this.isAmmo(player.getHeldItem(EnumHand.OFF_HAND))) {
             return player.getHeldItem(EnumHand.OFF_HAND);
         } else if (this.isAmmo(player.getHeldItem(EnumHand.MAIN_HAND))) {

@@ -1,34 +1,27 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemFood;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.item.Items;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class ItemAmbrosia extends ItemFood {
+public class ItemAmbrosia extends ItemGenericFood {
 
     public ItemAmbrosia() {
-        super(5, 0.6F, false);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.ambrosia");
-        this.setRegistryName(IceAndFire.MODID, "ambrosia");
-        this.setMaxStackSize(1);
-        this.setAlwaysEdible();
+        super(5, 0.6F, false, false, true, "ambrosia");
     }
 
-    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-        player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 3600, 2));
-        player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 3600, 2));
-        player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 3600, 2));
-        player.addPotionEffect(new PotionEffect(MobEffects.LUCK, 3600, 2));
+    public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
+        livingEntity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 3600, 2));
+        livingEntity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 3600, 2));
+        livingEntity.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 3600, 2));
+        livingEntity.addPotionEffect(new EffectInstance(Effects.LUCK, 3600, 2));
     }
 
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         super.onItemUseFinish(stack, worldIn, entityLiving);
         return new ItemStack(Items.BOWL);
     }

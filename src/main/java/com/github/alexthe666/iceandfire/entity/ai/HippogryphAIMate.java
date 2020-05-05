@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -81,14 +81,14 @@ public class HippogryphAIMate extends EntityAIBase {
         EntityItem egg = new EntityItem(world, this.hippo.posX, this.hippo.posY, this.hippo.posZ, ItemHippogryphEgg.createEggStack(this.hippo.getEnumVariant(), this.targetMate.getEnumVariant()));
 
         if (egg != null) {
-            EntityPlayer entityplayer = this.hippo.getLoveCause();
+            PlayerEntity PlayerEntity = this.hippo.getLoveCause();
 
-            if (entityplayer == null && this.targetMate.getLoveCause() != null) {
-                entityplayer = this.targetMate.getLoveCause();
+            if (PlayerEntity == null && this.targetMate.getLoveCause() != null) {
+                PlayerEntity = this.targetMate.getLoveCause();
             }
 
-            if (entityplayer != null) {
-                entityplayer.addStat(StatList.ANIMALS_BRED);
+            if (PlayerEntity != null) {
+                PlayerEntity.addStat(StatList.ANIMALS_BRED);
             }
 
             this.hippo.setGrowingAge(6000);

@@ -17,7 +17,7 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -90,7 +90,7 @@ public class EntityPixie extends EntityTameable {
         return entity.getPosition();
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 3;
     }
 
@@ -121,8 +121,8 @@ public class EntityPixie extends EntityTameable {
             this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         }
         super.onDeath(cause);
-        //if (cause.getTrueSource() instanceof EntityPlayer) {
-        //	((EntityPlayer) cause.getTrueSource()).addStat(ModAchievements.killPixie);
+        //if (cause.getTrueSource() instanceof PlayerEntity) {
+        //	((PlayerEntity) cause.getTrueSource()).addStat(ModAchievements.killPixie);
         //}
     }
 
@@ -154,7 +154,7 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
         }
@@ -205,15 +205,15 @@ public class EntityPixie extends EntityTameable {
 
         this.tasks.addTask(2, aiTempt = new PixieAISteal(this, 1.0D));
 
-        this.tasks.addTask(2, aiFlee = new PixieAIFlee(this, EntityPlayer.class, 10, new Predicate<EntityPlayer>() {
+        this.tasks.addTask(2, aiFlee = new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
             @Override
-            public boolean apply(@Nullable EntityPlayer entity) {
+            public boolean apply(@Nullable PlayerEntity entity) {
                 return true;
             }
         }));
         this.tasks.addTask(3, new AIMoveRandom());
         this.tasks.addTask(4, new AIEnterHouse());
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.tasks.removeTask(aiFlee);
     }
@@ -267,7 +267,7 @@ public class EntityPixie extends EntityTameable {
         if (this.getOwner() != null && this.isOwnerClose() && this.ticksExisted % 80 == 0) {
             this.getOwner().addPotionEffect(new PotionEffect(positivePotions[this.getColor()], 100, 0, false, false));
         }
-        //EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
+        //PlayerEntity player = world.getClosestPlayerToEntity(this, 25);
         //if (player != null) {
         //	player.addStat(ModAchievements.findPixie);
         //}

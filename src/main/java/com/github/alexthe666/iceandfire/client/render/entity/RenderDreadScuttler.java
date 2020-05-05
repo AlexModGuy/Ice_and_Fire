@@ -22,8 +22,8 @@ public class RenderDreadScuttler extends RenderLiving<EntityDreadScuttler> {
     }
 
     @Override
-    public void preRenderCallback(EntityDreadScuttler entitylivingbaseIn, float partialTickTime) {
-        GlStateManager.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
+    public void preRenderCallback(EntityDreadScuttler LivingEntityIn, float partialTickTime) {
+        GlStateManager.scale(LivingEntityIn.getScale(), LivingEntityIn.getScale(), LivingEntityIn.getScale());
     }
 
     @Override

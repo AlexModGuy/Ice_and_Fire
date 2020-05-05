@@ -14,7 +14,7 @@ import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.PotionEffect;
@@ -45,7 +45,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         ANIMATION_HIT = Animation.create(10);
     }
 
-    public static boolean isEntityLookingAt(EntityLivingBase looker, EntityLivingBase seen, double degree) {
+    public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         degree *= 1 + (looker.getDistance(seen) * 0.1);
         Vec3d vec3d = looker.getLook(1.0F).normalize();
         Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
@@ -55,7 +55,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         return d1 > 1.0D - degree / d0 && (looker.canEntityBeSeen(seen) && !isStoneMob(seen));
     }
 
-    public static boolean isStoneMob(EntityLivingBase mob) {
+    public static boolean isStoneMob(LivingEntity mob) {
         if (mob instanceof EntityLiving) {
             try {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
@@ -67,7 +67,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         return false;
     }
 
-    public static boolean isBlindfolded(EntityLivingBase attackTarget) {
+    public static boolean isBlindfolded(LivingEntity attackTarget) {
         return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
     }
 
@@ -89,9 +89,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
                 return super.shouldExecute();
             }
         });
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F) {
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F) {
             public boolean shouldContinueExecuting() {
-                if (this.closestEntity != null && this.closestEntity instanceof EntityPlayer && ((EntityPlayer) this.closestEntity).isCreative()) {
+                if (this.closestEntity != null && this.closestEntity instanceof PlayerEntity && ((PlayerEntity) this.closestEntity).isCreative()) {
                     return false;
                 }
                 return super.shouldContinueExecuting();
@@ -99,9 +99,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         });
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
             @Override
-            public boolean apply(@Nullable EntityPlayer entity) {
+            public boolean apply(@Nullable PlayerEntity entity) {
                 return true;
             }
         }));
@@ -115,8 +115,8 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         this.tasks.removeTask(aiMelee);
     }
 
-    public void attackEntityWithRangedAttack(EntityLivingBase entity) {
-        if (!(entity instanceof EntityPlayer) && entity instanceof EntityLiving) {
+    public void attackEntityWithRangedAttack(LivingEntity entity) {
+        if (!(entity instanceof PlayerEntity) && entity instanceof EntityLiving) {
             forcePreyToLook((EntityLiving) entity);
         }
     }
@@ -127,18 +127,18 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
             if (this.getAnimation() != ANIMATION_HIT) {
                 this.setAnimation(ANIMATION_HIT);
             }
-            if (entityIn instanceof EntityLivingBase) {
-                ((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 2, false, true));
+            if (entityIn instanceof LivingEntity) {
+                ((LivingEntity) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 2, false, true));
             }
         }
         return super.attackEntityAsMob(entityIn);
     }
 
-    public void setAttackTarget(@Nullable EntityLivingBase entitylivingbaseIn) {
-        super.setAttackTarget(entitylivingbaseIn);
-        if (entitylivingbaseIn != null && !world.isRemote) {
+    public void setAttackTarget(@Nullable LivingEntity LivingEntityIn) {
+        super.setAttackTarget(LivingEntityIn);
+        if (LivingEntityIn != null && !world.isRemote) {
 
-            boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn.isPotionActive(MobEffects.BLINDNESS) || entitylivingbaseIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entitylivingbaseIn).canBeTurnedToStone() || isBlindfolded(entitylivingbaseIn);
+            boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || LivingEntityIn.isPotionActive(MobEffects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
             if (blindness && this.deathTime == 0) {
                 this.tasks.removeTask(aiStare);
                 this.tasks.addTask(3, aiMelee);
@@ -149,7 +149,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         }
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 30;
     }
 
@@ -193,7 +193,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         if (this.getAttackTarget() != null) {
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
             this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-            if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof EntityPlayer)) {
+            if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof PlayerEntity)) {
                 forcePreyToLook((EntityLiving) this.getAttackTarget());
             }
         }
@@ -207,7 +207,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
                 }
                 if (this.getAnimation() == ANIMATION_SCARE) {
                     if (this.getAnimationTick() > 10) {
-                        if (this.getAttackTarget() instanceof EntityPlayer) {
+                        if (this.getAttackTarget() instanceof PlayerEntity) {
                             if (!world.isRemote) {
                                 this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                                 if (!this.getAttackTarget().isEntityAlive() && playerStatueCooldown == 0) {
@@ -259,7 +259,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        EntityPlayer player = world.getClosestPlayerToEntity(this, 25);
+        PlayerEntity player = world.getClosestPlayerToEntity(this, 25);
         //if (player != null) {
         //	player.addStat(ModAchievements.findGorgon);
         //}

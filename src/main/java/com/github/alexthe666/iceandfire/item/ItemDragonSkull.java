@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -33,7 +33,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTagCompound(new CompoundNBT());
     }
 
@@ -66,7 +66,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         /*
          * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
@@ -99,7 +99,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
 
     /*
      * @Override public ModelResourceLocation getModel(ItemStack stack,
-     * EntityPlayer player, int useRemaining) { switch(stack.getMetadata()){
+     * PlayerEntity player, int useRemaining) { switch(stack.getMetadata()){
      * default: return new ModelResourceLocation("iceandfire:dragon_skull_fire",
      * "inventory"); case 1: return new
      * ModelResourceLocation("iceandfire:dragon_skull_ice", "inventory"); } }

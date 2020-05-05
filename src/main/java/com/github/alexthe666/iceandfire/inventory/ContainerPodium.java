@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 public class ContainerPodium extends Container {
     private final IInventory podium;
 
-    public ContainerPodium(InventoryPlayer playerInventory, IInventory podiumIn, EntityPlayer player) {
+    public ContainerPodium(InventoryPlayer playerInventory, IInventory podiumIn, PlayerEntity player) {
         this.podium = podiumIn;
         podiumIn.openInventory(player);
         byte b0 = 51;
@@ -30,7 +30,7 @@ public class ContainerPodium extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return this.podium.isUsableByPlayer(playerIn);
     }
 
@@ -38,7 +38,7 @@ public class ContainerPodium extends Container {
      * Take a stack from the specified inventory slot.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
@@ -68,7 +68,7 @@ public class ContainerPodium extends Container {
      * Called when the container is closed.
      */
     @Override
-    public void onContainerClosed(EntityPlayer playerIn) {
+    public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.podium.closeInventory(playerIn);
     }

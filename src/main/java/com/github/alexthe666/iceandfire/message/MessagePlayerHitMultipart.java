@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,12 +44,12 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof EntityLivingBase) {
+            if (entity != null && entity instanceof LivingEntity) {
                 double dist = player.getDistance(entity);
-                EntityLivingBase mob = (EntityLivingBase) entity;
+                LivingEntity mob = (LivingEntity) entity;
                 if(dist < 100) {
                     player.attackTargetEntityWithCurrentItem(mob);
                     if (mob instanceof EntityHydra) {
@@ -61,12 +61,12 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessagePlayerHitMultipart message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof EntityLivingBase) {
+            if (entity != null && entity instanceof LivingEntity) {
                 double dist = player.getDistance(entity);
-                EntityLivingBase mob = (EntityLivingBase) entity;
+                LivingEntity mob = (LivingEntity) entity;
                 if(dist < 100) {
                     player.attackTargetEntityWithCurrentItem(mob);
                     if (mob instanceof EntityHydra) {

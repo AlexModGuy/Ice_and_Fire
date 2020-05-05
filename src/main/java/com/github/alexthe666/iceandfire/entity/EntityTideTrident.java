@@ -8,12 +8,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
@@ -72,11 +72,11 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.stack = stack;
     }
 
-    public EntityTideTrident(World worldIn, EntityLivingBase shooter, ItemStack stack) {
+    public EntityTideTrident(World worldIn, LivingEntity shooter, ItemStack stack) {
         this(worldIn, shooter.posX, shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D, shooter.posZ, stack.copy());
         this.shootingEntity = shooter;
 
-        if (shooter instanceof EntityPlayer && !((EntityPlayer) shooter).isCreative()) {
+        if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).isCreative()) {
             this.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
         }
     }
@@ -223,10 +223,10 @@ public class EntityTideTrident extends Entity implements IProjectile {
                 raytraceresult = new RayTraceResult(entity);
             }
 
-            if (raytraceresult != null && raytraceresult.entityHit instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer) raytraceresult.entityHit;
+            if (raytraceresult != null && raytraceresult.entityHit instanceof PlayerEntity) {
+                PlayerEntity PlayerEntity = (PlayerEntity) raytraceresult.entityHit;
 
-                if (this.shootingEntity instanceof EntityPlayer && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
+                if (this.shootingEntity instanceof PlayerEntity && !((PlayerEntity) this.shootingEntity).canAttackPlayer(PlayerEntity)) {
                     raytraceresult = null;
                 }
             }
@@ -320,30 +320,30 @@ public class EntityTideTrident extends Entity implements IProjectile {
             }
 
             if (entity.attackEntityFrom(damagesource, (float) i)) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
+                if (entity instanceof LivingEntity) {
+                    LivingEntity LivingEntity = (LivingEntity) entity;
 
                     if (!this.world.isRemote) {
-                        entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
+                        LivingEntity.setArrowCountInEntity(LivingEntity.getArrowCountInEntity() + 1);
                     }
 
                     if (this.knockbackStrength > 0) {
                         float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
                         if (f1 > 0.0F) {
-                            entitylivingbase.addVelocity(this.motionX * (double) this.knockbackStrength * 0.6000000238418579D / (double) f1, 0.1D, this.motionZ * (double) this.knockbackStrength * 0.6000000238418579D / (double) f1);
+                            LivingEntity.addVelocity(this.motionX * (double) this.knockbackStrength * 0.6000000238418579D / (double) f1, 0.1D, this.motionZ * (double) this.knockbackStrength * 0.6000000238418579D / (double) f1);
                         }
                     }
 
-                    if (this.shootingEntity instanceof EntityLivingBase) {
-                        EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
-                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) this.shootingEntity, entitylivingbase);
+                    if (this.shootingEntity instanceof LivingEntity) {
+                        EnchantmentHelper.applyThornEnchantments(LivingEntity, this.shootingEntity);
+                        EnchantmentHelper.applyArthropodEnchantments((LivingEntity) this.shootingEntity, LivingEntity);
                     }
 
-                    this.arrowHit(entitylivingbase);
+                    this.arrowHit(LivingEntity);
 
-                    if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP) {
-                        ((EntityPlayerMP) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+                    if (this.shootingEntity != null && LivingEntity != this.shootingEntity && LivingEntity instanceof PlayerEntity && this.shootingEntity instanceof PlayerEntityMP) {
+                        ((PlayerEntityMP) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
                     }
                 }
                 this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
@@ -396,7 +396,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
     }
 
-    protected void arrowHit(EntityLivingBase living) {
+    protected void arrowHit(LivingEntity living) {
     }
 
     @Nullable
@@ -479,7 +479,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer entityIn) {
+    public void onCollideWithPlayer(PlayerEntity entityIn) {
         if (!this.world.isRemote && this.inGround && this.arrowShake <= 0) {
             boolean flag = this.pickupStatus == EntityArrow.PickupStatus.ALLOWED || this.pickupStatus == EntityArrow.PickupStatus.CREATIVE_ONLY && entityIn.capabilities.isCreativeMode;
 
@@ -495,8 +495,8 @@ public class EntityTideTrident extends Entity implements IProjectile {
     }
 
     protected ItemStack getArrowStack() {
-        if (shootingEntity instanceof EntityLivingBase) {
-            stack.damageItem(1, (EntityLivingBase) shootingEntity);
+        if (shootingEntity instanceof LivingEntity) {
+            stack.damageItem(1, (LivingEntity) shootingEntity);
         }
         return stack;
     }
@@ -543,7 +543,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         }
     }
 
-    public void setEnchantmentEffectsFromEntity(EntityLivingBase p_190547_1_, float p_190547_2_) {
+    public void setEnchantmentEffectsFromEntity(LivingEntity p_190547_1_, float p_190547_2_) {
         int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, p_190547_1_);
         int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, p_190547_1_);
         this.setDamage((double) (p_190547_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double) ((float) this.world.getDifficulty().getId() * 0.11F));

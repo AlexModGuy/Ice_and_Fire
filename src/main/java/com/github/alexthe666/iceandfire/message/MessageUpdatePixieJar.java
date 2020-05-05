@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -39,7 +39,7 @@ public class MessageUpdatePixieJar extends AbstractMessage<MessageUpdatePixieJar
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageUpdatePixieJar message, PlayerEntity player, MessageContext messageContext) {
         if (client.world != null) {
             BlockPos pos = BlockPos.fromLong(message.blockPos);
             if (client.world.getTileEntity(pos) != null) {
@@ -52,7 +52,7 @@ public class MessageUpdatePixieJar extends AbstractMessage<MessageUpdatePixieJar
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageUpdatePixieJar message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageUpdatePixieJar message, PlayerEntity player, MessageContext messageContext) {
 
     }
 }

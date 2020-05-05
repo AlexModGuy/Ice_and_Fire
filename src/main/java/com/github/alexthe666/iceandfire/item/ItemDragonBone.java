@@ -6,8 +6,7 @@ import net.minecraft.item.Item;
 public class ItemDragonBone extends Item {
 
     public ItemDragonBone() {
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.dragonbone");
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "dragonbone");
     }
 }

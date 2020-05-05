@@ -12,7 +12,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
@@ -83,10 +83,10 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity.isEntityAlive();
@@ -96,7 +96,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof EntityLivingBase && DragonUtils.isAlive((EntityLiving) entity) && !(entity instanceof PartEntity) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((EntityLiving) entity) && !(entity instanceof PartEntity) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
     }
@@ -141,7 +141,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 }
             }
             if (breathing) {
-                EntityLivingBase entity = this.getAttackTarget();
+                LivingEntity entity = this.getAttackTarget();
                 if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
                     Vec3d vec3d = this.getLook(1.0F);
                     if(rand.nextFloat() < 0.2F){
@@ -340,7 +340,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-        this.getEntityAttribute(EntityLivingBase.SWIM_SPEED).setBaseValue(2.0D);
+        this.getEntityAttribute(LivingEntity.SWIM_SPEED).setBaseValue(2.0D);
     }
 
     @Override

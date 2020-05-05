@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -25,14 +25,14 @@ public class MessageSpawnParticleAt extends AbstractMessage<MessageSpawnParticle
     }
 
     @Override
-    public void onClientReceived(Minecraft client, MessageSpawnParticleAt message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageSpawnParticleAt message, PlayerEntity player, MessageContext messageContext) {
         if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK){
             client.world.spawnParticle(EnumParticleTypes.getParticleFromId(particleType), message.x, message.y, message.z, 0, 0, 0);
         }
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageSpawnParticleAt message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageSpawnParticleAt message, PlayerEntity player, MessageContext messageContext) {
 
     }
 

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpentArrow;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class ItemSeaSerpentArrow extends ItemArrow {
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_arrow");
     }
 
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
+    public EntityArrow createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
         return new EntitySeaSerpentArrow(worldIn, shooter);
     }
 

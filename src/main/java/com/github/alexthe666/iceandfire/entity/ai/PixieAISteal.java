@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
@@ -21,7 +21,7 @@ public class PixieAISteal extends EntityAIBase {
     private double targetZ;
     private double pitch;
     private double yaw;
-    private EntityPlayer temptingPlayer;
+    private PlayerEntity temptingPlayer;
     private int delayTemptCounter;
     private boolean isRunning;
 

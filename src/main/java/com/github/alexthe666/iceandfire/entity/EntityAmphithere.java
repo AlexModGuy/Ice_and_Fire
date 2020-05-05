@@ -18,7 +18,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
@@ -151,7 +151,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
@@ -221,7 +221,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         this.tasks.addTask(3, new AIFlyWander());
         this.tasks.addTask(3, new AIFlyCircle());
         this.tasks.addTask(3, new AILandWander(this, 1.0D));
-        this.tasks.addTask(4, new EntityAIWatchClosestIgnoreRider(this, EntityLivingBase.class, 6.0F));
+        this.tasks.addTask(4, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
         this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
@@ -259,7 +259,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (!this.isTamed() && this.isFlying() && !onGround && source.isProjectile() && !world.isRemote) {
             this.isFallen = true;
         }
-        if(source.getTrueSource() instanceof EntityLivingBase && this.isTamed() && this.isOwner((EntityLivingBase) source.getTrueSource())){
+        if(source.getTrueSource() instanceof LivingEntity && this.isTamed() && this.isOwner((LivingEntity) source.getTrueSource())){
             return false;
         }
         return super.attackEntityFrom(source, damage);
@@ -271,7 +271,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             this.rotationYaw = passenger.rotationYaw;
             //renderYawOffset = rotationYaw;
         }
-        if (!this.world.isRemote && !this.isTamed() && passenger instanceof EntityPlayer && this.getAnimation() == NO_ANIMATION && rand.nextInt(15) == 0) {
+        if (!this.world.isRemote && !this.isTamed() && passenger instanceof PlayerEntity && this.getAnimation() == NO_ANIMATION && rand.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
         }
         if (!this.world.isRemote && this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6 && !this.isTamed()) {
@@ -299,7 +299,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
+        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if(this.isInWater() && this.isJumping){
@@ -360,9 +360,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         if (this.getUntamedRider() == null) {
             ridingTime = 0;
         }
-        if (!this.isTamed() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof EntityPlayer) {
+        if (!this.isTamed() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof PlayerEntity) {
             this.world.setEntityState(this, (byte) 45);
-            this.setTamedBy((EntityPlayer) this.getUntamedRider());
+            this.setTamedBy((PlayerEntity) this.getUntamedRider());
         }
         if (world.isRemote) {
             this.updateClientControls();
@@ -508,8 +508,8 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
-                EntityPlayer player = (EntityPlayer) passenger;
+            if (passenger instanceof PlayerEntity && this.getAttackTarget() != passenger) {
+                PlayerEntity player = (PlayerEntity) passenger;
                 if (this.isTamed() && this.getOwnerId() != null && this.getOwnerId().equals(player.getUniqueID())) {
                     return player;
                 }
@@ -521,7 +521,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     @Nullable
     public Entity getUntamedRider() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer) {
+            if (passenger instanceof PlayerEntity) {
                 return passenger;
             }
         }
@@ -671,8 +671,8 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             }
             this.getUntamedRider().dismountRidingEntity();
         }
-        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
-            EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 2.5D);
+        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
+            LivingEntity target = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 2.5D);
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
             }
@@ -701,14 +701,14 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return false;
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
+    public boolean isRidingPlayer(PlayerEntity player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
     }
 
     @Nullable
-    public EntityPlayer getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof EntityPlayer){
-            return (EntityPlayer)this.getControllingPassenger();
+    public PlayerEntity getRidingPlayer() {
+        if(this.getControllingPassenger() instanceof PlayerEntity){
+            return (PlayerEntity)this.getControllingPassenger();
         }
         return null;
     }
@@ -874,7 +874,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return amphithere;
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
@@ -930,7 +930,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void onHearFlute(EntityPlayer player) {
+    public void onHearFlute(PlayerEntity player) {
         if (!this.onGround && this.isTamed()) {
             this.isFallen = true;
         }

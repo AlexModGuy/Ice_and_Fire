@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,7 +19,7 @@ public class EntityDragonArrow extends EntityArrow {
         this.setDamage(10);
     }
 
-    public EntityDragonArrow(World worldIn, EntityLivingBase shooter) {
+    public EntityDragonArrow(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -45,7 +45,7 @@ public class BlockDragonforgeBricks extends ContainerBlock implements IDragonPro
         return EnumPushReaction.BLOCK;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (this.getConnectedTileEntity(worldIn, pos) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, pos);
             if (forge.isFire == isFire) {

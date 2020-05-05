@@ -1,31 +1,25 @@
 package com.github.alexthe666.iceandfire.item;
-
-import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemFood;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class ItemDragonFlesh extends ItemFood {
+public class ItemDragonFlesh extends ItemGenericFood {
 
     boolean isFire;
 
     public ItemDragonFlesh(boolean isFire) {
-        super(8, 0.8F, true);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey(isFire ? "iceandfire.fire_dragon_flesh" : "iceandfire.ice_dragon_flesh");
-        this.setRegistryName(IceAndFire.MODID, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
+        super(8, 0.8F, true, false, false, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
         this.isFire = isFire;
     }
 
-    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+    public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
         if (!worldIn.isRemote) {
             if (isFire) {
-                player.setFire(5);
+                livingEntity.setFire(5);
             } else {
-                player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
+                livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
             }
         }
     }

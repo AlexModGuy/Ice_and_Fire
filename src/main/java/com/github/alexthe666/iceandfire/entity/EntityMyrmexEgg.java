@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -125,7 +125,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
             myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
                 MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
-                EntityPlayer player = world.getClosestPlayerToEntity(this, 30);
+                PlayerEntity player = world.getClosestPlayerToEntity(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
                     hive.ownerUUID = player.getUniqueID();
@@ -191,7 +191,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         return false;
     }
 
-    public void onPlayerPlace(EntityPlayer player) {
+    public void onPlayerPlace(PlayerEntity player) {
     }
 
     @Override

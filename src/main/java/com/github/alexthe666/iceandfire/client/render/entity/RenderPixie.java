@@ -29,9 +29,9 @@ public class RenderPixie extends RenderLiving<EntityPixie> {
     }
 
     @Override
-    public void preRenderCallback(EntityPixie entitylivingbaseIn, float partialTickTime) {
+    public void preRenderCallback(EntityPixie LivingEntityIn, float partialTickTime) {
         GL11.glScalef(0.55F, 0.55F, 0.55F);
-        if (entitylivingbaseIn.isSitting()) {
+        if (LivingEntityIn.isSitting()) {
             GL11.glTranslatef(0F, 0.5F, 0F);
 
         }

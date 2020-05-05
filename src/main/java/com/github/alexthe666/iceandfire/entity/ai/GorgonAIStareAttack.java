@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class GorgonAIStareAttack extends EntityAIBase {
@@ -43,18 +43,18 @@ public class GorgonAIStareAttack extends EntityAIBase {
     }
 
     public void updateTask() {
-        EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
+        LivingEntity LivingEntity = this.entity.getAttackTarget();
 
-        if (entitylivingbase != null) {
-            if (EntityGorgon.isStoneMob(entitylivingbase)) {
+        if (LivingEntity != null) {
+            if (EntityGorgon.isStoneMob(LivingEntity)) {
                 entity.setAttackTarget(null);
                 resetTask();
                 return;
             }
-            this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double) entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+            this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
 
-            double d0 = this.entity.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
-            boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
+            double d0 = this.entity.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
@@ -71,7 +71,7 @@ public class GorgonAIStareAttack extends EntityAIBase {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.moveSpeedAmp);
+                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 
@@ -95,9 +95,9 @@ public class GorgonAIStareAttack extends EntityAIBase {
                 }
 
                 this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.entity.getLookHelper().setLookPosition(entitylivingbase.posX, entitylivingbase.posY + (double) entitylivingbase.getEyeHeight(), entitylivingbase.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+                this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
             } else {
-                this.entity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
+                this.entity.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
             }
 
         }

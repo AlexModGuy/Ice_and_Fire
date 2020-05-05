@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.util.EnumHand;
 
@@ -11,7 +11,7 @@ public class CyclopsAIAttackMelee extends EntityAIAttackMelee {
         super(creature, speedIn, useLongMemory);
     }
 
-    protected void checkAndPerformAttack(EntityLivingBase entity, double distance) {
+    protected void checkAndPerformAttack(LivingEntity entity, double distance) {
         double d0 = this.getAttackReachSqr(entity);
         if (isCyclopsBlinded() && distance >= 36D) {
             this.resetTask();

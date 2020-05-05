@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,7 +38,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTagCompound(new CompoundNBT());
     }
 
@@ -54,7 +54,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
         }
     }
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
 
         if (!playerIn.capabilities.isCreativeMode) {

@@ -5,11 +5,11 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Optional;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -37,7 +37,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         switchNavigator(false);
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return 0;
     }
 
@@ -64,7 +64,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.tasks.addTask(3, new AIFlyRandom());
         this.tasks.addTask(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
         this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new MyrmexAISummonerHurtByTarget(this));
@@ -87,7 +87,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     @Nullable
-    public EntityLivingBase getSummoner() {
+    public LivingEntity getSummoner() {
         try {
             UUID uuid = this.getSummonerUUID();
             return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
@@ -140,7 +140,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.setTicksAlive(compound.getInteger("SummonTicks"));
     }
 
-    public void setSummonedBy(EntityPlayer player) {
+    public void setSummonedBy(PlayerEntity player) {
         this.setSummonerID(player.getUniqueID());
     }
 
@@ -228,7 +228,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return false;
     }
 
-    public boolean shouldAttackEntity(EntityLivingBase attacker, EntityLivingBase entitylivingbase) {
+    public boolean shouldAttackEntity(LivingEntity attacker, LivingEntity LivingEntity) {
         return !isOnSameTeam(attacker);
     }
 }

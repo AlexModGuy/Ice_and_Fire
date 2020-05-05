@@ -9,7 +9,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -111,19 +111,19 @@ public class ModelDreadQueen extends ModelDragonBase {
         animator = ModelAnimator.create();
     }
 
-    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+    public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = ModelBiped.ArmPose.EMPTY;
         this.leftArmPose = ModelBiped.ArmPose.EMPTY;
-        ItemStack itemstack = entitylivingbaseIn.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack itemstack = LivingEntityIn.getHeldItem(EnumHand.MAIN_HAND);
         
-        super.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTickTime);
+        super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
         super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         this.resetToDefaultPose();
         animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-        ItemStack itemstack = ((EntityLivingBase) entityIn).getHeldItemMainhand();
+        ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
         EntityDreadQueen thrall = (EntityDreadQueen) entityIn;
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
@@ -245,10 +245,10 @@ public class ModelDreadQueen extends ModelDragonBase {
     }
 
     protected EnumHandSide getMainHand(Entity entityIn) {
-        if (entityIn instanceof EntityLivingBase) {
-            EntityLivingBase entitylivingbase = (EntityLivingBase) entityIn;
-            EnumHandSide enumhandside = entitylivingbase.getPrimaryHand();
-            return entitylivingbase.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
+        if (entityIn instanceof LivingEntity) {
+            LivingEntity LivingEntity = (LivingEntity) entityIn;
+            EnumHandSide enumhandside = LivingEntity.getPrimaryHand();
+            return LivingEntity.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
         } else {
             return EnumHandSide.RIGHT;
         }

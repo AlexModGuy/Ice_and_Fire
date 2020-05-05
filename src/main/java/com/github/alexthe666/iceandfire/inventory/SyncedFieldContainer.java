@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -41,7 +41,7 @@ public abstract class SyncedFieldContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
         ItemStack transferred = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotIndex);
         int otherSlots = this.inventorySlots.size() - 36;

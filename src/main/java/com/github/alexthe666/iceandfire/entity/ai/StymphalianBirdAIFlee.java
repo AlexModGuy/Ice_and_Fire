@@ -4,11 +4,11 @@ import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,14 +20,14 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
     private final Predicate<Entity> canBeSeenSelector;
     private final float avoidDistance;
     protected EntityStymphalianBird stymphalianBird;
-    protected EntityLivingBase closestLivingEntity;
+    protected LivingEntity closestLivingEntity;
     private Vec3d hidePlace;
 
     public StymphalianBirdAIFlee(EntityStymphalianBird stymphalianBird, float avoidDistanceIn) {
         this.stymphalianBird = stymphalianBird;
         this.canBeSeenSelector = new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof EntityPlayer && entity.isEntityAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
+                return entity instanceof PlayerEntity && entity.isEntityAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
             }
         };
         this.avoidDistance = avoidDistanceIn;
@@ -39,7 +39,7 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
         if (this.stymphalianBird.getVictor() == null) {
             return false;
         }
-        List<EntityLivingBase> list = this.stymphalianBird.world.getEntitiesWithinAABB(EntityLivingBase.class, this.stymphalianBird.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
+        List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
                 Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector}));
 
         if (list.isEmpty()) {

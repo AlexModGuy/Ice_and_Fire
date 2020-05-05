@@ -7,10 +7,10 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -40,13 +40,13 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
         return multimap;
     }
 
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+    public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
         return player.getCooledAttackStrength(0) < 0.95 || player.swingProgress != 0;
     }
 
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
+    public boolean onEntitySwing(LivingEntity entityLiving, ItemStack stack) {
+        if (entityLiving instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entityLiving;
             if (player.getCooledAttackStrength(0) < 1 && player.swingProgress > 0) {
                 return true;
             } else {
@@ -57,8 +57,8 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
     }
 
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (entityIn instanceof EntityPlayer && isSelected) {
-            EntityPlayer player = (EntityPlayer) entityIn;
+        if (entityIn instanceof PlayerEntity && isSelected) {
+            PlayerEntity player = (PlayerEntity) entityIn;
             if (player.getCooledAttackStrength(0) < 0.95 && player.swingProgress > 0) {
                 player.swingProgressInt--;
             }

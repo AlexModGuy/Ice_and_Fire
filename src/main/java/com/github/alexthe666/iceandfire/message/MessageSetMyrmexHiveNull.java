@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.ClientProxy;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,12 +26,12 @@ public class MessageSetMyrmexHiveNull extends AbstractMessage<MessageSetMyrmexHi
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
+    public void onClientReceived(Minecraft client, MessageSetMyrmexHiveNull message, PlayerEntity player, MessageContext messageContext) {
         ClientProxy.setReferedClientHive(null);
     }
 
     @Override
-    public void onServerReceived(MinecraftServer server, MessageSetMyrmexHiveNull message, EntityPlayer player, MessageContext messageContext) {
+    public void onServerReceived(MinecraftServer server, MessageSetMyrmexHiveNull message, PlayerEntity player, MessageContext messageContext) {
 
     }
 }

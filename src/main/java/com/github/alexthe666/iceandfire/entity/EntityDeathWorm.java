@@ -26,7 +26,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -97,13 +97,13 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(3, new DeathwormAITargetItems(this, false, false));
-        this.targetTasks.addTask(5, new DeathWormAITarget(this, EntityLivingBase.class, false, new Predicate<EntityLivingBase>() {
+        this.targetTasks.addTask(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(@Nullable EntityLivingBase input) {
+            public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof EntityMob;
                 } else {
-                    return (IafConfig.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return (IafConfig.deathWormAttackMonsters ? input instanceof LivingEntity : (input instanceof EntityAnimal || input instanceof PlayerEntity)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
         }));
@@ -131,7 +131,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
     }
 
-    protected int getExperiencePoints(EntityPlayer player) {
+    protected int getExperiencePoints(PlayerEntity player) {
         return this.getScaleForAge() > 3 ? 20 : 10;
     }
 
@@ -177,10 +177,10 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         clearSegments();
         if (!this.dead) {
             Entity entity = cause.getTrueSource();
-            EntityLivingBase entitylivingbase = this.getAttackingEntity();
+            LivingEntity LivingEntity = this.getAttackingEntity();
 
-            if (this.scoreValue >= 0 && entitylivingbase != null) {
-                entitylivingbase.awardKillScore(this, this.scoreValue, cause);
+            if (this.scoreValue >= 0 && LivingEntity != null) {
+                LivingEntity.awardKillScore(this, this.scoreValue, cause);
             }
 
             if (entity != null) {
@@ -385,15 +385,15 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) passenger;
+            if (passenger instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) passenger;
                 return player;
             }
         }
         return null;
     }
 
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
@@ -543,7 +543,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.setHealth((float) this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
     }
 
-    public void onKillEntity(EntityLivingBase entityLivingIn) {
+    public void onKillEntity(LivingEntity entityLivingIn) {
         if (this.isTamed()) {
             this.heal(14);
         }
@@ -551,7 +551,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof EntityPlayer) {
+        if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if (this.willExplode) {
@@ -664,8 +664,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     public void onUpdate() {
         super.onUpdate();
         onUpdateParts();
-        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
-            EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
+        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
+            LivingEntity target = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 3);
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
                 this.playSound(this.getScaleForAge() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_ATTACK : IafSoundRegistry.DEATHWORM_ATTACK, 1, 1);
@@ -842,7 +842,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     public void travel(float strafe, float vertical, float forward) {
         float f4;
         if (this.isBeingRidden() && this.canBeSteered()) {
-            EntityLivingBase controller = (EntityLivingBase) this.getControllingPassenger();
+            LivingEntity controller = (LivingEntity) this.getControllingPassenger();
             if (controller != null) {
                 if (this.getAttackTarget() != null) {
                     this.setAttackTarget(null);
@@ -920,14 +920,14 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         return false;
     }
 
-    public boolean isRidingPlayer(EntityPlayer player) {
+    public boolean isRidingPlayer(PlayerEntity player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
     }
 
     @Nullable
-    public EntityPlayer getRidingPlayer() {
-        if (this.getControllingPassenger() instanceof EntityPlayer) {
-            return (EntityPlayer) this.getControllingPassenger();
+    public PlayerEntity getRidingPlayer() {
+        if (this.getControllingPassenger() instanceof PlayerEntity) {
+            return (PlayerEntity) this.getControllingPassenger();
         }
         return null;
     }
