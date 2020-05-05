@@ -7,7 +7,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -117,8 +117,8 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
         if (isDead)
             return;
         this.setDead();
-        ItemStack stack = new ItemStack(IafItemRegistry.dragon_skull, 1, getType());
-        stack.setTagCompound(new NBTTagCompound());
+        ItemStack stack = new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, getType());
+        stack.setTagCompound(new CompoundNBT());
         stack.getTagCompound().setInteger("Stage", this.getStage());
         stack.getTagCompound().setInteger("DragonAge", this.getDragonAge());
         if (!this.world.isRemote)
@@ -135,7 +135,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         this.setType(compound.getInteger("Type"));
         this.setStage(compound.getInteger("Stage"));
         this.setDragonAge(compound.getInteger("DragonAge"));
@@ -144,7 +144,7 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         compound.setInteger("Type", this.getType());
         compound.setInteger("Stage", this.getStage());
         compound.setInteger("DragonAge", this.getDragonAge());

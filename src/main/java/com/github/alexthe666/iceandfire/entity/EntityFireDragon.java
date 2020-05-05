@@ -9,7 +9,6 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
@@ -79,32 +78,32 @@ public class EntityFireDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.dragonscales_red;
+                return IafItemRegistry.DRAGONSCALES_RED;
             case 1:
-                return IafItemRegistry.dragonscales_green;
+                return IafItemRegistry.DRAGONSCALES_GREEN;
             case 2:
-                return IafItemRegistry.dragonscales_bronze;
+                return IafItemRegistry.DRAGONSCALES_BRONZE;
             case 3:
-                return IafItemRegistry.dragonscales_gray;
+                return IafItemRegistry.DRAGONSCALES_GRAY;
         }
     }
 
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.dragonegg_red;
+                return IafItemRegistry.DRAGONEGG_RED;
             case 1:
-                return IafItemRegistry.dragonegg_green;
+                return IafItemRegistry.DRAGONEGG_GREEN;
             case 2:
-                return IafItemRegistry.dragonegg_bronze;
+                return IafItemRegistry.DRAGONEGG_BRONZE;
             case 3:
-                return IafItemRegistry.dragonegg_gray;
+                return IafItemRegistry.DRAGONEGG_GRAY;
         }
     }
 
     @Override
     public Item getSummoningCrystal() {
-        return IafItemRegistry.summoning_crystal_fire;
+        return IafItemRegistry.SUMMONING_CRYSTAL_FIRE;
     }
 
     public boolean canBeSteered() {
@@ -392,7 +391,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.fire_stew;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW;
     }
 
     protected void spawnDeathParticles() {
@@ -417,11 +416,11 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.dragon_skull);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL);
     }
 
     public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.dragon_horn_fire);
+        return new ItemStack(IafItemRegistry.DRAGON_HORN_FIRE);
     }
 
 }

@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PreYggdrasilConverter;
@@ -27,7 +27,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+    public CompoundNBT writeToNBT(CompoundNBT tag) {
         if (type != null) {
             tag.setByte("Color", (byte) type.ordinal());
         } else {
@@ -44,7 +44,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(CompoundNBT tag) {
         super.readFromNBT(tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getByte("Age");
@@ -63,7 +63,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         this.writeToNBT(tag);
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }

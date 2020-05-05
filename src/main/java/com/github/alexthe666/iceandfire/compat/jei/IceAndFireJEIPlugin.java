@@ -42,20 +42,20 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.handleRecipes(DragonForgeRecipe.class, new IceDragonForgeFactory(), ICE_DRAGON_FORGE_ID);
         registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED), ICE_DRAGON_FORGE_ID);
         registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE), ICE_DRAGON_FORGE_ID);
-        addDescription(registry, new ItemStack(IafItemRegistry.fire_dragon_blood));
-        addDescription(registry, new ItemStack(IafItemRegistry.ice_dragon_blood));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_red));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_bronze));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_gray));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_green));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_blue));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_white));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_sapphire));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragonegg_silver));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragon_skull));
-        addDescription(registry, new ItemStack(IafItemRegistry.dragon_skull, 1, 1));
-        addDescription(registry, new ItemStack(IafItemRegistry.fire_stew));
-        addDescription(registry, new ItemStack(IafItemRegistry.frost_stew));
+        addDescription(registry, new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD));
+        addDescription(registry, new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_RED));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_BRONZE));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_GRAY));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_GREEN));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_BLUE));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_WHITE));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_SAPPHIRE));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_SILVER));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, 1));
+        addDescription(registry, new ItemStack(IafItemRegistry.FIRE_STEW));
+        addDescription(registry, new ItemStack(IafItemRegistry.FROST_STEW));
 
         for (EnumSkullType skull : EnumSkullType.values()) {
             addDescription(registry, new ItemStack(skull.skull_item));

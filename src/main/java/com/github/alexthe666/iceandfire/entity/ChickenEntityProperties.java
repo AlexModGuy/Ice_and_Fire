@@ -4,7 +4,7 @@ import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import java.util.Random;
 
@@ -19,12 +19,12 @@ public class ChickenEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         compound.setInteger("TimeUntilNextEgg", timeUntilNextEgg);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         this.timeUntilNextEgg = compound.getInteger("TimeUntilNextEgg");
     }
 

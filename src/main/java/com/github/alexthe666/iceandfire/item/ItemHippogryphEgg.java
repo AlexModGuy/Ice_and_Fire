@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
@@ -33,13 +33,13 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
         EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(IafItemRegistry.hippogryph_egg, 1, eggType.ordinal());
+        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG, 1, eggType.ordinal());
         return stack;
     }
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
     }
 
     @Override

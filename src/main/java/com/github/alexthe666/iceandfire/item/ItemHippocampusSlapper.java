@@ -17,7 +17,7 @@ import java.util.List;
 public class ItemHippocampusSlapper extends ItemSword {
 
     public ItemHippocampusSlapper() {
-        super(IafItemRegistry.hippocampus_sword_tools);
+        super(IafItemRegistry.HIPPOCAMPUS_SWORD_TOOL_MATERIAL);
         this.setTranslationKey("iceandfire.hippocampus_slapper");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "hippocampus_slapper");

@@ -78,7 +78,7 @@ public class RenderModCapes {
             GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
             GL11.glPushMatrix();
             GL11.glScalef(1.4F, 1.4F, 1.4F);
-            Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.weezer_blue_album), ItemCameraTransforms.TransformType.GROUND);
+            Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND);
             GL11.glPopMatrix();
             GL11.glPopMatrix();
 

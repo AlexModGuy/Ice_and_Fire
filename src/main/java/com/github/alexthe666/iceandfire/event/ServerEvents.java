@@ -31,7 +31,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -300,7 +300,7 @@ public class ServerEvents {
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
             event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ,
-                    new ItemStack(IafItemRegistry.witherbone, event.getEntityLiving().getRNG().nextInt(2))));
+                    new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRNG().nextInt(2))));
         }
 
         if (event.getEntityLiving() instanceof EntityLiving) {
@@ -398,8 +398,8 @@ public class ServerEvents {
                             event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
                             event.getTarget().setDead();
                             if (silkTouch) {
-                                ItemStack statuette = new ItemStack(IafItemRegistry.stone_statue);
-                                statuette.setTagCompound(new NBTTagCompound());
+                                ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
+                                statuette.setTagCompound(new CompoundNBT());
                                 statuette.getTagCompound().setBoolean("IAFStoneStatueEntityPlayer", stonePlayer);
                                 statuette.getTagCompound().setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
                                 ((EntityLiving) event.getTarget()).writeEntityToNBT(statuette.getTagCompound());
@@ -425,14 +425,14 @@ public class ServerEvents {
         if (chainProperties != null) {
             chainProperties.minimizeLists();
             if (!event.getEntity().world.isRemote) {
-                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(IafItemRegistry.chain, chainProperties.connectedEntities.size()));
+                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(IafItemRegistry.CHAIN, chainProperties.connectedEntities.size()));
                 entityitem.setDefaultPickupDelay();
                 event.getEntity().world.spawnEntity(entityitem);
             }
             chainProperties.clearChained();
         }
         if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
-            event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.weezer_blue_album), 1);
+            event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
         }
     }
 
@@ -530,7 +530,7 @@ public class ServerEvents {
                     if (event.getEntityLiving().getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                         event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().dropItem(IafItemRegistry.rotten_egg, 1);
+                        event.getEntityLiving().dropItem(IafItemRegistry.ROTTEN_EGG, 1);
                     }
                     chickenProps.timeUntilNextEgg = chickenProps.generateTime();
                 } else if (chickenProps.timeUntilNextEgg > 0) {
@@ -746,7 +746,7 @@ public class ServerEvents {
             if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getEntityPlayer())) {
                 chainProperties.removeChain(event.getTarget(), event.getEntityPlayer());
                 if (!event.getWorld().isRemote) {
-                    event.getTarget().dropItem(IafItemRegistry.chain, 1);
+                    event.getTarget().dropItem(IafItemRegistry.CHAIN, 1);
                 }
             }
         }
@@ -816,7 +816,7 @@ public class ServerEvents {
                 || event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) || event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE)
                 || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CORRIDOR) || event.getName().equals(LootTableList.CHESTS_STRONGHOLD_CROSSING)) {
             LootCondition chance = new RandomChance(0.4f);
-            LootEntryItem item = new LootEntryItem(IafItemRegistry.manuscript, 20, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
+            LootEntryItem item = new LootEntryItem(IafItemRegistry.MANUSCRIPT, 20, 5, new LootFunction[0], new LootCondition[0], "iceandfire:manuscript");
             LootPool pool = new LootPool(new LootEntry[]{item}, new LootCondition[]{chance}, new RandomValueRange(1, 5), new RandomValueRange(0, 3), "manuscript");
             event.getTable().addPool(pool);
         }
@@ -826,8 +826,8 @@ public class ServerEvents {
                 || event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) || event.getName().equals(LootTableList.CHESTS_WOODLAND_MANSION)
                 || event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH))) {
             LootCondition chance = new RandomChance(0.2f);
-            LootEntryItem silver = new LootEntryItem(IafItemRegistry.silverIngot, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
-            LootEntryItem nugget = new LootEntryItem(IafItemRegistry.silverNugget, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
+            LootEntryItem silver = new LootEntryItem(IafItemRegistry.SILVER_INGOT, 15, 12, new LootFunction[0], new LootCondition[0], "iceandfire:silver_ingot");
+            LootEntryItem nugget = new LootEntryItem(IafItemRegistry.SILVER_NUGGET, 20, 6, new LootFunction[0], new LootCondition[0], "iceandfire:silver_nugget");
             LootPool pool = new LootPool(new LootEntry[]{silver, nugget}, new LootCondition[]{chance}, new RandomValueRange(1, 3), new RandomValueRange(1, 2), "silver_ingot");
             event.getTable().addPool(pool);
         }
@@ -836,7 +836,7 @@ public class ServerEvents {
                 || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
                 || event.getName().equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
             LootCondition chance = new RandomChance(0.01f);
-            LootEntryItem silver = new LootEntryItem(IafItemRegistry.weezer_blue_album, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
+            LootEntryItem silver = new LootEntryItem(IafItemRegistry.WEEZER_BLUE_ALBUM, 1, 20, new LootFunction[0], new LootCondition[0], "iceandfire:weezer");
             LootPool pool = new LootPool(new LootEntry[]{silver}, new LootCondition[]{chance}, new RandomValueRange(1, 1), new RandomValueRange(1, 1), "weezer");
             event.getTable().addPool(pool);
         }

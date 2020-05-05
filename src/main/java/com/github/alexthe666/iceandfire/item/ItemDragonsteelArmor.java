@@ -30,7 +30,7 @@ public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDr
 
     @OnlyIn(Dist.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        if (material == IafItemRegistry.dragonsteel_fire_armor) {
+        if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
             return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 11 : 10);
         } else {
             return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 13 : 12);
@@ -44,7 +44,7 @@ public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDr
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (material == IafItemRegistry.dragonsteel_fire_armor) {
+        if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
             return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (renderIndex == 2 ? "_legs.png" : ".png");
         } else {
             return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (renderIndex == 2 ? "_legs.png" : ".png");

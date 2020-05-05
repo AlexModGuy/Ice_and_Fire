@@ -9,7 +9,6 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,7 +17,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -47,7 +46,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     private static ItemStack generateShield() {
         NBTTagList patterns = new NBTTagList();
-        NBTTagCompound currentPattern = new NBTTagCompound();
+        CompoundNBT currentPattern = new CompoundNBT();
         currentPattern.setString("Pattern", "iceandfire.dread");
         currentPattern.setInteger("Color", EnumDyeColor.WHITE.getDyeDamage());
         patterns.appendTag(currentPattern);
@@ -104,7 +103,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.dread_knight_sword));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
         if(rand.nextBoolean()){
             this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, SHIELD.copy());
         }
@@ -129,13 +128,13 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("ArmorVariant", getArmorVariant());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         setArmorVariant(compound.getInteger("ArmorVariant"));
     }

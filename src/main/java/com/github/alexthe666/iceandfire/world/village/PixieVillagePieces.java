@@ -11,7 +11,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -187,7 +187,7 @@ public class PixieVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
         }
     }
 
@@ -219,7 +219,7 @@ public class PixieVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             super.writeStructureToNBT(tagCompound);
             tagCompound.setInteger("Length", this.length);
         }
@@ -227,7 +227,7 @@ public class PixieVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             super.readStructureFromNBT(tagCompound);
             this.length = tagCompound.getInteger("Length");
         }
@@ -349,7 +349,7 @@ public class PixieVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -442,7 +442,7 @@ public class PixieVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             tagCompound.setInteger("HPos", this.averageGroundLvl);
             tagCompound.setInteger("VCount", this.villagersSpawned);
             tagCompound.setByte("Type", (byte) this.field_189928_h);
@@ -452,7 +452,7 @@ public class PixieVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             this.averageGroundLvl = tagCompound.getInteger("HPos");
             this.villagersSpawned = tagCompound.getInteger("VCount");
             this.field_189928_h = tagCompound.getByte("Type");
@@ -702,7 +702,7 @@ public class PixieVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -727,13 +727,13 @@ public class PixieVillagePieces {
             return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new PixieHouse(start, p_175853_7_, rand, structureboundingbox, facing) : null;
         }
 
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             super.writeStructureToNBT(tagCompound);
             tagCompound.setInteger("T", this.tablePosition);
             tagCompound.setBoolean("C", this.isTallHouse);
         }
 
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             super.readStructureFromNBT(tagCompound);
             this.tablePosition = tagCompound.getInteger("T");
             this.isTallHouse = tagCompound.getBoolean("C");
@@ -763,7 +763,7 @@ public class PixieVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }

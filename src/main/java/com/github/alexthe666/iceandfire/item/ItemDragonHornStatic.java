@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
@@ -27,13 +27,13 @@ public class ItemDragonHornStatic extends Item {
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
         if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         }
     }
 
@@ -43,7 +43,7 @@ public class ItemDragonHornStatic extends Item {
             EntityDragonBase dragon = (EntityDragonBase)target;
             playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
             ItemStack hornItem = new ItemStack(dragon.getHorn().getItem(), 1);
-            hornItem.setTagCompound(new NBTTagCompound());
+            hornItem.setTagCompound(new CompoundNBT());
             dragon.writeToNBT(hornItem.getTagCompound());
             if (!playerIn.inventory.addItemStackToInventory(hornItem)) {
                 playerIn.dropItem(hornItem, false);

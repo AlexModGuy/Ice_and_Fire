@@ -19,14 +19,11 @@ import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
-import com.github.alexthe666.iceandfire.enums.*;
-import net.java.games.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
@@ -36,7 +33,6 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.EnumFacing;
@@ -120,8 +116,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHead.class, manager -> new RenderGorgonHead(false));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHeadActive.class, manager -> new RenderGorgonHead(true));
-        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.gorgon_head, 0, TileEntityDummyGorgonHead.class);
-        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.gorgon_head, 1, TileEntityDummyGorgonHeadActive.class);
+        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.GORGON_HEAD, 0, TileEntityDummyGorgonHead.class);
+        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.GORGON_HEAD, 1, TileEntityDummyGorgonHeadActive.class);
         renderEntities();
 
 
@@ -157,7 +153,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonFireCharge.class, manager -> new RenderDragonFireCharge(manager, true));
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonIceCharge.class, manager -> new RenderDragonFireCharge(manager, false));
         RenderingRegistry.registerEntityRenderingHandler(EntitySnowVillager.class, manager -> new RenderSnowVillager(manager));
-        RenderingRegistry.registerEntityRenderingHandler(EntityHippogryphEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.hippogryph_egg, Minecraft.getInstance().getRenderItem()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityHippogryphEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.HIPPOGRYPH_EGG, Minecraft.getInstance().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippogryph.class, manager -> new RenderHippogryph(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityStoneStatue.class, manager -> new RenderStoneStatue(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityGorgon.class, manager -> new RenderGorgon(manager));
@@ -166,9 +162,9 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySiren.class, manager -> new RenderSiren(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippocampus.class, manager -> new RenderHippocampus(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityDeathWorm.class, manager -> new RenderDeathWorm(manager));
-        RenderingRegistry.registerEntityRenderingHandler(EntityDeathWormEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.deathworm_egg, Minecraft.getInstance().getRenderItem()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityDeathWormEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.DEATHWORM_EGG, Minecraft.getInstance().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EntityCockatrice.class, manager -> new RenderCockatrice(manager));
-        RenderingRegistry.registerEntityRenderingHandler(EntityCockatriceEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.rotten_egg, Minecraft.getInstance().getRenderItem()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityCockatriceEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.ROTTEN_EGG, Minecraft.getInstance().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianBird.class, manager -> new RenderStymphalianBird(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianFeather.class, manager -> new RenderStymphalianFeather(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityStymphalianArrow.class, manager -> new RenderStymphalianArrow(manager));

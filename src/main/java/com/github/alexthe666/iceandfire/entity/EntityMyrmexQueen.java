@@ -17,7 +17,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -76,7 +76,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("EggTicks", eggTicks);
         tag.setBoolean("MadeHome", this.hasMadeHome());
@@ -84,7 +84,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.eggTicks = tag.getInteger("EggTicks");
         this.setMadeHome(tag.getBoolean("MadeHome"));

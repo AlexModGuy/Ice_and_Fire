@@ -100,7 +100,7 @@ public class EntityPixieCharge extends EntityFireball {
             }
             if (this.shootingEntity == null || !(shootingEntity instanceof EntityPlayer) || !((EntityPlayer) shootingEntity).isCreative()) {
                 if (rand.nextInt(3) == 0) {
-                    this.entityDropItem(new ItemStack(IafItemRegistry.pixie_dust, 1), 0.45F);
+                    this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
                 }
             }
         }

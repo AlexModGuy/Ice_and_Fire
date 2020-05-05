@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -275,7 +275,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("Hen", this.isHen());
         tag.setBoolean("Staring", this.isStaring());
@@ -291,7 +291,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setHen(tag.getBoolean("Hen"));
         this.setStaring(tag.getBoolean("Staring"));

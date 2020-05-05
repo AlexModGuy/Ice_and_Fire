@@ -80,6 +80,6 @@ public class EntityHydraArrow  extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IafItemRegistry.hydra_arrow);
+        return new ItemStack(IafItemRegistry.HYDRA_ARROW);
     }
 }

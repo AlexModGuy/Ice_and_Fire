@@ -8,7 +8,7 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -30,23 +30,23 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         NBTTagList nbttaglist = new NBTTagList();
         for (UUID uuid : connectedEntityUUID) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setUniqueId("UUID", uuid);
-            nbttaglist.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setUniqueId("UUID", uuid);
+            nbttaglist.appendTag(CompoundNBT);
         }
         compound.setTag("ConnectedEntities", nbttaglist);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         NBTTagList nbttaglist = compound.getTagList("ConnectedEntities", Constants.NBT.TAG_COMPOUND);
         this.connectedEntityUUID = new ArrayList<UUID>();
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-            connectedEntityUUID.add(nbttagcompound.getUniqueId("UUID"));
+            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+            connectedEntityUUID.add(CompoundNBT.getUniqueId("UUID"));
         }
         updateConnectedEntities(getEntity());
     }

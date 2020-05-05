@@ -12,7 +12,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +56,7 @@ public class ItemDragonHornActive extends Item {
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
     }
 
     public EnumAction getItemUseAction(ItemStack stack) {
@@ -93,7 +93,7 @@ public class ItemDragonHornActive extends Item {
             } else {
                 BlockPos pos = raytraceresult.getBlockPos();
                 worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
-                if (this == IafItemRegistry.dragon_horn_fire) {
+                if (this == IafItemRegistry.DRAGON_HORN_FIRE) {
                     EntityFireDragon dragon = new EntityFireDragon(worldIn);
                     if (stack.getTagCompound() != null) {
                         dragon.readFromNBT(stack.getTagCompound());
@@ -107,12 +107,12 @@ public class ItemDragonHornActive extends Item {
                         worldIn.spawnEntity(dragon);
                     }
                     stack.shrink(1);
-                    ItemStack hornItem = new ItemStack(IafItemRegistry.dragon_horn);
+                    ItemStack hornItem = new ItemStack(IafItemRegistry.DRAGON_HORN);
                     if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
                         entityplayer.dropItem(hornItem, false);
                     }
                 }
-                if (this == IafItemRegistry.dragon_horn_ice) {
+                if (this == IafItemRegistry.DRAGON_HORN_ICE) {
                     EntityIceDragon dragon = new EntityIceDragon(worldIn);
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     if (stack.getTagCompound() != null) {
@@ -126,7 +126,7 @@ public class ItemDragonHornActive extends Item {
                         worldIn.spawnEntity(dragon);
                     }
                     stack.shrink(1);
-                    ItemStack hornItem = new ItemStack(IafItemRegistry.dragon_horn);
+                    ItemStack hornItem = new ItemStack(IafItemRegistry.DRAGON_HORN);
                     if (!entityplayer.inventory.addItemStackToInventory(hornItem)) {
                         entityplayer.dropItem(hornItem, false);
                     }
@@ -168,7 +168,7 @@ public class ItemDragonHornActive extends Item {
         if (stack.getTagCompound() != null) {
             String fire = new TextComponentTranslation("entity.firedragon.name").getUnformattedText();
             String ice = new TextComponentTranslation("entity.icedragon.name").getUnformattedText();
-            tooltip.add("" + (this == IafItemRegistry.dragon_horn_fire ? fire : ice));
+            tooltip.add("" + (this == IafItemRegistry.DRAGON_HORN_FIRE ? fire : ice));
             String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
             tooltip.add("" + name);
             String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));

@@ -36,7 +36,7 @@ public class ItemModSword extends ItemSword {
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.toolMaterial.getRepairItemStack();
-        if (this.toolMaterial == IafItemRegistry.silverTools) {
+        if (this.toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
             for (ItemStack ingot : silverItems) {
                 if (OreDictionary.itemMatches(repair, ingot, false)) {
@@ -50,12 +50,12 @@ public class ItemModSword extends ItemSword {
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (this == IafItemRegistry.silver_sword) {
+        if (this == IafItemRegistry.SILVER_SWORD) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), 3.0F + toolMaterial.getAttackDamage() + 3.0F);
             }
         }
-        if (this.toolMaterial == IafItemRegistry.myrmexChitin) {
+        if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
                 target.attackEntityFrom(DamageSource.GENERIC, 3.0F + toolMaterial.getAttackDamage() + 6.0F);
             }
@@ -63,14 +63,14 @@ public class ItemModSword extends ItemSword {
                 target.attackEntityFrom(DamageSource.GENERIC, 3.0F + toolMaterial.getAttackDamage() + 6.0F);
             }
         }
-        if (this == IafItemRegistry.myrmex_desert_sword_venom || this == IafItemRegistry.myrmex_jungle_sword_venom) {
+        if (this == IafItemRegistry.MYRMEX_DESERT_SWORD_VENOM || this == IafItemRegistry.MYRMEX_JUNGLE_SWORD_VENOM) {
             target.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             target.setFire(15);
             target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(300);
             target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
@@ -81,20 +81,20 @@ public class ItemModSword extends ItemSword {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (this == IafItemRegistry.silver_sword) {
+        if (this == IafItemRegistry.SILVER_SWORD) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
         }
-        if (this == IafItemRegistry.myrmex_desert_sword_venom || this == IafItemRegistry.myrmex_jungle_sword_venom) {
+        if (this == IafItemRegistry.MYRMEX_DESERT_SWORD_VENOM || this == IafItemRegistry.MYRMEX_JUNGLE_SWORD_VENOM) {
             tooltip.add(TextFormatting.DARK_GREEN + StatCollector.translateToLocal("myrmextools.poison"));
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
         }
-        if (this == IafItemRegistry.myrmex_desert_sword || this == IafItemRegistry.myrmex_jungle_sword) {
+        if (this == IafItemRegistry.MYRMEX_DESERT_SWORD || this == IafItemRegistry.MYRMEX_JUNGLE_SWORD) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
         }
     }

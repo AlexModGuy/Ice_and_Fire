@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -114,7 +114,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.dataManager.set(SUMMONER_ID, Optional.fromNullable(uuid));
     }
 
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         if (this.getSummonerUUID() == null) {
             compound.setString("SummonerUUID", "");
@@ -125,7 +125,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     }
 
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         String s = "";
         if (compound.hasKey("SummonerUUID", 8)) {

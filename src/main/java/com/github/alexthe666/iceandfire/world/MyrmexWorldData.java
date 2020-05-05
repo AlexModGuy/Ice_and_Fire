@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -117,26 +117,26 @@ public class MyrmexWorldData extends WorldSavedData {
         }
     }
 
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(CompoundNBT nbt) {
         this.tickCounter = nbt.getInteger("Tick");
         NBTTagList nbttaglist = nbt.getTagList("Hives", 10);
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
+            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
             MyrmexHive village = new MyrmexHive();
-            village.readVillageDataFromNBT(nbttagcompound);
+            village.readVillageDataFromNBT(CompoundNBT);
             this.hiveList.add(village);
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         compound.setInteger("Tick", this.tickCounter);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (MyrmexHive village : this.hiveList) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            village.writeVillageDataToNBT(nbttagcompound);
-            nbttaglist.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            village.writeVillageDataToNBT(CompoundNBT);
+            nbttaglist.appendTag(CompoundNBT);
         }
 
         compound.setTag("Hives", nbttaglist);

@@ -15,7 +15,7 @@ public class CreativeTab extends CreativeTabs {
 
     @Override
     public ItemStack createIcon() {
-        return this == IceAndFire.TAB_ITEMS ? new ItemStack(IafItemRegistry.dragon_skull) : new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
+        return this == IceAndFire.TAB_ITEMS ? new ItemStack(IafItemRegistry.DRAGON_SKULL) : new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
     }
 
     @Override

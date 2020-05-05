@@ -32,7 +32,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.manuscript;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
             }
         });
         for (int i = 0; i < 3; ++i) {
@@ -107,7 +107,7 @@ public class ContainerLectern extends SyncedFieldContainer {
 
     public int getManuscriptAmount() {
         ItemStack itemstack = this.tileFurnace.getStackInSlot(1);
-        return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.manuscript ? 0 : itemstack.getCount();
+        return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.MANUSCRIPT ? 0 : itemstack.getCount();
     }
 
     public EnumBestiaryPages[] getPossiblePages() {
@@ -115,7 +115,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         possiblePagesInt[1] = this.tileFurnace.getField(1);
         possiblePagesInt[2] = this.tileFurnace.getField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if (this.tileFurnace.getStackInSlot(0).getItem() == IafItemRegistry.bestiary) {
+        if (this.tileFurnace.getStackInSlot(0).getItem() == IafItemRegistry.BESTIARY) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -148,7 +148,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
             if (page != null) {
-                if (itemstack.getItem() == IafItemRegistry.bestiary) {
+                if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (this.tileFurnace instanceof TileEntityLectern) {

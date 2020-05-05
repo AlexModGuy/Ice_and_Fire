@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,6 +81,6 @@ public class EntityStymphalianFeather extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IafItemRegistry.stymphalian_bird_feather);
+        return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER);
     }
 }

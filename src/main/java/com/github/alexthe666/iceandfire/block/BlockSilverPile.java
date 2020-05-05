@@ -134,7 +134,7 @@ public class BlockSilverPile extends Block {
 
     @Override
     public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return IafItemRegistry.silverNugget;
+        return IafItemRegistry.SILVER_NUGGET;
     }
 
     @Override

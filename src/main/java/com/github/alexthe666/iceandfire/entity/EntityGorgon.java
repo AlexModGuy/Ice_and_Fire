@@ -12,7 +12,6 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,7 +68,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
     }
 
     public static boolean isBlindfolded(EntityLivingBase attackTarget) {
-        return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IafItemRegistry.blindfold;
+        return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
     }
 
     @Nullable

@@ -1,432 +1,239 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import com.github.alexthe666.iceandfire.item.*;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.SoundEvents;
 
 public class IafItemRegistry {
 
-    public static ArmorMaterial silverMetal = EnumHelper.addArmorMaterial("Silver", "iceandfire:armor_silver_metal", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-    public static ArmorMaterial blindfoldArmor = EnumHelper.addArmorMaterial("Blindfold", "iceandfire:blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static ArmorMaterial sheep = EnumHelper.addArmorMaterial("Sheep", "iceandfire:sheep_disguise", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static ArmorMaterial myrmexDesert = EnumHelper.addArmorMaterial("MyrmexDesert", "iceandfire:myrmex_desert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static ArmorMaterial myrmexJungle = EnumHelper.addArmorMaterial("MyrmexJungle", "iceandfire:myrmex_jungle", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static ArmorMaterial earplugsArmor = EnumHelper.addArmorMaterial("Earplugs", "iceandfire:earplugs", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static ArmorMaterial yellow_deathworm = EnumHelper.addArmorMaterial("Yellow Deathworm", "iceandfire:yellow_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static ArmorMaterial white_deathworm = EnumHelper.addArmorMaterial("White Deathworm", "iceandfire:white_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static ArmorMaterial red_deathworm = EnumHelper.addArmorMaterial("Red Deathworm", "iceandfire:red_deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static ArmorMaterial troll_mountain = EnumHelper.addArmorMaterial("Mountain Troll", "iceandfire:troll_mountain", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static ArmorMaterial troll_forest = EnumHelper.addArmorMaterial("Forest Troll", "iceandfire:troll_forest", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static ArmorMaterial troll_frost = EnumHelper.addArmorMaterial("Frost Troll", "iceandfire:troll_frost", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static ArmorMaterial dragonsteel_fire_armor = EnumHelper.addArmorMaterial("Dragonsteel Fire", "iceandfire:dragonsteel_fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static ArmorMaterial dragonsteel_ice_armor = EnumHelper.addArmorMaterial("Dragonsteel Ice", "iceandfire:dragonsteel_ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static ToolMaterial silverTools = EnumHelper.addToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
-    public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
-    public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
-    public static ToolMaterial iceBoneTools = EnumHelper.addToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
-    public static ToolMaterial trollWeapon = EnumHelper.addToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
-    public static ToolMaterial myrmexChitin = EnumHelper.addToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
-    public static ToolMaterial dragonsteel_fire_tools = EnumHelper.addToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
-    public static ToolMaterial dragonsteel_ice_tools = EnumHelper.addToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
-    public static ToolMaterial hippogryph_sword_tools = EnumHelper.addToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
-    public static ToolMaterial stymphalian_sword_tools = EnumHelper.addToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
-    public static ToolMaterial amphithere_sword_tools = EnumHelper.addToolMaterial("AmphithereSword", 2, 500, 10.0F, 1F, 10);
-    public static ToolMaterial hippocampus_sword_tools = EnumHelper.addToolMaterial("HippocampusSword", 0, 500, 0.0F, -2F, 50);
-    public static ToolMaterial dread_sword_tools = EnumHelper.addToolMaterial("DreadSword", 0, 100, 0.0F, 1F, 0);
-    public static ToolMaterial dread_knight_sword_tools = EnumHelper.addToolMaterial("DreadKnightSword", 0, 1200, 0.0F, 13F, 10);
-    public static ToolMaterial dread_queen_sword_tools = EnumHelper.addToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage, 10);
+    public static final CustomArmorMaterial SILVER_ARMOR_MATERIAL = new CustomArmorMaterial("Silver", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
+    public static final CustomArmorMaterial BLINDFOLD_ARMOR_MATERIAL = new CustomArmorMaterial("Blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial SHEEP_ARMOR_MATERIAL = new CustomArmorMaterial("Sheep", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial MYRMEX_DESERT_ARMOR_MATERIAL = new CustomArmorMaterial("MyrmexDesert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial MYRMEX_JUNGLE_ARMOR_MATERIAL = new CustomArmorMaterial("MyrmexJungle", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial EARPLUGS_ARMOR_MATERIAL = new CustomArmorMaterial("Earplugs", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial DEATHWORM_0_ARMOR_MATERIAL = new CustomArmorMaterial("Yellow Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial DEATHWORM_1_ARMOR_MATERIAL = new CustomArmorMaterial("White Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial DEATHWORM_2_ARMOR_MATERIAL = new CustomArmorMaterial("Red Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial TROLL_MOUNTAIN_ARMOR_MATERIAL = new CustomArmorMaterial("Mountain Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial TROLL_FOREST_ARMOR_MATERIAL = new CustomArmorMaterial("Forest Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new CustomArmorMaterial("Frost Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new CustomArmorMaterial("Dragonsteel Fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("Dragonsteel Ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
+    public static final CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
+    public static final CustomToolMaterial FIRE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
+    public static final CustomToolMaterial ICE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
+    public static final CustomToolMaterial TROLL_WEAPON_TOOL_MATERIAL = new CustomToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
+    public static final CustomToolMaterial MYRMEX_CHITIN_TOOL_MATERIAL = new CustomToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
+    public static final CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
+    public static final CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
+    public static final CustomToolMaterial HIPPOGRYPH_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
+    public static final CustomToolMaterial STYMHALIAN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
+    public static final CustomToolMaterial AMPHITHERE_SWORD_TOOL_MATERIAL = new CustomToolMaterial("AmphithereSword", 2, 500, 10.0F, 1F, 10);
+    public static final CustomToolMaterial HIPPOCAMPUS_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippocampusSword", 0, 500, 0.0F, -2F, 50);
+    public static final CustomToolMaterial DREAD_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadSword", 0, 100, 0.0F, 1F, 0);
+    public static final CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 0.0F, 13F, 10);
+    public static final CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage, 10);
 
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":bestiary")
-    public static Item bestiary = new ItemBestiary();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":manuscript")
-    public static Item manuscript = new ItemGeneric("manuscript", "iceandfire.manuscript");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sapphire_gem")
-    public static Item sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_ingot")
-    public static Item silverIngot = new ItemGeneric("silver_ingot", "iceandfire.silverIngot");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_nugget")
-    public static Item silverNugget = new ItemGeneric("silver_nugget", "iceandfire.silverNugget");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_helmet")
-    public static Item silver_helmet = new ItemSilverArmor(silverMetal, 0, EntityEquipmentSlot.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_chestplate")
-    public static Item silver_chestplate = new ItemSilverArmor(silverMetal, 1, EntityEquipmentSlot.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_leggings")
-    public static Item silver_leggings = new ItemSilverArmor(silverMetal, 2, EntityEquipmentSlot.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_boots")
-    public static Item silver_boots = new ItemSilverArmor(silverMetal, 3, EntityEquipmentSlot.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_sword")
-    public static Item silver_sword = new ItemModSword(silverTools, "silver_sword", "iceandfire.silver_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_shovel")
-    public static Item silver_shovel = new ItemModShovel(silverTools, "silver_shovel", "iceandfire.silver_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_pickaxe")
-    public static Item silver_pickaxe = new ItemModPickaxe(silverTools, "silver_pickaxe", "iceandfire.silver_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_axe")
-    public static Item silver_axe = new ItemModAxe(silverTools, "silver_axe", "iceandfire.silver_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":silver_hoe")
-    public static Item silver_hoe = new ItemModHoe(silverTools, "silver_hoe", "iceandfire.silver_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_stew")
-    public static Item fire_stew = new ItemGeneric("fire_stew", "iceandfire.fire_stew");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":frost_stew")
-    public static Item frost_stew = new ItemGeneric("frost_stew", "iceandfire.frost_stew");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_red")
-    public static Item dragonegg_red = new ItemDragonEgg("dragonegg_red", EnumDragonEgg.RED);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_green")
-    public static Item dragonegg_green = new ItemDragonEgg("dragonegg_green", EnumDragonEgg.GREEN);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_bronze")
-    public static Item dragonegg_bronze = new ItemDragonEgg("dragonegg_bronze", EnumDragonEgg.BRONZE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_gray")
-    public static Item dragonegg_gray = new ItemDragonEgg("dragonegg_gray", EnumDragonEgg.GRAY);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_blue")
-    public static Item dragonegg_blue = new ItemDragonEgg("dragonegg_blue", EnumDragonEgg.BLUE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_white")
-    public static Item dragonegg_white = new ItemDragonEgg("dragonegg_white", EnumDragonEgg.WHITE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_sapphire")
-    public static Item dragonegg_sapphire = new ItemDragonEgg("dragonegg_sapphire", EnumDragonEgg.SAPPHIRE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonegg_silver")
-    public static Item dragonegg_silver = new ItemDragonEgg("dragonegg_silver", EnumDragonEgg.SILVER);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_red")
-    public static Item dragonscales_red = new ItemDragonScales("dragonscales_red", EnumDragonEgg.RED);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_green")
-    public static Item dragonscales_green = new ItemDragonScales("dragonscales_green", EnumDragonEgg.GREEN);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_bronze")
-    public static Item dragonscales_bronze = new ItemDragonScales("dragonscales_bronze", EnumDragonEgg.BRONZE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_gray")
-    public static Item dragonscales_gray = new ItemDragonScales("dragonscales_gray", EnumDragonEgg.GRAY);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_blue")
-    public static Item dragonscales_blue = new ItemDragonScales("dragonscales_blue", EnumDragonEgg.BLUE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_white")
-    public static Item dragonscales_white = new ItemDragonScales("dragonscales_white", EnumDragonEgg.WHITE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_sapphire")
-    public static Item dragonscales_sapphire = new ItemDragonScales("dragonscales_sapphire", EnumDragonEgg.SAPPHIRE);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonscales_silver")
-    public static Item dragonscales_silver = new ItemDragonScales("dragonscales_silver", EnumDragonEgg.SILVER);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone")
-    public static Item dragonbone = new ItemDragonBone();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":witherbone")
-    public static Item witherbone = new ItemGeneric("witherbone", "iceandfire.witherbone");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fishing_spear")
-    public static Item fishing_spear = new ItemFishingSpear();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":wither_shard")
-    public static Item wither_shard = new ItemGeneric("wither_shard", "iceandfire.wither_shard");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_sword")
-    public static Item dragonbone_sword = new ItemModSword(boneTools, "dragonbone_sword", "iceandfire.dragonbone_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_shovel")
-    public static Item dragonbone_shovel = new ItemModShovel(boneTools, "dragonbone_shovel", "iceandfire.dragonbone_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_pickaxe")
-    public static Item dragonbone_pickaxe = new ItemModPickaxe(boneTools, "dragonbone_pickaxe", "iceandfire.dragonbone_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_axe")
-    public static Item dragonbone_axe = new ItemModAxe(boneTools, "dragonbone_axe", "iceandfire.dragonbone_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_hoe")
-    public static Item dragonbone_hoe = new ItemModHoe(boneTools, "dragonbone_hoe", "iceandfire.dragonbone_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_sword_fire")
-    public static Item dragonbone_sword_fire = new ItemAlchemySword(fireBoneTools, "dragonbone_sword_fire", "iceandfire.dragonbone_sword_fire");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_sword_ice")
-    public static Item dragonbone_sword_ice = new ItemAlchemySword(iceBoneTools, "dragonbone_sword_ice", "iceandfire.dragonbone_sword_ice");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_arrow")
-    public static Item dragonbone_arrow = new ItemGeneric("dragonbone_arrow", "iceandfire.dragonbone_arrow");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonbone_bow")
-    public static Item dragonbone_bow = new ItemDragonBow();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_skull")
-    public static Item dragon_skull = new ItemDragonSkull();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_iron")
-    public static Item dragon_armor_iron = new ItemDragonArmor(0, "dragonarmor_iron");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_gold")
-    public static Item dragon_armor_gold = new ItemDragonArmor(1, "dragonarmor_gold");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_diamond")
-    public static Item dragon_armor_diamond = new ItemDragonArmor(2, "dragonarmor_diamond");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_silver")
-    public static Item dragon_armor_silver = new ItemDragonArmor(3, "dragonarmor_silver");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_dragonsteel_fire")
-    public static Item dragon_armor_dragonsteel_fire = new ItemDragonArmor(4, "dragonarmor_dragonsteel_fire");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonarmor_dragonsteel_ice")
-    public static Item dragon_armor_dragonsteel_ice = new ItemDragonArmor(5, "dragonarmor_dragonsteel_ice");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_meal")
-    public static Item dragon_meal = new ItemGeneric("dragon_meal", "iceandfire.dragon_meal");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sickly_dragon_meal")
-    public static Item sickly_dragon_meal = new ItemGenericDesc("sickly_dragon_meal", "iceandfire.sickly_dragon_meal");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":creative_dragon_meal")
-    public static Item creative_dragon_meal = new ItemGeneric("creative_dragon_meal", "iceandfire.creative_dragon_meal", 2);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_dragon_flesh")
-    public static Item fire_dragon_flesh = new ItemDragonFlesh(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_flesh")
-    public static Item ice_dragon_flesh = new ItemDragonFlesh(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_dragon_heart")
-    public static Item fire_dragon_heart = new ItemGeneric("fire_dragon_heart", "iceandfire.fire_dragon_heart");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_heart")
-    public static Item ice_dragon_heart = new ItemGeneric("ice_dragon_heart", "iceandfire.ice_dragon_heart");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":fire_dragon_blood")
-    public static Item fire_dragon_blood = new ItemGeneric("fire_dragon_blood", "iceandfire.fire_dragon_blood");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":ice_dragon_blood")
-    public static Item ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_stick")
-    public static Item dragon_stick = new ItemDragonStaff();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn")
-    public static Item dragon_horn = new ItemDragonHornStatic();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn_fire")
-    public static Item dragon_horn_fire = new ItemDragonHornActive("dragon_horn_fire");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn_ice")
-    public static Item dragon_horn_ice = new ItemDragonHornActive("dragon_horn_ice");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_flute")
-    public static Item dragon_flute = new ItemDragonFlute();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":summoning_crystal_fire")
-    public static Item summoning_crystal_fire = new ItemSummoningCrystal("fire");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":summoning_crystal_ice")
-    public static Item summoning_crystal_ice = new ItemSummoningCrystal("ice");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_egg")
-    public static Item hippogryph_egg = new ItemHippogryphEgg();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":iron_hippogryph_armor")
-    public static Item iron_hippogryph_armor = new ItemGeneric("iron_hippogryph_armor", "iceandfire.iron_hippogryph_armor").setMaxStackSize(1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":gold_hippogryph_armor")
-    public static Item gold_hippogryph_armor = new ItemGeneric("gold_hippogryph_armor", "iceandfire.gold_hippogryph_armor").setMaxStackSize(1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":diamond_hippogryph_armor")
-    public static Item diamond_hippogryph_armor = new ItemGeneric("diamond_hippogryph_armor", "iceandfire.diamond_hippogryph_armor").setMaxStackSize(1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_talon")
-    public static Item hippogryph_talon = new ItemGeneric("hippogryph_talon", "iceandfire.hippogryph_talon", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippogryph_sword")
-    public static Item hippogryph_sword = new ItemHippogryphSword();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":gorgon_head")
-    public static Item gorgon_head = new ItemGorgonHead();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":stone_statue")
-    public static Item stone_statue = new ItemStoneStatue();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":blindfold")
-    public static Item blindfold = new ItemBlindfold();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_dust")
-    public static Item pixie_dust = new ItemPixieDust();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wings")
-    public static Item pixie_wings = new ItemGeneric("pixie_wings", "iceandfire.pixie_wings", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":pixie_wand")
-    public static Item pixie_wand = new ItemPixieWand();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":ambrosia")
-    public static Item ambrosia = new ItemAmbrosia();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":cyclops_eye")
-    public static Item cyclops_eye = new ItemCyclopsEye();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_helmet")
-    public static Item sheep_helmet = new ItemModArmor(sheep, 0, EntityEquipmentSlot.HEAD, "sheep_helmet", "iceandfire.sheep_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_chestplate")
-    public static Item sheep_chestplate = new ItemModArmor(sheep, 1, EntityEquipmentSlot.CHEST, "sheep_chestplate", "iceandfire.sheep_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_leggings")
-    public static Item sheep_leggings = new ItemModArmor(sheep, 2, EntityEquipmentSlot.LEGS, "sheep_leggings", "iceandfire.sheep_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sheep_boots")
-    public static Item sheep_boots = new ItemModArmor(sheep, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":shiny_scales")
-    public static Item shiny_scales = new ItemGeneric("shiny_scales", "iceandfire.shiny_scales");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":siren_tear")
-    public static Item siren_tear = new ItemGeneric("siren_tear", "iceandfire.siren_tear", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":siren_flute")
-    public static Item siren_flute = new ItemSirenFlute();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippocampus_fin")
-    public static Item hippocampus_fin = new ItemGeneric("hippocampus_fin", "iceandfire.hippocampus_fin", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hippocampus_slapper")
-    public static Item hippocampus_slapper = new ItemHippocampusSlapper();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":earplugs")
-    public static Item earplugs = new ItemModArmor(earplugsArmor, 0, EntityEquipmentSlot.HEAD, "earplugs", "iceandfire.earplugs");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_chitin")
-    public static Item deathworm_chitin = new ItemDeathWormChitin();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_helmet")
-    public static Item deathworm_yellow_helmet = new ItemDeathwormArmor(yellow_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_yellow_helmet", "iceandfire.deathworm_yellow_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_chestplate")
-    public static Item deathworm_yellow_chestplate = new ItemDeathwormArmor(yellow_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_yellow_chestplate", "iceandfire.deathworm_yellow_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_leggings")
-    public static Item deathworm_yellow_leggings = new ItemDeathwormArmor(yellow_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_yellow_leggings", "iceandfire.deathworm_yellow_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_yellow_boots")
-    public static Item deathworm_yellow_boots = new ItemDeathwormArmor(yellow_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_yellow_boots", "iceandfire.deathworm_yellow_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_helmet")
-    public static Item deathworm_white_helmet = new ItemDeathwormArmor(white_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_white_helmet", "iceandfire.deathworm_white_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_chestplate")
-    public static Item deathworm_white_chestplate = new ItemDeathwormArmor(white_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_white_chestplate", "iceandfire.deathworm_white_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_leggings")
-    public static Item deathworm_white_leggings = new ItemDeathwormArmor(white_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_white_leggings", "iceandfire.deathworm_white_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_white_boots")
-    public static Item deathworm_white_boots = new ItemDeathwormArmor(white_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_white_boots", "iceandfire.deathworm_white_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_helmet")
-    public static Item deathworm_red_helmet = new ItemDeathwormArmor(red_deathworm, 0, EntityEquipmentSlot.HEAD, "deathworm_red_helmet", "iceandfire.deathworm_red_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_chestplate")
-    public static Item deathworm_red_chestplate = new ItemDeathwormArmor(red_deathworm, 1, EntityEquipmentSlot.CHEST, "deathworm_red_chestplate", "iceandfire.deathworm_red_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_leggings")
-    public static Item deathworm_red_leggings = new ItemDeathwormArmor(red_deathworm, 2, EntityEquipmentSlot.LEGS, "deathworm_red_leggings", "iceandfire.deathworm_red_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_red_boots")
-    public static Item deathworm_red_boots = new ItemDeathwormArmor(red_deathworm, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_egg")
-    public static Item deathworm_egg = new ItemDeathwormEgg();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_tounge")
-    public static Item deathworm_tounge = new ItemGeneric("deathworm_tounge", "iceandfire.deathworm_tounge", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_yellow")
-    public static Item deathworm_gauntlet_yellow = new ItemDeathwormGauntlet("yellow");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_white")
-    public static Item deathworm_gauntlet_white = new ItemDeathwormGauntlet("white");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":deathworm_gauntlet_red")
-    public static Item deathworm_gauntlet_red = new ItemDeathwormGauntlet("red");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":rotten_egg")
-    public static Item rotten_egg = new ItemRottenEgg();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":cockatrice_eye")
-    public static Item cockatrice_eye = new ItemGeneric("cockatrice_eye", "iceandfire.cockatrice_eye", 1);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":cockatrice_scepter")
-    public static Item cockatrice_scepter = new ItemCockatriceScepter();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_feather")
-    public static Item stymphalian_bird_feather = new ItemGeneric("stymphalian_bird_feather", "iceandfire.stymphalian_bird_feather");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_arrow")
-    public static Item stymphalian_arrow = new ItemStymphalianArrow();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_feather_bundle")
-    public static Item stymphalian_feather_bundle = new ItemStymphalianFeatherBundle();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":stymphalian_bird_dagger")
-    public static Item stymphalian_feather_dagger = new ItemStymphalianDagger();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_tusk")
-    public static Item troll_tusk = new ItemGeneric("troll_tusk", "iceandfire.troll_tusk");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_egg")
-    public static Item myrmex_desert_egg = new ItemMyrmexEgg(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_egg")
-    public static Item myrmex_jungle_egg = new ItemMyrmexEgg(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_resin")
-    public static Item myrmex_desert_resin = new ItemGeneric("myrmex_desert_resin", "iceandfire.myrmex_desert_resin");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_resin")
-    public static Item myrmex_jungle_resin = new ItemGeneric("myrmex_jungle_resin", "iceandfire.myrmex_jungle_resin");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_chitin")
-    public static Item myrmex_desert_chitin = new ItemGeneric("myrmex_desert_chitin", "iceandfire.myrmex_desert_chitin");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_chitin")
-    public static Item myrmex_jungle_chitin = new ItemGeneric("myrmex_jungle_chitin", "iceandfire.myrmex_jungle_chitin");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_stinger")
-    public static Item myrmex_stinger = new ItemGeneric("myrmex_stinger", "iceandfire.myrmex_stinger");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_sword")
-    public static Item myrmex_desert_sword = new ItemModSword(myrmexChitin, "myrmex_desert_sword", "iceandfire.myrmex_desert_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_sword_venom")
-    public static Item myrmex_desert_sword_venom = new ItemModSword(myrmexChitin, "myrmex_desert_sword_venom", "iceandfire.myrmex_desert_sword_venom");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_shovel")
-    public static Item myrmex_desert_shovel = new ItemModShovel(myrmexChitin, "myrmex_desert_shovel", "iceandfire.myrmex_desert_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_pickaxe")
-    public static Item myrmex_desert_pickaxe = new ItemModPickaxe(myrmexChitin, "myrmex_desert_pickaxe", "iceandfire.myrmex_desert_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_axe")
-    public static Item myrmex_desert_axe = new ItemModAxe(myrmexChitin, "myrmex_desert_axe", "iceandfire.myrmex_desert_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_hoe")
-    public static Item myrmex_desert_hoe = new ItemModHoe(myrmexChitin, "myrmex_desert_hoe", "iceandfire.myrmex_desert_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_sword")
-    public static Item myrmex_jungle_sword = new ItemModSword(myrmexChitin, "myrmex_jungle_sword", "iceandfire.myrmex_jungle_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_sword_venom")
-    public static Item myrmex_jungle_sword_venom = new ItemModSword(myrmexChitin, "myrmex_jungle_sword_venom", "iceandfire.myrmex_jungle_sword_venom");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_shovel")
-    public static Item myrmex_jungle_shovel = new ItemModShovel(myrmexChitin, "myrmex_jungle_shovel", "iceandfire.myrmex_jungle_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_pickaxe")
-    public static Item myrmex_jungle_pickaxe = new ItemModPickaxe(myrmexChitin, "myrmex_jungle_pickaxe", "iceandfire.myrmex_jungle_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_axe")
-    public static Item myrmex_jungle_axe = new ItemModAxe(myrmexChitin, "myrmex_jungle_axe", "iceandfire.myrmex_jungle_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_hoe")
-    public static Item myrmex_jungle_hoe = new ItemModHoe(myrmexChitin, "myrmex_jungle_hoe", "iceandfire.myrmex_jungle_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_staff")
-    public static Item myrmex_desert_staff = new ItemMyrmexStaff(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_staff")
-    public static Item myrmex_jungle_staff = new ItemMyrmexStaff(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_helmet")
-    public static Item myrmex_desert_helmet = new ItemModArmor(myrmexDesert, 0, EntityEquipmentSlot.HEAD, "myrmex_desert_helmet", "iceandfire.myrmex_desert_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_chestplate")
-    public static Item myrmex_desert_chestplate = new ItemModArmor(myrmexDesert, 1, EntityEquipmentSlot.CHEST, "myrmex_desert_chestplate", "iceandfire.myrmex_desert_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_leggings")
-    public static Item myrmex_desert_leggings = new ItemModArmor(myrmexDesert, 2, EntityEquipmentSlot.LEGS, "myrmex_desert_leggings", "iceandfire.myrmex_desert_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_desert_boots")
-    public static Item myrmex_desert_boots = new ItemModArmor(myrmexDesert, 3, EntityEquipmentSlot.FEET, "myrmex_desert_boots", "iceandfire.myrmex_desert_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_helmet")
-    public static Item myrmex_jungle_helmet = new ItemModArmor(myrmexJungle, 0, EntityEquipmentSlot.HEAD, "myrmex_jungle_helmet", "iceandfire.myrmex_jungle_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_chestplate")
-    public static Item myrmex_jungle_chestplate = new ItemModArmor(myrmexJungle, 1, EntityEquipmentSlot.CHEST, "myrmex_jungle_chestplate", "iceandfire.myrmex_jungle_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_leggings")
-    public static Item myrmex_jungle_leggings = new ItemModArmor(myrmexJungle, 2, EntityEquipmentSlot.LEGS, "myrmex_jungle_leggings", "iceandfire.myrmex_jungle_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":myrmex_jungle_boots")
-    public static Item myrmex_jungle_boots = new ItemModArmor(myrmexJungle, 3, EntityEquipmentSlot.FEET, "myrmex_jungle_boots", "iceandfire.myrmex_jungle_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":mymrex_desert_swarm")
-    public static Item mymrex_desert_swarm = new ItemMyrmexSwarm(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":mymrex_jungle_swarm")
-    public static Item mymrex_jungle_swarm = new ItemMyrmexSwarm(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_feather")
-    public static Item amphithere_feather = new ItemGeneric("amphithere_feather", "iceandfire.amphithere_feather");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_arrow")
-    public static Item amphithere_arrow = new ItemAmphithereArrow();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":amphithere_macuahuitl")
-    public static Item amphithere_macuahuitl = new ItemAmphithereMacuahuitl();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_fang")
-    public static Item sea_serpent_fang = new ItemGeneric("sea_serpent_fang", "iceandfire.sea_serpent_fang");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_arrow")
-    public static Item sea_serpent_arrow = new ItemSeaSerpentArrow();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":tide_trident")
-    public static Item tide_trident = new ItemTideTrident();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_link")
-    public static Item chain_link = new ItemGeneric("chain_link", "iceandfire.chain_link");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain")
-    public static Item chain = new ItemChain(false);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":chain_sticky")
-    public static Item chain_sticky = new ItemChain(true);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_ingot")
-    public static Item dragonsteel_fire_ingot = new ItemGeneric("dragonsteel_fire_ingot", "iceandfire.dragonsteel_fire_ingot");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_sword")
-    public static Item dragonsteel_fire_sword = new ItemModSword(dragonsteel_fire_tools, "dragonsteel_fire_sword", "iceandfire.dragonsteel_fire_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_pickaxe")
-    public static Item dragonsteel_fire_pickaxe = new ItemModPickaxe(dragonsteel_fire_tools, "dragonsteel_fire_pickaxe", "iceandfire.dragonsteel_fire_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_axe")
-    public static Item dragonsteel_fire_axe = new ItemModAxe(dragonsteel_fire_tools, "dragonsteel_fire_axe", "iceandfire.dragonsteel_fire_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_shovel")
-    public static Item dragonsteel_fire_shovel = new ItemModShovel(dragonsteel_fire_tools, "dragonsteel_fire_shovel", "iceandfire.dragonsteel_fire_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_hoe")
-    public static Item dragonsteel_fire_hoe = new ItemModHoe(dragonsteel_fire_tools, "dragonsteel_fire_hoe", "iceandfire.dragonsteel_fire_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_helmet")
-    public static Item dragonsteel_fire_helmet = new ItemDragonsteelArmor(dragonsteel_fire_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_fire_helmet", "iceandfire.dragonsteel_fire_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_chestplate")
-    public static Item dragonsteel_fire_chestplate = new ItemDragonsteelArmor(dragonsteel_fire_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_fire_chestplate", "iceandfire.dragonsteel_fire_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_leggings")
-    public static Item dragonsteel_fire_leggings = new ItemDragonsteelArmor(dragonsteel_fire_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_fire_leggings", "iceandfire.dragonsteel_fire_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_fire_boots")
-    public static Item dragonsteel_fire_boots = new ItemDragonsteelArmor(dragonsteel_fire_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_fire_boots", "iceandfire.dragonsteel_fire_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_ingot")
-    public static Item dragonsteel_ice_ingot = new ItemGeneric("dragonsteel_ice_ingot", "iceandfire.dragonsteel_ice_ingot");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_sword")
-    public static Item dragonsteel_ice_sword = new ItemModSword(dragonsteel_ice_tools, "dragonsteel_ice_sword", "iceandfire.dragonsteel_ice_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_pickaxe")
-    public static Item dragonsteel_ice_pickaxe = new ItemModPickaxe(dragonsteel_ice_tools, "dragonsteel_ice_pickaxe", "iceandfire.dragonsteel_ice_pickaxe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_axe")
-    public static Item dragonsteel_ice_axe = new ItemModAxe(dragonsteel_ice_tools, "dragonsteel_ice_axe", "iceandfire.dragonsteel_ice_axe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_shovel")
-    public static Item dragonsteel_ice_shovel = new ItemModShovel(dragonsteel_ice_tools, "dragonsteel_ice_shovel", "iceandfire.dragonsteel_ice_shovel");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_hoe")
-    public static Item dragonsteel_ice_hoe = new ItemModHoe(dragonsteel_ice_tools, "dragonsteel_ice_hoe", "iceandfire.dragonsteel_ice_hoe");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_helmet")
-    public static Item dragonsteel_ice_helmet = new ItemDragonsteelArmor(dragonsteel_ice_armor, 0, EntityEquipmentSlot.HEAD, "dragonsteel_ice_helmet", "iceandfire.dragonsteel_ice_helmet");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_chestplate")
-    public static Item dragonsteel_ice_chestplate = new ItemDragonsteelArmor(dragonsteel_ice_armor, 1, EntityEquipmentSlot.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_leggings")
-    public static Item dragonsteel_ice_leggings = new ItemDragonsteelArmor(dragonsteel_ice_armor, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragonsteel_ice_boots")
-    public static Item dragonsteel_ice_boots = new ItemDragonsteelArmor(dragonsteel_ice_armor, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":weezer_blue_album")
-    public static Item weezer_blue_album = new ItemGeneric("weezer_blue_album", "iceandfire.weezer_blue_album", 1).setCreativeTab(null);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_debug_stick")
-    public static Item dragon_debug_stick = new ItemGeneric("dragon_debug_stick", "iceandfire.dragon_debug_stick", 1).setCreativeTab(null);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_sword")
-    public static Item dread_sword = new ItemModSword(dread_sword_tools, "dread_sword", "iceandfire.dread_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_knight_sword")
-    public static Item dread_knight_sword = new ItemModSword(dread_knight_sword_tools, "dread_knight_sword", "iceandfire.dread_knight_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":lich_staff")
-    public static Item lich_staff = new ItemLichStaff();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_queen_sword")
-    public static Item dread_queen_sword = new ItemModSword(dread_queen_sword_tools, "dread_queen_sword", "iceandfire.dread_queen_sword");
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_queen_staff")
-    public static Item dread_queen_staff = new ItemDreadQueenStaff();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_shard")
-    public static Item dread_shard = new ItemGeneric("dread_shard", "iceandfire.dread_shard", 0);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dread_key")
-    public static Item dread_key = new ItemGeneric("dread_key", "iceandfire.dread_key", 0);
+    public static final Item BESTIARY = new ItemBestiary();
+    public static final Item MANUSCRIPT = new ItemGeneric("manuscript");
+    public static final Item SAPPHIRE_GEM = new ItemGeneric("sapphire_gem");
+    public static final Item SILVER_INGOT = new ItemGeneric("silver_ingot");
+    public static final Item SILVER_NUGGET = new ItemGeneric("silver_nugget");
+    public static final Item SILVER_HELMET = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, 0, EquipmentSlotType.HEAD, "armor_silver_metal_helmet", "iceandfire.silver_helmet");
+    public static final Item SILVER_CHESTPLATE = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, 1, EquipmentSlotType.CHEST, "armor_silver_metal_chestplate", "iceandfire.silver_chestplate");
+    public static final Item SILVER_LEGGINGS = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, 2, EquipmentSlotType.LEGS, "armor_silver_metal_leggings", "iceandfire.silver_leggings");
+    public static final Item SILVER_BOOTS = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, 3, EquipmentSlotType.FEET, "armor_silver_metal_boots", "iceandfire.silver_boots");
+    public static final Item SILVER_SWORD = new ItemModSword(SILVER_TOOL_MATERIAL, "silver_sword", "iceandfire.silver_sword");
+    public static final Item SILVER_SHOVEL = new ItemModShovel(SILVER_TOOL_MATERIAL, "silver_shovel", "iceandfire.silver_shovel");
+    public static final Item SILVER_PICKAXE = new ItemModPickaxe(SILVER_TOOL_MATERIAL, "silver_pickaxe", "iceandfire.silver_pickaxe");
+    public static final Item SILVER_AXE = new ItemModAxe(SILVER_TOOL_MATERIAL, "silver_axe", "iceandfire.silver_axe");
+    public static final Item SILVER_HOE = new ItemModHoe(SILVER_TOOL_MATERIAL, "silver_hoe", "iceandfire.silver_hoe");
+    public static final Item FIRE_STEW = new ItemGeneric("fire_stew");
+    public static final Item FROST_STEW = new ItemGeneric("frost_stew");
+    public static final Item DRAGONEGG_RED = new ItemDragonEgg("dragonegg_red", EnumDragonEgg.RED);
+    public static final Item DRAGONEGG_GREEN = new ItemDragonEgg("dragonegg_green", EnumDragonEgg.GREEN);
+    public static final Item DRAGONEGG_BRONZE = new ItemDragonEgg("dragonegg_bronze", EnumDragonEgg.BRONZE);
+    public static final Item DRAGONEGG_GRAY = new ItemDragonEgg("dragonegg_gray", EnumDragonEgg.GRAY);
+    public static final Item DRAGONEGG_BLUE = new ItemDragonEgg("dragonegg_blue", EnumDragonEgg.BLUE);
+    public static final Item DRAGONEGG_WHITE = new ItemDragonEgg("dragonegg_white", EnumDragonEgg.WHITE);
+    public static final Item DRAGONEGG_SAPPHIRE = new ItemDragonEgg("dragonegg_sapphire", EnumDragonEgg.SAPPHIRE);
+    public static final Item DRAGONEGG_SILVER = new ItemDragonEgg("dragonegg_silver", EnumDragonEgg.SILVER);
+    public static final Item DRAGONSCALES_RED = new ItemDragonScales("dragonscales_red", EnumDragonEgg.RED);
+    public static final Item DRAGONSCALES_GREEN = new ItemDragonScales("dragonscales_green", EnumDragonEgg.GREEN);
+    public static final Item DRAGONSCALES_BRONZE = new ItemDragonScales("dragonscales_bronze", EnumDragonEgg.BRONZE);
+    public static final Item DRAGONSCALES_GRAY = new ItemDragonScales("dragonscales_gray", EnumDragonEgg.GRAY);
+    public static final Item DRAGONSCALES_BLUE = new ItemDragonScales("dragonscales_blue", EnumDragonEgg.BLUE);
+    public static final Item DRAGONSCALES_WHITE = new ItemDragonScales("dragonscales_white", EnumDragonEgg.WHITE);
+    public static final Item DRAGONSCALES_SAPPHIRE = new ItemDragonScales("dragonscales_sapphire", EnumDragonEgg.SAPPHIRE);
+    public static final Item DRAGONSCALES_SILVER = new ItemDragonScales("dragonscales_silver", EnumDragonEgg.SILVER);
+    public static final Item DRAGON_BONE = new ItemDragonBone();
+    public static final Item WITHERBONE = new ItemGeneric("witherbone");
+    public static final Item FISHING_SPEAR = new ItemFishingSpear();
+    public static final Item WITHER_SHARD = new ItemGeneric("wither_shard");
+    public static final Item DRAGONBONE_SWORD = new ItemModSword(DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword", "iceandfire.dragonbone_sword");
+    public static final Item DRAGONBONE_SHOVEL = new ItemModShovel(DRAGONBONE_TOOL_MATERIAL, "dragonbone_shovel", "iceandfire.dragonbone_shovel");
+    public static final Item DRAGONBONE_PICKAXE = new ItemModPickaxe(DRAGONBONE_TOOL_MATERIAL, "dragonbone_pickaxe", "iceandfire.dragonbone_pickaxe");
+    public static final Item DRAGONBONE_AXE = new ItemModAxe(DRAGONBONE_TOOL_MATERIAL, "dragonbone_axe", "iceandfire.dragonbone_axe");
+    public static final Item DRAGONBONE_HOE = new ItemModHoe(DRAGONBONE_TOOL_MATERIAL, "dragonbone_hoe", "iceandfire.dragonbone_hoe");
+    public static final Item DRAGONBONE_SWORD_FIRE = new ItemAlchemySword(FIRE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_fire", "iceandfire.dragonbone_sword_fire");
+    public static final Item DRAGONBONE_SWORD_ICE = new ItemAlchemySword(ICE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_ice", "iceandfire.dragonbone_sword_ice");
+    public static final Item DRAGONBONE_ARROW = new ItemGeneric("dragonbone_arrow");
+    public static final Item DRAGON_BOW = new ItemDragonBow();
+    public static final Item DRAGON_SKULL = new ItemDragonSkull();
+    public static final Item DRAGONARMOR_IRON = new ItemDragonArmor(0, "dragonarmor_iron");
+    public static final Item DRAGONARMOR_GOLD = new ItemDragonArmor(1, "dragonarmor_gold");
+    public static final Item DRAGONARMOR_DIAMOND = new ItemDragonArmor(2, "dragonarmor_diamond");
+    public static final Item DRAGONARMOR_SILVER = new ItemDragonArmor(3, "dragonarmor_silver");
+    public static final Item DRAGONARMOR_DRAGONSTEEL_FIRE = new ItemDragonArmor(4, "dragonarmor_dragonsteel_fire");
+    public static final Item DRAGONARMOR_DRAGONSTEEL_ICE = new ItemDragonArmor(5, "dragonarmor_dragonsteel_ice");
+    public static final Item DRAGON_MEAL = new ItemGeneric("dragon_meal");
+    public static final Item SICKLY_DRAGON_MEAL = new ItemGenericDesc("sickly_dragon_meal", "iceandfire.sickly_dragon_meal");
+    public static final Item CREATIVE_DRAGON_MEAL = new ItemGeneric("creative_dragon_meal", 2);
+    public static final Item FIRE_DRAGON_FLESH = new ItemDragonFlesh(true);
+    public static final Item ICE_DRAGON_FLESH = new ItemDragonFlesh(false);
+    public static final Item FIRE_DRAGON_HEART = new ItemGeneric("fire_dragon_heart");
+    public static final Item ICE_DRAGON_HEART = new ItemGeneric("ice_dragon_heart");
+    public static final Item FIRE_DRAGON_BLOOD = new ItemGeneric("fire_dragon_blood");
+    public static final Item ICE_DRAGON_BLOOD = new ItemGeneric("ice_dragon_blood");
+    public static final Item DRAGON_STAFF = new ItemDragonStaff();
+    public static final Item DRAGON_HORN = new ItemDragonHornStatic();
+    public static final Item DRAGON_HORN_FIRE = new ItemDragonHornActive("dragon_horn_fire");
+    public static final Item DRAGON_HORN_ICE = new ItemDragonHornActive("dragon_horn_ice");
+    public static final Item DRAGON_FLUTE = new ItemDragonFlute();
+    public static final Item SUMMONING_CRYSTAL_FIRE = new ItemSummoningCrystal("fire");
+    public static final Item SUMMONING_CRYSTAL_ICE = new ItemSummoningCrystal("ice");
+    public static final Item HIPPOGRYPH_EGG = new ItemHippogryphEgg();
+    public static final Item IRON_HIPPOGRYPH_ARMOR = new ItemGeneric("iron_hippogryph_armor").setStackSize(1);
+    public static final Item GOLD_HIPPOGRYPH_ARMOR = new ItemGeneric("gold_hippogryph_armor").setMaxStackSize(1);
+    public static final Item DIAMOND_HIPPOGRYPH_ARMOR = new ItemGeneric("diamond_hippogryph_armor").setMaxStackSize(1);
+    public static final Item HIPPOGRYPH_TALON = new ItemGeneric("hippogryph_talon", 1);
+    public static final Item HIPPOGRYPH_SWORD = new ItemHippogryphSword();
+    public static final Item GORGON_HEAD = new ItemGorgonHead();
+    public static final Item STONE_STATUE = new ItemStoneStatue();
+    public static final Item BLINDFOLD = new ItemBlindfold();
+    public static final Item PIXIE_DUST = new ItemPixieDust();
+    public static final Item PIXIE_WINGS = new ItemGeneric("pixie_wings", 1);
+    public static final Item PIXIE_WAND = new ItemPixieWand();
+    public static final Item AMBROSIA = new ItemAmbrosia();
+    public static final Item CYCLOPS_EYE = new ItemCyclopsEye();
+    public static final Item SHEEP_HELMET = new ItemModArmor(SHEEP_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "sheep_helmet", "iceandfire.sheep_helmet");
+    public static final Item SHEEP_CHESTPLATE = new ItemModArmor(SHEEP_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "sheep_chestplate", "iceandfire.sheep_chestplate");
+    public static final Item SHEEP_LEGGINGS = new ItemModArmor(SHEEP_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "sheep_leggings", "iceandfire.sheep_leggings");
+    public static final Item SHEEP_BOOTS = new ItemModArmor(SHEEP_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "sheep_boots", "iceandfire.sheep_boots");
+    public static final Item SHINY_SCALES = new ItemGeneric("shiny_scales", "iceandfire.shiny_scales");
+    public static final Item SIREN_TEAR = new ItemGeneric("siren_tear", 1);
+    public static final Item SIREN_FLUTE = new ItemSirenFlute();
+    public static final Item HIPPOCAMPUS_FIN = new ItemGeneric("hippocampus_fin", 1);
+    public static final Item HIPPOCAMPUS_SLAPPER = new ItemHippocampusSlapper();
+    public static final Item EARPLUGS = new ItemModArmor(EARPLUGS_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "earplugs", "iceandfire.earplugs");
+    public static final Item DEATH_WORM_CHITIN = new ItemDeathWormChitin();
+    public static final Item DEATHWORM_YELLOW_HELMET = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "deathworm_yellow_helmet", "iceandfire.deathworm_yellow_helmet");
+    public static final Item DEATHWORM_YELLOW_CHESTPLATE = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "deathworm_yellow_chestplate", "iceandfire.deathworm_yellow_chestplate");
+    public static final Item DEATHWORM_YELLOW_LEGGINGS = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "deathworm_yellow_leggings", "iceandfire.deathworm_yellow_leggings");
+    public static final Item DEATHWORM_YELLOW_BOOTS = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "deathworm_yellow_boots", "iceandfire.deathworm_yellow_boots");
+    public static final Item DEATHWORM_WHITE_HELMET = new ItemDeathwormArmor(DEATHWORM_1_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "deathworm_white_helmet", "iceandfire.deathworm_white_helmet");
+    public static final Item DEATHWORM_WHITE_CHESTPLATE = new ItemDeathwormArmor(DEATHWORM_1_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "deathworm_white_chestplate", "iceandfire.deathworm_white_chestplate");
+    public static final Item DEATHWORM_WHITE_LEGGINGS = new ItemDeathwormArmor(DEATHWORM_1_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "deathworm_white_leggings", "iceandfire.deathworm_white_leggings");
+    public static final Item DEATHWORM_WHITE_BOOTS = new ItemDeathwormArmor(DEATHWORM_1_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "deathworm_white_boots", "iceandfire.deathworm_white_boots");
+    public static final Item DEATHWORM_RED_HELMET = new ItemDeathwormArmor(DEATHWORM_2_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "deathworm_red_helmet", "iceandfire.deathworm_red_helmet");
+    public static final Item DEATHWORM_RED_CHESTPLATE = new ItemDeathwormArmor(DEATHWORM_2_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "deathworm_red_chestplate", "iceandfire.deathworm_red_chestplate");
+    public static final Item DEATHWORM_RED_LEGGINGS = new ItemDeathwormArmor(DEATHWORM_2_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "deathworm_red_leggings", "iceandfire.deathworm_red_leggings");
+    public static final Item DEATHWORM_RED_BOOTS = new ItemDeathwormArmor(DEATHWORM_2_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "deathworm_red_boots", "iceandfire.deathworm_red_boots");
+    public static final Item DEATHWORM_EGG = new ItemDeathwormEgg();
+    public static final Item DEATHWORM_TOUNGE = new ItemGeneric("deathworm_tounge", 1);
+    public static final Item DEATHWORM_GAUNTLET_YELLOW = new ItemDeathwormGauntlet("yellow");
+    public static final Item DEATHWORM_GAUNTLET_WHITE = new ItemDeathwormGauntlet("white");
+    public static final Item DEATHWORM_GAUNTLET_RED = new ItemDeathwormGauntlet("red");
+    public static final Item ROTTEN_EGG = new ItemRottenEgg();
+    public static final Item COCKATRICE_EYE = new ItemGeneric("cockatrice_eye", 1);
+    public static final Item ITEM_COCKATRICE_SCEPTER = new ItemCockatriceScepter();
+    public static final Item STYMPHALIAN_BIRD_FEATHER = new ItemGeneric("stymphalian_bird_feather");
+    public static final Item STYMPHALIAN_ARROW = new ItemStymphalianArrow();
+    public static final Item STYMPHALIAN_FEATHER_BUNDLE = new ItemStymphalianFeatherBundle();
+    public static final Item STYMPHALIAN_DAGGER = new ItemStymphalianDagger();
+    public static final Item TROLL_TUSK = new ItemGeneric("troll_tusk");
+    public static final Item MYRMEX_DESERT_EGG = new ItemMyrmexEgg(false);
+    public static final Item MYRMEX_JUNGLE_EGG = new ItemMyrmexEgg(true);
+    public static final Item MYRMEX_DESERT_RESIN = new ItemGeneric("myrmex_desert_resin");
+    public static final Item MYRMEX_JUNGLE_RESIN = new ItemGeneric("myrmex_jungle_resin");
+    public static final Item MYRMEX_DESERT_CHITIN = new ItemGeneric("myrmex_desert_chitin");
+    public static final Item MYRMEX_JUNGLE_CHITIN = new ItemGeneric("myrmex_jungle_chitin");
+    public static final Item MYRMEX_STINGER = new ItemGeneric("myrmex_stinger");
+    public static final Item MYRMEX_DESERT_SWORD = new ItemModSword(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_sword", "iceandfire.myrmex_desert_sword");
+    public static final Item MYRMEX_DESERT_SWORD_VENOM = new ItemModSword(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_sword_venom", "iceandfire.myrmex_desert_sword_venom");
+    public static final Item MYRMEX_DESERT_SHOVEL = new ItemModShovel(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_shovel", "iceandfire.myrmex_desert_shovel");
+    public static final Item MYRMEX_DESERT_PICKAXE = new ItemModPickaxe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_pickaxe", "iceandfire.myrmex_desert_pickaxe");
+    public static final Item MYRMEX_DESERT_AXE = new ItemModAxe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_axe", "iceandfire.myrmex_desert_axe");
+    public static final Item MYRMEX_DESERT_HOE = new ItemModHoe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_desert_hoe", "iceandfire.myrmex_desert_hoe");
+    public static final Item MYRMEX_JUNGLE_SWORD = new ItemModSword(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_sword", "iceandfire.myrmex_jungle_sword");
+    public static final Item MYRMEX_JUNGLE_SWORD_VENOM = new ItemModSword(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_sword_venom", "iceandfire.myrmex_jungle_sword_venom");
+    public static final Item MYRMEX_JUNGLE_SHOVEL = new ItemModShovel(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_shovel", "iceandfire.myrmex_jungle_shovel");
+    public static final Item MYRMEX_JUNGLE_PICKAXE = new ItemModPickaxe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_pickaxe", "iceandfire.myrmex_jungle_pickaxe");
+    public static final Item MYRMEX_JUNGLE_AXE = new ItemModAxe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_axe", "iceandfire.myrmex_jungle_axe");
+    public static final Item MYRMEX_JUNGLE_HOE = new ItemModHoe(MYRMEX_CHITIN_TOOL_MATERIAL, "myrmex_jungle_hoe", "iceandfire.myrmex_jungle_hoe");
+    public static final Item MYRMEX_DESERT_STAFF = new ItemMyrmexStaff(false);
+    public static final Item MYRMEX_JUNGLE_STAFF = new ItemMyrmexStaff(true);
+    public static final Item MYRMEX_DESERT_HELMET = new ItemModArmor(MYRMEX_DESERT_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "myrmex_desert_helmet", "iceandfire.myrmex_desert_helmet");
+    public static final Item MYRMEX_DESERT_CHESTPLATE = new ItemModArmor(MYRMEX_DESERT_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "myrmex_desert_chestplate", "iceandfire.myrmex_desert_chestplate");
+    public static final Item MYRMEX_DESERT_LEGGINGS = new ItemModArmor(MYRMEX_DESERT_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "myrmex_desert_leggings", "iceandfire.myrmex_desert_leggings");
+    public static final Item MYRMEX_DESERT_BOOTS = new ItemModArmor(MYRMEX_DESERT_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "myrmex_desert_boots", "iceandfire.myrmex_desert_boots");
+    public static final Item MYRMEX_JUNGLE_HELMET = new ItemModArmor(MYRMEX_JUNGLE_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "myrmex_jungle_helmet", "iceandfire.myrmex_jungle_helmet");
+    public static final Item MYRMEX_JUNGLE_CHESTPLATE = new ItemModArmor(MYRMEX_JUNGLE_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "myrmex_jungle_chestplate", "iceandfire.myrmex_jungle_chestplate");
+    public static final Item MYRMEX_JUNGLE_LEGGINGS = new ItemModArmor(MYRMEX_JUNGLE_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "myrmex_jungle_leggings", "iceandfire.myrmex_jungle_leggings");
+    public static final Item MYRMEX_JUNGLE_BOOTS = new ItemModArmor(MYRMEX_JUNGLE_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "myrmex_jungle_boots", "iceandfire.myrmex_jungle_boots");
+    public static final Item MYMREX_DESERT_SWARM = new ItemMyrmexSwarm(false);
+    public static final Item MYMREX_JUNGLE_SWARM = new ItemMyrmexSwarm(true);
+    public static final Item AMPHITHERE_FEATHER = new ItemGeneric("amphithere_feather");
+    public static final Item AMPHITHERE_ARROW = new ItemAmphithereArrow();
+    public static final Item AMPHITHERE_MACUAHUITL = new ItemAmphithereMacuahuitl();
+    public static final Item SERPENT_FANG = new ItemGeneric("sea_serpent_fang");
+    public static final Item SEA_SERPENT_ARROW = new ItemSeaSerpentArrow();
+    public static final Item TIDE_TRIDENT = new ItemTideTrident();
+    public static final Item CHAIN_LINK = new ItemGeneric("chain_link");
+    public static final Item CHAIN = new ItemChain(false);
+    public static final Item CHAIN_STICKY = new ItemChain(true);
+    public static final Item DRAGONSTEEL_FIRE_INGOT = new ItemGeneric("dragonsteel_fire_ingot");
+    public static final Item DRAGONSTEEL_FIRE_SWORD = new ItemModSword(DRAGONSTEEL_FIRE_TOOL_MATERIAL, "dragonsteel_fire_sword", "iceandfire.dragonsteel_fire_sword");
+    public static final Item DRAGONSTEEL_FIRE_PICKAXE = new ItemModPickaxe(DRAGONSTEEL_FIRE_TOOL_MATERIAL, "dragonsteel_fire_pickaxe", "iceandfire.dragonsteel_fire_pickaxe");
+    public static final Item DRAGONSTEEL_FIRE_AXE = new ItemModAxe(DRAGONSTEEL_FIRE_TOOL_MATERIAL, "dragonsteel_fire_axe", "iceandfire.dragonsteel_fire_axe");
+    public static final Item DRAGONSTEEL_FIRE_SHOVEL = new ItemModShovel(DRAGONSTEEL_FIRE_TOOL_MATERIAL, "dragonsteel_fire_shovel", "iceandfire.dragonsteel_fire_shovel");
+    public static final Item DRAGONSTEEL_FIRE_HOE = new ItemModHoe(DRAGONSTEEL_FIRE_TOOL_MATERIAL, "dragonsteel_fire_hoe", "iceandfire.dragonsteel_fire_hoe");
+    public static final Item DRAGONSTEEL_FIRE_HELMET = new ItemDragonsteelArmor(DRAGONSTEEL_FIRE_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "dragonsteel_fire_helmet", "iceandfire.dragonsteel_fire_helmet");
+    public static final Item DRAGONSTEEL_FIRE_CHESTPLATE = new ItemDragonsteelArmor(DRAGONSTEEL_FIRE_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "dragonsteel_fire_chestplate", "iceandfire.dragonsteel_fire_chestplate");
+    public static final Item DRAGONSTEEL_FIRE_LEGGINGS = new ItemDragonsteelArmor(DRAGONSTEEL_FIRE_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "dragonsteel_fire_leggings", "iceandfire.dragonsteel_fire_leggings");
+    public static final Item DRAGONSTEEL_FIRE_BOOTS = new ItemDragonsteelArmor(DRAGONSTEEL_FIRE_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "dragonsteel_fire_boots", "iceandfire.dragonsteel_fire_boots");
+    public static final Item DRAGONSTEEL_ICE_INGOT = new ItemGeneric("dragonsteel_ice_ingot");
+    public static final Item DRAGONSTEEL_ICE_SWORD = new ItemModSword(DRAGONSTEEL_ICE_TOOL_MATERIAL, "dragonsteel_ice_sword", "iceandfire.dragonsteel_ice_sword");
+    public static final Item DRAGONSTEEL_ICE_PICKAXE = new ItemModPickaxe(DRAGONSTEEL_ICE_TOOL_MATERIAL, "dragonsteel_ice_pickaxe", "iceandfire.dragonsteel_ice_pickaxe");
+    public static final Item DRAGONSTEEL_ICE_AXE = new ItemModAxe(DRAGONSTEEL_ICE_TOOL_MATERIAL, "dragonsteel_ice_axe", "iceandfire.dragonsteel_ice_axe");
+    public static final Item DRAGONSTEEL_ICE_SHOVEL = new ItemModShovel(DRAGONSTEEL_ICE_TOOL_MATERIAL, "dragonsteel_ice_shovel", "iceandfire.dragonsteel_ice_shovel");
+    public static final Item DRAGONSTEEL_ICE_HOE = new ItemModHoe(DRAGONSTEEL_ICE_TOOL_MATERIAL, "dragonsteel_ice_hoe", "iceandfire.dragonsteel_ice_hoe");
+    public static final Item DRAGONSTEEL_ICE_HELMET = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD, "dragonsteel_ice_helmet", "iceandfire.dragonsteel_ice_helmet");
+    public static final Item DRAGONSTEEL_ICE_CHESTPLATE = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 1, EntityEquipmentSlot.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
+    public static final Item DRAGONSTEEL_ICE_LEGGINGS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 2, EntityEquipmentSlot.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
+    public static final Item DRAGONSTEEL_ICE_BOOTS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 3, EntityEquipmentSlot.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+    public static final Item WEEZER_BLUE_ALBUM = new ItemGeneric("weezer_blue_album", 1);
+    public static final Item DRAGON_DEBUG_STICK = new ItemGeneric("dragon_debug_stick", 1).setCreativeTab(null);
+    public static final Item DREAD_SWORD = new ItemModSword(DREAD_SWORD_TOOL_MATERIAL, "dread_sword", "iceandfire.dread_sword");
+    public static final Item DREAD_KNIGHT_SWORD = new ItemModSword(DREAD_KNIGHT_TOOL_MATERIAL, "dread_knight_sword", "iceandfire.dread_knight_sword");
+    public static final Item LICH_STAFF = new ItemLichStaff();
+    public static final Item DREAD_QUEEN_SWORD = new ItemModSword(DREAD_QUEEN_SWORD_TOOL_MATERIAL, "dread_queen_sword", "iceandfire.dread_queen_sword");
+    public static final Item DREAD_QUEEN_STAFF = new ItemDreadQueenStaff();
+    public static final Item DREAD_SHARD = new ItemGeneric("dread_shard", 0);
+    public static final Item DREAD_KEY = new ItemGeneric("dread_key", 0);
 
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_fang")
-    public static Item hydra_fang = new ItemGeneric("hydra_fang", "iceandfire.hydra_fang", 0);
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_heart")
-    public static Item hydra_heart = new ItemHydraHeart();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":hydra_arrow")
-    public static Item hydra_arrow = new ItemHydraArrow();
+    public static final Item HYDRA_FANG = new ItemGeneric("hydra_fang", 0);
+    public static final Item HYDRA_HEART = new ItemHydraHeart();
+    public static final Item HYDRA_ARROW = new ItemHydraArrow();
     static {
         EnumDragonArmor.initArmors();
         EnumSeaSerpent.initArmors();

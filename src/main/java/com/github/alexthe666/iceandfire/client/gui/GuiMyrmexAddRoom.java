@@ -26,7 +26,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
 
     public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, EnumFacing facing) {
         this.staff = staff;
-        this.jungle = staff.getItem() == IafItemRegistry.myrmex_jungle_staff;
+        this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
         this.interactPos = interactPos;
         this.facing = facing;
         initGui();

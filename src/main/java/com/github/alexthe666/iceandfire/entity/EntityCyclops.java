@@ -31,7 +31,7 @@ import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -155,14 +155,14 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Blind", this.isBlinded());
         compound.setInteger("Variant", this.getVariant());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setBlinded(compound.getBoolean("Blind"));
         this.setVariant(compound.getInteger("Variant"));

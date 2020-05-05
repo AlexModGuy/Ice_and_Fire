@@ -58,7 +58,7 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             } else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
-                boolean jungle = podium.getStackInSlot(0).getItem() == IafItemRegistry.myrmex_jungle_egg;
+                boolean jungle = podium.getStackInSlot(0).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
                 GL11.glPushMatrix();

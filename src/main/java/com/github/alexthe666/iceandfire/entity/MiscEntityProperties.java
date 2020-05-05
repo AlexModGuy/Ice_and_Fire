@@ -5,7 +5,7 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class MiscEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("DismountedDragon", hasDismountedDragon);
         compound.setInteger("GauntletDamage", specialWeaponDmg);
         compound.setInteger("DreadPortalX", lastEnteredDreadPortalX);
@@ -42,7 +42,7 @@ public class MiscEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         this.hasDismountedDragon = compound.getBoolean("DismountedDragon");
         this.specialWeaponDmg = compound.getInteger("GauntletDamage");
         this.lastEnteredDreadPortalX = compound.getInteger("DreadPortalX");

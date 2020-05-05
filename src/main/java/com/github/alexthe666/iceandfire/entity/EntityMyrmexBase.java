@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
@@ -30,7 +29,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -280,7 +279,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("GrowthStage", this.getGrowthStage());
         tag.setInteger("GrowthTicks", growthTicks);
@@ -297,7 +296,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setGrowthStage(tag.getInteger("GrowthStage"));
         this.growthTicks = tag.getInteger("GrowthTicks");
@@ -306,8 +305,8 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         this.careerId = tag.getInteger("Career");
         this.careerLevel = tag.getInteger("CareerLevel");
         if (tag.hasKey("Offers", 10)) {
-            NBTTagCompound nbttagcompound = tag.getCompoundTag("Offers");
-            this.buyingList = new MerchantRecipeList(nbttagcompound);
+            CompoundNBT CompoundNBT = tag.getCompoundTag("Offers");
+            this.buyingList = new MerchantRecipeList(CompoundNBT);
         }
         this.wealth = tag.getInteger("Riches");
     }
@@ -363,7 +362,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             i += 5;
         }
 
-        if (recipe.getItemToBuy().getItem() == IafItemRegistry.myrmex_desert_resin || recipe.getItemToBuy().getItem() == IafItemRegistry.myrmex_jungle_resin) {
+        if (recipe.getItemToBuy().getItem() == IafItemRegistry.MYRMEX_DESERT_RESIN || recipe.getItemToBuy().getItem() == IafItemRegistry.MYRMEX_JUNGLE_RESIN) {
             this.wealth += recipe.getItemToBuy().getCount();
         }
 
@@ -545,7 +544,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         if (!shouldHaveNormalAI()) {
             return false;
         }
-        boolean flag2 = itemstack.getItem() == IafItemRegistry.myrmex_jungle_staff || itemstack.getItem() == IafItemRegistry.myrmex_desert_staff;
+        boolean flag2 = itemstack.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF || itemstack.getItem() == IafItemRegistry.MYRMEX_DESERT_STAFF;
 
         if (flag2) {
             this.onStaffInteract(player, itemstack);

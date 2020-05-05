@@ -24,7 +24,7 @@ public class ItemModArmor extends ItemArmor {
     }
 
     public String getTranslationKey(ItemStack stack) {
-        if (this == IafItemRegistry.earplugs) {
+        if (this == IafItemRegistry.EARPLUGS) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
@@ -36,7 +36,7 @@ public class ItemModArmor extends ItemArmor {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (this == IafItemRegistry.earplugs) {
+        if (this == IafItemRegistry.EARPLUGS) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {

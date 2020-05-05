@@ -14,7 +14,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -113,7 +113,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("HiveTicks", hiveTicks);
         tag.setInteger("ReleaseTicks", releaseTicks);
@@ -121,7 +121,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.hiveTicks = tag.getInteger("HiveTicks");
         this.releaseTicks = tag.getInteger("ReleaseTicks");

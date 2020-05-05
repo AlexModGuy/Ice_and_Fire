@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
 import jdk.nashorn.internal.ir.Block;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -66,28 +66,28 @@ public class DragonPosWorldData extends WorldSavedData {
         ++this.tickCounter;
     }
 
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(CompoundNBT nbt) {
         this.tickCounter = nbt.getInteger("Tick");
         NBTTagList nbttaglist = nbt.getTagList("DragonMap", 10);
         this.lastDragonPositions.clear();
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-            UUID uuid = nbttagcompound.getUniqueId("DragonUUID");
-            BlockPos pos = new BlockPos(nbttagcompound.getInteger("DragonPosX"), nbttagcompound.getInteger("DragonPosY"), nbttagcompound.getInteger("DragonPosZ"));
+            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+            UUID uuid = CompoundNBT.getUniqueId("DragonUUID");
+            BlockPos pos = new BlockPos(CompoundNBT.getInteger("DragonPosX"), CompoundNBT.getInteger("DragonPosY"), CompoundNBT.getInteger("DragonPosZ"));
             this.lastDragonPositions.put(uuid, pos);
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         compound.setInteger("Tick", this.tickCounter);
         NBTTagList nbttaglist = new NBTTagList();
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setUniqueId("DragonUUID", pair.getKey());
-            nbttagcompound.setInteger("DragonPosX", pair.get().getX());
-            nbttagcompound.setInteger("DragonPosY", pair.get().getY());
-            nbttagcompound.setInteger("DragonPosZ", pair.get().getZ());
-            nbttaglist.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setUniqueId("DragonUUID", pair.getKey());
+            CompoundNBT.setInteger("DragonPosX", pair.get().getX());
+            CompoundNBT.setInteger("DragonPosY", pair.get().getY());
+            CompoundNBT.setInteger("DragonPosZ", pair.get().getZ());
+            nbttaglist.appendTag(CompoundNBT);
         }
         compound.setTag("DragonMap", nbttaglist);
         return compound;

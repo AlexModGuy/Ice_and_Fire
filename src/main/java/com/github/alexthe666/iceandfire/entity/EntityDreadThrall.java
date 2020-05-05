@@ -11,14 +11,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -102,7 +101,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         if (rand.nextFloat() < 0.75F) {
             double chance = rand.nextFloat();
             if (chance < 0.0025F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.dragonsteel_ice_sword));
+                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
             }
             if (chance < 0.01F) {
                 this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
@@ -111,7 +110,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
                 this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
             }
             if (chance < 0.75F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.dread_sword));
+                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
             }
         }
         if (rand.nextFloat() < 0.75F) {
@@ -151,7 +150,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("ArmorVariant", getArmorVariant());
         compound.setBoolean("HasCustomHelmet", hasCustomArmorHead());
@@ -161,7 +160,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         setArmorVariant(compound.getInteger("ArmorVariant"));
         setCustomArmorHead(compound.getBoolean("HasCustomHelmet"));

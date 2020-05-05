@@ -39,7 +39,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if(stack.getItem() == IafItemRegistry.dread_key){
+        if(stack.getItem() == IafItemRegistry.DREAD_KEY){
             if(!playerIn.isCreative()){
                 stack.shrink(1);
             }

@@ -4,7 +4,7 @@ import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class StoneEntityProperties extends EntityProperties<LivingEntity> {
 
@@ -17,13 +17,13 @@ public class StoneEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("TurnedToStone", isStone);
         compound.setInteger("StoneBreakLvl", breakLvl);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         this.isStone = compound.getBoolean("TurnedToStone");
         this.breakLvl = compound.getInteger("StoneBreakLvl");
     }

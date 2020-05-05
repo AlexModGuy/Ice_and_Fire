@@ -28,7 +28,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -322,7 +322,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setBoolean("Chested", this.isChested());
@@ -333,10 +333,10 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             for (int i = 0; i < this.hippocampusInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = this.hippocampusInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-                    nbttagcompound.setByte("Slot", (byte) i);
-                    itemstack.writeToNBT(nbttagcompound);
-                    nbttaglist.appendTag(nbttagcompound);
+                    CompoundNBT CompoundNBT = new CompoundNBT();
+                    CompoundNBT.setByte("Slot", (byte) i);
+                    itemstack.writeToNBT(CompoundNBT);
+                    nbttaglist.appendTag(CompoundNBT);
                 }
             }
             compound.setTag("Items", nbttaglist);
@@ -348,7 +348,7 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setChested(compound.getBoolean("Chested"));
@@ -358,19 +358,19 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippocampusInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
-                this.hippocampusInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
+                this.hippocampusInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
             }
         } else {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippocampusInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
                 this.initHippocampusInv();
-                this.hippocampusInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
-                //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
+                this.hippocampusInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
+                //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
                 ItemStack saddle = hippocampusInventory.getStackInSlot(0);
                 ItemStack chest = hippocampusInventory.getStackInSlot(1);
                 if (world.isRemote) {

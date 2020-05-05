@@ -18,7 +18,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -63,7 +63,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         this.zTile = -1;
         this.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 6.0D;
-        this.stack = new ItemStack(IafItemRegistry.tide_trident);
+        this.stack = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
     }
 
     public EntityTideTrident(World worldIn, double x, double y, double z, ItemStack stack) {
@@ -429,7 +429,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         compound.setInteger("xTile", this.xTile);
         compound.setInteger("yTile", this.yTile);
         compound.setInteger("zTile", this.zTile);
@@ -447,7 +447,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         this.xTile = compound.getInteger("xTile");
         this.yTile = compound.getInteger("yTile");
         this.zTile = compound.getInteger("zTile");

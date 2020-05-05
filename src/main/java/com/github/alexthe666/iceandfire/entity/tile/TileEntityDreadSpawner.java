@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -43,12 +43,12 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         }
     };
 
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(CompoundNBT compound) {
         super.readFromNBT(compound);
         this.spawnerLogic.readFromNBT(compound);
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
         this.spawnerLogic.writeToNBT(compound);
         return compound;
@@ -70,10 +70,10 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
     }
 
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound nbttagcompound = this.writeToNBT(new NBTTagCompound());
-        nbttagcompound.removeTag("SpawnPotentials");
-        return nbttagcompound;
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT CompoundNBT = this.writeToNBT(new CompoundNBT());
+        CompoundNBT.removeTag("SpawnPotentials");
+        return CompoundNBT;
     }
 
     public boolean receiveClientEvent(int id, int type) {

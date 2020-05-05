@@ -15,7 +15,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -155,7 +155,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setInteger("ScreamStage", this.getScreamStage());
@@ -163,7 +163,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setScreamStage(compound.getInteger("ScreamStage"));

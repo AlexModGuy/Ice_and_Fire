@@ -72,6 +72,6 @@ public class EntityStymphalianArrow extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IafItemRegistry.stymphalian_arrow);
+        return new ItemStack(IafItemRegistry.STYMPHALIAN_ARROW);
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class ItemCyclopsEye extends Item {
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean unused2) {
         if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         } else {
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase) entity;

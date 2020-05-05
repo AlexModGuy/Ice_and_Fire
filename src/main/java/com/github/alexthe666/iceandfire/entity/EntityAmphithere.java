@@ -17,14 +17,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -177,7 +176,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             return true;
         }
         if (!super.processInteract(player, hand)) {
-            if (itemstack != null && itemstack.getItem() == IafItemRegistry.dragon_stick && this.isOwner(player)) {
+            if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = new BlockPos(this);
                     this.homePos = pos;
@@ -550,7 +549,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setBoolean("Flying", this.isFlying());
@@ -566,7 +565,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setFlying(compound.getBoolean("Flying"));

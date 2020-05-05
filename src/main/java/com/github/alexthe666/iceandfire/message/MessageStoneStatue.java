@@ -55,7 +55,7 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
     @Override
     public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
         if (player.world != null) {
-            if(player.getHeldItemMainhand().getItem() == IafItemRegistry.gorgon_head){
+            if(player.getHeldItemMainhand().getItem() == IafItemRegistry.GORGON_HEAD){
                 Entity entity = player.world.getEntityByID(message.entityId);
                 if (entity != null && entity instanceof EntityLiving) {
                     StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);

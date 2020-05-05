@@ -31,7 +31,6 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -44,7 +43,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -226,7 +225,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
         this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
         this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.fire_stew, false));
+        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
         this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(7, new DragonAILookIdle(this));
@@ -458,22 +457,22 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     public int getArmorOrdinal(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_iron) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_IRON) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_gold) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_GOLD) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_diamond) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_DIAMOND) {
             return 3;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_silver) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_SILVER) {
             return 4;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_dragonsteel_fire) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE) {
             return 5;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.dragon_armor_dragonsteel_ice) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE) {
             return 6;
         }
         return 0;
@@ -593,7 +592,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Hunger", this.getHunger());
         compound.setInteger("AgeTicks", this.getAgeInTicks());
@@ -625,10 +624,10 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             for (int i = 0; i < dragonInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = dragonInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-                    nbttagcompound.setByte("Slot", (byte) i);
-                    itemstack.writeToNBT(nbttagcompound);
-                    nbttaglist.appendTag(nbttagcompound);
+                    CompoundNBT CompoundNBT = new CompoundNBT();
+                    CompoundNBT.setByte("Slot", (byte) i);
+                    itemstack.writeToNBT(CompoundNBT);
+                    nbttaglist.appendTag(CompoundNBT);
                 }
             }
             compound.setTag("Items", nbttaglist);
@@ -637,7 +636,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setHunger(compound.getInteger("Hunger"));
         this.setAgeInTicks(compound.getInteger("AgeTicks"));
@@ -666,19 +665,19 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initInventory();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
                 if (j <= 4) {
-                    dragonInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
+                    dragonInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
                 }
             }
         } else {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initInventory();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
-                dragonInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
+                dragonInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
             }
         }
         this.setCrystalBound(compound.getBoolean("CrystalBound"));
@@ -961,7 +960,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
-        if (stack.getItem() == IafItemRegistry.dragon_debug_stick) {
+        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
             logic.debug();
             return true;
         }
@@ -971,12 +970,12 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
-                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_blood : IafItemRegistry.ice_dragon_blood, 1));
+                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.FIRE_DRAGON_BLOOD : IafItemRegistry.ICE_DRAGON_BLOOD, 1));
                 return true;
             } else if (!world.isRemote && stack.isEmpty() && IafConfig.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = getSkull().copy();
-                    skull.setTagCompound(new NBTTagCompound());
+                    skull.setTagCompound(new CompoundNBT());
                     skull.getTagCompound().setInteger("Stage", this.getDragonStage());
                     skull.getTagCompound().setInteger("DragonType", 0);
                     skull.getTagCompound().setInteger("DragonAge", this.getAgeInDays());
@@ -986,7 +985,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                     }
                     this.setDead();
                 } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IafConfig.dragonDropHeart) {
-                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.fire_dragon_heart : IafItemRegistry.ice_dragon_heart, 1);
+                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.FIRE_DRAGON_HEART : IafItemRegistry.ICE_DRAGON_HEART, 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(4)), 1);
                     if (!world.isRemote) {
                         this.entityDropItem(heart, 1);
@@ -1006,7 +1005,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             return true;
         }
         if (!this.isModelDead()) {
-            if (stack.getItem() == IafItemRegistry.creative_dragon_meal) {
+            if (stack.getItem() == IafItemRegistry.CREATIVE_DRAGON_MEAL) {
                 this.setTamedBy(player);
                 this.setHunger(this.getHunger() + 20);
                 this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1029,12 +1028,12 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             if (this.isOwner(player)) {
                 if(stack.getItem() == getSummoningCrystal() && !ItemSummoningCrystal.hasDragon(stack)){
                     this.setCrystalBound(true);
-                    NBTTagCompound compound = stack.getTagCompound();
+                    CompoundNBT compound = stack.getTagCompound();
                     if (compound == null) {
-                        compound = new NBTTagCompound();
+                        compound = new CompoundNBT();
                         stack.setTagCompound(compound);
                     }
-                    NBTTagCompound dragonTag = new NBTTagCompound();
+                    CompoundNBT dragonTag = new CompoundNBT();
                     dragonTag.setUniqueId("DragonUUID", this.getUniqueID());
                     dragonTag.setString("CustomName", this.getCustomNameTag());
                     compound.setTag("Dragon", dragonTag);
@@ -1044,7 +1043,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 }
                 this.setTamedBy(player);
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (stack.getItem() == IafItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
+                if (stack.getItem() == IafItemRegistry.DRAGON_HORN && (properties == null || !properties.isStone)) {
                     return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
@@ -1079,7 +1078,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IafItemRegistry.dragon_meal) {
+                    if (stack.getItem() == IafItemRegistry.DRAGON_MEAL) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + 20);
                         this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1093,7 +1092,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IafItemRegistry.sickly_dragon_meal && !this.isAgingDisabled()) {
+                    if (stack.getItem() == IafItemRegistry.SICKLY_DRAGON_MEAL && !this.isAgingDisabled()) {
                         this.setHunger(this.getHunger() + 20);
                         this.heal(this.getMaxHealth());
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
@@ -1109,7 +1108,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         }
                         return true;
                     }
-                    if (stack.getItem() == IafItemRegistry.dragon_stick) {
+                    if (stack.getItem() == IafItemRegistry.DRAGON_STAFF) {
                         if (player.isSneaking()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
@@ -1156,7 +1155,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
 
     private ItemStack getRandomDrop() {
         ItemStack stack = getItemFromLootTable();
-        if (stack.getItem() == IafItemRegistry.dragonbone) {
+        if (stack.getItem() == IafItemRegistry.DRAGON_BONE) {
             this.playSound(SoundEvents.ENTITY_SKELETON_AMBIENT, 1, 1);
         } else {
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
@@ -1857,7 +1856,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
                             living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50 * size));
                         } else {
-                            if (living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != IafItemRegistry.earplugs) {
+                            if (living.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() != IafItemRegistry.EARPLUGS) {
                                 living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 50 * size));
                             }
                         }
@@ -2088,7 +2087,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         return false;
     }
 
-    public boolean writeToNBTOptional(NBTTagCompound compound) {
+    public boolean writeToNBTOptional(CompoundNBT compound) {
         String s = this.getEntityString();
         compound.setString("id", s);
         this.writeToNBT(compound);

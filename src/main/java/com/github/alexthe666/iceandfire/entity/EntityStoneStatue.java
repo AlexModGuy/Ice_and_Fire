@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -35,14 +35,14 @@ public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromS
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("CrackAmount", this.crackAmount);
         tag.setBoolean("SmallArms", this.smallArms);
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setCrackAmount(tag.getByte("CrackAmount"));
         this.smallArms = tag.getBoolean("SmallArms");

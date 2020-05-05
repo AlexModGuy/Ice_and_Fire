@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -10,7 +9,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -41,7 +40,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("Jungle", this.isJungle());
         tag.setInteger("MyrmexAge", this.getMyrmexAge());
@@ -50,7 +49,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setJungle(tag.getBoolean("Jungle"));
         this.setMyrmexAge(tag.getInteger("MyrmexAge"));
@@ -175,7 +174,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     private ItemStack getItem() {
-        return new ItemStack(this.isJungle() ? IafItemRegistry.myrmex_jungle_egg : IafItemRegistry.myrmex_desert_egg, 1, this.getMyrmexCaste());
+        return new ItemStack(this.isJungle() ? IafItemRegistry.MYRMEX_JUNGLE_EGG : IafItemRegistry.MYRMEX_DESERT_EGG, 1, this.getMyrmexCaste());
     }
 
     @Override

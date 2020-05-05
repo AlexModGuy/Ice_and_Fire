@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -47,7 +47,7 @@ public class ItemStoneStatue extends Item {
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
         itemStack.getTagCompound().setBoolean("IAFStoneStatueEntityPlayer", true);
         itemStack.getTagCompound().setInteger("IAFStoneStatueEntityID", 90);
     }

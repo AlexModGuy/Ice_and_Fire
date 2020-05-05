@@ -8,7 +8,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
@@ -46,7 +46,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         return this.hasCustomName() ? this.customName : block.getTranslationKey() + ".name";
     }
 
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(CompoundNBT compound) {
         super.readFromNBT(compound);
         this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
@@ -59,7 +59,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
         if (!this.checkLootAndWrite(compound)) {
             ItemStackHelper.saveAllItems(compound, this.chestContents);
@@ -102,14 +102,14 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         this.writeToNBT(tag);
         return new SPacketUpdateTileEntity(this.pos, 0, tag);
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.writeToNBT(new CompoundNBT());
     }
 
     public void fillWithLoot(@Nullable EntityPlayer player) {

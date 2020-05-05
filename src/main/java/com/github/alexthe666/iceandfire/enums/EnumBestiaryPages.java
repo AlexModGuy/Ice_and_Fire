@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -108,7 +108,7 @@ public enum EnumBestiaryPages {
 
     public static List<EnumBestiaryPages> possiblePages(ItemStack book) {
         if (book.getItem() instanceof ItemBestiary) {
-            NBTTagCompound tag = book.getTagCompound();
+            CompoundNBT tag = book.getTagCompound();
             List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
             for (EnumBestiaryPages page : EnumBestiaryPages.values()) {
                 allPages.add(page);
@@ -131,7 +131,7 @@ public enum EnumBestiaryPages {
     public static boolean addPage(EnumBestiaryPages page, ItemStack book) {
         boolean flag = false;
         if (book.getItem() instanceof ItemBestiary) {
-            NBTTagCompound tag = book.getTagCompound();
+            CompoundNBT tag = book.getTagCompound();
             List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
             if (!enumlist.contains(page)) {
                 enumlist.add(page);

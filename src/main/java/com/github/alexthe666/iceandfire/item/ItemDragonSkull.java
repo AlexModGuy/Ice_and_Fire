@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -34,7 +34,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
         if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
             stack.getTagCompound().setInteger("Stage", 4);
             stack.getTagCompound().setInteger("DragonAge", 75);
 

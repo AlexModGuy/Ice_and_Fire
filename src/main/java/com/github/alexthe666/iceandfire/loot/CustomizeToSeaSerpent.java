@@ -29,7 +29,7 @@ public class CustomizeToSeaSerpent extends LootFunction {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 3 * ancientModifier)));
                 return new ItemStack(seaSerpent.getEnum().scale, stack.getCount(), stack.getMetadata());
             }
-            if (stack.getItem() == IafItemRegistry.sea_serpent_fang) {
+            if (stack.getItem() == IafItemRegistry.SERPENT_FANG) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 2 * ancientModifier)));
                 return stack;
             }

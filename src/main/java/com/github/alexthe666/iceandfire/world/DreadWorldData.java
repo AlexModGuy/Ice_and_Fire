@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -117,41 +117,41 @@ public class DreadWorldData extends WorldSavedData {
         }
     }
 
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(CompoundNBT nbt) {
         this.tickCounter = nbt.getInteger("Tick");
         NBTTagList nbttaglistAll = nbt.getTagList("AllPortals", 10);
         for (int i = 0; i < nbttaglistAll.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglistAll.getCompoundTagAt(i);
-            BlockPos pos = new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z"));
+            CompoundNBT CompoundNBT = nbttaglistAll.getCompoundTagAt(i);
+            BlockPos pos = new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z"));
             this.allOverworldPortalLocations.add(pos);
         }
         NBTTagList nbttaglistActive = nbt.getTagList("ActivePortals", 10);
         for (int i = 0; i < nbttaglistActive.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglistActive.getCompoundTagAt(i);
-            BlockPos pos = new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z"));
+            CompoundNBT CompoundNBT = nbttaglistActive.getCompoundTagAt(i);
+            BlockPos pos = new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z"));
             this.activeOverworldPortalLocations.add(pos);
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         compound.setInteger("Tick", this.tickCounter);
         NBTTagList nbttaglistAll = new NBTTagList();
         for (BlockPos pos : this.allOverworldPortalLocations) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", pos.getX());
-            nbttagcompound.setInteger("Y", pos.getY());
-            nbttagcompound.setInteger("Z", pos.getZ());
-            nbttaglistAll.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", pos.getX());
+            CompoundNBT.setInteger("Y", pos.getY());
+            CompoundNBT.setInteger("Z", pos.getZ());
+            nbttaglistAll.appendTag(CompoundNBT);
         }
         compound.setTag("AllPortals", nbttaglistAll);
 
         NBTTagList nbttaglistActive = new NBTTagList();
         for (BlockPos pos : this.activeOverworldPortalLocations) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", pos.getX());
-            nbttagcompound.setInteger("Y", pos.getY());
-            nbttagcompound.setInteger("Z", pos.getZ());
-            nbttaglistActive.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", pos.getX());
+            CompoundNBT.setInteger("Y", pos.getY());
+            CompoundNBT.setInteger("Z", pos.getZ());
+            nbttaglistActive.appendTag(CompoundNBT);
         }
         compound.setTag("ActivePortals", nbttaglistActive);
 

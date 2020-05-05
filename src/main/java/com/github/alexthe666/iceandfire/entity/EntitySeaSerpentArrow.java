@@ -72,6 +72,6 @@ public class EntitySeaSerpentArrow extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IafItemRegistry.sea_serpent_arrow);
+        return new ItemStack(IafItemRegistry.SEA_SERPENT_ARROW);
     }
 }

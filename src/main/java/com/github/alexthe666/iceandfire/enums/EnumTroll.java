@@ -19,9 +19,9 @@ import java.util.Random;
 
 
 public enum EnumTroll {
-    FOREST(BiomeDictionary.Type.FOREST, IafItemRegistry.troll_forest, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
-    FROST(BiomeDictionary.Type.SNOWY, IafItemRegistry.troll_frost, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
-    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, IafItemRegistry.troll_mountain, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
+    FOREST(BiomeDictionary.Type.FOREST, IafItemRegistry.TROLL_FOREST_ARMOR_MATERIAL, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
+    FROST(BiomeDictionary.Type.SNOWY, IafItemRegistry.TROLL_FROST_ARMOR_MATERIAL, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
+    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, IafItemRegistry.TROLL_MOUNTAIN_ARMOR_MATERIAL, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
 
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;

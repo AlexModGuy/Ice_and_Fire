@@ -16,9 +16,9 @@ public class RenderDeathWormGauntlet {
     public void renderItem(ItemStack stack, double x, double y, double z, float f, int f1, float alpha) {
         ResourceLocation texture;
 
-        if (stack.getItem() == IafItemRegistry.deathworm_gauntlet_red) {
+        if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_RED) {
             texture = RenderDeathWorm.TEXTURE_RED;
-        } else if (stack.getItem() == IafItemRegistry.deathworm_gauntlet_white) {
+        } else if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_WHITE) {
             texture = RenderDeathWorm.TEXTURE_WHITE;
         } else {
             texture = RenderDeathWorm.TEXTURE_YELLOW;

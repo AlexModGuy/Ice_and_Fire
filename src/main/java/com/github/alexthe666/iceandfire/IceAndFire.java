@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -31,13 +30,13 @@ public class IceAndFire {
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(IafItemRegistry.dragon_skull);
+            return new ItemStack(IafItemRegistry.DRAGON_SKULL);
         }
     };
     public static ItemGroup TAB_BLOCKS = new ItemGroup("iceandfire.blocks") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(IafItemRegistry.dragonscales_red);
+            return new ItemStack(IafItemRegistry.DRAGONSCALES_RED);
         }
     };
     public static CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);

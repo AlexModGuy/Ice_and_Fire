@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -85,14 +85,14 @@ public class EntityChainTie extends EntityHanging {
         return 0;
     }
 
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         BlockPos blockpos = this.getHangingPosition();
         compound.setInteger("TileX", blockpos.getX());
         compound.setInteger("TileY", blockpos.getY());
         compound.setInteger("TileZ", blockpos.getZ());
     }
 
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         this.hangingPosition = new BlockPos(compound.getInteger("TileX"), compound.getInteger("TileY"), compound.getInteger("TileZ"));
     }
 
@@ -117,7 +117,7 @@ public class EntityChainTie extends EntityHanging {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
                 chainProperties.removeChain(entityliving, this);
-                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.chain));
+                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
             }
@@ -149,7 +149,7 @@ public class EntityChainTie extends EntityHanging {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving1, this)) {
                             chainProperties.removeChain(entityliving1, this);
-                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.chain));
+                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
                             entityitem.setDefaultPickupDelay();
                             this.world.spawnEntity(entityitem);
                         }

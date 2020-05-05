@@ -4,7 +4,7 @@ import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class FrozenEntityProperties extends EntityProperties<LivingEntity> {
 
@@ -17,13 +17,13 @@ public class FrozenEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("IsFrozen", isFrozen);
         compound.setInteger("TicksUntilUnfrozen", ticksUntilUnfrozen);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         this.isFrozen = compound.getBoolean("IsFrozen");
         this.ticksUntilUnfrozen = compound.getInteger("TicksUntilUnfrozen");
     }

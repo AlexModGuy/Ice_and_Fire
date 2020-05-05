@@ -10,7 +10,6 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
@@ -72,7 +71,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }
         if (!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
             if (this.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
-                boolean isJungle = this.getHeldItem(EnumHand.MAIN_HAND).getItem() == IafItemRegistry.myrmex_jungle_egg;
+                boolean isJungle = this.getHeldItem(EnumHand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
                 int metadata = this.getHeldItem(EnumHand.MAIN_HAND).getMetadata();
                 EntityMyrmexEgg egg = new EntityMyrmexEgg(world);
                 egg.copyLocationAndAnglesFrom(this);
@@ -231,7 +230,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public void onPickupItem(EntityItem itemEntity) {
         Item item = itemEntity.getItem().getItem();
-        if (item == IafItemRegistry.myrmex_jungle_resin && this.isJungle() || item == IafItemRegistry.myrmex_desert_resin && !this.isJungle()) {
+        if (item == IafItemRegistry.MYRMEX_JUNGLE_RESIN && this.isJungle() || item == IafItemRegistry.MYRMEX_DESERT_RESIN && !this.isJungle()) {
 
             EntityPlayer owner = null;
             try {

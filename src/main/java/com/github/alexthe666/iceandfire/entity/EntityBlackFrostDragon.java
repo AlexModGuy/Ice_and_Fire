@@ -9,10 +9,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ai.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -54,7 +53,7 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
         this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
         this.tasks.addTask(2, new DragonAIEscort(this, 1.0D));
         this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, IafItemRegistry.frost_stew, false));
+        this.tasks.addTask(4, new AquaticAITempt(this, 1.0D, IafItemRegistry.FROST_STEW, false));
         this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
         this.tasks.addTask(7, new DragonAIWatchClosest(this, EntityLivingBase.class, 6.0F));
         this.tasks.addTask(7, new DragonAILookIdle(this));
@@ -129,7 +128,7 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         if (this.getCommanderId() == null) {
             compound.setString("CommanderUUID", "");
@@ -140,7 +139,7 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         String s;
         if (compound.hasKey("CommanderUUID", 8)) {
@@ -210,11 +209,11 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
     }
 
     public Item getVariantScale(int variant) {
-        return IafItemRegistry.dragonscales_blue;
+        return IafItemRegistry.DRAGONSCALES_BLUE;
     }
 
     public Item getVariantEgg(int variant) {
-        return IafItemRegistry.dragonegg_blue;
+        return IafItemRegistry.DRAGONEGG_BLUE;
     }
 
     public boolean isBreedingItem(@Nullable ItemStack stack) {

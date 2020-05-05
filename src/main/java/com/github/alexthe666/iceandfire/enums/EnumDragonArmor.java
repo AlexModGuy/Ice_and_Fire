@@ -60,38 +60,38 @@ public enum EnumDragonArmor {
     public static Item getScaleItem(EnumDragonArmor armor) {
         switch (armor) {
             case armor_red:
-                return IafItemRegistry.dragonscales_red;
+                return IafItemRegistry.DRAGONSCALES_RED;
             case armor_bronze:
-                return IafItemRegistry.dragonscales_bronze;
+                return IafItemRegistry.DRAGONSCALES_BRONZE;
             case armor_green:
-                return IafItemRegistry.dragonscales_green;
+                return IafItemRegistry.DRAGONSCALES_GREEN;
             case armor_gray:
-                return IafItemRegistry.dragonscales_gray;
+                return IafItemRegistry.DRAGONSCALES_GRAY;
             case armor_blue:
-                return IafItemRegistry.dragonscales_blue;
+                return IafItemRegistry.DRAGONSCALES_BLUE;
             case armor_white:
-                return IafItemRegistry.dragonscales_white;
+                return IafItemRegistry.DRAGONSCALES_WHITE;
             case armor_sapphire:
-                return IafItemRegistry.dragonscales_sapphire;
+                return IafItemRegistry.DRAGONSCALES_SAPPHIRE;
             case armor_silver:
-                return IafItemRegistry.dragonscales_silver;
+                return IafItemRegistry.DRAGONSCALES_SILVER;
             default:
-                return IafItemRegistry.dragonscales_red;
+                return IafItemRegistry.DRAGONSCALES_RED;
         }
     }
 
     public static Item getEggItem(EnumDragonArmor armor) {
         switch (armor) {
             case armor_red:
-                return IafItemRegistry.dragonegg_red;
+                return IafItemRegistry.DRAGONEGG_RED;
             case armor_bronze:
-                return IafItemRegistry.dragonegg_bronze;
+                return IafItemRegistry.DRAGONEGG_BRONZE;
             case armor_green:
-                return IafItemRegistry.dragonegg_green;
+                return IafItemRegistry.DRAGONEGG_GREEN;
             case armor_gray:
-                return IafItemRegistry.dragonegg_gray;
+                return IafItemRegistry.DRAGONEGG_GRAY;
             default:
-                return IafItemRegistry.dragonegg_red;
+                return IafItemRegistry.DRAGONEGG_RED;
         }
     }
 }

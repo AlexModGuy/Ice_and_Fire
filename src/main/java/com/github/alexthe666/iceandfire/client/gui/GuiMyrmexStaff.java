@@ -35,7 +35,7 @@ public class GuiMyrmexStaff extends GuiScreen {
 
     public GuiMyrmexStaff(ItemStack staff) {
         this.staff = staff;
-        this.jungle = staff.getItem() == IafItemRegistry.myrmex_jungle_staff;
+        this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
         initGui();
     }
 

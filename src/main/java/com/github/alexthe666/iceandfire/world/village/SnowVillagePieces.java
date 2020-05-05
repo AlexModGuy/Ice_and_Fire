@@ -11,7 +11,7 @@ import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -272,7 +272,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             //
         }
     }
@@ -298,7 +298,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             super.writeStructureToNBT(tagCompound);
             tagCompound.setBoolean("Chest", this.hasMadeChest);
         }
@@ -306,7 +306,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             super.readStructureFromNBT(tagCompound);
             this.hasMadeChest = tagCompound.getBoolean("Chest");
         }
@@ -400,7 +400,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -558,7 +558,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -591,7 +591,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             super.writeStructureToNBT(tagCompound);
             tagCompound.setInteger("Length", this.length);
         }
@@ -599,7 +599,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             super.readStructureFromNBT(tagCompound);
             this.length = tagCompound.getInteger("Length");
         }
@@ -715,7 +715,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -823,7 +823,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -858,7 +858,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             tagCompound.setInteger("HPos", this.averageGroundLvl);
             tagCompound.setInteger("VCount", this.villagersSpawned);
             tagCompound.setByte("Type", (byte) this.field_189928_h);
@@ -868,7 +868,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             this.averageGroundLvl = tagCompound.getInteger("HPos");
             this.villagersSpawned = tagCompound.getInteger("VCount");
             this.field_189928_h = tagCompound.getByte("Type");
@@ -1155,7 +1155,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -1200,7 +1200,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }
@@ -1228,7 +1228,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to write subclass data to NBT
          */
-        protected void writeStructureToNBT(NBTTagCompound tagCompound) {
+        protected void writeStructureToNBT(CompoundNBT tagCompound) {
             super.writeStructureToNBT(tagCompound);
             tagCompound.setInteger("T", this.tablePosition);
             tagCompound.setBoolean("C", this.isTallHouse);
@@ -1237,7 +1237,7 @@ public class SnowVillagePieces {
         /**
          * (abstract) Helper method to read subclass data from NBT
          */
-        protected void readStructureFromNBT(NBTTagCompound tagCompound) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound) {
             super.readStructureFromNBT(tagCompound);
             this.tablePosition = tagCompound.getInteger("T");
             this.isTallHouse = tagCompound.getBoolean("C");
@@ -1321,7 +1321,7 @@ public class SnowVillagePieces {
         }
 
         @Override
-        protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_) {
+        protected void readStructureFromNBT(CompoundNBT tagCompound, TemplateManager p_143011_2_) {
             super.readStructureFromNBT(tagCompound);
         }
     }

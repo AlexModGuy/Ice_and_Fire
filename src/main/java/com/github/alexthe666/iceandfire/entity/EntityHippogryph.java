@@ -19,7 +19,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityTameable;
@@ -33,7 +32,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -237,13 +236,13 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.iron_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.IRON_HIPPOGRYPH_ARMOR) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.gold_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.diamond_hippogryph_armor) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR) {
             return 3;
         }
         return 0;
@@ -416,7 +415,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setBoolean("Chested", this.isChested());
@@ -430,10 +429,10 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             for (int i = 0; i < this.hippogryphInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = this.hippogryphInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-                    nbttagcompound.setByte("Slot", (byte) i);
-                    itemstack.writeToNBT(nbttagcompound);
-                    nbttaglist.appendTag(nbttagcompound);
+                    CompoundNBT CompoundNBT = new CompoundNBT();
+                    CompoundNBT.setByte("Slot", (byte) i);
+                    itemstack.writeToNBT(CompoundNBT);
+                    nbttaglist.appendTag(CompoundNBT);
                 }
             }
             compound.setTag("Items", nbttaglist);
@@ -451,7 +450,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setChested(compound.getBoolean("Chested"));
@@ -464,19 +463,19 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippogryphInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
-                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
+                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
             }
         } else {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippogryphInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-                int j = nbttagcompound.getByte("Slot") & 255;
+                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+                int j = CompoundNBT.getByte("Slot") & 255;
                 this.initHippogryphInv();
-                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(nbttagcompound));
-                //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(nbttagcompound)));
+                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
+                //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
                 ItemStack saddle = hippogryphInventory.getStackInSlot(0);
                 ItemStack chest = hippogryphInventory.getStackInSlot(1);
                 if (world.isRemote) {
@@ -765,7 +764,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
         int i = MathHelper.floor(this.posX);
         int j = MathHelper.floor(this.posY);
         int k = MathHelper.floor(this.posZ);
-        ItemStack stack = new ItemStack(IafItemRegistry.hippogryph_egg);
+        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
         EntityItem egg = new EntityItem(this.world, i, j, k, stack);
         return egg;
     }

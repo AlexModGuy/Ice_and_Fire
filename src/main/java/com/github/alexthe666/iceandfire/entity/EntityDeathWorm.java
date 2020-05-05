@@ -31,7 +31,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -259,7 +259,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setInteger("GrowthCounter", this.growthCounter);
@@ -270,7 +270,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.growthCounter = compound.getInteger("GrowthCounter");

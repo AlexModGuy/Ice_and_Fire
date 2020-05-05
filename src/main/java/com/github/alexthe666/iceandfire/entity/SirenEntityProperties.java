@@ -5,7 +5,7 @@ import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class SirenEntityProperties extends EntityProperties<LivingEntity> {
@@ -20,13 +20,13 @@ public class SirenEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound compound) {
+    public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("CharmedBySiren", isCharmed);
         compound.setInteger("SirenID", sirenID);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound compound) {
+    public void loadNBTData(CompoundNBT compound) {
         this.isCharmed = compound.getBoolean("CharmedBySiren");
         this.sirenID = compound.getInteger("SirenID");
     }

@@ -32,7 +32,7 @@ public class ItemModPickaxe extends ItemPickaxe {
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.toolMaterial.getRepairItemStack();
-        if (this.toolMaterial == IafItemRegistry.silverTools) {
+        if (this.toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
             for (ItemStack ingot : silverItems) {
                 if (OreDictionary.itemMatches(repair, ingot, false)) {
@@ -46,12 +46,12 @@ public class ItemModPickaxe extends ItemPickaxe {
 
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (this == IafItemRegistry.silver_pickaxe) {
+        if (this == IafItemRegistry.SILVER_PICKAXE) {
             if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);
             }
         }
-        if (this.toolMaterial == IafItemRegistry.myrmexChitin) {
+        if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
                 target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
@@ -59,11 +59,11 @@ public class ItemModPickaxe extends ItemPickaxe {
                 target.attackEntityFrom(DamageSource.GENERIC, attackDamage + 6.0F);
             }
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             target.setFire(15);
             target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(300);
             target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 300, 2));
@@ -74,16 +74,16 @@ public class ItemModPickaxe extends ItemPickaxe {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (this == IafItemRegistry.silver_pickaxe) {
+        if (this == IafItemRegistry.SILVER_PICKAXE) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
         }
-        if (this == IafItemRegistry.myrmex_desert_pickaxe || this == IafItemRegistry.myrmex_jungle_pickaxe) {
+        if (this == IafItemRegistry.MYRMEX_DESERT_PICKAXE || this == IafItemRegistry.MYRMEX_JUNGLE_PICKAXE) {
             tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_fire_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             tooltip.add(TextFormatting.DARK_RED + StatCollector.translateToLocal("dragon_sword_fire.hurt2"));
         }
-        if (toolMaterial == IafItemRegistry.dragonsteel_ice_tools) {
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
         }
     }

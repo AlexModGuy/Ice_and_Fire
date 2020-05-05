@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -39,7 +39,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("Color", (byte) this.getType().ordinal());
         tag.setByte("DragonAge", (byte) this.getDragonAge());
@@ -52,7 +52,7 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setType(EnumDragonEgg.values()[tag.getInteger("Color")]);
         this.setDragonAge(tag.getByte("DragonAge"));
@@ -137,21 +137,21 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     private ItemStack getItem() {
         switch (getType().ordinal()) {
             default:
-                return new ItemStack(IafItemRegistry.dragonegg_red);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_RED);
             case 1:
-                return new ItemStack(IafItemRegistry.dragonegg_green);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_GREEN);
             case 2:
-                return new ItemStack(IafItemRegistry.dragonegg_bronze);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_BRONZE);
             case 3:
-                return new ItemStack(IafItemRegistry.dragonegg_gray);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_GRAY);
             case 4:
-                return new ItemStack(IafItemRegistry.dragonegg_blue);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_BLUE);
             case 5:
-                return new ItemStack(IafItemRegistry.dragonegg_white);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_WHITE);
             case 6:
-                return new ItemStack(IafItemRegistry.dragonegg_sapphire);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_SAPPHIRE);
             case 7:
-                return new ItemStack(IafItemRegistry.dragonegg_silver);
+                return new ItemStack(IafItemRegistry.DRAGONEGG_SILVER);
 
         }
     }

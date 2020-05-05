@@ -35,7 +35,7 @@ public class DreadLichAIStrife extends EntityAIBase {
     }
 
     protected boolean isStaffInHand() {
-        return !this.entity.getHeldItemMainhand().isEmpty() && this.entity.getHeldItemMainhand().getItem() == IafItemRegistry.lich_staff;
+        return !this.entity.getHeldItemMainhand().isEmpty() && this.entity.getHeldItemMainhand().getItem() == IafItemRegistry.LICH_STAFF;
     }
 
     public boolean shouldContinueExecuting() {

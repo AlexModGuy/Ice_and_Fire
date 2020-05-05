@@ -9,7 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -77,11 +77,11 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
             if (itemstack.isEmpty()) {
                 return false;
             }
-            if (itemstack.getItem() != IafItemRegistry.bestiary) {
+            if (itemstack.getItem() != IafItemRegistry.BESTIARY) {
                 return false;
             }
 
-            if (itemstack.getItem() == IafItemRegistry.bestiary) {
+            if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
                 List list = EnumBestiaryPages.possiblePages(itemstack);
                 if (list == null || list.isEmpty()) {
                     return false;
@@ -150,7 +150,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     public EnumBestiaryPages[] randomizePages() {
-        if (stacks.get(0).getItem() == IafItemRegistry.bestiary) {
+        if (stacks.get(0).getItem() == IafItemRegistry.BESTIARY) {
             List<EnumBestiaryPages> possibleList = getPossiblePages();
             localRand.setSeed(this.world.getWorldTime());
             Collections.shuffle(possibleList, localRand);
@@ -176,14 +176,14 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(CompoundNBT compound) {
         super.readFromNBT(compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
 
@@ -302,7 +302,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         this.writeToNBT(tag);
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }

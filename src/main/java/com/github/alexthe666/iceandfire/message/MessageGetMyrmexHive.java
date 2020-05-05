@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -33,7 +33,7 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
 
     @Override
     public void toBytes(ByteBuf buf) {
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         if (hive != null) {
             hive.writeVillageDataToNBT(tag);
         }
@@ -51,7 +51,7 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
         if (player.world != null) {
             MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
             if (serverHive != null) {
-                NBTTagCompound tag = new NBTTagCompound();
+                CompoundNBT tag = new CompoundNBT();
                 message.hive.writeVillageDataToNBT(tag);
                 serverHive.readVillageDataFromNBT(tag);
             }

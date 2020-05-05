@@ -19,13 +19,12 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -109,7 +108,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
 
     public static boolean isWearingEarplugs(EntityLivingBase entity) {
         ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        return helmet.getItem() == IafItemRegistry.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
+        return helmet.getItem() == IafItemRegistry.EARPLUGS || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 
     public static boolean isDrawnToSong(Entity entity) {
@@ -329,7 +328,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
+    public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("HairColor", this.getHairColor());
         tag.setBoolean("Aggressive", this.isAgressive());
@@ -341,7 +340,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
+    public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setHairColor(tag.getInteger("HairColor"));
         this.setAggressive(tag.getBoolean("Aggressive"));

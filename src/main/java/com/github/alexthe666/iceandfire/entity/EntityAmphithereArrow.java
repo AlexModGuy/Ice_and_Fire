@@ -120,6 +120,6 @@ public class EntityAmphithereArrow extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(IafItemRegistry.amphithere_arrow);
+        return new ItemStack(IafItemRegistry.AMPHITHERE_ARROW);
     }
 }

@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 public class ItemBlindfold extends ItemArmor {
 
     public ItemBlindfold() {
-        super(IafItemRegistry.blindfoldArmor, 0, EntityEquipmentSlot.HEAD);
+        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, 0, EntityEquipmentSlot.HEAD);
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setTranslationKey("iceandfire.blindfold");
         this.setRegistryName(IceAndFire.MODID, "blindfold");

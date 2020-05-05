@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.village;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -119,12 +119,12 @@ public class MapGenPixieVillage extends WorldGenerator {
             return this.hasMoreThanTwoComponents;
         }
 
-        public void writeToNBT(NBTTagCompound tagCompound) {
+        public void writeToNBT(CompoundNBT tagCompound) {
             super.writeToNBT(tagCompound);
             tagCompound.setBoolean("Valid", this.hasMoreThanTwoComponents);
         }
 
-        public void readFromNBT(NBTTagCompound tagCompound) {
+        public void readFromNBT(CompoundNBT tagCompound) {
             super.readFromNBT(tagCompound);
             this.hasMoreThanTwoComponents = tagCompound.getBoolean("Valid");
         }

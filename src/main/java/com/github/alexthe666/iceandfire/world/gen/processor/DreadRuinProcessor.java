@@ -7,7 +7,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,15 +39,15 @@ public class DreadRuinProcessor implements ITemplateProcessor {
             if (blockInfoIn.blockState.getBlock() instanceof BlockChest) {
                 ResourceLocation loot = DREAD_CHEST_LOOT;
                 Random rand = new Random(worldIn.getSeed() + pos.toLong());
-                NBTTagCompound tag = blockInfoIn.tileentityData == null ? new NBTTagCompound() : blockInfoIn.tileentityData;
+                CompoundNBT tag = blockInfoIn.tileentityData == null ? new CompoundNBT() : blockInfoIn.tileentityData;
                 tag.setString("LootTable", loot.toString());
                 tag.setLong("LootTableSeed", rand.nextLong());
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, Blocks.CHEST.getDefaultState(), tag);
                 return newInfo;
             }
             if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
-                NBTTagCompound tag = blockInfoIn.tileentityData == null ? new NBTTagCompound() : blockInfoIn.tileentityData;
-                NBTTagCompound spawnData = new NBTTagCompound();
+                CompoundNBT tag = blockInfoIn.tileentityData == null ? new CompoundNBT() : blockInfoIn.tileentityData;
+                CompoundNBT spawnData = new CompoundNBT();
                 Random rand = new Random(worldIn.getSeed() + pos.toLong());
                 ResourceLocation spawnerMobId = EntityList.getKey(getRandomMobForMobSpawner(rand));
                 if(spawnerMobId != null){

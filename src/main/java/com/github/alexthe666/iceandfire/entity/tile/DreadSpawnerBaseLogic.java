@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.*;
@@ -85,14 +85,14 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
                 boolean flag = false;
 
                 for (int i = 0; i < this.spawnCount; ++i) {
-                    NBTTagCompound nbttagcompound = this.spawnData.getNbt();
-                    NBTTagList nbttaglist = nbttagcompound.getTagList("Pos", 6);
+                    CompoundNBT CompoundNBT = this.spawnData.getNbt();
+                    NBTTagList nbttaglist = CompoundNBT.getTagList("Pos", 6);
                     World world = this.getSpawnerWorld();
                     int j = nbttaglist.tagCount();
                     double d0 = j >= 1 ? nbttaglist.getDoubleAt(0) : (double) blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
                     double d1 = j >= 2 ? nbttaglist.getDoubleAt(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
                     double d2 = j >= 3 ? nbttaglist.getDoubleAt(2) : (double) blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    Entity entity = AnvilChunkLoader.readWorldEntityPos(nbttagcompound, world, d0, d1, d2, false);
+                    Entity entity = AnvilChunkLoader.readWorldEntityPos(CompoundNBT, world, d0, d1, d2, false);
 
                     if (entity == null) {
                         return;
@@ -147,7 +147,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         this.broadcastEvent(1);
     }
 
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(CompoundNBT nbt) {
         this.spawnDelay = nbt.getShort("Delay");
         this.potentialSpawns.clear();
 
@@ -185,7 +185,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound p_189530_1_) {
+    public CompoundNBT writeToNBT(CompoundNBT p_189530_1_) {
         ResourceLocation resourcelocation = this.getEntityId();
 
         if (resourcelocation == null) {

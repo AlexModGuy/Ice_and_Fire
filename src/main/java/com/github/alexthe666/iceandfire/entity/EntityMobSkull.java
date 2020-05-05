@@ -7,7 +7,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -112,14 +112,14 @@ public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStat
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         this.setYaw(compound.getFloat("SkullYaw"));
         this.setEnumOrdinal(compound.getInteger("SkullType"));
         super.readEntityFromNBT(compound);
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         compound.setFloat("SkullYaw", this.getYaw());
         compound.setInteger("SkullType", this.getEnumOrdinal());
         super.writeEntityToNBT(compound);

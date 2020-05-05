@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -88,26 +88,26 @@ public class EntityIceDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.dragonscales_blue;
+                return IafItemRegistry.DRAGONSCALES_BLUE;
             case 1:
-                return IafItemRegistry.dragonscales_white;
+                return IafItemRegistry.DRAGONSCALES_WHITE;
             case 2:
-                return IafItemRegistry.dragonscales_sapphire;
+                return IafItemRegistry.DRAGONSCALES_SAPPHIRE;
             case 3:
-                return IafItemRegistry.dragonscales_silver;
+                return IafItemRegistry.DRAGONSCALES_SILVER;
         }
     }
 
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.dragonegg_blue;
+                return IafItemRegistry.DRAGONEGG_BLUE;
             case 1:
-                return IafItemRegistry.dragonegg_white;
+                return IafItemRegistry.DRAGONEGG_WHITE;
             case 2:
-                return IafItemRegistry.dragonegg_sapphire;
+                return IafItemRegistry.DRAGONEGG_SAPPHIRE;
             case 3:
-                return IafItemRegistry.dragonegg_silver;
+                return IafItemRegistry.DRAGONEGG_SILVER;
         }
     }
 
@@ -117,14 +117,14 @@ public class EntityIceDragon extends EntityDragonBase {
 
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Swimming", this.isSwimming());
         compound.setInteger("SwimmingTicks", this.ticksSwiming);
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setSwimming(compound.getBoolean("Swimming"));
         this.ticksSwiming = compound.getInteger("SwimmingTicks");
@@ -473,7 +473,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(@Nullable ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.frost_stew;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FROST_STEW;
     }
 
     @Override
@@ -532,11 +532,11 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.dragon_skull, 1, 1);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, 1);
     }
 
     public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.dragon_horn_ice);
+        return new ItemStack(IafItemRegistry.DRAGON_HORN_ICE);
     }
 
     public boolean useFlyingPathFinder() {
@@ -545,6 +545,6 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public Item getSummoningCrystal() {
-        return IafItemRegistry.summoning_crystal_ice;
+        return IafItemRegistry.SUMMONING_CRYSTAL_ICE;
     }
 }

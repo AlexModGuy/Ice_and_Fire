@@ -8,7 +8,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
@@ -256,7 +256,7 @@ public class MyrmexHive {
     /**
      * Read this village's data from NBT.
      */
-    public void readVillageDataFromNBT(NBTTagCompound compound) {
+    public void readVillageDataFromNBT(CompoundNBT compound) {
         this.numMyrmex = compound.getInteger("PopSize");
         this.reproduces = compound.getBoolean("Reproduces");
         this.hasOwner = compound.getBoolean("HasOwner");
@@ -270,57 +270,57 @@ public class MyrmexHive {
         this.centerHelper = new BlockPos(compound.getInteger("ACX"), compound.getInteger("ACY"), compound.getInteger("ACZ"));
         NBTTagList nbttaglist = compound.getTagList("Doors", 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), nbttagcompound.getInteger("IDX"), nbttagcompound.getInteger("IDZ"), nbttagcompound.getInteger("TS"));
+            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), CompoundNBT.getInteger("IDX"), CompoundNBT.getInteger("IDZ"), CompoundNBT.getInteger("TS"));
             this.villageDoorInfoList.add(villagedoorinfo);
         }
         NBTTagList hiveMembers = compound.getTagList("HiveMembers", 10);
         this.myrmexList.clear();
         for (int i = 0; i < hiveMembers.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = hiveMembers.getCompoundTagAt(i);
-            this.myrmexList.add(nbttagcompound.getUniqueId("MyrmexUUID"));
+            CompoundNBT CompoundNBT = hiveMembers.getCompoundTagAt(i);
+            this.myrmexList.add(CompoundNBT.getUniqueId("MyrmexUUID"));
         }
         NBTTagList foodRoomList = compound.getTagList("FoodRooms", 10);
         this.foodRooms.clear();
         for (int i = 0; i < foodRoomList.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = foodRoomList.getCompoundTagAt(i);
-            this.foodRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+            CompoundNBT CompoundNBT = foodRoomList.getCompoundTagAt(i);
+            this.foodRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
         }
         NBTTagList babyRoomList = compound.getTagList("BabyRooms", 10);
         this.babyRooms.clear();
         for (int i = 0; i < babyRoomList.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = babyRoomList.getCompoundTagAt(i);
-            this.babyRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+            CompoundNBT CompoundNBT = babyRoomList.getCompoundTagAt(i);
+            this.babyRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
         }
         NBTTagList miscRoomList = compound.getTagList("MiscRooms", 10);
         this.miscRooms.clear();
         for (int i = 0; i < miscRoomList.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = miscRoomList.getCompoundTagAt(i);
-            this.miscRooms.add(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")));
+            CompoundNBT CompoundNBT = miscRoomList.getCompoundTagAt(i);
+            this.miscRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
         }
         NBTTagList entrancesList = compound.getTagList("Entrances", 10);
         this.entrances.clear();
         for (int i = 0; i < entrancesList.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = entrancesList.getCompoundTagAt(i);
-            this.entrances.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.byHorizontalIndex(nbttagcompound.getInteger("Facing")));
+            CompoundNBT CompoundNBT = entrancesList.getCompoundTagAt(i);
+            this.entrances.put(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), EnumFacing.byHorizontalIndex(CompoundNBT.getInteger("Facing")));
         }
 
         NBTTagList entranceBottomsList = compound.getTagList("EntranceBottoms", 10);
         this.entranceBottoms.clear();
         for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound = entranceBottomsList.getCompoundTagAt(i);
-            this.entranceBottoms.put(new BlockPos(nbttagcompound.getInteger("X"), nbttagcompound.getInteger("Y"), nbttagcompound.getInteger("Z")), EnumFacing.byHorizontalIndex(nbttagcompound.getInteger("Facing")));
+            CompoundNBT CompoundNBT = entranceBottomsList.getCompoundTagAt(i);
+            this.entranceBottoms.put(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), EnumFacing.byHorizontalIndex(CompoundNBT.getInteger("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
         NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
         for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
-            NBTTagCompound nbttagcompound1 = nbttaglist1.getCompoundTagAt(j);
+            CompoundNBT CompoundNBT1 = nbttaglist1.getCompoundTagAt(j);
 
-            if (nbttagcompound1.hasKey("UUID")) {
-                this.playerReputation.put(UUID.fromString(nbttagcompound1.getString("UUID")), Integer.valueOf(nbttagcompound1.getInteger("S")));
+            if (CompoundNBT1.hasKey("UUID")) {
+                this.playerReputation.put(UUID.fromString(CompoundNBT1.getString("UUID")), Integer.valueOf(CompoundNBT1.getInteger("S")));
             } else {
                 //World is never set here, so this will always be offline UUIDs, sadly there is no way to convert this.
-                this.playerReputation.put(findUUID(nbttagcompound1.getString("Name")), Integer.valueOf(nbttagcompound1.getInteger("S")));
+                this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), Integer.valueOf(CompoundNBT1.getInteger("S")));
             }
         }
     }
@@ -328,7 +328,7 @@ public class MyrmexHive {
     /**
      * Write this village's data to NBT.
      */
-    public void writeVillageDataToNBT(NBTTagCompound compound) {
+    public void writeVillageDataToNBT(CompoundNBT compound) {
         compound.setInteger("PopSize", this.numMyrmex);
         compound.setBoolean("Reproduces", this.reproduces);
         compound.setBoolean("HasOwner", this.hasOwner);
@@ -348,68 +348,68 @@ public class MyrmexHive {
         compound.setInteger("ACZ", this.centerHelper.getZ());
         NBTTagList nbttaglist = new NBTTagList();
         for (VillageDoorInfo villagedoorinfo : this.villageDoorInfoList) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", villagedoorinfo.getDoorBlockPos().getX());
-            nbttagcompound.setInteger("Y", villagedoorinfo.getDoorBlockPos().getY());
-            nbttagcompound.setInteger("Z", villagedoorinfo.getDoorBlockPos().getZ());
-            nbttagcompound.setInteger("IDX", villagedoorinfo.getInsideOffsetX());
-            nbttagcompound.setInteger("IDZ", villagedoorinfo.getInsideOffsetZ());
-            nbttagcompound.setInteger("TS", villagedoorinfo.getLastActivityTimestamp());
-            nbttaglist.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", villagedoorinfo.getDoorBlockPos().getX());
+            CompoundNBT.setInteger("Y", villagedoorinfo.getDoorBlockPos().getY());
+            CompoundNBT.setInteger("Z", villagedoorinfo.getDoorBlockPos().getZ());
+            CompoundNBT.setInteger("IDX", villagedoorinfo.getInsideOffsetX());
+            CompoundNBT.setInteger("IDZ", villagedoorinfo.getInsideOffsetZ());
+            CompoundNBT.setInteger("TS", villagedoorinfo.getLastActivityTimestamp());
+            nbttaglist.appendTag(CompoundNBT);
         }
         NBTTagList hiveMembers = new NBTTagList();
         for (UUID memberUUID : this.myrmexList) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setUniqueId("MyrmexUUID", memberUUID);
-            hiveMembers.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setUniqueId("MyrmexUUID", memberUUID);
+            hiveMembers.appendTag(CompoundNBT);
         }
         compound.setTag("HiveMembers", hiveMembers);
         NBTTagList foodRoomList = new NBTTagList();
         for (BlockPos pos : this.foodRooms) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", pos.getX());
-            nbttagcompound.setInteger("Y", pos.getY());
-            nbttagcompound.setInteger("Z", pos.getZ());
-            foodRoomList.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", pos.getX());
+            CompoundNBT.setInteger("Y", pos.getY());
+            CompoundNBT.setInteger("Z", pos.getZ());
+            foodRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("FoodRooms", foodRoomList);
         NBTTagList babyRoomList = new NBTTagList();
         for (BlockPos pos : this.babyRooms) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", pos.getX());
-            nbttagcompound.setInteger("Y", pos.getY());
-            nbttagcompound.setInteger("Z", pos.getZ());
-            babyRoomList.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", pos.getX());
+            CompoundNBT.setInteger("Y", pos.getY());
+            CompoundNBT.setInteger("Z", pos.getZ());
+            babyRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("BabyRooms", babyRoomList);
         NBTTagList miscRoomList = new NBTTagList();
         for (BlockPos pos : this.miscRooms) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", pos.getX());
-            nbttagcompound.setInteger("Y", pos.getY());
-            nbttagcompound.setInteger("Z", pos.getZ());
-            miscRoomList.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", pos.getX());
+            CompoundNBT.setInteger("Y", pos.getY());
+            CompoundNBT.setInteger("Z", pos.getZ());
+            miscRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("MiscRooms", miscRoomList);
         NBTTagList entrancesList = new NBTTagList();
         for (Map.Entry<BlockPos, EnumFacing> entry : this.entrances.entrySet()) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", entry.getKey().getX());
-            nbttagcompound.setInteger("Y", entry.getKey().getY());
-            nbttagcompound.setInteger("Z", entry.getKey().getZ());
-            nbttagcompound.setInteger("Facing", entry.get().getHorizontalIndex());
-            entrancesList.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", entry.getKey().getX());
+            CompoundNBT.setInteger("Y", entry.getKey().getY());
+            CompoundNBT.setInteger("Z", entry.getKey().getZ());
+            CompoundNBT.setInteger("Facing", entry.get().getHorizontalIndex());
+            entrancesList.appendTag(CompoundNBT);
         }
         compound.setTag("Entrances", entrancesList);
 
         NBTTagList entranceBottomsList = new NBTTagList();
         for (Map.Entry<BlockPos, EnumFacing> entry : this.entranceBottoms.entrySet()) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setInteger("X", entry.getKey().getX());
-            nbttagcompound.setInteger("Y", entry.getKey().getY());
-            nbttagcompound.setInteger("Z", entry.getKey().getZ());
-            nbttagcompound.setInteger("Facing", entry.get().getHorizontalIndex());
-            entranceBottomsList.appendTag(nbttagcompound);
+            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundNBT.setInteger("X", entry.getKey().getX());
+            CompoundNBT.setInteger("Y", entry.getKey().getY());
+            CompoundNBT.setInteger("Z", entry.getKey().getZ());
+            CompoundNBT.setInteger("Facing", entry.get().getHorizontalIndex());
+            entranceBottomsList.appendTag(CompoundNBT);
         }
         compound.setTag("EntranceBottoms", entranceBottomsList);
         compound.setUniqueId("HiveUUID", this.hiveUUID);
@@ -417,13 +417,13 @@ public class MyrmexHive {
         NBTTagList nbttaglist1 = new NBTTagList();
 
         for (UUID s : this.playerReputation.keySet()) {
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            CompoundNBT CompoundNBT1 = new CompoundNBT();
 
             try {
                 {
-                    nbttagcompound1.setString("UUID", s.toString());
-                    nbttagcompound1.setInteger("S", this.playerReputation.get(s).intValue());
-                    nbttaglist1.appendTag(nbttagcompound1);
+                    CompoundNBT1.setString("UUID", s.toString());
+                    CompoundNBT1.setInteger("S", this.playerReputation.get(s).intValue());
+                    nbttaglist1.appendTag(CompoundNBT1);
                 }
             } catch (RuntimeException var9) {
             }

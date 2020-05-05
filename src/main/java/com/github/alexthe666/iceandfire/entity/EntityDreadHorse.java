@@ -10,7 +10,7 @@ import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -46,7 +46,7 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         if (this.getCommanderId() == null) {
             compound.setString("CommanderUUID", "");
@@ -56,7 +56,7 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         String s;
         if (compound.hasKey("CommanderUUID", 8)) {

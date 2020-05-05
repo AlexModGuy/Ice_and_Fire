@@ -19,7 +19,7 @@ import java.util.Random;
 public class ItemAmphithereMacuahuitl extends ItemSword {
 
     public ItemAmphithereMacuahuitl() {
-        super(IafItemRegistry.amphithere_sword_tools);
+        super(IafItemRegistry.AMPHITHERE_SWORD_TOOL_MATERIAL);
         this.setTranslationKey("iceandfire.amphithere_macuahuitl");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "amphithere_macuahuitl");

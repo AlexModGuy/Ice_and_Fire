@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +34,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         this.rand = new Random();
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
         compound.setInteger("HouseType", houseType);
         compound.setBoolean("HasPixie", hasPixie);
@@ -49,13 +49,13 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
+        CompoundNBT tag = new CompoundNBT();
         this.writeToNBT(tag);
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }
 
-    public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.writeToNBT(new CompoundNBT());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         }
     }
 
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(CompoundNBT compound) {
         houseType = compound.getInteger("HouseType");
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInteger("PixieType");

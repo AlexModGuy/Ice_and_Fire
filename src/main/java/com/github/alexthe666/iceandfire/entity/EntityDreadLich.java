@@ -11,13 +11,12 @@ import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -111,7 +110,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.lich_staff));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.LICH_STAFF));
     }
 
     @Nullable
@@ -135,14 +134,14 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger("Variant", this.getVariant());
         compound.setInteger("MinionCount", this.getMinionCount());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setVariant(compound.getInteger("Variant"));
         this.setMinionCount(compound.getInteger("MinionCount"));
@@ -208,7 +207,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             this.tasks.removeTask(this.aiAttackOnCollide);
             this.tasks.removeTask(this.aiArrowAttack);
             ItemStack itemstack = this.getHeldItemMainhand();
-            if (itemstack.getItem() == IafItemRegistry.lich_staff) {
+            if (itemstack.getItem() == IafItemRegistry.LICH_STAFF) {
                 int i = 100;
                 this.aiArrowAttack.setAttackCooldown(i);
                 this.tasks.addTask(4, this.aiArrowAttack);

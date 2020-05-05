@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -17,10 +18,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemHippogryphSword extends ItemSword {
+public class ItemHippogryphSword extends SwordItem {
 
     public ItemHippogryphSword() {
-        super(IafItemRegistry.hippogryph_sword_tools);
+        super(IafItemRegistry.HIPPOGRYPH_SWORD_TOOL_MATERIAL);
         this.setTranslationKey("iceandfire.hippogryph_sword");
         this.setCreativeTab(IceAndFire.TAB_ITEMS);
         this.setRegistryName(IceAndFire.MODID, "hippogryph_sword");

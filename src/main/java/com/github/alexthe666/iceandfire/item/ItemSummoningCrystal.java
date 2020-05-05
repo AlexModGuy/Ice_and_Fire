@@ -12,7 +12,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -50,13 +49,13 @@ public class ItemSummoningCrystal extends Item {
 
     @Override
     public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-        itemStack.setTagCompound(new NBTTagCompound());
+        itemStack.setTagCompound(new CompoundNBT());
     }
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
         if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
+            stack.setTagCompound(new CompoundNBT());
         }
     }
 
@@ -68,11 +67,11 @@ public class ItemSummoningCrystal extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 
         boolean flag = false;
-        boolean ice = stack.getItem() == IafItemRegistry.summoning_crystal_ice;
+        boolean ice = stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_ICE;
         if (stack.getTagCompound() != null) {
             for (String tagInfo : stack.getTagCompound().getKeySet()) {
                 if (tagInfo.contains("Dragon")) {
-                    NBTTagCompound draginTag = stack.getTagCompound().getCompoundTag(tagInfo);
+                    CompoundNBT draginTag = stack.getTagCompound().getCompoundTag(tagInfo);
                     String dragonName = I18n.format(ice ?  "entity.icedragon.name" : "entity.firedragon.name");
                     if (!draginTag.getString("CustomName").isEmpty()) {
                         dragonName = draginTag.getString("CustomName");
@@ -102,7 +101,7 @@ public class ItemSummoningCrystal extends Item {
                 for (String tagInfo : stack.getTagCompound().getKeySet()) {
                     if (tagInfo.contains("Dragon")) {
                         dragonCount++;
-                        NBTTagCompound dragonTag = stack.getTagCompound().getCompoundTag(tagInfo);
+                        CompoundNBT dragonTag = stack.getTagCompound().getCompoundTag(tagInfo);
                         UUID id = dragonTag.getUniqueId("DragonUUID");
                         if(id != null){
                             if(!worldIn.isRemote){
@@ -169,7 +168,7 @@ public class ItemSummoningCrystal extends Item {
                 player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1, 1);
                 player.swingArm(hand);
                 player.sendStatusMessage(new TextComponentTranslation("message.iceandfire.dragonTeleport"), true);
-                stack.setTagCompound(new NBTTagCompound());
+                stack.setTagCompound(new CompoundNBT());
             }else if(displayError){
                 player.sendStatusMessage(new TextComponentTranslation("message.iceandfire.noDragonTeleport"), true);
 
