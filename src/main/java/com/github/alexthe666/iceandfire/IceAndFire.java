@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class IceAndFire {
     public static final Logger LOGGER = (Logger)LogManager.getLogger();
-    public static final String MODID = "rats";
+    public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {

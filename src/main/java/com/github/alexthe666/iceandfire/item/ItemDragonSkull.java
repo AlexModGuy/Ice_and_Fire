@@ -24,17 +24,17 @@ import java.util.List;
 
 public class ItemDragonSkull extends Item implements ICustomRendered {
 
-    public ItemDragonSkull() {
-        this.maxStackSize = 1;
-        this.setHasSubtypes(true);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.dragon_skull");
-        this.setRegistryName(IceAndFire.MODID, "dragon_skull");
+    private int dragonType;
+
+    public ItemDragonSkull(int dragonType) {
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        this.dragonType = dragonType;
+        this.setRegistryName(IceAndFire.MODID, "dragon_skull_" + dragonType);
     }
 
     @Override
     public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
-        itemStack.setTagCompound(new CompoundNBT());
+        itemStack.setTag(new CompoundNBT());
     }
 
     @Override
