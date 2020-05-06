@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.IMob;
@@ -64,8 +64,8 @@ public class EntityDreadLichSkull extends EntityArrow {
     public void onUpdate() {
         float sqrt = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
         boolean flag = true;
-        if(this.shootingEntity != null && this.shootingEntity instanceof EntityLiving && ((EntityLiving) this.shootingEntity).getAttackTarget() != null){
-            LivingEntity target = ((EntityLiving) this.shootingEntity).getAttackTarget();
+        if(this.shootingEntity != null && this.shootingEntity instanceof LivingEntity && ((LivingEntity) this.shootingEntity).getAttackTarget() != null){
+            LivingEntity target = ((LivingEntity) this.shootingEntity).getAttackTarget();
             double minusX = target.posX - this.posX;
             double minusY = target.posY - this.posY;
             double minusZ = target.posZ - this.posZ;

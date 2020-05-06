@@ -1409,7 +1409,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setGender(this.getRNG().nextBoolean());
         int age = this.getRNG().nextInt(80) + 1;

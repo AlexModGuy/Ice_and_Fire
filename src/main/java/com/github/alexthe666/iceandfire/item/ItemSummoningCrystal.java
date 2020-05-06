@@ -59,7 +59,7 @@ public class ItemSummoningCrystal extends Item {
         }
     }
 
-    public ItemStack onItemUseFinish(World worldIn, LivingEntity entityLiving) {
+    public ItemStack onItemUseFinish(World worldIn, LivingEntity LivingEntity) {
         return new ItemStack(this);
     }
 

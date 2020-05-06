@@ -70,11 +70,11 @@ public class ItemDeathwormGauntlet extends Item {
         }
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscEntityProperties.class);
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, MiscEntityProperties.class);
         if (properties != null && properties.specialWeaponDmg > 0) {
-            stack.damageItem(properties.specialWeaponDmg, entityLiving, (p_219999_1_) -> {
-                p_219999_1_.sendBreakAnimation(entityLiving.getActiveHand());
+            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (p_219999_1_) -> {
+                p_219999_1_.sendBreakAnimation(LivingEntity.getActiveHand());
             });
             properties.specialWeaponDmg = 0;
         }
@@ -116,16 +116,16 @@ public class ItemDeathwormGauntlet extends Item {
                         PlayerEntity player = (PlayerEntity) entity;
                         Vec3d vec3d = player.getLook(1.0F).normalize();
                         double range = 5;
-                        for (LivingEntity entityliving : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
-                            Vec3d vec3d1 = new Vec3d(entityliving.getPosX() - player.getPosX(), entityliving.getPosY() - player.getPosY(), entityliving.getPosZ() - player.getPosZ());
+                        for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
+                            Vec3d vec3d1 = new Vec3d(LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosY() - player.getPosY(), LivingEntity.getPosZ() - player.getPosZ());
                             double d0 = vec3d1.length();
                             vec3d1 = vec3d1.normalize();
                             double d1 = vec3d.dotProduct(vec3d1);
-                            boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(entityliving);
+                            boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(LivingEntity);
                             if (canSee) {
                                 properties.specialWeaponDmg++;
-                                entityliving.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
-                                entityliving.knockBack(entityliving, 0.5F, entityliving.getPosX() - player.getPosX(), entityliving.getPosZ() - player.getPosZ());
+                                LivingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
+                                LivingEntity.knockBack(LivingEntity, 0.5F, LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosZ() - player.getPosZ());
                             }
                         }
                     }

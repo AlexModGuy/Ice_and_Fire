@@ -73,9 +73,9 @@ public class PathNavigateDeathWormLand extends PathNavigate {
     }
 
     /**
-     * Returns the path to the given EntityLiving. Args : entity
+     * Returns the path to the given LivingEntity. Args : entity
      */
-    public Path getPathToEntityLiving(Entity entityIn) {
+    public Path getPathToLivingEntity(Entity entityIn) {
         return this.getPathToPos(new BlockPos(entityIn));
     }
 

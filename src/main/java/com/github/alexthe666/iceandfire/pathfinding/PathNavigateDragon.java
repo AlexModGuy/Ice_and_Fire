@@ -16,9 +16,9 @@ public class PathNavigateDragon extends PathNavigateGround {
     public BlockPos targetPosition;
     private EntityDragonBase dragon;
 
-    public PathNavigateDragon(EntityDragonBase entitylivingIn, World worldIn) {
-        super(entitylivingIn, worldIn);
-        this.dragon = entitylivingIn;
+    public PathNavigateDragon(EntityDragonBase LivingEntityIn, World worldIn) {
+        super(LivingEntityIn, worldIn);
+        this.dragon = LivingEntityIn;
     }
 
     protected PathFinder getPathFinder() {
@@ -33,13 +33,13 @@ public class PathNavigateDragon extends PathNavigateGround {
         return super.getPathToPos(pos);
     }
 
-    public Path getPathToEntityLiving(Entity entityIn) {
+    public Path getPathToLivingEntity(Entity entityIn) {
         this.targetPosition = new BlockPos(entityIn);
-        return super.getPathToEntityLiving(entityIn);
+        return super.getPathToLivingEntity(entityIn);
     }
 
-    public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
-        Path path = this.getPathToEntityLiving(entityIn);
+    public boolean tryMoveToLivingEntity(Entity entityIn, double speedIn) {
+        Path path = this.getPathToLivingEntity(entityIn);
         if (path != null) {
             return this.setPath(path, speedIn);
         } else {

@@ -348,7 +348,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setVariant(this.getRNG().nextInt(3));
         float size = 0.25F + (float) (Math.random() * 0.35F);
@@ -543,7 +543,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         this.setHealth((float) this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
     }
 
-    public void onKillEntity(LivingEntity entityLivingIn) {
+    public void onKillEntity(LivingEntity LivingEntityIn) {
         if (this.isTamed()) {
             this.heal(14);
         }

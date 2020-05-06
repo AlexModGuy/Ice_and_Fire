@@ -153,7 +153,7 @@ public class ServerEvents {
 
     public static boolean isAnimaniaChicken(Entity entity) {
         String className = entity.getClass().getName();
-        return (className.contains("chicken") || entity instanceof EntityChicken) && entity instanceof EntityLiving && !entity.isCreatureType(EnumCreatureType.MONSTER, false);
+        return (className.contains("chicken") || entity instanceof EntityChicken) && entity instanceof LivingEntity && !entity.isCreatureType(EnumCreatureType.MONSTER, false);
     }
 
     public static boolean isAnimaniaFerret(Entity entity) {
@@ -216,8 +216,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityFall(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity) {
-            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
+        if (event.getLivingEntity() instanceof PlayerEntity) {
+            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), MiscEntityProperties.class);
             if (properties.hasDismountedDragon) {
                 event.setDamageMultiplier(0);
                 properties.hasDismountedDragon = false;
@@ -264,32 +264,32 @@ public class ServerEvents {
     public void onEntityDamage(LivingHurtEvent event) {
         if (event.getSource().isProjectile()) {
             float multi = 1;
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.1;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.3;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.2;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.1;
             }
             event.setAmount(event.getAmount() * multi);
         }
         if (event.getSource() == IceAndFire.dragonFire || event.getSource() == IceAndFire.dragonIce) {
             float multi = 1;
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.1;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.3;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.2;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.1;
             }
             event.setAmount(event.getAmount() * multi);
@@ -298,13 +298,13 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
-        if (event.getEntityLiving() instanceof EntityWitherSkeleton) {
+        if (event.getLivingEntity() instanceof EntityWitherSkeleton) {
             event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ,
-                    new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRNG().nextInt(2))));
+                    new ItemStack(IafItemRegistry.WITHERBONE, event.getLivingEntity().getRNG().nextInt(2))));
         }
 
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+        if (event.getLivingEntity() instanceof LivingEntity) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);
             }
@@ -314,8 +314,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDespawn(LivingSpawnEvent.AllowDespawn event) {
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+        if (event.getLivingEntity() instanceof LivingEntity) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setResult(Event.Result.DENY);
             }
@@ -330,11 +330,11 @@ public class ServerEvents {
             if (properties != null && properties.inLoveTicks > 0) {
                 event.setCanceled(true);
             }
-            if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof LivingEntity) {
-                signalChickenAlarm(event.getEntityLiving(), (LivingEntity) attacker);
+            if (isAnimaniaChicken(event.getLivingEntity()) && attacker instanceof LivingEntity) {
+                signalChickenAlarm(event.getLivingEntity(), (LivingEntity) attacker);
             }
-            if (DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof LivingEntity) {
-                signalAmphithereAlarm(event.getEntityLiving(), (LivingEntity) attacker);
+            if (DragonUtils.isVillager(event.getLivingEntity()) && attacker instanceof LivingEntity) {
+                signalAmphithereAlarm(event.getLivingEntity(), (LivingEntity) attacker);
             }
 
         }
@@ -344,7 +344,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
         if (event.getTarget() != null) {
-            LivingEntity attacker = event.getEntityLiving();
+            LivingEntity attacker = event.getLivingEntity();
             if (isAnimaniaChicken(event.getTarget())) {
                 signalChickenAlarm(event.getTarget(), attacker);
             }
@@ -373,11 +373,11 @@ public class ServerEvents {
                 }
             }
         }
-        if (event.getTarget() instanceof EntityLiving) {
+        if (event.getTarget() instanceof LivingEntity) {
             boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone || stonePlayer) {
-                ((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
+                ((LivingEntity) event.getTarget()).setHealth(((LivingEntity) event.getTarget()).getMaxHealth());
                 if (event.getPlayerEntity() != null) {
                     ItemStack stack = event.getPlayerEntity().getHeldItemMainhand();
                     if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
@@ -402,13 +402,13 @@ public class ServerEvents {
                                 statuette.setTagCompound(new CompoundNBT());
                                 statuette.getTagCompound().setBoolean("IAFStoneStatuePlayerEntity", stonePlayer);
                                 statuette.getTagCompound().setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
-                                ((EntityLiving) event.getTarget()).writeEntityToNBT(statuette.getTagCompound());
+                                ((LivingEntity) event.getTarget()).writeEntityToNBT(statuette.getTagCompound());
                                 if (!event.getTarget().world.isRemote) {
                                     event.getTarget().entityDropItem(statuette, 1);
                                 }
                             } else {
-                                if (!((EntityLiving) event.getTarget()).world.isRemote) {
-                                    event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
+                                if (!((LivingEntity) event.getTarget()).world.isRemote) {
+                                    event.getTarget().dropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getLivingEntity().getRNG().nextInt(4));
                                 }
                             }
                             event.getTarget().world.removeEntityDangerously(event.getTarget());
@@ -431,8 +431,8 @@ public class ServerEvents {
             }
             chainProperties.clearChained();
         }
-        if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
-            event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
+        if (event.getLivingEntity().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
+            event.getLivingEntity().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
         }
     }
 
@@ -481,8 +481,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
-            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).processInteract((PlayerEntity) event.getEntityLiving(), event.getHand());
+        if (event.getLivingEntity() instanceof PlayerEntity && event.getLivingEntity().rotationPitch > 87 && event.getLivingEntity().getRidingEntity() != null && event.getLivingEntity().getRidingEntity() instanceof EntityDragonBase) {
+            ((EntityDragonBase) event.getLivingEntity().getRidingEntity()).processInteract((PlayerEntity) event.getLivingEntity(), event.getHand());
         }
     }
 
@@ -493,44 +493,44 @@ public class ServerEvents {
             if (chainProperties.wasJustDisconnected) {
                 chainProperties.wasJustDisconnected = false;
             }
-            if (!event.getEntityLiving().world.isRemote) {
-                chainProperties.updateConnectedEntities(event.getEntityLiving());
+            if (!event.getLivingEntity().world.isRemote) {
+                chainProperties.updateConnectedEntities(event.getLivingEntity());
                 for (Entity chainer : chainProperties.connectedEntities) {
-                    float f = event.getEntityLiving().getDistance(chainer);
+                    float f = event.getLivingEntity().getDistance(chainer);
                     if (f > 7) {
-                        double d0 = (chainer.posX - event.getEntityLiving().posX) / (double) f;
-                        double d1 = (chainer.posY - event.getEntityLiving().posY) / (double) f;
-                        double d2 = (chainer.posZ - event.getEntityLiving().posZ) / (double) f;
-                        event.getEntityLiving().motionX += d0 * Math.abs(d0) * 0.4D;
-                        event.getEntityLiving().motionY += d1 * Math.abs(d1) * 0.2D;
-                        event.getEntityLiving().motionZ += d2 * Math.abs(d2) * 0.4D;
+                        double d0 = (chainer.posX - event.getLivingEntity().posX) / (double) f;
+                        double d1 = (chainer.posY - event.getLivingEntity().posY) / (double) f;
+                        double d2 = (chainer.posZ - event.getLivingEntity().posZ) / (double) f;
+                        event.getLivingEntity().motionX += d0 * Math.abs(d0) * 0.4D;
+                        event.getLivingEntity().motionY += d1 * Math.abs(d1) * 0.2D;
+                        event.getLivingEntity().motionZ += d2 * Math.abs(d2) * 0.4D;
                     }
                 }
             }
         }
-        if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
-            event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 50, 0, false, false));
-            if (event.getEntityLiving().isWet()) {
-                int headMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int chestMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int legMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int footMod = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
+        if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
+            event.getLivingEntity().addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 50, 0, false, false));
+            if (event.getLivingEntity().isWet()) {
+                int headMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int chestMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int legMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int footMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                event.getLivingEntity().addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
 
 
             }
         }
-        if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof EntityAnimal) {
-            ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
+        if (IafConfig.chickensLayRottenEggs && !event.getLivingEntity().world.isRemote && isAnimaniaChicken(event.getLivingEntity()) && !event.getLivingEntity().isChild() && event.getLivingEntity() instanceof EntityAnimal) {
+            ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), ChickenEntityProperties.class);
             if (chickenProps != null) {
                 if (chickenProps.timeUntilNextEgg < 0) {
                     chickenProps.timeUntilNextEgg = 0;
                 }
                 if (chickenProps.timeUntilNextEgg == 0) {
-                    if (event.getEntityLiving().getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
-                        event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().dropItem(IafItemRegistry.ROTTEN_EGG, 1);
+                    if (event.getLivingEntity().getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && event.getLivingEntity().ticksExisted > 30) {
+                        event.getLivingEntity().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+                        event.getLivingEntity().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+                        event.getLivingEntity().dropItem(IafItemRegistry.ROTTEN_EGG, 1);
                     }
                     chickenProps.timeUntilNextEgg = chickenProps.generateTime();
                 } else if (chickenProps.timeUntilNextEgg > 0) {
@@ -539,18 +539,18 @@ public class ServerEvents {
             }
 
         }
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), FrozenEntityProperties.class);
+        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), FrozenEntityProperties.class);
         if (frozenProps != null) {
             boolean prevFrozen = frozenProps.isFrozen;
-            if (event.getEntityLiving() instanceof EntityIceDragon) {
+            if (event.getLivingEntity() instanceof EntityIceDragon) {
                 frozenProps.isFrozen = false;
             }
-            if (!event.getEntityLiving().world.isRemote) {
-                if (frozenProps.isFrozen && event.getEntityLiving().isBurning()) {
+            if (!event.getLivingEntity().world.isRemote) {
+                if (frozenProps.isFrozen && event.getLivingEntity().isBurning()) {
                     frozenProps.isFrozen = false;
-                    event.getEntityLiving().extinguish();
+                    event.getLivingEntity().extinguish();
                 }
-                if (event.getEntityLiving().deathTime > 0) {
+                if (event.getLivingEntity().deathTime > 0) {
                     frozenProps.isFrozen = false;
                 }
                 if (frozenProps.ticksUntilUnfrozen > 0) {
@@ -560,31 +560,31 @@ public class ServerEvents {
                     frozenProps.isFrozen = false;
                 }
             }
-            if (frozenProps.isFrozen && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
-                event.getEntityLiving().motionX *= 0.25;
-                event.getEntityLiving().motionZ *= 0.25;
-                if (!(event.getEntityLiving() instanceof EntityDragon) && !event.getEntityLiving().onGround) {
-                    event.getEntityLiving().motionY -= 0.2D;
+            if (frozenProps.isFrozen && !(event.getLivingEntity() instanceof PlayerEntity && ((PlayerEntity) event.getLivingEntity()).isCreative())) {
+                event.getLivingEntity().motionX *= 0.25;
+                event.getLivingEntity().motionZ *= 0.25;
+                if (!(event.getLivingEntity() instanceof EntityDragon) && !event.getLivingEntity().onGround) {
+                    event.getLivingEntity().motionY -= 0.2D;
                 }
             }
             if (prevFrozen != frozenProps.isFrozen) {
                 if (frozenProps.isFrozen) {
-                    event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
+                    event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getEntityLiving().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), event.getEntityLiving().posY + ((rand.nextDouble()) * event.getEntityLiving().height), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
+                        event.getLivingEntity().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), event.getLivingEntity().posY + ((rand.nextDouble()) * event.getLivingEntity().height), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
                     }
-                    event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
+                    event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
             }
         }
 
-        if (event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof EntityVillager || event.getEntityLiving() instanceof IHearsSiren) {
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
+        if (event.getLivingEntity() instanceof PlayerEntity || event.getLivingEntity() instanceof EntityVillager || event.getLivingEntity() instanceof IHearsSiren) {
+            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), SirenEntityProperties.class);
             if (sirenProps != null && sirenProps.sirenID != 0) {
-                EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
+                EntitySiren closestSiren = sirenProps.getSiren(event.getLivingEntity().world);
                 if (closestSiren != null && closestSiren.isActuallySinging()) {
-                    if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IafConfig.sirenMaxSingTime) {
+                    if (EntitySiren.isWearingEarplugs(event.getLivingEntity()) || sirenProps.singTime > IafConfig.sirenMaxSingTime) {
                         sirenProps.isCharmed = false;
                         sirenProps.sirenID = 0;
                         sirenProps.singTime = 0;
@@ -594,13 +594,13 @@ public class ServerEvents {
                         sirenProps.singTime++;
                         if (rand.nextInt(7) == 0) {
                             for (int i = 0; i < 5; i++) {
-                                event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                                event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posY + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                             }
                         }
-                        LivingEntity entity = event.getEntityLiving();
+                        LivingEntity entity = event.getLivingEntity();
                         if (entity.collidedHorizontally) {
-                            if (entity instanceof EntityLiving) {
-                                ((EntityLiving) entity).getJumpHelper().setJumping();
+                            if (entity instanceof LivingEntity) {
+                                ((LivingEntity) entity).getJumpHelper().setJumping();
                             } else if (entity.onGround) {
                                 entity.motionY = 0.42F;
                             }
@@ -632,7 +632,7 @@ public class ServerEvents {
                             closestSiren.setAggressive(true);
                             closestSiren.triggerOtherSirens(entity);
                         }
-                        if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
+                        if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getLivingEntity().world) == null || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
                             sirenProps.isCharmed = false;
                             sirenProps.sirenID = 0;
                             sirenProps.singTime = 0;
@@ -642,11 +642,11 @@ public class ServerEvents {
             }
         }
 
-        if (event.getEntityLiving() instanceof EntityLiving) {
-            boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
+        if (event.getLivingEntity() instanceof LivingEntity) {
+            boolean stonePlayer = event.getLivingEntity() instanceof EntityStoneStatue;
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), StoneEntityProperties.class);
             if (properties != null && properties.isStone || stonePlayer) {
-                EntityLiving living = ((EntityLiving) event.getEntityLiving());
+                LivingEntity living = ((LivingEntity) event.getLivingEntity());
                 if (!living.getPassengers().isEmpty()) {
                     for (Entity e : living.getPassengers()) {
                         e.dismountRidingEntity();
@@ -678,15 +678,15 @@ public class ServerEvents {
                 }
             }
         }
-        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), MiscEntityProperties.class);
         if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {
             Iterator<Entity> itr = properties.entitiesWeAreGlaringAt.iterator();
             while (itr.hasNext()) {
                 Entity next = itr.next();
                 double d5 = 80F;
-                double d0 = next.posX - event.getEntityLiving().posX;
-                double d1 = next.posY + (double) (next.height * 0.5F) - (event.getEntityLiving().posY + (double) event.getEntityLiving().getEyeHeight() * 0.5D);
-                double d2 = next.posZ - event.getEntityLiving().posZ;
+                double d0 = next.posX - event.getLivingEntity().posX;
+                double d1 = next.posY + (double) (next.height * 0.5F) - (event.getLivingEntity().posY + (double) event.getLivingEntity().getEyeHeight() * 0.5D);
+                double d2 = next.posZ - event.getLivingEntity().posZ;
                 double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                 d0 = d0 / d3;
                 d1 = d1 / d3;
@@ -694,10 +694,10 @@ public class ServerEvents {
                 double d4 = this.rand.nextDouble();
                 while (d4 < d3) {
                     d4 += 1.0D;
-                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getEntityLiving().posX + d0 * d4, event.getEntityLiving().posY + d1 * d4 + (double) event.getEntityLiving().getEyeHeight() * 0.5D, event.getEntityLiving().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
+                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getLivingEntity().posX + d0 * d4, event.getLivingEntity().posY + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
                 ((LivingEntity) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
-                if (event.getEntityLiving().ticksExisted % 20 == 0) {
+                if (event.getLivingEntity().ticksExisted % 20 == 0) {
                     properties.specialWeaponDmg++;
                     next.attackEntityFrom(DamageSource.WITHER, 2);
                 }
@@ -710,9 +710,9 @@ public class ServerEvents {
             Iterator<Entity> itr = properties.glarers.iterator();
             while (itr.hasNext()) {
                 Entity next = itr.next();
-                if (next instanceof LivingEntity && !EntityGorgon.isEntityLookingAt((LivingEntity) next, event.getEntityLiving(), 0.2F)) {
+                if (next instanceof LivingEntity && !EntityGorgon.isEntityLookingAt((LivingEntity) next, event.getLivingEntity(), 0.2F)) {
                     MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(next, MiscEntityProperties.class);
-                    theirProperties.entitiesWeAreGlaringAt.remove(event.getEntityLiving());
+                    theirProperties.entitiesWeAreGlaringAt.remove(event.getLivingEntity());
                     itr.remove();
 
                 }
@@ -720,12 +720,12 @@ public class ServerEvents {
         }
         if (properties != null && properties.inLoveTicks > 0) {
             properties.inLoveTicks--;
-            if (event.getEntityLiving() instanceof EntityLiving) {
-                ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+            if (event.getLivingEntity() instanceof LivingEntity) {
+                ((LivingEntity) event.getLivingEntity()).setAttackTarget(null);
             }
             if (rand.nextInt(7) == 0) {
                 for (int i = 0; i < 5; i++) {
-                    event.getEntityLiving().world.spawnParticle(EnumParticleTypes.HEART, event.getEntityLiving().posX + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posY + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posY + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                 }
             }
         }
@@ -733,7 +733,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (event.getTarget() instanceof EntityLiving) {
+        if (event.getTarget() instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);
@@ -754,7 +754,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getTarget() instanceof EntityLiving) {
+        if (event.getTarget() instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
             if (properties != null && properties.isStone) {
                 event.setCanceled(true);

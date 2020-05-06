@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -215,8 +215,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(3, new MyrmexAIAttackPlayers(this));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
-            public boolean apply(@Nullable EntityLiving entity) {
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity) && DragonUtils.isAlive(entity);
             }
         }));

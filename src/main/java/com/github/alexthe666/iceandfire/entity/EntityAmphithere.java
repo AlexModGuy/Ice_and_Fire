@@ -880,7 +880,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setVariant(this.getRNG().nextInt(5));
         return livingdata;

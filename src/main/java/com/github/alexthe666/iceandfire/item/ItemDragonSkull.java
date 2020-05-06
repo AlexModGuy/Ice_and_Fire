@@ -1,24 +1,22 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -38,70 +36,52 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            items.add(new ItemStack(this, 1, 0));
-            items.add(new ItemStack(this, 1, 1));
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (stack.getTag() == null) {
+            stack.setTag(new CompoundNBT());
+            stack.getTag().putInt("Stage", 4);
+            stack.getTag().putInt("DragonAge", 75);
         }
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new CompoundNBT());
-            stack.getTagCompound().setInteger("Stage", 4);
-            stack.getTagCompound().setInteger("DragonAge", 75);
-
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        String iceorfire = dragonType == 0 ? "dragon.fire" : "dragon.ice";
+        tooltip.add(new TranslationTextComponent(iceorfire).applyTextStyle(TextFormatting.GRAY));
+        if (stack.getTag() != null) {
+            tooltip.add(new TranslationTextComponent("dragon.stage").appendSibling(new StringTextComponent("" + stack.getTag().getInt("Stage"))));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
-        tooltip.add(StatCollector.translateToLocal(iceorfire));
-        if (stack.getTagCompound() != null) {
-            tooltip.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
-        }
-    }
-
-    @Override
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType onItemUse(ItemUseContext context) {
+        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
         /*
          * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
          * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
          * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
          */
-        if (stack.getTagCompound() != null) {
-            EntityDragonSkull skull = new EntityDragonSkull(worldIn);
-            skull.setType(stack.getMetadata());
-            skull.setStage(stack.getTagCompound().getInteger("Stage"));
-            skull.setDragonAge(stack.getTagCompound().getInteger("DragonAge"));
-            BlockPos offset = pos.offset(side, 1);
+        if (stack.getTag() != null) {
+            EntityDragonSkull skull = new EntityDragonSkull(context.getWorld());
+            skull.setType(dragonType);
+            skull.setStage(stack.getTag().getInt("Stage"));
+            skull.setDragonAge(stack.getTag().getInt("DragonAge"));
+            BlockPos offset = context.getPos().offset(context.getFace(), 1);
             skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
-            float yaw = player.rotationYaw;
-            if (side != EnumFacing.UP) {
-                yaw = player.getHorizontalFacing().getHorizontalAngle();
+            float yaw = context.getPlayer().rotationYaw;
+            if (context.getFace() != Direction.UP) {
+                yaw = context.getPlayer().getHorizontalFacing().getHorizontalAngle();
             }
             skull.setYaw(yaw);
 
-            if (!worldIn.isRemote) {
-                worldIn.spawnEntity(skull);
+            if (!context.getWorld().isRemote) {
+                context.getWorld().addEntity(skull);
             }
-            if (!player.capabilities.isCreativeMode) {
+            if (!context.getPlayer().isCreative()) {
                 stack.shrink(1);
             }
         }
-        return EnumActionResult.SUCCESS;
+        return ActionResultType.SUCCESS;
 
     }
-
-    /*
-     * @Override public ModelResourceLocation getModel(ItemStack stack,
-     * PlayerEntity player, int useRemaining) { switch(stack.getMetadata()){
-     * default: return new ModelResourceLocation("iceandfire:dragon_skull_fire",
-     * "inventory"); case 1: return new
-     * ModelResourceLocation("iceandfire:dragon_skull_ice", "inventory"); } }
-     */
 }

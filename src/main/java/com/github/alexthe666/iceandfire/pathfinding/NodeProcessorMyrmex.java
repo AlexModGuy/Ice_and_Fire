@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
@@ -21,7 +21,7 @@ import java.util.Set;
 public class NodeProcessorMyrmex extends NodeProcessor {
     protected float avoidsWater;
 
-    public void init(IBlockAccess sourceIn, EntityLiving mob) {
+    public void init(IBlockAccess sourceIn, LivingEntity mob) {
         super.init(sourceIn, mob);
         this.avoidsWater = mob.getPathPriority(PathNodeType.WATER);
     }
@@ -240,10 +240,10 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         }
     }
 
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, LivingEntity LivingEntityIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
         EnumSet<PathNodeType> enumset = EnumSet.noneOf(PathNodeType.class);
         PathNodeType pathnodetype = PathNodeType.BLOCKED;
-        BlockPos blockpos = new BlockPos(entitylivingIn);
+        BlockPos blockpos = new BlockPos(LivingEntityIn);
         pathnodetype = this.getPathNodeType(blockaccessIn, x, y, z, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn, enumset, pathnodetype, blockpos);
 
         if (enumset.contains(PathNodeType.FENCE)) {
@@ -252,16 +252,16 @@ public class NodeProcessorMyrmex extends NodeProcessor {
             PathNodeType pathnodetype1 = PathNodeType.BLOCKED;
 
             for (PathNodeType pathnodetype2 : enumset) {
-                if (entitylivingIn.getPathPriority(pathnodetype2) < 0.0F) {
+                if (LivingEntityIn.getPathPriority(pathnodetype2) < 0.0F) {
                     return pathnodetype2;
                 }
 
-                if (entitylivingIn.getPathPriority(pathnodetype2) >= entitylivingIn.getPathPriority(pathnodetype1)) {
+                if (LivingEntityIn.getPathPriority(pathnodetype2) >= LivingEntityIn.getPathPriority(pathnodetype1)) {
                     pathnodetype1 = pathnodetype2;
                 }
             }
 
-            if (pathnodetype == PathNodeType.OPEN && entitylivingIn.getPathPriority(pathnodetype1) == 0.0F) {
+            if (pathnodetype == PathNodeType.OPEN && LivingEntityIn.getPathPriority(pathnodetype1) == 0.0F) {
                 return PathNodeType.OPEN;
             } else {
                 return pathnodetype1;
@@ -302,12 +302,12 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         return p_193577_11_;
     }
 
-    private PathNodeType getPathNodeType(EntityLiving entitylivingIn, BlockPos pos) {
-        return this.getPathNodeType(entitylivingIn, pos.getX(), pos.getY(), pos.getZ());
+    private PathNodeType getPathNodeType(LivingEntity LivingEntityIn, BlockPos pos) {
+        return this.getPathNodeType(LivingEntityIn, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    private PathNodeType getPathNodeType(EntityLiving entitylivingIn, int x, int y, int z) {
-        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, 1, 1, 1, this.getCanOpenDoors(), this.getCanEnterDoors());
+    private PathNodeType getPathNodeType(LivingEntity LivingEntityIn, int x, int y, int z) {
+        return this.getPathNodeType(this.blockaccess, x, y, z, LivingEntityIn, 1, 1, 1, this.getCanOpenDoors(), this.getCanEnterDoors());
     }
 
     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {

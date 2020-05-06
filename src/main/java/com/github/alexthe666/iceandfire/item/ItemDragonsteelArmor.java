@@ -1,53 +1,59 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonsteelArmor extends ItemArmor implements IProtectAgainstDragonItem {
+public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem {
 
-    private ArmorMaterial material;
+    private IArmorMaterial material;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot, String gameName, String name) {
-        super(material, renderIndex, slot);
+    public ItemDragonsteelArmor(IArmorMaterial material, int renderIndex, EquipmentSlotType slot, String gameName, String name) {
+        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.material = material;
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey(name);
         this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
+
     @OnlyIn(Dist.CLIENT)
-    public ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
-            return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 11 : 10);
-        } else {
-            return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 13 : 12);
+    @Nullable
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+        int legs = 11;
+        int armor = 10;
+        if(material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL){
+            legs = 13;
+            armor = 12;
         }
+        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? legs : armor);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(I18n.format("item.dragonscales_armor.desc"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").applyTextStyle(TextFormatting.GRAY));
     }
 
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (renderIndex == 2 ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         } else {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (renderIndex == 2 ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         }
     }
 }

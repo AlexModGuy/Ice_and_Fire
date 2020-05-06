@@ -3,8 +3,8 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -105,20 +105,20 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
                         return;
                     }
 
-                    EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
+                    LivingEntity LivingEntity = entity instanceof LivingEntity ? (LivingEntity) entity : null;
                     entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 
-                    if (entityliving == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityliving, getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this)) {
-                        if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && entity instanceof EntityLiving) {
-                            if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(entityliving, this.getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this))
-                                ((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+                    if (LivingEntity == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(LivingEntity, getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this)) {
+                        if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && entity instanceof LivingEntity) {
+                            if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(LivingEntity, this.getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this))
+                                ((LivingEntity) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
                         }
 
                         AnvilChunkLoader.spawnEntity(entity, world);
                         world.playEvent(2004, blockpos, 0);
 
-                        if (entityliving != null) {
-                            entityliving.spawnExplosionParticle();
+                        if (LivingEntity != null) {
+                            LivingEntity.spawnExplosionParticle();
                         }
 
                         flag = true;
@@ -231,8 +231,8 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         if (this.cachedEntity == null) {
             this.cachedEntity = AnvilChunkLoader.readWorldEntity(this.spawnData.getNbt(), this.getSpawnerWorld(), false);
 
-            if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && this.cachedEntity instanceof EntityLiving) {
-                ((EntityLiving) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), null);
+            if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && this.cachedEntity instanceof LivingEntity) {
+                ((LivingEntity) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), null);
             }
         }
 

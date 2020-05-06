@@ -114,8 +114,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
+        ILivingEntityData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
         this.setEquipmentBasedOnDifficulty(difficulty);
         this.setVariant(rand.nextInt(5));
@@ -223,7 +223,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         if (this.getMinionCount() < 5 && minionCooldown == 0) {
             this.setAnimation(ANIMATION_SUMMON);
             this.playSound(IafSoundRegistry.DREAD_LICH_SUMMON, this.getSoundVolume(), this.getSoundPitch());
-            EntityLiving minion = getRandomNewMinion();
+            LivingEntity minion = getRandomNewMinion();
             int x = (int) (this.posX) - 5 + rand.nextInt(10);
             int z = (int) (this.posZ) - 5 + rand.nextInt(10);
             double y = getHeightFromXZ(x, z);
@@ -254,7 +254,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         }
     }
 
-    private EntityLiving getRandomNewMinion() {
+    private LivingEntity getRandomNewMinion() {
         float chance = rand.nextFloat();
         if (chance > 0.5F) {
             return new EntityDreadThrall(world);

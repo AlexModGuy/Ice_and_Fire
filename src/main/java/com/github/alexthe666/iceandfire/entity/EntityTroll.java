@@ -12,7 +12,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityBoat;
@@ -177,7 +177,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setType(EnumTroll.getBiomeType(world.getBiome(this.getPosition())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getType()));

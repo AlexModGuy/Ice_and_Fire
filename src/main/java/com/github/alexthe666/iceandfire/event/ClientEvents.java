@@ -22,7 +22,7 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +60,7 @@ public class ClientEvents {
     public static void initializeStoneLayer() {
         for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getInstance().getRenderManager().entityRenderMap.entrySet()) {
             Render render = entry.get();
-            if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
+            if (render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
                 ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
@@ -94,7 +94,7 @@ public class ClientEvents {
                     if (entry.get() != null) {
                         try {
                             Render render = entry.get().createRenderFor(Minecraft.getInstance().getRenderManager());
-                            if (render != null && render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
+                            if (render != null && render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
                                 LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
                                 LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
                                 ((RenderLivingBase) render).addLayer(stoneLayer);
@@ -111,7 +111,7 @@ public class ClientEvents {
             if (entityRendersOld != null) {
                 for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : entityRendersOld.entrySet()) {
                     Render render = entry.get();
-                    if (render instanceof RenderLivingBase && EntityLiving.class.isAssignableFrom(entry.getKey())) {
+                    if (render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
                         LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
                         LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
                         ((RenderLivingBase) render).addLayer(stoneLayer);
@@ -227,8 +227,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+        if (event.getLivingEntity() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getLivingEntity();
             if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isPressed()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
@@ -239,10 +239,10 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
+            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), SirenEntityProperties.class);
             if (player.world.isRemote && sirenProps != null) {
                 EntityRenderer renderer = Minecraft.getInstance().entityRenderer;
-                EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
+                EntitySiren siren = sirenProps.getSiren(event.getLivingEntity().world);
                 if (siren == null) {
                     sirenProps.isCharmed = false;
                 }

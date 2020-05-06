@@ -41,14 +41,14 @@ public class DragonAIAttackMelee extends EntityAIBase {
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(LivingEntity);
+                    this.entityPathEntity = this.dragon.getNavigator().getPathToLivingEntity(LivingEntity);
                     this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
                     return this.entityPathEntity != null;
                 } else {
                     return true;
                 }
             }
-            this.entityPathEntity = this.dragon.getNavigator().getPathToEntityLiving(LivingEntity);
+            this.entityPathEntity = this.dragon.getNavigator().getPathToLivingEntity(LivingEntity);
             return this.entityPathEntity != null;
         }
     }
@@ -116,7 +116,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
                 } else if (d0 > 256.0D) {
                     this.delayCounter += 5;
                 }
-                if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
+                if (!this.dragon.getNavigator().tryMoveToLivingEntity(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
                     this.delayCounter += 15;
                 }
             }

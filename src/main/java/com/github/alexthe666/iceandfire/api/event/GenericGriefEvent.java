@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.api.event;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
@@ -26,7 +26,7 @@ public class GenericGriefEvent extends LivingEvent {
     private double targetY;
     private double targetZ;
 
-    public GenericGriefEvent(EntityLiving griefer, double targetX, double targetY, double targetZ){
+    public GenericGriefEvent(LivingEntity griefer, double targetX, double targetY, double targetZ){
         super(griefer);
         this.targetX = targetX;
         this.targetY = targetY;

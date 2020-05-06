@@ -6,7 +6,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -229,8 +229,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.targetTasks.addTask(2, new MyrmexAIFindMate(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
-            public boolean apply(@Nullable EntityLiving entity) {
+        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            public boolean apply(@Nullable LivingEntity entity) {
                 if (entity instanceof EntityMyrmexBase && EntityMyrmexRoyal.this.isBreedingSeason() || entity instanceof EntityMyrmexRoyal) {
                     return false;
                 }

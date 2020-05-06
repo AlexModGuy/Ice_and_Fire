@@ -9,7 +9,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -133,8 +133,8 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
+        ILivingEntityData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
         this.setEquipmentBasedOnDifficulty(difficulty);
         return data;

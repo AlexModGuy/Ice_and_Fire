@@ -14,7 +14,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.PlayerEntity;
@@ -220,7 +220,7 @@ public class EntityPixie extends EntityTameable {
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setColor(this.rand.nextInt(5));
         this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);

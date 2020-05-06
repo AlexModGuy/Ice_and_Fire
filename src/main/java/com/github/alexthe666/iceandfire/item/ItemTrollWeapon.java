@@ -44,9 +44,9 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
         return player.getCooledAttackStrength(0) < 0.95 || player.swingProgress != 0;
     }
 
-    public boolean onEntitySwing(LivingEntity entityLiving, ItemStack stack) {
-        if (entityLiving instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entityLiving;
+    public boolean onEntitySwing(LivingEntity LivingEntity, ItemStack stack) {
+        if (LivingEntity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) LivingEntity;
             if (player.getCooledAttackStrength(0) < 1 && player.swingProgress > 0) {
                 return true;
             } else {

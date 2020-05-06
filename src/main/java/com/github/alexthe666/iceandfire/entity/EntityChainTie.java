@@ -5,7 +5,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.BlockWall;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -113,11 +113,11 @@ public class EntityChainTie extends HangingEntity {
     public void setDead() {
         this.isDead = true;
         double d0 = 30D;
-        List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
-        for (EntityLiving entityliving : list) {
-            ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, this)) {
-                chainProperties.removeChain(entityliving, this);
+        List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+        for (LivingEntity LivingEntity : list) {
+            ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
+            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity, this)) {
+                chainProperties.removeChain(LivingEntity, this);
                 EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
@@ -131,13 +131,13 @@ public class EntityChainTie extends HangingEntity {
         } else {
             boolean flag = false;
             double d0 = 30D;
-            List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+            List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
 
-            for (EntityLiving entityliving : list) {
-                ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-                if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, player)) {
-                    chainProperties.addChain(entityliving, this);
-                    chainProperties.removeChain(entityliving, player);
+            for (LivingEntity LivingEntity : list) {
+                ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
+                if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity, player)) {
+                    chainProperties.addChain(LivingEntity, this);
+                    chainProperties.removeChain(LivingEntity, player);
                     flag = true;
                 }
             }
@@ -146,10 +146,10 @@ public class EntityChainTie extends HangingEntity {
                 this.setDead();
 
                 if (player.capabilities.isCreativeMode) {
-                    for (EntityLiving entityliving1 : list) {
-                        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving1, ChainEntityProperties.class);
-                        if (chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving1, this)) {
-                            chainProperties.removeChain(entityliving1, this);
+                    for (LivingEntity LivingEntity1 : list) {
+                        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity1, ChainEntityProperties.class);
+                        if (chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity1, this)) {
+                            chainProperties.removeChain(LivingEntity1, this);
                             EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
                             entityitem.setDefaultPickupDelay();
                             this.world.spawnEntity(entityitem);

@@ -8,7 +8,7 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -150,8 +150,8 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
+        ILivingEntityData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
         this.setVariant(rand.nextInt(2));
         this.setScale(0.85F + rand.nextFloat() * 0.5F);

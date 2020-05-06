@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
@@ -74,8 +74,8 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     }
 
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
+        ILivingEntityData data = super.onInitialSpawn(difficulty, livingdata);
         this.setGrowingAge(24000);
         return data;
     }

@@ -9,7 +9,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -30,7 +30,7 @@ public class LayerStoneEntityCrack implements LayerRenderer {
 
     @Override
     public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (LivingEntityIn instanceof EntityLiving) {
+        if (LivingEntityIn instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntityIn, StoneEntityProperties.class);
             if (properties != null && properties.isStone && properties.breakLvl > 0) {
                 float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4

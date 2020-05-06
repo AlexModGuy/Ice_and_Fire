@@ -23,7 +23,7 @@ public class ItemDeathwormArmor extends ArmorItem {
 
     @OnlyIn(Dist.CLIENT)
     @Nullable
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 5 : 4);
     }
 

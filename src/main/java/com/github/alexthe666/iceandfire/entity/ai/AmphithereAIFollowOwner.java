@@ -111,7 +111,7 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
 
     private boolean tryMoveTo() {
         if (!ampithere.isFlying()) {
-            return ampithere.getNavigator().tryMoveToEntityLiving(this.owner, this.followSpeed);
+            return ampithere.getNavigator().tryMoveToLivingEntity(this.owner, this.followSpeed);
         } else {
             this.ampithere.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight() + 5 + this.ampithere.getRNG().nextInt(8), this.owner.posZ, 0.25D);
             return true;

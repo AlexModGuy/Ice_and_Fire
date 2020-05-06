@@ -31,7 +31,7 @@ public class ItemScaleArmor extends ItemArmor implements IProtectAgainstDragonIt
     }
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.client.model.ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
+    public net.minecraft.client.model.ModelBiped getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
         return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (renderIndex == 2 ? 1 : 0) : (renderIndex == 2 ? 3 : 2)));
     }
 

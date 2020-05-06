@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerGenericGlowing implements LayerRenderer<EntityLiving> {
+public class LayerGenericGlowing implements LayerRenderer<LivingEntity> {
     private final RenderLiving render;
     private ResourceLocation texture;
 
@@ -23,7 +23,7 @@ public class LayerGenericGlowing implements LayerRenderer<EntityLiving> {
         this.texture = texture;
     }
 
-    public void doRenderLayer(EntityLiving gorgon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void doRenderLayer(LivingEntity gorgon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(gorgon, StoneEntityProperties.class);
         if (properties == null || !properties.isStone) {
             this.render.bindTexture(texture);

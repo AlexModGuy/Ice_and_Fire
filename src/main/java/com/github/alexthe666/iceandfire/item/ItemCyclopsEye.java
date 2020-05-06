@@ -41,9 +41,9 @@ public class ItemCyclopsEye extends Item {
                 if (living.getHeldItemMainhand() == stack || living.getHeldItemOffhand() == stack) {
                     double range = 15;
                     boolean inflictedDamage = false;
-                    for (MobEntity entityliving : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(living.getPosX() - range, living.getPosY() - range, living.getPosZ() - range, living.getPosX() + range, living.getPosY() + range, living.getPosZ() + range))) {
-                        if (!entityliving.isEntityEqual(living) && !entityliving.isOnSameTeam(living) && (entityliving.getAttackTarget() == living || entityliving.getRevengeTarget() == living || entityliving instanceof IMob)) {
-                            entityliving.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10, 1));
+                    for (MobEntity LivingEntity : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(living.getPosX() - range, living.getPosY() - range, living.getPosZ() - range, living.getPosX() + range, living.getPosY() + range, living.getPosZ() + range))) {
+                        if (!LivingEntity.isEntityEqual(living) && !LivingEntity.isOnSameTeam(living) && (LivingEntity.getAttackTarget() == living || LivingEntity.getRevengeTarget() == living || LivingEntity instanceof IMob)) {
+                            LivingEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10, 1));
                             inflictedDamage = true;
                         }
                     }

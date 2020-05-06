@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -185,7 +185,7 @@ public class EntitySnowVillager extends EntityVillager {
 
     }
 
-    public IEntityLivingData finalizeMobSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data, boolean forgeCheck) {
+    public ILivingEntityData finalizeMobSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData data, boolean forgeCheck) {
         this.prof = IafVillagerRegistry.INSTANCE.professions.get(this.getRNG().nextInt(3));
         return data;
     }

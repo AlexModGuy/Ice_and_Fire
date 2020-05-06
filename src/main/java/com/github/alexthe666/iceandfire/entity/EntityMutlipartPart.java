@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -11,7 +11,7 @@ import net.minecraft.util.EnumHand;
 
 public class EntityMutlipartPart extends PartEntity {
 
-    public EntityMutlipartPart(EntityLiving parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
+    public EntityMutlipartPart(LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 

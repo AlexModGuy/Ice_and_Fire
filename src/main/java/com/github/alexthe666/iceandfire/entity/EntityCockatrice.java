@@ -325,7 +325,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setHen(this.getRNG().nextBoolean());
         return livingdata;
@@ -374,7 +374,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
     }
 
-    public void forcePreyToLook(EntityLiving mob) {
+    public void forcePreyToLook(LivingEntity mob) {
         mob.getLookHelper().setLookPosition(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
     }
 
@@ -496,8 +496,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getAttackTarget() != null) {
             this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-            if (!shouldMelee() && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof PlayerEntity)) {
-                forcePreyToLook((EntityLiving) this.getAttackTarget());
+            if (!shouldMelee() && this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
+                forcePreyToLook((LivingEntity) this.getAttackTarget());
             }
         }
         boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);

@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -90,8 +90,8 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.targetTasks.addTask(2, new MyrmexAIFindGaurdingEntity(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
-            public boolean apply(@Nullable EntityLiving entity) {
+        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSoldier.this, entity) && DragonUtils.isAlive(entity);
             }
         }));

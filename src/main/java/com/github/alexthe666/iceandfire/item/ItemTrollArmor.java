@@ -50,7 +50,7 @@ public class ItemTrollArmor extends ItemArmor {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.client.model.ModelBiped getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
+    public net.minecraft.client.model.ModelBiped getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
         return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 7 : 6);
     }
 

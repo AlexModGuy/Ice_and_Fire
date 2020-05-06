@@ -71,7 +71,7 @@ public class GorgonAIStareAttack extends EntityAIBase {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
+                this.entity.getNavigator().tryMoveToLivingEntity(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 

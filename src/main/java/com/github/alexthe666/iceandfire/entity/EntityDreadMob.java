@@ -113,12 +113,12 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         return null;
     }
 
-    public void onKillEntity(LivingEntity entityLivingIn) {
+    public void onKillEntity(LivingEntity LivingEntityIn) {
         Entity commander = this instanceof EntityDreadLich ? this : this.getCommander();
-        if(commander != null && !(entityLivingIn instanceof EntityDragonBase)){// zombie dragons!!!!
-            Entity summoned = necromancyEntity(entityLivingIn);
+        if(commander != null && !(LivingEntityIn instanceof EntityDragonBase)){// zombie dragons!!!!
+            Entity summoned = necromancyEntity(LivingEntityIn);
             if(summoned != null){
-                summoned.copyLocationAndAnglesFrom(entityLivingIn);
+                summoned.copyLocationAndAnglesFrom(LivingEntityIn);
                 if(!world.isRemote){
                     world.spawnEntity(summoned);
                 }

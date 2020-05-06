@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromStatues, IDeadMob {
+public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
     private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);

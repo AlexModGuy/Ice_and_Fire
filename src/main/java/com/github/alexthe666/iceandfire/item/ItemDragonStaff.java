@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire.item;
 
-public class ItemDragonStaff extends ItemGeneric {
+import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.item.Item;
+
+public class ItemDragonStaff extends Item {
     public ItemDragonStaff() {
-        super("dragon_stick", "iceandfire.dragon_stick");
-        this.maxStackSize = 1;
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        this.setRegistryName(IceAndFire.MODID, "dragon_stick");
     }
 }

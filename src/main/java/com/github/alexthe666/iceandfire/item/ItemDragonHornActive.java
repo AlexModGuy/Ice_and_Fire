@@ -57,9 +57,9 @@ public class ItemDragonHornActive extends Item {
         return UseAction.BOW;
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-        if (entityLiving instanceof PlayerEntity) {
-            PlayerEntity PlayerEntity = (PlayerEntity) entityLiving;
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
+        if (LivingEntity instanceof PlayerEntity) {
+            PlayerEntity PlayerEntity = (PlayerEntity) LivingEntity;
             boolean flag = PlayerEntity.isCreative();
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
             if (i < 20) {
@@ -78,7 +78,7 @@ public class ItemDragonHornActive extends Item {
             float f7 = f4 * f5;
             float f8 = f3 * f5;
             Vec3d vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
-            RayTraceResult raytraceresult = worldIn.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entityLiving));
+            RayTraceResult raytraceresult = worldIn.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, LivingEntity));
             if (raytraceresult == null) {
                 return;
             }

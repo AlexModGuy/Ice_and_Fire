@@ -43,14 +43,14 @@ public class ItemChain extends Item {
         int j = fence.getY();
         int k = fence.getZ();
 
-        for (LivingEntity entityliving : worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
-            ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(entityliving, player)) {
+        for (LivingEntity LivingEntity : worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
+            ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
+            if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity, player)) {
                 if (entityleashknot == null) {
                     entityleashknot = EntityChainTie.createKnot(worldIn, fence);
                 }
-                chainProperties.addChain(entityliving, entityleashknot);
-                chainProperties.removeChain(entityliving, player);
+                chainProperties.addChain(LivingEntity, entityleashknot);
+                chainProperties.removeChain(LivingEntity, player);
                 flag = true;
             }
         }
@@ -81,10 +81,10 @@ public class ItemChain extends Item {
                     double j = playerIn.getPosY();
                     double k = playerIn.getPosZ();
                     boolean flag = false;
-                    for (LivingEntity entityliving : playerIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0))) {
-                        ChainEntityProperties otherChainProperties = EntityPropertiesHandler.INSTANCE.getProperties(entityliving, ChainEntityProperties.class);
-                        if (otherChainProperties != null && otherChainProperties.isChained() && otherChainProperties.isConnectedToEntity(entityliving, playerIn)) {
-                            chainProperties.addChain(target, entityliving);
+                    for (LivingEntity LivingEntity : playerIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0))) {
+                        ChainEntityProperties otherChainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
+                        if (otherChainProperties != null && otherChainProperties.isChained() && otherChainProperties.isConnectedToEntity(LivingEntity, playerIn)) {
+                            chainProperties.addChain(target, LivingEntity);
                             chainProperties.removeChain(target, playerIn);
                             otherChainProperties.removeChain(target, playerIn);
                             flag = true;

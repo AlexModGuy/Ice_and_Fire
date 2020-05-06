@@ -9,7 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -94,7 +94,7 @@ public class ItemStoneStatue extends Item {
                             return EnumActionResult.SUCCESS;
                         }
                     }
-                    if (entity != null && entity instanceof EntityLiving) {
+                    if (entity != null && entity instanceof LivingEntity) {
                         entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, player.rotationYaw, 0);
                         if (!worldIn.isRemote) {
                             worldIn.spawnEntity(entity);
@@ -102,14 +102,14 @@ public class ItemStoneStatue extends Item {
                         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                         properties.isStone = true;
                         IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(entity.getEntityId(), true));
-                        ((EntityLiving) entity).readEntityFromNBT(stack.getTagCompound());
-                        ((EntityLiving) entity).setNoAI(true);
+                        ((LivingEntity) entity).readEntityFromNBT(stack.getTagCompound());
+                        ((LivingEntity) entity).setNoAI(true);
                         float yaw = MathHelper.wrapDegrees(player.rotationYaw + 180F);
                         entity.prevRotationYaw = yaw;
                         entity.rotationYaw = yaw;
-                        ((EntityLiving) entity).rotationYawHead = yaw;
-                        ((EntityLiving) entity).renderYawOffset = yaw;
-                        ((EntityLiving) entity).prevRenderYawOffset = yaw;
+                        ((LivingEntity) entity).rotationYawHead = yaw;
+                        ((LivingEntity) entity).renderYawOffset = yaw;
+                        ((LivingEntity) entity).prevRenderYawOffset = yaw;
                         if (!player.capabilities.isCreativeMode) {
                             stack.shrink(1);
                         }

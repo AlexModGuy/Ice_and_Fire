@@ -92,11 +92,11 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 return entity.isEntityAlive();
             }
         }));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof LivingEntity && DragonUtils.isAlive((EntityLiving) entity) && !(entity instanceof PartEntity) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof PartEntity) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
     }
@@ -365,7 +365,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setVariant(rand.nextInt(3));
         return livingdata;

@@ -68,7 +68,7 @@ public class EntitySheepAIFollowCyclops extends EntityAIBase {
     public void updateTask() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;
-            Path path = getPathToEntityLiving(this.childAnimal, this.cyclops);
+            Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
             if (path != null) {
                 this.childAnimal.getNavigator().setPath(path, this.moveSpeed);
 
@@ -76,7 +76,7 @@ public class EntitySheepAIFollowCyclops extends EntityAIBase {
         }
     }
 
-    public Path getPathToEntityLiving(EntityAnimal entityIn, EntityCyclops cyclops) {
+    public Path getPathToLivingEntity(EntityAnimal entityIn, EntityCyclops cyclops) {
         PathNavigate navi = entityIn.getNavigator();
         Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.posX, cyclops.posY, cyclops.posZ));
         if (vec3d != null) {

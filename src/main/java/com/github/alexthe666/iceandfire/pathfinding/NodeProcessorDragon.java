@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 public class NodeProcessorDragon extends WalkNodeProcessor {
 
-    public void init(IBlockAccess sourceIn, EntityLiving mob) {
+    public void init(IBlockAccess sourceIn, LivingEntity mob) {
         super.init(sourceIn, mob);
         this.entitySizeX = 1;
         this.entitySizeY = 1;

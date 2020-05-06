@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromStatues {
+public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues {
 
     public boolean smallArms;
     private int crackAmount;

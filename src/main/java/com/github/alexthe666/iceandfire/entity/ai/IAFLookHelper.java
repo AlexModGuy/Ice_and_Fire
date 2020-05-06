@@ -2,13 +2,13 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityLookHelper;
 
 public class IAFLookHelper extends EntityLookHelper {
 
-    public IAFLookHelper(EntityLiving entitylivingIn) {
-        super(entitylivingIn);
+    public IAFLookHelper(LivingEntity LivingEntityIn) {
+        super(LivingEntityIn);
     }
 
     @Override

@@ -710,7 +710,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setVariant(this.getRNG().nextInt(7));
         boolean ancient = this.getRNG().nextInt(16) == 1;

@@ -22,6 +22,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -55,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
+public class EntityHippogryph extends TameableEntity implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -632,7 +633,7 @@ public class EntityHippogryph extends EntityTameable implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.getPosition())));
         return livingdata;

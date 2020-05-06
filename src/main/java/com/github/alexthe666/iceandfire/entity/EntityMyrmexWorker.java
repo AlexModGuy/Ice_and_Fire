@@ -8,7 +8,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -112,8 +112,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.targetTasks.addTask(3, new MyrmexAIPickupBabies(this));
         this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
-        this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityLiving.class, 10, true, true, new Predicate<EntityLiving>() {
-            public boolean apply(@Nullable EntityLiving entity) {
+        this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive(entity);
             }
         }));

@@ -111,8 +111,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
+        ILivingEntityData data = super.onInitialSpawn(difficulty, livingdata);
         this.setAnimation(ANIMATION_SPAWN);
         this.setEquipmentBasedOnDifficulty(difficulty);
         return data;

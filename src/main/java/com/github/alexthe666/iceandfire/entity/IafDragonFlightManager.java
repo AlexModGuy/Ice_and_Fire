@@ -121,8 +121,8 @@ public class IafDragonFlightManager {
     }
 
     protected static class GroundMoveHelper extends EntityMoveHelper {
-        public GroundMoveHelper(EntityLiving entitylivingIn) {
-            super(entitylivingIn);
+        public GroundMoveHelper(LivingEntity LivingEntityIn) {
+            super(LivingEntityIn);
         }
 
         public float distance(float rotateAngleFrom, float rotateAngleTo) {

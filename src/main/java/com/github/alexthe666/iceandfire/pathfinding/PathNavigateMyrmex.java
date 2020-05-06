@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 public class PathNavigateMyrmex extends PathNavigateGround {
     public BlockPos targetPosition;
 
-    public PathNavigateMyrmex(EntityLiving entitylivingIn, World worldIn) {
-        super(entitylivingIn, worldIn);
+    public PathNavigateMyrmex(LivingEntity LivingEntityIn, World worldIn) {
+        super(LivingEntityIn, worldIn);
     }
 
     protected PathFinder getPathFinder() {

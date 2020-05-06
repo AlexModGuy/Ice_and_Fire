@@ -14,6 +14,7 @@ import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -28,7 +29,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
-public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid {
+public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
     public static Animation ANIMATION_SCARE;
@@ -56,7 +57,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
     }
 
     public static boolean isStoneMob(LivingEntity mob) {
-        if (mob instanceof EntityLiving) {
+        if (mob instanceof LivingEntity) {
             try {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
                 return properties != null && properties.isStone;
@@ -105,19 +106,19 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
                 return true;
             }
         }));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<Entity>() {
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving) entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
         this.tasks.removeTask(aiMelee);
     }
 
     public void attackEntityWithRangedAttack(LivingEntity entity) {
-        if (!(entity instanceof PlayerEntity) && entity instanceof EntityLiving) {
-            forcePreyToLook((EntityLiving) entity);
+        if (!(entity instanceof PlayerEntity) && entity instanceof LivingEntity) {
+            forcePreyToLook((LivingEntity) entity);
         }
     }
 
@@ -193,8 +194,8 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         if (this.getAttackTarget() != null) {
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
             this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
-            if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof PlayerEntity)) {
-                forcePreyToLook((EntityLiving) this.getAttackTarget());
+            if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
+                forcePreyToLook((LivingEntity) this.getAttackTarget());
             }
         }
 
@@ -227,9 +228,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
                                 this.setAttackTarget(null);
                             }
                         } else {
-                            if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
+                            if (this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
                                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
-                                EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
+                                LivingEntity attackTarget = (LivingEntity) this.getAttackTarget();
                                 if (properties != null || !properties.isStone) {
                                     properties.isStone = true;
                                     if (world.isRemote) {
@@ -277,7 +278,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
         return EnumCreatureAttribute.UNDEAD;
     }
 
-    public void forcePreyToLook(EntityLiving mob) {
+    public void forcePreyToLook(LivingEntity mob) {
         mob.getLookHelper().setLookPosition(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
     }
 

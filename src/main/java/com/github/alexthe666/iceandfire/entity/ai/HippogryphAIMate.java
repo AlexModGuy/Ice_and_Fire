@@ -54,7 +54,7 @@ public class HippogryphAIMate extends EntityAIBase {
 
     public void updateTask() {
         this.hippo.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.hippo.getVerticalFaceSpeed());
-        this.hippo.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
+        this.hippo.getNavigator().tryMoveToLivingEntity(this.targetMate, this.moveSpeed);
         ++this.spawnBabyDelay;
 
         if (this.spawnBabyDelay >= 60 && this.hippo.getDistanceSq(this.targetMate) < 9.0D) {

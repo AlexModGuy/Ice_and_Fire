@@ -21,7 +21,7 @@ public class MyrmexAIEscortEntity extends EntityAIBase {
 
     public void updateTask() {
         if (this.myrmex.guardingEntity != null && (this.myrmex.getDistance(this.myrmex.guardingEntity) > 30 || this.myrmex.getNavigator().noPath())) {
-            this.myrmex.getNavigator().tryMoveToEntityLiving(this.myrmex.guardingEntity, movementSpeed);
+            this.myrmex.getNavigator().tryMoveToLivingEntity(this.myrmex.guardingEntity, movementSpeed);
         }
     }
 

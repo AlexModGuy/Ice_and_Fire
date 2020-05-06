@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.pathfinding;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 public class PathNavigateAmphibious extends PathNavigate {
     private boolean shouldAvoidSun;
 
-    public PathNavigateAmphibious(EntityLiving entitylivingIn, World worldIn) {
-        super(entitylivingIn, worldIn);
+    public PathNavigateAmphibious(LivingEntity LivingEntityIn, World worldIn) {
+        super(LivingEntityIn, worldIn);
         this.nodeProcessor.setCanSwim(true);
     }
 
@@ -64,7 +64,7 @@ public class PathNavigateAmphibious extends PathNavigate {
         }
     }
 
-    public Path getPathToEntityLiving(Entity entityIn) {
+    public Path getPathToLivingEntity(Entity entityIn) {
         return this.getPathToPos(new BlockPos(entityIn));
     }
 

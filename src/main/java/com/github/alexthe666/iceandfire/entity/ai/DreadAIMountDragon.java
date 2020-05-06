@@ -53,7 +53,7 @@ public class DreadAIMountDragon extends EntityAIBase {
     public void updateTask() {
         this.knight.getLookHelper().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
 
-        this.knight.getNavigator().tryMoveToEntityLiving(this.horse, 1.2D);
+        this.knight.getNavigator().tryMoveToLivingEntity(this.horse, 1.2D);
         if (this.knight.getDistanceSq(this.horse) < this.horse.getRenderSize() * 0.66D) {
             this.knight.getNavigator().clearPath();
             this.horse.setCommanderId(this.knight.getUniqueID());

@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromStatues, IDeadMob {
+public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
 
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.createKey(EntityDragonSkull.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.createKey(EntityDragonSkull.class, DataSerializers.VARINT);

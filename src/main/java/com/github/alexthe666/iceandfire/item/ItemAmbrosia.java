@@ -21,8 +21,8 @@ public class ItemAmbrosia extends ItemGenericFood {
         livingEntity.addPotionEffect(new EffectInstance(Effects.LUCK, 3600, 2));
     }
 
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        super.onItemUseFinish(stack, worldIn, entityLiving);
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity LivingEntity) {
+        super.onItemUseFinish(stack, worldIn, LivingEntity);
         return new ItemStack(Items.BOWL);
     }
 }

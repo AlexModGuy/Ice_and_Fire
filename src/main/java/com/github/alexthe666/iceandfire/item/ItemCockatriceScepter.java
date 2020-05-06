@@ -48,16 +48,16 @@ public class ItemCockatriceScepter extends Item {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entityLiving, MiscEntityProperties.class);
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
+        MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, MiscEntityProperties.class);
         if (properties != null && properties.specialWeaponDmg > 0) {
-            stack.damageItem(properties.specialWeaponDmg, entityLiving, (p_219999_1_) -> {
-                p_219999_1_.sendBreakAnimation(entityLiving.getActiveHand());
+            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (p_219999_1_) -> {
+                p_219999_1_.sendBreakAnimation(LivingEntity.getActiveHand());
             });
             properties.specialWeaponDmg = 0;
             for (Entity e : properties.entitiesWeAreGlaringAt) {
                 MiscEntityProperties theirProp = EntityPropertiesHandler.INSTANCE.getProperties(e, MiscEntityProperties.class);
-                theirProp.glarers.remove(entityLiving);
+                theirProp.glarers.remove(LivingEntity);
             }
             properties.entitiesWeAreGlaringAt.clear();
         }

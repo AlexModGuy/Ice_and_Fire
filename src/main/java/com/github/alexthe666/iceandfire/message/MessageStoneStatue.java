@@ -7,7 +7,7 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -45,7 +45,7 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
     public void onClientReceived(Minecraft client, MessageStoneStatue message, PlayerEntity player, MessageContext messageContext) {
         if (player.world != null) {
             Entity entity = player.world.getEntityByID(message.entityId);
-            if (entity != null && entity instanceof EntityLiving) {
+            if (entity != null && entity instanceof LivingEntity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                 properties.isStone = message.isStone;
             }
@@ -57,7 +57,7 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
         if (player.world != null) {
             if(player.getHeldItemMainhand().getItem() == IafItemRegistry.GORGON_HEAD){
                 Entity entity = player.world.getEntityByID(message.entityId);
-                if (entity != null && entity instanceof EntityLiving) {
+                if (entity != null && entity instanceof LivingEntity) {
                     StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                     properties.isStone = message.isStone;
                 }

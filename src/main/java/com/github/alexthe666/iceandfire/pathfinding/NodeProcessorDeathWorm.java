@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
@@ -33,7 +33,7 @@ public class NodeProcessorDeathWorm extends NodeProcessor {
         return i;
     }
 
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, LivingEntity LivingEntityIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
         return PathNodeType.OPEN;
     }
 

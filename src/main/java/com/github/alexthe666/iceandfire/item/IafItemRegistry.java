@@ -88,7 +88,8 @@ public class IafItemRegistry {
     public static final Item DRAGONBONE_SWORD_ICE = new ItemAlchemySword(ICE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_ice", "iceandfire.dragonbone_sword_ice");
     public static final Item DRAGONBONE_ARROW = new ItemGeneric("dragonbone_arrow");
     public static final Item DRAGON_BOW = new ItemDragonBow();
-    public static final Item DRAGON_SKULL = new ItemDragonSkull();
+    public static final Item DRAGON_SKULL_FIRE = new ItemDragonSkull(0);
+    public static final Item DRAGON_SKULL_ICE = new ItemDragonSkull(1);
     public static final Item DRAGONARMOR_IRON = new ItemDragonArmor(0, "dragonarmor_iron");
     public static final Item DRAGONARMOR_GOLD = new ItemDragonArmor(1, "dragonarmor_gold");
     public static final Item DRAGONARMOR_DIAMOND = new ItemDragonArmor(2, "dragonarmor_diamond");
@@ -96,7 +97,7 @@ public class IafItemRegistry {
     public static final Item DRAGONARMOR_DRAGONSTEEL_FIRE = new ItemDragonArmor(4, "dragonarmor_dragonsteel_fire");
     public static final Item DRAGONARMOR_DRAGONSTEEL_ICE = new ItemDragonArmor(5, "dragonarmor_dragonsteel_ice");
     public static final Item DRAGON_MEAL = new ItemGeneric("dragon_meal");
-    public static final Item SICKLY_DRAGON_MEAL = new ItemGenericDesc("sickly_dragon_meal", "iceandfire.sickly_dragon_meal");
+    public static final Item SICKLY_DRAGON_MEAL = new ItemGeneric("sickly_dragon_meal", 1);
     public static final Item CREATIVE_DRAGON_MEAL = new ItemGeneric("creative_dragon_meal", 2);
     public static final Item FIRE_DRAGON_FLESH = new ItemDragonFlesh(true);
     public static final Item ICE_DRAGON_FLESH = new ItemDragonFlesh(false);

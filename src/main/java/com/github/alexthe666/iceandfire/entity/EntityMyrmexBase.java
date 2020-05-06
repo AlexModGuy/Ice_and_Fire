@@ -611,7 +611,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setHive(MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400));
         if (this.getHive() != null) {
@@ -815,8 +815,8 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     protected static class GroundMoveHelper extends EntityMoveHelper {
-        public GroundMoveHelper(EntityLiving entitylivingIn) {
-            super(entitylivingIn);
+        public GroundMoveHelper(LivingEntity LivingEntityIn) {
+            super(LivingEntityIn);
         }
 
         public float distance(float rotateAngleFrom, float rotateAngleTo) {

@@ -57,14 +57,14 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.path = this.attacker.getNavigator().getPathToEntityLiving(LivingEntity);
+                    this.path = this.attacker.getNavigator().getPathToLivingEntity(LivingEntity);
                     this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
                     return this.path != null;
                 } else {
                     return true;
                 }
             }
-            this.path = this.attacker.getNavigator().getPathToEntityLiving(LivingEntity);
+            this.path = this.attacker.getNavigator().getPathToLivingEntity(LivingEntity);
 
             if (this.path != null) {
                 return true;
@@ -153,7 +153,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
                     this.delayCounter += 5;
                 }
 
-                if (!this.attacker.getNavigator().tryMoveToEntityLiving(LivingEntity, this.speedTowardsTarget)) {
+                if (!this.attacker.getNavigator().tryMoveToLivingEntity(LivingEntity, this.speedTowardsTarget)) {
                     this.delayCounter += 15;
                 }
             }
