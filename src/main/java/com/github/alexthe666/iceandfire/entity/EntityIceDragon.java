@@ -188,9 +188,9 @@ public class EntityIceDragon extends EntityDragonBase {
                 shootIceAtMob(this.getAttackTarget());
             }
             if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {
-                double difX = this.getAttackTarget().posX - this.posX;
-                double difY = this.getAttackTarget().posY + this.getAttackTarget().height - this.posY;
-                double difZ = this.getAttackTarget().posZ - this.posZ;
+                double difX = this.getAttackTarget().getPosX() - this.getPosX();
+                double difY = this.getAttackTarget().getPosY() + this.getAttackTarget().height - this.getPosY();
+                double difZ = this.getAttackTarget().getPosZ() - this.getPosZ();
                 this.motionX += difX * 0.1D;
                 this.motionY += difY * 0.1D;
                 this.motionZ += difZ * 0.1D;
@@ -310,9 +310,9 @@ public class EntityIceDragon extends EntityDragonBase {
                 } else if (this.getAnimationTick() == 15) {
                     rotationYaw = renderYawOffset;
                     Vec3d headVec = this.getHeadPosition();
-                    double d2 = entity.posX - headVec.x;
-                    double d3 = entity.posY - headVec.y;
-                    double d4 = entity.posZ - headVec.z;
+                    double d2 = entity.getPosX() - headVec.x;
+                    double d3 = entity.getPosY() - headVec.y;
+                    double d4 = entity.getPosZ() - headVec.z;
                     float inaccuracy = 1.0F;
                     d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
@@ -337,7 +337,7 @@ public class EntityIceDragon extends EntityDragonBase {
                         if (this.ticksExisted % 5 == 0) {
                             this.playSound(IafSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                         }
-                        stimulateFire(entity.posX, entity.posY, entity.posZ, 1);
+                        stimulateFire(entity.getPosX(), entity.getPosY(), entity.getPosZ(), 1);
                         if (entity.isDead || entity == null) {
                             this.setBreathingFire(false);
                             this.usingGroundAttack = true;
@@ -415,7 +415,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 }
             } else {
                 if (!world.isRemote) {
-                    RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(progressX, progressY, progressZ), false, true, false);
+                    RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(progressX, progressY, progressZ), false, true, false);
                     BlockPos pos = result.getBlockPos();
                     IafDragonDestructionManager.destroyAreaIce(world, pos, this);
                 }
@@ -505,7 +505,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                IceAndFire.PROXY.spawnParticle("snowflake", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                IceAndFire.PROXY.spawnParticle("snowflake", this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
             }
         }
     }

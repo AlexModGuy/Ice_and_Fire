@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,7 +61,7 @@ public class TileEntityDreadPortal extends TileEntity {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean shouldRenderFace(EnumFacing p_184313_1_) {
+    public boolean shouldRenderFace(Direction p_184313_1_) {
         return this.getBlockType().getDefaultState().shouldSideBeRendered(this.world, this.getPos(), p_184313_1_);
     }
 }

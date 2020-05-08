@@ -20,7 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -69,10 +69,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
             }
         }
-        if (!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
-            if (this.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
-                boolean isJungle = this.getHeldItem(EnumHand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
-                int metadata = this.getHeldItem(EnumHand.MAIN_HAND).getMetadata();
+        if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+            if (this.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
+                boolean isJungle = this.getHeldItem(Hand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
+                int metadata = this.getHeldItem(Hand.MAIN_HAND).getMetadata();
                 EntityMyrmexEgg egg = new EntityMyrmexEgg(world);
                 egg.copyLocationAndAnglesFrom(this);
                 egg.setJungle(isJungle);
@@ -81,7 +81,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                     world.spawnEntity(egg);
                 }
                 egg.startRiding(this);
-                this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
         if (!this.getPassengers().isEmpty()) {
@@ -161,9 +161,9 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY) {
-                this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
-                this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
+                this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
+                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
@@ -177,7 +177,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
 
     public boolean holdingSomething() {
-        return this.getHeldEntity() != null || !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
+        return this.getHeldEntity() != null || !this.getHeldItem(Hand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
     }
 
     public boolean holdingBaby() {
@@ -202,15 +202,15 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
-            passenger.setPosition(this.posX + extraX, this.posY + 0.25F, this.posZ + extraZ);
+            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + 0.25F, this.getPosZ() + extraZ);
         }
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
-            this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
-            this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+        if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
+            this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
+            this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
         if (amount >= 1.0D && !this.getPassengers().isEmpty()) {
             for (Entity entity : this.getPassengers()) {
@@ -242,7 +242,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getHive().modifyPlayerReputation(owner.getUniqueID(), 5);
                 this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1, 1);
                 if (!world.isRemote) {
-                    world.spawnEntity(new EntityXPOrb(world, owner.posX, owner.posY, owner.posZ, 1 + rand.nextInt(3)));
+                    world.spawnEntity(new EntityXPOrb(world, owner.getPosX(), owner.getPosY(), owner.getPosZ(), 1 + rand.nextInt(3)));
                 }
             }
         }

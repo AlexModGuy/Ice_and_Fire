@@ -106,11 +106,11 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
                     }
 
                     LivingEntity LivingEntity = entity instanceof LivingEntity ? (LivingEntity) entity : null;
-                    entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
+                    entity.setLocationAndAngles(entity.getPosX(), entity.getPosY(), entity.getPosZ(), world.rand.nextFloat() * 360.0F, 0.0F);
 
-                    if (LivingEntity == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(LivingEntity, getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this)) {
+                    if (LivingEntity == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(LivingEntity, getSpawnerWorld(), (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), this)) {
                         if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && entity instanceof LivingEntity) {
-                            if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(LivingEntity, this.getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ, this))
+                            if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(LivingEntity, this.getSpawnerWorld(), (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), this))
                                 ((LivingEntity) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
                         }
 

@@ -10,7 +10,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -47,7 +47,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
 
         }
     }
@@ -79,7 +79,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
                     double d3 = 10.0D;
                     double xRatio = motionX * height;
                     double zRatio = motionZ * height;
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {
@@ -106,10 +106,10 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             player.getActiveItemStack().damageItem(i, player);
 
             if (player.getActiveItemStack().isEmpty()) {
-                EnumHand enumhand = player.getActiveHand();
-                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, enumhand);
+                Hand Hand = player.getActiveHand();
+                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (enumhand == EnumHand.MAIN_HAND) {
+                if (Hand == Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);

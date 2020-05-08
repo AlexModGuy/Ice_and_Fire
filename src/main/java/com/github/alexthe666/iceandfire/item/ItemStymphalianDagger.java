@@ -41,7 +41,7 @@ public class ItemStymphalianDagger extends ItemSword {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(I18n.format("item.iceandfire.stymphalian_bird_dagger.desc_0"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_bird_dagger.desc_0"));
     }
 }

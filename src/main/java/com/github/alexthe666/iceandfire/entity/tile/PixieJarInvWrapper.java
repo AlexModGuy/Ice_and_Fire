@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -10,9 +10,9 @@ import javax.annotation.Nonnull;
 public class PixieJarInvWrapper implements IItemHandlerModifiable {
 
     private TileEntityJar tile;
-    private EnumFacing side;
+    private Direction side;
 
-    public PixieJarInvWrapper(TileEntityJar tile, EnumFacing side) {
+    public PixieJarInvWrapper(TileEntityJar tile, Direction side) {
         this.tile = tile;
         this.side = side;
     }

@@ -41,9 +41,9 @@ public class IceAndFireParticleSpawner {
 
         if (this.mc != null && entity != null && this.mc.effectRenderer != null) {
             int k1 = this.calculateParticleLevel(minParticles, ingoreLimit);
-            double d3 = entity.posX - xCoord;
-            double d4 = entity.posY - yCoord;
-            double d5 = entity.posZ - zCoord;
+            double d3 = entity.getPosX() - xCoord;
+            double d4 = entity.getPosY() - yCoord;
+            double d5 = entity.getPosZ() - zCoord;
             if (ignoreRange) {
                 return spawnEffectParticle(particleID);
             } else if (d3 * d3 + d4 * d4 + d5 * d5 > 1024.0D) {

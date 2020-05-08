@@ -70,7 +70,7 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityA
                 return true;
             }
         } else {
-            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double) this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<PlayerEntity, Double>() {
+            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.getPosX(), this.taskOwner.getPosY() + (double) this.taskOwner.getEyeHeight(), this.taskOwner.getPosZ(), this.getTargetDistance(), this.getTargetDistance(), new Function<PlayerEntity, Double>() {
                 @Nullable
                 public Double apply(@Nullable PlayerEntity player) {
                     ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);

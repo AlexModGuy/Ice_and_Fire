@@ -17,7 +17,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -66,7 +66,7 @@ public class BlockEggInIce extends ContainerBlock {
     @Override
     @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(BlockState blockstate, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(BlockState blockstate, IBlockAccess worldIn, BlockPos pos, Direction side) {
         BlockState BlockState = worldIn.getBlockState(pos);
         Block block = BlockState.getBlock();
         if (worldIn.getBlockState(pos.offset(side.getOpposite())) != BlockState) {

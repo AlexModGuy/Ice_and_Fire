@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.MobEffects;
@@ -15,7 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityPixieCharge extends EntityFireball {
+public class EntityPixieCharge extends AbstractFireballEntity {
 
     public int ticksInAir;
     private float[] rgb;
@@ -58,7 +59,7 @@ public class EntityPixieCharge extends EntityFireball {
     public void onUpdate() {
         if (this.world.isRemote) {
             for (int i = 0; i < 5; ++i) {
-                IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
             }
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
@@ -68,9 +69,9 @@ public class EntityPixieCharge extends EntityFireball {
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onImpact(raytraceresult);
             }
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
+            this.getPosX() += this.motionX;
+            this.getPosY() += this.motionY;
+            this.getPosZ() += this.motionZ;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
             float f = this.getMotionFactor();
             this.motionX += this.accelerationX;
@@ -79,7 +80,7 @@ public class EntityPixieCharge extends EntityFireball {
             this.motionX *= (double) f;
             this.motionY *= (double) f;
             this.motionZ *= (double) f;
-            this.setPosition(this.posX, this.posY, this.posZ);
+            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         } else {
             this.setDead();
         }
@@ -95,7 +96,7 @@ public class EntityPixieCharge extends EntityFireball {
             }
             if (this.world.isRemote) {
                 for (int i = 0; i < 20; ++i) {
-                    IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                    IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
                 }
             }
             if (this.shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {

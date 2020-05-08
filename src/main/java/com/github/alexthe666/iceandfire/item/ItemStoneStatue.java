@@ -15,8 +15,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -40,7 +40,7 @@ public class ItemStoneStatue extends Item {
             int id = stack.getTagCompound().getInteger("IAFStoneStatueEntityID");
             if (EntityList.getKey(EntityList.getClassFromID(id)) != null) {
                 String untranslated = isPlayer ? "entity.player.name" : "entity." + net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(EntityList.getClassFromID(id)).getName() + ".name";
-                tooltip.add(I18n.format(untranslated));
+                tooltip.add(new TranslationTextComponent(untranslated));
             }
         }
     }
@@ -53,8 +53,8 @@ public class ItemStoneStatue extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (side != EnumFacing.UP) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+        if (side != Direction.UP) {
             return EnumActionResult.FAIL;
         } else {
             ItemStack stack = player.getHeldItem(hand);

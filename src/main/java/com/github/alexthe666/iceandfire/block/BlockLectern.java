@@ -17,8 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -30,14 +30,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockLectern extends ContainerBlock {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
     public Item itemBlock;
 
     public BlockLectern() {
         super(Material.WOOD);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().with(FACING, Direction.NORTH));
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.lectern");
@@ -77,7 +77,7 @@ public class BlockLectern extends ContainerBlock {
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.down());
         Block block = BlockState.getBlock();
-        return BlockState.isSideSolid(worldIn, pos, EnumFacing.UP);
+        return BlockState.isSideSolid(worldIn, pos, Direction.UP);
     }
 
     @Deprecated
@@ -99,14 +99,14 @@ public class BlockLectern extends ContainerBlock {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
+        return this.getDefaultState().with(FACING, Direction.byHorizontalIndex(meta));
     }
 
     @Override
@@ -131,7 +131,7 @@ public class BlockLectern extends ContainerBlock {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking()) {
             return false;
         } else {
@@ -141,10 +141,10 @@ public class BlockLectern extends ContainerBlock {
     }
 
     @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
-        if (face == EnumFacing.UP) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
+        if (face == Direction.UP) {
             return BlockFaceShape.SOLID;
-        } else if (face == EnumFacing.DOWN) {
+        } else if (face == Direction.DOWN) {
             return BlockFaceShape.SOLID;
         } else {
             return BlockFaceShape.UNDEFINED;

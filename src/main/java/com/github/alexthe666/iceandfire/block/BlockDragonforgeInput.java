@@ -14,8 +14,8 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -43,7 +43,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
         return EnumPushReaction.BLOCK;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (this.getConnectedTileEntity(worldIn, pos) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, pos);
             if (forge.isFire == isFire) {
@@ -55,7 +55,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     }
 
     private TileEntityDragonforge getConnectedTileEntity(World worldIn, BlockPos pos) {
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+        for (Direction facing : Direction.HORIZONTALS) {
             if (worldIn.getTileEntity(pos.offset(facing)) != null && worldIn.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
                 return (TileEntityDragonforge) worldIn.getTileEntity(pos.offset(facing));
             }

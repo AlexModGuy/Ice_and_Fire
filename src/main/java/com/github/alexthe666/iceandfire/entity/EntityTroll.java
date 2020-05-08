@@ -216,7 +216,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 if (this.getRNG().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
                     weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);
-                    dropItemAt(weaponStack, this.posX, this.posY, this.posZ);
+                    dropItemAt(weaponStack, this.getPosX(), this.getPosY(), this.getPosZ());
                 } else {
                     ItemStack brokenDrop = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
                     ItemStack brokenDrop2 = new ItemStack(Blocks.STONEBRICK, this.getRNG().nextInt(2) + 1, 0);
@@ -248,8 +248,8 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                         brokenDrop = new ItemStack(Blocks.LOG, this.getRNG().nextInt(4) + 1, 1);
                         brokenDrop2 = new ItemStack(Items.SNOWBALL, this.getRNG().nextInt(4) + 1);
                     }
-                    dropItemAt(brokenDrop, this.posX, this.posY, this.posZ);
-                    dropItemAt(brokenDrop2, this.posX, this.posY, this.posZ);
+                    dropItemAt(brokenDrop, this.getPosX(), this.getPosY(), this.getPosZ());
+                    dropItemAt(brokenDrop2, this.getPosX(), this.getPosY(), this.getPosZ());
 
                 }
             }
@@ -294,7 +294,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         setAvoidSun(this.world.isDaytime());
         if (this.world.isDaytime() && !this.world.isRemote) {
             float f = this.getBrightness();
-            BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ);
+            BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ())).up() : new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ());
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
                 if (properties != null && !properties.isStone) {

@@ -5,7 +5,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ, 1);
+        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
@@ -65,7 +65,7 @@ public class MyrmexAIForageForItems<T extends EntityItem> extends EntityAITarget
         }
         if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
             this.myrmex.onPickupItem(targetEntity);
-            this.myrmex.setHeldItem(EnumHand.MAIN_HAND, this.targetEntity.getItem());
+            this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.setDead();
             resetTask();
         }

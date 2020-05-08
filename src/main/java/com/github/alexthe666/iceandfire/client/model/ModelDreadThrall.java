@@ -15,8 +15,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelDreadThrall extends AdvancedModelBase {
@@ -110,7 +110,7 @@ public class ModelDreadThrall extends AdvancedModelBase {
     public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = ModelBiped.ArmPose.EMPTY;
         this.leftArmPose = ModelBiped.ArmPose.EMPTY;
-        ItemStack itemstack = LivingEntityIn.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
         super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
@@ -158,12 +158,12 @@ public class ModelDreadThrall extends AdvancedModelBase {
             this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
         }
         if (this.swingProgress > 0.0F) {
-            EnumHandSide enumhandside = this.getMainHand(entityIn);
-            ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
+            HandSide Handside = this.getMainHand(entityIn);
+            ModelRenderer modelrenderer = this.getArmForSide(Handside);
             float f1 = this.swingProgress;
             this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
 
-            if (enumhandside == EnumHandSide.LEFT) {
+            if (Handside == HandSide.LEFT) {
                 this.bipedBody.rotateAngleY *= -1.0F;
             }
 
@@ -256,22 +256,22 @@ public class ModelDreadThrall extends AdvancedModelBase {
     }
 
 
-    public void postRenderArm(float scale, EnumHandSide side) {
+    public void postRenderArm(float scale, HandSide side) {
         this.bipedBody.postRender(scale);
         this.getArmForSide(side).postRender(scale);
     }
 
-    protected ModelRenderer getArmForSide(EnumHandSide side) {
-        return side == EnumHandSide.LEFT ? this.bipedLeftArm : this.bipedRightArm;
+    protected ModelRenderer getArmForSide(HandSide side) {
+        return side == HandSide.LEFT ? this.bipedLeftArm : this.bipedRightArm;
     }
 
-    protected EnumHandSide getMainHand(Entity entityIn) {
+    protected HandSide getMainHand(Entity entityIn) {
         if (entityIn instanceof LivingEntity) {
             LivingEntity LivingEntity = (LivingEntity) entityIn;
-            EnumHandSide enumhandside = LivingEntity.getPrimaryHand();
-            return LivingEntity.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
+            HandSide Handside = LivingEntity.getPrimaryHand();
+            return LivingEntity.swingingHand == Hand.MAIN_HAND ? Handside : Handside.opposite();
         } else {
-            return EnumHandSide.RIGHT;
+            return HandSide.RIGHT;
         }
     }
 

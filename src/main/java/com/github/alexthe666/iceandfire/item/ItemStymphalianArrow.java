@@ -29,7 +29,7 @@ public class ItemStymphalianArrow extends ItemArrow {
 
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(I18n.format("item.iceandfire.stymphalian_arrow.desc"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_arrow.desc"));
     }
 
 }

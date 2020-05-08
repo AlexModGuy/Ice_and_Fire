@@ -52,7 +52,7 @@ public class DreadAIDragonFindQueen extends EntityAIBase {
     public void updateTask() {
         this.dragon.getLookHelper().setLookPositionWithEntity(this.queen, 30.0F, 30.0F);
         if(this.dragon.isFlying() || this.dragon.isHovering()){
-            dragon.getMoveHelper().setMoveTo(this.queen.posX, this.queen.posY + 1, this.queen.posZ, 1.2D);
+            dragon.getMoveHelper().setMoveTo(this.queen.getPosX(), this.queen.getPosY() + 1, this.queen.getPosZ(), 1.2D);
         }else{
             this.dragon.getNavigator().tryMoveToLivingEntity(this.queen, 1.2D);
         }

@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
@@ -22,8 +22,8 @@ public class NodeProcessorDeathWorm extends NodeProcessor {
     public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
         int i = 0;
 
-        for (EnumFacing enumfacing : EnumFacing.values()) {
-            PathPoint pathpoint = this.getWaterNode(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset());
+        for (Direction Direction : Direction.values()) {
+            PathPoint pathpoint = this.getWaterNode(currentPoint.x + Direction.getXOffset(), currentPoint.y + Direction.getYOffset(), currentPoint.z + Direction.getZOffset());
 
             if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
                 pathOptions[i++] = pathpoint;

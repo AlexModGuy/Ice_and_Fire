@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 
 public abstract class ModelMyrmexBase extends ModelDragonBase {
     private static final ModelMyrmexLarva LARVA_MODEL = new ModelMyrmexLarva();
@@ -21,7 +21,7 @@ public abstract class ModelMyrmexBase extends ModelDragonBase {
         }
     }
 
-    public void postRenderArm(float scale, EnumHandSide side) {
+    public void postRenderArm(float scale, HandSide side) {
         for (ModelRenderer renderer : this.getHeadParts()) {
             renderer.postRender(scale);
         }

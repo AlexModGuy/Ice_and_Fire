@@ -56,8 +56,8 @@ public class LegSolver {
 
         public void update(EntityDragonBase entity, double sideX, double sideZ, double forwardX, double forwardZ, float scale) {
             this.prevHeight = this.height;
-            double posY = entity.posY;
-            float settledHeight = this.settle(entity, entity.posX + sideX * this.side + forwardX * this.forward, posY, entity.posZ + sideZ * this.side + forwardZ * this.forward, this.height);
+            double posY = entity.getPosY();
+            float settledHeight = this.settle(entity, entity.getPosX() + sideX * this.side + forwardX * this.forward, posY, entity.getPosZ() + sideZ * this.side + forwardZ * this.forward, this.height);
             this.height = MathHelper.clamp(settledHeight, -this.range * scale, this.range * scale);
         }
 

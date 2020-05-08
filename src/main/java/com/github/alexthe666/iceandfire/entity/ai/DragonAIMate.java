@@ -61,7 +61,7 @@ public class DragonAIMate extends EntityAIBase {
      */
     public void updateTask() {
         this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
-        this.dragon.getNavigator().tryMoveToXYZ(targetMate.posX, targetMate.posY, targetMate.posZ, this.moveSpeed);
+        this.dragon.getNavigator().tryMoveToXYZ(targetMate.getPosX(), targetMate.getPosY(), targetMate.getPosZ(), this.moveSpeed);
         this.dragon.setFlying(false);
         this.dragon.setHovering(false);
         ++this.spawnBabyDelay;
@@ -113,9 +113,9 @@ public class DragonAIMate extends EntityAIBase {
             this.targetMate.setGrowingAge(6000);
             this.dragon.resetInLove();
             this.targetMate.resetInLove();
-            int nestX = (int) (this.dragon.isMale() ? this.targetMate.posX : this.dragon.posX);
-            int nestY = (int) (this.dragon.isMale() ? this.targetMate.posY : this.dragon.posY) - 1;
-            int nestZ = (int) (this.dragon.isMale() ? this.targetMate.posZ : this.dragon.posZ);
+            int nestX = (int) (this.dragon.isMale() ? this.targetMate.getPosX() : this.dragon.getPosX());
+            int nestY = (int) (this.dragon.isMale() ? this.targetMate.getPosY() : this.dragon.getPosY()) - 1;
+            int nestZ = (int) (this.dragon.isMale() ? this.targetMate.getPosZ() : this.dragon.getPosZ());
 
             egg.setLocationAndAngles(nestX - 0.5F, nestY + 1F, nestZ - 0.5F, 0.0F, 0.0F);
             this.theWorld.spawnEntity(egg);
@@ -128,7 +128,7 @@ public class DragonAIMate extends EntityAIBase {
                 double d3 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
                 double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
                 double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
-                this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2);
+                this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
             }
             BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
             BlockPos dirtPos = eggPos.add(1, 0, 1);
@@ -145,7 +145,7 @@ public class DragonAIMate extends EntityAIBase {
                 theWorld.setBlockState(dirtPos, Blocks.GRASS_PATH.getDefaultState());
             }
             if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
-                this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.posX, this.dragon.posY, this.dragon.posZ, random.nextInt(15) + 10));
+                this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.getPosX(), this.dragon.getPosY(), this.dragon.getPosZ(), random.nextInt(15) + 10));
             }
         }
     }

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import org.lwjgl.opengl.GL11;
@@ -33,13 +33,13 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 
         if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
             meta = entity.houseType;
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
+            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.NORTH) {
                 rotation = 180;
             }
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == EnumFacing.EAST) {
+            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.EAST) {
                 rotation = -90;
             }
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == EnumFacing.WEST) {
+            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.WEST) {
                 rotation = 90;
             }
 

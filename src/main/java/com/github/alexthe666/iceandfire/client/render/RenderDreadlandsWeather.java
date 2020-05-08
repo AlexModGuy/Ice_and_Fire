@@ -50,9 +50,9 @@ public class RenderDreadlandsWeather extends IRenderHandler {
         if (f > 0.0F) {
             this.enableLightmap(mc);
             Entity entity = mc.getRenderViewEntity();
-            int i = MathHelper.floor(entity.posX);
-            int j = MathHelper.floor(entity.posY);
-            int k = MathHelper.floor(entity.posZ);
+            int i = MathHelper.floor(entity.getPosX());
+            int j = MathHelper.floor(entity.getPosY());
+            int k = MathHelper.floor(entity.getPosZ());
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             GlStateManager.disableCull();
@@ -60,9 +60,9 @@ public class RenderDreadlandsWeather extends IRenderHandler {
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.alphaFunc(516, 0.1F);
-            double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
-            double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
-            double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
+            double d0 = entity.lastTickPosX + (entity.getPosX() - entity.lastTickPosX) * (double) partialTicks;
+            double d1 = entity.lastTickPosY + (entity.getPosY() - entity.lastTickPosY) * (double) partialTicks;
+            double d2 = entity.lastTickPosZ + (entity.getPosZ() - entity.lastTickPosZ) * (double) partialTicks;
             int l = MathHelper.floor(d1);
             int i1 = 5;
 
@@ -110,8 +110,8 @@ public class RenderDreadlandsWeather extends IRenderHandler {
                             double d8 = (double) (-((float) (this.rendererUpdateCount & 511) + partialTicks) / 512.0F);
                             double d9 = this.random.nextDouble() + (double) f1 * 0;
                             double d10 = this.random.nextDouble() + (double) (f1) * -0.001D;
-                            double d11 = (double) ((float) l1 + 0.5F) - entity.posX;
-                            double d12 = (double) ((float) k1 + 0.5F) - entity.posZ;
+                            double d11 = (double) ((float) l1 + 0.5F) - entity.getPosX();
+                            double d12 = (double) ((float) k1 + 0.5F) - entity.getPosZ();
                             float f6 = MathHelper.sqrt(d11 * d11 + d12 * d12) / (float) i1;
                             float f5 = ((1.0F - f6 * f6) * 0.3F + 0.5F) * f;
                             blockpos$mutableblockpos.setPos(l1, i3, k1);

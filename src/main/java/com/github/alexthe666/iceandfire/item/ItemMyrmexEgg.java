@@ -2,22 +2,26 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
+import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
+import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -26,31 +30,33 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     boolean isJungle;
 
     public ItemMyrmexEgg(boolean isJungle) {
-        this.setHasSubtypes(true);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.isJungle = isJungle;
-        this.setTranslationKey(isJungle ? "iceandfire.myrmex_jungle_egg" : "iceandfire.myrmex_desert_egg");
-        this.maxStackSize = 1;
         this.setRegistryName(IceAndFire.MODID, isJungle ? "myrmex_jungle_egg" : "myrmex_desert_egg");
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (isInCreativeTab(tab)) {
-            items.add(new ItemStack(this, 1, 0));
-            items.add(new ItemStack(this, 1, 1));
-            items.add(new ItemStack(this, 1, 2));
-            items.add(new ItemStack(this, 1, 3));
-            items.add(new ItemStack(this, 1, 4));
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)) {
+            for (int i = 0; i < 5; i++) {
+                ItemStack stack = new ItemStack(this);
+                CompoundNBT tag = new CompoundNBT();
+                tag.putInt("EggOrdinal", i);
+                stack.setTag(tag);
+                items.add(stack);
+            }
         }
+
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String caste;
-        switch (stack.getMetadata()) {
+        CompoundNBT tag = stack.getTag();
+        int eggOrdinal = 0;
+        if(tag != null){
+            eggOrdinal = tag.getInt("EggOrdinal");
+        }
+        switch (eggOrdinal) {
             default:
                 caste = "worker";
                 break;
@@ -66,40 +72,38 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
             case 4:
                 caste = "queen";
         }
-        if (stack.getMetadata() == 4) {
-            tooltip.add(TextFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
+        if (eggOrdinal == 4) {
+            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").applyTextStyle(TextFormatting.LIGHT_PURPLE));
         } else {
-            tooltip.add(StatCollector.translateToLocal("myrmex.caste_" + caste + ".name"));
+            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").applyTextStyle(TextFormatting.GRAY));
         }
     }
 
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (facing != EnumFacing.UP) {
-            return EnumActionResult.PASS;
-        } else {
-            EntityMyrmexEgg egg = new EntityMyrmexEgg(worldIn);
-            egg.setJungle(isJungle);
-            egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-            egg.onPlayerPlace(player);
-            ItemStack itemstack = player.getHeldItem(hand);
-            egg.setMyrmexCaste(itemstack.getMetadata());
-            if (!worldIn.isRemote) {
-                worldIn.spawnEntity(egg);
-            }
-
-            if (!player.capabilities.isCreativeMode) {
-                itemstack.shrink(1);
-                if (itemstack.getCount() <= 0) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
-                }
-            }
-            return EnumActionResult.SUCCESS;
-
+    public ActionResultType onItemUse(ItemUseContext context) {
+        ItemStack itemstack = context.getPlayer().getHeldItem(context.getHand());
+        BlockPos offset = context.getPos().offset(context.getFace());
+        EntityMyrmexEgg egg = new EntityMyrmexEgg(context.getWorld());
+        CompoundNBT tag = itemstack.getTag();
+        int eggOrdinal = 0;
+        if(tag != null){
+            eggOrdinal = tag.getInt("EggOrdinal");
         }
+        egg.setMyrmexCaste(eggOrdinal);
+        egg.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
+        egg.onPlayerPlace(context.getPlayer());
+        if (!context.getWorld().isRemote) {
+            context.getWorld().addEntity(egg);
+        }
+        itemstack.shrink(1);
+        return ActionResultType.SUCCESS;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean hasEffect(ItemStack stack) {
-        return super.hasEffect(stack) || stack.getMetadata() == 4;
+        CompoundNBT tag = stack.getTag();
+        int eggOrdinal = 0;
+        if(tag != null){
+            eggOrdinal = tag.getInt("EggOrdinal");
+        }
+        return super.hasEffect(stack) || eggOrdinal == 4;
     }
 }

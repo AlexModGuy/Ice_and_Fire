@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -51,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
+public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
 
     public static final ResourceLocation TAN_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_tan"));
     public static final ResourceLocation WHITE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "deathworm_white"));
@@ -116,9 +117,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
 
     public boolean getCanSpawnHere() {
-        int i = MathHelper.floor(this.posX);
+        int i = MathHelper.floor(this.getPosX());
         int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-        int k = MathHelper.floor(this.posZ);
+        int k = MathHelper.floor(this.getPosZ());
         BlockPos blockpos = new BlockPos(i, j, k);
         return this.world.getBlockState(blockpos.down()).getBlock() == this.spawnableBlock && this.getRNG().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
     }
@@ -163,8 +164,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.playSound(this.getScaleForAge() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_ATTACK : IafSoundRegistry.DEATHWORM_ATTACK, 1, 1);
         }
         if (this.getRNG().nextInt(3) == 0 && this.getScaleForAge() > 1 && this.world.getGameRules().getBoolean("mobGriefing")) {
-            if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, entityIn.posX, entityIn.posY, entityIn.posZ))) {
-                BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, entityIn.posX, entityIn.posY, entityIn.posZ, this.getScaleForAge());
+            if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()))) {
+                BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ(), this.getScaleForAge());
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);
             }
@@ -206,7 +207,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                 if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, cause, capturedDrops, i, recentlyHit > 0)) {
                     for (EntityItem item : capturedDrops) {
                         world.spawnEntity(item);
-                        item.posY = this.getSurface((int) item.posX, (int) item.posY, (int) item.posZ);
+                        item.getPosY() = this.getSurface((int) item.getPosX(), (int) item.getPosY(), (int) item.getPosZ());
                     }
                 }
             }
@@ -378,7 +379,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
             double extraZ = radius * MathHelper.cos(angle);
-            passenger.setPosition(this.posX + extraX, this.posY + this.getEyeHeight() - 0.55F, this.posZ + extraZ);
+            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + this.getEyeHeight() - 0.55F, this.getPosZ() + extraZ);
         }
     }
 
@@ -393,7 +394,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         return null;
     }
 
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
@@ -456,9 +457,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 
         for (int i = 0; i < 8; ++i) {
-            int j = MathHelper.floor(this.posY + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
-            int k = MathHelper.floor(this.posX + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.width * 0.8F));
-            int l = MathHelper.floor(this.posZ + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
+            int j = MathHelper.floor(this.getPosY() + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
+            int k = MathHelper.floor(this.getPosX() + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.width * 0.8F));
+            int l = MathHelper.floor(this.getPosZ() + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
 
             if (blockpos$pooledmutableblockpos.getX() != k || blockpos$pooledmutableblockpos.getY() != j || blockpos$pooledmutableblockpos.getZ() != l) {
                 blockpos$pooledmutableblockpos.setPos(k, j, l);
@@ -483,46 +484,46 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         if (!this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
             return false;
         } else {
-            EnumFacing enumfacing = EnumFacing.UP;
+            Direction Direction = Direction.UP;
             double d3 = Double.MAX_VALUE;
 
             if (!isBlockFullCube(blockpos.west()) && d0 < d3) {
                 d3 = d0;
-                enumfacing = EnumFacing.WEST;
+                Direction = Direction.WEST;
             }
 
             if (!isBlockFullCube(blockpos.east()) && 1.0D - d0 < d3) {
                 d3 = 1.0D - d0;
-                enumfacing = EnumFacing.EAST;
+                Direction = Direction.EAST;
             }
 
             if (!isBlockFullCube(blockpos.north()) && d2 < d3) {
                 d3 = d2;
-                enumfacing = EnumFacing.NORTH;
+                Direction = Direction.NORTH;
             }
 
             if (!isBlockFullCube(blockpos.south()) && 1.0D - d2 < d3) {
                 d3 = 1.0D - d2;
-                enumfacing = EnumFacing.SOUTH;
+                Direction = Direction.SOUTH;
             }
 
             if (!isBlockFullCube(blockpos.up()) && 1.0D - d1 < d3) {
                 d3 = 1.0D - d1;
-                enumfacing = EnumFacing.UP;
+                Direction = Direction.UP;
             }
 
             float f = this.rand.nextFloat() * 0.2F + 0.1F;
-            float f1 = (float) enumfacing.getAxisDirection().getOffset();
+            float f1 = (float) Direction.getAxisDirection().getOffset();
 
-            if (enumfacing.getAxis() == EnumFacing.Axis.X) {
+            if (Direction.getAxis() == Direction.Axis.X) {
                 this.motionX = f1 * f;
                 this.motionY *= 0.75D;
                 this.motionZ *= 0.75D;
-            } else if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+            } else if (Direction.getAxis() == Direction.Axis.Y) {
                 this.motionX *= 0.75D;
                 this.motionY = f1 * f;
                 this.motionZ *= 0.75D;
-            } else if (enumfacing.getAxis() == EnumFacing.Axis.Z) {
+            } else if (Direction.getAxis() == Direction.Axis.Z) {
                 this.motionX *= 0.75D;
                 this.motionY *= 0.75D;
                 this.motionZ = f1 * f;
@@ -557,7 +558,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         if (this.willExplode) {
             if (this.ticksTillExplosion == 0) {
                 boolean b = !MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, posX, posY, posZ));
-                world.newExplosion(null, this.posX, this.posY, this.posZ, 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && b);
+                world.newExplosion(null, this.getPosX(), this.getPosY(), this.getPosZ(), 2.5F * this.getScaleForAge(), false, net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) && b);
             } else {
                 this.ticksTillExplosion--;
             }
@@ -573,9 +574,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.setDeathWormScale(this.getScale());
             if (world.isRemote) {
                 for (int i = 0; i < 10 * this.getScaleForAge(); i++) {
-                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     for (int j = 0; j < segments.length; j++) {
-                        this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                        this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].getPosX() + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].getPosX()), (int) Math.floor(segments[j].getPosY()), (int) Math.floor(segments[j].getPosZ())) + 0.5F, segments[j].getPosZ() + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     }
                 }
             }
@@ -602,8 +603,8 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             this.faceEntity(this.getAttackTarget(), 10.0F, 10.0F);
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist >= 4.0D * getScaleForAge() && dist <= 16.0D * getScaleForAge() && (this.isInSand() || this.onGround)) {
-                double d0 = this.getAttackTarget().posX - this.posX;
-                double d1 = this.getAttackTarget().posZ - this.posZ;
+                double d0 = this.getAttackTarget().getPosX() - this.getPosX();
+                double d1 = this.getAttackTarget().getPosZ() - this.getPosZ();
                 float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
                 if ((double) leap >= 1.0E-4D) {
                     this.motionX += d0 / (double) leap * 0.800000011920929D + this.motionX * 0.20000000298023224D;
@@ -623,12 +624,12 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
 
     @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX), 0, MathHelper.floor(this.posZ));
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.getPosX()), 0, MathHelper.floor(this.getPosZ()));
 
         if (this.world.isBlockLoaded(blockpos$mutableblockpos)) {
-            blockpos$mutableblockpos.setY(MathHelper.floor(this.posY + (double) this.getEyeHeight()));
+            blockpos$mutableblockpos.setY(MathHelper.floor(this.getPosY() + (double) this.getEyeHeight()));
             if (world.getBlockState(blockpos$mutableblockpos).getMaterial() == Material.SAND || this.isEntityInsideOpaqueBlock()) {
-                blockpos$mutableblockpos.setY(world.getHeight(MathHelper.floor(this.posX), MathHelper.floor(this.posZ)));
+                blockpos$mutableblockpos.setY(world.getHeight(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getPosZ())));
             }
             return this.world.getCombinedLight(blockpos$mutableblockpos, 0);
         } else {
@@ -674,7 +675,7 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
                     float angle = (0.01745329251F * this.renderYawOffset);
                     double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                     double extraZ = radius * MathHelper.cos(angle);
-                    BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, this.posX + extraX, this.posY - this.getEyeHeight(), this.posZ + extraZ, this.getScaleForAge() * 0.75F);
+                    BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, this, this.getPosX() + extraX, this.getPosY() - this.getEyeHeight(), this.getPosZ() + extraZ, this.getScaleForAge() * 0.75F);
                     explosion.doExplosionA();
                     explosion.doExplosionB(true);
                 }
@@ -686,11 +687,11 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         if (!this.isInSand()) {
             this.noClip = false;
         } else {
-            BlockState state = world.getBlockState(new BlockPos(this.posX, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)), this.posZ).down());
+            BlockState state = world.getBlockState(new BlockPos(this.getPosX(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())), this.getPosZ()).down());
             int blockId = Block.getStateId(state);
             if (state.isOpaqueCube()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     for (int i = 0; i < segments.length; i++) {
                         this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     }
@@ -714,12 +715,12 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         }
         if (this.getControllingPassenger() != null) {
             this.noClip = false;
-            this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+            this.pushOutOfBlocks(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
             if (isSandBelow()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     for (int i = 0; i < segments.length; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
+                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].getPosX() + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].getPosX()), (int) Math.floor(segments[i].getPosY()), (int) Math.floor(segments[i].getPosZ())) + 0.5F, segments[i].getPosZ() + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     }
                 }
             }
@@ -778,9 +779,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
     }
 
     public boolean isSandBelow() {
-        int i = MathHelper.floor(this.posX);
-        int j = MathHelper.floor(this.posY - 1);
-        int k = MathHelper.floor(this.posZ);
+        int i = MathHelper.floor(this.getPosX());
+        int j = MathHelper.floor(this.getPosY() - 1);
+        int k = MathHelper.floor(this.getPosZ());
         BlockPos blockpos = new BlockPos(i, j, k);
         BlockState BlockState = this.world.getBlockState(blockpos);
         return BlockState.getMaterial() == Material.SAND;
@@ -879,9 +880,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             }
         }
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double deltaX = this.posX - this.prevPosX;
-        double deltaZ = this.posZ - this.prevPosZ;
-        double deltaY = this.posY - this.prevPosY;
+        double deltaX = this.getPosX() - this.prevPosX;
+        double deltaZ = this.getPosZ() - this.prevPosZ;
+        double deltaY = this.getPosY() - this.prevPosY;
         float delta = MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 4.0F;
         if (delta > 1.0F) {
             delta = 1.0F;
@@ -947,9 +948,9 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
         @Override
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.worm.getNavigator().noPath() && !this.worm.isBeingRidden()) {
-                double distanceX = this.posX - this.worm.posX;
-                double distanceY = this.posY - this.worm.posY;
-                double distanceZ = this.posZ - this.worm.posZ;
+                double distanceX = this.getPosX() - this.worm.getPosX();
+                double distanceY = this.getPosY() - this.worm.getPosY();
+                double distanceZ = this.getPosZ() - this.worm.getPosZ();
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
                 double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;

@@ -199,7 +199,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = raiseUp;
-            passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
             if (this.getAnimationTick() == 32) {
                 passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
                 passenger.dismountRidingEntity();
@@ -272,10 +272,10 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
                 double extraY = 0.8F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
 
-                BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
                     }
                 }
             }

@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 public class DragonAIAttackMelee extends EntityAIBase {
@@ -89,13 +89,13 @@ public class DragonAIAttackMelee extends EntityAIBase {
                 this.resetTask();
                 return;
             }
-            double d0 = this.dragon.getDistanceSq(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+            double d0 = this.dragon.getDistanceSq(entity.getPosX(), entity.getEntityBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
             if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
-                this.targetX = entity.posX;
+                this.targetX = entity.getPosX();
                 this.targetY = entity.getEntityBoundingBox().minY;
-                this.targetZ = entity.posZ;
+                this.targetZ = entity.getPosZ();
                 this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
 
                 if (this.canPenalize) {
@@ -125,7 +125,7 @@ public class DragonAIAttackMelee extends EntityAIBase {
 
             if (d0 <= d1 && this.attackTick <= 0) {
                 this.attackTick = 20;
-                this.dragon.swingArm(EnumHand.MAIN_HAND);
+                this.dragon.swingArm(Hand.MAIN_HAND);
                 this.dragon.attackEntityAsMob(entity);
             }
         }

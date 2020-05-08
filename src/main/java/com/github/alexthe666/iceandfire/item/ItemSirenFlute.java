@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -41,7 +41,7 @@ public class ItemSirenFlute extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand hand) {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.setActiveHand(hand);
         player.getCooldownTracker().setCooldown(this, 900);
@@ -94,11 +94,12 @@ public class ItemSirenFlute extends Item {
         return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(I18n.format("item.iceandfire.siren_flute.desc_0"));
-        tooltip.add(I18n.format("item.iceandfire.siren_flute.desc_1"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.siren_flute.desc_0"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.siren_flute.desc_1"));
     }
 }

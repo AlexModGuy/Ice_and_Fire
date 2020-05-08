@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,7 +23,7 @@ public class LayerPixieItem implements LayerRenderer<EntityPixie> {
     }
 
     public void doRenderLayer(EntityPixie entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
 
             GlStateManager.color(1.0F, 1.0F, 1.0F);

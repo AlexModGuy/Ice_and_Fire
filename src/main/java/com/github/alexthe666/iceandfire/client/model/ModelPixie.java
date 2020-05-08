@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelPixie extends ModelDragonBase {
@@ -112,7 +112,7 @@ public class ModelPixie extends ModelDragonBase {
         }
         this.Body.rotateAngleX = f12;
         this.Head.rotateAngleX -= f12;
-        ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
 
             this.faceTarget(f3, f4, 1, this.Head);
@@ -187,7 +187,7 @@ public class ModelPixie extends ModelDragonBase {
         this.Right_Wing.rotateAngleZ = (float) Math.toRadians(28);
         this.Left_Wing2.rotateAngleZ = (float) Math.toRadians(-8);
         this.Right_Wing2.rotateAngleZ = (float) Math.toRadians(8);
-		/*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+		/*ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
 		if (!itemstack.isEmpty()) {
             this.Body.rotateAngleX = f12;
             this.Head.rotateAngleX -= f12;
@@ -244,7 +244,7 @@ public class ModelPixie extends ModelDragonBase {
             this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 1, jar.ticksExisted, 1);
             this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 1, jar.ticksExisted, 1);
         }
-		/*ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+		/*ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
 		if (!itemstack.isEmpty()) {
             this.Body.rotateAngleX = f12;
             this.Head.rotateAngleX -= f12;

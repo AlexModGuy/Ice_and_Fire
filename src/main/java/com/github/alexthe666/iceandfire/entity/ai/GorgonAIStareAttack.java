@@ -51,9 +51,9 @@ public class GorgonAIStareAttack extends EntityAIBase {
                 resetTask();
                 return;
             }
-            this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+            this.entity.getLookHelper().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
 
-            double d0 = this.entity.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
             boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 
@@ -95,7 +95,7 @@ public class GorgonAIStareAttack extends EntityAIBase {
                 }
 
                 this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+                this.entity.getLookHelper().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
             } else {
                 this.entity.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
             }

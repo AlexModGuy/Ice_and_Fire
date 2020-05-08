@@ -15,7 +15,7 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -93,7 +93,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 if (random.nextInt(IafConfig.spawnGorgonsChance + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
-                    new WorldGenGorgonTemple(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
+                    new WorldGenGorgonTemple(Direction.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
                     lastGorgonTemple = surface;
                 }
             }
@@ -306,7 +306,7 @@ public class WorldGenEvents implements IWorldGenerator {
                 if (random.nextInt(IafConfig.generateMausoleumChance + 1) == 0) {
                     BlockPos surface = world.getHeight(new BlockPos(x, 0, z));
                     surface = degradeSurface(world, surface);
-                    new WorldGenMausoleum(EnumFacing.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
+                    new WorldGenMausoleum(Direction.byHorizontalIndex(random.nextInt(3))).generate(world, random, surface);
                     lastMausoleum = surface;
                 }
             }

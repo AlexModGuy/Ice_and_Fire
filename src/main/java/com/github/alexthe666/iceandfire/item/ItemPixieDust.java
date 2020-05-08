@@ -1,24 +1,21 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class ItemPixieDust extends ItemFood {
+public class ItemPixieDust extends ItemGenericFood {
 
     public ItemPixieDust() {
-        super(1, 0.3F, false);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.pixie_dust");
-        this.setRegistryName(IceAndFire.MODID, "pixie_dust");
+        super(1, 0.3F, false, false, true, "pixie_dust");
     }
 
-    protected void onFoodEaten(ItemStack stack, World worldIn, PlayerEntity player) {
-        player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 1));
-        player.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 1));
+    public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
+        livingEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 1));
+        livingEntity.addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 1));
     }
 }

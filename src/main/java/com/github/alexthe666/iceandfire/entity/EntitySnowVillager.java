@@ -12,7 +12,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -40,7 +40,7 @@ public class EntitySnowVillager extends EntityVillager {
         super(worldIn, profession);
     }
 
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
         if (properties != null && properties.isStone) {
             return false;

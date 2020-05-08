@@ -143,7 +143,7 @@ public class ContainerLectern extends SyncedFieldContainer {
         ItemStack itemstack1 = this.tileFurnace.getStackInSlot(1);
         int i = 3;
         boolean didEnchant = false;
-        if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.capabilities.isCreativeMode) {
+        if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.isCreative()) {
             return false;
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
@@ -155,7 +155,7 @@ public class ContainerLectern extends SyncedFieldContainer {
                         ((TileEntityLectern) this.tileFurnace).randomizePages();
                     }
                 }
-                if (!playerIn.capabilities.isCreativeMode && didEnchant) {
+                if (!playerIn.isCreative() && didEnchant) {
                     itemstack1.shrink(i);
                     if (itemstack1.isEmpty()) {
                         this.tileFurnace.setInventorySlotContents(1, ItemStack.EMPTY);

@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -57,7 +57,7 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
 
                 if (isSoil && position.getY() < worldIn.getHeight() - i - 1) {
                     state.getBlock().onPlantGrow(state, worldIn, down, position);
-                    EnumFacing enumfacing = EnumFacing.Plane.HORIZONTAL.random(rand);
+                    Direction Direction = Direction.Plane.HORIZONTAL.random(rand);
                     int k2 = i - rand.nextInt(4) - 1;
                     int l2 = 3 - rand.nextInt(3);
                     int i3 = position.getX();
@@ -68,8 +68,8 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
                         int i2 = position.getY() + l1;
 
                         if (l1 >= k2 && l2 > 0) {
-                            i3 += enumfacing.getXOffset();
-                            j1 += enumfacing.getZOffset();
+                            i3 += Direction.getXOffset();
+                            j1 += Direction.getZOffset();
                             --l2;
                         }
 
@@ -88,9 +88,9 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
 
                     i3 = position.getX();
                     j1 = position.getZ();
-                    EnumFacing enumfacing1 = EnumFacing.Plane.HORIZONTAL.random(rand);
+                    Direction Direction1 = Direction.Plane.HORIZONTAL.random(rand);
 
-                    if (enumfacing1 != enumfacing) {
+                    if (Direction1 != Direction) {
                         int l3 = k2 - rand.nextInt(2) - 1;
                         int k4 = 1 + rand.nextInt(3);
                         k1 = 0;
@@ -98,8 +98,8 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
                         for (int l4 = l3; l4 < i && k4 > 0; --k4) {
                             if (l4 >= 1) {
                                 int j2 = position.getY() + l4;
-                                i3 += enumfacing1.getXOffset();
-                                j1 += enumfacing1.getZOffset();
+                                i3 += Direction1.getXOffset();
+                                j1 += Direction1.getZOffset();
                                 BlockPos blockpos1 = new BlockPos(i3, j2, j1);
                                 state = worldIn.getBlockState(blockpos1);
 
@@ -126,7 +126,7 @@ public class WorldGenDreadwoodTree extends WorldGenerator {
 
     private void placeLogAt(World worldIn, BlockPos pos) {
         this.setBlockAndNotifyAdequately(worldIn, pos, TRUNK);
-        for(EnumFacing facing : EnumFacing.HORIZONTALS){
+        for(Direction facing : Direction.HORIZONTALS){
             if(worldIn.rand.nextFloat() < 0.1F){
                 this.setBlockAndNotifyAdequately(worldIn, pos.offset(facing), TRUNK.with(BlockRotatedPillar.AXIS, facing.getAxis()));
                 if(worldIn.rand.nextBoolean()){

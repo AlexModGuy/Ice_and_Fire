@@ -5,7 +5,7 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,16 +28,16 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock {
 
     @OnlyIn(Dist.CLIENT)
     public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        EnumFacing enumfacing = stateIn.get(FACING);
+        Direction Direction = stateIn.get(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.6D;
         double d2 = (double) pos.getZ() + 0.5D;
         double d3 = 0.22D;
         double d4 = 0.27D;
-        if (enumfacing.getAxis().isHorizontal()) {
-            EnumFacing enumfacing1 = enumfacing.getOpposite();
-            //worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.27D * (double)enumfacing1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)enumfacing1.getZOffset(), 0.0D, 0.0D, 0.0D);
-            IceAndFire.PROXY.spawnParticle("dread_torch", d0 + 0.27D * (double) enumfacing1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double) enumfacing1.getZOffset(), 0.0D, 0.0D, 0.0D);
+        if (Direction.getAxis().isHorizontal()) {
+            Direction Direction1 = Direction.getOpposite();
+            //worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.27D * (double)Direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)Direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
+            IceAndFire.PROXY.spawnParticle("dread_torch", d0 + 0.27D * (double) Direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double) Direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
 
         } else {
             //worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);

@@ -10,7 +10,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 
@@ -91,7 +91,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public void releasePixie() {
         EntityPixie pixie = new EntityPixie(this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
-        pixie.setHeldItem(EnumHand.MAIN_HAND, pixieItems.get(0));
+        pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!world.isRemote) {
             world.spawnEntity(pixie);

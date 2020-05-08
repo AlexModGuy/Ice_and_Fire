@@ -36,7 +36,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
     }
 
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.posX, (double) this.getPathablePosY(), this.entity.posZ);
+        return new Vec3d(this.entity.getPosX(), (double) this.getPathablePosY(), this.entity.getPosZ());
     }
 
     /**
@@ -85,12 +85,12 @@ public class PathNavigateDeathWormLand extends PathNavigate {
     private int getPathablePosY() {
         if (this.worm.isInSand()) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
-            BlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
+            BlockState blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ())));
             int j = 0;
 
             while (blockstate.getMaterial() == Material.SAND) {
                 ++i;
-                blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ)));
+                blockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ())));
                 ++j;
 
                 if (j > 16) {
@@ -108,7 +108,7 @@ public class PathNavigateDeathWormLand extends PathNavigate {
         super.removeSunnyPath();
 
         if (this.shouldAvoidSun) {
-            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.posX), (int) (this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.posZ)))) {
+            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.getPosX()), (int) (this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getPosZ())))) {
                 return;
             }
 

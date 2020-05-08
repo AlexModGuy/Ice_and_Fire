@@ -248,7 +248,7 @@ public class ClientEvents {
                 }
                 if (sirenProps.isCharmed) {
                     if (player.world.isRemote && rand.nextInt(40) == 0) {
-                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.posX, player.posY, player.posZ, 0, 0, 0);
+                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), 0, 0, 0);
                     }
 
                     if (IafConfig.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {
@@ -295,14 +295,14 @@ public class ClientEvents {
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder bufferbuilder = tessellator.getBuffer();
                 event.getRenderer().bindTexture(CHAIN_TEXTURE);
-                double posX = Minecraft.getInstance().player.prevPosX + (Minecraft.getInstance().player.posX - Minecraft.getInstance().player.prevPosX) * (double) event.getPartialRenderTick();
-                double posY = Minecraft.getInstance().player.prevPosY + (Minecraft.getInstance().player.posY - Minecraft.getInstance().player.prevPosY) * (double) event.getPartialRenderTick();
-                double posZ = Minecraft.getInstance().player.prevPosZ + (Minecraft.getInstance().player.posZ - Minecraft.getInstance().player.prevPosZ) * (double) event.getPartialRenderTick();
+                double posX = Minecraft.getInstance().player.prevPosX + (Minecraft.getInstance().player.getPosX() - Minecraft.getInstance().player.prevPosX) * (double) event.getPartialRenderTick();
+                double posY = Minecraft.getInstance().player.prevPosY + (Minecraft.getInstance().player.getPosY() - Minecraft.getInstance().player.prevPosY) * (double) event.getPartialRenderTick();
+                double posZ = Minecraft.getInstance().player.prevPosZ + (Minecraft.getInstance().player.getPosZ() - Minecraft.getInstance().player.prevPosZ) * (double) event.getPartialRenderTick();
                 for (Entity chainer : properties.connectedEntities) {
                     GlStateManager.pushMatrix();
-                    double chainPosX = chainer.prevPosX + (chainer.posX - chainer.prevPosX) * (double) event.getPartialRenderTick();
-                    double chainPosY = chainer.prevPosY + (chainer.posY - chainer.prevPosY) * (double) event.getPartialRenderTick();
-                    double chainPosZ = chainer.prevPosZ + (chainer.posZ - chainer.prevPosZ) * (double) event.getPartialRenderTick();
+                    double chainPosX = chainer.prevPosX + (chainer.getPosX() - chainer.prevPosX) * (double) event.getPartialRenderTick();
+                    double chainPosY = chainer.prevPosY + (chainer.getPosY() - chainer.prevPosY) * (double) event.getPartialRenderTick();
+                    double chainPosZ = chainer.prevPosZ + (chainer.getPosZ() - chainer.prevPosZ) * (double) event.getPartialRenderTick();
                     GlStateManager.translate(chainPosX - posX, chainPosY - posY, chainPosZ - posZ);
                     GlStateManager.translate(0, 0.75, 0);
                     double height = (double) chainer.getEyeHeight() * 0.75F;
@@ -366,7 +366,7 @@ public class ClientEvents {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             float sideExpand = 0.25F;
-            AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(event.getEntity().getRenderBoundingBox().minX - event.getEntity().posX + event.getX() - sideExpand, event.getEntity().getRenderBoundingBox().minY - event.getEntity().posY + event.getY(), event.getEntity().getRenderBoundingBox().minZ - event.getEntity().posZ + event.getZ() - sideExpand, event.getEntity().getRenderBoundingBox().maxX - event.getEntity().posX + event.getX() + sideExpand, event.getEntity().getRenderBoundingBox().maxY - event.getEntity().posY + event.getY() + sideExpand, event.getEntity().getRenderBoundingBox().maxZ - event.getEntity().posZ + event.getZ() + sideExpand);
+            AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(event.getEntity().getRenderBoundingBox().minX - event.getEntity().getPosX() + event.getX() - sideExpand, event.getEntity().getRenderBoundingBox().minY - event.getEntity().getPosY() + event.getY(), event.getEntity().getRenderBoundingBox().minZ - event.getEntity().getPosZ() + event.getZ() - sideExpand, event.getEntity().getRenderBoundingBox().maxX - event.getEntity().getPosX() + event.getX() + sideExpand, event.getEntity().getRenderBoundingBox().maxY - event.getEntity().getPosY() + event.getY() + sideExpand, event.getEntity().getRenderBoundingBox().maxZ - event.getEntity().getPosZ() + event.getZ() + sideExpand);
             event.getRenderer().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
             renderAABB(axisalignedbb1, 0, 0, 0);
             GlStateManager.disableBlend();
@@ -453,9 +453,9 @@ public class ClientEvents {
     }
 
     private Vec3d getChainPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
-        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.posX - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
-        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.posY - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
-        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.posZ - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
+        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
         return new Vec3d(d0, d1, d2);
     }
 

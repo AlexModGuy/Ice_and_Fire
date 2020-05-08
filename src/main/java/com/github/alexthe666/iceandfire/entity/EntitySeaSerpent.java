@@ -121,8 +121,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     public static BlockPos getPositionRelativeToSeafloor(EntitySeaSerpent entity, World world, double x, double z, Random rand) {
         BlockPos pos;
-        BlockPos topY = new BlockPos(x, entity.posY, z);
-        BlockPos bottomY = new BlockPos(x, entity.posY, z);
+        BlockPos topY = new BlockPos(x, entity.getPosY(), z);
+        BlockPos bottomY = new BlockPos(x, entity.getPosY(), z);
         while (isWaterBlock(world, topY) && topY.getY() < world.getHeight()) {
             topY = topY.up();
         }
@@ -162,15 +162,15 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         float angle = (0.01745329251F * entity.renderYawOffset);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
-        double signum = Math.signum(target.getY() + 0.5F - entity.posY);
+        double signum = Math.signum(target.getY() + 0.5F - entity.getPosY());
         BlockPos pos = new BlockPos(target.getX() + extraX, target.getY() + entity.rand.nextInt(5) * signum, target.getZ() + extraZ);
         entity.isArcing = true;
         return clampBlockPosToWater(entity, world, pos);
     }
 
     private static BlockPos clampBlockPosToWater(Entity entity, World world, BlockPos pos) {
-        BlockPos topY = new BlockPos(pos.getX(), entity.posY, pos.getZ());
-        BlockPos bottomY = new BlockPos(pos.getX(), entity.posY, pos.getZ());
+        BlockPos topY = new BlockPos(pos.getX(), entity.getPosY(), pos.getZ());
+        BlockPos bottomY = new BlockPos(pos.getX(), entity.getPosY(), pos.getZ());
         while (isWaterBlock(world, topY) && topY.getY() < world.getHeight()) {
             topY = topY.up();
         }
@@ -295,9 +295,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     private void spawnParticlesAroundEntity(EnumParticleTypes type, Entity entity, int count) {
         for (int i = 0; i < count; i++) {
-            double x = entity.posX + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width;
-            double y = entity.posY + 0.5D + (double) (this.rand.nextFloat() * entity.height);
-            double z = entity.posZ + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width;
+            double x = entity.getPosX() + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width;
+            double y = entity.getPosY() + 0.5D + (double) (this.rand.nextFloat() * entity.height);
+            double z = entity.getPosZ() + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width;
             if (this.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER) {
                 this.world.spawnParticle(type, x, y, z, 0, 0, 0);
             }
@@ -316,7 +316,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 double extraY = 0.8F;
                 double extraZ = radius * MathHelper.cos(angle);
                 if (world.isRemote) {
-                    world.spawnParticle(type, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, 0);
+                    world.spawnParticle(type, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, 0);
                 }
             }
         }
@@ -599,8 +599,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             if (entity instanceof LivingEntity) {
                 entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                 destroyBoat(entity);
-                double xRatio = this.posX - entity.posX;
-                double zRatio = this.posZ - entity.posZ;
+                double xRatio = this.getPosX() - entity.getPosX();
+                double zRatio = this.getPosZ() - entity.getPosZ();
                 float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
                 float strength = 0.3F * this.getSeaSerpentScale();
                 entity.motionX /= 2.0D;
@@ -837,12 +837,12 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                     float f1 = 0;
                     float f2 = 0;
                     float f3 = 0;
-                    float headPosX = f1 + (float) (this.segments[0].posX + 0.3F * getSeaSerpentScale() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-                    float headPosZ = f2 + (float) (this.segments[0].posZ + 0.3F * getSeaSerpentScale() * Math.sin((rotationYaw + 90) * Math.PI / 180));
-                    float headPosY = f3 + (float) (this.segments[0].posY + 0.2F * getSeaSerpentScale());
-                    double d2 = entity.posX - headPosX;
-                    double d3 = entity.posY - headPosY;
-                    double d4 = entity.posZ - headPosZ;
+                    float headPosX = f1 + (float) (this.segments[0].getPosX() + 0.3F * getSeaSerpentScale() * Math.cos((rotationYaw + 90) * Math.PI / 180));
+                    float headPosZ = f2 + (float) (this.segments[0].getPosZ() + 0.3F * getSeaSerpentScale() * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                    float headPosY = f3 + (float) (this.segments[0].getPosY() + 0.2F * getSeaSerpentScale());
+                    double d2 = entity.getPosX() - headPosX;
+                    double d3 = entity.getPosY() - headPosY;
+                    double d4 = entity.getPosZ() - headPosZ;
                     EntitySeaSerpentBubbles entitylargefireball = new EntitySeaSerpentBubbles(world, this, d2, d3, d4);
                     float size = 0.8F;
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -919,9 +919,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             }
         }
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double deltaX = this.posX - this.prevPosX;
-        double deltaZ = this.posZ - this.prevPosZ;
-        double deltaY = this.posY - this.prevPosY;
+        double deltaX = this.getPosX() - this.prevPosX;
+        double deltaZ = this.getPosZ() - this.prevPosZ;
+        double deltaY = this.getPosY() - this.prevPosY;
         float delta = MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 4.0F;
         if (delta > 1.0F) {
             delta = 1.0F;
@@ -968,9 +968,9 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         @Override
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-                double d0 = this.posX - EntitySeaSerpent.this.posX;
-                double d1 = this.posY - EntitySeaSerpent.this.posY;
-                double d2 = this.posZ - EntitySeaSerpent.this.posZ;
+                double d0 = this.getPosX() - EntitySeaSerpent.this.getPosX();
+                double d1 = this.getPosY() - EntitySeaSerpent.this.getPosY();
+                double d2 = this.getPosZ() - EntitySeaSerpent.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = MathHelper.sqrt(d3);
                 if (d3 < 6 && EntitySeaSerpent.this.getAttackTarget() == null) {
@@ -1007,8 +1007,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                             EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.motionX, EntitySeaSerpent.this.motionZ)) * (180F / (float) Math.PI);
                             EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
                         } else if (EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP) {
-                            double d4 = EntitySeaSerpent.this.getAttackTarget().posX - EntitySeaSerpent.this.posX;
-                            double d5 = EntitySeaSerpent.this.getAttackTarget().posZ - EntitySeaSerpent.this.posZ;
+                            double d4 = EntitySeaSerpent.this.getAttackTarget().getPosX() - EntitySeaSerpent.this.getPosX();
+                            double d5 = EntitySeaSerpent.this.getAttackTarget().getPosZ() - EntitySeaSerpent.this.getPosZ();
                             EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
                             EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
                         }
@@ -1042,11 +1042,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
         protected BlockPos generateTarget() {
             if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
-                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.posX, EntitySeaSerpent.this.posZ, EntitySeaSerpent.this.rand);
+                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.getPosX(), EntitySeaSerpent.this.getPosZ(), EntitySeaSerpent.this.rand);
                 return pos.up(3 * (int) Math.ceil(EntitySeaSerpent.this.getSeaSerpentScale()));
             }
             for (int i = 0; i < 5; i++) {
-                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.posX + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.posZ + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.rand);
+                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.getPosX() + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.getPosZ() + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.rand);
                 if (EntitySeaSerpent.isWaterBlock(world, pos) && EntitySeaSerpent.this.isDirectPathBetweenPoints(pos) || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
                     return pos;
                 }
@@ -1105,7 +1105,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
         protected BlockPos generateTarget() {
             for (int i = 0; i < 5; i++) {
-                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.posX + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.posZ + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.rand);
+                BlockPos pos = EntitySeaSerpent.getPositionRelativeToSeafloor(EntitySeaSerpent.this, EntitySeaSerpent.this.world, EntitySeaSerpent.this.getPosX() + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.getPosZ() + EntitySeaSerpent.this.rand.nextInt(30) - 15, EntitySeaSerpent.this.rand);
                 if (EntitySeaSerpent.isWaterBlock(world, pos) && EntitySeaSerpent.this.isDirectPathBetweenPoints(pos)) {
                     return pos;
                 }
@@ -1209,8 +1209,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 if (EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.getAttackTarget().isDead) {
                     this.secondPhase = true;
                 } else {
-                    double d0 = EntitySeaSerpent.this.getAttackTarget().posX - EntitySeaSerpent.this.posX;
-                    double d1 = EntitySeaSerpent.this.getAttackTarget().posZ - EntitySeaSerpent.this.posZ;
+                    double d0 = EntitySeaSerpent.this.getAttackTarget().getPosX() - EntitySeaSerpent.this.getPosX();
+                    double d1 = EntitySeaSerpent.this.getAttackTarget().getPosZ() - EntitySeaSerpent.this.getPosZ();
                     double d2 = d0 * d0 + d1 * d1;
                     d2 = MathHelper.sqrt(d2);
                     EntitySeaSerpent.this.arcingYAdditive = (secondPhase ? 1 : -1) * (float) d2;

@@ -31,9 +31,10 @@ public class BlockDragonScales extends Block implements IDragonProof {
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
     }
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
         tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
     }
 }

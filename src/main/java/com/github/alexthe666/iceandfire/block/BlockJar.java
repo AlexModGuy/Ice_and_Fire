@@ -51,7 +51,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
     }
 
     @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.MIDDLE_POLE;
     }
 
@@ -76,7 +76,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.down());
-        return BlockState.isSideSolid(worldIn, pos, EnumFacing.UP) || BlockState.getBlock().canPlaceTorchOnTop(BlockState, worldIn, pos);
+        return BlockState.isSideSolid(worldIn, pos, Direction.UP) || BlockState.getBlock().canPlaceTorchOnTop(BlockState, worldIn, pos);
     }
 
     public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
@@ -117,7 +117,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
         return new ItemStack(IafBlockRegistry.JAR_EMPTY);
     }
 
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
             ((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
             EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST));

@@ -4,17 +4,18 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityHydraArrow  extends EntityArrow {
+public class EntityHydraArrow  extends AbstractArrowEntity {
 
     public EntityHydraArrow(World worldIn) {
         super(worldIn);
@@ -41,8 +42,8 @@ public class EntityHydraArrow  extends EntityArrow {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            IceAndFire.PROXY.spawnParticle("hydra", this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
-            IceAndFire.PROXY.spawnParticle("hydra", this.posX + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
 
         }
     }
@@ -54,10 +55,10 @@ public class EntityHydraArrow  extends EntityArrow {
             player.getActiveItemStack().damageItem(i, player);
 
             if (player.getActiveItemStack().isEmpty()) {
-                EnumHand enumhand = player.getActiveHand();
-                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, enumhand);
+                Hand Hand = player.getActiveHand();
+                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (enumhand == EnumHand.MAIN_HAND) {
+                if (Hand == Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);

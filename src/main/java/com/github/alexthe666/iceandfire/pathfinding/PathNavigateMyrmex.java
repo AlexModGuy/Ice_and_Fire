@@ -47,9 +47,9 @@ public class PathNavigateMyrmex extends PathNavigateGround {
 
         this.maxDistanceToWaypoint = this.entity.width;
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
-        float distX = MathHelper.abs((float)(this.entity.posX - (vec3d1.x + 0.5D)));
-        float distZ = MathHelper.abs((float)(this.entity.posZ - (vec3d1.z + 0.5D)));
-        float distY = (float)Math.abs(this.entity.posY - vec3d1.y);
+        float distX = MathHelper.abs((float)(this.entity.getPosX() - (vec3d1.x + 0.5D)));
+        float distZ = MathHelper.abs((float)(this.entity.getPosZ() - (vec3d1.z + 0.5D)));
+        float distY = (float)Math.abs(this.entity.getPosY() - vec3d1.y);
 
         if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY <= 1.1F)
         {

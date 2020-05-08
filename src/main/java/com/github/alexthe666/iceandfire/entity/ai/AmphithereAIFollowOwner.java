@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -84,8 +84,8 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
                 tryMoveTo();
                 if (!this.ampithere.getLeashed() && !this.ampithere.isRiding()) {
                     if (this.ampithere.getDistanceSq(this.owner) >= 144.0D) {
-                        int i = MathHelper.floor(this.owner.posX) - 2;
-                        int j = MathHelper.floor(this.owner.posZ) - 2;
+                        int i = MathHelper.floor(this.owner.getPosX()) - 2;
+                        int j = MathHelper.floor(this.owner.getPosZ()) - 2;
                         int k = MathHelper.floor(this.owner.getEntityBoundingBox().minY);
 
                         for (int l = 0; l <= 4; ++l) {
@@ -106,14 +106,14 @@ public class AmphithereAIFollowOwner extends EntityAIBase {
     protected boolean isTeleportFriendlyBlock(int x, int z, int y, int xOffset, int zOffset) {
         BlockPos blockpos = new BlockPos(x + xOffset, y - 1, z + zOffset);
         BlockState BlockState = this.world.getBlockState(blockpos);
-        return BlockState.getBlockFaceShape(this.world, blockpos, EnumFacing.DOWN) == BlockFaceShape.SOLID && BlockState.canEntitySpawn(this.ampithere) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
+        return BlockState.getBlockFaceShape(this.world, blockpos, Direction.DOWN) == BlockFaceShape.SOLID && BlockState.canEntitySpawn(this.ampithere) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
     }
 
     private boolean tryMoveTo() {
         if (!ampithere.isFlying()) {
             return ampithere.getNavigator().tryMoveToLivingEntity(this.owner, this.followSpeed);
         } else {
-            this.ampithere.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight() + 5 + this.ampithere.getRNG().nextInt(8), this.owner.posZ, 0.25D);
+            this.ampithere.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight() + 5 + this.ampithere.getRNG().nextInt(8), this.owner.getPosZ(), 0.25D);
             return true;
         }
     }

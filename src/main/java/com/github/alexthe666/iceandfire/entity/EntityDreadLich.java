@@ -85,7 +85,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
         }
@@ -96,8 +96,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             float f = this.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.ticksExisted * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
-            IceAndFire.PROXY.spawnParticle("dread_torch", this.posX + (double) f1 * 0.6D, this.posY + 1.8D, this.posZ + (double) f2 * 0.6D, d0, d1, d2);
-            IceAndFire.PROXY.spawnParticle("dread_torch", this.posX - (double) f1 * 0.6D, this.posY + 1.8D, this.posZ - (double) f2 * 0.6D, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle("dread_torch", this.getPosX() + (double) f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() + (double) f2 * 0.6D, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle("dread_torch", this.getPosX() - (double) f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() - (double) f2 * 0.6D, d0, d1, d2);
         }
         if (fireCooldown > 0) {
             fireCooldown--;
@@ -224,8 +224,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             this.setAnimation(ANIMATION_SUMMON);
             this.playSound(IafSoundRegistry.DREAD_LICH_SUMMON, this.getSoundVolume(), this.getSoundPitch());
             LivingEntity minion = getRandomNewMinion();
-            int x = (int) (this.posX) - 5 + rand.nextInt(10);
-            int z = (int) (this.posZ) - 5 + rand.nextInt(10);
+            int x = (int) (this.getPosX()) - 5 + rand.nextInt(10);
+            int z = (int) (this.getPosZ()) - 5 + rand.nextInt(10);
             double y = getHeightFromXZ(x, z);
             minion.setLocationAndAngles(x + 0.5D, y, z + 0.5D, this.rotationYaw, this.rotationPitch);
             minion.setAttackTarget(target);
@@ -241,12 +241,12 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             flag = true;
         }
         if (fireCooldown == 0 && !flag) {
-            this.swingArm(EnumHand.MAIN_HAND);
+            this.swingArm(Hand.MAIN_HAND);
             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
             EntityDreadLichSkull skull = new EntityDreadLichSkull(world, this, 6);
-            double d0 = target.posX - this.posX;
-            double d1 = target.getEntityBoundingBox().minY + (double) (target.height * 2) - skull.posY;
-            double d2 = target.posZ - this.posZ;
+            double d0 = target.getPosX() - this.getPosX();
+            double d1 = target.getEntityBoundingBox().minY + (double) (target.height * 2) - skull.getPosY();
+            double d2 = target.getPosZ() - this.getPosZ();
             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, (float) (14 - this.world.getDifficulty().getId() * 4));
             this.world.spawnEntity(skull);
@@ -268,7 +268,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     private double getHeightFromXZ(int x, int z) {
-        BlockPos thisPos = new BlockPos(x, this.posY + 7, z);
+        BlockPos thisPos = new BlockPos(x, this.getPosY() + 7, z);
         while (world.isAirBlock(thisPos) && thisPos.getY() > 2) {
             thisPos = thisPos.down();
         }

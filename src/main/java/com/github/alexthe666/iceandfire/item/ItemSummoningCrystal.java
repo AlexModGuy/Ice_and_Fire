@@ -14,8 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -72,24 +72,24 @@ public class ItemSummoningCrystal extends Item {
             for (String tagInfo : stack.getTagCompound().getKeySet()) {
                 if (tagInfo.contains("Dragon")) {
                     CompoundNBT draginTag = stack.getTagCompound().getCompoundTag(tagInfo);
-                    String dragonName = I18n.format(ice ?  "entity.icedragon.name" : "entity.firedragon.name");
+                    String dragonName = new TranslationTextComponent(ice ?  "entity.icedragon.name" : "entity.firedragon.name");
                     if (!draginTag.getString("CustomName").isEmpty()) {
                         dragonName = draginTag.getString("CustomName");
                     }
-                    tooltip.add(I18n.format("item.iceandfire.summoning_crystal.bound", dragonName));
+                    tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.bound", dragonName));
                     flag = true;
                 }
             }
         }
         if(!flag){
-            tooltip.add(I18n.format("item.iceandfire.summoning_crystal.desc_0"));
-            tooltip.add(I18n.format("item.iceandfire.summoning_crystal.desc_1"));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_0"));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_1"));
 
         }
 
     }
 
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         boolean flag = false;
         BlockPos offsetPos = pos.offset(facing);

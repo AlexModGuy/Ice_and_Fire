@@ -47,7 +47,7 @@ public class StymphalianBirdAIFlee extends EntityAIBase {
         } else {
             this.closestLivingEntity = list.get(0);
             if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
+                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
                 if (vec3d == null) {
                     return false;

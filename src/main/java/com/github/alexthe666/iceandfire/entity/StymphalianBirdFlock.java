@@ -35,7 +35,7 @@ public class StymphalianBirdFlock {
     @Nullable
     public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird) {
         float d0 = IafConfig.stymphalianBirdFlockLength;
-        List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.posX, bird.posY, bird.posZ, bird.posX + 1.0D, bird.posY + 1.0D, bird.posZ + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
+        List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.getPosX(), bird.getPosY(), bird.getPosZ(), bird.getPosX() + 1.0D, bird.getPosY() + 1.0D, bird.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(bird));
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();

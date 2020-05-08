@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -12,13 +13,13 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStatues, IDeadMob {
+public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
 
     private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.VARINT);
@@ -104,7 +105,7 @@ public class EntityMobSkull extends EntityAnimal implements IBlacklistedFromStat
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         if (player.isSneaking()) {
             this.setYaw(player.rotationYaw);
         }

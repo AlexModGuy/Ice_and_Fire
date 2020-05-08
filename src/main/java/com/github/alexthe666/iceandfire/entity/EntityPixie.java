@@ -30,7 +30,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -65,7 +65,7 @@ public class EntityPixie extends EntityTameable {
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.posY, z);
+        BlockPos pos = new BlockPos(x, entity.getPosY(), z);
         for (int yDown = 0; yDown < 3; yDown++) {
             if (!world.isAirBlock(pos.down(yDown))) {
                 return pos.up(yDown);
@@ -104,9 +104,9 @@ public class EntityPixie extends EntityTameable {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
 
-        if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
-            this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
-            this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+        if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
+            this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
+            this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
             return true;
         }
         if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())) {
@@ -116,9 +116,9 @@ public class EntityPixie extends EntityTameable {
     }
 
     public void onDeath(DamageSource cause) {
-        if (!this.world.isRemote && !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
-            this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
-            this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+        if (!this.world.isRemote && !this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+            this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
+            this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
         super.onDeath(cause);
         //if (cause.getTrueSource() instanceof PlayerEntity) {
@@ -154,7 +154,7 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
         }
@@ -174,8 +174,8 @@ public class EntityPixie extends EntityTameable {
             }
             ItemStack stack = new ItemStack(IafBlockRegistry.JAR_PIXIE, 1, this.getColor());
             if (!world.isRemote) {
-                if (!this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
-                    this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0.0F);
+                if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+                    this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0.0F);
                 }
                 this.entityDropItem(stack, 0.0F);
             }
@@ -223,17 +223,17 @@ public class EntityPixie extends EntityTameable {
     public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setColor(this.rand.nextInt(5));
-        this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+        this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         return livingdata;
     }
 
     private boolean isBeyondHeight() {
-        if (this.posY > this.world.getHeight()) {
+        if (this.getPosY() > this.world.getHeight()) {
             return true;
         }
         BlockPos height = this.world.getHeight(new BlockPos(this));
         int maxY = 20 + height.getY();
-        return this.posY > maxY;
+        return this.getPosY() > maxY;
     }
 
     public void onLivingUpdate() {
@@ -244,7 +244,7 @@ public class EntityPixie extends EntityTameable {
             this.moveHelper.action = EntityMoveHelper.Action.WAIT;
         }
         if (world.isRemote) {
-            IceAndFire.PROXY.spawnParticle("if_pixie", this.posX + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
+            IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2F) - (double) this.width, PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
         }
         if (ticksUntilHouseAI > 0) {
             ticksUntilHouseAI--;
@@ -257,7 +257,7 @@ public class EntityPixie extends EntityTameable {
             } else {
                 ((TileEntityPixieHouse) world.getTileEntity(housePos)).hasPixie = true;
                 ((TileEntityPixieHouse) world.getTileEntity(housePos)).pixieType = this.getColor();
-                ((TileEntityPixieHouse) world.getTileEntity(housePos)).pixieItems.set(0, this.getHeldItem(EnumHand.MAIN_HAND));
+                ((TileEntityPixieHouse) world.getTileEntity(housePos)).pixieItems.set(0, this.getHeldItem(Hand.MAIN_HAND));
                 ((TileEntityPixieHouse) world.getTileEntity(housePos)).tamedPixie = this.isTamed();
                 ((TileEntityPixieHouse) world.getTileEntity(housePos)).pixieOwnerUUID = this.getOwnerId();
                 IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(housePos.toLong(), true, this.getColor()));
@@ -341,14 +341,14 @@ public class EntityPixie extends EntityTameable {
                 if (EntityPixie.this.collidedHorizontally) {
                     EntityPixie.this.rotationYaw += 180.0F;
                     this.speed = 0.1F;
-                    BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
-                    this.posX = target.getX();
-                    this.posY = target.getY();
-                    this.posZ = target.getZ();
+                    BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+                    this.getPosX() = target.getX();
+                    this.getPosY() = target.getY();
+                    this.getPosZ() = target.getZ();
                 }
-                double d0 = this.posX - EntityPixie.this.posX;
-                double d1 = this.posY - EntityPixie.this.posY;
-                double d2 = this.posZ - EntityPixie.this.posZ;
+                double d0 = this.getPosX() - EntityPixie.this.getPosX();
+                double d1 = this.getPosY() - EntityPixie.this.getPosY();
+                double d2 = this.getPosZ() - EntityPixie.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
 
@@ -366,8 +366,8 @@ public class EntityPixie extends EntityTameable {
                         EntityPixie.this.rotationYaw = -((float) MathHelper.atan2(EntityPixie.this.motionX, EntityPixie.this.motionZ)) * (180F / (float) Math.PI);
                         EntityPixie.this.renderYawOffset = EntityPixie.this.rotationYaw;
                     } else {
-                        double d4 = EntityPixie.this.getAttackTarget().posX - EntityPixie.this.posX;
-                        double d5 = EntityPixie.this.getAttackTarget().posZ - EntityPixie.this.posZ;
+                        double d4 = EntityPixie.this.getAttackTarget().getPosX() - EntityPixie.this.getPosX();
+                        double d5 = EntityPixie.this.getAttackTarget().getPosZ() - EntityPixie.this.getPosZ();
                         EntityPixie.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
                         EntityPixie.this.renderYawOffset = EntityPixie.this.rotationYaw;
                     }
@@ -384,7 +384,7 @@ public class EntityPixie extends EntityTameable {
         }
 
         public boolean shouldExecute() {
-            target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+            target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
             return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.isSitting() && isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
         }
 
@@ -399,7 +399,7 @@ public class EntityPixie extends EntityTameable {
 
         public void updateTask() {
             if (!isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target)) {
-                target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
+                target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
             }
             if (EntityPixie.this.world.isAirBlock(target)) {
                 EntityPixie.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);

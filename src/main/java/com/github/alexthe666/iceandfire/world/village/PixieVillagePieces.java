@@ -12,7 +12,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -55,13 +55,13 @@ public class PixieVillagePieces {
         return flag ? i : -1;
     }
 
-    private static Village findAndCreateComponentFactory(Start start, PieceWeight weight, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
+    private static Village findAndCreateComponentFactory(Start start, PieceWeight weight, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing, int componentType) {
         Class<? extends PixieVillagePieces.Village> oclass = weight.villagePieceClass;
         Object village = PixieHouse.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing, componentType);
         return (Village) village;
     }
 
-    private static Village generateComponent(Start start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
+    private static Village generateComponent(Start start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing, int componentType) {
         int i = updatePieceWeight(start.structureVillageWeightedPieceList);
 
         if (i <= 0) {
@@ -100,7 +100,7 @@ public class PixieVillagePieces {
         }
     }
 
-    private static StructureComponent generateAndAddComponent(Start start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing, int componentType) {
+    private static StructureComponent generateAndAddComponent(Start start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing, int componentType) {
         if (componentType > 50) {
             return null;
         } else if (Math.abs(structureMinX - start.getBoundingBox().minX) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().minZ) <= 112) {
@@ -118,7 +118,7 @@ public class PixieVillagePieces {
         }
     }
 
-    private static StructureComponent generateAndAddRoadPiece(Start start, List<StructureComponent> p_176069_1_, Random rand, int p_176069_3_, int p_176069_4_, int p_176069_5_, EnumFacing facing, int p_176069_7_) {
+    private static StructureComponent generateAndAddRoadPiece(Start start, List<StructureComponent> p_176069_1_, Random rand, int p_176069_3_, int p_176069_4_, int p_176069_5_, Direction facing, int p_176069_7_) {
         if (p_176069_7_ > 3 + start.terrainType) {
             return null;
         } else if (Math.abs(p_176069_3_ - start.getBoundingBox().minX) <= 112 && Math.abs(p_176069_5_ - start.getBoundingBox().minZ) <= 112) {
@@ -141,13 +141,13 @@ public class PixieVillagePieces {
         public House1() {
         }
 
-        public House1(Start start, int type, Random rand, StructureBoundingBox p_i45571_4_, EnumFacing facing) {
+        public House1(Start start, int type, Random rand, StructureBoundingBox p_i45571_4_, Direction facing) {
             super(start, type);
             this.setCoordBaseMode(facing);
             this.boundingBox = p_i45571_4_;
         }
 
-        public static House1 createPiece(Start start, List<StructureComponent> p_175850_1_, Random rand, int p_175850_3_, int p_175850_4_, int p_175850_5_, EnumFacing facing, int p_175850_7_) {
+        public static House1 createPiece(Start start, List<StructureComponent> p_175850_1_, Random rand, int p_175850_3_, int p_175850_4_, int p_175850_5_, Direction facing, int p_175850_7_) {
             StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175850_3_, p_175850_4_, p_175850_5_, 0, 0, 0, 9, 9, 6, facing);
             return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175850_1_, structureboundingbox) == null ? new House1(start, p_175850_7_, rand, structureboundingbox, facing) : null;
         }
@@ -163,7 +163,7 @@ public class PixieVillagePieces {
                 this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 9 - 1, 0);
             }
 
-            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, EnumFacing.NORTH), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, Direction.NORTH), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) != null && worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);
@@ -197,14 +197,14 @@ public class PixieVillagePieces {
         public Path() {
         }
 
-        public Path(Start start, int p_i45562_2_, Random rand, StructureBoundingBox p_i45562_4_, EnumFacing facing) {
+        public Path(Start start, int p_i45562_2_, Random rand, StructureBoundingBox p_i45562_4_, Direction facing) {
             super(start, p_i45562_2_);
             this.setCoordBaseMode(facing);
             this.boundingBox = p_i45562_4_;
             this.length = Math.max(p_i45562_4_.getXSize(), p_i45562_4_.getZSize());
         }
 
-        public static StructureBoundingBox findPieceBox(Start start, List<StructureComponent> p_175848_1_, Random rand, int p_175848_3_, int p_175848_4_, int p_175848_5_, EnumFacing facing) {
+        public static StructureBoundingBox findPieceBox(Start start, List<StructureComponent> p_175848_1_, Random rand, int p_175848_3_, int p_175848_4_, int p_175848_5_, Direction facing) {
             for (int i = 3 * MathHelper.getInt(rand, 3, 5); i >= 3; i -= 3) {
                 StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 1, 1, i, facing);
 
@@ -256,39 +256,39 @@ public class PixieVillagePieces {
                 }
             }
 
-            EnumFacing enumfacing = this.getCoordBaseMode();
+            Direction Direction = this.getCoordBaseMode();
 
-            if (flag && rand.nextInt(3) > 0 && enumfacing != null) {
-                switch (enumfacing) {
+            if (flag && rand.nextInt(3) > 0 && Direction != null) {
+                switch (Direction) {
                     case NORTH:
                     default:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.getBoundingBox().minX - 1, this.getBoundingBox().minY, this.getBoundingBox().minZ, EnumFacing.WEST, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.getBoundingBox().minX - 1, this.getBoundingBox().minY, this.getBoundingBox().minZ, Direction.WEST, this.getComponentType());
                         break;
                     case SOUTH:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.WEST, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, Direction.WEST, this.getComponentType());
                         break;
                     case WEST:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ - 1, Direction.NORTH, this.getComponentType());
                         break;
                     case EAST:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, Direction.NORTH, this.getComponentType());
                 }
             }
 
-            if (flag && rand.nextInt(3) > 0 && enumfacing != null) {
-                switch (enumfacing) {
+            if (flag && rand.nextInt(3) > 0 && Direction != null) {
+                switch (Direction) {
                     case NORTH:
                     default:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ, EnumFacing.EAST, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ, Direction.EAST, this.getComponentType());
                         break;
                     case SOUTH:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.EAST, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, Direction.EAST, this.getComponentType());
                         break;
                     case WEST:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.maxZ + 1, Direction.SOUTH, this.getComponentType());
                         break;
                     case EAST:
-                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+                        generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, Direction.SOUTH, this.getComponentType());
                 }
             }
         }
@@ -468,19 +468,19 @@ public class PixieVillagePieces {
          * Gets the next village component, with the bounding box shifted -1 in the X and Z direction.
          */
         protected StructureComponent getNextComponentNN(Start start, List<StructureComponent> structureComponents, Random rand, int p_74891_4_, int p_74891_5_) {
-            EnumFacing enumfacing = this.getCoordBaseMode();
+            Direction Direction = this.getCoordBaseMode();
 
-            if (enumfacing != null) {
-                switch (enumfacing) {
+            if (Direction != null) {
+                switch (Direction) {
                     case NORTH:
                     default:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ + p_74891_5_, EnumFacing.WEST, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ + p_74891_5_, Direction.WEST, this.getComponentType());
                     case SOUTH:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ + p_74891_5_, EnumFacing.WEST, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ + p_74891_5_, Direction.WEST, this.getComponentType());
                     case WEST:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74891_5_, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74891_5_, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ - 1, Direction.NORTH, this.getComponentType());
                     case EAST:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74891_5_, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ - 1, EnumFacing.NORTH, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74891_5_, this.boundingBox.minY + p_74891_4_, this.boundingBox.minZ - 1, Direction.NORTH, this.getComponentType());
                 }
             } else {
                 return null;
@@ -491,19 +491,19 @@ public class PixieVillagePieces {
          * Gets the next village component, with the bounding box shifted +1 in the X and Z direction.
          */
         protected StructureComponent getNextComponentPP(Start start, List<StructureComponent> structureComponents, Random rand, int p_74894_4_, int p_74894_5_) {
-            EnumFacing enumfacing = this.getCoordBaseMode();
+            Direction Direction = this.getCoordBaseMode();
 
-            if (enumfacing != null) {
-                switch (enumfacing) {
+            if (Direction != null) {
+                switch (Direction) {
                     case NORTH:
                     default:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + p_74894_4_, this.boundingBox.minZ + p_74894_5_, EnumFacing.EAST, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + p_74894_4_, this.boundingBox.minZ + p_74894_5_, Direction.EAST, this.getComponentType());
                     case SOUTH:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + p_74894_4_, this.boundingBox.minZ + p_74894_5_, EnumFacing.EAST, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + p_74894_4_, this.boundingBox.minZ + p_74894_5_, Direction.EAST, this.getComponentType());
                     case WEST:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74894_5_, this.boundingBox.minY + p_74894_4_, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74894_5_, this.boundingBox.minY + p_74894_4_, this.boundingBox.maxZ + 1, Direction.SOUTH, this.getComponentType());
                     case EAST:
-                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74894_5_, this.boundingBox.minY + p_74894_4_, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+                        return generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + p_74894_5_, this.boundingBox.minY + p_74894_4_, this.boundingBox.maxZ + 1, Direction.SOUTH, this.getComponentType());
                 }
             } else {
                 return null;
@@ -662,9 +662,9 @@ public class PixieVillagePieces {
 
         public Well(Start start, int type, Random rand, int x, int z) {
             super(start, type);
-            this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+            this.setCoordBaseMode(Direction.Plane.HORIZONTAL.random(rand));
 
-            if (this.getCoordBaseMode().getAxis() == EnumFacing.Axis.Z) {
+            if (this.getCoordBaseMode().getAxis() == Direction.Axis.Z) {
                 this.boundingBox = new StructureBoundingBox(x, 64, z, x + 3, 64, z + 3);
             } else {
                 this.boundingBox = new StructureBoundingBox(x, 64, z, x + 3, 64, z + 3);
@@ -672,10 +672,10 @@ public class PixieVillagePieces {
         }
 
         public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand) {
-            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.maxY - 4, this.boundingBox.minZ + 2, EnumFacing.WEST, this.getComponentType());
-            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 2, EnumFacing.EAST, this.getComponentType());
-            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 2, this.boundingBox.maxY - 4, this.boundingBox.minZ, EnumFacing.NORTH, this.getComponentType());
-            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 2, this.boundingBox.maxY - 4, this.boundingBox.maxZ + 1, EnumFacing.SOUTH, this.getComponentType());
+            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.maxY - 4, this.boundingBox.minZ + 2, Direction.WEST, this.getComponentType());
+            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 2, Direction.EAST, this.getComponentType());
+            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 2, this.boundingBox.maxY - 4, this.boundingBox.minZ, Direction.NORTH, this.getComponentType());
+            generateAndAddRoadPiece((Start) componentIn, listIn, rand, this.boundingBox.minX + 2, this.boundingBox.maxY - 4, this.boundingBox.maxZ + 1, Direction.SOUTH, this.getComponentType());
         }
 
         public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
@@ -714,7 +714,7 @@ public class PixieVillagePieces {
         public PixieHouse() {
         }
 
-        public PixieHouse(Start start, int type, Random rand, StructureBoundingBox structurebb, EnumFacing facing) {
+        public PixieHouse(Start start, int type, Random rand, StructureBoundingBox structurebb, Direction facing) {
             super(start, type);
             this.setCoordBaseMode(facing);
             this.boundingBox = structurebb;
@@ -722,7 +722,7 @@ public class PixieVillagePieces {
             this.tablePosition = rand.nextInt(3);
         }
 
-        public static PixieHouse createPiece(Start start, List<StructureComponent> p_175853_1_, Random rand, int p_175853_3_, int p_175853_4_, int p_175853_5_, EnumFacing facing, int p_175853_7_) {
+        public static PixieHouse createPiece(Start start, List<StructureComponent> p_175853_1_, Random rand, int p_175853_3_, int p_175853_4_, int p_175853_5_, Direction facing, int p_175853_7_) {
             StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175853_3_, p_175853_4_, p_175853_5_, 0, 0, 0, 1, 1, 1, facing);
             return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new PixieHouse(start, p_175853_7_, rand, structureboundingbox, facing) : null;
         }
@@ -751,7 +751,7 @@ public class PixieVillagePieces {
             }
             this.replaceAirAndLiquidDownwards(worldIn, Blocks.DIRT.getDefaultState(), 0, -1, 0, structureBoundingBoxIn);
 
-            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? EnumFacing.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
+            this.setBlockState(worldIn, IafBlockRegistry.PIXIE_HOUSE.getDefaultState().with(BlockPixieHouse.FACING, this.getCoordBaseMode() == null ? Direction.NORTH : this.getCoordBaseMode().getOpposite()), 0, 0, 0, structureBoundingBoxIn);
             BlockPos blockpos = new BlockPos(this.getXWithOffset(0, 0), this.getYWithOffset(0), this.getZWithOffset(0, 0));
             if (worldIn.getTileEntity(blockpos) instanceof TileEntityPixieHouse) {
                 int houseType = randomIn.nextInt(5);

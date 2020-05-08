@@ -34,7 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -72,7 +72,7 @@ public class ServerEvents {
 
     private static void signalChickenAlarm(LivingEntity chicken, LivingEntity attacker) {
         float d0 = IafConfig.cockatriceChickenSearchLength;
-        List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
+        List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.getPosX(), chicken.getPosY(), chicken.getPosZ(), chicken.getPosX() + 1.0D, chicken.getPosY() + 1.0D, chicken.getPosZ() + 1.0D)).grow(d0, 10.0D, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();
@@ -97,7 +97,7 @@ public class ServerEvents {
 
     private static void signalAmphithereAlarm(LivingEntity villager, LivingEntity attacker) {
         float d0 = IafConfig.amphithereVillagerSearchLength;
-        List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
+        List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.getPosX() - 1.0D, villager.getPosY() - 1.0D, villager.getPosZ() - 1.0D, villager.getPosX() + 1.0D, villager.getPosY() + 1.0D, villager.getPosZ() + 1.0D)).grow(d0, d0, d0));
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(attacker));
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();
@@ -233,7 +233,7 @@ public class ServerEvents {
             if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote) {
                 PlayerEntity player = (PlayerEntity) event.getEntityMounting();
                 if (dragon.isOwner((PlayerEntity) event.getEntityMounting())) {
-                    dragon.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+                    dragon.setPositionAndRotation(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
                     player.fallDistance = -dragon.height;
                 } else {
                     dragon.renderYawOffset = dragon.rotationYaw;
@@ -245,7 +245,7 @@ public class ServerEvents {
                     double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                     double extraZ = (double) (radius * MathHelper.cos(angle));
                     double extraY = modTick_2 == 0 ? 0 : 0.035F * ((dragon.getRenderSize() / 3) + (modTick_2 * 0.5 * (dragon.getRenderSize() / 3)));
-                    player.setPosition(dragon.posX + extraX, dragon.posY + extraY, dragon.posZ + extraZ);
+                    player.setPosition(dragon.getPosX() + extraX, dragon.getPosY() + extraY, dragon.getPosZ() + extraZ);
                 }
             }
 
@@ -254,7 +254,7 @@ public class ServerEvents {
             EntityHippogryph hippogryph = (EntityHippogryph) event.getEntityBeingMounted();
             if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((PlayerEntity) event.getEntityMounting())) {
                 PlayerEntity player = (PlayerEntity) event.getEntityMounting();
-                hippogryph.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+                hippogryph.setPositionAndRotation(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
             }
         }
          */
@@ -299,7 +299,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getLivingEntity() instanceof EntityWitherSkeleton) {
-            event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ,
+            event.getDrops().add(new EntityItem(event.getEntity().world, event.getEntity().getPosX(), event.getEntity().getPosY(), event.getEntity().getPosZ(),
                     new ItemStack(IafItemRegistry.WITHERBONE, event.getLivingEntity().getRNG().nextInt(2))));
         }
 
@@ -425,7 +425,7 @@ public class ServerEvents {
         if (chainProperties != null) {
             chainProperties.minimizeLists();
             if (!event.getEntity().world.isRemote) {
-                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().posX, event.getEntity().posY + (double) 1, event.getEntity().posZ, new ItemStack(IafItemRegistry.CHAIN, chainProperties.connectedEntities.size()));
+                EntityItem entityitem = new EntityItem(event.getEntity().world, event.getEntity().getPosX(), event.getEntity().getPosY() + (double) 1, event.getEntity().getPosZ(), new ItemStack(IafItemRegistry.CHAIN, chainProperties.connectedEntities.size()));
                 entityitem.setDefaultPickupDelay();
                 event.getEntity().world.spawnEntity(entityitem);
             }
@@ -449,9 +449,9 @@ public class ServerEvents {
             event.setCanceled(true);
             if (Blocks.TORCH.canPlaceBlockAt(event.getWorld(), event.getPos())) {
                 BlockState state = IafBlockRegistry.BURNT_TORCH.getDefaultState();
-                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
-                    if (canTorchPlaceAt(event.getWorld(), event.getPos(), enumfacing)) {
-                        state = state.with(BlockBurntTorch.FACING, enumfacing);
+                for (Direction Direction : Direction.Plane.HORIZONTAL) {
+                    if (canTorchPlaceAt(event.getWorld(), event.getPos(), Direction)) {
+                        state = state.with(BlockBurntTorch.FACING, Direction);
                     }
                 }
                 event.getWorld().setBlockState(event.getPos(), state);
@@ -459,15 +459,15 @@ public class ServerEvents {
         }
     }
 
-    private boolean canTorchPlaceAt(World worldIn, BlockPos pos, EnumFacing facing) {
+    private boolean canTorchPlaceAt(World worldIn, BlockPos pos, Direction facing) {
         BlockPos blockpos = pos.offset(facing.getOpposite());
         BlockState BlockState = worldIn.getBlockState(blockpos);
         Block block = BlockState.getBlock();
         BlockFaceShape blockfaceshape = BlockState.getBlockFaceShape(worldIn, blockpos, facing);
 
-        if (facing.equals(EnumFacing.UP) && this.canPlaceTorchOn(worldIn, blockpos)) {
+        if (facing.equals(Direction.UP) && this.canPlaceTorchOn(worldIn, blockpos)) {
             return true;
-        } else if (facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
+        } else if (facing != Direction.UP && facing != Direction.DOWN) {
             return !isExceptBlockForAttachWithPiston(block) && blockfaceshape == BlockFaceShape.SOLID;
         } else {
             return false;
@@ -498,9 +498,9 @@ public class ServerEvents {
                 for (Entity chainer : chainProperties.connectedEntities) {
                     float f = event.getLivingEntity().getDistance(chainer);
                     if (f > 7) {
-                        double d0 = (chainer.posX - event.getLivingEntity().posX) / (double) f;
-                        double d1 = (chainer.posY - event.getLivingEntity().posY) / (double) f;
-                        double d2 = (chainer.posZ - event.getLivingEntity().posZ) / (double) f;
+                        double d0 = (chainer.getPosX() - event.getLivingEntity().getPosX()) / (double) f;
+                        double d1 = (chainer.getPosY() - event.getLivingEntity().getPosY()) / (double) f;
+                        double d2 = (chainer.getPosZ() - event.getLivingEntity().getPosZ()) / (double) f;
                         event.getLivingEntity().motionX += d0 * Math.abs(d0) * 0.4D;
                         event.getLivingEntity().motionY += d1 * Math.abs(d1) * 0.2D;
                         event.getLivingEntity().motionZ += d2 * Math.abs(d2) * 0.4D;
@@ -572,7 +572,7 @@ public class ServerEvents {
                     event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getLivingEntity().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), event.getLivingEntity().posY + ((rand.nextDouble()) * event.getLivingEntity().height), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
+                        event.getLivingEntity().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), event.getLivingEntity().getPosY() + ((rand.nextDouble()) * event.getLivingEntity().height), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
                     }
                     event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
@@ -594,7 +594,7 @@ public class ServerEvents {
                         sirenProps.singTime++;
                         if (rand.nextInt(7) == 0) {
                             for (int i = 0; i < 5; i++) {
-                                event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posY + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                                event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                             }
                         }
                         LivingEntity entity = event.getLivingEntity();
@@ -605,13 +605,13 @@ public class ServerEvents {
                                 entity.motionY = 0.42F;
                             }
                         }
-                        entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
-                        entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
-                        entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
+                        entity.motionX += (Math.signum(closestSiren.getPosX() - entity.getPosX()) * 0.5D - entity.motionX) * 0.100000000372529;
+                        entity.motionY += (Math.signum(closestSiren.getPosY() - entity.getPosY() + 1) * 0.5D - entity.motionY) * 0.100000000372529;
+                        entity.motionZ += (Math.signum(closestSiren.getPosZ() - entity.getPosZ()) * 0.5D - entity.motionZ) * 0.100000000372529;
                         float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
-                        double d0 = closestSiren.posX - entity.posX;
-                        double d2 = closestSiren.posZ - entity.posZ;
-                        double d1 = closestSiren.posY - 1 - entity.posY;
+                        double d0 = closestSiren.getPosX() - entity.getPosX();
+                        double d2 = closestSiren.getPosZ() - entity.getPosZ();
+                        double d1 = closestSiren.getPosY() - 1 - entity.getPosY();
                         if (entity.isRiding()) {
                             entity.dismountRidingEntity();
                         }
@@ -684,9 +684,9 @@ public class ServerEvents {
             while (itr.hasNext()) {
                 Entity next = itr.next();
                 double d5 = 80F;
-                double d0 = next.posX - event.getLivingEntity().posX;
-                double d1 = next.posY + (double) (next.height * 0.5F) - (event.getLivingEntity().posY + (double) event.getLivingEntity().getEyeHeight() * 0.5D);
-                double d2 = next.posZ - event.getLivingEntity().posZ;
+                double d0 = next.getPosX() - event.getLivingEntity().getPosX();
+                double d1 = next.getPosY() + (double) (next.height * 0.5F) - (event.getLivingEntity().getPosY() + (double) event.getLivingEntity().getEyeHeight() * 0.5D);
+                double d2 = next.getPosZ() - event.getLivingEntity().getPosZ();
                 double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                 d0 = d0 / d3;
                 d1 = d1 / d3;
@@ -694,7 +694,7 @@ public class ServerEvents {
                 double d4 = this.rand.nextDouble();
                 while (d4 < d3) {
                     d4 += 1.0D;
-                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getLivingEntity().posX + d0 * d4, event.getLivingEntity().posY + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
+                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getLivingEntity().getPosX() + d0 * d4, event.getLivingEntity().getPosY() + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
                 ((LivingEntity) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
                 if (event.getLivingEntity().ticksExisted % 20 == 0) {
@@ -725,7 +725,7 @@ public class ServerEvents {
             }
             if (rand.nextInt(7) == 0) {
                 for (int i = 0; i < 5; i++) {
-                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().posX + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posY + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                 }
             }
         }

@@ -23,7 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -117,7 +117,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             this.setAnimation(ANIMATION_DIGNEST);
             if (this.getAnimationTick() == 42) {
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
-                BlockPos genPos = new BlockPos(this.posX, down, this.posZ);
+                BlockPos genPos = new BlockPos(this.getPosX(), down, this.getPosZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))){
                     WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle());
                     hiveGen.generate(world, this.getRNG(), genPos);
@@ -143,7 +143,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
             double extraZ = (double) (radius * MathHelper.cos(angle));
-            BlockPos eggPos = new BlockPos(this.posX + extraX, this.posY + 0.75F, this.posZ + extraZ);
+            BlockPos eggPos = new BlockPos(this.getPosX() + extraX, this.getPosY() + 0.75F, this.getPosZ() + extraZ);
             if (world.isAirBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
                 if (this.getAnimationTick() == 10) {
@@ -151,7 +151,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     egg.setJungle(this.isJungle());
                     int caste = getRandomCaste(world, this.getRNG(), getHive() == null || getHive().reproduces);
                     egg.setMyrmexCaste(caste);
-                    egg.setLocationAndAngles(this.posX + extraX, this.posY + 0.75F, this.posZ + extraZ, 0, 0);
+                    egg.setLocationAndAngles(this.getPosX() + extraX, this.getPosY() + 0.75F, this.getPosZ() + extraZ, 0, 0);
                     if (getHive() != null) {
                         egg.hiveUUID = this.getHive().hiveUUID;
                     }
@@ -268,9 +268,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY) {
-                this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
-                this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
+                this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
+                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
@@ -298,10 +298,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 double extraY = 0.8F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
 
-                BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
                     }
                 }
             }

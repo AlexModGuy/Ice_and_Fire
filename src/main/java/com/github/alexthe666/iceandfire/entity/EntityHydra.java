@@ -137,7 +137,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
                     this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3, false, false));
-                    this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.posX - this.getAttackTarget().posX, this.posZ - this.getAttackTarget().posZ);
+                    this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
             }
             if (breathing) {
@@ -147,12 +147,12 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                     if(rand.nextFloat() < 0.2F){
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
                     }
-                    double headPosX = this.headBoxes[i].posX + vec3d.x * 1.0D;
-                    double headPosY = this.headBoxes[i].posY + 1.3F;
-                    double headPosZ = this.headBoxes[i].posZ + vec3d.z * 1.0D;
-                    double d2 = entity.posX - headPosX + this.rand.nextGaussian() * 0.4D;
-                    double d3 = entity.posY + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
-                    double d4 = entity.posZ - headPosZ + this.rand.nextGaussian() * 0.4D;
+                    double headPosX = this.headBoxes[i].getPosX() + vec3d.x * 1.0D;
+                    double headPosY = this.headBoxes[i].getPosY() + 1.3F;
+                    double headPosZ = this.headBoxes[i].getPosZ() + vec3d.z * 1.0D;
+                    double d2 = entity.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
+                    double d3 = entity.getPosY() + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
+                    double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
                     EntityHydraBreath entitylargefireball = new EntityHydraBreath(world, this, d2, d3, d4);
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
                     if (!world.isRemote && !entity.isDead) {
@@ -244,8 +244,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         onUpdateParts();
         float partY = 1.0F - limbSwingAmount * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
-            headBoxes[i].setPosition(headBoxes[i].posX, this.posY + partY, headBoxes[i].posZ);
-            headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].posX, this.posY + partY, headBoxes[HEADS + i].posZ);
+            headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
+            headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
         }
         if (getHeadCount() > 1 && !isBurning()) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class WorldGenDreadRuin extends WorldGenerator {
 
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         ResourceLocation structure = getRandomStructure(rand);
-        EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(3)];
+        Direction facing = Direction.HORIZONTALS[rand.nextInt(3)];
         MinecraftServer server = worldIn.getMinecraftServer();
         TemplateManager templateManager = worldIn.getSaveHandler().getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).setReplacedBlock(Blocks.AIR);
@@ -45,7 +45,7 @@ public class WorldGenDreadRuin extends WorldGenerator {
         return true;
     }
 
-    public static Rotation getRotationFromFacing(EnumFacing facing) {
+    public static Rotation getRotationFromFacing(Direction facing) {
         switch (facing) {
             case EAST:
                 return Rotation.CLOCKWISE_90;

@@ -164,7 +164,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
             this.motionY -= 0.08D;
-            if (this.moveHelper.getY() > this.posY) {
+            if (this.moveHelper.getY() > this.getPosY()) {
                 this.motionY += 0.08D;
             }
         }
@@ -173,7 +173,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.motionY += 0.2F;
         }
         if (this.getAttackTarget() != null) {
-            this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().posZ, 1.0F);
+            this.moveHelper.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }

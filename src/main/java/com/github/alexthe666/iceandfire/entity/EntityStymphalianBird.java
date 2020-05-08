@@ -189,7 +189,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                     if (bronzeIngot != ItemStack.EMPTY) {
                         ItemStack stack = bronzeIngot.copy();
                         stack.setCount(1 + this.getRNG().nextInt(3));
-                        dropItemAt(stack, this.posX, this.posY + 0.5F, this.posZ);
+                        dropItemAt(stack, this.getPosX(), this.getPosY() + 0.5F, this.getPosZ());
                         break;
                     }
                 }
@@ -199,7 +199,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                     if (copperIngot != ItemStack.EMPTY) {
                         ItemStack stack = copperIngot.copy();
                         stack.setCount(1 + this.getRNG().nextInt(3));
-                        dropItemAt(stack, this.posX, this.posY + 0.5F, this.posZ);
+                        dropItemAt(stack, this.getPosX(), this.getPosY() + 0.5F, this.getPosZ());
                         break;
                     }
                 }
@@ -327,9 +327,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                             float wingX = (float) (posX + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
                             float wingZ = (float) (posZ + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
                             float wingY = (float) (posY + 1F);
-                            double d0 = target.posX - wingX;
+                            double d0 = target.getPosX() - wingX;
                             double d1 = target.getEntityBoundingBox().minY - wingY;
-                            double d2 = target.posZ - wingZ;
+                            double d2 = target.getPosZ() - wingZ;
                             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
                             EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(world, this);
                             entityarrow.setPosition(wingX, wingY, wingZ);
@@ -401,8 +401,8 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (this.posY > IafConfig.stymphalianBirdFlightHeight) {
-            this.setPosition(this.posX, IafConfig.stymphalianBirdFlightHeight, this.posZ);
+        if (this.getPosY() > IafConfig.stymphalianBirdFlightHeight) {
+            this.setPosition(this.getPosX(), IafConfig.stymphalianBirdFlightHeight, this.getPosZ());
         }
     }
 
@@ -425,7 +425,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - posX;
             double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
             double targetZ = airTarget.getZ() + 0.5D - posZ;
@@ -443,7 +443,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         } else {
             this.airTarget = null;
         }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) < 3 && this.doesWantToLand()) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) < 3 && this.doesWantToLand()) {
             this.setFlying(false);
         }
     }
@@ -503,9 +503,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     public float getDistanceSquared(Vec3d vec3d) {
-        float f = (float) (this.posX - vec3d.x);
-        float f1 = (float) (this.posY - vec3d.y);
-        float f2 = (float) (this.posZ - vec3d.z);
+        float f = (float) (this.getPosX() - vec3d.x);
+        float f1 = (float) (this.getPosY() - vec3d.y);
+        float f2 = (float) (this.getPosZ() - vec3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 

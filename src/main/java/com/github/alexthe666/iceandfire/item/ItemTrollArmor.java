@@ -61,6 +61,6 @@ public class ItemTrollArmor extends ItemArmor {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("item.iceandfire.troll_leather_armor_" + getArmorPart(this.armorType) + ".desc"));
+        tooltip.add(TextFormatting.GREEN + new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(this.armorType) + ".desc"));
     }
 }

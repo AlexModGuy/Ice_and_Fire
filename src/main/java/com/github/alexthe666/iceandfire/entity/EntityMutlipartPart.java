@@ -7,7 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 
 public class EntityMutlipartPart extends PartEntity {
 
@@ -15,7 +15,7 @@ public class EntityMutlipartPart extends PartEntity {
         super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
-    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
         if (world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));
         }

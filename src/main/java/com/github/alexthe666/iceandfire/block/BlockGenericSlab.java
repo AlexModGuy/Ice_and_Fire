@@ -164,7 +164,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 		}
 
 		@Override
-        public EnumActionResult onItemUse(PlayerEntity playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        public EnumActionResult onItemUse(PlayerEntity playerIn, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 			ItemStack stack = playerIn.getHeldItem(hand);
 			if(stack.getItem() == Item.getItemFromBlock(doubleSlab)){
 				return EnumActionResult.SUCCESS;
@@ -174,7 +174,7 @@ public abstract class BlockGenericSlab extends BlockSlab {
 				BlockState BlockState = worldIn.getBlockState(pos);
 				if (BlockState.getBlock() == this.singleSlab) {
 					BlockSlab.EnumBlockHalf blockslab$enumblockhalf = BlockState.get(BlockSlab.HALF);
-					if ((facing == EnumFacing.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP)) {
+					if ((facing == Direction.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == Direction.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP)) {
 						BlockState BlockState1 = this.doubleSlab.getDefaultState();
 						AxisAlignedBB axisalignedbb = BlockState1.getCollisionBoundingBox(worldIn, pos);
 						if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, BlockState1, 11)) {
@@ -193,13 +193,13 @@ public abstract class BlockGenericSlab extends BlockSlab {
 
 		@Override
         @OnlyIn(Dist.CLIENT)
-		public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack) {
+		public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, Direction side, PlayerEntity player, ItemStack stack) {
 			BlockPos blockpos = pos;
 			BlockState BlockState = worldIn.getBlockState(pos);
 
 			if (BlockState.getBlock() == this.singleSlab) {
 				boolean flag = BlockState.get(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP;
-				if ((side == EnumFacing.UP && !flag || side == EnumFacing.DOWN && flag)) {
+				if ((side == Direction.UP && !flag || side == Direction.DOWN && flag)) {
 					return true;
 				}
 			}

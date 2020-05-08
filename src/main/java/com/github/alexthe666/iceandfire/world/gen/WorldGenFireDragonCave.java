@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -35,7 +35,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
                 boolean generateGold = rand.nextInt(goldRand) == 0;
                 world.setBlockState(pos, generateGold ? IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
-                world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[rand.nextInt(3)]), 2);
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof BlockChest) {
                     TileEntity tileentity1 = world.getTileEntity(pos);
                     if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -54,7 +54,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
         int radius = (int) (dragonAge * 0.2F) + rand.nextInt(8);
         createShell(worldIn, rand, position, radius, sphereList);
         for (int i = 0; i < 3 + rand.nextInt(2); i++) {
-            EnumFacing direction = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length - 1)];
+            Direction direction = Direction.HORIZONTALS[rand.nextInt(Direction.HORIZONTALS.length - 1)];
             createShell(worldIn, rand, position.offset(direction, radius - 2), 2 * (int) (radius / 3F) + rand.nextInt(8), sphereList);
         }
         for (SphereInfo info : sphereList) {
@@ -93,7 +93,7 @@ public class WorldGenFireDragonCave extends WorldGenerator {
     }
 
     private BlockPos offsetRandomlyBy(BlockPos in, Random rand, int offset1, int offset2) {
-        return in.offset(EnumFacing.values()[rand.nextInt(EnumFacing.values().length - 1)], offset1).offset(EnumFacing.values()[rand.nextInt(EnumFacing.values().length - 1)], offset2);
+        return in.offset(Direction.values()[rand.nextInt(Direction.values().length - 1)], offset1).offset(Direction.values()[rand.nextInt(Direction.values().length - 1)], offset2);
     }
 
     private BlockPos offsetRandomlyByXZ(BlockPos in, Random rand, int offset1, int offset2) {

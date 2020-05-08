@@ -36,11 +36,12 @@ public class ItemSeaSerpentArmor extends ItemArmor {
         return "iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (renderIndex == 2 ? "_legs.png" : ".png");
     }
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(armor_type.color + StatCollector.translateToLocal("sea_serpent." + armor_type.resourceName));
-        tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_0"));
-        tooltip.add(StatCollector.translateToLocal("item.iceandfire.sea_serpent_armor.desc_1"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
+        tooltip.add(armor_type.color + new TranslationTextComponent("sea_serpent." + armor_type.resourceName));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_0"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_1"));
     }
 }

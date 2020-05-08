@@ -198,14 +198,14 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         }
         if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 5) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-            this.getAttackTarget().motionX += (Math.signum(this.posX - this.getAttackTarget().posX) * 0.5D - this.getAttackTarget().motionX) * 0.100000000372529 * 5;
-            this.getAttackTarget().motionY += (Math.signum(this.posY - this.getAttackTarget().posY + 1) * 0.5D - this.getAttackTarget().motionY) * 0.100000000372529 * 5;
-            this.getAttackTarget().motionZ += (Math.signum(this.posZ - this.getAttackTarget().posZ) * 0.5D - this.getAttackTarget().motionZ) * 0.100000000372529 * 5;
+            this.getAttackTarget().motionX += (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().motionX) * 0.100000000372529 * 5;
+            this.getAttackTarget().motionY += (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().motionY) * 0.100000000372529 * 5;
+            this.getAttackTarget().motionZ += (Math.signum(this.getPosZ() - this.getAttackTarget().getPosZ()) * 0.5D - this.getAttackTarget().motionZ) * 0.100000000372529 * 5;
             float angle = (float) (Math.atan2(this.getAttackTarget().motionZ, this.getAttackTarget().motionX) * 180.0D / Math.PI) - 90.0F;
             //entity.moveForward = 0.5F;
-            double d0 = this.posX - this.getAttackTarget().posX;
-            double d2 = this.posZ - this.getAttackTarget().posZ;
-            double d1 = this.posY - 1 - this.getAttackTarget().posY;
+            double d0 = this.getPosX() - this.getAttackTarget().getPosX();
+            double d2 = this.getPosZ() - this.getAttackTarget().getPosZ();
+            double d1 = this.getPosY() - 1 - this.getAttackTarget().getPosY();
             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
@@ -281,7 +281,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
                     double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                     double extraY = 1.2F;
                     double extraZ = radius * MathHelper.cos(angle);
-                    IceAndFire.PROXY.spawnParticle("siren_music", this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                    IceAndFire.PROXY.spawnParticle("siren_music", this.getPosX() + extraX + this.rand.nextFloat() - 0.5, this.getPosY() + extraY + this.rand.nextFloat() - 0.5, this.getPosZ() + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
                 }
             }
         }
@@ -521,8 +521,8 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
             }
         }
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double deltaX = this.posX - this.prevPosX;
-        double deltaZ = this.posZ - this.prevPosZ;
+        double deltaX = this.getPosX() - this.prevPosX;
+        double deltaZ = this.getPosZ() - this.prevPosZ;
         float delta = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) * 4.0F;
         if (delta > 1.0F) {
             delta = 1.0F;
@@ -556,9 +556,9 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         @Override
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.siren.getNavigator().noPath() && !this.siren.isBeingRidden()) {
-                double distanceX = this.posX - this.siren.posX;
-                double distanceY = this.posY - this.siren.posY;
-                double distanceZ = this.posZ - this.siren.posZ;
+                double distanceX = this.getPosX() - this.siren.getPosX();
+                double distanceY = this.getPosY() - this.siren.getPosY();
+                double distanceZ = this.getPosZ() - this.siren.getPosZ();
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
                 double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;

@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,7 +95,7 @@ public class MyrmexAIForage extends EntityAIBase {
                         ItemStack heldStack = drops.get(0).copy();
                         heldStack.setCount(1);
                         drops.get(0).shrink(1);
-                        this.myrmex.setHeldItem(EnumHand.MAIN_HAND, heldStack);
+                        this.myrmex.setHeldItem(Hand.MAIN_HAND, heldStack);
                         for (ItemStack stack : drops) {
                             EntityItem itemEntity = new EntityItem(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
                             itemEntity.setDefaultPickupDelay();
@@ -121,9 +121,9 @@ public class MyrmexAIForage extends EntityAIBase {
     }
 
     private double getDistance(BlockPos pos) {
-        double deltaX = this.myrmex.posX - (pos.getX() + 0.5);
-        double deltaY = this.myrmex.posY + this.myrmex.getEyeHeight() - (pos.getY() + 0.5);
-        double deltaZ = this.myrmex.posZ - (pos.getZ() + 0.5);
+        double deltaX = this.myrmex.getPosX() - (pos.getX() + 0.5);
+        double deltaY = this.myrmex.getPosY() + this.myrmex.getEyeHeight() - (pos.getY() + 0.5);
+        double deltaZ = this.myrmex.getPosZ() - (pos.getZ() + 0.5);
         return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
     }
 

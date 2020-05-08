@@ -21,9 +21,9 @@ public class LayerChainedEntity implements LayerRenderer<LivingEntity> {
     }
 
     private Vec3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
-        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.posX - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
-        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.posY - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
-        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.posZ - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
+        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
         return new Vec3d(d0, d1, d2);
     }
 

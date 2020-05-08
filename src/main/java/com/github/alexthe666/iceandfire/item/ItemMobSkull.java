@@ -6,9 +6,11 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -17,32 +19,31 @@ public class ItemMobSkull extends Item implements ICustomRendered {
     private EnumSkullType skull;
 
     public ItemMobSkull(EnumSkullType skull) {
-        this.maxStackSize = 1;
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire." + skull.itemResourceName);
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, skull.itemResourceName);
-
         this.skull = skull;
     }
 
     @Override
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        EntityMobSkull skull = new EntityMobSkull(worldIn);
-        ItemStack stack = player.getHeldItem(hand);
-        BlockPos offset = pos.offset(side, 1);
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
+
+        EntityMobSkull skull = new EntityMobSkull(context.getWorld());
+        ItemStack stack = player.getHeldItem(context.getHand());
+        BlockPos offset = context.getPos().offset(context.getFace(), 1);
         skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
         float yaw = player.rotationYaw;
-        if (side != EnumFacing.UP) {
+        if (context.getFace() != Direction.UP) {
             yaw = player.getHorizontalFacing().getHorizontalAngle();
         }
         skull.setYaw(yaw);
         skull.setSkullType(this.skull);
-        if (!worldIn.isRemote) {
-            worldIn.spawnEntity(skull);
+        if (!context.getWorld().isRemote) {
+            context.getWorld().addEntity(skull);
         }
-        if (!player.capabilities.isCreativeMode) {
+        if (!player.isCreative()) {
             stack.shrink(1);
         }
-        return EnumActionResult.SUCCESS;
+        return ActionResultType.SUCCESS;
     }
 }

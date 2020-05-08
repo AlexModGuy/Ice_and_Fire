@@ -29,7 +29,7 @@ public class PathNavigateDeathWormSand extends PathNavigate {
     }
 
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.posX, this.entity.posY + 0.5D, this.entity.posZ);
+        return new Vec3d(this.entity.getPosX(), this.entity.getPosY() + 0.5D, this.entity.getPosZ());
     }
 
     protected void pathFollow() {

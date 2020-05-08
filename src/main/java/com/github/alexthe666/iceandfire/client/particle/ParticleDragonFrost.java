@@ -47,7 +47,7 @@ public class ParticleDragonFrost extends ParticleFlame {
         targetX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
         targetY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
         targetZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
-        this.setPosition(this.posX, this.posY, this.posZ);
+        this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         this.dragonSize = dragonSize;
         this.speedBonus = rand.nextFloat() * 0.015F;
         this.setParticleTextureIndex(rand.nextInt(8));
@@ -60,9 +60,9 @@ public class ParticleDragonFrost extends ParticleFlame {
         this.targetX = dragon.burnParticleX + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
         this.targetY = dragon.burnParticleY + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
         this.targetZ = dragon.burnParticleZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.posX = x;
-        this.posY = y;
-        this.posZ = z;
+        this.getPosX() = x;
+        this.getPosY() = y;
+        this.getPosZ() = z;
         this.particleAge = startingAge;
     }
 
@@ -77,11 +77,11 @@ public class ParticleDragonFrost extends ParticleFlame {
         }
         particleScale = 5F * dragonSize;
 
-        float f3 = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
-        float f4 = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
-        float f5 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ);
-        float distX = (float) (this.initialX - this.posX);
-        float distZ = (float) (this.initialZ - this.posZ);
+        float f3 = (float) (this.prevPosX + (this.getPosX() - this.prevPosX) * partialTicks - interpPosX);
+        float f4 = (float) (this.prevPosY + (this.getPosY() - this.prevPosY) * partialTicks - interpPosY);
+        float f5 = (float) (this.prevPosZ + (this.getPosZ() - this.prevPosZ) * partialTicks - interpPosZ);
+        float distX = (float) (this.initialX - this.getPosX());
+        float distZ = (float) (this.initialZ - this.getPosZ());
         float width = particleScale * 0.09F;
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
@@ -144,8 +144,8 @@ public class ParticleDragonFrost extends ParticleFlame {
     public void onUpdate() {
         super.onUpdate();
         if (dragon == null) {
-            float distX = (float) (this.initialX - this.posX);
-            float distZ = (float) (this.initialZ - this.posZ);
+            float distX = (float) (this.initialX - this.getPosX());
+            float distZ = (float) (this.initialZ - this.getPosZ());
             this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
             this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
             this.motionY += 0.015F * rand.nextFloat();

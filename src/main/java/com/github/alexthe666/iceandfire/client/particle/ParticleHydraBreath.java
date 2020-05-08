@@ -43,9 +43,9 @@ public class ParticleHydraBreath extends Particle {
     }
 
     public void onUpdate() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = this.getPosX();
+        this.prevPosY = this.getPosY();
+        this.prevPosZ = this.getPosZ();
 
         if (this.particleAge++ >= this.particleMaxAge) {
             this.setExpired();
@@ -54,7 +54,7 @@ public class ParticleHydraBreath extends Particle {
         this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
         this.move(this.motionX, this.motionY, this.motionZ);
 
-        if (this.posY == this.prevPosY) {
+        if (this.getPosY() == this.prevPosY) {
             this.motionX *= 1.1D;
             this.motionZ *= 1.1D;
         }

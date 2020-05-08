@@ -103,7 +103,7 @@ public class EntityBlackFrostDragon extends EntityIceDragon implements IDreadMob
 
     public void updatePassenger(Entity passenger) {
         if (this.isPassenger(passenger)) {
-            passenger.setPosition(this.posX, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ);
+            passenger.setPosition(this.getPosX(), this.getPosY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPosZ());
         }
         if (this.isPassenger(passenger)) {
             if (!(passenger instanceof EntityDreadQueen) && (this.getControllingPassenger() == null || !this.getControllingPassenger().getUniqueID().equals(passenger.getUniqueID()))) {

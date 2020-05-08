@@ -19,7 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -34,9 +34,9 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private static final int[] SLOTS_BOTTOM = new int[]{2};
     private static final int[] SLOTS_SIDES = new int[]{0, 1};
     public boolean isFire;
-    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
-    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
-    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.WEST);
+    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.UP);
+    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
+    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.WEST);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
     private int cookTime;
     private int lastDragonFlameTimer = 0;
@@ -70,7 +70,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     }
 
     private void updateGrills(boolean grill) {
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+        for (Direction facing : Direction.HORIZONTALS) {
             BlockPos grillPos = this.getPos().offset(facing);
             if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_BRICK) {
                 BlockState grillState = isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.DRAGONFORGE_ICE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
@@ -284,20 +284,20 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return index == 0;
     }
 
-    public int[] getSlotsForFace(EnumFacing side) {
-        if (side == EnumFacing.DOWN) {
+    public int[] getSlotsForFace(Direction side) {
+        if (side == Direction.DOWN) {
             return SLOTS_BOTTOM;
         } else {
-            return side == EnumFacing.UP ? SLOTS_TOP : SLOTS_SIDES;
+            return side == Direction.UP ? SLOTS_TOP : SLOTS_SIDES;
         }
     }
 
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return this.isItemValidForSlot(index, itemStackIn);
     }
 
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        if (direction == EnumFacing.DOWN && index == 1) {
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        if (direction == Direction.DOWN && index == 1) {
             Item item = stack.getItem();
 
             return item == Items.WATER_BUCKET || item == Items.BUCKET;
@@ -329,11 +329,11 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     @SuppressWarnings("unchecked")
     @Override
     @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing) {
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            if (facing == EnumFacing.DOWN)
+            if (facing == Direction.DOWN)
                 return (T) handlerBottom;
-            else if (facing == EnumFacing.UP)
+            else if (facing == Direction.UP)
                 return (T) handlerTop;
             else
                 return (T) handlerSide;
@@ -390,7 +390,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
         return getCapability(capability, facing) != null;
     }
 
@@ -404,7 +404,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
 
     private boolean atleastThreeAreBricks(BlockPos pos) {
         int count = 0;
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+        for (Direction facing : Direction.HORIZONTALS) {
             if (world.getBlockState(pos.offset(facing)).getBlock() == getBrick()) {
                 count++;
             }

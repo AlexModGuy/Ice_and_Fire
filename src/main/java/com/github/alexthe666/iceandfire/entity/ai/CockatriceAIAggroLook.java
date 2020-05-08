@@ -27,7 +27,7 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Playe
             return false;
         }
         double d0 = this.getTargetDistance();
-        this.player = this.cockatrice.world.getNearestAttackablePlayer(this.cockatrice.posX, this.cockatrice.posY, this.cockatrice.posZ, d0, d0, null, new Predicate<PlayerEntity>() {
+        this.player = this.cockatrice.world.getNearestAttackablePlayer(this.cockatrice.getPosX(), this.cockatrice.getPosY(), this.cockatrice.getPosZ(), d0, d0, null, new Predicate<PlayerEntity>() {
             public boolean apply(@Nullable PlayerEntity p_apply_1_) {
                 return p_apply_1_ != null && EntityGorgon.isEntityLookingAt(p_apply_1_, CockatriceAIAggroLook.this.cockatrice, EntityCockatrice.VIEW_RADIUS);
             }

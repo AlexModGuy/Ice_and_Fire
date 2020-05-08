@@ -78,7 +78,7 @@ public class HippogryphAIMate extends EntityAIBase {
     }
 
     private void spawnBaby() {
-        EntityItem egg = new EntityItem(world, this.hippo.posX, this.hippo.posY, this.hippo.posZ, ItemHippogryphEgg.createEggStack(this.hippo.getEnumVariant(), this.targetMate.getEnumVariant()));
+        EntityItem egg = new EntityItem(world, this.hippo.getPosX(), this.hippo.getPosY(), this.hippo.getPosZ(), ItemHippogryphEgg.createEggStack(this.hippo.getEnumVariant(), this.targetMate.getEnumVariant()));
 
         if (egg != null) {
             PlayerEntity PlayerEntity = this.hippo.getLoveCause();
@@ -95,7 +95,7 @@ public class HippogryphAIMate extends EntityAIBase {
             this.targetMate.setGrowingAge(6000);
             this.hippo.resetInLove();
             this.targetMate.resetInLove();
-            egg.setLocationAndAngles(this.hippo.posX, this.hippo.posY, this.hippo.posZ, 0.0F, 0.0F);
+            egg.setLocationAndAngles(this.hippo.getPosX(), this.hippo.getPosY(), this.hippo.getPosZ(), 0.0F, 0.0F);
             if (!world.isRemote) {
                 this.world.spawnEntity(egg);
             }
@@ -108,11 +108,11 @@ public class HippogryphAIMate extends EntityAIBase {
                 double d3 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
                 double d4 = 0.5D + random.nextDouble() * (double) this.hippo.height;
                 double d5 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
-                this.world.spawnParticle(EnumParticleTypes.HEART, this.hippo.posX + d3, this.hippo.posY + d4, this.hippo.posZ + d5, d0, d1, d2);
+                this.world.spawnParticle(EnumParticleTypes.HEART, this.hippo.getPosX() + d3, this.hippo.getPosY() + d4, this.hippo.getPosZ() + d5, d0, d1, d2);
             }
 
             if (this.world.getGameRules().getBoolean("doMobLoot")) {
-                this.world.spawnEntity(new EntityXPOrb(this.world, this.hippo.posX, this.hippo.posY, this.hippo.posZ, random.nextInt(7) + 1));
+                this.world.spawnEntity(new EntityXPOrb(this.world, this.hippo.getPosX(), this.hippo.getPosY(), this.hippo.getPosZ(), random.nextInt(7) + 1));
             }
         }
     }

@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,7 +46,7 @@ public class PixieAISteal extends EntityAIBase {
             return false;
         } else {
             this.temptingPlayer = this.temptedEntity.world.getClosestPlayerToEntity(this.temptedEntity, 10.0D);
-            return this.temptingPlayer != null && (this.temptedEntity.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty() && !this.temptingPlayer.isCreative());
+            return this.temptingPlayer != null && (this.temptedEntity.getHeldItem(Hand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty() && !this.temptingPlayer.isCreative());
         }
     }
 
@@ -55,9 +55,9 @@ public class PixieAISteal extends EntityAIBase {
     }
 
     public void startExecuting() {
-        this.targetX = this.temptingPlayer.posX;
-        this.targetY = this.temptingPlayer.posY;
-        this.targetZ = this.temptingPlayer.posZ;
+        this.targetX = this.temptingPlayer.getPosX();
+        this.targetY = this.temptingPlayer.getPosY();
+        this.targetZ = this.temptingPlayer.getPosZ();
         this.isRunning = true;
     }
 
@@ -79,7 +79,7 @@ public class PixieAISteal extends EntityAIBase {
             }
             int slot = slotlist.get(new Random().nextInt(slotlist.size()));
             ItemStack randomItem = this.temptingPlayer.inventory.getStackInSlot(slot);
-            this.temptedEntity.setHeldItem(EnumHand.MAIN_HAND, randomItem);
+            this.temptedEntity.setHeldItem(Hand.MAIN_HAND, randomItem);
             this.temptingPlayer.inventory.removeStackFromSlot(slot);
             this.temptedEntity.flipAI(true);
             this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
@@ -89,7 +89,7 @@ public class PixieAISteal extends EntityAIBase {
             }
 
         } else {
-            this.temptedEntity.getMoveHelper().setMoveTo(this.temptingPlayer.posX, this.temptingPlayer.posY + 1.5F, this.temptingPlayer.posZ, 1D);
+            this.temptedEntity.getMoveHelper().setMoveTo(this.temptingPlayer.getPosX(), this.temptingPlayer.getPosY() + 1.5F, this.temptingPlayer.getPosZ(), 1D);
         }
     }
 

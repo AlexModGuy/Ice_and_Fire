@@ -9,7 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -34,11 +34,11 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         int i;
         if (this.getCanSwim() && this.entity.isInWater()) {
             i = (int) this.entity.getEntityBoundingBox().minY;
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ));
+            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()));
 
             for (Block block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock()) {
                 ++i;
-                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ));
+                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()));
             }
         } else if (this.entity.onGround) {
             i = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
@@ -89,10 +89,10 @@ public class NodeProcessorMyrmex extends NodeProcessor {
 
         BlockPos blockpos = (new BlockPos(currentPoint.x, currentPoint.y, currentPoint.z)).down();
         double d0 = (double) currentPoint.y - (1.0D - this.blockaccess.getBlockState(blockpos).getBoundingBox(this.blockaccess, blockpos).maxY);
-        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
-        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.WEST);
-        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.EAST);
-        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
+        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
+        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, Direction.WEST);
+        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, Direction.EAST);
+        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
 
         if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
             pathOptions[i++] = pathpoint;
@@ -116,7 +116,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         boolean flag3 = pathpoint1 == null || pathpoint1.nodeType == PathNodeType.OPEN || pathpoint1.costMalus != 0.0F;
 
         if (flag && flag3) {
-            PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
+            PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
 
             if (pathpoint4 != null && !pathpoint4.visited && pathpoint4.distanceTo(targetPoint) < maxDistance) {
                 pathOptions[i++] = pathpoint4;
@@ -124,7 +124,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         }
 
         if (flag && flag2) {
-            PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
+            PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
 
             if (pathpoint5 != null && !pathpoint5.visited && pathpoint5.distanceTo(targetPoint) < maxDistance) {
                 pathOptions[i++] = pathpoint5;
@@ -132,7 +132,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         }
 
         if (flag1 && flag3) {
-            PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
+            PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
 
             if (pathpoint6 != null && !pathpoint6.visited && pathpoint6.distanceTo(targetPoint) < maxDistance) {
                 pathOptions[i++] = pathpoint6;
@@ -140,7 +140,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
         }
 
         if (flag1 && flag2) {
-            PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
+            PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
 
             if (pathpoint7 != null && !pathpoint7.visited && pathpoint7.distanceTo(targetPoint) < maxDistance) {
                 pathOptions[i++] = pathpoint7;
@@ -153,7 +153,7 @@ public class NodeProcessorMyrmex extends NodeProcessor {
     /**
      * Returns a point that the entity can safely move to
      */
-    private PathPoint getSafePoint(int x, int y, int z, int p_186332_4_, double p_186332_5_, EnumFacing facing) {
+    private PathPoint getSafePoint(int x, int y, int z, int p_186332_4_, double p_186332_5_, Direction facing) {
         PathPoint pathpoint = null;
         BlockPos blockpos = new BlockPos(x, y, z);
         BlockPos blockpos1 = blockpos.down();

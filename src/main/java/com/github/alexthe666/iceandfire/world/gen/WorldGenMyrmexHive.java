@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -58,10 +58,10 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         generateSphere(world, rand, position, 14, 7, resin, sticky_resin);
         generateSphere(world, rand, position, 12, 5, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, position, 12, 5, RoomType.QUEEN);
-        generatePath(world, rand, position.offset(EnumFacing.NORTH, 9).down(), 15 + rand.nextInt(10), EnumFacing.NORTH, 100);
-        generatePath(world, rand, position.offset(EnumFacing.SOUTH, 9).down(), 15 + rand.nextInt(10), EnumFacing.SOUTH, 100);
-        generatePath(world, rand, position.offset(EnumFacing.WEST, 9).down(), 15 + rand.nextInt(10), EnumFacing.WEST, 100);
-        generatePath(world, rand, position.offset(EnumFacing.EAST, 9).down(), 15 + rand.nextInt(10), EnumFacing.EAST, 100);
+        generatePath(world, rand, position.offset(Direction.NORTH, 9).down(), 15 + rand.nextInt(10), Direction.NORTH, 100);
+        generatePath(world, rand, position.offset(Direction.SOUTH, 9).down(), 15 + rand.nextInt(10), Direction.SOUTH, 100);
+        generatePath(world, rand, position.offset(Direction.WEST, 9).down(), 15 + rand.nextInt(10), Direction.WEST, 100);
+        generatePath(world, rand, position.offset(Direction.EAST, 9).down(), 15 + rand.nextInt(10), Direction.EAST, 100);
         if (!small) {
             EntityMyrmexQueen queen = new EntityMyrmexQueen(world);
             BlockPos ground = MyrmexHive.getGroundedPos(world, position);
@@ -105,7 +105,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    private void generatePath(World world, Random rand, BlockPos offset, int length, EnumFacing direction, int roomChance) {
+    private void generatePath(World world, Random rand, BlockPos offset, int length, Direction direction, int roomChance) {
         if (roomChance == 0) {
             return;
         }
@@ -145,7 +145,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         }
     }
 
-    private void generateRoom(World world, Random rand, BlockPos position, int size, int height, int roomChance, EnumFacing direction) {
+    private void generateRoom(World world, Random rand, BlockPos position, int size, int height, int roomChance, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         RoomType type = RoomType.random(rand);
@@ -161,22 +161,22 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         decorateSphere(world, rand, position, size, height - 1, type);
         hive.addRoom(position, type);
         if (!small) {
-            if (rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.NORTH) {
-                generatePath(world, rand, position.offset(EnumFacing.NORTH, size - 2), 5 + rand.nextInt(20), EnumFacing.NORTH, roomChance);
+            if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.NORTH) {
+                generatePath(world, rand, position.offset(Direction.NORTH, size - 2), 5 + rand.nextInt(20), Direction.NORTH, roomChance);
             }
-            if (rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.SOUTH) {
-                generatePath(world, rand, position.offset(EnumFacing.SOUTH, size - 2), 5 + rand.nextInt(20), EnumFacing.SOUTH, roomChance);
+            if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.SOUTH) {
+                generatePath(world, rand, position.offset(Direction.SOUTH, size - 2), 5 + rand.nextInt(20), Direction.SOUTH, roomChance);
             }
-            if (rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.WEST) {
-                generatePath(world, rand, position.offset(EnumFacing.WEST, size - 2), 5 + rand.nextInt(20), EnumFacing.WEST, roomChance);
+            if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.WEST) {
+                generatePath(world, rand, position.offset(Direction.WEST, size - 2), 5 + rand.nextInt(20), Direction.WEST, roomChance);
             }
-            if (rand.nextInt(3) == 0 && direction.getOpposite() != EnumFacing.EAST) {
-                generatePath(world, rand, position.offset(EnumFacing.EAST, size - 2), 5 + rand.nextInt(20), EnumFacing.EAST, roomChance);
+            if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.EAST) {
+                generatePath(world, rand, position.offset(Direction.EAST, size - 2), 5 + rand.nextInt(20), Direction.EAST, roomChance);
             }
         }
     }
 
-    private void generateEntrance(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
+    private void generateEntrance(World world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.up();
         hive.getEntranceBottoms().put(up, direction);
         while (!world.canBlockSeeSky(up)) {
@@ -192,7 +192,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         entrances++;
     }
 
-    private void generateCircle(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
+    private void generateCircle(World world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
@@ -201,7 +201,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i);
                     int z = (int) Math.floor(Math.cos(j) * i);
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), rand.nextInt(3) == 0 ? sticky_resin : resin);
 
                     } else {
@@ -216,7 +216,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState());
                     } else {
                         world.setBlockState(position.add(x, z, 0), Blocks.AIR.getDefaultState());
@@ -228,7 +228,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         decorateCircle(world, rand, position, size, height, direction);
     }
 
-    private void generateCircleRespectSky(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
+    private void generateCircleRespectSky(World world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
@@ -237,7 +237,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i);
                     int z = (int) Math.floor(Math.cos(j) * i);
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         if (!world.canBlockSeeSky(position.add(0, x, z))) {
                             world.setBlockState(position.add(0, x, z), rand.nextInt(3) == 0 ? sticky_resin : resin);
                         }
@@ -256,7 +256,7 @@ public class WorldGenMyrmexHive extends WorldGenerator {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState());
                     } else {
                         world.setBlockState(position.add(x, z, 0), Blocks.AIR.getDefaultState());
@@ -269,14 +269,14 @@ public class WorldGenMyrmexHive extends WorldGenerator {
     }
 
 
-    private void generateCircleAir(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
+    private void generateCircleAir(World world, Random rand, BlockPos position, int size, int height, Direction direction) {
         int radius = size;
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState());
                     } else {
                         world.setBlockState(position.add(x, z, 0), Blocks.AIR.getDefaultState());
@@ -354,14 +354,14 @@ public class WorldGenMyrmexHive extends WorldGenerator {
         return world.getBlockState(copy).getBlock() instanceof BlockMyrmexResin || world.getBlockState(copy).getBlock() instanceof BlockMyrmexConnectedResin;
     }
 
-    private void decorateCircle(World world, Random rand, BlockPos position, int size, int height, EnumFacing direction) {
+    private void decorateCircle(World world, Random rand, BlockPos position, int size, int height, Direction direction) {
         int radius = size + 2;
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
                     int x = (int) Math.floor(Math.sin(j) * i);
                     int z = (int) Math.floor(Math.cos(j) * i);
-                    if (direction == EnumFacing.WEST || direction == EnumFacing.EAST) {
+                    if (direction == Direction.WEST || direction == Direction.EAST) {
                         if (world.isAirBlock(position.add(0, x, z))) {
                             decorate(world, position.add(0, x, z), position, size, rand, RoomType.TUNNEL);
                         }

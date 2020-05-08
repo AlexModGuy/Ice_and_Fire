@@ -38,6 +38,6 @@ public class DragonAILookIdle extends EntityAIBase {
     @Override
     public void updateTask() {
         --this.idleTime;
-        this.dragon.getLookHelper().setLookPosition(this.dragon.posX + this.lookX, this.dragon.posY + this.dragon.getEyeHeight(), this.dragon.posZ + this.lookZ, this.dragon.getHorizontalFaceSpeed(), this.dragon.getVerticalFaceSpeed());
+        this.dragon.getLookHelper().setLookPosition(this.dragon.getPosX() + this.lookX, this.dragon.getPosY() + this.dragon.getEyeHeight(), this.dragon.getPosZ() + this.lookZ, this.dragon.getHorizontalFaceSpeed(), this.dragon.getVerticalFaceSpeed());
     }
 }

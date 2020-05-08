@@ -78,7 +78,7 @@ public class EntitySheepAIFollowCyclops extends EntityAIBase {
 
     public Path getPathToLivingEntity(EntityAnimal entityIn, EntityCyclops cyclops) {
         PathNavigate navi = entityIn.getNavigator();
-        Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.posX, cyclops.posY, cyclops.posZ));
+        Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.getPosX(), cyclops.getPosY(), cyclops.getPosZ()));
         if (vec3d != null) {
             BlockPos blockpos = new BlockPos(vec3d);
             return navi.getPathToPos(blockpos);

@@ -105,7 +105,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.posY, z);
+        BlockPos pos = new BlockPos(x, entity.getPosY(), z);
         for (int yDown = 0; yDown < 6 + rand.nextInt(6); yDown++) {
             if (!world.isAirBlock(pos.down(yDown))) {
                 return pos.up(yDown);
@@ -151,7 +151,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
             return true;
@@ -288,7 +288,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         float angle = (0.01745329251F * this.renderYawOffset);
         double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
         double extraZ = (double) (radius * MathHelper.cos(angle));
-        passenger.setPosition(this.posX + extraX, this.posY + 0.7F - scaled_ground * 0.14F + pitch_forward, this.posZ + extraZ);
+        passenger.setPosition(this.getPosX() + extraX, this.getPosY() + 0.7F - scaled_ground * 0.14F + pitch_forward, this.getPosZ() + extraZ);
 
     }
 
@@ -372,7 +372,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         } else {
             this.ticksStill = 0;
         }
-        if (!this.isFlying() && !this.isChild() && ((this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.posY < -1)) {
+        if (!this.isFlying() && !this.isChild() && ((this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.getPosY() < -1)) {
             this.motionY += 0.5F;
             this.setFlying(true);
         }
@@ -579,9 +579,9 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     public boolean getCanSpawnHere() {
-        int i = MathHelper.floor(this.posX);
+        int i = MathHelper.floor(this.getPosX());
         int j = MathHelper.floor(this.getEntityBoundingBox().minY);
-        int k = MathHelper.floor(this.posZ);
+        int k = MathHelper.floor(this.getPosZ());
         BlockPos blockpos = new BlockPos(i, j, k);
         Block block = this.world.getBlockState(blockpos.down()).getBlock();
         return this.world.canBlockSeeSky(blockpos.up());
@@ -925,7 +925,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 
@@ -998,7 +998,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 return false;
             }
             if (EntityAmphithere.this.isFlying()) {
-                target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
+                target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.getPosX() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.getPosZ() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
                 EntityAmphithere.this.orbitPos = null;
                 return (!EntityAmphithere.this.getMoveHelper().isUpdating() || EntityAmphithere.this.ticksStill >= 50);
             } else {
@@ -1026,7 +1026,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
         public void updateTask() {
             if (!isDirectPathBetweenPoints(EntityAmphithere.this)) {
-                target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
+                target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.getPosX() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.getPosZ() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
             }
             if (EntityAmphithere.this.world.isAirBlock(target)) {
                 EntityAmphithere.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
@@ -1050,7 +1050,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                 return false;
             }
             if (EntityAmphithere.this.isFlying()) {
-                EntityAmphithere.this.orbitPos = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
+                EntityAmphithere.this.orbitPos = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.getPosX() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.getPosZ() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
                 target = EntityAmphithere.getPositionInOrbit(EntityAmphithere.this, world, EntityAmphithere.this.orbitPos, EntityAmphithere.this.rand);
                 return true;
             } else {
@@ -1103,16 +1103,16 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             if (EntityAmphithere.this.collidedHorizontally) {
                 EntityAmphithere.this.rotationYaw += 180.0F;
                 this.speed = 0.1F;
-                BlockPos target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.rand);
-                this.posX = target.getX();
-                this.posY = target.getY();
-                this.posZ = target.getZ();
+                BlockPos target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.getPosX() + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.getPosZ() + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.rand);
+                this.getPosX() = target.getX();
+                this.getPosY() = target.getY();
+                this.getPosZ() = target.getZ();
             }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
 
-                double d0 = this.posX - EntityAmphithere.this.posX;
-                double d1 = this.posY - EntityAmphithere.this.posY;
-                double d2 = this.posZ - EntityAmphithere.this.posZ;
+                double d0 = this.getPosX() - EntityAmphithere.this.getPosX();
+                double d1 = this.getPosY() - EntityAmphithere.this.getPosY();
+                double d2 = this.getPosZ() - EntityAmphithere.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
                 if (d3 < 6 && EntityAmphithere.this.getAttackTarget() == null) {
@@ -1143,8 +1143,8 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(EntityAmphithere.this.motionX, EntityAmphithere.this.motionZ)) * (180F / (float) Math.PI);
                         EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     } else {
-                        double d4 = EntityAmphithere.this.getAttackTarget().posX - EntityAmphithere.this.posX;
-                        double d5 = EntityAmphithere.this.getAttackTarget().posZ - EntityAmphithere.this.posZ;
+                        double d4 = EntityAmphithere.this.getAttackTarget().getPosX() - EntityAmphithere.this.getPosX();
+                        double d5 = EntityAmphithere.this.getAttackTarget().getPosZ() - EntityAmphithere.this.getPosZ();
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
                         EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     }

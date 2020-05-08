@@ -375,11 +375,11 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public void forcePreyToLook(LivingEntity mob) {
-        mob.getLookHelper().setLookPosition(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
+        mob.getLookHelper().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
         if (flag) {
             player.getHeldItem(hand).interactWithEntity(player, this, hand);
@@ -453,8 +453,8 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         }
         if (this.getAnimation() == ANIMATION_JUMPAT && this.getAttackTarget() != null) {
             double dist = this.getDistanceSq(this.getAttackTarget());
-            double d0 = this.getAttackTarget().posX - this.posX;
-            double d1 = this.getAttackTarget().posZ - this.posZ;
+            double d0 = this.getAttackTarget().getPosX() - this.getPosX();
+            double d1 = this.getAttackTarget().getPosZ() - this.getPosZ();
             float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
             if (dist <= 16.0D && this.onGround && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
                 if ((double) leap >= 1.0E-4D) {
@@ -495,7 +495,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             this.setStaring(false);
         }
         if (this.getAttackTarget() != null) {
-            this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
+            this.getLookHelper().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
             if (!shouldMelee() && this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
                 forcePreyToLook((LivingEntity) this.getAttackTarget());
             }
@@ -562,9 +562,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                     this.getLookHelper().setLookPositionWithEntity(LivingEntity, 90.0F, 90.0F);
                     this.getLookHelper().onUpdateLook();
                     double d5 = (double) this.getAttackAnimationScale(0.0F);
-                    double d0 = LivingEntity.posX - this.posX;
-                    double d1 = LivingEntity.posY + (double) (LivingEntity.height * 0.5F) - (this.posY + (double) this.getEyeHeight());
-                    double d2 = LivingEntity.posZ - this.posZ;
+                    double d0 = LivingEntity.getPosX() - this.getPosX();
+                    double d1 = LivingEntity.getPosY() + (double) (LivingEntity.height * 0.5F) - (this.getPosY() + (double) this.getEyeHeight());
+                    double d2 = LivingEntity.getPosZ() - this.getPosZ();
                     double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                     d0 = d0 / d3;
                     d1 = d1 / d3;
@@ -573,7 +573,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
                     while (d4 < d3) {
                         d4 += 1.8D - d5 + this.rand.nextDouble() * (1.7D - d5);
-                        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + d0 * d4, this.posY + d1 * d4 + (double) this.getEyeHeight(), this.posZ + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
+                        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.getPosX() + d0 * d4, this.getPosY() + d1 * d4 + (double) this.getEyeHeight(), this.getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                     }
                 }
             }
@@ -726,7 +726,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 

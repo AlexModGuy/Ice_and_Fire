@@ -21,9 +21,9 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
 
     public MessageDragonSyncFire(int dragonId, double posX, double posY, double posZ, int syncType) {
         this.dragonId = dragonId;
-        this.posX = posX;
-        this.posY = posY;
-        this.posZ = posZ;
+        this.getPosX() = posX;
+        this.getPosY() = posY;
+        this.getPosZ() = posZ;
         this.syncType = syncType;
     }
 
@@ -55,7 +55,7 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) entity;
-                dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+                dragon.stimulateFire(message.getPosX(), message.getPosY(), message.getPosZ(), message.syncType);
             }
         }
     }
@@ -66,7 +66,7 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) entity;
-                dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
+                dragon.stimulateFire(message.getPosX(), message.getPosY(), message.getPosZ(), message.syncType);
             }
         }
     }

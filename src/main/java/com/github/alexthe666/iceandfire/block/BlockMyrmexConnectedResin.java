@@ -8,7 +8,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,12 +48,12 @@ public class BlockMyrmexConnectedResin extends Block {
     }
 
     public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.with(UP, canFenceConnectTo(worldIn, pos, EnumFacing.UP))
-                .with(DOWN, canFenceConnectTo(worldIn, pos, EnumFacing.DOWN))
-                .with(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
-                .with(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
-                .with(EAST, canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
-                .with(WEST, canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
+        return state.with(UP, canFenceConnectTo(worldIn, pos, Direction.UP))
+                .with(DOWN, canFenceConnectTo(worldIn, pos, Direction.DOWN))
+                .with(NORTH, canFenceConnectTo(worldIn, pos, Direction.NORTH))
+                .with(SOUTH, canFenceConnectTo(worldIn, pos, Direction.SOUTH))
+                .with(EAST, canFenceConnectTo(worldIn, pos, Direction.EAST))
+                .with(WEST, canFenceConnectTo(worldIn, pos, Direction.WEST));
     }
 
     protected BlockStateContainer createBlockState() {
@@ -64,7 +64,7 @@ public class BlockMyrmexConnectedResin extends Block {
         return 0;
     }
 
-    private boolean canFenceConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+    private boolean canFenceConnectTo(IBlockAccess world, BlockPos pos, Direction facing) {
         BlockPos other = pos.offset(facing);
         Block block = world.getBlockState(other).getBlock();
         return block == this;
@@ -76,7 +76,7 @@ public class BlockMyrmexConnectedResin extends Block {
 
 
     @OnlyIn(Dist.CLIENT)
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
         BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
         Block block = BlockState.getBlock();
 

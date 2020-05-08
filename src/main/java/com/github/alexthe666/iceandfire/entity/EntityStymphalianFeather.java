@@ -7,7 +7,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -64,12 +64,12 @@ public class EntityStymphalianFeather extends EntityArrow {
             entity.getActiveItemStack().damageItem(i, entity);
 
             if (entity.getActiveItemStack().isEmpty()) {
-                EnumHand enumhand = entity.getActiveHand();
+                Hand Hand = entity.getActiveHand();
                 if (entity instanceof PlayerEntity) {
-                    net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((PlayerEntity) entity, copyBeforeUse, enumhand);
+                    net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((PlayerEntity) entity, copyBeforeUse, Hand);
                 }
 
-                if (enumhand == EnumHand.MAIN_HAND) {
+                if (Hand == Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);

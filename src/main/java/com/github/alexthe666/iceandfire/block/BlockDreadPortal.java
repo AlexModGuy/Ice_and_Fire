@@ -12,7 +12,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -96,7 +96,7 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
         BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
         Block block = BlockState.getBlock();
         return !BlockState.isOpaqueCube() && block != IafBlockRegistry.DREAD_PORTAL;
@@ -147,7 +147,7 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
         return MapColor.LIGHT_BLUE;
     }
 
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
         return BlockFaceShape.UNDEFINED;
     }
 }

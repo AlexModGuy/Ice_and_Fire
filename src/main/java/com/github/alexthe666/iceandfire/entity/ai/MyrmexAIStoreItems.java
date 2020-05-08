@@ -9,7 +9,7 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
@@ -46,7 +46,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon) > 3 && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon) > 3 && this.myrmex.shouldEnterHive();
     }
 
     @Override
@@ -65,9 +65,9 @@ public class MyrmexAIStoreItems extends EntityAIBase {
             if(this.myrmex.getNavigator().noPath()) {
                 this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
             }
-            if (this.myrmex.getDistanceSq(nextCocoon) < 5.5D && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            if (this.myrmex.getDistanceSq(nextCocoon) < 5.5D && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
-                ItemStack itemstack = this.myrmex.getHeldItem(EnumHand.MAIN_HAND);
+                ItemStack itemstack = this.myrmex.getHeldItem(Hand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {
                     for (int i = 0; i < cocoon.getSizeInventory(); ++i) {
                         if (!itemstack.isEmpty()) {
@@ -75,7 +75,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
                             if (itemstack1.isEmpty()) {
                                 cocoon.setInventorySlotContents(i, itemstack);
                                 cocoon.markDirty();
-                                this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                                this.myrmex.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                                 this.myrmex.isEnteringHive = false;
                                 return;
                             }
@@ -89,7 +89,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
                                     if (itemstack.isEmpty()) {
                                         cocoon.markDirty();
                                     }
-                                    this.myrmex.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+                                    this.myrmex.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                                     this.myrmex.isEnteringHive = false;
                                     return;
                                 }
@@ -115,7 +115,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
         for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ))) {
             TileEntity te = this.myrmex.world.getTileEntity(blockpos);
             if (te != null && te instanceof TileEntityMyrmexCocoon) {
-                if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND))) {
+                if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND))) {
                     closeCocoons.add(blockpos);
                 }
             }
@@ -128,7 +128,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
 
     public boolean isUseableCocoon(BlockPos blockpos) {
         if (this.myrmex.world.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.world.getTileEntity(blockpos) != null && this.myrmex.world.getTileEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-            return !((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(EnumHand.MAIN_HAND));
+            return !((TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(blockpos)).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND));
         }
         return false;
     }

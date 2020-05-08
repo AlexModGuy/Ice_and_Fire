@@ -9,7 +9,7 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -40,7 +40,7 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
 
 
     public boolean shouldExecute() {
-        if (this.pixie.getHeldItem(EnumHand.MAIN_HAND) == ItemStack.EMPTY) {
+        if (this.pixie.getHeldItem(Hand.MAIN_HAND) == ItemStack.EMPTY) {
             return false;
         }
         if (this.pixie.isTamed()) {
@@ -54,7 +54,7 @@ public class PixieAIFlee<T extends Entity> extends EntityAIBase {
         } else {
             this.closestLivingEntity = list.get(0);
             if (closestLivingEntity != null) {
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.pixie, 16, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
+                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.pixie, 16, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
                 if (vec3d == null) {
                     return false;

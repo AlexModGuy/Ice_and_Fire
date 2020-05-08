@@ -33,7 +33,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
     public NonNullList<ItemStack> pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
     public float rotationYaw;
     public float prevRotationYaw;
-    net.minecraftforge.items.IItemHandler handlerBottom = new PixieJarInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
+    net.minecraftforge.items.IItemHandler handlerBottom = new PixieJarInvWrapper(this, net.minecraft.util.Direction.DOWN);
     private Random rand;
 
     public TileEntityJar() {
@@ -122,7 +122,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
     public void releasePixie() {
         EntityPixie pixie = new EntityPixie(this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
-        pixie.setHeldItem(EnumHand.MAIN_HAND, pixieItems.get(0));
+        pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!world.isRemote) {
             world.spawnEntity(pixie);
@@ -140,14 +140,14 @@ public class TileEntityJar extends TileEntity implements ITickable {
 
     @Override
     @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing) {
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return (T) handlerBottom;
         return null;
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
         return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.hasPixie;
     }
 

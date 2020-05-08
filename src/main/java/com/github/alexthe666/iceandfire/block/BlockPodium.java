@@ -66,7 +66,7 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking()) {
             return false;
         } else {
@@ -76,10 +76,10 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
     }
 
     @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, EnumFacing face) {
-        if (face == EnumFacing.UP) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
+        if (face == Direction.UP) {
             return BlockFaceShape.SOLID;
-        } else if (face == EnumFacing.DOWN) {
+        } else if (face == Direction.DOWN) {
             return BlockFaceShape.SOLID;
         } else {
             return BlockFaceShape.UNDEFINED;
@@ -128,7 +128,7 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.down());
-        return BlockState.isSideSolid(worldIn, pos, EnumFacing.UP);
+        return BlockState.isSideSolid(worldIn, pos, Direction.UP);
     }
 
     @Deprecated

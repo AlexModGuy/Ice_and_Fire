@@ -22,7 +22,7 @@ public class ParticleDreadTorch extends ParticleFlame {
 
     public ParticleDreadTorch(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
         super(world, x, y, z, motX, motY, motZ);
-        this.setPosition(this.posX, this.posY, this.posZ);
+        this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         this.motionY += 0.01D;
         this.setParticleTextureIndex(rand.nextInt(8));
         big = rand.nextBoolean();
@@ -35,9 +35,9 @@ public class ParticleDreadTorch extends ParticleFlame {
 
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         particleScale = 0.125F * (this.particleMaxAge - (this.particleAge));
-        float f3 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
-        float f4 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
-        float f5 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
+        float f3 = (float)(this.prevPosX + (this.getPosX() - this.prevPosX) * (double)partialTicks - interpPosX);
+        float f4 = (float)(this.prevPosY + (this.getPosY() - this.prevPosY) * (double)partialTicks - interpPosY);
+        float f5 = (float)(this.prevPosZ + (this.getPosZ() - this.prevPosZ) * (double)partialTicks - interpPosZ);
         float width = particleScale * 0.09F;
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
@@ -80,7 +80,7 @@ public class ParticleDreadTorch extends ParticleFlame {
     }
 
     public int getBrightnessForRender(float partialTick) {
-        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        BlockPos blockpos = new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ());
         return this.world.isBlockLoaded(blockpos) ? this.world.getCombinedLight(blockpos, 0) : 0;
     }
 

@@ -71,9 +71,9 @@ public class AquaticAITempt extends EntityAIBase {
                     return false;
                 }
             } else {
-                this.targetX = this.temptingPlayer.posX;
-                this.targetY = this.temptingPlayer.posY;
-                this.targetZ = this.temptingPlayer.posZ;
+                this.targetX = this.temptingPlayer.getPosX();
+                this.targetY = this.temptingPlayer.getPosY();
+                this.targetZ = this.temptingPlayer.getPosZ();
             }
 
             this.pitch = (double) this.temptingPlayer.rotationPitch;
@@ -87,9 +87,9 @@ public class AquaticAITempt extends EntityAIBase {
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        this.targetX = this.temptingPlayer.posX;
-        this.targetY = this.temptingPlayer.posY;
-        this.targetZ = this.temptingPlayer.posZ;
+        this.targetX = this.temptingPlayer.getPosX();
+        this.targetY = this.temptingPlayer.getPosY();
+        this.targetZ = this.temptingPlayer.getPosZ();
         this.isRunning = true;
     }
 

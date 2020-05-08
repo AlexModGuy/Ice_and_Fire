@@ -34,9 +34,9 @@ public class ParticleSirenMusic extends Particle {
         this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
         this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
         this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = this.getPosX();
+        this.prevPosY = this.getPosY();
+        this.prevPosZ = this.getPosZ();
 
         if (this.particleAge++ >= this.particleMaxAge) {
             this.setExpired();
@@ -45,7 +45,7 @@ public class ParticleSirenMusic extends Particle {
         this.motionY += 0.004D;
         this.move(this.motionX, this.motionY, this.motionZ);
 
-        if (this.posY == this.prevPosY) {
+        if (this.getPosY() == this.prevPosY) {
             this.motionX *= 1.1D;
             this.motionZ *= 1.1D;
         }

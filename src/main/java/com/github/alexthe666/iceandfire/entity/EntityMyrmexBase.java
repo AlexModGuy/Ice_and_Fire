@@ -21,6 +21,7 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
@@ -62,7 +63,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimatedEntity, IMerchant {
+public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant {
 
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
@@ -367,7 +368,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
 
         if (recipe.getRewardsExp()) {
-            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), i));
         }
     }
 
@@ -539,7 +540,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         super.onDeath(cause);
     }
 
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (!shouldHaveNormalAI()) {
             return false;
@@ -560,7 +561,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
                 this.populateBuyingList();
             }
 
-            if (hand == EnumHand.MAIN_HAND) {
+            if (hand == Hand.MAIN_HAND) {
                 player.addStat(StatList.TALKED_TO_VILLAGER);
             }
 
@@ -668,8 +669,8 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     }
 
     public boolean isOnResin() {
-        double d0 = this.posY - 1;
-        BlockPos blockpos = new BlockPos(this.posX, d0, this.posZ);
+        double d0 = this.getPosY() - 1;
+        BlockPos blockpos = new BlockPos(this.getPosX(), d0, this.getPosZ());
         while (world.isAirBlock(blockpos) && blockpos.getY() > 1) {
             blockpos = blockpos.down();
         }
@@ -767,7 +768,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 
@@ -845,7 +846,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
                 PathNavigate pathnavigate = this.entity.getNavigator();
                 if (pathnavigate != null) {
                     NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
-                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.entity.world, MathHelper.floor(this.entity.posX + (double) f7), MathHelper.floor(this.entity.posY), MathHelper.floor(this.entity.posZ + (double) f8)) != PathNodeType.WALKABLE) {
+                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.entity.world, MathHelper.floor(this.entity.getPosX() + (double) f7), MathHelper.floor(this.entity.getPosY()), MathHelper.floor(this.entity.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
                         this.moveForward = 1.0F;
                         this.moveStrafe = 0.0F;
                         f1 = f;
@@ -857,9 +858,9 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
                 this.action = EntityMoveHelper.Action.WAIT;
             } else if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 this.action = EntityMoveHelper.Action.WAIT;
-                double d0 = this.posX - this.entity.posX;
-                double d1 = this.posZ - this.entity.posZ;
-                double d2 = this.posY - this.entity.posY;
+                double d0 = this.getPosX() - this.entity.getPosX();
+                double d1 = this.getPosZ() - this.entity.getPosZ();
+                double d2 = this.getPosY() - this.entity.getPosY();
                 double d3 = d0 * d0 + d2 * d2 + d1 * d1;
                 if (d3 < 2.500000277905201E-7D) {
                     this.entity.setMoveForward(0.0F);

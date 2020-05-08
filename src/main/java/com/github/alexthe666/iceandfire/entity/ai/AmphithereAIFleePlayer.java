@@ -34,7 +34,7 @@ public class AmphithereAIFleePlayer extends EntityAIBase {
                 return false;
             } else {
                 this.closestLivingEntity = list.get(0);
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
+                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
                 if (vec3d == null) {
                     return false;

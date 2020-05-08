@@ -13,8 +13,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -79,7 +79,7 @@ public class BlockSilverPile extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
         ItemStack item = playerIn.inventory.getCurrentItem();
 
         if (!item.isEmpty()) {
@@ -88,7 +88,7 @@ public class BlockSilverPile extends Block {
                     if (!item.isEmpty()) {
                         if (this.getMetaFromState(state) < 7) {
                             WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.SILVER_PILE, this.getMetaFromState(state) + 1, 3);
-                            if (!playerIn.capabilities.isCreativeMode) {
+                            if (!playerIn.isCreative()) {
                                 item.shrink(1);
 
                                 if (item.isEmpty()) {
@@ -140,8 +140,8 @@ public class BlockSilverPile extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.UP || super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
+        return side == Direction.UP || super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }
 
     @Override

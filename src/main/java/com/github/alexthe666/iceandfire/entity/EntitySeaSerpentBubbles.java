@@ -54,16 +54,16 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
                 this.onImpact(raytraceresult);
             }
 
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
+            this.getPosX() += this.motionX;
+            this.getPosY() += this.motionY;
+            this.getPosZ() += this.motionZ;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
             float f = this.getMotionFactor();
 
             if (this.isInWater()) {
                 if (this.world.isRemote) {
                     for (int i = 0; i < 6; ++i) {
-                        IceAndFire.PROXY.spawnParticle("serpent_bubble", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                        IceAndFire.PROXY.spawnParticle("serpent_bubble", this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
                     }
                 }
             } else {
@@ -77,7 +77,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             this.motionX *= (double) f;
             this.motionY *= (double) f;
             this.motionZ *= (double) f;
-            this.setPosition(this.posX, this.posY, this.posZ);
+            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         } else {
             this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1F, this.rand.nextFloat());
             this.setDead();
@@ -87,9 +87,9 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
     public void autoTarget() {
         if (this.shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) this.shootingEntity).getAttackTarget() != null) {
             Entity target = ((EntitySeaSerpent) this.shootingEntity).getAttackTarget();
-            double d2 = target.posX - posX;
-            double d3 = target.posY - posY;
-            double d4 = target.posZ - posZ;
+            double d2 = target.getPosX() - posX;
+            double d3 = target.getPosY() - posY;
+            double d4 = target.getPosZ() - posZ;
             double d0 = (double) MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
             this.accelerationX = d2 / d0 * 0.1D;
             this.accelerationY = d3 / d0 * 0.1D;

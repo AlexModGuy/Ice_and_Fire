@@ -8,15 +8,16 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,11 +25,8 @@ import java.util.List;
 public class ItemHydraHeart extends Item {
 
     public ItemHydraHeart() {
-        super();
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.hydra_heart");
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, "hydra_heart");
-        this.maxStackSize = 1;
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
@@ -36,8 +34,8 @@ public class ItemHydraHeart extends Item {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean unused2) {
-        if(entity instanceof PlayerEntity && slot >= 0 && slot <= 8){
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        if(entity instanceof PlayerEntity && itemSlot >= 0 && itemSlot <= 8){
             double healthPercentage = ((PlayerEntity) entity).getHealth() / Math.max(1, ((PlayerEntity) entity).getMaxHealth());
             if(healthPercentage < 1.0D){
                 int level = 0;
@@ -48,19 +46,17 @@ public class ItemHydraHeart extends Item {
                 }else if(healthPercentage < 0.75D){
                     level = 1;
                 }
-                if(!((PlayerEntity) entity).isPotionActive(MobEffects.REGENERATION))
-                ((PlayerEntity) entity).addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, level, true, false));
+                if(!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION))
+                ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
 
             }
             //In hotbar
         }
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(I18n.format("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(I18n.format("item.iceandfire.hydra_heart.desc_0"));
-        tooltip.add(I18n.format("item.iceandfire.hydra_heart.desc_1"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_0").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_1").applyTextStyle(TextFormatting.GRAY));
     }
 }

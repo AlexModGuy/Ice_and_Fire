@@ -56,7 +56,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
     public void onUpdate() {
         if (this.world.isRemote) {
             for (int i = 0; i < 14; ++i) {
-                IceAndFire.PROXY.spawnParticle("dragonice", this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+                IceAndFire.PROXY.spawnParticle("dragonice", this.getPosX() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
             }
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
@@ -73,16 +73,16 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
                 this.onImpact(raytraceresult);
             }
 
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
+            this.getPosX() += this.motionX;
+            this.getPosY() += this.motionY;
+            this.getPosZ() += this.motionZ;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
             float f = this.getMotionFactor();
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f = 0.8F;
@@ -94,8 +94,8 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
             this.motionX *= f;
             this.motionY *= f;
             this.motionZ *= f;
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
-            this.setPosition(this.posX, this.posY, this.posZ);
+            this.world.spawnParticle(this.getParticleType(), this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
+            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         } else {
             this.setDead();
         }

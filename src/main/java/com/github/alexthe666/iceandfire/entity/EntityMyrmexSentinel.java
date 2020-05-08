@@ -219,7 +219,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             if (passenger.height >= 1.75F) {
                 extraY = passenger.height - 2F;
             }
-            passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
         }
     }
 

@@ -73,7 +73,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
     }
 
     public EntityTideTrident(World worldIn, LivingEntity shooter, ItemStack stack) {
-        this(worldIn, shooter.posX, shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D, shooter.posZ, stack.copy());
+        this(worldIn, shooter.getPosX(), shooter.getPosY() + (double) shooter.getEyeHeight() - 0.10000000149011612D, shooter.getPosZ(), stack.copy());
         this.shootingEntity = shooter;
 
         if (shooter instanceof PlayerEntity && !((PlayerEntity) shooter).isCreative()) {
@@ -160,7 +160,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
             this.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
-            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+            this.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, this.rotationPitch);
             this.ticksInGround = 0;
         }
     }
@@ -174,7 +174,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
             this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
             this.prevRotationYaw = this.rotationYaw;
             this.prevRotationPitch = this.rotationPitch;
-            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+            this.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, this.rotationPitch);
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
@@ -184,7 +184,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
         if (BlockState.getMaterial() != Material.AIR) {
             AxisAlignedBB axisalignedbb = BlockState.getCollisionBoundingBox(this.world, blockpos);
 
-            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).contains(new Vec3d(this.posX, this.posY, this.posZ))) {
+            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).contains(new Vec3d(this.getPosX(), this.getPosY(), this.getPosZ()))) {
                 this.inGround = true;
             }
         }
@@ -207,11 +207,11 @@ public class EntityTideTrident extends Entity implements IProjectile {
         } else {
             this.timeInGround = 0;
             ++this.ticksInAir;
-            Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
-            Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Vec3d vec3d1 = new Vec3d(this.getPosX(), this.getPosY(), this.getPosZ());
+            Vec3d vec3d = new Vec3d(this.getPosX() + this.motionX, this.getPosY() + this.motionY, this.getPosZ() + this.motionZ);
             RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, false, true, false);
-            vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
-            vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            vec3d1 = new Vec3d(this.getPosX(), this.getPosY(), this.getPosZ());
+            vec3d = new Vec3d(this.getPosX() + this.motionX, this.getPosY() + this.motionY, this.getPosZ() + this.motionZ);
 
             if (raytraceresult != null) {
                 vec3d = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
@@ -237,13 +237,13 @@ public class EntityTideTrident extends Entity implements IProjectile {
 
             if (this.getIsCritical()) {
                 for (int k = 0; k < 4; ++k) {
-                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double) k / 4.0D, this.posY + this.motionY * (double) k / 4.0D, this.posZ + this.motionZ * (double) k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.getPosX() + this.motionX * (double) k / 4.0D, this.getPosY() + this.motionY * (double) k / 4.0D, this.getPosZ() + this.motionZ * (double) k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
 
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
+            this.getPosX() += this.motionX;
+            this.getPosY() += this.motionY;
+            this.getPosZ() += this.motionZ;
             float f4 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
@@ -270,7 +270,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f3 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f1 = 0.99F;
@@ -288,7 +288,7 @@ public class EntityTideTrident extends Entity implements IProjectile {
                 this.motionY -= 0.05000000074505806D;
             }
 
-            this.setPosition(this.posX, this.posY, this.posZ);
+            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
             this.doBlockCollisions();
         }
     }
@@ -368,13 +368,13 @@ public class EntityTideTrident extends Entity implements IProjectile {
             BlockState BlockState = this.world.getBlockState(blockpos);
             this.inTile = BlockState.getBlock();
             this.inData = this.inTile.getMetaFromState(BlockState);
-            this.motionX = (double) ((float) (raytraceResultIn.hitVec.x - this.posX));
-            this.motionY = (double) ((float) (raytraceResultIn.hitVec.y - this.posY));
-            this.motionZ = (double) ((float) (raytraceResultIn.hitVec.z - this.posZ));
+            this.motionX = (double) ((float) (raytraceResultIn.hitVec.x - this.getPosX()));
+            this.motionY = (double) ((float) (raytraceResultIn.hitVec.y - this.getPosY()));
+            this.motionZ = (double) ((float) (raytraceResultIn.hitVec.z - this.getPosZ()));
             float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-            this.posX -= this.motionX / (double) f2 * 0.05000000074505806D;
-            this.posY -= this.motionY / (double) f2 * 0.05000000074505806D;
-            this.posZ -= this.motionZ / (double) f2 * 0.05000000074505806D;
+            this.getPosX() -= this.motionX / (double) f2 * 0.05000000074505806D;
+            this.getPosY() -= this.motionY / (double) f2 * 0.05000000074505806D;
+            this.getPosZ() -= this.motionZ / (double) f2 * 0.05000000074505806D;
             this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
             this.inGround = true;
             this.arrowShake = 7;
@@ -390,9 +390,9 @@ public class EntityTideTrident extends Entity implements IProjectile {
         super.move(type, x, y, z);
 
         if (this.inGround) {
-            this.xTile = MathHelper.floor(this.posX);
-            this.yTile = MathHelper.floor(this.posY);
-            this.zTile = MathHelper.floor(this.posZ);
+            this.xTile = MathHelper.floor(this.getPosX());
+            this.yTile = MathHelper.floor(this.getPosY());
+            this.zTile = MathHelper.floor(this.getPosZ());
         }
     }
 

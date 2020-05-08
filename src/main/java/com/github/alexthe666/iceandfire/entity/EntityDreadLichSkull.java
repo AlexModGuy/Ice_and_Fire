@@ -7,12 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Collections;
 import java.util.List;
 
-public class EntityDreadLichSkull extends EntityArrow {
+public class EntityDreadLichSkull extends AbstractArrowEntity {
 
     public EntityAINearestAttackableTarget.Sorter targetSorter;
 
@@ -66,9 +67,9 @@ public class EntityDreadLichSkull extends EntityArrow {
         boolean flag = true;
         if(this.shootingEntity != null && this.shootingEntity instanceof LivingEntity && ((LivingEntity) this.shootingEntity).getAttackTarget() != null){
             LivingEntity target = ((LivingEntity) this.shootingEntity).getAttackTarget();
-            double minusX = target.posX - this.posX;
-            double minusY = target.posY - this.posY;
-            double minusZ = target.posZ - this.posZ;
+            double minusX = target.getPosX() - this.getPosX();
+            double minusY = target.getPosY() - this.getPosY();
+            double minusZ = target.getPosZ() - this.getPosZ();
             double speed = 0.15D;
             this.motionX += minusX * speed * 0.1D;
             this.motionY += minusY * speed * 0.1D;
@@ -78,7 +79,7 @@ public class EntityDreadLichSkull extends EntityArrow {
             LivingEntity target = ((PlayerEntity) this.shootingEntity).getAttackingEntity();
             if(target == null || !target.isEntityAlive()){
                 double d0 = 10;
-                List<LivingEntity> list = world.getEntitiesWithinAABB(LivingEntity.class, (new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D)).grow(d0, 10.0D, d0), IMob.VISIBLE_MOB_SELECTOR);
+                List<LivingEntity> list = world.getEntitiesWithinAABB(LivingEntity.class, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), IMob.VISIBLE_MOB_SELECTOR);
                 if(targetSorter != null){
                     Collections.sort(list, targetSorter);
                 }
@@ -87,9 +88,9 @@ public class EntityDreadLichSkull extends EntityArrow {
                 }
             }
             if(target != null && target.isEntityAlive()){
-                double minusX = target.posX - this.posX;
-                double minusY = target.posY + target.getEyeHeight() - this.posY;
-                double minusZ = target.posZ - this.posZ;
+                double minusX = target.getPosX() - this.getPosX();
+                double minusY = target.getPosY() + target.getEyeHeight() - this.getPosY();
+                double minusZ = target.getPosZ() - this.getPosZ();
                 double speed = 0.25D * Math.min(this.getDistance(target), 10D) / 10D;
                 this.motionX += (Math.signum(minusX) * 0.5D - this.motionX) * 0.10000000149011612D;
                 this.motionY += (Math.signum(minusY) * 0.5D - this.motionY) * 0.10000000149011612D;
@@ -106,9 +107,9 @@ public class EntityDreadLichSkull extends EntityArrow {
         double d0 = 0;
         double d1 = 0.01D;
         double d2 = 0D;
-        double x = this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
-        double y = this.posY + (double) (this.rand.nextFloat() * this.height) - (double) this.height;
-        double z = this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
+        double x = this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
+        double y = this.getPosY() + (double) (this.rand.nextFloat() * this.height) - (double) this.height;
+        double z = this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
         float f = (this.width + this.height + this.width) * 0.333F + 0.5F;
         if (particleDistSq(x, y, z) < f * f) {
             IceAndFire.PROXY.spawnParticle("dread_torch", x, y + 0.5D, z, d0, d1, d2);
@@ -125,7 +126,7 @@ public class EntityDreadLichSkull extends EntityArrow {
 
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
         if (!this.isSilent() && soundIn != SoundEvents.ENTITY_ARROW_HIT && soundIn != SoundEvents.ENTITY_ARROW_HIT_PLAYER) {
-            this.world.playSound(null, this.posX, this.posY, this.posZ, soundIn, this.getSoundCategory(), volume, pitch);
+            this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), soundIn, this.getSoundCategory(), volume, pitch);
         }
     }
 
@@ -155,10 +156,10 @@ public class EntityDreadLichSkull extends EntityArrow {
             player.getActiveItemStack().damageItem(i, player);
 
             if (player.getActiveItemStack().isEmpty()) {
-                EnumHand enumhand = player.getActiveHand();
-                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, enumhand);
+                Hand Hand = player.getActiveHand();
+                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (enumhand == EnumHand.MAIN_HAND) {
+                if (Hand == Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);

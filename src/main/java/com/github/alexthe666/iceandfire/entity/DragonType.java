@@ -59,8 +59,8 @@ public class DragonType {
                     }
                     dragon.setTamed(true);
                     dragon.setOwnerId(egg.getOwnerId());
-                    egg.world.playSound(egg.posX, egg.posY + egg.getEyeHeight(), egg.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                    egg.world.playSound(egg.posX, egg.posY + egg.getEyeHeight(), egg.posZ, IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                    egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                    egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
                     egg.setDead();
                 }
 
@@ -70,7 +70,7 @@ public class DragonType {
             if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
                 egg.setDead();
                 egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
-                egg.world.playSound(egg.posX, egg.posY + egg.getEyeHeight(), egg.posZ, SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getType();
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).ownerUUID = egg.getOwnerId();

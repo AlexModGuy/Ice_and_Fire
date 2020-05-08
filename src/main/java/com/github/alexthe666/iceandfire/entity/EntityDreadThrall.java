@@ -86,12 +86,12 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
                 for (int i = 0; i < 5; i++){
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
+                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getEntityBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
         }
         if(this.getHeldItemMainhand().getItem() == Items.BOW){
-            this.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BONE));
+            this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BONE));
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }

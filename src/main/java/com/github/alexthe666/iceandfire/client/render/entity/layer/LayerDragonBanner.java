@@ -12,8 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -31,7 +31,7 @@ public class LayerDragonBanner implements LayerRenderer<EntityDragonBase> {
     }
 
     public void doRenderLayer(EntityDragonBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        ItemStack itemstack = entity.getHeldItem(EnumHand.OFF_HAND);
+        ItemStack itemstack = entity.getHeldItem(Hand.OFF_HAND);
         GlStateManager.pushMatrix();
         if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemBanner) {
             this.banner.setItemValues(itemstack, false);

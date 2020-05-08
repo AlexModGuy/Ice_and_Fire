@@ -32,9 +32,10 @@ public class BlockSeaSerpentScales extends Block {
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
     }
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
         tooltip.add(color + StatCollector.translateToLocal("sea_serpent." + name));
     }
 }

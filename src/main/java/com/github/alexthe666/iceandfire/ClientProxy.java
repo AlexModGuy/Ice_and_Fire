@@ -35,7 +35,7 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -282,7 +282,7 @@ public class ClientProxy extends CommonProxy {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
+    public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, Direction facing) {
         Minecraft.getInstance().displayGuiScreen(new GuiMyrmexAddRoom(staff, pos, facing));
     }
 

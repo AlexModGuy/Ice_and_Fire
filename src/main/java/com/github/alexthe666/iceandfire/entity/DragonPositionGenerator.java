@@ -24,7 +24,7 @@ public class DragonPositionGenerator {
         boolean flag;
 
         if (mob.hasHome()) {
-            double d0 = mob.getHomePosition().distanceSq((double) MathHelper.floor(mob.posX), (double) MathHelper.floor(mob.posY), (double) MathHelper.floor(mob.posZ)) + 4.0D;
+            double d0 = mob.getHomePosition().distanceSq((double) MathHelper.floor(mob.getPosX()), (double) MathHelper.floor(mob.getPosY()), (double) MathHelper.floor(mob.getPosZ())) + 4.0D;
             double d1 = (double) (mob.getMaximumHomeDistance() + (float) xz);
             flag = d0 < d1 * d1;
         } else {
@@ -46,20 +46,20 @@ public class DragonPositionGenerator {
                 if (mob.hasHome() && xz > 1) {
                     BlockPos blockpos = mob.getHomePosition();
 
-                    if (mob.posX > (double) blockpos.getX()) {
+                    if (mob.getPosX() > (double) blockpos.getX()) {
                         l -= random.nextInt(xz / 2);
                     } else {
                         l += random.nextInt(xz / 2);
                     }
 
-                    if (mob.posZ > (double) blockpos.getZ()) {
+                    if (mob.getPosZ() > (double) blockpos.getZ()) {
                         j1 -= random.nextInt(xz / 2);
                     } else {
                         j1 += random.nextInt(xz / 2);
                     }
                 }
 
-                BlockPos blockpos1 = new BlockPos((double) l + mob.posX, (double) i1 + mob.posY, (double) j1 + mob.posZ);
+                BlockPos blockpos1 = new BlockPos((double) l + mob.getPosX(), (double) i1 + mob.getPosY(), (double) j1 + mob.getPosZ());
 
                 if ((!flag || mob.isWithinHomeDistanceFromPosition(blockpos1)) && pathnavigate.canEntityStandOnPos(blockpos1)) {
                     if (skipWater) {
@@ -83,7 +83,7 @@ public class DragonPositionGenerator {
         }
 
         if (flag1) {
-            return new Vec3d((double) k1 + mob.posX, (double) i + mob.posY, (double) j + mob.posZ);
+            return new Vec3d((double) k1 + mob.getPosX(), (double) i + mob.getPosY(), (double) j + mob.getPosZ());
         } else {
             return null;
         }

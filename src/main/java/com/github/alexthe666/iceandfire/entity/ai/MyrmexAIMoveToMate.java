@@ -21,7 +21,7 @@ public class MyrmexAIMoveToMate extends EntityAIBase {
 
     public void updateTask() {
         if (this.myrmex.mate != null && (this.myrmex.getDistance(this.myrmex.mate) > 30 || this.myrmex.getNavigator().noPath())) {
-            this.myrmex.getMoveHelper().setMoveTo(this.myrmex.mate.posX, this.myrmex.posY, this.myrmex.mate.posZ, movementSpeed);
+            this.myrmex.getMoveHelper().setMoveTo(this.myrmex.mate.getPosX(), this.myrmex.getPosY(), this.myrmex.mate.getPosZ(), movementSpeed);
         }
     }
 

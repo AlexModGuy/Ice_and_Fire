@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 
 public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
 
@@ -22,16 +22,16 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
 
     public void doRenderLayer(EntityMyrmexBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (entity instanceof EntityMyrmexWorker) {
-            ItemStack itemstack = entity.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
             if (!itemstack.isEmpty()) {
                 GlStateManager.pushMatrix();
-                this.renderHeldItem(entity, itemstack, ItemCameraTransforms.TransformType.HEAD, EnumHandSide.RIGHT);
+                this.renderHeldItem(entity, itemstack, ItemCameraTransforms.TransformType.HEAD, HandSide.RIGHT);
                 GlStateManager.popMatrix();
             }
         }
     }
 
-    private void renderHeldItem(EntityMyrmexBase myrmex, ItemStack stack, ItemCameraTransforms.TransformType transform, EnumHandSide handSide) {
+    private void renderHeldItem(EntityMyrmexBase myrmex, ItemStack stack, ItemCameraTransforms.TransformType transform, HandSide handSide) {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
 
@@ -51,7 +51,7 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
         }
     }
 
-    protected void translateToHand(EnumHandSide side) {
+    protected void translateToHand(HandSide side) {
         ((ModelMyrmexBase) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, side);
     }
 

@@ -49,7 +49,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         degree *= 1 + (looker.getDistance(seen) * 0.1);
         Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
+        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
         double d0 = vec3d1.length();
         vec3d1 = vec3d1.normalize();
         double d1 = vec3d.dotProduct(vec3d1);
@@ -162,7 +162,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 double d2 = 0.4;
                 double d0 = 0.1;
                 double d1 = 0.1;
-                IceAndFire.PROXY.spawnParticle("blood", this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                IceAndFire.PROXY.spawnParticle("blood", this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY(), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
             }
         }
         if (this.deathTime >= 200) {
@@ -172,7 +172,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 while (i > 0) {
                     int j = EntityXPOrb.getXPSplit(i);
                     i -= j;
-                    this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+                    this.world.spawnEntity(new EntityXPOrb(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), j));
                 }
             }
             this.setDead();
@@ -181,7 +181,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
             }
         }
     }
@@ -193,7 +193,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         }
         if (this.getAttackTarget() != null) {
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
-            this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
+            this.getLookHelper().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
             if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
                 forcePreyToLook((LivingEntity) this.getAttackTarget());
             }
@@ -213,7 +213,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                                 this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
                                 if (!this.getAttackTarget().isEntityAlive() && playerStatueCooldown == 0) {
                                     EntityStoneStatue statue = new EntityStoneStatue(world);
-                                    statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+                                    statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
                                     statue.smallArms = true;
                                     if (!world.isRemote) {
                                         world.spawnEntity(statue);
@@ -279,7 +279,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public void forcePreyToLook(LivingEntity mob) {
-        mob.getLookHelper().setLookPosition(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ, (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
+        mob.getLookHelper().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
     }
 
     protected void applyEntityAttributes() {

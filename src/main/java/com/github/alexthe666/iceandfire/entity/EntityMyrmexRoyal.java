@@ -62,7 +62,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.posY, z);
+        BlockPos pos = new BlockPos(x, entity.getPosY(), z);
         for (int yDown = 0; yDown < 10; yDown++) {
             if (!world.isAirBlock(pos.down(yDown))) {
                 return pos.up(yDown);
@@ -335,7 +335,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 
@@ -366,14 +366,14 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 if (EntityMyrmexRoyal.this.collidedHorizontally) {
                     EntityMyrmexRoyal.this.rotationYaw += 180.0F;
                     this.speed = 0.1F;
-                    BlockPos target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.rand);
-                    this.posX = target.getX();
-                    this.posY = target.getY();
-                    this.posZ = target.getZ();
+                    BlockPos target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.getPosX() + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.getPosZ() + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.rand);
+                    this.getPosX() = target.getX();
+                    this.getPosY() = target.getY();
+                    this.getPosZ() = target.getZ();
                 }
-                double d0 = this.posX - EntityMyrmexRoyal.this.posX;
-                double d1 = this.posY - EntityMyrmexRoyal.this.posY;
-                double d2 = this.posZ - EntityMyrmexRoyal.this.posZ;
+                double d0 = this.getPosX() - EntityMyrmexRoyal.this.getPosX();
+                double d1 = this.getPosY() - EntityMyrmexRoyal.this.getPosY();
+                double d2 = this.getPosZ() - EntityMyrmexRoyal.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
 
@@ -391,8 +391,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                         EntityMyrmexRoyal.this.rotationYaw = -((float) MathHelper.atan2(EntityMyrmexRoyal.this.motionX, EntityMyrmexRoyal.this.motionZ)) * (180F / (float) Math.PI);
                         EntityMyrmexRoyal.this.renderYawOffset = EntityMyrmexRoyal.this.rotationYaw;
                     } else {
-                        double d4 = EntityMyrmexRoyal.this.getAttackTarget().posX - EntityMyrmexRoyal.this.posX;
-                        double d5 = EntityMyrmexRoyal.this.getAttackTarget().posZ - EntityMyrmexRoyal.this.posZ;
+                        double d4 = EntityMyrmexRoyal.this.getAttackTarget().getPosX() - EntityMyrmexRoyal.this.getPosX();
+                        double d5 = EntityMyrmexRoyal.this.getAttackTarget().getPosZ() - EntityMyrmexRoyal.this.getPosZ();
                         EntityMyrmexRoyal.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
                         EntityMyrmexRoyal.this.renderYawOffset = EntityMyrmexRoyal.this.rotationYaw;
                     }
@@ -412,9 +412,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             if (EntityMyrmexRoyal.this.isFlying() && EntityMyrmexRoyal.this.getAttackTarget() == null) {
                 if (EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner() != null) {
                     Entity summon = ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner();
-                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.posX + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.posZ + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
+                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.getPosX() + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.getPosZ() + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
                 } else {
-                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
+                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.getPosX() + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.getPosZ() + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
                 }
                 return isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target) && !EntityMyrmexRoyal.this.getMoveHelper().isUpdating() && EntityMyrmexRoyal.this.rand.nextInt(2) == 0;
             } else {
@@ -435,9 +435,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             if (!isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target)) {
                 if (EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner() != null) {
                     Entity summon = ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner();
-                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.posX + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.posZ + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
+                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, summon.getPosX() + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, summon.getPosZ() + EntityMyrmexRoyal.this.rand.nextInt(10) - 5, EntityMyrmexRoyal.this.rand);
                 } else {
-                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
+                    target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.getPosX() + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.getPosZ() + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
                 }
             }
             if (EntityMyrmexRoyal.this.world.isAirBlock(target)) {

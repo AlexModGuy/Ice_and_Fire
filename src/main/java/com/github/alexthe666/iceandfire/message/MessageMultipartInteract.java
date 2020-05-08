@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,7 +51,7 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
                     if (message.dmg > 0F) {
                         mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
                     } else {
-                        mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                        mob.processInitialInteract(player, Hand.MAIN_HAND);
                     }
                 }
             }
@@ -69,7 +69,7 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
                     if (message.dmg > 0F) {
                         mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
                     } else {
-                        mob.processInitialInteract(player, EnumHand.MAIN_HAND);
+                        mob.processInitialInteract(player, Hand.MAIN_HAND);
                     }
                 }
             }

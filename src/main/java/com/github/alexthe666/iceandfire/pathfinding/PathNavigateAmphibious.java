@@ -31,7 +31,7 @@ public class PathNavigateAmphibious extends PathNavigate {
     }
 
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.posX, (double) this.getPathablePosY(), this.entity.posZ);
+        return new Vec3d(this.entity.getPosX(), (double) this.getPathablePosY(), this.entity.getPosZ());
     }
 
     public Path getPathToPos(BlockPos pos) {
@@ -71,12 +71,12 @@ public class PathNavigateAmphibious extends PathNavigate {
     private int getPathablePosY() {
         if (this.entity.isInWater() && this.getCanSwim()) {
             int i = (int) this.entity.getEntityBoundingBox().minY;
-            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
+            Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()))).getBlock();
             int j = 0;
 
             while (block == Blocks.FLOWING_WATER || block == Blocks.WATER) {
                 ++i;
-                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), i, MathHelper.floor(this.entity.posZ))).getBlock();
+                block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()))).getBlock();
                 ++j;
 
                 if (j > 16) {
@@ -94,7 +94,7 @@ public class PathNavigateAmphibious extends PathNavigate {
         super.removeSunnyPath();
 
         if (this.shouldAvoidSun) {
-            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.posX), (int) (this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.posZ)))) {
+            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.getPosX()), (int) (this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getPosZ())))) {
                 return;
             }
 

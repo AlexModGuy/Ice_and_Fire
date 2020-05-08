@@ -8,7 +8,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -22,10 +22,10 @@ import java.util.Random;
 
 public class WorldGenMausoleum extends WorldGenerator {
 
-    public EnumFacing facing;
+    public Direction facing;
     private static final ResourceLocation STRUCTURE = new ResourceLocation(IceAndFire.MODID, "dread_mausoleum_forge");
 
-    public WorldGenMausoleum(EnumFacing facing) {
+    public WorldGenMausoleum(Direction facing) {
         super(false);
         this.facing = facing;
     }
@@ -34,7 +34,7 @@ public class WorldGenMausoleum extends WorldGenerator {
         return DragonUtils.isDreadBlock(state);
     }
 
-    public static Rotation getRotationFromFacing(EnumFacing facing) {
+    public static Rotation getRotationFromFacing(Direction facing) {
         switch (facing) {
             case EAST:
                 return Rotation.CLOCKWISE_90;
@@ -90,7 +90,7 @@ public class WorldGenMausoleum extends WorldGenerator {
         return true;
     }
 
-    public boolean checkIfCanGenAt(World world, BlockPos middle, int x, int z, EnumFacing facing) {
+    public boolean checkIfCanGenAt(World world, BlockPos middle, int x, int z, Direction facing) {
         return !isPartOfRuin(world.getBlockState(middle.offset(facing, z / 2))) && !isPartOfRuin(world.getBlockState(middle.offset(facing.getOpposite(), z / 2))) &&
                 !isPartOfRuin(world.getBlockState(middle.offset(facing.rotateY(), x / 2))) && !isPartOfRuin(world.getBlockState(middle.offset(facing.rotateYCCW(), x / 2)));
     }

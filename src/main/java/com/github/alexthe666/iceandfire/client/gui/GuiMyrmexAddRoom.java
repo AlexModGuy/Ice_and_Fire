@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
@@ -22,9 +22,9 @@ public class GuiMyrmexAddRoom extends GuiScreen {
     private ItemStack staff;
     private boolean jungle;
     private BlockPos interactPos;
-    private EnumFacing facing;
+    private Direction facing;
 
-    public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, EnumFacing facing) {
+    public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, Direction facing) {
         this.staff = staff;
         this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
         this.interactPos = interactPos;

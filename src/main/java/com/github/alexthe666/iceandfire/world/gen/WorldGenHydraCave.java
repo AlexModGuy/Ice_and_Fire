@@ -6,7 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -86,7 +86,7 @@ public class WorldGenHydraCave extends WorldGenerator {
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l))) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
+                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(1)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(1));
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -96,7 +96,7 @@ public class WorldGenHydraCave extends WorldGenerator {
                         continue;
                     }
                     if (rand.nextInt(45) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), Blocks.SKULL.getDefaultState().with(BlockSkull.FACING, EnumFacing.UP));
+                        worldIn.setBlockState(blockpos.up(), Blocks.SKULL.getDefaultState().with(BlockSkull.FACING, Direction.UP));
                         TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(1));
                         if (tileentity1 instanceof TileEntitySkull && !tileentity1.isInvalid()) {
                             int rot = MathHelper.floor((double)(rand.nextFloat() * 360.0F) + 0.5D) & 15;
@@ -106,8 +106,8 @@ public class WorldGenHydraCave extends WorldGenerator {
                     }
                     if (rand.nextInt(35) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         worldIn.setBlockState(blockpos.up(), Blocks.LEAVES.getDefaultState().with(BlockLeaves.DECAYABLE, false));
-                        for(EnumFacing facing : EnumFacing.values()){
-                            if(rand.nextFloat() < 0.3F && facing != EnumFacing.DOWN){
+                        for(Direction facing : Direction.values()){
+                            if(rand.nextFloat() < 0.3F && facing != Direction.DOWN){
                                 worldIn.setBlockState(blockpos.up().offset(facing), Blocks.LEAVES.getDefaultState().with(BlockLeaves.DECAYABLE, false));
                             }
                         }
@@ -134,7 +134,7 @@ public class WorldGenHydraCave extends WorldGenerator {
 
     private boolean isTouchingAir(World worldIn, BlockPos pos) {
         boolean isTouchingAir = true;
-        for (EnumFacing direction : EnumFacing.HORIZONTALS) {
+        for (Direction direction : Direction.HORIZONTALS) {
             if (!worldIn.isAirBlock(pos.offset(direction))) {
                 isTouchingAir = false;
             }

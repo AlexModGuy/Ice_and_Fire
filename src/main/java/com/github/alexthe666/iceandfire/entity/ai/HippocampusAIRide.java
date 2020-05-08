@@ -33,9 +33,9 @@ public class HippocampusAIRide extends EntityAIBase {
     public void updateTask() {
         dragon.getNavigator().clearPath();
         dragon.setAttackTarget(null);
-        double x = dragon.posX;
-        double y = dragon.posY;
-        double z = dragon.posZ;
+        double x = dragon.getPosX();
+        double y = dragon.getPosY();
+        double z = dragon.getPosZ();
         double speed = 1.8F * dragon.getRideSpeedModifier();
         if (player.moveStrafing != 0 || player.moveForward != 0) {
             Vec3d lookVec = player.getLookVec();

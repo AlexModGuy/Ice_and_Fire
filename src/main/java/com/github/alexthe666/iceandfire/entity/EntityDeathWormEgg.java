@@ -43,7 +43,7 @@ public class EntityDeathWormEgg extends ThrowableEntity {
         if (id == 3) {
             double d0 = 0.08D;
             for (int i = 0; i < 8; ++i) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.DEATHWORM_EGG));
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.DEATHWORM_EGG));
             }
         }
     }
@@ -64,7 +64,7 @@ public class EntityDeathWormEgg extends ThrowableEntity {
             deathworm.setWormAge(1);
             deathworm.setDeathWormScale(giant ? (0.25F + (float) (Math.random() * 0.35F)) * 4 : 0.25F + (float) (Math.random() * 0.35F));
             deathworm.setOwnerId(this.thrower.getUniqueID());
-            deathworm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            deathworm.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
             this.world.spawnEntity(deathworm);
             this.world.setEntityState(this, (byte) 3);
             this.setDead();

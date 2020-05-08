@@ -63,9 +63,9 @@ public class DeathWormAIFindSandTarget extends EntityAIBase {
                     }
                 }
             } else {
-                for (int x = (int) this.mob.posX - range; x < (int) this.mob.posX + range; x++) {
-                    for (int y = (int) this.mob.posY - range; y < (int) this.mob.posY + range; y++) {
-                        for (int z = (int) this.mob.posZ - range; z < (int) this.mob.posZ + range; z++) {
+                for (int x = (int) this.mob.getPosX() - range; x < (int) this.mob.getPosX() + range; x++) {
+                    for (int y = (int) this.mob.getPosY() - range; y < (int) this.mob.getPosY() + range; y++) {
+                        for (int z = (int) this.mob.getPosZ() - range; z < (int) this.mob.getPosZ() + range; z++) {
                             if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.SAND && isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(x, y, z))) {
                                 sand.add(new BlockPos(x, y, z));
                             }

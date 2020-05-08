@@ -32,7 +32,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.posX - looker.posX, seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.posY + (double) looker.getEyeHeight()), seen.posZ - looker.posZ);
+        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
         double d0 = vec3d1.length();
         vec3d1 = vec3d1.normalize();
         double d1 = vec3d.dotProduct(vec3d1);
@@ -70,7 +70,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 resetTask();
                 return;
             }
-            if (!isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS) || (LivingEntity.prevPosX != entity.posX || LivingEntity.prevPosY != entity.posY || LivingEntity.prevPosZ != entity.posZ)) {
+            if (!isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS) || (LivingEntity.prevPosX != entity.getPosX() || LivingEntity.prevPosY != entity.getPosY() || LivingEntity.prevPosZ != entity.getPosZ())) {
                 this.entity.getNavigator().clearPath();
                 this.prevYaw = LivingEntity.rotationYaw;
                 BlockPos pos = DragonUtils.getBlockInTargetsViewCockatrice(this.entity, LivingEntity);
@@ -80,7 +80,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
             }
             this.entity.setTargetedEntity(LivingEntity.getEntityId());
 
-            double d0 = this.entity.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
             boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 
@@ -99,7 +99,7 @@ public class CockatriceAIStareAttack extends EntityAIBase {
                 }
 
             }
-            this.entity.getLookHelper().setLookPosition(LivingEntity.posX, LivingEntity.posY + (double) LivingEntity.getEyeHeight(), LivingEntity.posZ, (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+            this.entity.getLookHelper().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
         }
     }
 

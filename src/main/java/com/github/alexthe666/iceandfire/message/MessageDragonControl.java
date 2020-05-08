@@ -23,9 +23,9 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
     public MessageDragonControl(int dragonId, byte controlState, double posX, double posY, double posZ) {
         this.dragonId = dragonId;
         this.controlState = controlState;
-        this.posX = posX;
-        this.posY = posY;
-        this.posZ = posZ;
+        this.getPosX() = posX;
+        this.getPosY() = posY;
+        this.getPosZ() = posZ;
     }
 
     public MessageDragonControl() {
@@ -66,29 +66,29 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
                     if (dragon.isOwner(player)) {
                         dragon.setControlState(message.controlState);
                     }
-                    dragon.setPosition(message.posX, message.posY, message.posZ);
+                    dragon.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 } else if (entity instanceof EntityHippogryph) {
                     EntityHippogryph hippo = (EntityHippogryph) entity;
                     if (hippo.isOwner(player)) {
                         hippo.setControlState(message.controlState);
                     }
-                    hippo.setPosition(message.posX, message.posY, message.posZ);
+                    hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 } else if (entity instanceof EntityHippocampus) {
                     EntityHippocampus hippo = (EntityHippocampus) entity;
                     if (hippo.isOwner(player)) {
                         hippo.setControlState(message.controlState);
                     }
-                    hippo.setPosition(message.posX, message.posY, message.posZ);
+                    hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 } else if (entity instanceof EntityDeathWorm) {
                     EntityDeathWorm deathworm = (EntityDeathWorm) entity;
                     deathworm.setControlState(message.controlState);
-                    deathworm.setPosition(message.posX, message.posY, message.posZ);
+                    deathworm.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 } else if (entity instanceof EntityAmphithere) {
                     EntityAmphithere amphi = (EntityAmphithere) entity;
                     if (amphi.isOwner(player)) {
                         amphi.setControlState(message.controlState);
                     }
-                    amphi.setPosition(message.posX, message.posY, message.posZ);
+                    amphi.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 }
             }
         }

@@ -32,7 +32,7 @@ public class HippogryphAIAirTarget extends EntityAIBase {
             if (hippogryph.getOwner() != null && hippogryph.getPassengers().contains(hippogryph.getOwner())) {
                 return false;
             }
-            if (hippogryph.airTarget != null && hippogryph.getDistanceSquared(new Vec3d(hippogryph.airTarget.getX(), hippogryph.posY, hippogryph.airTarget.getZ())) > 3) {
+            if (hippogryph.airTarget != null && hippogryph.getDistanceSquared(new Vec3d(hippogryph.airTarget.getX(), hippogryph.getPosY(), hippogryph.airTarget.getZ())) > 3) {
                 hippogryph.airTarget = null;
             }
 
@@ -87,7 +87,7 @@ public class HippogryphAIAirTarget extends EntityAIBase {
                 }
             }
         } else {
-            BlockPos pos = new BlockPos((int) hippogryph.getAttackTarget().posX, (int) hippogryph.getAttackTarget().posY, (int) hippogryph.getAttackTarget().posZ);
+            BlockPos pos = new BlockPos((int) hippogryph.getAttackTarget().getPosX(), (int) hippogryph.getAttackTarget().getPosY(), (int) hippogryph.getAttackTarget().getPosZ());
             if (hippogryph.world.getBlockState(pos).getMaterial() == Material.AIR) {
                 return pos;
             }

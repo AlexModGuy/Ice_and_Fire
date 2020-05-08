@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -69,7 +69,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
             if (this.path != null) {
                 return true;
             } else {
-                return this.getAttackReachSqr(LivingEntity) >= this.attacker.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+                return this.getAttackReachSqr(LivingEntity) >= this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
             }
         }
     }
@@ -122,16 +122,16 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (LivingEntity != null) {
             if (attacker.isInWater()) {
-                this.attacker.getMoveHelper().setMoveTo(LivingEntity.posX, LivingEntity.posY + LivingEntity.getEyeHeight(), LivingEntity.posZ, 0.1D);
+                this.attacker.getMoveHelper().setMoveTo(LivingEntity.getPosX(), LivingEntity.getPosY() + LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), 0.1D);
             }
             this.attacker.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
-            double d0 = this.attacker.getDistanceSq(LivingEntity.posX, LivingEntity.getEntityBoundingBox().minY, LivingEntity.posZ);
+            double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
             --this.delayCounter;
 
             if ((this.longMemory || this.attacker.getEntitySenses().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
-                this.targetX = LivingEntity.posX;
+                this.targetX = LivingEntity.getPosX();
                 this.targetY = LivingEntity.getEntityBoundingBox().minY;
-                this.targetZ = LivingEntity.posZ;
+                this.targetZ = LivingEntity.getPosZ();
                 this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
 
                 if (this.canPenalize) {
@@ -166,7 +166,7 @@ public class SeaSerpentAIAttackMelee extends EntityAIBase {
         double d0 = this.getAttackReachSqr(enemy);
         if (distToEnemySqr <= d0) {
             this.attackTick = 20;
-            this.attacker.swingArm(EnumHand.MAIN_HAND);
+            this.attacker.swingArm(Hand.MAIN_HAND);
             this.attacker.attackEntityAsMob(enemy);
         }
     }

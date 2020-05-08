@@ -12,8 +12,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,7 +37,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if(stack.getItem() == IafItemRegistry.DREAD_KEY){
             if(!playerIn.isCreative()){
@@ -54,7 +54,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         if(pos.getDistance(startPos.getX(), startPos.getY(), startPos.getZ()) < 32){
             if(worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK){
                 worldIn.destroyBlock(pos, false);
-                for(EnumFacing facing : EnumFacing.values()){
+                for(Direction facing : Direction.values()){
                     deleteNearbyWood(worldIn, pos.offset(facing), startPos);
                 }
             }
@@ -73,7 +73,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         return new BlockStateContainer(this, PLAYER_PLACED);
     }
 
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         return this.getDefaultState().with(PLAYER_PLACED, true);
     }
 }

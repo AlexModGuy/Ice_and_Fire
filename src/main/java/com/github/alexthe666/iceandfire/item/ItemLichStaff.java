@@ -1,20 +1,19 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public class ItemLichStaff extends ItemGeneric {
+public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
-        super("lich_staff", "iceandfire.lich_staff");
-        this.maxStackSize = 1;
-        this.setMaxDamage(100);
+        super(new Item.Properties().maxStackSize(1).maxDamage(100).group(IceAndFire.TAB_ITEMS));
+        this.setRegistryName("iceandfire:lich_staff");
     }
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
@@ -22,7 +21,7 @@ public class ItemLichStaff extends ItemGeneric {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         playerIn.setActiveHand(hand);
         playerIn.swingArm(hand);
@@ -35,14 +34,16 @@ public class ItemLichStaff extends ItemGeneric {
         d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
         EntityDreadLichSkull charge = new EntityDreadLichSkull(worldIn, playerIn, 6);
         charge.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
-        charge.setPosition(playerIn.posX, playerIn.posY + 1, playerIn.posZ);
+        charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
         if (!worldIn.isRemote) {
-            worldIn.spawnEntity(charge);
+            worldIn.addEntity(charge);
         }
         charge.shoot(d2, d3, d4, 1, 1);
         playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
-        itemStackIn.damageItem(1, playerIn);
+        itemStackIn.damageItem(1, playerIn , (p_213625_1_) -> {
+            p_213625_1_.sendBreakAnimation(hand);
+        });
         playerIn.getCooldownTracker().setCooldown(this, 4);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
     }
 }

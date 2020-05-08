@@ -10,7 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -90,7 +90,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                         worldIn.setBlockState(blockpos.up().south(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlockState(blockpos.up().west(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlockState(blockpos.up().east(), IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 2);
+                        worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(2)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(2));
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
@@ -122,7 +122,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
         int width = 5 + rand.nextInt(3);
         int sheeps = 2 + rand.nextInt(3);
         int sheepsSpawned = 0;
-        EnumFacing direction = EnumFacing.NORTH;
+        Direction direction = Direction.NORTH;
         BlockPos end = blockpos;
         for (int sideCount = 0; sideCount < 4; sideCount++) {
             for (int side = 0; side < width; side++) {
@@ -155,7 +155,7 @@ public class WorldGenCyclopsCave extends WorldGenerator {
 
     private boolean isTouchingAir(World worldIn, BlockPos pos) {
         boolean isTouchingAir = true;
-        for (EnumFacing direction : EnumFacing.HORIZONTALS) {
+        for (Direction direction : Direction.HORIZONTALS) {
             if (!worldIn.isAirBlock(pos.offset(direction))) {
                 isTouchingAir = false;
             }
@@ -164,8 +164,8 @@ public class WorldGenCyclopsCave extends WorldGenerator {
     }
 
     private void genSkeleton(World worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
-        EnumFacing direction = EnumFacing.HORIZONTALS[new Random().nextInt(3)];
-        EnumFacing.Axis oppositeAxis = direction.getAxis() == EnumFacing.Axis.X ? EnumFacing.Axis.Z : EnumFacing.Axis.X;
+        Direction direction = Direction.HORIZONTALS[new Random().nextInt(3)];
+        Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         int maxRibHeight = rand.nextInt(2);
         for (int spine = 0; spine < 5 + rand.nextInt(2) * 2; spine++) {
             BlockPos segment = blockpos.offset(direction, spine);
@@ -183,10 +183,10 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                 }
                 for (int ribHeight = 1; ribHeight < maxRibHeight + 2; ribHeight++) {
                     if (origin.distanceSq(rightRib.up(ribHeight).offset(direction.rotateYCCW())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        worldIn.setBlockState(rightRib.up(ribHeight).offset(direction.rotateYCCW()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, Direction.Axis.Y));
                     }
                     if (origin.distanceSq(leftRib.up(ribHeight).offset(direction.rotateY())) <= (double) (radius * radius)) {
-                        worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, EnumFacing.Axis.Y));
+                        worldIn.setBlockState(leftRib.up(ribHeight).offset(direction.rotateY()), Blocks.BONE_BLOCK.getDefaultState().with(BlockBone.AXIS, Direction.Axis.Y));
                     }
                 }
                 if (origin.distanceSq(rightRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {

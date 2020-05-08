@@ -411,7 +411,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 while (i > 0) {
                     int j = EntityXPOrb.getXPSplit(i);
                     i -= j;
-                    this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+                    this.world.spawnEntity(new EntityXPOrb(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), j));
                 }
             }
         }
@@ -424,7 +424,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
             spawnDeathParticles();
@@ -958,7 +958,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
@@ -1165,7 +1165,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean canPositionBeSeen(double x, double y, double z) {
-        return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ), new Vec3d(x, y, z), false, true, false) == null;
+        return this.world.rayTraceBlocks(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(x, y, z), false, true, false) == null;
     }
 
     public abstract ResourceLocation getDeadLootTable();
@@ -1242,7 +1242,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     private boolean isOverAirLogic() {
-        return world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY - 1, this.posZ));
+        return world.isAirBlock(new BlockPos(this.getPosX(), this.getEntityBoundingBox().minY - 1, this.getPosZ()));
     }
 
     public boolean isDiving() {
@@ -1250,10 +1250,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean isBeyondHeight() {
-        if (this.posY > this.world.getHeight()) {
+        if (this.getPosY() > this.world.getHeight()) {
             return true;
         }
-        return this.posY > IafConfig.maxDragonFlight;
+        return this.getPosY() > IafConfig.maxDragonFlight;
     }
 
     public void breakBlock() {
@@ -1299,11 +1299,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                 double extraY = 0.8F;
                 double extraZ = radius * MathHelper.cos(angle);
-                BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
+                BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 BlockState BlockState = this.world.getBlockState(ground);
                 if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, ground.getY() + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
+                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, ground.getY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
                     }
                 }
             }
@@ -1377,7 +1377,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
-        prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
+        prey.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
     }
 
     public int getDragonStage() {
@@ -1472,7 +1472,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
-            if(!world.isRemote && world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ)) && this.posY > -1){
+            if(!world.isRemote && world.isAirBlock(new BlockPos(this.getPosX(), this.getEntityBoundingBox().minY, this.getPosZ())) && this.getPosY() > -1){
                 this.move(MoverType.SELF, 0, -0.2F, 0);
             }
             this.setBreathingFire(false);
@@ -1587,7 +1587,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYawHead = ((PlayerEntity) riding).rotationYawHead;
             this.prevRotationYaw = ((PlayerEntity) riding).rotationYawHead;
-            this.setPositionAndRotation(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ, ((PlayerEntity) riding).rotationYawHead, 0);
+            this.setPositionAndRotation(riding.getPosX() + extraX, riding.getPosY() + extraY, riding.getPosZ() + extraZ, ((PlayerEntity) riding).rotationYawHead, 0);
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isRiding()) {
                 this.dismountRidingEntity();
             }
@@ -1659,9 +1659,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public EntityDragonEgg createEgg(EntityDragonBase ageable) {
-        int i = MathHelper.floor(this.posX);
-        int j = MathHelper.floor(this.posY);
-        int k = MathHelper.floor(this.posZ);
+        int i = MathHelper.floor(this.getPosX());
+        int j = MathHelper.floor(this.getPosY());
+        int k = MathHelper.floor(this.getPosZ());
         BlockPos pos = new BlockPos(i, j, k);
         EntityDragonEgg dragon = new EntityDragonEgg(this.world);
         dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
@@ -1729,9 +1729,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
 
     public float getDistanceSquared(Vec3d vec3d) {
-        float f = (float) (this.posX - vec3d.x);
-        float f1 = (float) (this.posY - vec3d.y);
-        float f2 = (float) (this.posZ - vec3d.z);
+        float f = (float) (this.getPosX() - vec3d.x);
+        float f1 = (float) (this.getPosY() - vec3d.y);
+        float f2 = (float) (this.getPosZ() - vec3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 
@@ -2028,15 +2028,15 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public void tryScorchTarget() {
         LivingEntity entity = this.getAttackTarget();
         if (entity != null) {
-            float distX = (float) (entity.posX - this.posX);
-            float distZ = (float) (entity.posZ - this.posZ);
+            float distX = (float) (entity.getPosX() - this.getPosX());
+            float distZ = (float) (entity.getPosZ() - this.getPosZ());
             if (this.isBreathingFire()) {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
                     if (this.ticksExisted % 5 == 0) {
                         this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                     }
-                    stimulateFire(this.posX + distX * this.fireTicks / 40, entity.posY, this.posZ + distZ * this.fireTicks / 40, 1);
+                    stimulateFire(this.getPosX() + distX * this.fireTicks / 40, entity.getPosY(), this.getPosZ() + distZ * this.fireTicks / 40, 1);
                 }
             } else {
                 this.setBreathingFire(true);
@@ -2098,7 +2098,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
         if (soundIn == SoundEvents.ENTITY_GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
             if (!this.isSilent() && this.headPart != null) {
-                this.world.playSound(null, this.headPart.posX, this.headPart.posY, this.headPart.posZ, soundIn, this.getSoundCategory(), volume, pitch);
+                this.world.playSound(null, this.headPart.getPosX(), this.headPart.getPosY(), this.headPart.getPosZ(), soundIn, this.getSoundCategory(), volume, pitch);
             }
         } else {
             super.playSound(soundIn, volume, pitch);
@@ -2106,7 +2106,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean hasFlightClearance() {
-        BlockPos topOfBB = new BlockPos(this.posX, this.getEntityBoundingBox().maxY, this.posZ);
+        BlockPos topOfBB = new BlockPos(this.getPosX(), this.getEntityBoundingBox().maxY, this.getPosZ());
         for (int i = 1; i < 4; i++) {
             if (!world.isAirBlock(topOfBB.up(i))) {
                 return false;

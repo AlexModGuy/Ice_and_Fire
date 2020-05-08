@@ -23,9 +23,10 @@ public class ItemSeaSerpentScales extends ItemGeneric {
     }
 
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(color + StatCollector.translateToLocal("sea_serpent." + colorName));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
+        tooltip.add(color + new TranslationTextComponent("sea_serpent." + colorName));
     }
 }

@@ -69,8 +69,8 @@ public class MyrmexAIFindHidingSpot extends EntityAIBase {
     }
 
     public BlockPos getTargetPosition(int radius) {
-        int x = (int) myrmex.posX + myrmex.getRNG().nextInt(radius * 2) - radius;
-        int z = (int) myrmex.posZ + myrmex.getRNG().nextInt(radius * 2) - radius;
+        int x = (int) myrmex.getPosX() + myrmex.getRNG().nextInt(radius * 2) - radius;
+        int z = (int) myrmex.getPosZ() + myrmex.getRNG().nextInt(radius * 2) - radius;
         return myrmex.world.getHeight(new BlockPos(x, 0, z));
     }
 

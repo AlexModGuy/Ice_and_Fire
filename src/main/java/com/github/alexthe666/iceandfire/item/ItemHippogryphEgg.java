@@ -5,19 +5,17 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -25,58 +23,62 @@ import java.util.Random;
 public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
     public ItemHippogryphEgg() {
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.hippogryph_egg");
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
-        this.setHasSubtypes(true);
     }
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
         EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG, 1, eggType.ordinal());
+        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
+        CompoundNBT tag = new CompoundNBT();
+        tag.putInt("EggOrdinal", eggType.ordinal());
+        stack.setTag(tag);
         return stack;
     }
 
-    @Override
-    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
-        itemStack.setTagCompound(new CompoundNBT());
-    }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)) {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
-                if (!type.developer) {
-                    items.add(new ItemStack(this, 1, type.ordinal()));
-                }
+                ItemStack stack = new ItemStack(this);
+                CompoundNBT tag = new CompoundNBT();
+                tag.putInt("EggOrdinal", type.ordinal());
+                stack.setTag(tag);
+                items.add(stack);
+
             }
         }
+
     }
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, EnumHand handIn) {
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
 
-        if (!playerIn.capabilities.isCreativeMode) {
+        if (!playerIn.isCreative()) {
             itemstack.shrink(1);
         }
 
-        worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
             EntityHippogryphEgg entityegg = new EntityHippogryphEgg(worldIn, playerIn, itemstack);
             entityegg.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-            worldIn.spawnEntity(entityegg);
+            worldIn.addEntity(entityegg);
         }
 
-        playerIn.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult(ActionResultType.SUCCESS, itemstack);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String type = EnumHippogryphTypes.values()[MathHelper.clamp(stack.getMetadata(), 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
-        tooltip.add(StatCollector.translateToLocal("entity.hippogryph." + type));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+       CompoundNBT tag = stack.getTag();
+       int eggOrdinal = 0;
+       if(tag != null){
+           eggOrdinal = tag.getInt("EggOrdinal");
+       }
+
+        String type = EnumHippogryphTypes.values()[MathHelper.clamp(eggOrdinal, 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
+        tooltip.add(new TranslationTextComponent("entity.hippogryph." + type).applyTextStyle(TextFormatting.GRAY));
     }
 }

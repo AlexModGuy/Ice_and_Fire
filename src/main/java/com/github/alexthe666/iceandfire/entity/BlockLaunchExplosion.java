@@ -108,9 +108,9 @@ public class BlockLaunchExplosion extends Explosion {
                 double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;
 
                 if (d12 <= 1.0D) {
-                    double d5 = entity.posX - this.explosionX;
-                    double d7 = entity.posY + entity.getEyeHeight() - this.explosionY;
-                    double d9 = entity.posZ - this.explosionZ;
+                    double d5 = entity.getPosX() - this.explosionX;
+                    double d7 = entity.getPosY() + entity.getEyeHeight() - this.explosionY;
+                    double d9 = entity.getPosZ() - this.explosionZ;
                     double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
                     double d14 = this.worldObj.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
                     double d10 = (1.0D - d12) * d14;
@@ -172,9 +172,9 @@ public class BlockLaunchExplosion extends Explosion {
             if (!worldObj.isRemote) {
                 EntityFallingBlock entity = new EntityFallingBlock(worldObj, blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, state);
                 worldObj.spawnEntity(entity);
-                double d5 = entity.posX - this.explosionX;
-                double d7 = entity.posY - this.explosionY;
-                double d9 = entity.posZ - this.explosionZ;
+                double d5 = entity.getPosX() - this.explosionX;
+                double d7 = entity.getPosY() - this.explosionY;
+                double d9 = entity.getPosZ() - this.explosionZ;
                 double d11 = 0.6D;
                 entity.motionX += d5 * d11;
                 entity.motionY += 0.7F;

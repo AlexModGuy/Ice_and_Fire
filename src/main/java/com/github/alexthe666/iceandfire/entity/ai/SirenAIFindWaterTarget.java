@@ -48,9 +48,9 @@ public class SirenAIFindWaterTarget extends EntityAIBase {
         if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
             List<Vec3d> water = new ArrayList<>();
             List<Vec3d> singTargets = new ArrayList<>();
-            for (int x = (int) this.mob.posX - 5; x < (int) this.mob.posX + 5; x++) {
-                for (int y = (int) this.mob.posY - 5; y < (int) this.mob.posY + 5; y++) {
-                    for (int z = (int) this.mob.posZ - 5; z < (int) this.mob.posZ + 5; z++) {
+            for (int x = (int) this.mob.getPosX() - 5; x < (int) this.mob.getPosX() + 5; x++) {
+                for (int y = (int) this.mob.getPosY() - 5; y < (int) this.mob.getPosY() + 5; y++) {
+                    for (int z = (int) this.mob.getPosZ() - 5; z < (int) this.mob.getPosZ() + 5; z++) {
                         if (mob.wantsToSing()) {
                             if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid() && this.mob.world.isAirBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVector(), new Vec3d(x, y + 1, z))) {
                                 singTargets.add(new Vec3d(x, y + 1, z));

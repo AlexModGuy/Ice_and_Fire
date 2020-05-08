@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -32,9 +32,9 @@ public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
         super(renderManager, new ModelDreadThrall(0.0F, false), 0.6F);
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
         this.addLayer(new LayerHeldItem(this) {
-            protected void translateToHand(EnumHandSide p_191361_1_) {
+            protected void translateToHand(HandSide p_191361_1_) {
                 ((ModelDreadThrall) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
-                if (p_191361_1_ == EnumHandSide.LEFT) {
+                if (p_191361_1_ == HandSide.LEFT) {
                     GL11.glTranslatef(-0.05F, 0, 0);
                 } else {
                     GL11.glTranslatef(0.05F, 0, 0);

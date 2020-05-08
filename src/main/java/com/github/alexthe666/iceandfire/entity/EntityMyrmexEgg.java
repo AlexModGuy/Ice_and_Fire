@@ -122,7 +122,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             }
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
-            myrmex.setPositionAndRotation(this.posX, this.posY, this.posZ, 0, 0);
+            myrmex.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
                 MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
                 PlayerEntity player = world.getClosestPlayerToEntity(this, 30);
@@ -147,7 +147,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             if (!world.isRemote) {
                 world.spawnEntity(myrmex);
             }
-            this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ, IafSoundRegistry.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
+            this.world.playSound(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), IafSoundRegistry.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
         }
     }
 

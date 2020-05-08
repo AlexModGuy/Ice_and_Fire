@@ -49,7 +49,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 
     public void onUpdate() {
         for (int i = 0; i < 4; ++i) {
-            this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D);
+            this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * width), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * width), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D);
         }
         if (this.isInWater()) {
             setDead();
@@ -69,16 +69,16 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                 this.onImpact(raytraceresult);
             }
 
-            this.posX += this.motionX;
-            this.posY += this.motionY;
-            this.posZ += this.motionZ;
+            this.getPosX() += this.motionX;
+            this.getPosY() += this.motionY;
+            this.getPosZ() += this.motionZ;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
             float f = this.getMotionFactor();
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f = 0.8F;
@@ -90,8 +90,8 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
             this.motionX *= (double) f;
             this.motionY *= (double) f;
             this.motionZ *= (double) f;
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
-            this.setPosition(this.posX, this.posY, this.posZ);
+            this.world.spawnParticle(this.getParticleType(), this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
+            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         } else {
             this.setDead();
         }

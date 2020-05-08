@@ -86,7 +86,7 @@ public class IafDragonLogic {
             dragon.setHovering(true);
         }
         if (dragon.isOverAir() && !dragon.isRiding()) {
-            double ydist = dragon.prevPosY - dragon.posY;//down 0.4 up -0.38
+            double ydist = dragon.prevPosY - dragon.getPosY();//down 0.4 up -0.38
             float planeDist = (float) ((Math.abs(dragon.motionX) + Math.abs(dragon.motionZ)) * 6F);
             if (!dragon.isHovering()) {
                 dragon.incrementDragonPitch((float) (ydist) * 10);
@@ -143,7 +143,7 @@ public class IafDragonLogic {
         if (dragon.isInLove()) {
             dragon.world.setEntityState(dragon, (byte) 18);
         }
-        if ((int) dragon.prevPosX == (int) dragon.posX && (int) dragon.prevPosZ == (int) dragon.posZ) {
+        if ((int) dragon.prevPosX == (int) dragon.getPosX() && (int) dragon.prevPosZ == (int) dragon.getPosZ()) {
             dragon.ticksStill++;
         } else {
             dragon.ticksStill = 0;
@@ -259,8 +259,8 @@ public class IafDragonLogic {
             dragon.setHovering(false);
         }
         if ((properties == null || properties != null && !properties.isStone) && !dragon.isFlying() && !dragon.isHovering()) {
-            if (dragon.isAllowedToTriggerFlight() || dragon.posY < -1) {
-                if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.posY < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().posY + 5 < dragon.posY) {
+            if (dragon.isAllowedToTriggerFlight() || dragon.getPosY() < -1) {
+                if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getPosY() < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().getPosY() + 5 < dragon.getPosY()) {
                     dragon.setHovering(true);
                     dragon.setSleeping(false);
                     dragon.setSitting(false);
@@ -387,7 +387,7 @@ public class IafDragonLogic {
         } else if (!fireBreathing && dragon.fireBreathProgress > 0.0F) {
             dragon.fireBreathProgress -= 0.5F;
         }
-        boolean hovering = dragon.isHovering() || dragon.isFlying() && dragon.airAttack == IafDragonAttacks.Air.HOVER_BLAST && dragon.getAttackTarget() != null && dragon.getDistance(dragon.getAttackTarget().posX, dragon.posY, dragon.getAttackTarget().posZ) < 17F;
+        boolean hovering = dragon.isHovering() || dragon.isFlying() && dragon.airAttack == IafDragonAttacks.Air.HOVER_BLAST && dragon.getAttackTarget() != null && dragon.getDistance(dragon.getAttackTarget().getPosX(), dragon.getPosY(), dragon.getAttackTarget().getPosZ()) < 17F;
         if (hovering && dragon.hoverProgress < 20.0F) {
             dragon.hoverProgress += 0.5F;
         } else if (!hovering && dragon.hoverProgress > 0.0F) {

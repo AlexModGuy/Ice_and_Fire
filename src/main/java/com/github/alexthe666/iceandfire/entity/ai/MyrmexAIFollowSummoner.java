@@ -77,11 +77,11 @@ public class MyrmexAIFollowSummoner extends EntityAIBase {
         this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
-            this.tameable.getMoveHelper().setMoveTo(this.owner.posX, this.owner.posY + this.owner.getEyeHeight(), this.owner.posZ, 0.25D);
+            this.tameable.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight(), this.owner.getPosZ(), 0.25D);
             if (!this.tameable.getLeashed()) {
                 if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
-                    int i = MathHelper.floor(this.owner.posX) - 2;
-                    int j = MathHelper.floor(this.owner.posZ) - 2;
+                    int i = MathHelper.floor(this.owner.getPosX()) - 2;
+                    int j = MathHelper.floor(this.owner.getPosZ()) - 2;
                     int k = MathHelper.floor(this.owner.getEntityBoundingBox().minY);
 
                     for (int l = 0; l <= 4; ++l) {

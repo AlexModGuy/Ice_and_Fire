@@ -59,7 +59,7 @@ public class DeathWormAIGetInSand extends EntityAIBase {
     @Nullable
     private Vec3d findPossibleShelter() {
         Random random = this.creature.getRNG();
-        BlockPos blockpos = new BlockPos(this.creature.posX, this.creature.getEntityBoundingBox().minY, this.creature.posZ);
+        BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getEntityBoundingBox().minY, this.creature.getPosZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);

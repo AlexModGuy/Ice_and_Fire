@@ -123,9 +123,9 @@ public class IceExplosion extends Explosion {
                 double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / f3;
 
                 if (d12 <= 1.0D) {
-                    double d5 = entity.posX - this.explosionX;
-                    double d7 = entity.posY + entity.getEyeHeight() - this.explosionY;
-                    double d9 = entity.posZ - this.explosionZ;
+                    double d5 = entity.getPosX() - this.explosionX;
+                    double d7 = entity.getPosY() + entity.getEyeHeight() - this.explosionY;
+                    double d9 = entity.getPosZ() - this.explosionZ;
                     double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
 
                     if (d13 != 0.0D) {

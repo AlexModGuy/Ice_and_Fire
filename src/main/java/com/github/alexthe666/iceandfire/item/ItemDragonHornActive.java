@@ -161,9 +161,9 @@ public class ItemDragonHornActive extends Item {
             ITextComponent fire = new TranslationTextComponent("entity.firedragon.name").applyTextStyle(TextFormatting.GRAY);
             ITextComponent ice = new TranslationTextComponent("entity.icedragon.name").applyTextStyle(TextFormatting.GRAY);
             tooltip.add((this == IafItemRegistry.DRAGON_HORN_FIRE ? fire : ice));
-            String name = stack.getTag().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTag().getString("CustomName");
+            String name = stack.getTag().getString("CustomName").isEmpty() ? new TranslationTextComponent("dragon.unnamed") : new TranslationTextComponent("dragon.name") + stack.getTag().getString("CustomName");
             tooltip.add(new StringTextComponent(name));
-            String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTag().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
+            String gender = new TranslationTextComponent("dragon.gender") + new TranslationTextComponent((stack.getTag().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
             tooltip.add(new StringTextComponent(gender));
             int stagenumber = stack.getTag().getInt("AgeTicks") / 24000;
             int stage1 = 0;
@@ -180,7 +180,7 @@ public class ItemDragonHornActive extends Item {
                     stage1 = 1;
                 }
             }
-            String stage = StatCollector.translateToLocal("dragon.stage") + stage1 + " " + StatCollector.translateToLocal("dragon.days.front") + stagenumber + " " + StatCollector.translateToLocal("dragon.days.back");
+            String stage = new TranslationTextComponent("dragon.stage") + stage1 + " " + new TranslationTextComponent("dragon.days.front") + stagenumber + " " + new TranslationTextComponent("dragon.days.back");
             tooltip.add(new StringTextComponent(stage));
         }
     }

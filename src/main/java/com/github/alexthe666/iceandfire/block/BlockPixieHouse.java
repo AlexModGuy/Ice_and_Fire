@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,14 +29,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
     public Item itemBlock;
 
     public BlockPixieHouse(String type) {
         super(Material.WOOD);
         this.setHardness(2.0F);
         this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().with(FACING, Direction.NORTH));
         this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(IceAndFire.TAB_BLOCKS);
         this.setTranslationKey("iceandfire.pixie_house");
@@ -59,7 +59,7 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.down());
-        return BlockState.isSideSolid(worldIn, pos, EnumFacing.UP);
+        return BlockState.isSideSolid(worldIn, pos, Direction.UP);
     }
 
     public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
@@ -102,14 +102,14 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
+        return this.getDefaultState().with(FACING, Direction.byHorizontalIndex(meta));
     }
 
     @Override

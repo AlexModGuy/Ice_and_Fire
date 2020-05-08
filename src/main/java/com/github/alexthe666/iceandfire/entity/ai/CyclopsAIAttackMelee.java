@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 
 public class CyclopsAIAttackMelee extends EntityAIAttackMelee {
 
@@ -19,7 +19,7 @@ public class CyclopsAIAttackMelee extends EntityAIAttackMelee {
         }
         if (distance <= d0 && this.attackTick <= 0) {
             this.attackTick = 20;
-            this.attacker.swingArm(EnumHand.MAIN_HAND);
+            this.attacker.swingArm(Hand.MAIN_HAND);
             this.attacker.attackEntityAsMob(entity);
         }
     }

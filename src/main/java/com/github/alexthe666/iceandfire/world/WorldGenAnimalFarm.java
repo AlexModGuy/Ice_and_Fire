@@ -5,7 +5,7 @@ import net.minecraft.block.BlockFenceGate;
 import net.minecraft.entity.passive.*;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -79,14 +79,14 @@ public class WorldGenAnimalFarm extends WorldGenerator {
                     worldIn.setBlockState(position.add(x, 0, z), Blocks.GRASS_PATH.getDefaultState());
                 }
                 if (x == 0) {
-                    worldIn.setBlockState(position.add(0, 1, 4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.SOUTH));
-                    worldIn.setBlockState(position.add(0, 1, -4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.NORTH));
+                    worldIn.setBlockState(position.add(0, 1, 4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, Direction.SOUTH));
+                    worldIn.setBlockState(position.add(0, 1, -4), fence_gate.getDefaultState().with(BlockFenceGate.FACING, Direction.NORTH));
                     worldIn.setBlockState(position.add(0, 0, 4), Blocks.GRASS_PATH.getDefaultState());
                     worldIn.setBlockState(position.add(0, 0, -4), Blocks.GRASS_PATH.getDefaultState());
                 }
                 if (z == 0) {
-                    worldIn.setBlockState(position.add(4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.EAST));
-                    worldIn.setBlockState(position.add(-4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, EnumFacing.WEST));
+                    worldIn.setBlockState(position.add(4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, Direction.EAST));
+                    worldIn.setBlockState(position.add(-4, 1, 0), fence_gate.getDefaultState().with(BlockFenceGate.FACING, Direction.WEST));
                     worldIn.setBlockState(position.add(4, 0, 0), Blocks.GRASS_PATH.getDefaultState());
                     worldIn.setBlockState(position.add(-4, 0, 0), Blocks.GRASS_PATH.getDefaultState());
                 }

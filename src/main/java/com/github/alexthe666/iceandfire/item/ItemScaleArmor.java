@@ -39,10 +39,11 @@ public class ItemScaleArmor extends ItemArmor implements IProtectAgainstDragonIt
         return "iceandfire:textures/models/armor/" + armor_type.name() + (renderIndex == 2 ? "_legs.png" : ".png");
     }
 
+
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(eggType.color + I18n.format("dragon." + eggType.toString().toLowerCase()));
-        tooltip.add(I18n.format("item.dragonscales_armor.desc"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+
+        tooltip.add(eggType.color + new TranslationTextComponent("dragon." + eggType.toString().toLowerCase()));
+        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc"));
     }
 }

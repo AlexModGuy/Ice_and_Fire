@@ -27,7 +27,7 @@ public class TrollAIFleeSun extends EntityAIBase {
     public boolean shouldExecute() {
         if (!this.world.isDaytime()) {
             return false;
-        } else if (!this.world.canSeeSky(new BlockPos(this.troll.posX, this.troll.getEntityBoundingBox().minY, this.troll.posZ))) {
+        } else if (!this.world.canSeeSky(new BlockPos(this.troll.getPosX(), this.troll.getEntityBoundingBox().minY, this.troll.getPosZ()))) {
             return false;
         } else {
             Vec3d vec3d = this.findPossibleShelter();
@@ -60,7 +60,7 @@ public class TrollAIFleeSun extends EntityAIBase {
     @Nullable
     private Vec3d findPossibleShelter() {
         Random random = this.troll.getRNG();
-        BlockPos blockpos = new BlockPos(this.troll.posX, this.troll.getEntityBoundingBox().minY, this.troll.posZ);
+        BlockPos blockpos = new BlockPos(this.troll.getPosX(), this.troll.getEntityBoundingBox().minY, this.troll.getPosZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);

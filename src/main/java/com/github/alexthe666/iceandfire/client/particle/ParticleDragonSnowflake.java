@@ -34,10 +34,10 @@ public class ParticleDragonSnowflake extends ParticleFlame {
         this.initialX = xCoordIn;
         this.initialY = yCoordIn;
         this.initialZ = zCoordIn;
-        this.posX = this.initialX + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
-        this.posY = this.initialY + 0.5F + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
-        this.posZ = this.initialZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
-        this.setPosition(this.posX, this.posY, this.posZ);
+        this.getPosX() = this.initialX + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
+        this.getPosY() = this.initialY + 0.5F + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
+        this.getPosZ() = this.initialZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.25F);
+        this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         this.setParticleTextureIndex(rand.nextInt(8));
         big = rand.nextBoolean();
     }
@@ -52,11 +52,11 @@ public class ParticleDragonSnowflake extends ParticleFlame {
             this.setExpired();
         }
         particleScale = 0.125F * (this.particleMaxAge - (this.particleAge));
-        float f3 = (float) (this.posX - interpPosX);
-        float f4 = (float) (this.posY - interpPosY);
-        float f5 = (float) (this.posZ - interpPosZ);
-        float distX = (float) (this.initialX - this.posX);
-        float distZ = (float) (this.initialZ - this.posZ);
+        float f3 = (float) (this.getPosX() - interpPosX);
+        float f4 = (float) (this.getPosY() - interpPosY);
+        float f5 = (float) (this.getPosZ() - interpPosZ);
+        float distX = (float) (this.initialX - this.getPosX());
+        float distZ = (float) (this.initialZ - this.getPosZ());
         float ageOrDist = Math.max(particleAge, Math.max(distX * 10, distZ * 10));
         float width = particleScale * 0.09F;
         int i = this.getBrightnessForRender(partialTicks);
@@ -109,8 +109,8 @@ public class ParticleDragonSnowflake extends ParticleFlame {
 
     public void onUpdate() {
         super.onUpdate();
-        float distX = (float) (this.initialX - this.posX);
-        float distZ = (float) (this.initialZ - this.posZ);
+        float distX = (float) (this.initialX - this.getPosX());
+        float distZ = (float) (this.initialZ - this.getPosZ());
         this.motionX += distX * 0.1F * rand.nextFloat();
         this.motionZ += distZ * 0.1F * rand.nextFloat();
         this.motionY -= 0.015F * rand.nextFloat();

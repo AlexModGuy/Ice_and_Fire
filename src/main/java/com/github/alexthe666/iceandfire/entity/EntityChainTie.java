@@ -13,8 +13,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public class EntityChainTie extends HangingEntity {
 
     public EntityChainTie(World worldIn) {
         super(worldIn);
-        this.facingDirection = EnumFacing.NORTH;
+        this.facingDirection = Direction.NORTH;
     }
 
     public EntityChainTie(World worldIn, BlockPos hangingPositionIn) {
@@ -61,9 +61,9 @@ public class EntityChainTie extends HangingEntity {
     }
 
     public void setPosition(double x, double y, double z) {
-        this.posX = x;
-        this.posY = y;
-        this.posZ = z;
+        this.getPosX() = x;
+        this.getPosY() = y;
+        this.getPosZ() = z;
         if (this.isAddedToWorld() && !this.world.isRemote)
             this.world.updateEntityWithOptionalForce(this, false); // Forge - Process chunk registration after moving.
         float f = this.width / 2.0F;
@@ -113,25 +113,25 @@ public class EntityChainTie extends HangingEntity {
     public void setDead() {
         this.isDead = true;
         double d0 = 30D;
-        List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+        List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPosX() - d0, this.getPosY() - d0, this.getPosZ() - d0, this.getPosX() + d0, this.getPosY() + d0, this.getPosZ() + d0));
         for (LivingEntity LivingEntity : list) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity, this)) {
                 chainProperties.removeChain(LivingEntity, this);
-                EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
+                EntityItem entityitem = new EntityItem(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
                 entityitem.setDefaultPickupDelay();
                 this.world.spawnEntity(entityitem);
             }
         }
     }
 
-    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
         if (this.world.isRemote) {
             return true;
         } else {
             boolean flag = false;
             double d0 = 30D;
-            List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+            List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPosX() - d0, this.getPosY() - d0, this.getPosZ() - d0, this.getPosX() + d0, this.getPosY() + d0, this.getPosZ() + d0));
 
             for (LivingEntity LivingEntity : list) {
                 ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
@@ -150,7 +150,7 @@ public class EntityChainTie extends HangingEntity {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity1, this)) {
                             chainProperties.removeChain(LivingEntity1, this);
-                            EntityItem entityitem = new EntityItem(this.world, this.posX, this.posY + (double) 1, this.posZ, new ItemStack(IafItemRegistry.CHAIN));
+                            EntityItem entityitem = new EntityItem(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
                             entityitem.setDefaultPickupDelay();
                             this.world.spawnEntity(entityitem);
                         }

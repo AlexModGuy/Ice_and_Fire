@@ -36,9 +36,9 @@ public class DragonAIRide<T extends EntityCreature & IFlyingMount> extends Entit
     public void updateTask() {
         dragon.getNavigator().clearPath();
         dragon.setAttackTarget(null);
-        double x = dragon.posX;
-        double y = dragon.posY;
-        double z = dragon.posZ;
+        double x = dragon.getPosX();
+        double y = dragon.getPosY();
+        double z = dragon.getPosZ();
         double speed = 1.8F * dragon.getFlightSpeedModifier();
         Vec3d lookVec = player.getLookVec();
         if (player.moveForward < 0) {

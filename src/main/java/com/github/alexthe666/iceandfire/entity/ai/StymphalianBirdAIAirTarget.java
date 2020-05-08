@@ -29,7 +29,7 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
                 bird.flock.setTarget(bird.airTarget);
             }
         } else {
-            return new BlockPos((int) bird.getAttackTarget().posX, (int) bird.getAttackTarget().posY + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().posZ);
+            return new BlockPos((int) bird.getAttackTarget().getPosX(), (int) bird.getAttackTarget().getPosY() + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().getPosZ());
         }
         return bird.getPosition();
     }

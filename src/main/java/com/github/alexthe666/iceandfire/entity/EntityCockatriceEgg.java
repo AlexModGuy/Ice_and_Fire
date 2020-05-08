@@ -30,11 +30,11 @@ public class EntityCockatriceEgg extends EntityEgg {
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.ROTTEN_EGG));
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.ROTTEN_EGG));
             }
             if (thrower != null && thrower instanceof PlayerEntity) {
                 for (int i = 0; i < 8; ++i) {
-                    this.world.spawnParticle(EnumParticleTypes.HEART, this.posX, this.posY, this.posZ, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
+                    this.world.spawnParticle(EnumParticleTypes.HEART, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
                 }
             }
         }
@@ -60,7 +60,7 @@ public class EntityCockatriceEgg extends EntityEgg {
                     EntityCockatrice cockatrice = new EntityCockatrice(this.world);
                     cockatrice.setGrowingAge(-24000);
                     cockatrice.setHen(this.rand.nextBoolean());
-                    cockatrice.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                    cockatrice.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
                     if (thrower != null && thrower instanceof PlayerEntity) {
                         cockatrice.setTamedBy((PlayerEntity) thrower);
                     }
