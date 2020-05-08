@@ -1,5 +1,5 @@
-十七块龙息锻炉砖块，你就可以
-建造出龙息锻炉。
+造出龙息锻炉。
+
 
 
 <item><iceandfire:dragon_bone_block 0 40 30 1>
