@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class WorldGenMyrmexHive extends WorldGenerator {
 
-    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_RESIN.getDefaultState();
-    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_RESIN_STICKY.getDefaultState();
-    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_RESIN.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
-    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_RESIN_STICKY.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.getDefaultState();
+    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.getDefaultState();
+    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
+    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.getDefaultState().with(BlockMyrmexResin.VARIANT, BlockMyrmexResin.EnumType.JUNGLE);
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;

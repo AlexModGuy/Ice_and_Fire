@@ -4,81 +4,41 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
-    public Item itemBlock;
+    public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
     public BlockPixieHouse(String type) {
-        super(Material.WOOD);
-        this.setHardness(2.0F);
-        this.setResistance(5.0F);
-        this.setDefaultState(this.blockState.getBaseState().with(FACING, Direction.NORTH));
-        this.setSoundType(SoundType.WOOD);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setTranslationKey("iceandfire.pixie_house");
-        this.setRegistryName(IceAndFire.MODID, "pixie_house");
-        GameRegistry.registerTileEntity(TileEntityPixieHouse.class, "pixie_house");
+        super(Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 5.0F).tickRandomly());
+        this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+        this.setRegistryName(IceAndFire.MODID, "pixie_house_" + type);
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(BlockState blockstate) {
-        return false;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isFullCube(BlockState blockstate) {
-        return false;
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        BlockState BlockState = worldIn.getBlockState(pos.down());
-        return BlockState.isSideSolid(worldIn, pos, Direction.UP);
-    }
-
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
-        int meta = 0;
-        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityPixieHouse) {
-            meta = ((TileEntityPixieHouse) worldIn.getTileEntity(pos)).houseType;
-        }
-        spawnAsEntity(worldIn, pos, new ItemStack(IafBlockRegistry.PIXIE_HOUSE, 1, meta));
-        super.breakBlock(worldIn, pos, state);
+        spawnAsEntity(worldIn, pos, new ItemStack(this, 0));
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
-    public int quantityDropped(Random random) {
-        return 0;
-    }
 
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+        //worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
     }
 
     public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
@@ -95,73 +55,19 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
         }
     }
 
+    private boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return true;
+    }
+
     public void dropPixie(World world, BlockPos pos) {
         if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse) world.getTileEntity(pos)).hasPixie) {
             ((TileEntityPixieHouse) world.getTileEntity(pos)).releasePixie();
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-
-    @SuppressWarnings("deprecation")
+    @Nullable
     @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(FACING, Direction.byHorizontalIndex(meta));
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.get(FACING).getHorizontalIndex();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(BlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
-            ((TileEntityPixieHouse) world.getTileEntity(pos)).houseType = stack.getMetadata();
-        }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        for (int i = 0; i < 6; i++) {
-            items.add(new ItemStack(this, 1, i));
-        }
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityPixieHouse();
-    }
-
-    public class ItemBlockPixieHouse extends ItemBlock {
-        public ItemBlockPixieHouse(Block block) {
-            super(block);
-            this.maxStackSize = 1;
-            this.setHasSubtypes(true);
-        }
-
-        public String getTranslationKey(ItemStack stack) {
-            int i = stack.getMetadata();
-            return "tile.iceandfire.pixie_house_" + i;
-        }
     }
 }

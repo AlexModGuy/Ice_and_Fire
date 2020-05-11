@@ -22,8 +22,8 @@ public class IafBlockRegistry {
     public static final Block PODIUM_ACACIA = new BlockPodium("acacia");
     public static final Block FIRE_LILY = new BlockElementalFlower(true);
     public static final Block FROST_LILY = new BlockElementalFlower(false);
-    public static final Block GOLD_PILE = new BlockGoldPile();
-    public static final Block SILVER_PILE = new BlockSilverPile();
+    public static final Block GOLD_PILE = new BlockGoldPile("gold_pile");
+    public static final Block SILVER_PILE = new BlockGoldPile("silver_pile");
     public static final Block SILVER_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
     public static final Block SAPPHIRE_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
     public static final Block SILVER_BLOCK = new BlockGeneric(Material.IRON, "silver_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
@@ -79,8 +79,10 @@ public class IafBlockRegistry {
     public static final Block JAR_PIXIE_3 = new BlockJar(3);
     public static final Block JAR_PIXIE_4 = new BlockJar(4);
     public static final Block JAR_PIXIE_5 = new BlockJar(5);
-    public static final Block MYRMEX_RESIN = new BlockMyrmexResin(false);
-    public static final Block MYRMEX_RESIN_STICKY = new BlockMyrmexResin(true);
+    public static final Block MYRMEX_DESERT_RESIN = new BlockMyrmexResin(false, "desert");
+    public static final Block MYRMEX_DESERT_RESIN_STICKY = new BlockMyrmexResin(true, "desert");
+    public static final Block MYRMEX_JUNGLE_RESIN = new BlockMyrmexResin(false, "jungle");
+    public static final Block MYRMEX_JUNGLE_RESIN_STICKY = new BlockMyrmexResin(true, "jungle");
     public static final Block DESERT_MYRMEX_COCOON = new BlockMyrmexCocoon(false);
     public static final Block JUNGLE_MYRMEX_COCOON = new BlockMyrmexCocoon(true);
     public static final Block MYRMEX_DESERT_BIOLIGHT = new BlockMyrmexBiolight(false);

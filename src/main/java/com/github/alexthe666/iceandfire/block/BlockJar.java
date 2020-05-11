@@ -63,14 +63,6 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
         }
     }
 
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY);
-    }
-
-    protected ItemStack getSilkTouchDrop(BlockState state) {
-        return new ItemStack(IafBlockRegistry.JAR_EMPTY);
-    }
-
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
             ((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;

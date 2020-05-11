@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.block.BlockChest;

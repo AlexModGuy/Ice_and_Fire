@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import com.github.alexthe666.iceandfire.block.BlockSilverPile;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

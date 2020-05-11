@@ -2,30 +2,29 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IBlockReader;
 
 public class BlockMyrmexConnectedResin extends Block {
 
-    public static final PropertyBool UP = PropertyBool.create("up");
-    public static final PropertyBool DOWN = PropertyBool.create("down");
-    public static final PropertyBool NORTH = PropertyBool.create("north");
-    public static final PropertyBool EAST = PropertyBool.create("east");
-    public static final PropertyBool SOUTH = PropertyBool.create("south");
-    public static final PropertyBool WEST = PropertyBool.create("west");
+    public static final BooleanProperty UP = BooleanProperty.create("up");
+    public static final BooleanProperty DOWN = BooleanProperty.create("down");
+    public static final BooleanProperty NORTH = BooleanProperty.create("north");
+    public static final BooleanProperty EAST = BooleanProperty.create("east");
+    public static final BooleanProperty SOUTH = BooleanProperty.create("south");
+    public static final BooleanProperty WEST = BooleanProperty.create("west");
 
     public BlockMyrmexConnectedResin(boolean jungle, boolean glass) {
-        super(Material.ROCK);
-        this.setDefaultState(this.blockState.getBaseState().with(UP, Boolean.valueOf(false))
+        super(Properties.create(Material.ROCK).hardnessAndResistance(glass ? 1.5F : 3.5F).sound(glass ? SoundType.GLASS : SoundType.STONE));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(UP, Boolean.valueOf(false))
                 .with(DOWN, Boolean.valueOf(false))
                 .with(NORTH, Boolean.valueOf(false))
                 .with(EAST, Boolean.valueOf(false))
@@ -33,64 +32,48 @@ public class BlockMyrmexConnectedResin extends Block {
                 .with(WEST, Boolean.valueOf(false))
         );
         if (glass) {
-            this.setHardness(1.5F);
-            this.setSoundType(SoundType.GLASS);
-            this.setTranslationKey(jungle ? "iceandfire.myrmex_jungle_resin_glass" : "iceandfire.myrmex_desert_resin_glass");
             this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_glass" : "myrmex_desert_resin_glass");
         } else {
-            this.setHardness(3.5F);
-            this.setSoundType(SoundType.STONE);
-            this.setTranslationKey(jungle ? "iceandfire.myrmex_jungle_resin_block" : "iceandfire.myrmex_desert_resin_block");
             this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_block" : "myrmex_desert_resin_block");
         }
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
 
     }
 
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.with(UP, canFenceConnectTo(worldIn, pos, Direction.UP))
-                .with(DOWN, canFenceConnectTo(worldIn, pos, Direction.DOWN))
-                .with(NORTH, canFenceConnectTo(worldIn, pos, Direction.NORTH))
-                .with(SOUTH, canFenceConnectTo(worldIn, pos, Direction.SOUTH))
-                .with(EAST, canFenceConnectTo(worldIn, pos, Direction.EAST))
-                .with(WEST, canFenceConnectTo(worldIn, pos, Direction.WEST));
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        IBlockReader iblockreader = context.getWorld();
+        BlockPos blockpos = context.getPos();
+        IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        BlockPos blockpos1 = blockpos.north();
+        BlockPos blockpos2 = blockpos.east();
+        BlockPos blockpos3 = blockpos.south();
+        BlockPos blockpos4 = blockpos.west();
+        BlockPos blockpos5 = blockpos.up();
+        BlockPos blockpos6 = blockpos.down();
+        BlockState blockstate = iblockreader.getBlockState(blockpos1);
+        BlockState blockstate1 = iblockreader.getBlockState(blockpos2);
+        BlockState blockstate2 = iblockreader.getBlockState(blockpos3);
+        BlockState blockstate3 = iblockreader.getBlockState(blockpos4);
+        BlockState blockstate4 = iblockreader.getBlockState(blockpos5);
+        BlockState blockstate5 = iblockreader.getBlockState(blockpos6);
+        return super.getStateForPlacement(context)
+                .with(NORTH, Boolean.valueOf(this.canFenceConnectTo(blockstate, blockstate.canBeConnectedTo(iblockreader, blockpos1, Direction.SOUTH), Direction.SOUTH)))
+                .with(EAST, Boolean.valueOf(this.canFenceConnectTo(blockstate1, blockstate1.canBeConnectedTo(iblockreader, blockpos2, Direction.WEST), Direction.WEST)))
+                .with(SOUTH, Boolean.valueOf(this.canFenceConnectTo(blockstate2, blockstate2.canBeConnectedTo(iblockreader, blockpos3, Direction.NORTH), Direction.NORTH)))
+                .with(WEST, Boolean.valueOf(this.canFenceConnectTo(blockstate3, blockstate3.canBeConnectedTo(iblockreader, blockpos4, Direction.EAST), Direction.EAST)))
+                .with(UP, Boolean.valueOf(this.canFenceConnectTo(blockstate4, blockstate4.canBeConnectedTo(iblockreader, blockpos5, Direction.UP), Direction.UP)))
+                .with(DOWN, Boolean.valueOf(this.canFenceConnectTo(blockstate5, blockstate5.canBeConnectedTo(iblockreader, blockpos6, Direction.DOWN), Direction.DOWN)));
     }
 
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, UP, DOWN, NORTH, SOUTH, EAST, WEST);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(NORTH, EAST, WEST, SOUTH, DOWN, UP);
     }
 
-    public int getMetaFromState(BlockState state) {
-        return 0;
-    }
-
-    private boolean canFenceConnectTo(IBlockAccess world, BlockPos pos, Direction facing) {
-        BlockPos other = pos.offset(facing);
-        Block block = world.getBlockState(other).getBlock();
-        return block == this;
+    public boolean canFenceConnectTo(BlockState p_220111_1_, boolean p_220111_2_, Direction p_220111_3_) {
+        return p_220111_1_.getBlock() == this;
     }
 
     public boolean isOpaqueCube(BlockState state) {
         return false;
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
-        BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
-        Block block = BlockState.getBlock();
-
-        if (block == this) {
-            return false;
-        }
-
-        return block != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
     }
 
 }

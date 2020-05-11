@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 
 public class BlockUtils {
 

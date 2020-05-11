@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.world.gen.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,7 +16,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -25,19 +23,16 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.*;
 import javax.annotation.Nullable;
-import java.util.Random;
-
-import static com.github.alexthe666.iceandfire.block.BlockSilverPile.SNOW_AABB;
 
 public class BlockGoldPile extends Block {
     public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);
     protected static final VoxelShape[] SHAPES = new VoxelShape[]{VoxelShapes.empty(), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
     public Item itemBlock;
 
-    public BlockGoldPile() {
+    public BlockGoldPile(String name) {
         super(Properties.create(Material.EARTH).hardnessAndResistance(0.3F, 1).tickRandomly().sound(IafBlockRegistry.SOUND_TYPE_GOLD));
         this.setDefaultState(this.stateContainer.getBaseState().with(LAYERS, Integer.valueOf(1)));
-        setRegistryName(IceAndFire.MODID, "goldpile");
+        setRegistryName(IceAndFire.MODID, name);
     }
 
     public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
@@ -113,7 +108,7 @@ public class BlockGoldPile extends Block {
                 if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.GOLD_PILE)) {
                     if (!item.isEmpty()) {
                         if (state.get(LAYERS) < 7) {
-                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.GOLD_PILE, state.get(LAYERS) + 1, 3);
+                            worldIn.setBlockState(pos, state.with(LAYERS, state.get(LAYERS) + 1), 3);
                             if (!playerIn.isCreative()) {
                                 item.shrink(1);
 

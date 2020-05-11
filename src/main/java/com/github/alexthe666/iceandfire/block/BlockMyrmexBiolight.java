@@ -1,68 +1,50 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.BlockBush;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
 
 public class BlockMyrmexBiolight extends BushBlock {
 
-    public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("down");
+    public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
     protected static final AxisAlignedBB BUSH_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockMyrmexBiolight(boolean jungle) {
-        super(Material.PLANTS);
-        this.setHardness(0F);
-        this.setLightLevel(0.6F);
-        this.setTranslationKey(jungle ? "iceandfire.myrmex_jungle_biolight" : "iceandfire.myrmex_desert_biolight");
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setSoundType(SoundType.PLANT);
+        super(Properties.create(Material.PLANTS).hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
-        this.setDefaultState(this.blockState.getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-        return true;
+    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+        if(!worldIn.isRemote){
+            this.updateState(state, worldIn, pos, state.getBlock());
+        }
+        if(worldIn.getBlockState(pos.up()).isAir()){
+            worldIn.destroyBlock(pos, true);
+        }
     }
 
+    public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
+        boolean flag2 = state.get(CONNECTED_DOWN);
+        boolean flag3 = !worldIn.getBlockState(pos.down()).isAir();
+        if(flag2 != flag3){
+            worldIn.setBlockState(pos, state.with(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
+        }
 
-    public boolean canBlockStay(World worldIn, BlockPos pos, BlockState state) {
-        return worldIn.getBlockState(pos.up()).isOpaqueCube() || worldIn.getBlockState(pos.up()).getBlock() == this;
     }
 
-    public boolean canBlockStay(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.up()).isOpaqueCube() || worldIn.getBlockState(pos.up()).getBlock() == this;
-    }
-
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && canBlockStay(worldIn, pos);
-    }
-
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return BUSH_AABB;
-    }
-
-    protected boolean canSustainBush(BlockState state) {
-        return true;
-    }
-
-    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.with(CONNECTED_DOWN, worldIn.getBlockState(pos.down()).getBlock() == this);
-    }
-
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, CONNECTED_DOWN);
-    }
-
-    public int getMetaFromState(BlockState state) {
-        return 0;
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(CONNECTED_DOWN);
     }
 }

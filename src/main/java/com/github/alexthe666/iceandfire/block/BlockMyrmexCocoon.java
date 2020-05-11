@@ -2,91 +2,64 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
+import net.minecraft.block.*;
 import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 
 public class BlockMyrmexCocoon extends ContainerBlock {
 
 
     public BlockMyrmexCocoon(boolean jungle) {
-        super(Material.GROUND);
-        this.setHardness(2.5F);
-        this.setSoundType(SoundType.METAL);
-        this.setTranslationKey(jungle ? "iceandfire.jungle_myrmex_cocoon" : "iceandfire.desert_myrmex_cocoon");
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setSoundType(SoundType.SLIME);
+        super(Properties.create(Material.EARTH).hardnessAndResistance(2.5F).sound(SoundType.SLIME));
         this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
 
     }
 
-
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        if (face == Direction.UP) {
-            return BlockFaceShape.SOLID;
-        }
-        return super.getBlockFaceShape(worldIn, state, pos, face);
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-
-    public EnumBlockRenderType getRenderType(BlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof IInventory) {
             InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
             worldIn.updateComparatorOutputLevel(pos, this);
         }
-        super.breakBlock(worldIn, pos, state);
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking()) {
-            return false;
-        } else {
-            player.openGui(IceAndFire.INSTANCE, 6, world, pos.getX(), pos.getY(), pos.getZ());
-            return true;
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(!player.isShiftKeyDown()){
+            if(worldIn.isRemote){
+                IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
+            }else{
+                INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
+                if (inamedcontainerprovider != null) {
+                    player.openContainer(inamedcontainerprovider);
+                }
+            }
+            return ActionResultType.SUCCESS;
         }
+        return ActionResultType.FAIL;
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityMyrmexCocoon();
     }
 }
