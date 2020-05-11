@@ -8,9 +8,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -19,22 +23,14 @@ public class BlockDragonScales extends Block implements IDragonProof {
     EnumDragonEgg type;
 
     public BlockDragonScales(String name, EnumDragonEgg type) {
-        super(Material.ROCK);
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(30F, 500).harvestTool(ToolType.PICKAXE).harvestLevel(2).sound(SoundType.STONE));
         this.type = type;
-        this.setTranslationKey("iceandfire.dragonscale_block");
-        this.setRegistryName(IceAndFire.MODID, name);
-        this.setHarvestLevel("pickaxe", 2);
-        this.setHardness(30F);
-        this.setResistance(500F);
-        this.setSoundType(SoundType.STONE);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
     }
 
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-
-        tooltip.add(type.color + StatCollector.translateToLocal("dragon." + type.toString().toLowerCase()));
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).applyTextStyle(type.color));
     }
 }

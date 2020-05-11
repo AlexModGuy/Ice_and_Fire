@@ -7,8 +7,6 @@ import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
-import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
@@ -19,6 +17,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -249,5 +248,8 @@ public class CommonProxy {
 
     public boolean shouldSeeBestiaryContents() {
         return true;
+    }
+
+    public void setRefrencedTE(TileEntity tileEntity) {
     }
 }

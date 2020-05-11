@@ -3,23 +3,16 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
-import net.minecraft.block.Block;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.material.MapColor;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -27,24 +20,13 @@ import java.util.Random;
 public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
 
     public BlockDreadPortal() {
-        super(Material.PORTAL);
-        this.setHardness(-1.0F);
-        this.setResistance(10000F);
-        this.setLightLevel(0.2F);
-        this.setTranslationKey("iceandfire.dread_portal");
+        super(Properties.create(Material.PORTAL).variableOpacity().hardnessAndResistance(-1, 100000).harvestTool(ToolType.PICKAXE).lightValue(1).tickRandomly());
         this.setRegistryName(IceAndFire.MODID, "dread_portal");
-        this.setTickRandomly(true);
-        GameRegistry.registerTileEntity(TileEntityDreadPortal.class, "dread_portal");
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public int getPackedLightmapCoords(BlockState state, IBlockAccess source, BlockPos pos) {
-        return 15728880;
     }
 
     @Override
-    public void onEntityCollision(World world, BlockPos pos, BlockState state, Entity entity) {
-       /* if(entity.dimension != IafConfig.dreadlandsDimensionId){
+    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entity) {
+     /* if(entity.dimension != IafConfig.dreadlandsDimensionId){
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
             if (properties != null) {
                 properties.lastEnteredDreadPortalX = pos.getX();
@@ -95,32 +77,12 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
         return new TileEntityDreadPortal();
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
-        BlockState BlockState = blockAccess.getBlockState(pos.offset(side));
-        Block block = BlockState.getBlock();
-        return !BlockState.isOpaqueCube() && block != IafBlockRegistry.DREAD_PORTAL;
-    }
-
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return NULL_AABB;
-    }
-
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
-
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
     public int quantityDropped(Random random) {
         return 0;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
         if (tileentity instanceof TileEntityDreadPortal) {
@@ -139,15 +101,21 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
         }
     }
 
-    public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {
-        return ItemStack.EMPTY;
+    public boolean isOpaqueCube(BlockState state) {
+        return false;
     }
 
-    public MapColor getMapColor(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return MapColor.LIGHT_BLUE;
+    public boolean isFullCube(BlockState state) {
+        return false;
     }
 
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.UNDEFINED;
+    public BlockRenderType getRenderType(BlockState p_149645_1_) {
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return new TileEntityDreadPortal();
     }
 }

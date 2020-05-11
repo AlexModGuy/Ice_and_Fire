@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class IafBlockRegistry {
 
@@ -24,8 +22,8 @@ public class IafBlockRegistry {
     public static final Block FROST_LILY = new BlockElementalFlower(false);
     public static final Block GOLD_PILE = new BlockGoldPile();
     public static final Block SILVER_PILE = new BlockSilverPile();
-    public static final Block SILVER_ORE = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
-    public static final Block SAPPHIRE_ORE = new BlockDragonOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
+    public static final Block SILVER_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
+    public static final Block SAPPHIRE_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
     public static final Block SILVER_BLOCK = new BlockGeneric(Material.IRON, "silver_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
     public static final Block SAPPHIRE_BLOCK = new BlockGeneric(Material.IRON, "sapphire_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
     public static final Block CHARRED_DIRT = new BlockReturningState(Material.EARTH, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());

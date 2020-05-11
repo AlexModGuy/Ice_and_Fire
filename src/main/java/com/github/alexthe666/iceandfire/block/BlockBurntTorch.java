@@ -1,40 +1,27 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
 public class BlockBurntTorch extends TorchBlock implements IDreadBlock {
 
     public BlockBurntTorch() {
-        super();
-        this.setTranslationKey("iceandfire.burnt_torch");
-        this.setHardness(0F);
-        this.setResistance(0F);
-        this.setLightLevel(0.0F);
-        this.setSoundType(SoundType.WOOD);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
+        super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.WOOD).lightValue(0));
         setRegistryName(IceAndFire.MODID, "burnt_torch");
     }
 
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(Blocks.TORCH);
-    }
 
     @OnlyIn(Dist.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 
     }
 }

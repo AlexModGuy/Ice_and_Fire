@@ -1,47 +1,41 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
 public class BlockDreadTorch extends TorchBlock implements IDreadBlock {
 
     public BlockDreadTorch() {
-        super();
-        this.setTranslationKey("iceandfire.dread_torch");
-        this.setHardness(0F);
-        this.setResistance(10000F);
-        this.setLightLevel(0.35F);
-        this.setSoundType(SoundType.STONE);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
+        super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.STONE).lightValue(7));
         setRegistryName(IceAndFire.MODID, "dread_torch");
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        Direction Direction = stateIn.get(FACING);
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+       // Direction Direction = stateIn.get(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.6D;
         double d2 = (double) pos.getZ() + 0.5D;
         double d3 = 0.22D;
         double d4 = 0.27D;
-        if (Direction.getAxis().isHorizontal()) {
+        IceAndFire.PROXY.spawnParticle("dread_torch", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+  /*   if (Direction.getAxis().isHorizontal()) {
             Direction Direction1 = Direction.getOpposite();
             //worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.27D * (double)Direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)Direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
             IceAndFire.PROXY.spawnParticle("dread_torch", d0 + 0.27D * (double) Direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double) Direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
 
         } else {
             //worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-            IceAndFire.PROXY.spawnParticle("dread_torch", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        }
+        }*/
     }
 }
